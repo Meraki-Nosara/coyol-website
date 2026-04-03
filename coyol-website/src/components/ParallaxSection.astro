@@ -1,0 +1,164 @@
+---
+interface Props {
+  image: string;
+  title: string;
+  subtitle?: string;
+  description?: string;
+  align?: 'left' | 'center' | 'right';
+  dark?: boolean;
+  height?: 'full' | 'tall' | 'medium';
+}
+
+const { 
+  image, 
+  title, 
+  subtitle, 
+  description, 
+  align = 'center',
+  dark = true,
+  height = 'full'
+} = Astro.props;
+
+const alignmentClasses = {
+  left: 'text-left items-start justify-start pl-8 lg:pl-24',
+  center: 'text-center items-center justify-center',
+  right: 'text-right items-end justify-end pr-8 lg:pr-24'
+};
+
+const heightClasses = {
+  full: 'min-h-screen',
+  tall: 'min-h-[80vh]',
+  medium: 'min-h-[60vh]'
+};
+---
+
+<section class={`parallax-section relative ${heightClasses[height]} flex items-center overflow-hidden`}>
+  <!-- Background Image with Parallax -->
+  <div class="parallax-bg absolute inset-0 w-full h-[120%] -top-[10%]">
+    <img 
+      src={image}
+      alt=""
+      class="w-full h-full object-cover"
+      loading="lazy"
+    />
+    <div class={`absolute inset-0 ${dark ? 'bg-black/40' : 'bg-white/20'}`}></div>
+  </div>
+  
+  <!-- Floating Content -->
+  <div class={`parallax-content relative z-10 w-full max-w-6xl mx-auto px-8 py-32 flex flex-col ${alignmentClasses[align]}`}>
+    {subtitle && (
+      <p 
+        class="scroll-fade text-sm md:text-base tracking-[0.3em] uppercase mb-6"
+        style={`color: ${dark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.6)'}`}
+        data-delay="0"
+      >
+        {subtitle}
+      </p>
+    )}
+    
+    <h2 
+      class="scroll-fade font-serif text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-medium leading-[0.95] mb-8"
+      style={`color: ${dark ? '#fff' : '#1A1F16'}; text-shadow: ${dark ? '0 4px 40px rgba(0,0,0,0.4)' : 'none'}`}
+      data-delay="100"
+    >
+      {title}
+    </h2>
+    
+    {description && (
+      <p 
+        class="scroll-fade text-lg md:text-xl lg:text-2xl max-w-2xl leading-relaxed"
+        style={`color: ${dark ? 'rgba(255,255,255,0.85)' : 'rgba(0,0,0,0.7)'}`}
+        data-delay="200"
+      >
+        {description}
+      </p>
+    )}
+    
+    <slot />
+  </div>
+</section>
+
+<style>
+  .parallax-section {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .parallax-bg {
+    will-change: transform;
+  }
+  
+  .scroll-fade {
+    opacity: 0;
+    transform: translateY(80px);
+    transition: none; /* Controlled by JS */
+  }
+  
+  .scroll-fade.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  // Smooth parallax + scroll animations (Zapotal-style)
+  
+  // Parallax backgrounds
+  const parallaxSections = document.querySelectorAll('.parallax-section');
+  
+  function updateParallax() {
+    parallaxSections.forEach(section => {
+      const bg = section.querySelector('.parallax-bg') as HTMLElement;
+      if (!bg) return;
+      
+      const rect = section.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      
+      // Only animate when in view
+      if (rect.bottom > 0 && rect.top < windowHeight) {
+        const scrollPercent = (windowHeight - rect.top) / (windowHeight + rect.height);
+        const translateY = (scrollPercent - 0.5) * 100; // -50 to +50 range
+        bg.style.transform = `translateY(${translateY}px) scale(1.1)`;
+      }
+    });
+  }
+  
+  // Scroll-triggered fade animations
+  const scrollFadeElements = document.querySelectorAll('.scroll-fade');
+  
+  const fadeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target as HTMLElement;
+        const delay = parseInt(el.dataset.delay || '0');
+        
+        setTimeout(() => {
+          el.style.transition = 'opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1)';
+          el.classList.add('visible');
+        }, delay);
+        
+        fadeObserver.unobserve(el);
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -10% 0px'
+  });
+  
+  scrollFadeElements.forEach(el => fadeObserver.observe(el));
+  
+  // Throttled scroll handler for parallax
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        updateParallax();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+  
+  // Initial call
+  updateParallax();
+</script>

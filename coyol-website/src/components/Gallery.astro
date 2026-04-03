@@ -1,0 +1,42 @@
+---
+const images = [
+  { src: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop", alt: "Luxury home exterior", span: "lg:col-span-2 lg:row-span-2" },
+  { src: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop", alt: "Modern interior", span: "" },
+  { src: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop", alt: "Pool view", span: "" },
+  { src: "https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=2070&auto=format&fit=crop", alt: "Outdoor living", span: "lg:col-span-2" },
+  { src: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop", alt: "Beach house", span: "" },
+  { src: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2070&auto=format&fit=crop", alt: "Living room", span: "" },
+];
+---
+
+<section id="gallery" class="py-24 lg:py-32 bg-landrover-pangea">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    
+    <!-- Header -->
+    <div class="max-w-3xl mb-16">
+      <p class="text-landrover-coniston text-xs tracking-[0.3em] uppercase mb-4">Gallery</p>
+      <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl text-landrover-santorini mb-6">
+        Spaces That Inspire
+      </h2>
+      <p class="text-landrover-marine/70 text-lg leading-relaxed">
+        Each design emerges naturally from its surroundings, guided by light, climate, 
+        and material honesty. No repetition. No formulas. Only spaces that feel inevitable.
+      </p>
+    </div>
+
+    <!-- Image Grid -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {images.map((image) => (
+        <div class={`img-zoom overflow-hidden ${image.span}`}>
+          <img 
+            src={image.src}
+            alt={image.alt}
+            class="w-full h-full object-cover aspect-square"
+            loading="lazy"
+          />
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

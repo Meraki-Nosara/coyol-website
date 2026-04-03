@@ -1,0 +1,102 @@
+---
+const navLinks = [
+  { href: '#home', label: 'Home' },
+  { href: '#about', label: 'About' },
+  { href: '#properties', label: 'Properties' },
+  { href: '#developments', label: 'Developments' },
+  { href: '#gallery', label: 'Gallery' },
+  { href: '#contact', label: 'Contact' },
+];
+---
+
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      <!-- Logo -->
+      <a href="#home" class="flex items-center">
+        <span class="text-2xl font-serif font-semibold text-white tracking-widest transition-colors duration-300" id="logo-text">
+          COYOL
+        </span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-8">
+        {navLinks.map((link) => (
+          <a 
+            href={link.href}
+            class="nav-link text-xs font-medium text-white/90 hover:text-white transition-colors duration-200 tracking-[0.2em] uppercase"
+          >
+            {link.label}
+          </a>
+        ))}
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button 
+        id="mobile-menu-btn"
+        class="md:hidden p-2 text-white"
+        aria-label="Open menu"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden md:hidden bg-landrover-keswick/95 backdrop-blur-md">
+    <div class="px-6 py-4 space-y-4">
+      {navLinks.map((link) => (
+        <a 
+          href={link.href}
+          class="block text-base font-medium text-white/90 hover:text-white transition-colors py-2 tracking-wider"
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  const logoText = document.getElementById('logo-text');
+  const navLinks = document.querySelectorAll('.nav-link');
+  
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 100) {
+      navbar?.classList.add('bg-landrover-limestone/95', 'backdrop-blur-md', 'shadow-sm');
+      logoText?.classList.remove('text-white');
+      logoText?.classList.add('text-landrover-keswick');
+      navLinks.forEach(link => {
+        link.classList.remove('text-white/90', 'hover:text-white');
+        link.classList.add('text-landrover-keswick/80', 'hover:text-landrover-keswick');
+      });
+    } else {
+      navbar?.classList.remove('bg-landrover-limestone/95', 'backdrop-blur-md', 'shadow-sm');
+      logoText?.classList.add('text-white');
+      logoText?.classList.remove('text-landrover-keswick');
+      navLinks.forEach(link => {
+        link.classList.add('text-white/90', 'hover:text-white');
+        link.classList.remove('text-landrover-keswick/80', 'hover:text-landrover-keswick');
+      });
+    }
+  });
+
+  // Mobile menu toggle
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  
+  mobileMenuBtn?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden');
+  });
+
+  // Close mobile menu on link click
+  mobileMenu?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu?.classList.add('hidden');
+    });
+  });
+</script>

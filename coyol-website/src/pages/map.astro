@@ -1,0 +1,404 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Interactive Map | Coyol Real Estate">
+  <Navigation />
+  
+  <main class="pt-20">
+    <!-- Map Header -->
+    <section class="bg-landrover-limestone py-16">
+      <div class="max-w-7xl mx-auto px-8">
+        <p class="text-landrover-coniston text-xs tracking-[0.3em] uppercase mb-4">Explore Our Developments</p>
+        <h1 class="font-serif text-4xl md:text-5xl text-landrover-santorini mb-4">Interactive Map</h1>
+        <p class="text-landrover-marine/70 text-lg max-w-2xl">
+          Explore our three distinct communities. Click on any lot to view details, availability, and photos.
+        </p>
+      </div>
+    </section>
+
+    <!-- Filter Controls -->
+    <section class="bg-landrover-pangea py-6 border-b border-landrover-arles/30">
+      <div class="max-w-7xl mx-auto px-8">
+        <div class="flex flex-wrap items-center gap-4">
+          <span class="text-landrover-marine text-sm font-medium">Filter by:</span>
+          
+          <!-- Development Filter -->
+          <div class="flex gap-2">
+            <button 
+              class="dev-filter active px-4 py-2 text-xs tracking-wider uppercase bg-landrover-keswick text-white transition-colors"
+              data-development="all"
+            >
+              All
+            </button>
+            <button 
+              class="dev-filter px-4 py-2 text-xs tracking-wider uppercase bg-landrover-limestone text-landrover-marine hover:bg-landrover-keswick hover:text-white transition-colors"
+              data-development="nosara-hills"
+            >
+              Nosara Hills
+            </button>
+            <button 
+              class="dev-filter px-4 py-2 text-xs tracking-wider uppercase bg-landrover-limestone text-landrover-marine hover:bg-landrover-keswick hover:text-white transition-colors"
+              data-development="mar-azul"
+            >
+              Mar Azul
+            </button>
+          </div>
+          
+          <!-- Status Legend -->
+          <div class="flex items-center gap-4 ml-auto">
+            <div class="flex items-center gap-2">
+              <span class="w-4 h-4 bg-green-500 rounded-full"></span>
+              <span class="text-xs text-landrover-marine">Available</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-4 h-4 bg-yellow-500 rounded-full"></span>
+              <span class="text-xs text-landrover-marine">Reserved</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-4 h-4 bg-red-500 rounded-full"></span>
+              <span class="text-xs text-landrover-marine">Sold</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Map Container -->
+    <section class="relative">
+      <div id="map" class="w-full h-[70vh] min-h-[500px]"></div>
+      
+      <!-- Map Controls Overlay -->
+      <div class="absolute top-4 right-4 flex flex-col gap-2">
+        <button id="toggle-3d" class="bg-white shadow-md px-4 py-2 text-xs font-medium text-landrover-marine hover:bg-landrover-limestone transition-colors">
+          Toggle 3D Terrain
+        </button>
+        <button id="reset-view" class="bg-white shadow-md px-4 py-2 text-xs font-medium text-landrover-marine hover:bg-landrover-limestone transition-colors">
+          Reset View
+        </button>
+      </div>
+
+      <!-- Lot Info Panel (shows on click) -->
+      <div id="lot-panel" class="hidden absolute bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 bg-white shadow-xl p-6">
+        <button id="close-panel" class="absolute top-4 right-4 text-landrover-marine hover:text-landrover-keswick">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        
+        <p id="lot-development" class="text-landrover-coniston text-xs tracking-[0.2em] uppercase mb-2"></p>
+        <h3 id="lot-name" class="font-serif text-2xl text-landrover-santorini mb-4"></h3>
+        
+        <div class="space-y-3 mb-6">
+          <div class="flex justify-between">
+            <span class="text-landrover-marine/60 text-sm">Status</span>
+            <span id="lot-status" class="text-sm font-medium"></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-landrover-marine/60 text-sm">Size</span>
+            <span id="lot-size" class="text-sm font-medium text-landrover-santorini">--</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-landrover-marine/60 text-sm">Type</span>
+            <span id="lot-type" class="text-sm font-medium text-landrover-santorini">--</span>
+          </div>
+        </div>
+        
+        <a 
+          href="#contact" 
+          class="block w-full bg-landrover-keswick text-white text-center px-6 py-3 text-xs font-medium tracking-wider uppercase hover:bg-landrover-coniston transition-colors"
+        >
+          Inquire About This Lot
+        </a>
+      </div>
+    </section>
+
+    <!-- Development Details -->
+    <section class="py-16 bg-landrover-alaska">
+      <div class="max-w-7xl mx-auto px-8">
+        <div class="grid md:grid-cols-3 gap-8">
+          <!-- Nosara Hills Info -->
+          <div class="bg-white p-8">
+            <h3 class="font-serif text-2xl text-landrover-santorini mb-4">Nosara Hills</h3>
+            <p class="text-landrover-marine/70 text-sm mb-4">
+              A gated community offering elevated homesites with panoramic ocean and mountain views. 
+              Underground utilities, paved roads, and 24/7 security.
+            </p>
+            <ul class="space-y-2 text-sm text-landrover-marine/80">
+              <li>• 2,000 - 8,000 m² homesites</li>
+              <li>• Ocean & mountain views</li>
+              <li>• Gated with 24/7 security</li>
+              <li>• Underground utilities</li>
+            </ul>
+          </div>
+          
+          <!-- Mar Azul Info -->
+          <div class="bg-white p-8">
+            <h3 class="font-serif text-2xl text-landrover-santorini mb-4">Mar Azul</h3>
+            <p class="text-landrover-marine/70 text-sm mb-4">
+              Beachside living at its finest. These homesites offer direct access to pristine beaches 
+              while remaining immersed in tropical forest.
+            </p>
+            <ul class="space-y-2 text-sm text-landrover-marine/80">
+              <li>• 1,500 - 5,000 m² homesites</li>
+              <li>• Steps from the beach</li>
+              <li>• Tropical forest setting</li>
+              <li>• Private community</li>
+            </ul>
+          </div>
+          
+          <!-- Los Coyoles Info -->
+          <div class="bg-white p-8">
+            <h3 class="font-serif text-2xl text-landrover-santorini mb-4">Los Coyoles</h3>
+            <p class="text-landrover-marine/70 text-sm mb-4">
+              Secluded forest retreats among ancient trees. Perfect for those seeking complete privacy 
+              while staying connected to nature.
+            </p>
+            <ul class="space-y-2 text-sm text-landrover-marine/80">
+              <li>• 3,000 - 10,000 m² estates</li>
+              <li>• Forest sanctuary</li>
+              <li>• Maximum privacy</li>
+              <li>• Coming soon</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</Layout>
+
+<!-- Mapbox GL CSS -->
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+
+<!-- Mapbox GL JS -->
+<script is:inline src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+
+<script is:inline>
+  // Initialize map when DOM is ready
+  document.addEventListener('DOMContentLoaded', async () => {
+    // IMPORTANT: Replace with your Mapbox token
+    mapboxgl.accessToken = 'YOUR_MAPBOX_TOKEN';
+    
+    // Nosara coordinates (approximate center of developments)
+    const center = [-85.638, 9.998];
+    
+    // Initialize map
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/satellite-streets-v12',
+      center: center,
+      zoom: 14,
+      pitch: 45,
+      bearing: -20,
+      antialias: true
+    });
+
+    // Add navigation controls
+    map.addControl(new mapboxgl.NavigationControl(), 'top-left');
+    map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
+    
+    // State
+    let is3DEnabled = true;
+    let currentDevelopment = 'all';
+    
+    // Load map
+    map.on('load', async () => {
+      // Add 3D terrain
+      map.addSource('mapbox-dem', {
+        type: 'raster-dem',
+        url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+        tileSize: 512,
+        maxzoom: 14
+      });
+      map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
+      
+      // Add sky
+      map.addLayer({
+        id: 'sky',
+        type: 'sky',
+        paint: {
+          'sky-type': 'atmosphere',
+          'sky-atmosphere-sun': [0.0, 90.0],
+          'sky-atmosphere-sun-intensity': 15
+        }
+      });
+      
+      // Load GeoJSON data
+      try {
+        const response = await fetch('/data/all-developments.geojson');
+        const geojson = await response.json();
+        
+        // Add source
+        map.addSource('lots', {
+          type: 'geojson',
+          data: geojson
+        });
+        
+        // Status colors
+        const statusColors = {
+          available: '#22c55e',  // green
+          reserved: '#eab308',   // yellow  
+          sold: '#ef4444'        // red
+        };
+        
+        // Add fill layer for polygons
+        map.addLayer({
+          id: 'lots-fill',
+          type: 'fill',
+          source: 'lots',
+          filter: ['==', ['geometry-type'], 'Polygon'],
+          paint: {
+            'fill-color': [
+              'match',
+              ['get', 'status'],
+              'available', statusColors.available,
+              'reserved', statusColors.reserved,
+              'sold', statusColors.sold,
+              statusColors.available
+            ],
+            'fill-opacity': 0.3
+          }
+        });
+        
+        // Add outline layer
+        map.addLayer({
+          id: 'lots-outline',
+          type: 'line',
+          source: 'lots',
+          paint: {
+            'line-color': [
+              'match',
+              ['get', 'status'],
+              'available', statusColors.available,
+              'reserved', statusColors.reserved,
+              'sold', statusColors.sold,
+              statusColors.available
+            ],
+            'line-width': 2,
+            'line-opacity': 0.8
+          }
+        });
+        
+        // Add line layer for non-polygon features (roads, boundaries)
+        map.addLayer({
+          id: 'boundaries',
+          type: 'line',
+          source: 'lots',
+          filter: ['==', ['geometry-type'], 'LineString'],
+          paint: {
+            'line-color': '#ffffff',
+            'line-width': 1,
+            'line-opacity': 0.5
+          }
+        });
+        
+        // Click handler
+        map.on('click', 'lots-fill', (e) => {
+          const feature = e.features[0];
+          const props = feature.properties;
+          
+          // Update panel
+          document.getElementById('lot-development').textContent = 
+            props.source === 'nosara-hills' ? 'Nosara Hills' : 'Mar Azul';
+          document.getElementById('lot-name').textContent = props.name || `Lot ${props.id}`;
+          document.getElementById('lot-status').textContent = props.status || 'Available';
+          document.getElementById('lot-status').className = 
+            `text-sm font-medium ${props.status === 'sold' ? 'text-red-600' : props.status === 'reserved' ? 'text-yellow-600' : 'text-green-600'}`;
+          document.getElementById('lot-type').textContent = props.layer || 'Homesite';
+          
+          // Show panel
+          document.getElementById('lot-panel').classList.remove('hidden');
+        });
+        
+        // Hover effects
+        map.on('mouseenter', 'lots-fill', () => {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+        
+        map.on('mouseleave', 'lots-fill', () => {
+          map.getCanvas().style.cursor = '';
+        });
+        
+      } catch (error) {
+        console.error('Error loading GeoJSON:', error);
+      }
+    });
+    
+    // Close panel button
+    document.getElementById('close-panel').addEventListener('click', () => {
+      document.getElementById('lot-panel').classList.add('hidden');
+    });
+    
+    // Toggle 3D terrain
+    document.getElementById('toggle-3d').addEventListener('click', () => {
+      is3DEnabled = !is3DEnabled;
+      if (is3DEnabled) {
+        map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
+        map.easeTo({ pitch: 45 });
+      } else {
+        map.setTerrain(null);
+        map.easeTo({ pitch: 0 });
+      }
+    });
+    
+    // Reset view
+    document.getElementById('reset-view').addEventListener('click', () => {
+      map.flyTo({
+        center: center,
+        zoom: 14,
+        pitch: 45,
+        bearing: -20,
+        duration: 2000
+      });
+    });
+    
+    // Development filters
+    document.querySelectorAll('.dev-filter').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Update active state
+        document.querySelectorAll('.dev-filter').forEach(b => {
+          b.classList.remove('active', 'bg-landrover-keswick', 'text-white');
+          b.classList.add('bg-landrover-limestone', 'text-landrover-marine');
+        });
+        btn.classList.add('active', 'bg-landrover-keswick', 'text-white');
+        btn.classList.remove('bg-landrover-limestone', 'text-landrover-marine');
+        
+        const dev = btn.dataset.development;
+        currentDevelopment = dev;
+        
+        // Apply filter
+        if (dev === 'all') {
+          map.setFilter('lots-fill', ['==', ['geometry-type'], 'Polygon']);
+          map.setFilter('lots-outline', null);
+          map.setFilter('boundaries', ['==', ['geometry-type'], 'LineString']);
+        } else {
+          map.setFilter('lots-fill', ['all', 
+            ['==', ['geometry-type'], 'Polygon'],
+            ['==', ['get', 'source'], dev]
+          ]);
+          map.setFilter('lots-outline', ['==', ['get', 'source'], dev]);
+          map.setFilter('boundaries', ['all',
+            ['==', ['geometry-type'], 'LineString'],
+            ['==', ['get', 'source'], dev]
+          ]);
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .mapboxgl-popup-content {
+    padding: 16px;
+    border-radius: 0;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .mapboxgl-ctrl-attrib {
+    font-size: 10px;
+  }
+</style>

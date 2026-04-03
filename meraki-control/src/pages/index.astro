@@ -1,0 +1,288 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const today = new Date().toLocaleDateString('es-CR', { 
+  weekday: 'long', 
+  year: 'numeric', 
+  month: 'long', 
+  day: 'numeric' 
+});
+
+const restaurants = [
+  { id: 1, name: 'Esh', code: 'esh', todaySales: 485000, yesterdaySales: 520000, weekSales: 3250000, customers: 68 },
+  { id: 2, name: 'Coyol', code: 'coyol', todaySales: 612000, yesterdaySales: 580000, weekSales: 4120000, customers: 85 },
+  { id: 3, name: 'La Luna', code: 'laluna', todaySales: 890000, yesterdaySales: 920000, weekSales: 6180000, customers: 112 },
+];
+
+const totalToday = restaurants.reduce((sum, r) => sum + r.todaySales, 0);
+const totalWeek = restaurants.reduce((sum, r) => sum + r.weekSales, 0);
+const totalCustomers = restaurants.reduce((sum, r) => sum + r.customers, 0);
+
+// Sample supplier data
+const supplierAlerts = [
+  { supplier: 'Pescadería del Pacífico', product: 'Camarón', change: '+12%', status: 'up' },
+  { supplier: 'Carnicería Central', product: 'Lomito', change: '-5%', status: 'down' },
+];
+
+// Sample recommendations
+const recommendations = [
+  { type: 'labor', title: 'Temporada baja en mayo', desc: 'Reducir personal temporal', savings: 450000, priority: 'high' },
+  { type: 'supplier', title: 'Mejor precio en camarón', desc: 'Proveedor B ofrece 15% menos', savings: 85000, priority: 'medium' },
+  { type: 'inventory', title: 'Esh superando proyección', desc: 'Aumentar inventario de pescado', savings: null, priority: 'info' },
+];
+---
+
+<Layout title="Dashboard">
+  <!-- Sidebar + Main Layout -->
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-landrover-keswick text-white flex-shrink-0 hidden lg:block">
+      <div class="p-6">
+        <h1 class="font-serif text-2xl font-semibold tracking-wide">Meraki</h1>
+        <p class="text-landrover-limestone/60 text-xs mt-1">Control Financiero</p>
+      </div>
+      
+      <nav class="mt-4">
+        <a href="/" class="flex items-center gap-3 px-6 py-3 bg-white/10 text-white border-l-4 border-landrover-sand">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          <span class="text-sm font-medium">Dashboard</span>
+        </a>
+        
+        <a href="/ventas" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span class="text-sm">Ventas</span>
+        </a>
+        
+        <a href="/proveedores" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <span class="text-sm">Proveedores</span>
+        </a>
+        
+        <a href="/facturas" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span class="text-sm">Facturas</span>
+        </a>
+        
+        <a href="/reportes" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          <span class="text-sm">Reportes</span>
+        </a>
+        
+        <a href="/comparador" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+          </svg>
+          <span class="text-sm">Comparador</span>
+        </a>
+      </nav>
+      
+      <!-- User -->
+      <div class="absolute bottom-0 left-0 w-64 p-6 border-t border-white/10">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-landrover-sand rounded-full flex items-center justify-center text-landrover-keswick font-semibold">
+            AP
+          </div>
+          <div>
+            <p class="text-sm font-medium">Angelina Peri</p>
+            <p class="text-xs text-landrover-limestone/60">Administradora</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-auto">
+      <!-- Top Header -->
+      <header class="bg-white border-b border-landrover-arles/30 sticky top-0 z-40">
+        <div class="px-6 lg:px-8 py-4 flex items-center justify-between">
+          <div>
+            <h2 class="text-xl font-semibold text-landrover-santorini">Dashboard</h2>
+            <p class="text-sm text-landrover-marine/60 capitalize">{today}</p>
+          </div>
+          
+          <div class="flex items-center gap-4">
+            <button class="btn-primary text-xs">
+              + Registrar Ventas
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div class="p-6 lg:p-8 space-y-8">
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="card p-6">
+            <p class="text-xs font-medium text-landrover-marine/60 uppercase tracking-wider mb-2">Ventas Hoy</p>
+            <p class="text-3xl font-semibold text-landrover-santorini">₡{totalToday.toLocaleString()}</p>
+            <p class="text-xs text-landrover-coniston mt-2">↑ 5% vs ayer</p>
+          </div>
+          
+          <div class="card p-6">
+            <p class="text-xs font-medium text-landrover-marine/60 uppercase tracking-wider mb-2">Esta Semana</p>
+            <p class="text-3xl font-semibold text-landrover-santorini">₡{totalWeek.toLocaleString()}</p>
+            <p class="text-xs text-landrover-marine/50 mt-2">3 restaurantes</p>
+          </div>
+          
+          <div class="card p-6">
+            <p class="text-xs font-medium text-landrover-marine/60 uppercase tracking-wider mb-2">Clientes Hoy</p>
+            <p class="text-3xl font-semibold text-landrover-santorini">{totalCustomers}</p>
+            <p class="text-xs text-landrover-marine/50 mt-2">Promedio: ₡{Math.round(totalToday/totalCustomers).toLocaleString()}</p>
+          </div>
+          
+          <div class="card p-6">
+            <p class="text-xs font-medium text-landrover-marine/60 uppercase tracking-wider mb-2">Alertas</p>
+            <p class="text-3xl font-semibold text-landrover-terracotta">{supplierAlerts.length}</p>
+            <p class="text-xs text-landrover-terracotta mt-2">Cambios de precio</p>
+          </div>
+        </div>
+
+        <!-- Restaurant Sales Table -->
+        <div class="card">
+          <div class="px-6 py-4 border-b border-landrover-arles/30 flex items-center justify-between">
+            <h3 class="font-semibold text-landrover-santorini">Ventas por Restaurante</h3>
+            <select class="text-sm border border-landrover-arles/50 px-3 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-landrover-coniston">
+              <option>Hoy</option>
+              <option>Esta Semana</option>
+              <option>Este Mes</option>
+            </select>
+          </div>
+          
+          <div class="overflow-x-auto">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Restaurante</th>
+                  <th class="text-right">Hoy</th>
+                  <th class="text-right">Ayer</th>
+                  <th class="text-right">Semana</th>
+                  <th class="text-right">Clientes</th>
+                  <th class="text-right">Promedio</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {restaurants.map((r) => {
+                  const change = ((r.todaySales - r.yesterdaySales) / r.yesterdaySales * 100).toFixed(1);
+                  const isUp = r.todaySales >= r.yesterdaySales;
+                  return (
+                    <tr>
+                      <td class="font-medium text-landrover-santorini">{r.name}</td>
+                      <td class="text-right font-semibold">₡{r.todaySales.toLocaleString()}</td>
+                      <td class="text-right text-landrover-marine/60">₡{r.yesterdaySales.toLocaleString()}</td>
+                      <td class="text-right">₡{r.weekSales.toLocaleString()}</td>
+                      <td class="text-right">{r.customers}</td>
+                      <td class="text-right">₡{Math.round(r.todaySales/r.customers).toLocaleString()}</td>
+                      <td class="text-right">
+                        <span class={`text-xs font-medium ${isUp ? 'text-landrover-coniston' : 'text-landrover-terracotta'}`}>
+                          {isUp ? '↑' : '↓'} {Math.abs(Number(change))}%
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+              <tfoot>
+                <tr class="bg-landrover-limestone/30">
+                  <td class="font-semibold text-landrover-santorini">Total</td>
+                  <td class="text-right font-bold text-landrover-santorini">₡{totalToday.toLocaleString()}</td>
+                  <td class="text-right font-semibold text-landrover-marine/60">₡{restaurants.reduce((s,r) => s + r.yesterdaySales, 0).toLocaleString()}</td>
+                  <td class="text-right font-semibold">₡{totalWeek.toLocaleString()}</td>
+                  <td class="text-right font-semibold">{totalCustomers}</td>
+                  <td class="text-right font-semibold">₡{Math.round(totalToday/totalCustomers).toLocaleString()}</td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <!-- Two Column Layout -->
+        <div class="grid lg:grid-cols-2 gap-6">
+          <!-- Supplier Price Alerts -->
+          <div class="card">
+            <div class="px-6 py-4 border-b border-landrover-arles/30">
+              <h3 class="font-semibold text-landrover-santorini">Alertas de Precios</h3>
+            </div>
+            <div class="divide-y divide-landrover-arles/20">
+              {supplierAlerts.map((alert) => (
+                <div class="px-6 py-4 flex items-center justify-between">
+                  <div>
+                    <p class="font-medium text-landrover-santorini">{alert.product}</p>
+                    <p class="text-sm text-landrover-marine/60">{alert.supplier}</p>
+                  </div>
+                  <span class={`px-3 py-1 text-sm font-semibold ${
+                    alert.status === 'up' 
+                      ? 'bg-red-50 text-red-700' 
+                      : 'bg-green-50 text-green-700'
+                  }`}>
+                    {alert.change}
+                  </span>
+                </div>
+              ))}
+              <div class="px-6 py-4">
+                <a href="/proveedores" class="text-sm text-landrover-coniston font-medium hover:text-landrover-keswick">
+                  Ver todos los proveedores →
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recommendations -->
+          <div class="card">
+            <div class="px-6 py-4 border-b border-landrover-arles/30">
+              <h3 class="font-semibold text-landrover-santorini">Recomendaciones</h3>
+            </div>
+            <div class="divide-y divide-landrover-arles/20">
+              {recommendations.map((rec) => (
+                <div class="px-6 py-4">
+                  <div class="flex items-start justify-between">
+                    <div class="flex-1">
+                      <div class="flex items-center gap-2">
+                        <p class="font-medium text-landrover-santorini">{rec.title}</p>
+                        {rec.priority === 'high' && (
+                          <span class="px-2 py-0.5 text-xs bg-landrover-terracotta/10 text-landrover-terracotta">Urgente</span>
+                        )}
+                      </div>
+                      <p class="text-sm text-landrover-marine/60 mt-1">{rec.desc}</p>
+                      {rec.savings && (
+                        <p class="text-xs text-landrover-coniston mt-2">
+                          Ahorro potencial: ₡{rec.savings.toLocaleString()}/mes
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Entry Cards -->
+        <div class="grid md:grid-cols-3 gap-4">
+          {restaurants.map((r) => (
+            <a href={`/entrada/${r.code}`} class="card p-6 hover:border-landrover-coniston transition-colors group">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-semibold text-landrover-santorini">{r.name}</h3>
+                <svg class="w-5 h-5 text-landrover-arles group-hover:text-landrover-coniston transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+              </div>
+              <p class="text-2xl font-semibold text-landrover-santorini">₡{r.todaySales.toLocaleString()}</p>
+              <p class="text-xs text-landrover-marine/50 mt-1">Registrado hoy</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </main>
+  </div>
+</Layout>

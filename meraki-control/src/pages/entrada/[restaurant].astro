@@ -1,0 +1,223 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const { restaurant } = Astro.params;
+
+const restaurantData = {
+  esh: { name: 'Esh', emoji: '🍽️' },
+  coyol: { name: 'Coyol', emoji: '🌴' },
+  laluna: { name: 'La Luna', emoji: '🌙' },
+};
+
+const data = restaurantData[restaurant] || restaurantData.esh;
+const today = new Date().toISOString().split('T')[0];
+---
+
+<Layout title={`Registrar Ventas - ${data.name}`}>
+  <div class="min-h-screen flex">
+    <!-- Simplified Sidebar for mobile -->
+    <aside class="w-64 bg-landrover-keswick text-white flex-shrink-0 hidden lg:flex flex-col">
+      <div class="p-6">
+        <a href="/" class="font-serif text-2xl font-semibold tracking-wide">Meraki</a>
+        <p class="text-landrover-limestone/60 text-xs mt-1">Control Financiero</p>
+      </div>
+      
+      <div class="flex-1 flex items-center justify-center">
+        <div class="text-center">
+          <p class="text-6xl mb-4">{data.emoji}</p>
+          <p class="text-xl font-serif">{data.name}</p>
+        </div>
+      </div>
+      
+      <div class="p-6">
+        <a href="/" class="flex items-center gap-2 text-landrover-limestone/80 hover:text-white transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7" />
+          </svg>
+          <span class="text-sm">Volver al Dashboard</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-auto">
+      <!-- Mobile Header -->
+      <header class="lg:hidden bg-landrover-keswick text-white sticky top-0 z-50">
+        <div class="px-4 py-4 flex items-center gap-4">
+          <a href="/" class="p-2 -ml-2 hover:bg-white/10 rounded-lg transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </a>
+          <div>
+            <h1 class="text-xl font-semibold">{data.emoji} {data.name}</h1>
+            <p class="text-sm text-landrover-limestone/60">Registrar ventas</p>
+          </div>
+        </div>
+      </header>
+
+      <!-- Desktop Header -->
+      <header class="hidden lg:block bg-white border-b border-landrover-arles/30">
+        <div class="px-8 py-6">
+          <h1 class="text-2xl font-semibold text-landrover-santorini">Registrar Ventas — {data.name}</h1>
+          <p class="text-sm text-landrover-marine/60 mt-1">Ingresa las ventas del día</p>
+        </div>
+      </header>
+
+      <!-- Form -->
+      <div class="p-6 lg:p-8 max-w-2xl">
+        <form id="sales-form" class="space-y-6">
+          <input type="hidden" name="restaurant" value={restaurant} />
+          
+          <!-- Date -->
+          <div class="card p-6">
+            <label class="block text-xs font-medium text-landrover-marine/60 uppercase tracking-wider mb-2">Fecha</label>
+            <input 
+              type="date" 
+              name="date"
+              value={today}
+              class="w-full px-4 py-3 border border-landrover-arles/50 bg-white focus:outline-none focus:ring-2 focus:ring-landrover-coniston focus:border-transparent text-lg"
+            />
+          </div>
+
+          <!-- Sales Inputs -->
+          <div class="card p-6 space-y-6">
+            <h3 class="font-semibold text-landrover-santorini">Ventas del Día</h3>
+            
+            <!-- Cash -->
+            <div>
+              <label class="block text-xs font-medium text-landrover-marine/60 uppercase tracking-wider mb-2">
+                💵 Efectivo
+              </label>
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-landrover-arles text-lg">₡</span>
+                <input 
+                  type="number" 
+                  name="cash_sales"
+                  placeholder="0"
+                  inputmode="numeric"
+                  class="w-full pl-10 pr-4 py-4 border border-landrover-arles/50 bg-white focus:outline-none focus:ring-2 focus:ring-landrover-coniston focus:border-transparent text-2xl font-semibold"
+                />
+              </div>
+            </div>
+
+            <!-- Card -->
+            <div>
+              <label class="block text-xs font-medium text-landrover-marine/60 uppercase tracking-wider mb-2">
+                💳 Tarjeta
+              </label>
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-landrover-arles text-lg">₡</span>
+                <input 
+                  type="number" 
+                  name="card_sales"
+                  placeholder="0"
+                  inputmode="numeric"
+                  class="w-full pl-10 pr-4 py-4 border border-landrover-arles/50 bg-white focus:outline-none focus:ring-2 focus:ring-landrover-coniston focus:border-transparent text-2xl font-semibold"
+                />
+              </div>
+            </div>
+
+            <!-- Transfer -->
+            <div>
+              <label class="block text-xs font-medium text-landrover-marine/60 uppercase tracking-wider mb-2">
+                📱 SINPE / Transferencia
+              </label>
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-landrover-arles text-lg">₡</span>
+                <input 
+                  type="number" 
+                  name="transfer_sales"
+                  placeholder="0"
+                  inputmode="numeric"
+                  class="w-full pl-10 pr-4 py-4 border border-landrover-arles/50 bg-white focus:outline-none focus:ring-2 focus:ring-landrover-coniston focus:border-transparent text-2xl font-semibold"
+                />
+              </div>
+            </div>
+
+            <!-- Total Display -->
+            <div class="bg-landrover-limestone/50 p-6 -mx-6 -mb-6 mt-6">
+              <p class="text-xs font-medium text-landrover-marine/60 uppercase tracking-wider mb-1">Total del Día</p>
+              <p id="total-display" class="text-4xl font-bold text-landrover-santorini">₡0</p>
+            </div>
+          </div>
+
+          <!-- Additional Info -->
+          <div class="card p-6 space-y-6">
+            <h3 class="font-semibold text-landrover-santorini">Información Adicional</h3>
+            
+            <!-- Customer Count -->
+            <div>
+              <label class="block text-xs font-medium text-landrover-marine/60 uppercase tracking-wider mb-2">
+                👥 Cantidad de Clientes
+              </label>
+              <input 
+                type="number" 
+                name="customer_count"
+                placeholder="0"
+                inputmode="numeric"
+                class="w-full px-4 py-3 border border-landrover-arles/50 bg-white focus:outline-none focus:ring-2 focus:ring-landrover-coniston focus:border-transparent text-lg"
+              />
+            </div>
+
+            <!-- Notes -->
+            <div>
+              <label class="block text-xs font-medium text-landrover-marine/60 uppercase tracking-wider mb-2">
+                📝 Notas
+              </label>
+              <textarea 
+                name="notes"
+                rows="3"
+                placeholder="Ej: Evento privado, día lluvioso, etc."
+                class="w-full px-4 py-3 border border-landrover-arles/50 bg-white focus:outline-none focus:ring-2 focus:ring-landrover-coniston focus:border-transparent resize-none"
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button 
+            type="submit"
+            class="w-full btn-primary py-4 text-base flex items-center justify-center gap-2"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Guardar Ventas
+          </button>
+        </form>
+      </div>
+    </main>
+  </div>
+</Layout>
+
+<script>
+  const form = document.getElementById('sales-form');
+  const totalDisplay = document.getElementById('total-display');
+  
+  function updateTotal() {
+    const cash = parseFloat(form.cash_sales.value) || 0;
+    const card = parseFloat(form.card_sales.value) || 0;
+    const transfer = parseFloat(form.transfer_sales.value) || 0;
+    const total = cash + card + transfer;
+    totalDisplay.textContent = '₡' + total.toLocaleString('es-CR');
+  }
+  
+  ['cash_sales', 'card_sales', 'transfer_sales'].forEach(name => {
+    form[name].addEventListener('input', updateTotal);
+  });
+  
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = form.querySelector('button[type="submit"]');
+    const originalText = btn.innerHTML;
+    
+    btn.innerHTML = '<svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Guardando...';
+    btn.disabled = true;
+    
+    // TODO: Send to API
+    setTimeout(() => {
+      btn.innerHTML = '✓ Guardado';
+      setTimeout(() => window.location.href = '/', 1000);
+    }, 1000);
+  });
+</script>

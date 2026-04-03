@@ -1,0 +1,97 @@
+---
+const properties = [
+  {
+    title: "Mar Azul Homesites",
+    subtitle: "Gated Community",
+    description: "Curated homesites within a private, nature-immersed community. Each lot positioned for optimal views, privacy, and connection to the land.",
+    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop",
+    features: ["Ocean Views", "Gated Entry", "Underground Utilities"],
+    status: "Available"
+  },
+  {
+    title: "Coastal Villas",
+    subtitle: "Turn-key Homes",
+    description: "Architecturally designed homes that blend tropical modernism with sustainable living. Move-in ready with premium finishes throughout.",
+    image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2071&auto=format&fit=crop",
+    features: ["3-5 Bedrooms", "Private Pool", "Smart Home"],
+    status: "Coming Soon"
+  },
+  {
+    title: "Forest Retreats",
+    subtitle: "Secluded Sanctuaries",
+    description: "Hidden among ancient trees, these retreats offer complete privacy while remaining minutes from Nosara's beaches and amenities.",
+    image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?q=80&w=2065&auto=format&fit=crop",
+    features: ["2+ Acres", "Mountain Views", "Natural Springs"],
+    status: "Available"
+  }
+];
+---
+
+<section id="properties" class="py-24 lg:py-32 bg-landrover-pangea">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    
+    <!-- Header -->
+    <div class="max-w-3xl mb-16">
+      <p class="text-landrover-coniston text-xs tracking-[0.3em] uppercase mb-4">Real Estate</p>
+      <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl text-landrover-santorini mb-6">
+        Your Sanctuary Awaits
+      </h2>
+      <p class="text-landrover-marine/70 text-lg leading-relaxed">
+        Set within Nicoya's Blue Zone, between forest and ocean, each property is designed 
+        with intention — quietly crafted, deeply human, and meant to be lived.
+      </p>
+    </div>
+
+    <!-- Property Cards -->
+    <div class="grid lg:grid-cols-3 gap-8">
+      {properties.map((property, index) => (
+        <article class="group bg-landrover-alaska overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500">
+          <!-- Image -->
+          <div class="img-zoom aspect-[4/3] relative">
+            <img 
+              src={property.image}
+              alt={property.title}
+              class="w-full h-full object-cover"
+            />
+            <div class="absolute top-4 left-4">
+              <span class={`px-3 py-1 text-xs font-medium tracking-wider uppercase ${
+                property.status === 'Available' 
+                  ? 'bg-landrover-coniston text-white' 
+                  : 'bg-landrover-marine text-white'
+              }`}>
+                {property.status}
+              </span>
+            </div>
+          </div>
+          
+          <!-- Content -->
+          <div class="p-6 lg:p-8">
+            <p class="text-landrover-coniston text-xs tracking-[0.2em] uppercase mb-2">{property.subtitle}</p>
+            <h3 class="font-serif text-2xl text-landrover-santorini mb-3">{property.title}</h3>
+            <p class="text-landrover-marine/70 leading-relaxed mb-6">{property.description}</p>
+            
+            <!-- Features -->
+            <div class="flex flex-wrap gap-2 mb-6">
+              {property.features.map((feature) => (
+                <span class="px-3 py-1 bg-landrover-limestone text-landrover-marine text-xs tracking-wide">
+                  {feature}
+                </span>
+              ))}
+            </div>
+            
+            <a 
+              href="#contact" 
+              class="inline-flex items-center text-landrover-coniston font-medium text-sm tracking-wide group-hover:text-landrover-keswick transition-colors"
+            >
+              Inquire Now
+              <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+
+  </div>
+</section>

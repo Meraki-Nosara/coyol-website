@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía: Reenvío de Correos a Meraki</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    @page {
+      size: letter;
+      margin: 2cm;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 12pt;
+      line-height: 1.6;
+      color: #1A1F16;
+      background: white;
+      padding: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      padding-bottom: 30px;
+      border-bottom: 3px solid #3D4F3D;
+      margin-bottom: 30px;
+    }
+    
+    .logo {
+      font-size: 32pt;
+      font-weight: bold;
+      color: #3D4F3D;
+      letter-spacing: 3px;
+    }
+    
+    .subtitle {
+      color: #4A5D4A;
+      font-size: 14pt;
+      margin-top: 5px;
+    }
+    
+    h1 {
+      color: #3D4F3D;
+      font-size: 20pt;
+      margin-bottom: 20px;
+    }
+    
+    h2 {
+      color: #3D4F3D;
+      font-size: 14pt;
+      margin: 25px 0 15px 0;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #D4C9B5;
+    }
+    
+    .important-box {
+      background: #F5F3EF;
+      border-left: 4px solid #3D4F3D;
+      padding: 15px 20px;
+      margin: 20px 0;
+    }
+    
+    .important-box .label {
+      font-weight: bold;
+      color: #3D4F3D;
+      font-size: 10pt;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .email-highlight {
+      background: #3D4F3D;
+      color: white;
+      padding: 15px 25px;
+      font-size: 16pt;
+      font-weight: bold;
+      text-align: center;
+      margin: 20px 0;
+      letter-spacing: 1px;
+    }
+    
+    .steps {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+    }
+    
+    .steps li {
+      counter-increment: step;
+      padding: 15px 0 15px 60px;
+      position: relative;
+      border-bottom: 1px solid #E8E2D6;
+    }
+    
+    .steps li:last-child {
+      border-bottom: none;
+    }
+    
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 12px;
+      width: 40px;
+      height: 40px;
+      background: #3D4F3D;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14pt;
+    }
+    
+    .steps li strong {
+      color: #3D4F3D;
+    }
+    
+    .method-section {
+      background: #F5F3EF;
+      padding: 25px;
+      margin: 20px 0;
+      page-break-inside: avoid;
+    }
+    
+    .method-title {
+      color: #3D4F3D;
+      font-size: 14pt;
+      font-weight: bold;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .method-title .badge {
+      background: #4A5D4A;
+      color: white;
+      font-size: 9pt;
+      padding: 3px 10px;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+    
+    .warning {
+      background: #FFF8E6;
+      border-left: 4px solid #C4A67C;
+      padding: 15px 20px;
+      margin: 20px 0;
+    }
+    
+    .warning .label {
+      font-weight: bold;
+      color: #A65D3F;
+    }
+    
+    .checklist {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .checklist li {
+      padding: 8px 0 8px 30px;
+      position: relative;
+    }
+    
+    .checklist li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #4A5D4A;
+      font-weight: bold;
+    }
+    
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px solid #D4C9B5;
+      text-align: center;
+      color: #666;
+      font-size: 10pt;
+    }
+    
+    .contact-box {
+      background: #3D4F3D;
+      color: white;
+      padding: 20px;
+      margin-top: 30px;
+      text-align: center;
+    }
+    
+    .contact-box p {
+      margin: 5px 0;
+    }
+    
+    @media print {
+      body {
+        padding: 0;
+      }
+      
+      .method-section {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">MERAKI</div>
+    <div class="subtitle">Sistema de Control Financiero</div>
+  </div>
+
+  <h1>📧 Guía: Cómo Reenviar Correos al Sistema</h1>
+  
+  <div class="important-box">
+    <p class="label">📌 Correo de Destino</p>
+    <p>Todos los correos de ventas, pagos y facturas deben reenviarse a:</p>
+  </div>
+  
+  <div class="email-highlight">
+    marion@agentmail.to
+  </div>
+
+  <h2>¿Qué correos debo reenviar?</h2>
+  <ul class="checklist">
+    <li>Reportes diarios de ventas</li>
+    <li>Confirmaciones de SINPE Móvil</li>
+    <li>Notificaciones de transferencias bancarias</li>
+    <li>Resúmenes de pagos con tarjeta</li>
+    <li>Facturas electrónicas de proveedores</li>
+    <li>Estados de cuenta bancarios</li>
+  </ul>
+
+  <h2>Método 1: Reenvío Manual</h2>
+  <div class="method-section">
+    <div class="method-title">
+      Reenviar Correo Individual
+      <span class="badge">Rápido</span>
+    </div>
+    <ol class="steps">
+      <li><strong>Abrir el correo</strong> que desea reenviar en Gmail</li>
+      <li>Hacer clic en los <strong>tres puntos (⋮)</strong> en la esquina superior derecha del correo</li>
+      <li>Seleccionar <strong>"Reenviar"</strong> del menú</li>
+      <li>En el campo "Para:", escribir: <strong>marion@agentmail.to</strong></li>
+      <li>Hacer clic en <strong>"Enviar"</strong></li>
+    </ol>
+  </div>
+
+  <h2>Método 2: Reenvío Automático (Recomendado)</h2>
+  <div class="method-section">
+    <div class="method-title">
+      Configurar Filtro en Gmail
+      <span class="badge">Automático</span>
+    </div>
+    <p style="margin-bottom: 15px; color: #666;">Este método reenviará automáticamente todos los correos que cumplan ciertos criterios.</p>
+    
+    <ol class="steps">
+      <li>
+        <strong>Abrir Gmail</strong> en el navegador (gmail.com)
+      </li>
+      <li>
+        <strong>Ir a Configuración:</strong><br>
+        Clic en el ícono de engranaje (⚙️) → "Ver toda la configuración"
+      </li>
+      <li>
+        <strong>Ir a "Reenvío y correo POP/IMAP"</strong><br>
+        Clic en "Añadir una dirección de reenvío"<br>
+        Escribir: <strong>marion@agentmail.to</strong><br>
+        Clic en "Siguiente" → "Continuar" → "Aceptar"
+      </li>
+      <li>
+        <strong>Confirmar el reenvío:</strong><br>
+        El sistema enviará un código de confirmación. Solicítelo al administrador.
+      </li>
+      <li>
+        <strong>Crear filtro:</strong><br>
+        Ir a la pestaña "Filtros y direcciones bloqueadas"<br>
+        Clic en "Crear un filtro nuevo"
+      </li>
+      <li>
+        <strong>Configurar el filtro:</strong><br>
+        En "Asunto", escribir: <strong>factura OR pago OR venta OR SINPE OR transferencia</strong><br>
+        Clic en "Crear filtro"
+      </li>
+      <li>
+        <strong>Seleccionar acción:</strong><br>
+        Marcar "Reenviar a: marion@agentmail.to"<br>
+        Clic en "Crear filtro"
+      </li>
+    </ol>
+  </div>
+
+  <div class="warning">
+    <p class="label">⚠️ Importante</p>
+    <p>El reenvío automático requiere confirmación. Una vez configurado, avise al administrador para que confirme la dirección de reenvío.</p>
+  </div>
+
+  <h2>Verificar que Funciona</h2>
+  <p>Después de configurar el reenvío:</p>
+  <ol class="steps">
+    <li><strong>Reenviar un correo de prueba</strong> a marion@agentmail.to</li>
+    <li><strong>Esperar confirmación</strong> del sistema (recibirá respuesta en minutos)</li>
+    <li><strong>Verificar en el Dashboard</strong> que los datos aparecen correctamente</li>
+  </ol>
+
+  <div class="contact-box">
+    <p><strong>¿Necesita ayuda?</strong></p>
+    <p>Contactar a Marion Peri</p>
+    <p>📱 WhatsApp: +506 8855-9146</p>
+  </div>
+
+  <div class="footer">
+    <p>Meraki Control System — Esh • Coyol • La Luna</p>
+    <p>Documento generado: Abril 2026</p>
+  </div>
+</body>
+</html>

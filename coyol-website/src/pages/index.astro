@@ -1,0 +1,337 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import ParallaxSection from '../components/ParallaxSection.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Coyol Real Estate | Luxury Living in Nosara, Costa Rica">
+  <Navigation />
+  
+  <main>
+    <!-- Hero Section -->
+    <section id="home">
+      <ParallaxSection
+        image="/images/hero-bg.png"
+        subtitle="A Discovery Land Company Community"
+        title="A sanctuary of endless possibilities"
+      >
+        <a 
+          href="#about" 
+          class="scroll-fade mt-12 opacity-0"
+          data-delay="400"
+        >
+          <div class="w-8 h-14 border-2 border-white/40 rounded-full flex items-start justify-center p-2">
+            <div class="w-1.5 h-3 bg-white/60 rounded-full animate-bounce"></div>
+          </div>
+        </a>
+      </ParallaxSection>
+    </section>
+
+    <!-- Intro Text Section -->
+    <section id="about" class="py-32 lg:py-48 bg-landrover-limestone">
+      <div class="max-w-5xl mx-auto px-8 text-center">
+        <h2 class="scroll-fade font-serif text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-landrover-santorini leading-tight" data-delay="0">
+          Set in Nosara's Blue Zone on Costa Rica's Pacific coast, 
+          Coyol encompasses pristine beachfront surrounded by wild and vibrant nature.
+        </h2>
+      </div>
+    </section>
+
+    <!-- Lifestyle Parallax -->
+    <ParallaxSection
+      image="/images/section-bg-1.png"
+      subtitle="The Lifestyle"
+      title="Costa Rica as you've always imagined it."
+      description="Rural yet refined, Coyol embodies a family-focused, adventurous lifestyle. A destination where sustainable standards are set and vivid well-being is prioritized."
+      align="left"
+    />
+
+    <!-- Philosophy Section -->
+    <section class="py-32 lg:py-48 bg-landrover-pangea">
+      <div class="max-w-7xl mx-auto px-8">
+        <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+          <div>
+            <p class="scroll-fade text-landrover-coniston text-xs tracking-[0.3em] uppercase mb-6" data-delay="0">Our Philosophy</p>
+            <h2 class="scroll-fade font-serif text-3xl md:text-4xl lg:text-5xl text-landrover-santorini mb-8 leading-tight" data-delay="100">
+              Land is not just acquired — it is felt.
+            </h2>
+            <p class="scroll-fade text-landrover-marine/70 text-lg lg:text-xl leading-relaxed mb-8" data-delay="200">
+              Every property carries a rhythm, a memory of wind, light, and time. 
+              We listen before we build, observe before we propose, honoring the natural 
+              intelligence of each place.
+            </p>
+            <p class="scroll-fade text-landrover-marine/70 text-lg lg:text-xl leading-relaxed" data-delay="300">
+              This is a place curated by a family, shaped by decades of hosting, feeding, 
+              and caring for people in Nosara through La Luna, Coyol Restaurant, and Esh.
+            </p>
+          </div>
+          <div class="scroll-fade" data-delay="200">
+            <div class="img-zoom aspect-[4/5] overflow-hidden">
+              <img 
+                src="/images/section-bg-2.png"
+                alt="Coyol lifestyle"
+                class="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experiences Parallax -->
+    <ParallaxSection
+      image="https://images.unsplash.com/photo-1502680390469-be75c86b636f?q=80&w=2070&auto=format&fit=crop"
+      subtitle="Experiences"
+      title="Where nature inspires"
+      description="Coyol is a true retreat from the day-to-day. A place where nature guides and inspires your experience."
+      align="right"
+    />
+
+    <!-- Blue Zone Section -->
+    <section class="py-32 lg:py-48 bg-landrover-keswick text-white overflow-hidden">
+      <div class="max-w-5xl mx-auto px-8 text-center">
+        <p class="scroll-fade text-landrover-limestone/60 text-xs tracking-[0.3em] uppercase mb-6" data-delay="0">Nicoya Peninsula</p>
+        <h2 class="scroll-fade font-serif text-4xl md:text-5xl lg:text-6xl xl:text-7xl mb-8" data-delay="100">
+          One of Five Blue Zones
+        </h2>
+        <p class="scroll-fade text-landrover-limestone/80 text-lg md:text-xl lg:text-2xl leading-relaxed max-w-3xl mx-auto" data-delay="200">
+          The Nicoya Peninsula is recognized as one of only five Blue Zones on Earth — 
+          regions where people live measurably longer, healthier lives.
+        </p>
+      </div>
+    </section>
+
+    <!-- Real Estate Parallax -->
+    <ParallaxSection
+      image="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop"
+      subtitle="Real Estate"
+      title="Your sanctuary awaits"
+      description="Coyol blends luxury living with a relaxed family-friendly atmosphere. Choose from a selection of custom homes and homesites in a variety of settings."
+      align="left"
+    />
+
+    <!-- Developments Section -->
+    <section id="developments" class="py-32 lg:py-48 bg-landrover-alaska">
+      <div class="max-w-7xl mx-auto px-8">
+        <div class="text-center mb-20">
+          <p class="scroll-fade text-landrover-coniston text-xs tracking-[0.3em] uppercase mb-4" data-delay="0">Our Developments</p>
+          <h2 class="scroll-fade font-serif text-4xl md:text-5xl lg:text-6xl text-landrover-santorini" data-delay="100">
+            Three Distinct Communities
+          </h2>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
+          <!-- Nosara Hills -->
+          <article class="scroll-fade group relative overflow-hidden" data-delay="0">
+            <div class="aspect-[3/4] overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop"
+                alt="Nosara Hills"
+                class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+              />
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-landrover-santorini/90 via-landrover-santorini/30 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-8">
+              <p class="text-landrover-limestone/60 text-xs tracking-[0.2em] uppercase mb-3">Gated Community</p>
+              <h3 class="font-serif text-3xl lg:text-4xl text-white mb-3">Nosara Hills</h3>
+              <p class="text-landrover-limestone/70 text-sm lg:text-base">Elevated homesites with panoramic views</p>
+            </div>
+          </article>
+          
+          <!-- Mar Azul -->
+          <article class="scroll-fade group relative overflow-hidden" data-delay="150">
+            <div class="aspect-[3/4] overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2070&auto=format&fit=crop"
+                alt="Mar Azul"
+                class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+              />
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-landrover-santorini/90 via-landrover-santorini/30 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-8">
+              <p class="text-landrover-limestone/60 text-xs tracking-[0.2em] uppercase mb-3">Beachside Living</p>
+              <h3 class="font-serif text-3xl lg:text-4xl text-white mb-3">Mar Azul</h3>
+              <p class="text-landrover-limestone/70 text-sm lg:text-base">Steps from the ocean, immersed in nature</p>
+            </div>
+          </article>
+          
+          <!-- Los Coyoles -->
+          <article class="scroll-fade group relative overflow-hidden" data-delay="300">
+            <div class="aspect-[3/4] overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?q=80&w=2065&auto=format&fit=crop"
+                alt="Los Coyoles"
+                class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+              />
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-landrover-santorini/90 via-landrover-santorini/30 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-8">
+              <p class="text-landrover-limestone/60 text-xs tracking-[0.2em] uppercase mb-3">Forest Retreat</p>
+              <h3 class="font-serif text-3xl lg:text-4xl text-white mb-3">Los Coyoles</h3>
+              <p class="text-landrover-limestone/70 text-sm lg:text-base">Secluded sanctuaries among ancient trees</p>
+            </div>
+          </article>
+        </div>
+        
+        <div class="scroll-fade text-center mt-16" data-delay="200">
+          <a 
+            href="#map" 
+            class="inline-block bg-landrover-keswick text-white px-12 py-5 text-xs font-medium tracking-[0.2em] uppercase hover:bg-landrover-coniston transition-colors"
+          >
+            Explore Interactive Map
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Family Legacy Parallax -->
+    <ParallaxSection
+      image="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070&auto=format&fit=crop"
+      subtitle="A Family Legacy"
+      title="La Luna · Coyol · Esh"
+      description="What once gathered people around tables now gathers them around homes — designed with the same intention and care."
+    />
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-32 lg:py-48 bg-landrover-limestone">
+      <div class="max-w-7xl mx-auto px-8">
+        <div class="text-center mb-20">
+          <p class="scroll-fade text-landrover-coniston text-xs tracking-[0.3em] uppercase mb-4" data-delay="0">Gallery</p>
+          <h2 class="scroll-fade font-serif text-4xl md:text-5xl lg:text-6xl text-landrover-santorini" data-delay="100">
+            Spaces That Inspire
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="scroll-fade lg:col-span-2 lg:row-span-2" data-delay="0">
+            <div class="img-zoom aspect-square overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop"
+                alt="Gallery"
+                class="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+          <div class="scroll-fade" data-delay="100">
+            <div class="img-zoom aspect-square overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop"
+                alt="Gallery"
+                class="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+          <div class="scroll-fade" data-delay="150">
+            <div class="img-zoom aspect-square overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop"
+                alt="Gallery"
+                class="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+          <div class="scroll-fade lg:col-span-2" data-delay="200">
+            <div class="img-zoom aspect-[2/1] overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=2070&auto=format&fit=crop"
+                alt="Gallery"
+                class="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA Parallax -->
+    <ParallaxSection
+      image="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop"
+      subtitle="Begin Your Journey"
+      title="Your sanctuary awaits"
+    >
+      <a 
+        href="#contact" 
+        class="scroll-fade mt-12 bg-landrover-limestone text-landrover-keswick px-12 py-5 text-xs font-medium tracking-[0.2em] uppercase hover:bg-white transition-colors opacity-0"
+        data-delay="300"
+      >
+        Get in Touch
+      </a>
+    </ParallaxSection>
+
+    <!-- Contact -->
+    <Contact />
+  </main>
+  
+  <Footer />
+</Layout>
+
+<style is:global>
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Custom scrollbar - Land Rover style */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #E8E2D6;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #4A5D4A;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3D4F3D;
+  }
+  
+  /* Image hover zoom */
+  .img-zoom img {
+    transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .img-zoom:hover img {
+    transform: scale(1.08);
+  }
+  
+  /* Global scroll fade for non-parallax sections */
+  .scroll-fade {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  
+  .scroll-fade.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  // Initialize scroll animations for all sections
+  const allScrollFade = document.querySelectorAll('.scroll-fade:not(.parallax-section .scroll-fade)');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target as HTMLElement;
+        const delay = parseInt(el.dataset.delay || '0');
+        
+        setTimeout(() => {
+          el.style.transition = 'opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1)';
+          el.classList.add('visible');
+        }, delay);
+        
+        observer.unobserve(el);
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -5% 0px'
+  });
+  
+  allScrollFade.forEach(el => observer.observe(el));
+</script>
