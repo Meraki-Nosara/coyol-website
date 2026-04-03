@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meraki Daily Report</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #3D4F3D;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    
+    .report {
+      max-width: 420px;
+      margin: 0 auto;
+      background: #F8F6F3;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #3D4F3D 0%, #4A5D4A 100%);
+      padding: 32px 24px;
+      text-align: center;
+    }
+    
+    .logo-text {
+      font-size: 32px;
+      font-weight: 300;
+      letter-spacing: 8px;
+      color: #D4C9B5;
+      margin-bottom: 4px;
+    }
+    
+    .tagline {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: #D4C9B5;
+      opacity: 0.7;
+      text-transform: uppercase;
+    }
+    
+    .date {
+      margin-top: 20px;
+      font-size: 13px;
+      color: white;
+      letter-spacing: 1px;
+    }
+    
+    /* Section */
+    .section {
+      padding: 24px;
+      border-bottom: 1px solid #E8E4DE;
+    }
+    
+    .section:last-child {
+      border-bottom: none;
+    }
+    
+    .section-title {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #4A5D4A;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    
+    /* Total Card */
+    .total-card {
+      background: linear-gradient(135deg, #3D4F3D 0%, #4A5D4A 100%);
+      padding: 28px;
+      text-align: center;
+      margin: -24px -24px 24px -24px;
+    }
+    
+    .total-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #D4C9B5;
+      margin-bottom: 8px;
+    }
+    
+    .total-amount {
+      font-size: 42px;
+      font-weight: 300;
+      color: white;
+      letter-spacing: 2px;
+    }
+    
+    .total-change {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 4px 12px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 20px;
+      font-size: 12px;
+      color: #90EE90;
+    }
+    
+    /* Restaurant Row */
+    .restaurant {
+      display: flex;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid #E8E4DE;
+    }
+    
+    .restaurant:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    
+    .restaurant-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 14px;
+      flex-shrink: 0;
+      overflow: hidden;
+      padding: 8px;
+    }
+    
+    .restaurant-logo.esh { background: #2C3E50; }
+    .restaurant-logo.coyol { background: #1a1a1a; }
+    .restaurant-logo.laluna { background: #4A5D4A; }
+    
+    .restaurant-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
+    
+    .restaurant-info {
+      flex: 1;
+    }
+    
+    .restaurant-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 2px;
+    }
+    
+    .restaurant-customers {
+      font-size: 12px;
+      color: #888;
+    }
+    
+    .restaurant-amount {
+      text-align: right;
+    }
+    
+    .restaurant-sales {
+      font-size: 17px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+    
+    .restaurant-change {
+      font-size: 11px;
+      color: #22c55e;
+    }
+    
+    .restaurant-change.down {
+      color: #ef4444;
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    
+    .stat-box {
+      background: white;
+      padding: 16px;
+      border: 1px solid #E8E4DE;
+    }
+    
+    .stat-label {
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 6px;
+    }
+    
+    .stat-value {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+    
+    .stat-sub {
+      font-size: 11px;
+      color: #888;
+      margin-top: 2px;
+    }
+    
+    /* Breakdown */
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #E8E4DE;
+      font-size: 14px;
+    }
+    
+    .breakdown-row:last-child {
+      border-bottom: none;
+    }
+    
+    .breakdown-label {
+      color: #666;
+    }
+    
+    .breakdown-value {
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+    
+    /* Alerts */
+    .alert {
+      display: flex;
+      align-items: flex-start;
+      padding: 14px;
+      background: white;
+      border-left: 3px solid;
+      margin-bottom: 10px;
+    }
+    
+    .alert:last-child {
+      margin-bottom: 0;
+    }
+    
+    .alert.warning {
+      border-color: #eab308;
+      background: #fefce8;
+    }
+    
+    .alert.success {
+      border-color: #22c55e;
+      background: #f0fdf4;
+    }
+    
+    .alert-icon {
+      font-size: 16px;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+    
+    .alert-content {
+      flex: 1;
+    }
+    
+    .alert-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 2px;
+    }
+    
+    .alert-text {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    /* Category Breakdown */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+    
+    .category-item {
+      text-align: center;
+      padding: 12px 8px;
+      background: white;
+      border: 1px solid #E8E4DE;
+    }
+    
+    .category-name {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      margin-bottom: 4px;
+    }
+    
+    .category-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+    
+    /* Footer */
+    .footer {
+      background: #3D4F3D;
+      padding: 20px 24px;
+      text-align: center;
+    }
+    
+    .footer-text {
+      font-size: 11px;
+      color: #D4C9B5;
+      letter-spacing: 1px;
+    }
+    
+    .footer-link {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 10px 24px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      text-decoration: none;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    
+    /* Restaurant logos inline as base64 */
+  </style>
+</head>
+<body>
+  <div class="report">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo-text">MERAKI</div>
+      <div class="tagline">Control Financiero</div>
+      <div class="date">Friday, April 3, 2026</div>
+    </div>
+    
+    <!-- Total Sales -->
+    <div class="section">
+      <div class="total-card">
+        <div class="total-label">Total Sales Today</div>
+        <div class="total-amount">₡11.01M</div>
+        <div class="total-change">↑ 7% vs yesterday</div>
+      </div>
+      
+      <!-- By Restaurant -->
+      <div class="section-title">By Restaurant</div>
+      
+      <div class="restaurant">
+        <div class="restaurant-logo esh">
+          <img src="/images/esh-logo.png" alt="Esh">
+        </div>
+        <div class="restaurant-info">
+          <div class="restaurant-name">Esh</div>
+          <div class="restaurant-customers">94 customers</div>
+        </div>
+        <div class="restaurant-amount">
+          <div class="restaurant-sales">₡2,842,000</div>
+          <div class="restaurant-change">↑ 8%</div>
+        </div>
+      </div>
+      
+      <div class="restaurant">
+        <div class="restaurant-logo coyol">
+          <img src="/images/coyol-logo.png" alt="Coyol">
+        </div>
+        <div class="restaurant-info">
+          <div class="restaurant-name">Coyol</div>
+          <div class="restaurant-customers">127 customers</div>
+        </div>
+        <div class="restaurant-amount">
+          <div class="restaurant-sales">₡3,156,000</div>
+          <div class="restaurant-change">↑ 12%</div>
+        </div>
+      </div>
+      
+      <div class="restaurant">
+        <div class="restaurant-logo laluna">
+          <img src="/images/laluna-logo.png" alt="La Luna">
+        </div>
+        <div class="restaurant-info">
+          <div class="restaurant-name">La Luna</div>
+          <div class="restaurant-customers">156 customers</div>
+        </div>
+        <div class="restaurant-amount">
+          <div class="restaurant-sales">₡5,012,188</div>
+          <div class="restaurant-change down">↓ 3%</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- La Luna Breakdown (from real data) -->
+    <div class="section">
+      <div class="section-title">La Luna Breakdown</div>
+      <div class="category-grid">
+        <div class="category-item">
+          <div class="category-name">Bebidas</div>
+          <div class="category-value">₡1.35M</div>
+        </div>
+        <div class="category-item">
+          <div class="category-name">Cócteles</div>
+          <div class="category-value">₡1.36M</div>
+        </div>
+        <div class="category-item">
+          <div class="category-name">Entradas</div>
+          <div class="category-value">₡1.40M</div>
+        </div>
+        <div class="category-item">
+          <div class="category-name">Fuertes</div>
+          <div class="category-value">₡7.40M</div>
+        </div>
+        <div class="category-item">
+          <div class="category-name">Pizza</div>
+          <div class="category-value">₡836K</div>
+        </div>
+        <div class="category-item">
+          <div class="category-name">Vinos</div>
+          <div class="category-value">₡590K</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Key Metrics -->
+    <div class="section">
+      <div class="section-title">Key Metrics</div>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-label">Customers</div>
+          <div class="stat-value">377</div>
+          <div class="stat-sub">avg ₡29,207</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Tips</div>
+          <div class="stat-value">₡736K</div>
+          <div class="stat-sub">6.7% of sales</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">This Week</div>
+          <div class="stat-value">₡68.5M</div>
+          <div class="stat-sub">↑ 5% vs last</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">MTD</div>
+          <div class="stat-value">₡33.2M</div>
+          <div class="stat-sub">on track</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Payment Breakdown -->
+    <div class="section">
+      <div class="section-title">Payment Methods</div>
+      <div class="breakdown-row">
+        <span class="breakdown-label">💳 Cards (LAFISE/BCR)</span>
+        <span class="breakdown-value">₡10,571,450</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-label">💵 Cash</span>
+        <span class="breakdown-value">₡539,500</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-label">🏦 IVA 13%</span>
+        <span class="breakdown-value">₡1,158,480</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-label">🍽️ Service 10%</span>
+        <span class="breakdown-value">₡882,292</span>
+      </div>
+    </div>
+    
+    <!-- Alerts -->
+    <div class="section">
+      <div class="section-title">Alerts & Insights</div>
+      
+      <div class="alert warning">
+        <span class="alert-icon">⚠️</span>
+        <div class="alert-content">
+          <div class="alert-title">Camarón price up 12%</div>
+          <div class="alert-text">Pescadería del Pacífico — Consider switching to Mariscos del Sur</div>
+        </div>
+      </div>
+      
+      <div class="alert success">
+        <span class="alert-icon">💡</span>
+        <div class="alert-content">
+          <div class="alert-title">Fuertes leading sales</div>
+          <div class="alert-text">Main dishes at ₡7.4M — 67% of La Luna revenue</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+      <div class="footer-text">Meraki Control • Daily Report</div>
+      <a href="#" class="footer-link">View Full Dashboard</a>
+    </div>
+  </div>
+</body>
+</html>

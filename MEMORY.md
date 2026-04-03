@@ -25,16 +25,34 @@
 ### Meraki — Restaurant Group (Angelina's company)
 Three restaurants under unified management:
 
-| Restaurant | Code | Emoji | Notes |
-|------------|------|-------|-------|
-| **Esh** | `esh` | 🍽️ | |
-| **Coyol** | `coyol` | 🌴 | Same name as real estate |
-| **La Luna** | `laluna` | 🌙 | |
+| Restaurant | Code | Color | Manager |
+|------------|------|-------|--------|
+| **Esh** | `esh` | Sand #C4A67C | Danny (shared) — smallest operation |
+| **Coyol** | `coyol` | Keswick Green #3D4F3D | John |
+| **La Luna** | `laluna` | Terracotta #A65D3F | Abner (staff) |
 
 - **Accounting:** One unified bank account for all 3
 - **POS:** Manual (no digital system)
 - **Invoices:** Factura electrónica (Costa Rica Hacienda system)
 - **Control System:** Meraki Control (building now)
+
+### Meraki Team
+
+| Person | Role | Notes |
+|--------|------|-------|
+| **Angelina** | Owner/Admin | Has bank statements & CC commissions. Not great at routine — ask nicely explaining why you need it |
+| **Ingrid** | Daily closings | Photos of yesterday's closings + cash count for ALL 3 locations. If missing → ask Angelina to follow up |
+| **John** | Coyol Manager | |
+| **Abner** | La Luna Manager | Staff/manpower + payroll for all locations |
+| **Silvia** | Cleaning & supplies | All locations, based at La Luna |
+| **Danny** | Food & ordering | All 3 locations + oversees Esh |
+
+### Meraki Reports
+- **Daily** @ 8pm → Angelina (vailas78@yahoo.com)
+- **Weekly** @ Sunday 7pm → Angelina
+- **Monthly** @ 1st of month → Angelina
+- **Language:** English only
+- **Logos:** Black on white, Land Rover Heritage colors per restaurant
 
 ### Coyol Real Estate
 Luxury real estate development company:

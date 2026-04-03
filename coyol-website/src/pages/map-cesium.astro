@@ -1,0 +1,480 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="3D Interactive Map | Coyol Real Estate">
+  <Navigation />
+  
+  <main class="pt-20">
+    <!-- Map Header -->
+    <section class="bg-landrover-limestone py-12 lg:py-16">
+      <div class="max-w-7xl mx-auto px-8">
+        <p class="text-landrover-coniston text-xs tracking-[0.3em] uppercase mb-4">Explore Our Developments</p>
+        <h1 class="font-serif text-4xl md:text-5xl text-landrover-santorini mb-4">3D Interactive Map</h1>
+        <p class="text-landrover-marine/70 text-lg max-w-2xl">
+          Explore Nosara Hills and Mar Azul in stunning 3D. Click on any lot to view details, availability, and photos.
+        </p>
+      </div>
+    </section>
+
+    <!-- Controls Bar -->
+    <section class="bg-landrover-pangea py-4 border-b border-landrover-arles/30 sticky top-20 z-30">
+      <div class="max-w-7xl mx-auto px-8">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <!-- Development Selector -->
+          <div class="flex items-center gap-3">
+            <span class="text-landrover-marine text-sm font-medium">View:</span>
+            <div class="flex gap-2">
+              <button id="btn-all" class="dev-btn active px-4 py-2 text-xs tracking-wider uppercase bg-landrover-keswick text-white transition-all">
+                All
+              </button>
+              <button id="btn-nosara" class="dev-btn px-4 py-2 text-xs tracking-wider uppercase bg-landrover-limestone text-landrover-marine hover:bg-landrover-keswick hover:text-white transition-all">
+                Nosara Hills
+              </button>
+              <button id="btn-marazul" class="dev-btn px-4 py-2 text-xs tracking-wider uppercase bg-landrover-limestone text-landrover-marine hover:bg-landrover-keswick hover:text-white transition-all">
+                Mar Azul
+              </button>
+            </div>
+          </div>
+          
+          <!-- Legend -->
+          <div class="flex items-center gap-6">
+            <div class="flex items-center gap-2">
+              <span class="w-4 h-4 rounded-full" style="background: #22c55e;"></span>
+              <span class="text-xs text-landrover-marine">Available</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-4 h-4 rounded-full" style="background: #eab308;"></span>
+              <span class="text-xs text-landrover-marine">Reserved</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-4 h-4 rounded-full" style="background: #ef4444;"></span>
+              <span class="text-xs text-landrover-marine">Sold</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3D Map Container -->
+    <section class="relative bg-landrover-santorini">
+      <div id="cesiumContainer" class="w-full h-[75vh] min-h-[600px]"></div>
+      
+      <!-- Floating Info Panel -->
+      <div id="info-panel" class="hidden absolute bottom-6 left-6 right-6 md:left-auto md:right-6 md:w-[400px] bg-white shadow-2xl">
+        <button id="close-panel" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-landrover-marine hover:text-landrover-keswick transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        
+        <div class="p-6">
+          <p id="panel-development" class="text-landrover-coniston text-xs tracking-[0.2em] uppercase mb-2"></p>
+          <h3 id="panel-name" class="font-serif text-2xl text-landrover-santorini mb-6"></h3>
+          
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <p class="text-xs text-landrover-marine/50 uppercase tracking-wider mb-1">Status</p>
+              <p id="panel-status" class="text-sm font-medium"></p>
+            </div>
+            <div>
+              <p class="text-xs text-landrover-marine/50 uppercase tracking-wider mb-1">Size</p>
+              <p id="panel-size" class="text-sm font-medium text-landrover-santorini">—</p>
+            </div>
+            <div>
+              <p class="text-xs text-landrover-marine/50 uppercase tracking-wider mb-1">View</p>
+              <p id="panel-view" class="text-sm font-medium text-landrover-santorini">—</p>
+            </div>
+            <div>
+              <p class="text-xs text-landrover-marine/50 uppercase tracking-wider mb-1">Price</p>
+              <p id="panel-price" class="text-sm font-medium text-landrover-santorini">Contact for pricing</p>
+            </div>
+          </div>
+          
+          <!-- Gallery placeholder -->
+          <div id="panel-gallery" class="grid grid-cols-3 gap-2 mb-6">
+            <div class="aspect-square bg-landrover-limestone"></div>
+            <div class="aspect-square bg-landrover-limestone"></div>
+            <div class="aspect-square bg-landrover-limestone"></div>
+          </div>
+          
+          <a 
+            href="#contact" 
+            class="block w-full bg-landrover-keswick text-white text-center px-6 py-4 text-xs font-medium tracking-[0.15em] uppercase hover:bg-landrover-coniston transition-colors"
+          >
+            Request Information
+          </a>
+        </div>
+      </div>
+
+      <!-- Camera Controls -->
+      <div class="absolute top-4 right-4 flex flex-col gap-2">
+        <button id="btn-reset" class="bg-white/90 backdrop-blur shadow-lg px-4 py-3 text-xs font-medium text-landrover-marine hover:bg-white transition-colors">
+          Reset View
+        </button>
+        <button id="btn-tilt" class="bg-white/90 backdrop-blur shadow-lg px-4 py-3 text-xs font-medium text-landrover-marine hover:bg-white transition-colors">
+          Top Down
+        </button>
+      </div>
+    </section>
+
+    <!-- Development Details -->
+    <section class="py-20 bg-landrover-alaska">
+      <div class="max-w-7xl mx-auto px-8">
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-white p-8 border border-landrover-arles/30">
+            <h3 class="font-serif text-2xl text-landrover-santorini mb-4">Nosara Hills</h3>
+            <p class="text-landrover-marine/70 text-sm leading-relaxed mb-6">
+              A gated community offering elevated homesites with panoramic ocean and mountain views. 
+              Underground utilities, paved roads, and 24/7 security.
+            </p>
+            <ul class="space-y-2 text-sm text-landrover-marine/80">
+              <li class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 bg-landrover-coniston rounded-full"></span>
+                2,000 - 8,000 m² homesites
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 bg-landrover-coniston rounded-full"></span>
+                Ocean & mountain views
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 bg-landrover-coniston rounded-full"></span>
+                Gated with 24/7 security
+              </li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-8 border border-landrover-arles/30">
+            <h3 class="font-serif text-2xl text-landrover-santorini mb-4">Mar Azul</h3>
+            <p class="text-landrover-marine/70 text-sm leading-relaxed mb-6">
+              Beachside living at its finest. These homesites offer direct access to pristine beaches 
+              while remaining immersed in tropical forest.
+            </p>
+            <ul class="space-y-2 text-sm text-landrover-marine/80">
+              <li class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 bg-landrover-coniston rounded-full"></span>
+                1,500 - 5,000 m² homesites
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 bg-landrover-coniston rounded-full"></span>
+                Steps from the beach
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 bg-landrover-coniston rounded-full"></span>
+                Private community
+              </li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-8 border border-landrover-arles/30">
+            <h3 class="font-serif text-2xl text-landrover-santorini mb-4">Los Coyoles</h3>
+            <p class="text-landrover-marine/70 text-sm leading-relaxed mb-6">
+              Secluded forest retreats among ancient trees. Perfect for those seeking complete privacy 
+              while staying connected to nature.
+            </p>
+            <ul class="space-y-2 text-sm text-landrover-marine/80">
+              <li class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 bg-landrover-coniston rounded-full"></span>
+                3,000 - 10,000 m² estates
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 bg-landrover-coniston rounded-full"></span>
+                Forest sanctuary
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 bg-landrover-coniston rounded-full"></span>
+                Coming soon
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</Layout>
+
+<!-- Cesium JS & CSS -->
+<link href="https://cesium.com/downloads/cesiumjs/releases/1.140/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+<script is:inline src="https://cesium.com/downloads/cesiumjs/releases/1.140/Build/Cesium/Cesium.js"></script>
+
+<style is:global>
+  /* Cesium customizations */
+  #cesiumContainer {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Hide default Cesium UI elements we don't need */
+  .cesium-viewer-toolbar,
+  .cesium-viewer-animationContainer,
+  .cesium-viewer-timelineContainer,
+  .cesium-viewer-bottom {
+    display: none !important;
+  }
+  
+  .cesium-viewer-fullscreenContainer {
+    display: none !important;
+  }
+  
+  /* Style the credit */
+  .cesium-credit-logoContainer {
+    display: none !important;
+  }
+  
+  .cesium-credit-textContainer {
+    font-size: 10px !important;
+  }
+</style>
+
+<script is:inline>
+document.addEventListener('DOMContentLoaded', async () => {
+  // ⚠️ IMPORTANT: Replace with your Cesium Ion access token
+  // Get one free at: https://ion.cesium.com/signup
+  Cesium.Ion.defaultAccessToken = 'YOUR_CESIUM_ION_TOKEN';
+  
+  // Nosara, Costa Rica coordinates
+  const nosaraCenter = {
+    lng: -85.638,
+    lat: 9.976,
+    height: 2500
+  };
+  
+  // Initialize Cesium Viewer
+  const viewer = new Cesium.Viewer('cesiumContainer', {
+    terrain: Cesium.Terrain.fromWorldTerrain(),
+    baseLayerPicker: false,
+    geocoder: false,
+    homeButton: false,
+    sceneModePicker: false,
+    selectionIndicator: true,
+    timeline: false,
+    animation: false,
+    navigationHelpButton: false,
+    fullscreenButton: false,
+    infoBox: false,
+  });
+  
+  // Set initial camera position - fly to Nosara
+  viewer.camera.flyTo({
+    destination: Cesium.Cartesian3.fromDegrees(
+      nosaraCenter.lng, 
+      nosaraCenter.lat, 
+      nosaraCenter.height
+    ),
+    orientation: {
+      heading: Cesium.Math.toRadians(0),
+      pitch: Cesium.Math.toRadians(-45),
+      roll: 0
+    },
+    duration: 2
+  });
+  
+  // Enable lighting for realistic terrain
+  viewer.scene.globe.enableLighting = true;
+  
+  // Status colors
+  const statusColors = {
+    available: Cesium.Color.fromCssColorString('#22c55e').withAlpha(0.6),
+    reserved: Cesium.Color.fromCssColorString('#eab308').withAlpha(0.6),
+    sold: Cesium.Color.fromCssColorString('#ef4444').withAlpha(0.6)
+  };
+  
+  const statusOutlines = {
+    available: Cesium.Color.fromCssColorString('#22c55e'),
+    reserved: Cesium.Color.fromCssColorString('#eab308'),
+    sold: Cesium.Color.fromCssColorString('#ef4444')
+  };
+  
+  // Load GeoJSON data
+  let allEntities = [];
+  
+  try {
+    const response = await fetch('/data/all-developments.geojson');
+    const geojson = await response.json();
+    
+    // Process each feature
+    geojson.features.forEach((feature, index) => {
+      if (feature.geometry.type === 'Polygon') {
+        const coords = feature.geometry.coordinates[0];
+        const positions = coords.map(c => Cesium.Cartesian3.fromDegrees(c[0], c[1], 50));
+        
+        const status = feature.properties.status || 'available';
+        const source = feature.properties.source || 'unknown';
+        
+        const entity = viewer.entities.add({
+          name: feature.properties.name || `Lot ${index + 1}`,
+          polygon: {
+            hierarchy: positions,
+            material: statusColors[status],
+            outline: true,
+            outlineColor: statusOutlines[status],
+            outlineWidth: 2,
+            height: 0,
+            extrudedHeight: 5, // Slight extrusion for 3D effect
+            closeTop: true,
+            closeBottom: true
+          },
+          properties: {
+            id: feature.properties.id,
+            source: source,
+            status: status,
+            layer: feature.properties.layer,
+            name: feature.properties.name || `Lot ${index + 1}`
+          }
+        });
+        
+        allEntities.push(entity);
+      } else if (feature.geometry.type === 'LineString') {
+        // Roads and boundaries
+        const coords = feature.geometry.coordinates;
+        const positions = coords.map(c => Cesium.Cartesian3.fromDegrees(c[0], c[1], 2));
+        
+        viewer.entities.add({
+          polyline: {
+            positions: positions,
+            width: 2,
+            material: Cesium.Color.WHITE.withAlpha(0.4),
+            clampToGround: true
+          },
+          properties: {
+            source: feature.properties.source,
+            layer: feature.properties.layer
+          }
+        });
+      }
+    });
+    
+    console.log(`Loaded ${allEntities.length} lot polygons`);
+    
+  } catch (error) {
+    console.error('Error loading GeoJSON:', error);
+  }
+  
+  // Click handler for lots
+  const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+  
+  handler.setInputAction((click) => {
+    const pickedObject = viewer.scene.pick(click.position);
+    
+    if (Cesium.defined(pickedObject) && Cesium.defined(pickedObject.id)) {
+      const entity = pickedObject.id;
+      const props = entity.properties;
+      
+      if (props) {
+        const source = props.source?.getValue() || 'Unknown';
+        const status = props.status?.getValue() || 'available';
+        const name = props.name?.getValue() || entity.name;
+        const layer = props.layer?.getValue() || 'Homesite';
+        
+        // Update panel
+        document.getElementById('panel-development').textContent = 
+          source === 'nosara-hills' ? 'Nosara Hills' : 
+          source === 'mar-azul' ? 'Mar Azul' : 'Development';
+        document.getElementById('panel-name').textContent = name;
+        
+        const statusEl = document.getElementById('panel-status');
+        statusEl.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+        statusEl.className = `text-sm font-medium ${
+          status === 'sold' ? 'text-red-600' : 
+          status === 'reserved' ? 'text-yellow-600' : 
+          'text-green-600'
+        }`;
+        
+        document.getElementById('panel-view').textContent = layer;
+        
+        // Show panel
+        document.getElementById('info-panel').classList.remove('hidden');
+        
+        // Highlight selected lot
+        viewer.selectedEntity = entity;
+      }
+    }
+  }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+  
+  // Close panel
+  document.getElementById('close-panel').addEventListener('click', () => {
+    document.getElementById('info-panel').classList.add('hidden');
+    viewer.selectedEntity = undefined;
+  });
+  
+  // Reset view button
+  document.getElementById('btn-reset').addEventListener('click', () => {
+    viewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(nosaraCenter.lng, nosaraCenter.lat, nosaraCenter.height),
+      orientation: {
+        heading: Cesium.Math.toRadians(0),
+        pitch: Cesium.Math.toRadians(-45),
+        roll: 0
+      },
+      duration: 1.5
+    });
+  });
+  
+  // Top down view
+  let isTopDown = false;
+  document.getElementById('btn-tilt').addEventListener('click', () => {
+    isTopDown = !isTopDown;
+    viewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(
+        nosaraCenter.lng, 
+        nosaraCenter.lat, 
+        isTopDown ? 4000 : nosaraCenter.height
+      ),
+      orientation: {
+        heading: Cesium.Math.toRadians(0),
+        pitch: Cesium.Math.toRadians(isTopDown ? -90 : -45),
+        roll: 0
+      },
+      duration: 1
+    });
+    document.getElementById('btn-tilt').textContent = isTopDown ? '3D View' : 'Top Down';
+  });
+  
+  // Development filter buttons
+  const filterButtons = document.querySelectorAll('.dev-btn');
+  
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Update button styles
+      filterButtons.forEach(b => {
+        b.classList.remove('active', 'bg-landrover-keswick', 'text-white');
+        b.classList.add('bg-landrover-limestone', 'text-landrover-marine');
+      });
+      btn.classList.add('active', 'bg-landrover-keswick', 'text-white');
+      btn.classList.remove('bg-landrover-limestone', 'text-landrover-marine');
+      
+      const filter = btn.id.replace('btn-', '');
+      
+      // Filter entities
+      allEntities.forEach(entity => {
+        const source = entity.properties?.source?.getValue();
+        
+        if (filter === 'all') {
+          entity.show = true;
+        } else if (filter === 'nosara') {
+          entity.show = source === 'nosara-hills';
+        } else if (filter === 'marazul') {
+          entity.show = source === 'mar-azul';
+        }
+      });
+      
+      // Fly to development
+      if (filter === 'nosara') {
+        viewer.camera.flyTo({
+          destination: Cesium.Cartesian3.fromDegrees(-85.638, 9.998, 1500),
+          duration: 1.5
+        });
+      } else if (filter === 'marazul') {
+        viewer.camera.flyTo({
+          destination: Cesium.Cartesian3.fromDegrees(-85.65, 9.95, 1500),
+          duration: 1.5
+        });
+      }
+    });
+  });
+});
+</script>

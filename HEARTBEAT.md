@@ -6,6 +6,17 @@
 - Check for new forwarded sales/payment emails
 - Parse and log any new data
 - Alert Marion if important
+- **Sales images from restaurants** → Parse and store in `meraki-control/data/sales.json`
+
+### 📊 Meraki Daily Report (8pm Costa Rica)
+- **At 8pm (20:00)**: Generate and send daily report to Angelina (vailas78@yahoo.com)
+- Read data from `~/.openclaw/workspace/meraki-control/data/sales.json`
+- Use HTML template with Land Rover colors:
+  - Esh = Sand (#C4A67C)
+  - Coyol = Keswick Green (#3D4F3D)
+  - La Luna = Terracotta (#A65D3F)
+- Generate PNG with playwright, send via macOS Mail
+- If missing data, note which restaurants haven't reported
 
 ### 📊 Projects Status
 - Coyol website dev server (port 4321)
@@ -14,11 +25,17 @@
 
 ---
 
-## Weekly Tasks
+## Weekly Tasks (Sunday evening)
+
+### Meraki Weekly Report
+- Generate weekly summary for Angelina
+- Week totals by restaurant
+- Best/worst days
+- Week-over-week trends
+- Send to vailas78@yahoo.com
 
 ### Monday
 - Review weekend sales data
-- Generate weekly summary for Angelina
 - Check supplier price changes
 
 ### Friday
@@ -28,7 +45,48 @@
 
 ---
 
+## Monthly Tasks (1st of each month)
+
+### Meraki Monthly Report
+- Full month breakdown by restaurant
+- Month-over-month comparison
+- Supplier costs summary (when available)
+- Recommendations
+- Send to vailas78@yahoo.com
+
+---
+
 ## Notes
 - Don't check late night (23:00-08:00) unless urgent
 - Angelina's WhatsApp: +506 8855-9146
-- Reports in English
+- **Reports in English only**
+- Angelina's email: vailas78@yahoo.com
+
+## Team / Contacts
+
+### Angelina Peri (Owner/Administrator)
+- WhatsApp: +506 8855-9146
+- Email: vailas78@yahoo.com
+- Role: Receives all reports, coordinates staff
+- **Has:** Bank statements, credit card commissions
+- **Note:** Not great at routine — but will send if I explain why I need it for a report. Just ask nicely!
+
+### Ingrid
+- Role: Takes photos of daily closings for each restaurant, counts cash
+- Sends: Yesterday's closing images for Esh, Coyol, La Luna
+- **If data is missing → Ask Angelina to follow up with Ingrid**
+
+### John
+- Role: Manager of Coyol restaurant
+
+### Abner
+- Role: Manager of La Luna (staff/manpower)
+- Also handles payroll across all locations
+
+### Silvia
+- Role: Cleaning & supplies (all locations, based at La Luna)
+
+### Danny
+- Role: Food control & ordering (all 3 locations)
+- Also oversees Esh (smaller operation)
+- Hired by Angelina
