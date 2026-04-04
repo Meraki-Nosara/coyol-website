@@ -4,6 +4,88 @@
     "coyol": { "name": "Coyol", "color": "#3D4F3D" },
     "laluna": { "name": "La Luna", "color": "#A65D3F" }
   },
-  "daily": [],
-  "lastUpdated": null
+  "daily": [
+    {
+      "date": "2026-04-03",
+      "restaurant": "esh",
+      "cash": 185000,
+      "card": 245000,
+      "sinpe": 55000,
+      "total": 485000,
+      "source": "sample"
+    },
+    {
+      "date": "2026-04-03",
+      "restaurant": "coyol",
+      "cash": 220000,
+      "card": 312000,
+      "sinpe": 80000,
+      "total": 612000,
+      "source": "sample"
+    },
+    {
+      "date": "2026-04-03",
+      "restaurant": "laluna",
+      "cash": 340000,
+      "card": 420000,
+      "sinpe": 130000,
+      "total": 890000,
+      "source": "sample"
+    },
+    {
+      "date": "2026-04-02",
+      "restaurant": "esh",
+      "cash": 200000,
+      "card": 260000,
+      "sinpe": 60000,
+      "total": 520000,
+      "source": "sample"
+    },
+    {
+      "date": "2026-04-02",
+      "restaurant": "coyol",
+      "cash": 210000,
+      "card": 290000,
+      "sinpe": 80000,
+      "total": 580000,
+      "source": "sample"
+    },
+    {
+      "date": "2026-04-02",
+      "restaurant": "laluna",
+      "cash": 360000,
+      "card": 430000,
+      "sinpe": 130000,
+      "total": 920000,
+      "source": "sample"
+    },
+    {
+      "date": "2026-04-01",
+      "restaurant": "esh",
+      "cash": 175000,
+      "card": 235000,
+      "sinpe": 45000,
+      "total": 455000,
+      "source": "sample"
+    },
+    {
+      "date": "2026-04-01",
+      "restaurant": "coyol",
+      "cash": 195000,
+      "card": 275000,
+      "sinpe": 70000,
+      "total": 540000,
+      "source": "sample"
+    },
+    {
+      "date": "2026-04-01",
+      "restaurant": "laluna",
+      "cash": 320000,
+      "card": 390000,
+      "sinpe": 110000,
+      "total": 820000,
+      "source": "sample"
+    }
+  ],
+  "lastUpdated": "2026-04-03T20:00:00.000Z"
 }

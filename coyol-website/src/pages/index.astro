@@ -2,6 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 import ParallaxSection from '../components/ParallaxSection.astro';
+import FamilyBrands from '../components/FamilyBrands.astro';
+import RenderGallery from '../components/RenderGallery.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
 ---
@@ -13,8 +15,8 @@ import Footer from '../components/Footer.astro';
     <!-- Hero Section -->
     <section id="home">
       <ParallaxSection
-        image="/images/hero-bg.png"
-        subtitle="A Discovery Land Company Community"
+        image="/images/render-glass-jungle.jpg"
+        subtitle="Nosara, Costa Rica"
         title="A sanctuary of endless possibilities"
       >
         <a 
@@ -39,12 +41,12 @@ import Footer from '../components/Footer.astro';
       </div>
     </section>
 
-    <!-- Lifestyle Parallax -->
+    <!-- Architectural Vision -->
     <ParallaxSection
-      image="/images/section-bg-1.png"
-      subtitle="The Lifestyle"
-      title="Costa Rica as you've always imagined it."
-      description="Rural yet refined, Coyol embodies a family-focused, adventurous lifestyle. A destination where sustainable standards are set and vivid well-being is prioritized."
+      image="/images/mar-azul-lot34-render.jpg"
+      subtitle="Architectural Vision"
+      title="Your dream, designed"
+      description="Work with world-class architects to create your perfect home — infinity pools, stone terraces, and seamless indoor-outdoor living tailored to your lot."
       align="left"
     />
 
@@ -70,8 +72,8 @@ import Footer from '../components/Footer.astro';
           <div class="scroll-fade" data-delay="200">
             <div class="img-zoom aspect-[4/5] overflow-hidden">
               <img 
-                src="/images/section-bg-2.png"
-                alt="Coyol lifestyle"
+                src="/images/render-hacienda.jpg"
+                alt="Hacienda style architecture at Coyol"
                 class="w-full h-full object-cover"
               />
             </div>
@@ -82,10 +84,10 @@ import Footer from '../components/Footer.astro';
 
     <!-- Experiences Parallax -->
     <ParallaxSection
-      image="https://images.unsplash.com/photo-1502680390469-be75c86b636f?q=80&w=2070&auto=format&fit=crop"
-      subtitle="Experiences"
-      title="Where nature inspires"
-      description="Coyol is a true retreat from the day-to-day. A place where nature guides and inspires your experience."
+      image="/images/mar-azul-lot34-render.jpg"
+      subtitle="The Lifestyle"
+      title="Indoor-outdoor living"
+      description="Infinity pools, stone terraces, and panoramic views. Every home is designed to embrace the natural beauty of Nosara."
       align="right"
     />
 
@@ -105,10 +107,10 @@ import Footer from '../components/Footer.astro';
 
     <!-- Real Estate Parallax -->
     <ParallaxSection
-      image="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop"
+      image="/images/render-hacienda.jpg"
       subtitle="Real Estate"
       title="Your sanctuary awaits"
-      description="Coyol blends luxury living with a relaxed family-friendly atmosphere. Choose from a selection of custom homes and homesites in a variety of settings."
+      description="Choose from a selection of custom homes and homesites. Work with world-class architects to create your perfect retreat."
       align="left"
     />
 
@@ -127,7 +129,7 @@ import Footer from '../components/Footer.astro';
           <article class="scroll-fade group relative overflow-hidden" data-delay="0">
             <div class="aspect-[3/4] overflow-hidden">
               <img 
-                src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop"
+                src="/images/render-mountain-view.jpg"
                 alt="Nosara Hills"
                 class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
               />
@@ -144,7 +146,7 @@ import Footer from '../components/Footer.astro';
           <article class="scroll-fade group relative overflow-hidden" data-delay="150">
             <div class="aspect-[3/4] overflow-hidden">
               <img 
-                src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2070&auto=format&fit=crop"
+                src="/images/mar-azul-lot34-render.jpg"
                 alt="Mar Azul"
                 class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
               />
@@ -161,7 +163,7 @@ import Footer from '../components/Footer.astro';
           <article class="scroll-fade group relative overflow-hidden" data-delay="300">
             <div class="aspect-[3/4] overflow-hidden">
               <img 
-                src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?q=80&w=2065&auto=format&fit=crop"
+                src="/images/render-hacienda.jpg"
                 alt="Los Coyoles"
                 class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
               />
@@ -177,22 +179,64 @@ import Footer from '../components/Footer.astro';
         
         <div class="scroll-fade text-center mt-16" data-delay="200">
           <a 
-            href="#map" 
+            href="/map-cesium" 
             class="inline-block bg-landrover-keswick text-white px-12 py-5 text-xs font-medium tracking-[0.2em] uppercase hover:bg-landrover-coniston transition-colors"
           >
-            Explore Interactive Map
+            Explore Interactive 3D Map
           </a>
         </div>
       </div>
     </section>
 
-    <!-- Family Legacy Parallax -->
-    <ParallaxSection
-      image="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070&auto=format&fit=crop"
-      subtitle="A Family Legacy"
-      title="La Luna · Coyol · Esh"
-      description="What once gathered people around tables now gathers them around homes — designed with the same intention and care."
-    />
+    <!-- Map Preview Section -->
+    <section id="map" class="py-32 lg:py-48 bg-landrover-santorini text-white">
+      <div class="max-w-7xl mx-auto px-8">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <p class="scroll-fade text-landrover-limestone/60 text-xs tracking-[0.3em] uppercase mb-6" data-delay="0">Interactive Experience</p>
+            <h2 class="scroll-fade font-serif text-4xl md:text-5xl lg:text-6xl mb-8" data-delay="100">
+              Explore in 3D
+            </h2>
+            <p class="scroll-fade text-landrover-limestone/70 text-lg lg:text-xl leading-relaxed mb-8" data-delay="200">
+              Navigate our developments in stunning 3D. View lot boundaries, explore the terrain, 
+              and discover your perfect homesite with our interactive map.
+            </p>
+            <a 
+              href="/map-cesium" 
+              class="scroll-fade inline-block bg-landrover-limestone text-landrover-keswick px-12 py-5 text-xs font-medium tracking-[0.2em] uppercase hover:bg-white transition-colors"
+              data-delay="300"
+            >
+              Launch 3D Map
+            </a>
+          </div>
+          <div class="scroll-fade relative" data-delay="200">
+            <a href="/map-cesium" class="block group">
+              <div class="aspect-video bg-landrover-keswick rounded-sm overflow-hidden relative">
+                <img 
+                  src="https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/-85.638,9.976,12,0/800x450@2x?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw"
+                  alt="Nosara aerial view"
+                  class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                />
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <div class="w-20 h-20 bg-white/20 backdrop-blur rounded-full flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                    <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <p class="text-landrover-limestone/50 text-sm mt-4 text-center">Click to explore Nosara Hills & Mar Azul</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Render Gallery -->
+    <RenderGallery />
+
+    <!-- Family Brands Section -->
+    <FamilyBrands />
 
     <!-- Gallery Section -->
     <section id="gallery" class="py-32 lg:py-48 bg-landrover-limestone">

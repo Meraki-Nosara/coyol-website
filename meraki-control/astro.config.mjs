@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   output: 'server',
@@ -10,13 +11,13 @@ export default defineConfig({
     host: true,
     port: 4400
   },
+  security: {
+    checkOrigin: false
+  },
   vite: {
-    css: {
-      postcss: {
-        plugins: [
-          (await import('tailwindcss')).default
-        ]
-      }
+    plugins: [tailwindcss()],
+    server: {
+      allowedHosts: true
     }
   }
 });

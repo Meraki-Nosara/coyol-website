@@ -1,0 +1,108 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { validateCredentials, createSessionToken, setSessionCookie, getSessionCookie, validateSession } from '../lib/auth';
+
+// If already logged in, redirect to dashboard
+const existingSession = getSessionCookie(Astro.request);
+if (validateSession(existingSession)) {
+  return Astro.redirect('/');
+}
+
+let error = '';
+
+// Handle form submission
+if (Astro.request.method === 'POST') {
+  const formData = await Astro.request.formData();
+  const user = formData.get('user')?.toString() || '';
+  const pass = formData.get('pass')?.toString() || '';
+  
+  if (validateCredentials(user, pass)) {
+    const token = createSessionToken();
+    return new Response(null, {
+      status: 302,
+      headers: {
+        'Location': '/',
+        'Set-Cookie': setSessionCookie(token)
+      }
+    });
+  } else {
+    error = 'Invalid username or password';
+  }
+}
+---
+
+<Layout title="Login">
+  <div class="min-h-screen bg-landrover-keswick flex items-center justify-center p-6">
+    <div class="w-full max-w-sm">
+      <!-- Logo/Brand -->
+      <div class="text-center mb-10">
+        <h1 class="font-serif text-4xl font-semibold text-white tracking-wide">Meraki</h1>
+        <p class="text-landrover-limestone/60 text-sm mt-2">Control Financiero</p>
+      </div>
+      
+      <!-- Login Card -->
+      <div class="bg-white shadow-2xl">
+        <div class="p-8">
+          <h2 class="text-xl font-semibold text-landrover-santorini mb-6">Sign In</h2>
+          
+          {error && (
+            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 text-sm mb-6">
+              {error}
+            </div>
+          )}
+          
+          <form method="POST" class="space-y-5">
+            <div>
+              <label for="user" class="block text-xs font-medium text-landrover-marine/60 uppercase tracking-wider mb-2">
+                Username
+              </label>
+              <input 
+                type="text" 
+                id="user" 
+                name="user" 
+                required
+                autocomplete="username"
+                class="w-full px-4 py-3 border border-landrover-arles/50 bg-landrover-alaska/50 focus:outline-none focus:ring-2 focus:ring-landrover-coniston focus:border-transparent text-landrover-santorini"
+                placeholder="Your name"
+              />
+            </div>
+            
+            <div>
+              <label for="pass" class="block text-xs font-medium text-landrover-marine/60 uppercase tracking-wider mb-2">
+                Password
+              </label>
+              <input 
+                type="password" 
+                id="pass" 
+                name="pass" 
+                required
+                autocomplete="current-password"
+                class="w-full px-4 py-3 border border-landrover-arles/50 bg-landrover-alaska/50 focus:outline-none focus:ring-2 focus:ring-landrover-coniston focus:border-transparent text-landrover-santorini"
+                placeholder="••••••"
+              />
+            </div>
+            
+            <button 
+              type="submit" 
+              class="w-full btn-primary py-4 text-base font-medium mt-4"
+            >
+              Login
+            </button>
+          </form>
+        </div>
+        
+        <!-- Footer -->
+        <div class="bg-landrover-limestone/30 px-8 py-4 text-center">
+          <p class="text-xs text-landrover-marine/50">
+            Esh • Coyol • La Luna
+          </p>
+        </div>
+      </div>
+      
+      <!-- Credits -->
+      <p class="text-center text-landrover-limestone/40 text-xs mt-8">
+        Nosara, Costa Rica
+      </p>
+    </div>
+  </div>
+</Layout>

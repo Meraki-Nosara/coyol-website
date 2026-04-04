@@ -1,0 +1,58 @@
+---
+const renders = [
+  { src: '/images/render-glass-jungle.jpg', title: 'Glass Pavilion', desc: 'Cantilevered living over the jungle canopy' },
+  { src: '/images/render-interior-greatroom.jpg', title: 'Great Room', desc: 'Cathedral ceilings, open-plan living' },
+  { src: '/images/render-mountain-view.jpg', title: 'Mountain Retreat', desc: 'Sunset views from your private terrace' },
+  { src: '/images/mar-azul-lot34-render.jpg', title: 'Jungle Infinity', desc: 'Where the pool meets the forest' },
+  { src: '/images/render-hacienda.jpg', title: 'Stone Hacienda', desc: 'Traditional elegance, modern comfort' },
+  { src: '/images/render-interior-bedroom.jpg', title: 'Artisan Bedroom', desc: 'Crafted details, natural materials' },
+  { src: '/images/render-kitchen.jpg', title: 'Chef\'s Kitchen', desc: 'Verde marble, brass accents, pro appliances' },
+  { src: '/images/render-master-suite.jpg', title: 'Master Suite', desc: 'Natural textures, artisan details, pure serenity' },
+];
+---
+
+<section id="gallery" class="py-32 lg:py-48 bg-landrover-limestone">
+  <div class="max-w-7xl mx-auto px-8">
+    
+    <!-- Header -->
+    <div class="text-center mb-16">
+      <p class="scroll-fade text-landrover-coniston text-xs tracking-[0.3em] uppercase mb-4" data-delay="0">Architectural Vision</p>
+      <h2 class="scroll-fade font-serif text-4xl md:text-5xl lg:text-6xl text-landrover-santorini mb-6" data-delay="100">
+        Design Possibilities
+      </h2>
+      <p class="scroll-fade text-landrover-marine/70 text-lg max-w-2xl mx-auto" data-delay="200">
+        Work with world-class architects to bring your vision to life. These renderings show what's possible on your lot.
+      </p>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {renders.map((render, i) => (
+        <article 
+          class:list={[
+            "scroll-fade group relative overflow-hidden cursor-pointer",
+            i === 0 ? "md:col-span-2 md:row-span-2" : ""
+          ]}
+          data-delay={i * 100}
+        >
+          <div class:list={[
+            "overflow-hidden",
+            i === 0 ? "aspect-square md:aspect-auto md:h-full" : "aspect-[4/3]"
+          ]}>
+            <img 
+              src={render.src}
+              alt={render.title}
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+          </div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+            <h3 class="font-serif text-xl lg:text-2xl text-white mb-1">{render.title}</h3>
+            <p class="text-white/70 text-sm">{render.desc}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+
+  </div>
+</section>

@@ -52,7 +52,16 @@ Three restaurants under unified management:
 - **Weekly** @ Sunday 7pm → Angelina
 - **Monthly** @ 1st of month → Angelina
 - **Language:** English only
-- **Logos:** Black on white, Land Rover Heritage colors per restaurant
+- **Style:** Premium/slick, investor-presentation quality
+  - **Daily:** Light mode (white/cream) — clean, daytime
+  - **Weekly:** Dark mode + Keswick Green accent — growth vibe
+  - **Monthly:** Dark mode + Terracotta/Gold accent — executive feel
+- **Logos:** Black on white (inverted), Land Rover Heritage colors per restaurant
+- **Charts:** Yes — but only when they clarify important info, not decoration
+  - Bar charts for comparisons
+  - Progress bars for targets
+  - Trend lines for growth
+  - Keep it clear and relevant
 
 ### Coyol Real Estate
 Luxury real estate development company:

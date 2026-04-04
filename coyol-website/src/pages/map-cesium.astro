@@ -62,6 +62,14 @@ import Footer from '../components/Footer.astro';
     <section class="relative bg-landrover-santorini">
       <div id="cesiumContainer" class="w-full h-[75vh] min-h-[600px]"></div>
       
+      <!-- Animated Clouds Overlay -->
+      <div id="clouds-overlay" class="absolute inset-0 pointer-events-none overflow-hidden opacity-40">
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
+        <div class="cloud cloud-4"></div>
+      </div>
+      
       <!-- Floating Info Panel -->
       <div id="info-panel" class="hidden absolute bottom-6 left-6 right-6 md:left-auto md:right-6 md:w-[400px] bg-white shadow-2xl">
         <button id="close-panel" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-landrover-marine hover:text-landrover-keswick transition-colors">
@@ -228,13 +236,67 @@ import Footer from '../components/Footer.astro';
   .cesium-credit-textContainer {
     font-size: 10px !important;
   }
+  
+  /* Animated Clouds */
+  .cloud {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.6;
+  }
+  
+  .cloud-1 {
+    width: 300px;
+    height: 120px;
+    top: 10%;
+    animation: drift-1 60s linear infinite;
+  }
+  
+  .cloud-2 {
+    width: 400px;
+    height: 150px;
+    top: 25%;
+    animation: drift-2 80s linear infinite;
+    animation-delay: -20s;
+  }
+  
+  .cloud-3 {
+    width: 250px;
+    height: 100px;
+    top: 50%;
+    animation: drift-3 70s linear infinite;
+    animation-delay: -40s;
+  }
+  
+  .cloud-4 {
+    width: 350px;
+    height: 130px;
+    top: 70%;
+    animation: drift-1 90s linear infinite;
+    animation-delay: -15s;
+  }
+  
+  @keyframes drift-1 {
+    0% { left: -400px; }
+    100% { left: 100%; }
+  }
+  
+  @keyframes drift-2 {
+    0% { left: -500px; }
+    100% { left: 100%; }
+  }
+  
+  @keyframes drift-3 {
+    0% { left: -350px; }
+    100% { left: 100%; }
+  }
 </style>
 
 <script is:inline>
 document.addEventListener('DOMContentLoaded', async () => {
-  // ⚠️ IMPORTANT: Replace with your Cesium Ion access token
-  // Get one free at: https://ion.cesium.com/signup
-  Cesium.Ion.defaultAccessToken = 'YOUR_CESIUM_ION_TOKEN';
+  // Cesium Ion access token
+  Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4M2E5NTU4OS02ZjhiLTQ0ODItOGM0Zi00MzFhZGJlOWVlMjciLCJpZCI6NDEzNTMzLCJpYXQiOjE3NzUyNjMxMDV9.3vO61DPftOwtsluGJgtwchTXBmgJYu8AWa8fvbF-isQ';
   
   // Nosara, Costa Rica coordinates
   const nosaraCenter = {
@@ -243,7 +305,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     height: 2500
   };
   
-  // Initialize Cesium Viewer
+  // Bounding box for Nosara area (limit camera)
+  const bounds = {
+    west: -85.72,
+    south: 9.90,
+    east: -85.55,
+    north: 10.05
+  };
+  
+  // Initialize Cesium Viewer with artistic/illustrated style
   const viewer = new Cesium.Viewer('cesiumContainer', {
     terrain: Cesium.Terrain.fromWorldTerrain(),
     baseLayerPicker: false,
@@ -257,6 +327,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     fullscreenButton: false,
     infoBox: false,
   });
+  
+  // Remove default satellite imagery and add OpenStreetMap style (more illustrated)
+  viewer.imageryLayers.removeAll();
+  viewer.imageryLayers.addImageryProvider(
+    new Cesium.OpenStreetMapImageryProvider({
+      url: 'https://tile.openstreetmap.org/'
+    })
+  );
   
   // Set initial camera position - fly to Nosara
   viewer.camera.flyTo({
@@ -276,6 +354,58 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Enable lighting for realistic terrain
   viewer.scene.globe.enableLighting = true;
   
+  // Atmospheric effects
+  viewer.scene.skyAtmosphere.show = true;
+  viewer.scene.fog.enabled = true;
+  viewer.scene.fog.density = 0.0003;
+  viewer.scene.fog.screenSpaceErrorFactor = 4.0;
+  
+  // Improve terrain rendering
+  viewer.scene.globe.depthTestAgainstTerrain = true;
+  
+  // Add ocean/water effect - make water areas blue and reflective
+  viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#1a5276');
+  viewer.scene.globe.showGroundAtmosphere = true;
+  
+  // Sky atmosphere for nice horizon
+  viewer.scene.skyAtmosphere.hueShift = -0.05;
+  viewer.scene.skyAtmosphere.saturationShift = 0.1;
+  viewer.scene.skyAtmosphere.brightnessShift = 0.1;
+  
+  // Limit camera to Nosara area
+  viewer.camera.changed.addEventListener(() => {
+    const pos = viewer.camera.positionCartographic;
+    const lon = Cesium.Math.toDegrees(pos.longitude);
+    const lat = Cesium.Math.toDegrees(pos.latitude);
+    const height = pos.height;
+    
+    // Clamp position within bounds
+    let needsUpdate = false;
+    let newLon = lon;
+    let newLat = lat;
+    let newHeight = height;
+    
+    if (lon < bounds.west) { newLon = bounds.west; needsUpdate = true; }
+    if (lon > bounds.east) { newLon = bounds.east; needsUpdate = true; }
+    if (lat < bounds.south) { newLat = bounds.south; needsUpdate = true; }
+    if (lat > bounds.north) { newLat = bounds.north; needsUpdate = true; }
+    
+    // Limit zoom (min 500m, max 8000m)
+    if (height < 500) { newHeight = 500; needsUpdate = true; }
+    if (height > 8000) { newHeight = 8000; needsUpdate = true; }
+    
+    if (needsUpdate) {
+      viewer.camera.setView({
+        destination: Cesium.Cartesian3.fromDegrees(newLon, newLat, newHeight),
+        orientation: {
+          heading: viewer.camera.heading,
+          pitch: viewer.camera.pitch,
+          roll: viewer.camera.roll
+        }
+      });
+    }
+  });
+  
   // Status colors
   const statusColors = {
     available: Cesium.Color.fromCssColorString('#22c55e').withAlpha(0.6),
@@ -293,58 +423,66 @@ document.addEventListener('DOMContentLoaded', async () => {
   let allEntities = [];
   
   try {
-    const response = await fetch('/data/all-developments.geojson');
+    const response = await fetch('/data/clean.geojson');
     const geojson = await response.json();
     
     // Process each feature
     geojson.features.forEach((feature, index) => {
+      const layer = feature.properties.layer || '';
+      const source = feature.properties.source || 'unknown';
+      
       if (feature.geometry.type === 'Polygon') {
         const coords = feature.geometry.coordinates[0];
         const positions = coords.map(c => Cesium.Cartesian3.fromDegrees(c[0], c[1], 50));
         
+        // All polygons - outline only, no fill
         const status = feature.properties.status || 'available';
-        const source = feature.properties.source || 'unknown';
         
+        // Draw ALL polygons as boundary lines
         const entity = viewer.entities.add({
           name: feature.properties.name || `Lot ${index + 1}`,
-          polygon: {
-            hierarchy: positions,
-            material: statusColors[status],
-            outline: true,
-            outlineColor: statusOutlines[status],
-            outlineWidth: 2,
-            height: 0,
-            extrudedHeight: 5, // Slight extrusion for 3D effect
-            closeTop: true,
-            closeBottom: true
+          polyline: {
+            positions: positions,
+            width: 2,
+            material: Cesium.Color.fromCssColorString('#22c55e').withAlpha(0.8),
+            clampToGround: true
           },
           properties: {
             id: feature.properties.id,
             source: source,
             status: status,
-            layer: feature.properties.layer,
+            layer: layer,
             name: feature.properties.name || `Lot ${index + 1}`
           }
         });
         
         allEntities.push(entity);
       } else if (feature.geometry.type === 'LineString') {
-        // Roads and boundaries
         const coords = feature.geometry.coordinates;
         const positions = coords.map(c => Cesium.Cartesian3.fromDegrees(c[0], c[1], 2));
         
-        viewer.entities.add({
-          polyline: {
-            positions: positions,
-            width: 2,
-            material: Cesium.Color.WHITE.withAlpha(0.4),
-            clampToGround: true
-          },
-          properties: {
-            source: feature.properties.source,
-            layer: feature.properties.layer
-          }
-        });
+        // Roads - thicker white lines
+        if (layer.includes('calle') || layer.includes('CAMINO') || layer.includes('road')) {
+          viewer.entities.add({
+            polyline: {
+              positions: positions,
+              width: 3,
+              material: Cesium.Color.WHITE.withAlpha(0.7),
+              clampToGround: true
+            }
+          });
+        }
+        // Property boundaries
+        else if (layer.includes('limite') || layer.includes('LINDERO') || layer.includes('propiedad')) {
+          viewer.entities.add({
+            polyline: {
+              positions: positions,
+              width: 4,
+              material: Cesium.Color.fromCssColorString('#D4C9B5').withAlpha(0.9),
+              clampToGround: true
+            }
+          });
+        }
       }
     });
     

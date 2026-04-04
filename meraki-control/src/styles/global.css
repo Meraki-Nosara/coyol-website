@@ -1,12 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* Custom theme colors for Land Rover Heritage palette */
+@theme {
+  --color-landrover-keswick: #3D4F3D;
+  --color-landrover-coniston: #4A5D4A;
+  --color-landrover-bronze: #4E5B4E;
+  --color-landrover-moss: #5C6B5C;
+  --color-landrover-limestone: #D4C9B5;
+  --color-landrover-alaska: #F5F3EF;
+  --color-landrover-pangea: #E8E2D6;
+  --color-landrover-arles: #BFB8A8;
+  --color-landrover-sand: #C4A67C;
+  --color-landrover-terracotta: #A65D3F;
+  --color-landrover-sahara: #D4A574;
+  --color-landrover-marine: #2C3E50;
+  --color-landrover-santorini: #1A1F16;
+  --color-landrover-beluga: #2B2B2B;
+  
+  --font-family-serif: 'Playfair Display', Georgia, serif;
+  --font-family-sans: 'Inter', system-ui, sans-serif;
+}
 
 @layer base {
   html {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: var(--font-family-sans);
     -webkit-font-smoothing: antialiased;
   }
   

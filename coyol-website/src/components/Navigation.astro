@@ -1,11 +1,11 @@
 ---
 const navLinks = [
-  { href: '#home', label: 'Home' },
-  { href: '#about', label: 'About' },
-  { href: '#properties', label: 'Properties' },
-  { href: '#developments', label: 'Developments' },
-  { href: '#gallery', label: 'Gallery' },
-  { href: '#contact', label: 'Contact' },
+  { href: '/#home', label: 'Home' },
+  { href: '/#about', label: 'About' },
+  { href: '/map-cesium', label: '3D Map' },
+  { href: '/#developments', label: 'Developments' },
+  { href: '/#family', label: 'Family' },
+  { href: '/#contact', label: 'Contact' },
 ];
 ---
 
@@ -13,8 +13,14 @@ const navLinks = [
   <div class="max-w-7xl mx-auto px-6 lg:px-8">
     <div class="flex items-center justify-between h-20">
       <!-- Logo -->
-      <a href="#home" class="flex items-center">
-        <span class="text-2xl font-serif font-semibold text-white tracking-widest transition-colors duration-300" id="logo-text">
+      <a href="/" class="flex items-center gap-3">
+        <img 
+          src="/images/logo-coyol.png" 
+          alt="Coyol Real Estate" 
+          class="h-12 w-auto transition-all duration-300"
+          id="logo-img"
+        />
+        <span class="text-xl font-serif font-semibold text-white tracking-widest transition-colors duration-300 hidden sm:block" id="logo-text">
           COYOL
         </span>
       </a>
@@ -63,6 +69,7 @@ const navLinks = [
   // Navbar scroll effect
   const navbar = document.getElementById('navbar');
   const logoText = document.getElementById('logo-text');
+  const logoImg = document.getElementById('logo-img');
   const navLinks = document.querySelectorAll('.nav-link');
   
   window.addEventListener('scroll', () => {
@@ -70,6 +77,7 @@ const navLinks = [
       navbar?.classList.add('bg-landrover-limestone/95', 'backdrop-blur-md', 'shadow-sm');
       logoText?.classList.remove('text-white');
       logoText?.classList.add('text-landrover-keswick');
+      logoImg?.classList.add('brightness-0');
       navLinks.forEach(link => {
         link.classList.remove('text-white/90', 'hover:text-white');
         link.classList.add('text-landrover-keswick/80', 'hover:text-landrover-keswick');
@@ -78,6 +86,7 @@ const navLinks = [
       navbar?.classList.remove('bg-landrover-limestone/95', 'backdrop-blur-md', 'shadow-sm');
       logoText?.classList.add('text-white');
       logoText?.classList.remove('text-landrover-keswick');
+      logoImg?.classList.remove('brightness-0');
       navLinks.forEach(link => {
         link.classList.add('text-white/90', 'hover:text-white');
         link.classList.remove('text-landrover-keswick/80', 'hover:text-landrover-keswick');
