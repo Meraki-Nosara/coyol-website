@@ -1,0 +1,20 @@
+[accounts.meraki]
+email = "marionnosara@gmail.com"
+display-name = "Marion Peri"
+default = true
+
+backend.type = "imap"
+backend.host = "imap.gmail.com"
+backend.port = 993
+backend.encryption.type = "tls"
+backend.login = "marionnosara@gmail.com"
+backend.auth.type = "password"
+backend.auth.raw = "jdbyzdcstbhysvcw"
+
+message.send.backend.type = "smtp"
+message.send.backend.host = "smtp.gmail.com"
+message.send.backend.port = 587
+message.send.backend.encryption.type = "start-tls"
+message.send.backend.login = "marionnosara@gmail.com"
+message.send.backend.auth.type = "password"
+message.send.backend.auth.raw = "jdbyzdcstbhysvcw"

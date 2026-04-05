@@ -22,3 +22,7 @@ dist/
 
 # Temp
 *.tmp
+coyol-website/source-files/Master Plan NH-MA.pdf
+coyol-website/source-files/*.pdf
+coyol-website/source-files/videos/
+*.blend

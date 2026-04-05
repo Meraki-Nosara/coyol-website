@@ -162,54 +162,54 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
       <div class="p-4 lg:p-8 space-y-6">
         
         <!-- Grand Total Card -->
-        <div class="card p-6 lg:p-8 bg-landrover-keswick text-white">
-          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div class="card p-5 lg:p-8 bg-landrover-keswick text-white">
+          <div class="flex flex-col gap-4">
             <div>
-              <p class="text-landrover-limestone/60 text-sm uppercase tracking-wider mb-1">Total Sales 2026</p>
-              <p class="text-4xl lg:text-5xl font-semibold">{fmt(grandTotal)}</p>
-              <p class="text-landrover-limestone/60 text-sm mt-2">{yearTotals.customers.toLocaleString()} customers • {yearTotals.orders.toLocaleString()} orders</p>
+              <p class="text-landrover-limestone/60 text-xs uppercase tracking-wider mb-1">Total Sales 2026</p>
+              <p class="text-3xl lg:text-5xl font-semibold">{fmt(grandTotal)}</p>
+              <p class="text-landrover-limestone/60 text-xs lg:text-sm mt-2">{yearTotals.customers.toLocaleString()} customers • {yearTotals.orders.toLocaleString()} orders</p>
             </div>
-            <div class="flex gap-6">
+            <div class="flex gap-6 pt-2 border-t border-white/20">
               <div>
                 <p class="text-landrover-limestone/60 text-xs uppercase">Food</p>
-                <p class="text-xl font-semibold">{fmt(yearTotals.food)}</p>
+                <p class="text-lg lg:text-xl font-semibold">{fmt(yearTotals.food)}</p>
               </div>
               <div>
                 <p class="text-landrover-limestone/60 text-xs uppercase">Bar</p>
-                <p class="text-xl font-semibold">{fmt(yearTotals.bar)}</p>
+                <p class="text-lg lg:text-xl font-semibold">{fmt(yearTotals.bar)}</p>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Restaurant Cards -->
-        <div class="grid md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 lg:gap-4">
           {restaurantTotals.map(r => {
             const pct = grandTotal > 0 ? Math.round(r.totalSales / grandTotal * 100) : 0;
             return (
               <div class="card overflow-hidden">
-                <div class="h-2" style={`background-color: ${r.color}`}></div>
-                <div class="p-5">
-                  <div class="flex items-center justify-between mb-4">
+                <div class="h-1.5 lg:h-2" style={`background-color: ${r.color}`}></div>
+                <div class="p-4 lg:p-5">
+                  <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-3">
-                      <img src={r.logo} alt={r.name} class={r.code === 'laluna' ? 'h-14 w-auto' : 'h-10 w-auto'} />
+                      <img src={r.logo} alt={r.name} class={r.code === 'laluna' ? 'h-10 lg:h-14 w-auto' : 'h-8 lg:h-10 w-auto'} />
                     </div>
-                    <span class="text-sm text-landrover-marine/60">{pct}%</span>
+                    <span class="text-xs lg:text-sm text-landrover-marine/60 bg-landrover-limestone/30 px-2 py-0.5 rounded">{pct}%</span>
                   </div>
                   
-                  <p class="text-3xl font-semibold text-landrover-santorini mb-4">
+                  <p class="text-2xl lg:text-3xl font-semibold text-landrover-santorini mb-3">
                     {fmt(r.totalSales)}
                   </p>
                   
                   <!-- Progress bar -->
-                  <div class="h-2 bg-landrover-limestone/50 rounded-full mb-4">
+                  <div class="h-1.5 lg:h-2 bg-landrover-limestone/50 rounded-full mb-3">
                     <div 
                       class="h-full rounded-full transition-all" 
                       style={`width: ${pct}%; background-color: ${r.color}`}
                     ></div>
                   </div>
                   
-                  <div class="grid grid-cols-2 gap-4 text-sm">
+                  <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-xs lg:text-sm">
                     <div>
                       <p class="text-landrover-marine/60">Food</p>
                       <p class="font-medium">{fmt(r.food)}</p>
@@ -233,16 +233,16 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
           })}
         </div>
 
-        <!-- Monthly Trend Line Graph -->
+        <!-- Monthly Trend Chart -->
         {monthlyTotals.length > 1 && (
           <div class="card">
-            <div class="px-4 lg:px-6 py-4 border-b border-landrover-arles/30">
-              <h3 class="font-semibold text-landrover-santorini">Monthly Trend</h3>
+            <div class="px-4 lg:px-6 py-3 lg:py-4 border-b border-landrover-arles/30">
+              <h3 class="font-semibold text-landrover-santorini text-sm lg:text-base">Monthly Trend</h3>
             </div>
             
-            <div class="p-6 lg:p-8">
+            <div class="p-4 lg:p-8">
               <!-- Graph with labels -->
-              <div class="flex items-end justify-around gap-8 h-72">
+              <div class="flex items-end justify-around gap-2 lg:gap-8 h-48 lg:h-72">
                 {monthlyTotals.map((m, i) => {
                   const maxSales = Math.max(...monthlyTotals.map(x => x.totalSales));
                   const minSales = Math.min(...monthlyTotals.map(x => x.totalSales));
@@ -253,13 +253,13 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
                   const change = prevMonth && prevMonth.totalSales > 0 ? Math.round((m.totalSales - prevMonth.totalSales) / prevMonth.totalSales * 100) : 0;
                   
                   return (
-                    <div class="flex-1 flex flex-col items-center max-w-32">
+                    <div class="flex-1 flex flex-col items-center max-w-24 lg:max-w-32">
                       <!-- Value label -->
-                      <div class="text-center mb-3">
-                        <p class="text-lg font-bold text-landrover-santorini">{fmt(m.totalSales)}</p>
+                      <div class="text-center mb-2 lg:mb-3">
+                        <p class="text-xs lg:text-lg font-bold text-landrover-santorini">{fmt(m.totalSales)}</p>
                         {i > 0 && (
-                          <p class={`text-sm font-medium ${change >= 0 ? 'text-landrover-coniston' : 'text-landrover-terracotta'}`}>
-                            {change >= 0 ? '↑' : '↓'} {Math.abs(change)}%
+                          <p class={`text-xs lg:text-sm font-medium ${change >= 0 ? 'text-landrover-coniston' : 'text-landrover-terracotta'}`}>
+                            {change >= 0 ? '↑' : '↓'}{Math.abs(change)}%
                           </p>
                         )}
                       </div>
@@ -267,14 +267,14 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
                       <!-- Bar -->
                       <div class="w-full flex-1 flex items-end">
                         <div 
-                          class="w-full bg-landrover-keswick rounded-t-lg transition-all"
+                          class="w-full bg-landrover-keswick rounded-t transition-all"
                           style={`height: ${heightPct}%`}
                         ></div>
                       </div>
                       
                       <!-- Month label -->
-                      <p class="text-sm font-medium text-landrover-marine/70 mt-3">
-                        {formatMonth(m.month).split(' ')[0]}
+                      <p class="text-xs lg:text-sm font-medium text-landrover-marine/70 mt-2 lg:mt-3">
+                        {formatMonth(m.month).split(' ')[0].slice(0, 3)}
                       </p>
                     </div>
                   );
@@ -285,15 +285,15 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
         )}
 
         <!-- Two Pie Charts Side by Side -->
-        <div class="grid md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-2 gap-3 lg:gap-4">
           <!-- Food vs Drinks -->
           <div class="card">
-            <div class="px-4 lg:px-6 py-4 border-b border-landrover-arles/30">
-              <h3 class="font-semibold text-landrover-santorini">Food vs Drinks</h3>
+            <div class="px-3 lg:px-6 py-2 lg:py-4 border-b border-landrover-arles/30">
+              <h3 class="font-semibold text-landrover-santorini text-xs lg:text-base">Food vs Drinks</h3>
             </div>
             
-            <div class="p-4 lg:p-6 flex items-center justify-center gap-6">
-              <div class="relative w-32 h-32">
+            <div class="p-3 lg:p-6 flex flex-col lg:flex-row items-center justify-center gap-3 lg:gap-6">
+              <div class="relative w-20 h-20 lg:w-32 lg:h-32">
                 <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
                   <circle cx="50" cy="50" r="40" fill="transparent" stroke="#3D4F3D" stroke-width="20"
                     stroke-dasharray={`${(yearTotals.food / (yearTotals.food + yearTotals.bar)) * 251.2} 251.2`}
@@ -305,19 +305,19 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
                 </svg>
               </div>
               
-              <div class="space-y-3">
-                <div class="flex items-center gap-3">
-                  <div class="w-3 h-3 rounded bg-landrover-keswick"></div>
+              <div class="space-y-2 lg:space-y-3">
+                <div class="flex items-center gap-2 lg:gap-3">
+                  <div class="w-2 h-2 lg:w-3 lg:h-3 rounded bg-landrover-keswick"></div>
                   <div>
-                    <p class="text-sm font-medium">Food {Math.round(yearTotals.food / (yearTotals.food + yearTotals.bar) * 100)}%</p>
-                    <p class="text-sm text-landrover-marine/60">{fmt(yearTotals.food)}</p>
+                    <p class="text-xs lg:text-sm font-medium">Food {Math.round(yearTotals.food / (yearTotals.food + yearTotals.bar) * 100)}%</p>
+                    <p class="text-xs text-landrover-marine/60 hidden lg:block">{fmt(yearTotals.food)}</p>
                   </div>
                 </div>
-                <div class="flex items-center gap-3">
-                  <div class="w-3 h-3 rounded bg-landrover-terracotta"></div>
+                <div class="flex items-center gap-2 lg:gap-3">
+                  <div class="w-2 h-2 lg:w-3 lg:h-3 rounded bg-landrover-terracotta"></div>
                   <div>
-                    <p class="text-sm font-medium">Drinks {Math.round(yearTotals.bar / (yearTotals.food + yearTotals.bar) * 100)}%</p>
-                    <p class="text-sm text-landrover-marine/60">{fmt(yearTotals.bar)}</p>
+                    <p class="text-xs lg:text-sm font-medium">Drinks {Math.round(yearTotals.bar / (yearTotals.food + yearTotals.bar) * 100)}%</p>
+                    <p class="text-xs text-landrover-marine/60 hidden lg:block">{fmt(yearTotals.bar)}</p>
                   </div>
                 </div>
               </div>
@@ -326,12 +326,12 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
           
           <!-- Cash vs Card -->
           <div class="card">
-            <div class="px-4 lg:px-6 py-4 border-b border-landrover-arles/30">
-              <h3 class="font-semibold text-landrover-santorini">Cash vs Card</h3>
+            <div class="px-3 lg:px-6 py-2 lg:py-4 border-b border-landrover-arles/30">
+              <h3 class="font-semibold text-landrover-santorini text-xs lg:text-base">Cash vs Card</h3>
             </div>
             
-            <div class="p-4 lg:p-6 flex items-center justify-center gap-6">
-              <div class="relative w-32 h-32">
+            <div class="p-3 lg:p-6 flex flex-col lg:flex-row items-center justify-center gap-3 lg:gap-6">
+              <div class="relative w-20 h-20 lg:w-32 lg:h-32">
                 <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
                   <circle cx="50" cy="50" r="40" fill="transparent" stroke="#2C3E50" stroke-width="20"
                     stroke-dasharray={`${(yearTotals.card / (yearTotals.card + yearTotals.cash)) * 251.2} 251.2`}
@@ -343,19 +343,19 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
                 </svg>
               </div>
               
-              <div class="space-y-3">
-                <div class="flex items-center gap-3">
-                  <div class="w-3 h-3 rounded bg-landrover-marine"></div>
+              <div class="space-y-2 lg:space-y-3">
+                <div class="flex items-center gap-2 lg:gap-3">
+                  <div class="w-2 h-2 lg:w-3 lg:h-3 rounded bg-landrover-marine"></div>
                   <div>
-                    <p class="text-sm font-medium">Card {Math.round(yearTotals.card / (yearTotals.card + yearTotals.cash) * 100)}%</p>
-                    <p class="text-sm text-landrover-marine/60">{fmt(yearTotals.card)}</p>
+                    <p class="text-xs lg:text-sm font-medium">Card {Math.round(yearTotals.card / (yearTotals.card + yearTotals.cash) * 100)}%</p>
+                    <p class="text-xs text-landrover-marine/60 hidden lg:block">{fmt(yearTotals.card)}</p>
                   </div>
                 </div>
-                <div class="flex items-center gap-3">
-                  <div class="w-3 h-3 rounded bg-landrover-sand"></div>
+                <div class="flex items-center gap-2 lg:gap-3">
+                  <div class="w-2 h-2 lg:w-3 lg:h-3 rounded bg-landrover-sand"></div>
                   <div>
-                    <p class="text-sm font-medium">Cash {Math.round(yearTotals.cash / (yearTotals.card + yearTotals.cash) * 100)}%</p>
-                    <p class="text-sm text-landrover-marine/60">{fmt(yearTotals.cash)}</p>
+                    <p class="text-xs lg:text-sm font-medium">Cash {Math.round(yearTotals.cash / (yearTotals.card + yearTotals.cash) * 100)}%</p>
+                    <p class="text-xs text-landrover-marine/60 hidden lg:block">{fmt(yearTotals.cash)}</p>
                   </div>
                 </div>
               </div>

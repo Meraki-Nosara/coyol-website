@@ -298,19 +298,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Cesium Ion access token
   Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4M2E5NTU4OS02ZjhiLTQ0ODItOGM0Zi00MzFhZGJlOWVlMjciLCJpZCI6NDEzNTMzLCJpYXQiOjE3NzUyNjMxMDV9.3vO61DPftOwtsluGJgtwchTXBmgJYu8AWa8fvbF-isQ';
   
-  // Nosara, Costa Rica coordinates
+  // Mar Azul center coordinates
   const nosaraCenter = {
-    lng: -85.638,
-    lat: 9.976,
-    height: 2500
+    lng: -85.637,
+    lat: 10.003,
+    height: 600
   };
   
-  // Bounding box for Nosara area (limit camera)
+  // Tight bounding box for Mar Azul (limit camera)
   const bounds = {
-    west: -85.72,
-    south: 9.90,
-    east: -85.55,
-    north: 10.05
+    west: -85.642,
+    south: 9.997,
+    east: -85.632,
+    north: 10.008
   };
   
   // Initialize Cesium Viewer with artistic/illustrated style
@@ -328,15 +328,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     infoBox: false,
   });
   
-  // Remove default satellite imagery and add OpenStreetMap style (more illustrated)
+  // Use Cesium World Imagery (satellite) for realistic look
+  // Or switch to Bing Maps for detailed satellite
   viewer.imageryLayers.removeAll();
   viewer.imageryLayers.addImageryProvider(
-    new Cesium.OpenStreetMapImageryProvider({
-      url: 'https://tile.openstreetmap.org/'
-    })
+    await Cesium.IonImageryProvider.fromAssetId(2) // Bing Maps Aerial with Labels
   );
   
-  // Set initial camera position - fly to Nosara
+  // Cinematic fly-in to Mar Azul
   viewer.camera.flyTo({
     destination: Cesium.Cartesian3.fromDegrees(
       nosaraCenter.lng, 
@@ -344,11 +343,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       nosaraCenter.height
     ),
     orientation: {
-      heading: Cesium.Math.toRadians(0),
-      pitch: Cesium.Math.toRadians(-45),
+      heading: Cesium.Math.toRadians(30),
+      pitch: Cesium.Math.toRadians(-35),
       roll: 0
     },
-    duration: 2
+    duration: 3,
+    easingFunction: Cesium.EasingFunction.QUADRATIC_IN_OUT
   });
   
   // Enable lighting for realistic terrain
@@ -390,9 +390,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (lat < bounds.south) { newLat = bounds.south; needsUpdate = true; }
     if (lat > bounds.north) { newLat = bounds.north; needsUpdate = true; }
     
-    // Limit zoom (min 500m, max 8000m)
-    if (height < 500) { newHeight = 500; needsUpdate = true; }
-    if (height > 8000) { newHeight = 8000; needsUpdate = true; }
+    // Limit zoom (min 100m for close detail, max 2000m)
+    if (height < 100) { newHeight = 100; needsUpdate = true; }
+    if (height > 2000) { newHeight = 2000; needsUpdate = true; }
     
     if (needsUpdate) {
       viewer.camera.setView({
@@ -423,7 +423,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   let allEntities = [];
   
   try {
-    const response = await fetch('/data/clean.geojson');
+    const response = await fetch('/data/mar-azul-all.geojson');
     const geojson = await response.json();
     
     // Process each feature
@@ -435,24 +435,56 @@ document.addEventListener('DOMContentLoaded', async () => {
         const coords = feature.geometry.coordinates[0];
         const positions = coords.map(c => Cesium.Cartesian3.fromDegrees(c[0], c[1], 50));
         
-        // All polygons - outline only, no fill
+        // Render lots with fill and outline
         const status = feature.properties.status || 'available';
+        const lotId = feature.properties.id || `lot-${index + 1}`;
+        const lotNum = index + 1;
+        const area = feature.properties.area_m2 || 0;
         
-        // Draw ALL polygons as boundary lines
+        // Calculate center for label
+        let centerLng = 0, centerLat = 0;
+        coords.forEach(c => { centerLng += c[0]; centerLat += c[1]; });
+        centerLng /= coords.length;
+        centerLat /= coords.length;
+        
+        // Draw lot polygon with clear boundary
         const entity = viewer.entities.add({
-          name: feature.properties.name || `Lot ${index + 1}`,
+          name: `Lot ${lotNum}`,
+          polygon: {
+            hierarchy: new Cesium.PolygonHierarchy(positions),
+            material: Cesium.Color.fromCssColorString('#22c55e').withAlpha(0.3),
+            outline: false,
+            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+          },
+          // Add polyline for visible border
           polyline: {
             positions: positions,
-            width: 2,
-            material: Cesium.Color.fromCssColorString('#22c55e').withAlpha(0.8),
+            width: 3,
+            material: Cesium.Color.fromCssColorString('#ffffff'),
             clampToGround: true
           },
+          // Label only shows when zoomed in close
+          position: Cesium.Cartesian3.fromDegrees(centerLng, centerLat, 10),
+          label: {
+            text: lotNum.toString(),
+            font: 'bold 14px sans-serif',
+            fillColor: Cesium.Color.WHITE,
+            outlineColor: Cesium.Color.BLACK,
+            outlineWidth: 2,
+            style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+            verticalOrigin: Cesium.VerticalOrigin.CENTER,
+            horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+            disableDepthTestDistance: Number.POSITIVE_INFINITY,
+            scaleByDistance: new Cesium.NearFarScalar(100, 1.0, 500, 0.0)
+          },
           properties: {
-            id: feature.properties.id,
+            id: lotId,
+            lotNumber: lotNum,
             source: source,
             status: status,
-            layer: layer,
-            name: feature.properties.name || `Lot ${index + 1}`
+            area_m2: area,
+            name: `Lot ${lotNum}`
           }
         });
         

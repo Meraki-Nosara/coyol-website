@@ -6,6 +6,42 @@
   },
   "daily": [
     {
+      "date": "2026-04-04",
+      "restaurant": "coyol",
+      "cash": 156788,
+      "card": 4071731,
+      "total": 4228519,
+      "netSales": 3397170,
+      "service10": 339717,
+      "iva13": 441632,
+      "source": "ingrid_email",
+      "cashier": "John Freiser"
+    },
+    {
+      "date": "2026-04-04",
+      "restaurant": "esh",
+      "cash": 129700,
+      "card": 574827,
+      "total": 704527,
+      "netSales": 544523,
+      "service10": 39173,
+      "iva13": 70708,
+      "source": "ingrid_email",
+      "cashier": "Raul Rodriguez"
+    },
+    {
+      "date": "2026-04-04",
+      "restaurant": "laluna",
+      "cash": 632000,
+      "card": 8967590,
+      "total": 9599590,
+      "netSales": 7733034,
+      "service10": 761081,
+      "iva13": 1005295,
+      "source": "ingrid_email",
+      "cashier": "Julia Arrieta"
+    },
+    {
       "date": "2026-04-03",
       "restaurant": "esh",
       "cash": 185000,
@@ -87,5 +123,5 @@
       "source": "sample"
     }
   ],
-  "lastUpdated": "2026-04-03T20:00:00.000Z"
+  "lastUpdated": "2026-04-05T14:59:00.000Z"
 }

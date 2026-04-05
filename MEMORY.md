@@ -119,15 +119,35 @@ Marion loves the classic Land Rover colors — used for both projects:
 
 ### 1. Coyol Real Estate Website
 - **Location:** `~/.openclaw/workspace/coyol-website/`
-- **Stack:** Astro + Tailwind CSS
+- **Stack:** Astro + Tailwind CSS + Cesium 3D
 - **Dev Server:** Port 4321
-- **Status:** Building — parallax done, map needs Mapbox token
+- **Status:** Building 3D map, Mar Azul lots rendering
+- **Full state:** See `projects/coyol-website-state.md`
+- **Cesium Token:** Configured and working
+- **8 architectural renders** added to gallery
+- **Source files:** KML, Master Plan PDF, drone photos in Downloads
+- **Map focus:** Mar Azul first (40 lots), then Nosara Hills, then Los Coyoles
 
 ### 2. Meraki Control System
 - **Location:** `~/.openclaw/workspace/meraki-control/`
-- **Stack:** Astro + Tailwind + SQLite
+- **Stack:** Astro + Tailwind CSS
 - **Dev Server:** Port 4400
-- **Status:** Dashboard built, waiting for email data
+- **Status:** **LIVE** with Q1 2026 data
+- **Auth:** Angelina / masro
+- **Tunnel:** Cloudflare Quick Tunnel (URL changes on restart)
+- **Data Loaded:**
+  - Coyol: Jan-Mar 2026 (₡312.7M)
+  - Esh: Jan-Mar 2026 (₡51.9M)
+  - La Luna: Jan-Mar 2026 (₡634.6M)
+  - **Q1 Total: ₡999.2M**
+- **Features:**
+  - Restaurant summary cards with logos
+  - Food vs Drinks pie chart
+  - Cash vs Card pie chart
+  - Monthly trend bar chart
+  - Currency toggle (CRC/USD @ ₡505)
+- **Himalaya Gmail:** Configured for marionnosara@gmail.com
+- **Pending:** Daily data from Ingrid, permanent domain
 
 ---
 

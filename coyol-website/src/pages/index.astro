@@ -3,125 +3,145 @@ import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 import ParallaxSection from '../components/ParallaxSection.astro';
 import FamilyBrands from '../components/FamilyBrands.astro';
-import RenderGallery from '../components/RenderGallery.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
 ---
 
-<Layout title="Coyol Real Estate | Luxury Living in Nosara, Costa Rica">
+<Layout title="Coyol | A Way of Life in Nosara">
   <Navigation />
   
   <main>
-    <!-- Hero Section -->
-    <section id="home">
-      <ParallaxSection
-        image="/images/render-glass-jungle.jpg"
-        subtitle="Nosara, Costa Rica"
-        title="A sanctuary of endless possibilities"
+    <!-- Hero Section - Lifestyle First -->
+    <section id="home" class="relative h-screen overflow-hidden">
+      <video 
+        autoplay 
+        muted 
+        loop 
+        playsinline
+        class="absolute inset-0 w-full h-full object-cover"
+        poster="/images/render-glass-jungle.jpg"
       >
+        <source src="/videos/nosara-lifestyle.mp4" type="video/mp4" />
+      </video>
+      <div class="absolute inset-0 bg-gradient-to-b from-landrover-santorini/30 via-transparent to-landrover-santorini/60"></div>
+      
+      <div class="relative z-10 h-full flex flex-col items-center justify-center text-center px-8">
+        <p class="scroll-fade text-white/70 text-xs tracking-[0.4em] uppercase mb-6" data-delay="0">
+          Nosara, Costa Rica
+        </p>
+        <h1 class="scroll-fade font-serif text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white max-w-4xl leading-tight" data-delay="100">
+          A way of life, rooted in generosity
+        </h1>
         <a 
-          href="#about" 
-          class="scroll-fade mt-12 opacity-0"
+          href="#story" 
+          class="scroll-fade mt-16 opacity-0"
           data-delay="400"
         >
           <div class="w-8 h-14 border-2 border-white/40 rounded-full flex items-start justify-center p-2">
             <div class="w-1.5 h-3 bg-white/60 rounded-full animate-bounce"></div>
           </div>
         </a>
-      </ParallaxSection>
-    </section>
-
-    <!-- Intro Text Section -->
-    <section id="about" class="py-32 lg:py-48 bg-landrover-limestone">
-      <div class="max-w-5xl mx-auto px-8 text-center">
-        <h2 class="scroll-fade font-serif text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-landrover-santorini leading-tight" data-delay="0">
-          Set in Nosara's Blue Zone on Costa Rica's Pacific coast, 
-          Coyol encompasses pristine beachfront surrounded by wild and vibrant nature.
-        </h2>
       </div>
     </section>
 
-    <!-- Architectural Vision -->
-    <ParallaxSection
-      image="/images/mar-azul-lot34-render.jpg"
-      subtitle="Architectural Vision"
-      title="Your dream, designed"
-      description="Work with world-class architects to create your perfect home — infinity pools, stone terraces, and seamless indoor-outdoor living tailored to your lot."
-      align="left"
-    />
+    <!-- The Story - Your Site's Copy -->
+    <section id="story" class="py-32 lg:py-48 bg-landrover-limestone">
+      <div class="max-w-4xl mx-auto px-8">
+        <p class="scroll-fade font-serif text-2xl md:text-3xl lg:text-4xl text-landrover-santorini leading-relaxed text-center" data-delay="0">
+          This is a place curated by a family, shaped by decades of hosting, feeding, 
+          and caring for people in Nosara through La Luna, Coyol, and Esh.
+        </p>
+      </div>
+    </section>
 
-    <!-- Philosophy Section -->
+    <!-- Continuation of Legacy -->
+    <ParallaxSection
+      image="/images/render-glass-jungle.jpg"
+      subtitle=""
+      title=""
+    >
+      <div class="max-w-3xl text-center">
+        <p class="scroll-fade font-serif text-xl md:text-2xl lg:text-3xl text-white/90 leading-relaxed" data-delay="100">
+          Created and imagined by the same hands and minds, these homesites grow from 
+          a way of life rooted in generosity, connection, and time.
+        </p>
+      </div>
+    </ParallaxSection>
+
+    <!-- What Once Gathered -->
     <section class="py-32 lg:py-48 bg-landrover-pangea">
+      <div class="max-w-5xl mx-auto px-8 text-center">
+        <p class="scroll-fade font-serif text-2xl md:text-3xl lg:text-4xl text-landrover-santorini leading-relaxed" data-delay="0">
+          What once gathered people around tables now gathers them around homes—designed 
+          with the same intention and care.
+        </p>
+      </div>
+    </section>
+
+    <!-- Family Brands - The Legacy -->
+    <FamilyBrands />
+
+    <!-- Blue Zone Section -->
+    <section class="py-32 lg:py-48 bg-landrover-keswick text-white">
       <div class="max-w-7xl mx-auto px-8">
         <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-          <div>
-            <p class="scroll-fade text-landrover-coniston text-xs tracking-[0.3em] uppercase mb-6" data-delay="0">Our Philosophy</p>
-            <h2 class="scroll-fade font-serif text-3xl md:text-4xl lg:text-5xl text-landrover-santorini mb-8 leading-tight" data-delay="100">
-              Land is not just acquired — it is felt.
-            </h2>
-            <p class="scroll-fade text-landrover-marine/70 text-lg lg:text-xl leading-relaxed mb-8" data-delay="200">
-              Every property carries a rhythm, a memory of wind, light, and time. 
-              We listen before we build, observe before we propose, honoring the natural 
-              intelligence of each place.
-            </p>
-            <p class="scroll-fade text-landrover-marine/70 text-lg lg:text-xl leading-relaxed" data-delay="300">
-              This is a place curated by a family, shaped by decades of hosting, feeding, 
-              and caring for people in Nosara through La Luna, Coyol Restaurant, and Esh.
-            </p>
-          </div>
-          <div class="scroll-fade" data-delay="200">
-            <div class="img-zoom aspect-[4/5] overflow-hidden">
+          <div class="scroll-fade" data-delay="0">
+            <div class="aspect-[4/5] overflow-hidden">
               <img 
                 src="/images/render-hacienda.jpg"
-                alt="Hacienda style architecture at Coyol"
+                alt="Life in Nosara"
                 class="w-full h-full object-cover"
               />
             </div>
+          </div>
+          <div>
+            <p class="scroll-fade text-landrover-limestone/60 text-xs tracking-[0.3em] uppercase mb-6" data-delay="0">Nicoya Peninsula</p>
+            <h2 class="scroll-fade font-serif text-3xl md:text-4xl lg:text-5xl mb-8 leading-tight" data-delay="100">
+              Set within Nicoya's Blue Zone, between forest and ocean
+            </h2>
+            <p class="scroll-fade text-landrover-limestone/70 text-lg lg:text-xl leading-relaxed mb-8" data-delay="200">
+              Each place is designed with the same hands and minds that have long understood 
+              what it means to make people feel welcome.
+            </p>
+            <p class="scroll-fade text-landrover-limestone/70 text-lg lg:text-xl leading-relaxed" data-delay="300">
+              The Nicoya Peninsula is one of only five Blue Zones on Earth—regions where 
+              people live measurably longer, healthier lives.
+            </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Experiences Parallax -->
-    <ParallaxSection
-      image="/images/mar-azul-lot34-render.jpg"
-      subtitle="The Lifestyle"
-      title="Indoor-outdoor living"
-      description="Infinity pools, stone terraces, and panoramic views. Every home is designed to embrace the natural beauty of Nosara."
-      align="right"
-    />
-
-    <!-- Blue Zone Section -->
-    <section class="py-32 lg:py-48 bg-landrover-keswick text-white overflow-hidden">
-      <div class="max-w-5xl mx-auto px-8 text-center">
-        <p class="scroll-fade text-landrover-limestone/60 text-xs tracking-[0.3em] uppercase mb-6" data-delay="0">Nicoya Peninsula</p>
-        <h2 class="scroll-fade font-serif text-4xl md:text-5xl lg:text-6xl xl:text-7xl mb-8" data-delay="100">
-          One of Five Blue Zones
-        </h2>
-        <p class="scroll-fade text-landrover-limestone/80 text-lg md:text-xl lg:text-2xl leading-relaxed max-w-3xl mx-auto" data-delay="200">
-          The Nicoya Peninsula is recognized as one of only five Blue Zones on Earth — 
-          regions where people live measurably longer, healthier lives.
+    <!-- More Than Real Estate -->
+    <section class="py-32 lg:py-48 bg-landrover-limestone">
+      <div class="max-w-4xl mx-auto px-8 text-center">
+        <p class="scroll-fade font-serif text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-landrover-santorini leading-relaxed" data-delay="0">
+          More than real estate, this is a continuation of a legacy—quietly crafted, 
+          deeply human, and meant to be lived.
         </p>
       </div>
     </section>
 
-    <!-- Real Estate Parallax -->
+    <!-- Living Here Parallax -->
     <ParallaxSection
-      image="/images/render-hacienda.jpg"
-      subtitle="Real Estate"
-      title="Your sanctuary awaits"
-      description="Choose from a selection of custom homes and homesites. Work with world-class architects to create your perfect retreat."
-      align="left"
+      image="/images/mar-azul-lot34-render.jpg"
+      subtitle="The Life"
+      title="Surf before breakfast. Dine under stars."
+      description="Wake to howler monkeys. Watch the sunset from your terrace. This is home."
+      align="center"
     />
 
-    <!-- Developments Section -->
-    <section id="developments" class="py-32 lg:py-48 bg-landrover-alaska">
+    <!-- Explore Section - Subtle Real Estate -->
+    <section id="explore" class="py-32 lg:py-48 bg-landrover-alaska">
       <div class="max-w-7xl mx-auto px-8">
         <div class="text-center mb-20">
-          <p class="scroll-fade text-landrover-coniston text-xs tracking-[0.3em] uppercase mb-4" data-delay="0">Our Developments</p>
-          <h2 class="scroll-fade font-serif text-4xl md:text-5xl lg:text-6xl text-landrover-santorini" data-delay="100">
-            Three Distinct Communities
+          <p class="scroll-fade text-landrover-coniston text-xs tracking-[0.3em] uppercase mb-4" data-delay="0">Explore</p>
+          <h2 class="scroll-fade font-serif text-4xl md:text-5xl lg:text-6xl text-landrover-santorini mb-6" data-delay="100">
+            Find Your Place
           </h2>
+          <p class="scroll-fade text-landrover-marine/70 text-lg max-w-2xl mx-auto" data-delay="200">
+            Three distinct communities, each with its own character. Discover the one that feels like home.
+          </p>
         </div>
         
         <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
@@ -136,9 +156,8 @@ import Footer from '../components/Footer.astro';
             </div>
             <div class="absolute inset-0 bg-gradient-to-t from-landrover-santorini/90 via-landrover-santorini/30 to-transparent"></div>
             <div class="absolute bottom-0 left-0 right-0 p-8">
-              <p class="text-landrover-limestone/60 text-xs tracking-[0.2em] uppercase mb-3">Gated Community</p>
               <h3 class="font-serif text-3xl lg:text-4xl text-white mb-3">Nosara Hills</h3>
-              <p class="text-landrover-limestone/70 text-sm lg:text-base">Elevated homesites with panoramic views</p>
+              <p class="text-landrover-limestone/70 text-sm lg:text-base">Elevated views, morning mist, evening breeze</p>
             </div>
           </article>
           
@@ -153,7 +172,6 @@ import Footer from '../components/Footer.astro';
             </div>
             <div class="absolute inset-0 bg-gradient-to-t from-landrover-santorini/90 via-landrover-santorini/30 to-transparent"></div>
             <div class="absolute bottom-0 left-0 right-0 p-8">
-              <p class="text-landrover-limestone/60 text-xs tracking-[0.2em] uppercase mb-3">Beachside Living</p>
               <h3 class="font-serif text-3xl lg:text-4xl text-white mb-3">Mar Azul</h3>
               <p class="text-landrover-limestone/70 text-sm lg:text-base">Steps from the ocean, immersed in nature</p>
             </div>
@@ -170,9 +188,8 @@ import Footer from '../components/Footer.astro';
             </div>
             <div class="absolute inset-0 bg-gradient-to-t from-landrover-santorini/90 via-landrover-santorini/30 to-transparent"></div>
             <div class="absolute bottom-0 left-0 right-0 p-8">
-              <p class="text-landrover-limestone/60 text-xs tracking-[0.2em] uppercase mb-3">Forest Retreat</p>
               <h3 class="font-serif text-3xl lg:text-4xl text-white mb-3">Los Coyoles</h3>
-              <p class="text-landrover-limestone/70 text-sm lg:text-base">Secluded sanctuaries among ancient trees</p>
+              <p class="text-landrover-limestone/70 text-sm lg:text-base">Secluded among ancient trees</p>
             </div>
           </article>
         </div>
@@ -180,107 +197,52 @@ import Footer from '../components/Footer.astro';
         <div class="scroll-fade text-center mt-16" data-delay="200">
           <a 
             href="/map-cesium" 
-            class="inline-block bg-landrover-keswick text-white px-12 py-5 text-xs font-medium tracking-[0.2em] uppercase hover:bg-landrover-coniston transition-colors"
+            class="inline-block border border-landrover-keswick text-landrover-keswick px-12 py-5 text-xs font-medium tracking-[0.2em] uppercase hover:bg-landrover-keswick hover:text-white transition-colors"
           >
-            Explore Interactive 3D Map
+            Explore the Land
           </a>
         </div>
       </div>
     </section>
 
-    <!-- Map Preview Section -->
-    <section id="map" class="py-32 lg:py-48 bg-landrover-santorini text-white">
+    <!-- Interior Living -->
+    <section class="py-32 lg:py-48 bg-landrover-pangea">
       <div class="max-w-7xl mx-auto px-8">
-        <div class="grid lg:grid-cols-2 gap-16 items-center">
-          <div>
-            <p class="scroll-fade text-landrover-limestone/60 text-xs tracking-[0.3em] uppercase mb-6" data-delay="0">Interactive Experience</p>
-            <h2 class="scroll-fade font-serif text-4xl md:text-5xl lg:text-6xl mb-8" data-delay="100">
-              Explore in 3D
-            </h2>
-            <p class="scroll-fade text-landrover-limestone/70 text-lg lg:text-xl leading-relaxed mb-8" data-delay="200">
-              Navigate our developments in stunning 3D. View lot boundaries, explore the terrain, 
-              and discover your perfect homesite with our interactive map.
-            </p>
-            <a 
-              href="/map-cesium" 
-              class="scroll-fade inline-block bg-landrover-limestone text-landrover-keswick px-12 py-5 text-xs font-medium tracking-[0.2em] uppercase hover:bg-white transition-colors"
-              data-delay="300"
-            >
-              Launch 3D Map
-            </a>
-          </div>
-          <div class="scroll-fade relative" data-delay="200">
-            <a href="/map-cesium" class="block group">
-              <div class="aspect-video bg-landrover-keswick rounded-sm overflow-hidden relative">
-                <img 
-                  src="https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/-85.638,9.976,12,0/800x450@2x?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw"
-                  alt="Nosara aerial view"
-                  class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                />
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <div class="w-20 h-20 bg-white/20 backdrop-blur rounded-full flex items-center justify-center group-hover:bg-white/30 transition-colors">
-                    <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z"/>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-              <p class="text-landrover-limestone/50 text-sm mt-4 text-center">Click to explore Nosara Hills & Mar Azul</p>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Render Gallery -->
-    <RenderGallery />
-
-    <!-- Family Brands Section -->
-    <FamilyBrands />
-
-    <!-- Gallery Section -->
-    <section id="gallery" class="py-32 lg:py-48 bg-landrover-limestone">
-      <div class="max-w-7xl mx-auto px-8">
-        <div class="text-center mb-20">
-          <p class="scroll-fade text-landrover-coniston text-xs tracking-[0.3em] uppercase mb-4" data-delay="0">Gallery</p>
-          <h2 class="scroll-fade font-serif text-4xl md:text-5xl lg:text-6xl text-landrover-santorini" data-delay="100">
-            Spaces That Inspire
-          </h2>
-        </div>
-
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div class="scroll-fade lg:col-span-2 lg:row-span-2" data-delay="0">
-            <div class="img-zoom aspect-square overflow-hidden">
+        <div class="grid lg:grid-cols-2 gap-8">
+          <div class="scroll-fade" data-delay="0">
+            <div class="aspect-square overflow-hidden">
               <img 
-                src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop"
-                alt="Gallery"
-                class="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-          <div class="scroll-fade" data-delay="100">
-            <div class="img-zoom aspect-square overflow-hidden">
-              <img 
-                src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop"
-                alt="Gallery"
+                src="/images/render-interior-greatroom.jpg"
+                alt="Living spaces"
                 class="w-full h-full object-cover"
               />
             </div>
           </div>
           <div class="scroll-fade" data-delay="150">
-            <div class="img-zoom aspect-square overflow-hidden">
+            <div class="aspect-square overflow-hidden">
               <img 
-                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop"
-                alt="Gallery"
+                src="/images/render-interior-bedroom.jpg"
+                alt="Bedroom"
                 class="w-full h-full object-cover"
               />
             </div>
           </div>
-          <div class="scroll-fade lg:col-span-2" data-delay="200">
-            <div class="img-zoom aspect-[2/1] overflow-hidden">
+        </div>
+        <div class="grid lg:grid-cols-3 gap-8 mt-8">
+          <div class="scroll-fade" data-delay="200">
+            <div class="aspect-[4/3] overflow-hidden">
               <img 
-                src="https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=2070&auto=format&fit=crop"
-                alt="Gallery"
+                src="/images/render-kitchen.jpg"
+                alt="Kitchen"
+                class="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+          <div class="scroll-fade lg:col-span-2" data-delay="250">
+            <div class="aspect-[2/1] overflow-hidden">
+              <img 
+                src="/images/render-master-suite.jpg"
+                alt="Master suite"
                 class="w-full h-full object-cover"
               />
             </div>
@@ -289,19 +251,24 @@ import Footer from '../components/Footer.astro';
       </div>
     </section>
 
-    <!-- Final CTA Parallax -->
+    <!-- Final Statement -->
     <ParallaxSection
-      image="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop"
-      subtitle="Begin Your Journey"
-      title="Your sanctuary awaits"
+      image="/images/render-mountain-view.jpg"
+      subtitle=""
+      title=""
     >
-      <a 
-        href="#contact" 
-        class="scroll-fade mt-12 bg-landrover-limestone text-landrover-keswick px-12 py-5 text-xs font-medium tracking-[0.2em] uppercase hover:bg-white transition-colors opacity-0"
-        data-delay="300"
-      >
-        Get in Touch
-      </a>
+      <div class="max-w-4xl text-center">
+        <p class="scroll-fade font-serif text-3xl md:text-4xl lg:text-5xl text-white leading-tight" data-delay="100">
+          Quietly crafted. Deeply human. Meant to be lived.
+        </p>
+        <a 
+          href="#contact" 
+          class="scroll-fade inline-block mt-12 bg-white/10 backdrop-blur border border-white/30 text-white px-12 py-5 text-xs font-medium tracking-[0.2em] uppercase hover:bg-white hover:text-landrover-keswick transition-colors"
+          data-delay="300"
+        >
+          Begin the Conversation
+        </a>
+      </div>
     </ParallaxSection>
 
     <!-- Contact -->
@@ -316,7 +283,6 @@ import Footer from '../components/Footer.astro';
     scroll-behavior: smooth;
   }
   
-  /* Custom scrollbar - Land Rover style */
   ::-webkit-scrollbar {
     width: 6px;
   }
@@ -333,7 +299,6 @@ import Footer from '../components/Footer.astro';
     background: #3D4F3D;
   }
   
-  /* Image hover zoom */
   .img-zoom img {
     transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
   }
@@ -342,7 +307,6 @@ import Footer from '../components/Footer.astro';
     transform: scale(1.08);
   }
   
-  /* Global scroll fade for non-parallax sections */
   .scroll-fade {
     opacity: 0;
     transform: translateY(60px);
@@ -355,7 +319,6 @@ import Footer from '../components/Footer.astro';
 </style>
 
 <script>
-  // Initialize scroll animations for all sections
   const allScrollFade = document.querySelectorAll('.scroll-fade:not(.parallax-section .scroll-fade)');
   
   const observer = new IntersectionObserver((entries) => {

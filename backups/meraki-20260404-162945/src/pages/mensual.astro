@@ -1,0 +1,373 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { loadMonthlyData, formatCurrency, formatMonth, USD_RATE } from '../lib/monthly-data';
+
+const data = loadMonthlyData();
+const allMonths = [...new Set(data.monthly.map(m => m.month))].sort();
+const restaurants = ['esh', 'coyol', 'laluna'] as const;
+
+// Get currency from URL param (default CRC)
+const url = new URL(Astro.request.url);
+const currency = (url.searchParams.get('currency') as 'CRC' | 'USD') || 'CRC';
+
+// Helper to format with current currency
+const fmt = (amount: number) => formatCurrency(amount, currency);
+
+// Logo paths
+const logos: Record<string, string> = {
+  esh: '/images/logos/esh-black.png',
+  coyol: '/images/logos/coyol-black.png',
+  laluna: '/images/logos/laluna-black.png'
+};
+
+// Calculate totals BY RESTAURANT (aggregated across all months)
+const restaurantTotals = restaurants.map(code => {
+  const restData = data.monthly.filter(m => m.restaurant === code && !m.partial);
+  return {
+    code,
+    name: data.restaurants[code]?.name || code,
+    color: data.restaurants[code]?.color || '#666',
+    logo: logos[code],
+    totalSales: restData.reduce((sum, m) => sum + m.totalSales, 0),
+    food: restData.reduce((sum, m) => sum + m.food, 0),
+    bar: restData.reduce((sum, m) => sum + m.bar, 0),
+    cash: restData.reduce((sum, m) => sum + m.cash, 0),
+    card: restData.reduce((sum, m) => sum + m.card, 0),
+    customers: restData.reduce((sum, m) => sum + m.customers, 0),
+    orders: restData.reduce((sum, m) => sum + m.orders, 0),
+    months: restData.length
+  };
+});
+
+// Calculate totals per month (all restaurants combined) for trend chart
+// Only include months where we have complete data (all 3 restaurants)
+const monthlyTotals = allMonths
+  .map(month => {
+    const monthData = data.monthly.filter(m => m.month === month && !m.partial);
+    return {
+      month,
+      totalSales: monthData.reduce((sum, m) => sum + m.totalSales, 0),
+      restaurants: monthData.length
+    };
+  })
+  .filter(m => m.restaurants === 3); // Only show complete months
+
+// Year 2026 totals
+const year2026 = data.monthly.filter(m => m.month.startsWith('2026') && !m.partial);
+const yearTotals = {
+  totalSales: year2026.reduce((sum, m) => sum + m.totalSales, 0),
+  food: year2026.reduce((sum, m) => sum + m.food, 0),
+  bar: year2026.reduce((sum, m) => sum + m.bar, 0),
+  cash: year2026.reduce((sum, m) => sum + m.cash, 0),
+  card: year2026.reduce((sum, m) => sum + m.card, 0),
+  customers: year2026.reduce((sum, m) => sum + m.customers, 0),
+  orders: year2026.reduce((sum, m) => sum + m.orders, 0),
+  netReceipts: year2026.reduce((sum, m) => sum + m.netReceipts, 0)
+};
+
+// Grand total
+const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
+---
+
+<Layout title="Sales Summary">
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-landrover-keswick text-white flex-shrink-0 hidden lg:flex lg:flex-col">
+      <div class="p-6">
+        <h1 class="font-serif text-2xl font-semibold tracking-wide">Meraki</h1>
+        <p class="text-landrover-limestone/60 text-xs mt-1">Financial Control</p>
+      </div>
+      
+      <nav class="mt-4 flex-1">
+        <a href="/mensual" class="flex items-center gap-3 px-6 py-3 bg-white/10 text-white border-l-4 border-landrover-sand">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          <span class="text-sm font-medium">Summary</span>
+        </a>
+        
+        <a href="/tendencias" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span class="text-sm">Trends</span>
+        </a>
+      </nav>
+      
+      <!-- User & Logout -->
+      <div class="p-6 border-t border-white/10">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-landrover-sand rounded-full flex items-center justify-center text-landrover-keswick font-semibold">
+              AP
+            </div>
+            <div>
+              <p class="text-sm font-medium">Angelina</p>
+              <p class="text-xs text-landrover-limestone/60">Admin</p>
+            </div>
+          </div>
+          <a href="/logout" class="text-landrover-limestone/60 hover:text-white transition-colors" title="Log out">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-auto">
+      <!-- Mobile Header -->
+      <header class="lg:hidden bg-landrover-keswick text-white p-4 flex items-center justify-between">
+        <h1 class="font-serif text-xl font-semibold">Meraki</h1>
+        <a href="/logout" class="text-landrover-limestone/80">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+        </a>
+      </header>
+      
+      <!-- Header -->
+      <header class="bg-white border-b border-landrover-arles/30 sticky top-0 z-40">
+        <div class="px-4 lg:px-8 py-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-semibold text-landrover-santorini">Sales Summary 2026</h2>
+            <p class="text-sm text-landrover-marine/60">Year to date • {allMonths.length} months</p>
+          </div>
+          
+          <!-- Currency Toggle -->
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-landrover-marine/60">Currency:</span>
+            <div class="flex bg-landrover-limestone/50 rounded overflow-hidden">
+              <a 
+                href="?currency=CRC" 
+                class={`px-4 py-2 text-sm font-medium transition-colors ${currency === 'CRC' ? 'bg-landrover-keswick text-white' : 'text-landrover-marine hover:bg-landrover-limestone'}`}
+              >
+                CRC ₡
+              </a>
+              <a 
+                href="?currency=USD" 
+                class={`px-4 py-2 text-sm font-medium transition-colors ${currency === 'USD' ? 'bg-landrover-keswick text-white' : 'text-landrover-marine hover:bg-landrover-limestone'}`}
+              >
+                USD $
+              </a>
+            </div>
+            {currency === 'USD' && (
+              <span class="text-xs text-landrover-marine/40">@ ₡{USD_RATE}/USD</span>
+            )}
+          </div>
+        </div>
+      </header>
+
+      <div class="p-4 lg:p-8 space-y-6">
+        
+        <!-- Grand Total Card -->
+        <div class="card p-6 lg:p-8 bg-landrover-keswick text-white">
+          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div>
+              <p class="text-landrover-limestone/60 text-sm uppercase tracking-wider mb-1">Total Sales 2026</p>
+              <p class="text-4xl lg:text-5xl font-semibold">{fmt(grandTotal)}</p>
+              <p class="text-landrover-limestone/60 text-sm mt-2">{yearTotals.customers.toLocaleString()} customers • {yearTotals.orders.toLocaleString()} orders</p>
+            </div>
+            <div class="flex gap-6">
+              <div>
+                <p class="text-landrover-limestone/60 text-xs uppercase">Food</p>
+                <p class="text-xl font-semibold">{fmt(yearTotals.food)}</p>
+              </div>
+              <div>
+                <p class="text-landrover-limestone/60 text-xs uppercase">Bar</p>
+                <p class="text-xl font-semibold">{fmt(yearTotals.bar)}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Restaurant Cards -->
+        <div class="grid md:grid-cols-3 gap-4">
+          {restaurantTotals.map(r => {
+            const pct = grandTotal > 0 ? Math.round(r.totalSales / grandTotal * 100) : 0;
+            return (
+              <div class="card overflow-hidden">
+                <div class="h-2" style={`background-color: ${r.color}`}></div>
+                <div class="p-5">
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                      <img src={r.logo} alt={r.name} class={r.code === 'laluna' ? 'h-14 w-auto' : 'h-10 w-auto'} />
+                    </div>
+                    <span class="text-sm text-landrover-marine/60">{pct}%</span>
+                  </div>
+                  
+                  <p class="text-3xl font-semibold text-landrover-santorini mb-4">
+                    {fmt(r.totalSales)}
+                  </p>
+                  
+                  <!-- Progress bar -->
+                  <div class="h-2 bg-landrover-limestone/50 rounded-full mb-4">
+                    <div 
+                      class="h-full rounded-full transition-all" 
+                      style={`width: ${pct}%; background-color: ${r.color}`}
+                    ></div>
+                  </div>
+                  
+                  <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <p class="text-landrover-marine/60">Food</p>
+                      <p class="font-medium">{fmt(r.food)}</p>
+                    </div>
+                    <div>
+                      <p class="text-landrover-marine/60">Bar</p>
+                      <p class="font-medium">{fmt(r.bar)}</p>
+                    </div>
+                    <div>
+                      <p class="text-landrover-marine/60">Customers</p>
+                      <p class="font-medium">{r.customers > 0 ? r.customers.toLocaleString() : '-'}</p>
+                    </div>
+                    <div>
+                      <p class="text-landrover-marine/60">Orders</p>
+                      <p class="font-medium">{r.orders > 0 ? r.orders.toLocaleString() : '-'}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <!-- Monthly Trend Line Graph -->
+        {monthlyTotals.length > 1 && (
+          <div class="card">
+            <div class="px-4 lg:px-6 py-4 border-b border-landrover-arles/30">
+              <h3 class="font-semibold text-landrover-santorini">Monthly Trend</h3>
+            </div>
+            
+            <div class="p-6 lg:p-8">
+              <!-- Graph with labels -->
+              <div class="flex items-end justify-around gap-8 h-72">
+                {monthlyTotals.map((m, i) => {
+                  const maxSales = Math.max(...monthlyTotals.map(x => x.totalSales));
+                  const minSales = Math.min(...monthlyTotals.map(x => x.totalSales));
+                  const range = maxSales - minSales;
+                  // Scale from 30% to 100% to avoid too much zoom
+                  const heightPct = range > 0 ? 30 + ((m.totalSales - minSales) / range) * 70 : 80;
+                  const prevMonth = monthlyTotals[i - 1];
+                  const change = prevMonth && prevMonth.totalSales > 0 ? Math.round((m.totalSales - prevMonth.totalSales) / prevMonth.totalSales * 100) : 0;
+                  
+                  return (
+                    <div class="flex-1 flex flex-col items-center max-w-32">
+                      <!-- Value label -->
+                      <div class="text-center mb-3">
+                        <p class="text-lg font-bold text-landrover-santorini">{fmt(m.totalSales)}</p>
+                        {i > 0 && (
+                          <p class={`text-sm font-medium ${change >= 0 ? 'text-landrover-coniston' : 'text-landrover-terracotta'}`}>
+                            {change >= 0 ? '↑' : '↓'} {Math.abs(change)}%
+                          </p>
+                        )}
+                      </div>
+                      
+                      <!-- Bar -->
+                      <div class="w-full flex-1 flex items-end">
+                        <div 
+                          class="w-full bg-landrover-keswick rounded-t-lg transition-all"
+                          style={`height: ${heightPct}%`}
+                        ></div>
+                      </div>
+                      
+                      <!-- Month label -->
+                      <p class="text-sm font-medium text-landrover-marine/70 mt-3">
+                        {formatMonth(m.month).split(' ')[0]}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <!-- Two Pie Charts Side by Side -->
+        <div class="grid md:grid-cols-2 gap-4">
+          <!-- Food vs Drinks -->
+          <div class="card">
+            <div class="px-4 lg:px-6 py-4 border-b border-landrover-arles/30">
+              <h3 class="font-semibold text-landrover-santorini">Food vs Drinks</h3>
+            </div>
+            
+            <div class="p-4 lg:p-6 flex items-center justify-center gap-6">
+              <div class="relative w-32 h-32">
+                <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+                  <circle cx="50" cy="50" r="40" fill="transparent" stroke="#3D4F3D" stroke-width="20"
+                    stroke-dasharray={`${(yearTotals.food / (yearTotals.food + yearTotals.bar)) * 251.2} 251.2`}
+                  />
+                  <circle cx="50" cy="50" r="40" fill="transparent" stroke="#A65D3F" stroke-width="20"
+                    stroke-dasharray={`${(yearTotals.bar / (yearTotals.food + yearTotals.bar)) * 251.2} 251.2`}
+                    stroke-dashoffset={`-${(yearTotals.food / (yearTotals.food + yearTotals.bar)) * 251.2}`}
+                  />
+                </svg>
+              </div>
+              
+              <div class="space-y-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-3 h-3 rounded bg-landrover-keswick"></div>
+                  <div>
+                    <p class="text-sm font-medium">Food {Math.round(yearTotals.food / (yearTotals.food + yearTotals.bar) * 100)}%</p>
+                    <p class="text-sm text-landrover-marine/60">{fmt(yearTotals.food)}</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-3 h-3 rounded bg-landrover-terracotta"></div>
+                  <div>
+                    <p class="text-sm font-medium">Drinks {Math.round(yearTotals.bar / (yearTotals.food + yearTotals.bar) * 100)}%</p>
+                    <p class="text-sm text-landrover-marine/60">{fmt(yearTotals.bar)}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Cash vs Card -->
+          <div class="card">
+            <div class="px-4 lg:px-6 py-4 border-b border-landrover-arles/30">
+              <h3 class="font-semibold text-landrover-santorini">Cash vs Card</h3>
+            </div>
+            
+            <div class="p-4 lg:p-6 flex items-center justify-center gap-6">
+              <div class="relative w-32 h-32">
+                <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+                  <circle cx="50" cy="50" r="40" fill="transparent" stroke="#2C3E50" stroke-width="20"
+                    stroke-dasharray={`${(yearTotals.card / (yearTotals.card + yearTotals.cash)) * 251.2} 251.2`}
+                  />
+                  <circle cx="50" cy="50" r="40" fill="transparent" stroke="#C4A67C" stroke-width="20"
+                    stroke-dasharray={`${(yearTotals.cash / (yearTotals.card + yearTotals.cash)) * 251.2} 251.2`}
+                    stroke-dashoffset={`-${(yearTotals.card / (yearTotals.card + yearTotals.cash)) * 251.2}`}
+                  />
+                </svg>
+              </div>
+              
+              <div class="space-y-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-3 h-3 rounded bg-landrover-marine"></div>
+                  <div>
+                    <p class="text-sm font-medium">Card {Math.round(yearTotals.card / (yearTotals.card + yearTotals.cash) * 100)}%</p>
+                    <p class="text-sm text-landrover-marine/60">{fmt(yearTotals.card)}</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-3 h-3 rounded bg-landrover-sand"></div>
+                  <div>
+                    <p class="text-sm font-medium">Cash {Math.round(yearTotals.cash / (yearTotals.card + yearTotals.cash) * 100)}%</p>
+                    <p class="text-sm text-landrover-marine/60">{fmt(yearTotals.cash)}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Info -->
+        <p class="text-xs text-landrover-marine/40 text-center">
+          Last updated: {data.lastUpdated ? new Date(data.lastUpdated).toLocaleString('en-US') : 'N/A'}
+        </p>
+      </div>
+    </main>
+  </div>
+</Layout>

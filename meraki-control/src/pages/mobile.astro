@@ -1,0 +1,399 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { loadMonthlyData, formatCurrency, formatMonth, USD_RATE } from '../lib/monthly-data';
+
+const data = loadMonthlyData();
+const allMonths = [...new Set(data.monthly.map(m => m.month))].sort();
+const restaurants = ['esh', 'coyol', 'laluna'] as const;
+
+// Get currency from URL param (default CRC)
+const url = new URL(Astro.request.url);
+const currency = (url.searchParams.get('currency') as 'CRC' | 'USD') || 'CRC';
+
+// Helper to format with current currency
+const fmt = (amount: number) => formatCurrency(amount, currency);
+
+// Logo paths
+const logos: Record<string, string> = {
+  esh: '/images/logos/esh-black.png',
+  coyol: '/images/logos/coyol-black.png',
+  laluna: '/images/logos/laluna-black.png'
+};
+
+// White logo paths for dark backgrounds
+const logosWhite: Record<string, string> = {
+  esh: '/images/logos/esh-bw.png',
+  coyol: '/images/logos/coyol-bw.png',
+  laluna: '/images/logos/laluna-bw.png'
+};
+
+// Restaurant colors and images
+const restaurantMeta: Record<string, { color: string; bg: string }> = {
+  esh: { color: '#C4A67C', bg: '/images/logos/esh-official.png' },
+  coyol: { color: '#3D4F3D', bg: '/images/logos/coyol-official.png' },
+  laluna: { color: '#A65D3F', bg: '/images/logos/laluna-official.png' }
+};
+
+// Calculate totals BY RESTAURANT
+const restaurantTotals = restaurants.map(code => {
+  const restData = data.monthly.filter(m => m.restaurant === code && !m.partial);
+  return {
+    code,
+    name: data.restaurants[code]?.name || code,
+    color: restaurantMeta[code]?.color || '#666',
+    logo: logos[code],
+    logoWhite: logosWhite[code],
+    totalSales: restData.reduce((sum, m) => sum + m.totalSales, 0),
+    food: restData.reduce((sum, m) => sum + m.food, 0),
+    bar: restData.reduce((sum, m) => sum + m.bar, 0),
+    cash: restData.reduce((sum, m) => sum + m.cash, 0),
+    card: restData.reduce((sum, m) => sum + m.card, 0),
+    customers: restData.reduce((sum, m) => sum + m.customers, 0),
+    orders: restData.reduce((sum, m) => sum + m.orders, 0),
+    months: restData.length
+  };
+});
+
+// Monthly totals for trend
+const monthlyTotals = allMonths
+  .map(month => {
+    const monthData = data.monthly.filter(m => m.month === month && !m.partial);
+    return {
+      month,
+      totalSales: monthData.reduce((sum, m) => sum + m.totalSales, 0),
+      restaurants: monthData.length
+    };
+  })
+  .filter(m => m.restaurants === 3);
+
+// Year totals
+const year2026 = data.monthly.filter(m => m.month.startsWith('2026') && !m.partial);
+const yearTotals = {
+  totalSales: year2026.reduce((sum, m) => sum + m.totalSales, 0),
+  food: year2026.reduce((sum, m) => sum + m.food, 0),
+  bar: year2026.reduce((sum, m) => sum + m.bar, 0),
+  cash: year2026.reduce((sum, m) => sum + m.cash, 0),
+  card: year2026.reduce((sum, m) => sum + m.card, 0),
+  customers: year2026.reduce((sum, m) => sum + m.customers, 0),
+  orders: year2026.reduce((sum, m) => sum + m.orders, 0)
+};
+
+const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
+const foodPct = Math.round(yearTotals.food / (yearTotals.food + yearTotals.bar) * 100);
+const cardPct = Math.round(yearTotals.card / (yearTotals.card + yearTotals.cash) * 100);
+---
+
+<Layout title="Meraki Dashboard">
+  <style>
+    .parallax-section {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .parallax-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 120%;
+      top: -10%;
+      will-change: transform;
+    }
+    
+    .scroll-fade {
+      opacity: 0;
+      transform: translateY(60px);
+    }
+    
+    .scroll-fade.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .stat-card {
+      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .glass-dark {
+      backdrop-filter: blur(20px);
+      background: rgba(0, 0, 0, 0.6);
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+    
+    .bounce {
+      animation: bounce 2s infinite;
+    }
+  </style>
+
+  <main class="bg-landrover-limestone">
+    
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-landrover-keswick text-white px-5 py-4 flex items-center justify-between">
+      <h1 class="font-serif text-xl">Meraki</h1>
+      <div class="flex items-center gap-3">
+        <div class="flex bg-white/20 rounded-full overflow-hidden">
+          <a 
+            href="?currency=CRC" 
+            class={`px-3 py-1 text-xs font-medium transition-all ${currency === 'CRC' ? 'bg-white text-landrover-keswick' : 'text-white'}`}
+          >
+            ₡
+          </a>
+          <a 
+            href="?currency=USD" 
+            class={`px-3 py-1 text-xs font-medium transition-all ${currency === 'USD' ? 'bg-white text-landrover-keswick' : 'text-white'}`}
+          >
+            $
+          </a>
+        </div>
+        <a href="/logout" class="text-white/60">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+        </a>
+      </div>
+    </header>
+    
+    <!-- Total Sales Hero -->
+    <section class="bg-landrover-keswick text-white px-5 pt-6 pb-10">
+      <p class="scroll-fade text-white/50 text-xs tracking-widest uppercase mb-2" data-delay="0">2026 Total</p>
+      <h2 class="scroll-fade text-4xl font-serif font-medium mb-4" data-delay="50">{fmt(grandTotal)}</h2>
+      
+      <div class="scroll-fade grid grid-cols-3 gap-4 mt-6" data-delay="100">
+        <div>
+          <p class="text-white/40 text-xs uppercase">Food</p>
+          <p class="text-lg font-semibold">{fmt(yearTotals.food)}</p>
+        </div>
+        <div>
+          <p class="text-white/40 text-xs uppercase">Drinks</p>
+          <p class="text-lg font-semibold">{fmt(yearTotals.bar)}</p>
+        </div>
+        <div>
+          <p class="text-white/40 text-xs uppercase">Customers</p>
+          <p class="text-lg font-semibold">{yearTotals.customers.toLocaleString()}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Restaurant Cards - Scrollable -->
+    <section class="px-4 -mt-4 space-y-4 pb-6">
+      {restaurantTotals.map((r, index) => {
+        const pct = grandTotal > 0 ? Math.round(r.totalSales / grandTotal * 100) : 0;
+        
+        return (
+          <div 
+            class="scroll-fade stat-card overflow-hidden"
+            data-delay={index * 80}
+          >
+            <!-- Color bar -->
+            <div class="h-1.5" style={`background: ${r.color};`}></div>
+            
+            <div class="p-5">
+              <!-- Logo + Total -->
+              <div class="flex items-center justify-between mb-4">
+                <img src={r.logo} alt={r.name} class={r.code === 'laluna' ? 'h-12' : 'h-9'} />
+                <span class="text-xs text-landrover-marine/50 bg-landrover-limestone/50 px-2 py-1 rounded-full">{pct}%</span>
+              </div>
+              
+              <!-- Big number -->
+              <p class="text-3xl font-serif font-semibold text-landrover-santorini mb-4">
+                {fmt(r.totalSales)}
+              </p>
+              
+              <!-- Progress bar -->
+              <div class="h-2 bg-landrover-limestone rounded-full mb-5">
+                <div class="h-full rounded-full" style={`width: ${pct}%; background: ${r.color};`}></div>
+              </div>
+              
+              <!-- Stats grid -->
+              <div class="grid grid-cols-2 gap-y-4 gap-x-6">
+                <div>
+                  <p class="text-xs text-landrover-marine/50 uppercase">Food</p>
+                  <p class="text-base font-semibold">{fmt(r.food)}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-landrover-marine/50 uppercase">Drinks</p>
+                  <p class="text-base font-semibold">{fmt(r.bar)}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-landrover-marine/50 uppercase">Cash</p>
+                  <p class="text-base font-semibold">{fmt(r.cash)}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-landrover-marine/50 uppercase">Card</p>
+                  <p class="text-base font-semibold">{fmt(r.card)}</p>
+                </div>
+                {r.customers > 0 && (
+                  <div>
+                    <p class="text-xs text-landrover-marine/50 uppercase">Customers</p>
+                    <p class="text-base font-semibold">{r.customers.toLocaleString()}</p>
+                  </div>
+                )}
+                {r.orders > 0 && (
+                  <div>
+                    <p class="text-xs text-landrover-marine/50 uppercase">Orders</p>
+                    <p class="text-base font-semibold">{r.orders.toLocaleString()}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </section>
+
+    <!-- Monthly Trend -->
+    <section class="px-4 pb-6">
+      <div class="scroll-fade stat-card p-5" data-delay="0">
+        <h3 class="text-sm font-semibold text-landrover-santorini mb-6">Monthly Trend</h3>
+        
+        <div class="flex items-end justify-around gap-3 h-40">
+          {monthlyTotals.map((m, i) => {
+            const maxSales = Math.max(...monthlyTotals.map(x => x.totalSales));
+            const minSales = Math.min(...monthlyTotals.map(x => x.totalSales));
+            const range = maxSales - minSales;
+            const heightPct = range > 0 ? 30 + ((m.totalSales - minSales) / range) * 70 : 80;
+            const prevMonth = monthlyTotals[i - 1];
+            const change = prevMonth && prevMonth.totalSales > 0 ? Math.round((m.totalSales - prevMonth.totalSales) / prevMonth.totalSales * 100) : 0;
+            
+            return (
+              <div class="flex-1 flex flex-col items-center">
+                <p class="text-xs font-bold text-landrover-santorini mb-1">{fmt(m.totalSales)}</p>
+                {i > 0 && (
+                  <p class={`text-xs mb-2 ${change >= 0 ? 'text-landrover-coniston' : 'text-landrover-terracotta'}`}>
+                    {change >= 0 ? '↑' : '↓'}{Math.abs(change)}%
+                  </p>
+                )}
+                <div class="w-full flex-1 flex items-end">
+                  <div 
+                    class="w-full bg-landrover-keswick rounded-t"
+                    style={`height: ${heightPct}%`}
+                  ></div>
+                </div>
+                <p class="text-xs text-landrover-marine/60 mt-2">
+                  {formatMonth(m.month).split(' ')[0].slice(0, 3)}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+
+    <!-- Breakdown Cards -->
+    <section class="px-4 pb-6 grid grid-cols-2 gap-3">
+      <!-- Food vs Drinks -->
+      <div class="scroll-fade stat-card p-4" data-delay="0">
+        <h3 class="text-xs font-semibold text-landrover-santorini mb-3">Food vs Drinks</h3>
+        <div class="relative w-20 h-20 mx-auto mb-3">
+          <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#e5e5e5" stroke-width="12" />
+            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#3D4F3D" stroke-width="12"
+              stroke-dasharray={`${foodPct * 2.512} 251.2`}
+            />
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span class="text-lg font-bold">{foodPct}%</span>
+          </div>
+        </div>
+        <p class="text-xs text-center text-landrover-marine/60">Food</p>
+      </div>
+      
+      <!-- Cash vs Card -->
+      <div class="scroll-fade stat-card p-4" data-delay="50">
+        <h3 class="text-xs font-semibold text-landrover-santorini mb-3">Card vs Cash</h3>
+        <div class="relative w-20 h-20 mx-auto mb-3">
+          <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#e5e5e5" stroke-width="12" />
+            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#2C3E50" stroke-width="12"
+              stroke-dasharray={`${cardPct * 2.512} 251.2`}
+            />
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span class="text-lg font-bold">{cardPct}%</span>
+          </div>
+        </div>
+        <p class="text-xs text-center text-landrover-marine/60">Card</p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="px-5 py-8 bg-landrover-keswick text-white text-center">
+      <p class="font-serif text-lg">Meraki</p>
+      <p class="text-white/30 text-xs mt-1">Financial Control</p>
+      <p class="text-white/20 text-xs mt-4">
+        Updated: {data.lastUpdated ? new Date(data.lastUpdated).toLocaleDateString('en-US') : 'N/A'}
+      </p>
+    </footer>
+    
+  </main>
+
+  <script>
+    // Parallax effect
+    const parallaxSections = document.querySelectorAll('.parallax-section');
+    
+    function updateParallax() {
+      parallaxSections.forEach(section => {
+        const bg = section.querySelector('.parallax-bg') as HTMLElement;
+        if (!bg) return;
+        
+        const rect = section.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        
+        if (rect.bottom > 0 && rect.top < windowHeight) {
+          const scrollPercent = (windowHeight - rect.top) / (windowHeight + rect.height);
+          const translateY = (scrollPercent - 0.5) * 60;
+          bg.style.transform = `translateY(${translateY}px) scale(1.1)`;
+        }
+      });
+    }
+    
+    // Scroll-triggered animations
+    const scrollFadeElements = document.querySelectorAll('.scroll-fade');
+    
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const delay = parseInt(el.dataset.delay || '0');
+          
+          setTimeout(() => {
+            el.classList.add('visible');
+          }, delay);
+          
+          fadeObserver.unobserve(el);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -5% 0px'
+    });
+    
+    scrollFadeElements.forEach(el => fadeObserver.observe(el));
+    
+    // Throttled scroll
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateParallax();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+    
+    updateParallax();
+  </script>
+</Layout>

@@ -1,0 +1,146 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { loadSalesData } from '../lib/data';
+
+const salesData = loadSalesData();
+const allSales = salesData.daily.sort((a, b) => b.date.localeCompare(a.date));
+
+// Group by date
+const salesByDate = allSales.reduce((acc, sale) => {
+  if (!acc[sale.date]) acc[sale.date] = [];
+  acc[sale.date].push(sale);
+  return acc;
+}, {} as Record<string, typeof allSales>);
+
+const dates = Object.keys(salesByDate).sort((a, b) => b.localeCompare(a));
+---
+
+<Layout title="Historial de Ventas">
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-landrover-keswick text-white flex-shrink-0 hidden lg:flex lg:flex-col">
+      <div class="p-6">
+        <h1 class="font-serif text-2xl font-semibold tracking-wide">Meraki</h1>
+        <p class="text-landrover-limestone/60 text-xs mt-1">Control Financiero</p>
+      </div>
+      
+      <nav class="mt-4 flex-1">
+        <a href="/" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          <span class="text-sm">Dashboard</span>
+        </a>
+        
+        <a href="/ventas" class="flex items-center gap-3 px-6 py-3 bg-white/10 text-white border-l-4 border-landrover-sand">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span class="text-sm font-medium">Historial</span>
+        </a>
+        
+        <a href="/comparar" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          <span class="text-sm">Comparar</span>
+        </a>
+      </nav>
+      
+      <!-- User & Logout -->
+      <div class="p-6 border-t border-white/10">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-landrover-sand rounded-full flex items-center justify-center text-landrover-keswick font-semibold">
+              AP
+            </div>
+            <div>
+              <p class="text-sm font-medium">Angelina</p>
+              <p class="text-xs text-landrover-limestone/60">Admin</p>
+            </div>
+          </div>
+          <a href="/logout" class="text-landrover-limestone/60 hover:text-white transition-colors" title="Cerrar sesión">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-auto">
+      <!-- Mobile Header -->
+      <header class="lg:hidden bg-landrover-keswick text-white p-4 flex items-center justify-between">
+        <a href="/" class="text-landrover-limestone/80">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7" />
+          </svg>
+        </a>
+        <h1 class="font-serif text-xl font-semibold">Historial</h1>
+        <a href="/logout" class="text-landrover-limestone/80">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+        </a>
+      </header>
+      
+      <!-- Header -->
+      <header class="bg-white border-b border-landrover-arles/30 sticky top-0 z-40">
+        <div class="px-4 lg:px-8 py-4">
+          <h2 class="text-xl font-semibold text-landrover-santorini">Historial de Ventas</h2>
+          <p class="text-sm text-landrover-marine/60">{allSales.length} registros</p>
+        </div>
+      </header>
+
+      <div class="p-4 lg:p-8 space-y-6">
+        {dates.length === 0 ? (
+          <div class="bg-landrover-limestone/50 border border-landrover-arles/30 px-6 py-8 text-center">
+            <p class="text-landrover-marine/60 font-medium">No hay datos de ventas</p>
+            <p class="text-sm text-landrover-marine/40 mt-1">Los datos aparecerán cuando se registren ventas</p>
+          </div>
+        ) : (
+          dates.map(date => {
+            const daySales = salesByDate[date];
+            const dayTotal = daySales.reduce((sum, s) => sum + s.total, 0);
+            const dateDisplay = new Date(date + 'T12:00:00').toLocaleDateString('es-CR', {
+              weekday: 'long',
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric'
+            });
+            
+            return (
+              <div class="card">
+                <div class="px-4 lg:px-6 py-4 border-b border-landrover-arles/30 flex items-center justify-between">
+                  <div>
+                    <h3 class="font-semibold text-landrover-santorini capitalize">{dateDisplay}</h3>
+                    <p class="text-xs text-landrover-marine/60">{daySales.length} restaurante{daySales.length > 1 ? 's' : ''}</p>
+                  </div>
+                  <p class="text-xl font-semibold text-landrover-santorini">₡{dayTotal.toLocaleString()}</p>
+                </div>
+                
+                <div class="divide-y divide-landrover-arles/20">
+                  {daySales.map(sale => (
+                    <div class="px-4 lg:px-6 py-4 flex items-center justify-between">
+                      <div class="flex items-center gap-3">
+                        <div class="w-3 h-3 rounded-full" style={`background-color: ${salesData.restaurants[sale.restaurant]?.color || '#666'}`}></div>
+                        <div>
+                          <p class="font-medium text-landrover-santorini">{salesData.restaurants[sale.restaurant]?.name || sale.restaurant}</p>
+                          <p class="text-xs text-landrover-marine/50">
+                            Efectivo: ₡{sale.cash.toLocaleString()} • Tarjeta: ₡{sale.card.toLocaleString()} • SINPE: ₡{sale.sinpe.toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+                      <p class="text-lg font-semibold text-landrover-santorini">₡{sale.total.toLocaleString()}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+    </main>
+  </div>
+</Layout>

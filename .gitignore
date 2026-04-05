@@ -137,3 +137,8 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+# Large files
+*.pdf
+*.blend
+coyol-website/source-files/videos/
+*.mp4
