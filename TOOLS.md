@@ -18,7 +18,7 @@
 ## Production URLs
 | Project | URL |
 |---------|-----|
-| Meraki Control | https://sea-lion-app-9kpar.ondigitalocean.app |
+| Meraki Control | https://meraki.livingnosara.com |
 
 ## Models Available
 - `anthropic/claude-opus-4-5` (default)

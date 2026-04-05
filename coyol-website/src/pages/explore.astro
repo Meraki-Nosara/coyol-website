@@ -1,0 +1,1015 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Explore Our Communities | Coyol Real Estate">
+  <div id="map-app">
+    <!-- Aerial image base layer -->
+    <div id="aerial-layer">
+      <img src="/images/mar-azul-aerial-1-4k.jpg" alt="Mar Azul Aerial" id="aerial-image" />
+    </div>
+    
+    <!-- SVG overlay for lots -->
+    <svg id="lot-overlay" viewBox="0 0 1000 667" preserveAspectRatio="xMidYMid slice">
+      <!-- Lots will be drawn here -->
+    </svg>
+    
+    <!-- Top bar -->
+    <header id="top-bar">
+      <a href="/" id="logo">
+        <img src="/images/logo.png" alt="Coyol Real Estate" />
+      </a>
+      
+      <nav id="community-nav">
+        <button class="community-btn active" data-community="mar-azul">Mar Azul</button>
+        <button class="community-btn" data-community="nosara-hills">Nosara Hills</button>
+        <button class="community-btn" data-community="los-coyoles">Los Coyoles</button>
+      </nav>
+      
+      <a href="/#contact" id="contact-btn">Contact Us</a>
+    </header>
+    
+    <!-- Left sidebar - Community info -->
+    <aside id="community-panel">
+      <div class="panel-content">
+        <span class="overline">Now Selling</span>
+        <h1 id="community-title">Mar Azul</h1>
+        <p id="community-subtitle">36 Jungle Homesites</p>
+        
+        <div class="stats">
+          <div class="stat">
+            <span class="number" id="stat-available">32</span>
+            <span class="label">Available</span>
+          </div>
+          <div class="stat">
+            <span class="number" id="stat-reserved">3</span>
+            <span class="label">Reserved</span>
+          </div>
+          <div class="stat">
+            <span class="number" id="stat-sold">1</span>
+            <span class="label">Sold</span>
+          </div>
+        </div>
+        
+        <p class="description">
+          Perched on a jungle ridgeline with 360° views, Mar Azul offers 
+          a rare opportunity to build your sanctuary in one of Costa Rica's 
+          most pristine settings.
+        </p>
+        
+        <div class="amenities">
+          <h4>Community Features</h4>
+          <ul>
+            <li>🌊 10 min to Playa Guiones</li>
+            <li>🌳 Protected jungle reserve</li>
+            <li>💦 Natural waterfalls & lagoon</li>
+            <li>🛡️ 24/7 gated security</li>
+            <li>🚴 Cycling & nature trails</li>
+            <li>🛤️ Private paved roads</li>
+          </ul>
+        </div>
+        
+        <a href="/#contact" class="cta-button">Schedule a Tour</a>
+      </div>
+    </aside>
+    
+    <!-- Right panel - Lot details (hidden by default) -->
+    <aside id="lot-panel" class="hidden">
+      <button id="close-lot-panel">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+      
+      <div class="panel-content">
+        <span class="overline">Homesite</span>
+        <h2 id="lot-number">Lot 12</h2>
+        
+        <div class="lot-image">
+          <img id="lot-photo" src="/images/renders/render-glass-jungle.jpg" alt="Lot view" />
+        </div>
+        
+        <div class="lot-details">
+          <div class="detail-row">
+            <span>Area</span>
+            <strong id="lot-area">2,450 m²</strong>
+          </div>
+          <div class="detail-row">
+            <span>Status</span>
+            <strong id="lot-status" class="status-available">Available</strong>
+          </div>
+          <div class="detail-row">
+            <span>View</span>
+            <strong id="lot-view">Jungle & Mountains</strong>
+          </div>
+          <div class="detail-row">
+            <span>Elevation</span>
+            <strong id="lot-elevation">340m</strong>
+          </div>
+        </div>
+        
+        <div class="lot-features">
+          <span class="feature">Building Platform</span>
+          <span class="feature">Underground Utilities</span>
+          <span class="feature">Road Access</span>
+        </div>
+        
+        <a href="/#contact" class="cta-button">Inquire About This Lot</a>
+      </div>
+    </aside>
+    
+    <!-- Map controls -->
+    <div id="map-controls">
+      <button id="zoom-in" title="Zoom in">+</button>
+      <button id="zoom-out" title="Zoom out">−</button>
+      <button id="reset-view" title="Reset view">⌂</button>
+    </div>
+    
+    <!-- Legend -->
+    <div id="legend">
+      <div class="legend-item">
+        <span class="dot available"></span>
+        <span>Available</span>
+      </div>
+      <div class="legend-item">
+        <span class="dot reserved"></span>
+        <span>Reserved</span>
+      </div>
+      <div class="legend-item">
+        <span class="dot sold"></span>
+        <span>Sold</span>
+      </div>
+    </div>
+    
+    <!-- Hint -->
+    <div id="map-hint">
+      <p>Click a lot to view details • Drag to pan • Scroll to zoom</p>
+    </div>
+    
+    <!-- Loading overlay -->
+    <div id="loading">
+      <div class="loader">
+        <div class="spinner"></div>
+        <p>Loading Mar Azul...</p>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  
+  #map-app {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #1a2f1a;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+  }
+  
+  /* Aerial base layer */
+  #aerial-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+  }
+  
+  #aerial-image {
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    object-fit: cover;
+    transform-origin: center center;
+    transition: transform 0.1s ease-out;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+  
+  #aerial-image:active {
+    cursor: grabbing;
+  }
+  
+  /* SVG lot overlay */
+  #lot-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150%;
+    height: 150%;
+    z-index: 2;
+    pointer-events: none;
+    transform-origin: center center;
+  }
+  
+  #lot-overlay .lot {
+    pointer-events: auto;
+    cursor: pointer;
+    fill: rgba(143, 188, 143, 0.4);
+    stroke: rgba(143, 188, 143, 0.9);
+    stroke-width: 1.5;
+    transition: all 0.2s ease;
+  }
+  
+  #lot-overlay .lot:hover {
+    fill: rgba(143, 188, 143, 0.6);
+    stroke: #fff;
+    stroke-width: 2;
+  }
+  
+  #lot-overlay .lot.selected {
+    fill: rgba(143, 188, 143, 0.7);
+    stroke: #fff;
+    stroke-width: 2.5;
+  }
+  
+  #lot-overlay .lot.reserved {
+    fill: rgba(196, 166, 124, 0.4);
+    stroke: rgba(196, 166, 124, 0.9);
+  }
+  
+  #lot-overlay .lot.reserved:hover {
+    fill: rgba(196, 166, 124, 0.6);
+  }
+  
+  #lot-overlay .lot.sold {
+    fill: rgba(166, 93, 63, 0.4);
+    stroke: rgba(166, 93, 63, 0.9);
+  }
+  
+  #lot-overlay .lot.sold:hover {
+    fill: rgba(166, 93, 63, 0.6);
+  }
+  
+  #lot-overlay .lot-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 8px;
+    font-weight: 600;
+    fill: #fff;
+    text-anchor: middle;
+    dominant-baseline: central;
+    pointer-events: none;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+  }
+  
+  /* Top bar */
+  #top-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    background: linear-gradient(180deg, rgba(26, 31, 22, 0.95) 0%, rgba(26, 31, 22, 0) 100%);
+    z-index: 100;
+  }
+  
+  #logo img {
+    height: 32px;
+    filter: brightness(0) invert(1);
+    opacity: 0.95;
+    transition: opacity 0.3s;
+  }
+  
+  #logo:hover img {
+    opacity: 1;
+  }
+  
+  #community-nav {
+    display: flex;
+    gap: 8px;
+    background: rgba(26, 31, 22, 0.8);
+    backdrop-filter: blur(12px);
+    padding: 6px;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 201, 181, 0.1);
+  }
+  
+  .community-btn {
+    padding: 10px 20px;
+    background: transparent;
+    border: none;
+    color: rgba(212, 201, 181, 0.7);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.3s;
+  }
+  
+  .community-btn:hover {
+    color: #D4C9B5;
+    background: rgba(212, 201, 181, 0.1);
+  }
+  
+  .community-btn.active {
+    background: #3D4F3D;
+    color: #F5F3EF;
+  }
+  
+  #contact-btn {
+    padding: 10px 24px;
+    background: rgba(196, 166, 124, 0.15);
+    border: 1px solid rgba(196, 166, 124, 0.3);
+    color: #C4A67C;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.3s;
+  }
+  
+  #contact-btn:hover {
+    background: rgba(196, 166, 124, 0.25);
+    border-color: rgba(196, 166, 124, 0.5);
+  }
+  
+  /* Left sidebar */
+  #community-panel {
+    position: absolute;
+    top: 96px;
+    left: 24px;
+    bottom: 24px;
+    width: 340px;
+    background: rgba(26, 31, 22, 0.92);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(212, 201, 181, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    z-index: 50;
+  }
+  
+  .panel-content {
+    padding: 28px;
+    height: 100%;
+    overflow-y: auto;
+  }
+  
+  .overline {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #C4A67C;
+    margin-bottom: 8px;
+  }
+  
+  #community-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: #F5F3EF;
+    margin: 0 0 4px 0;
+    line-height: 1.1;
+  }
+  
+  #community-subtitle {
+    font-size: 15px;
+    color: rgba(212, 201, 181, 0.7);
+    margin: 0 0 24px 0;
+  }
+  
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: rgba(61, 79, 61, 0.3);
+    border-radius: 12px;
+  }
+  
+  .stat {
+    text-align: center;
+  }
+  
+  .stat .number {
+    display: block;
+    font-size: 28px;
+    font-weight: 600;
+    color: #F5F3EF;
+    line-height: 1;
+  }
+  
+  .stat .label {
+    display: block;
+    font-size: 11px;
+    color: rgba(212, 201, 181, 0.6);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .description {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(212, 201, 181, 0.8);
+    margin-bottom: 24px;
+  }
+  
+  .amenities h4 {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(212, 201, 181, 0.5);
+    margin: 0 0 12px 0;
+  }
+  
+  .amenities ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+  }
+  
+  .amenities li {
+    font-size: 14px;
+    color: #D4C9B5;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(212, 201, 181, 0.1);
+  }
+  
+  .amenities li:last-child {
+    border-bottom: none;
+  }
+  
+  .cta-button {
+    display: block;
+    width: 100%;
+    padding: 14px 24px;
+    background: #3D4F3D;
+    color: #F5F3EF;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .cta-button:hover {
+    background: #4A5D4A;
+  }
+  
+  /* Right panel - Lot details */
+  #lot-panel {
+    position: absolute;
+    top: 96px;
+    right: 24px;
+    bottom: 24px;
+    width: 360px;
+    background: rgba(26, 31, 22, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(212, 201, 181, 0.15);
+    border-radius: 16px;
+    overflow: hidden;
+    z-index: 60;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s;
+  }
+  
+  #lot-panel.hidden {
+    transform: translateX(calc(100% + 48px));
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  #close-lot-panel {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    background: rgba(212, 201, 181, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: #D4C9B5;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    z-index: 10;
+  }
+  
+  #close-lot-panel:hover {
+    background: rgba(212, 201, 181, 0.2);
+  }
+  
+  #lot-panel .panel-content {
+    padding: 24px;
+  }
+  
+  #lot-number {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: #F5F3EF;
+    margin: 0 0 16px 0;
+  }
+  
+  .lot-image {
+    width: 100%;
+    height: 180px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .lot-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .lot-details {
+    margin-bottom: 20px;
+  }
+  
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(212, 201, 181, 0.1);
+  }
+  
+  .detail-row span {
+    font-size: 13px;
+    color: rgba(212, 201, 181, 0.6);
+  }
+  
+  .detail-row strong {
+    font-size: 14px;
+    font-weight: 500;
+    color: #F5F3EF;
+  }
+  
+  .status-available { color: #8fbc8f !important; }
+  .status-reserved { color: #C4A67C !important; }
+  .status-sold { color: #A65D3F !important; }
+  
+  .lot-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  
+  .feature {
+    padding: 6px 12px;
+    background: rgba(61, 79, 61, 0.4);
+    border-radius: 20px;
+    font-size: 12px;
+    color: #D4C9B5;
+  }
+  
+  /* Map controls */
+  #map-controls {
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 40;
+    transition: right 0.4s;
+  }
+  
+  #map-controls.shifted {
+    right: 400px;
+  }
+  
+  #map-controls button {
+    width: 40px;
+    height: 40px;
+    background: rgba(26, 31, 22, 0.9);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(212, 201, 181, 0.15);
+    color: #D4C9B5;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  #map-controls button:first-child {
+    border-radius: 8px 8px 0 0;
+  }
+  
+  #map-controls button:last-child {
+    border-radius: 0 0 8px 8px;
+  }
+  
+  #map-controls button:hover {
+    background: rgba(61, 79, 61, 0.9);
+    color: #F5F3EF;
+  }
+  
+  /* Legend */
+  #legend {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    gap: 20px;
+    padding: 12px 20px;
+    background: rgba(26, 31, 22, 0.9);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(212, 201, 181, 0.1);
+    border-radius: 8px;
+    z-index: 40;
+    transition: right 0.4s;
+  }
+  
+  #legend.shifted {
+    right: 400px;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: rgba(212, 201, 181, 0.8);
+  }
+  
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  
+  .dot.available { background: #8fbc8f; }
+  .dot.reserved { background: #C4A67C; }
+  .dot.sold { background: #A65D3F; }
+  
+  /* Map hint */
+  #map-hint {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background: rgba(26, 31, 22, 0.8);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    z-index: 40;
+    transition: opacity 0.3s;
+  }
+  
+  #map-hint p {
+    margin: 0;
+    font-size: 12px;
+    color: rgba(212, 201, 181, 0.7);
+  }
+  
+  /* Loading */
+  #loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #1a2f1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: opacity 0.5s;
+  }
+  
+  #loading.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  .loader {
+    text-align: center;
+    color: #D4C9B5;
+  }
+  
+  .spinner {
+    width: 48px;
+    height: 48px;
+    border: 2px solid rgba(196, 166, 124, 0.2);
+    border-top-color: #C4A67C;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  .loader p {
+    font-size: 14px;
+    opacity: 0.8;
+  }
+  
+  /* Mobile responsive */
+  @media (max-width: 1024px) {
+    #community-panel {
+      display: none;
+    }
+    
+    #lot-panel {
+      left: 16px;
+      right: 16px;
+      top: auto;
+      bottom: 0;
+      width: auto;
+      max-height: 60vh;
+      border-radius: 16px 16px 0 0;
+    }
+    
+    #lot-panel.hidden {
+      transform: translateY(100%);
+    }
+    
+    #map-controls {
+      right: 16px;
+    }
+    
+    #legend {
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      justify-content: center;
+    }
+    
+    #map-hint {
+      display: none;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    #top-bar {
+      padding: 0 16px;
+    }
+    
+    #community-nav {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Lot data - positioned for Aerial 1 (ocean view, looking north)
+  // Homes visible in render follow the curved road through the development
+  // West Gate on upper left, East Gate on lower right
+  const lots = [
+    // West Gate area - upper left where road enters
+    { id: 1, x: 340, y: 195, w: 28, h: 22, area: 2714, status: 'available', view: 'West Entry' },
+    { id: 2, x: 375, y: 185, w: 26, h: 20, area: 2665, status: 'available', view: 'Ocean Vista' },
+    { id: 3, x: 405, y: 178, w: 28, h: 22, area: 2812, status: 'reserved', view: 'Ocean & Jungle' },
+    
+    // Upper road curve - ocean facing (best views)
+    { id: 4, x: 440, y: 172, w: 26, h: 20, area: 2450, status: 'available', view: 'Premium Ocean' },
+    { id: 5, x: 475, y: 168, w: 28, h: 22, area: 3580, status: 'available', view: 'Beach Views' },
+    { id: 6, x: 510, y: 175, w: 26, h: 20, area: 2920, status: 'sold', view: 'Ocean Panorama' },
+    { id: 7, x: 545, y: 185, w: 28, h: 22, area: 2340, status: 'available', view: 'Sunset Views' },
+    
+    // Second row - along the main road
+    { id: 8, x: 355, y: 230, w: 28, h: 22, area: 3250, status: 'available', view: 'Road Front' },
+    { id: 9, x: 390, y: 225, w: 26, h: 20, area: 2890, status: 'available', view: 'Central Location' },
+    { id: 10, x: 425, y: 220, w: 28, h: 22, area: 3100, status: 'available', view: 'Jungle & Ocean' },
+    { id: 11, x: 460, y: 215, w: 26, h: 20, area: 2650, status: 'reserved', view: 'Garden Views' },
+    { id: 12, x: 495, y: 218, w: 28, h: 22, area: 3000, status: 'available', view: 'Trail Access' },
+    { id: 13, x: 530, y: 225, w: 26, h: 20, area: 2780, status: 'available', view: 'Nature Path' },
+    { id: 14, x: 565, y: 235, w: 28, h: 22, area: 3600, status: 'available', view: 'East Views' },
+    
+    // Middle section - inner curve of the S-road
+    { id: 15, x: 370, y: 275, w: 28, h: 22, area: 3150, status: 'available', view: 'Inner Circle' },
+    { id: 16, x: 410, y: 268, w: 26, h: 20, area: 3400, status: 'available', view: 'Park Adjacent' },
+    { id: 17, x: 450, y: 262, w: 28, h: 22, area: 2950, status: 'available', view: 'Central Hub' },
+    { id: 18, x: 490, y: 265, w: 26, h: 20, area: 3100, status: 'available', view: 'Trail Junction' },
+    { id: 19, x: 530, y: 272, w: 28, h: 22, area: 2700, status: 'available', view: 'Forest Edge' },
+    { id: 20, x: 570, y: 282, w: 26, h: 20, area: 2480, status: 'available', view: 'East Ridge' },
+    
+    // Lower curve section
+    { id: 21, x: 395, y: 320, w: 28, h: 22, area: 3050, status: 'reserved', view: 'Valley Views' },
+    { id: 22, x: 435, y: 315, w: 26, h: 20, area: 2820, status: 'available', view: 'Jungle Canopy' },
+    { id: 23, x: 475, y: 312, w: 28, h: 22, area: 3380, status: 'available', view: 'Private Setting' },
+    { id: 24, x: 515, y: 318, w: 26, h: 20, area: 2550, status: 'available', view: 'Nature Reserve' },
+    { id: 25, x: 555, y: 328, w: 28, h: 22, area: 4200, status: 'available', view: 'Premium Lot' },
+    { id: 26, x: 595, y: 340, w: 26, h: 20, area: 3650, status: 'available', view: 'East Forest' },
+    
+    // Lower section - toward East Gate
+    { id: 27, x: 440, y: 365, w: 28, h: 22, area: 3850, status: 'available', view: 'South Facing' },
+    { id: 28, x: 485, y: 360, w: 26, h: 20, area: 3200, status: 'available', view: 'Playground Area' },
+    { id: 29, x: 530, y: 368, w: 30, h: 24, area: 4500, status: 'available', view: 'Family Lot' },
+    { id: 30, x: 575, y: 380, w: 28, h: 22, area: 4100, status: 'available', view: 'Trail End' },
+    
+    // East Gate approach
+    { id: 31, x: 505, y: 415, w: 26, h: 20, area: 3400, status: 'available', view: 'Gate Adjacent' },
+    { id: 32, x: 550, y: 425, w: 28, h: 22, area: 3100, status: 'available', view: 'Easy Access' },
+    { id: 33, x: 595, y: 440, w: 26, h: 20, area: 2900, status: 'available', view: 'Entry Views' },
+    
+    // Southeast lots near East Gate
+    { id: 34, x: 555, y: 475, w: 28, h: 22, area: 3750, status: 'available', view: 'Corner Lot' },
+    { id: 35, x: 600, y: 490, w: 26, h: 20, area: 3450, status: 'available', view: 'East Gate' },
+    { id: 36, x: 640, y: 460, w: 26, h: 20, area: 3200, status: 'available', view: 'Private Entry' },
+  ];
+  
+  // DOM elements
+  const aerialImage = document.getElementById('aerial-image') as HTMLImageElement;
+  const lotOverlay = document.getElementById('lot-overlay') as SVGSVGElement;
+  const loading = document.getElementById('loading')!;
+  const lotPanel = document.getElementById('lot-panel')!;
+  const closeLotPanel = document.getElementById('close-lot-panel')!;
+  const mapControls = document.getElementById('map-controls')!;
+  const legend = document.getElementById('legend')!;
+  const mapHint = document.getElementById('map-hint')!;
+  
+  // Map state
+  let scale = 1;
+  let translateX = -25; // Center offset
+  let translateY = -25;
+  let isDragging = false;
+  let startX = 0;
+  let startY = 0;
+  let selectedLotId: number | null = null;
+  
+  // Render lots on SVG
+  function renderLots() {
+    lotOverlay.innerHTML = '';
+    
+    lots.forEach(lot => {
+      // Create lot polygon (rounded rectangle approximation)
+      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      rect.setAttribute('x', String(lot.x));
+      rect.setAttribute('y', String(lot.y));
+      rect.setAttribute('width', String(lot.w));
+      rect.setAttribute('height', String(lot.h));
+      rect.setAttribute('rx', '4');
+      rect.setAttribute('ry', '4');
+      rect.setAttribute('class', `lot ${lot.status}${selectedLotId === lot.id ? ' selected' : ''}`);
+      rect.setAttribute('data-id', String(lot.id));
+      
+      // Click handler
+      rect.addEventListener('click', () => selectLot(lot.id));
+      
+      lotOverlay.appendChild(rect);
+      
+      // Add lot number label
+      const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      label.setAttribute('x', String(lot.x + lot.w / 2));
+      label.setAttribute('y', String(lot.y + lot.h / 2));
+      label.setAttribute('class', 'lot-label');
+      label.textContent = String(lot.id);
+      lotOverlay.appendChild(label);
+    });
+  }
+  
+  // Select lot
+  function selectLot(id: number) {
+    const lot = lots.find(l => l.id === id);
+    if (!lot) return;
+    
+    selectedLotId = id;
+    renderLots();
+    
+    // Update panel
+    document.getElementById('lot-number')!.textContent = `Lot ${lot.id}`;
+    document.getElementById('lot-area')!.textContent = `${lot.area.toLocaleString()} m²`;
+    
+    const statusEl = document.getElementById('lot-status')!;
+    statusEl.textContent = lot.status.charAt(0).toUpperCase() + lot.status.slice(1);
+    statusEl.className = `status-${lot.status}`;
+    
+    document.getElementById('lot-view')!.textContent = lot.view;
+    document.getElementById('lot-elevation')!.textContent = `${320 + Math.floor(lot.id * 2)}m`;
+    
+    lotPanel.classList.remove('hidden');
+    mapControls.classList.add('shifted');
+    legend.classList.add('shifted');
+  }
+  
+  // Close panel
+  closeLotPanel.addEventListener('click', () => {
+    lotPanel.classList.add('hidden');
+    mapControls.classList.remove('shifted');
+    legend.classList.remove('shifted');
+    selectedLotId = null;
+    renderLots();
+  });
+  
+  // Update transform
+  function updateTransform() {
+    const transform = `translate(${translateX}%, ${translateY}%) scale(${scale})`;
+    aerialImage.style.transform = transform;
+    lotOverlay.style.transform = transform;
+  }
+  
+  // Pan handlers
+  aerialImage.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    aerialImage.style.cursor = 'grabbing';
+  });
+  
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    
+    const dx = (e.clientX - startX) / window.innerWidth * 100 / scale;
+    const dy = (e.clientY - startY) / window.innerHeight * 100 / scale;
+    
+    translateX += dx;
+    translateY += dy;
+    
+    // Clamp
+    translateX = Math.max(-50, Math.min(0, translateX));
+    translateY = Math.max(-50, Math.min(0, translateY));
+    
+    startX = e.clientX;
+    startY = e.clientY;
+    
+    updateTransform();
+  });
+  
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+    aerialImage.style.cursor = 'grab';
+  });
+  
+  // Zoom handlers
+  document.getElementById('zoom-in')!.addEventListener('click', () => {
+    scale = Math.min(3, scale * 1.3);
+    updateTransform();
+  });
+  
+  document.getElementById('zoom-out')!.addEventListener('click', () => {
+    scale = Math.max(0.8, scale / 1.3);
+    updateTransform();
+  });
+  
+  document.getElementById('reset-view')!.addEventListener('click', () => {
+    scale = 1;
+    translateX = -25;
+    translateY = -25;
+    updateTransform();
+  });
+  
+  // Mouse wheel zoom
+  document.addEventListener('wheel', (e) => {
+    if (e.deltaY < 0) {
+      scale = Math.min(3, scale * 1.1);
+    } else {
+      scale = Math.max(0.8, scale / 1.1);
+    }
+    updateTransform();
+  }, { passive: true });
+  
+  // Update stats
+  const statAvailable = document.getElementById('stat-available')!;
+  const statReserved = document.getElementById('stat-reserved')!;
+  const statSold = document.getElementById('stat-sold')!;
+  
+  let counts = { available: 0, reserved: 0, sold: 0 };
+  lots.forEach(lot => {
+    counts[lot.status as keyof typeof counts]++;
+  });
+  statAvailable.textContent = String(counts.available);
+  statReserved.textContent = String(counts.reserved);
+  statSold.textContent = String(counts.sold);
+  
+  // Initialize
+  renderLots();
+  updateTransform();
+  
+  // Hide loading after image loads
+  aerialImage.onload = () => {
+    setTimeout(() => loading.classList.add('hidden'), 500);
+  };
+  
+  // Fallback if image already cached
+  if (aerialImage.complete) {
+    setTimeout(() => loading.classList.add('hidden'), 500);
+  }
+  
+  // Hide hint after interaction
+  let hintHidden = false;
+  document.addEventListener('mousedown', () => {
+    if (!hintHidden) {
+      mapHint.style.opacity = '0';
+      hintHidden = true;
+    }
+  });
+</script>
