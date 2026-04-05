@@ -7,7 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "start": "npx serve dist -l 8080"
+    "start": "node dist/server/entry.mjs"
   },
   "keywords": [],
   "author": "",
