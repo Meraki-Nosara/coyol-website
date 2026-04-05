@@ -134,7 +134,9 @@ Marion loves the classic Land Rover colors — used for both projects:
 - **Dev Server:** Port 4400
 - **Status:** **LIVE** with Q1 2026 data
 - **Auth:** Angelina / masro
-- **Tunnel:** Cloudflare Quick Tunnel (URL changes on restart)
+- **Production URL:** https://sea-lion-app-9kpar.ondigitalocean.app
+- **Hosting:** DigitalOcean App Platform (auto-deploys from GitHub)
+- **Deployed:** April 5, 2026
 - **Data Loaded:**
   - Coyol: Jan-Mar 2026 (₡312.7M)
   - Esh: Jan-Mar 2026 (₡51.9M)

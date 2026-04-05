@@ -15,6 +15,11 @@
 | Coyol Website | 4321 | http://192.168.110.42:4321 |
 | Meraki Control | 4400 | http://192.168.110.42:4400 |
 
+## Production URLs
+| Project | URL |
+|---------|-----|
+| Meraki Control | https://sea-lion-app-9kpar.ondigitalocean.app |
+
 ## Models Available
 - `anthropic/claude-opus-4-5` (default)
 - `openrouter/google/gemini-2.5-pro`
