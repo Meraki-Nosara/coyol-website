@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurar Reenvío de Gmail - Meraki</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      color: #1A1F16;
+      background: #F5F3EF;
+      padding: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      background: #3D4F3D;
+      color: white;
+      padding: 30px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+    
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .card h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #3D4F3D;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .step-number {
+      background: #3D4F3D;
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    .card p, .card li {
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+    
+    .card ol, .card ul {
+      padding-left: 20px;
+    }
+    
+    .card li {
+      margin-bottom: 8px;
+    }
+    
+    .highlight {
+      background: #E8EDE8;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 14px;
+      color: #3D4F3D;
+      margin: 12px 0;
+    }
+    
+    .warning {
+      background: #FFF3E0;
+      border-left: 4px solid #A65D3F;
+      padding: 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+    }
+    
+    .warning strong {
+      color: #A65D3F;
+    }
+    
+    .success {
+      background: #E8F5E9;
+      border-left: 4px solid #3D4F3D;
+      padding: 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+    }
+    
+    .link {
+      color: #3D4F3D;
+      text-decoration: underline;
+      word-break: break-all;
+    }
+    
+    .footer {
+      text-align: center;
+      color: #666;
+      font-size: 13px;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+    }
+    
+    @media print {
+      body {
+        background: white;
+        padding: 20px;
+      }
+      .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>📧 Configurar Reenvío de Correos en Gmail</h1>
+    <p>Instrucciones para reenviar correos de merakifamilylimitada@gmail.com</p>
+  </div>
+
+  <div class="card">
+    <h2>¿Por qué hacer esto?</h2>
+    <p>Para que el sistema de control de Meraki pueda leer automáticamente las facturas electrónicas y los cierres de caja, necesitamos que los correos de <strong>merakifamilylimitada@gmail.com</strong> se reenvíen a <strong>marionnosara@gmail.com</strong>.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="step-number">1</span> Iniciar sesión en Gmail</h2>
+    <p>Abre Chrome y ve a: <strong>gmail.com</strong></p>
+    <p>Inicia sesión con:</p>
+    <div class="highlight">
+      Correo: merakifamilylimitada@gmail.com
+    </div>
+    <p><em>(Si no saben la contraseña, preguntarle a Angelina)</em></p>
+  </div>
+
+  <div class="card">
+    <h2><span class="step-number">2</span> Ir a Configuración</h2>
+    <ol>
+      <li>Haz clic en el <strong>ícono de engranaje</strong> ⚙️ (arriba a la derecha)</li>
+      <li>Haz clic en <strong>"Ver todos los ajustes"</strong></li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2><span class="step-number">3</span> Ir a Reenvío</h2>
+    <p>Haz clic en la pestaña <strong>"Reenvío y correo POP/IMAP"</strong></p>
+    <p>O ve directamente a este enlace:</p>
+    <div class="highlight">
+      https://mail.google.com/mail/u/0/#settings/fwdandpop
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="step-number">4</span> Agregar Dirección de Reenvío</h2>
+    <ol>
+      <li>Haz clic en <strong>"Agregar una dirección de reenvío"</strong></li>
+      <li>Escribe exactamente:</li>
+    </ol>
+    <div class="highlight">
+      marionnosara@gmail.com
+    </div>
+    <ol start="3">
+      <li>Haz clic en <strong>"Siguiente"</strong></li>
+      <li>Haz clic en <strong>"Continuar"</strong></li>
+      <li>Gmail mostrará un mensaje: "Se envió un correo de confirmación"</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2><span class="step-number">5</span> Confirmar el Reenvío</h2>
+    <div class="warning">
+      <strong>⚠️ IMPORTANTE:</strong> Este paso lo hace Marion. Avísenle cuando hayan completado el paso 4.
+    </div>
+    <p>Gmail envía un código de confirmación a marionnosara@gmail.com. Una vez que Marion confirme, pueden continuar con el paso 6.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="step-number">6</span> Activar el Reenvío</h2>
+    <ol>
+      <li>Vuelve a <strong>Configuración → Reenvío y correo POP/IMAP</strong></li>
+      <li>Selecciona: <strong>"Reenviar una copia del correo entrante a"</strong></li>
+      <li>Asegúrate que dice <strong>marionnosara@gmail.com</strong></li>
+      <li>En el menú desplegable, selecciona: <strong>"conservar la copia de Gmail en la bandeja de entrada"</strong></li>
+      <li>Baja y haz clic en <strong>"Guardar cambios"</strong></li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="success">
+      <strong>✅ ¡Listo!</strong><br>
+      A partir de ahora, todos los correos que lleguen a merakifamilylimitada@gmail.com también llegarán a marionnosara@gmail.com automáticamente.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>❓ ¿Problemas?</h2>
+    <p>Si algo no funciona, avísenle a Marion por WhatsApp o Telegram.</p>
+  </div>
+
+  <div class="footer">
+    Meraki Control System — Abril 2026
+  </div>
+
+</body>
+</html>

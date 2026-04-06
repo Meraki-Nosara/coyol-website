@@ -13,16 +13,47 @@ const { title, description = "Coyol Real Estate - Luxury homes and homesites in 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon-large.png" />
+    <link rel="apple-touch-icon" href="/favicon-large.png" />
     <meta name="generator" content={Astro.generator} />
     
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/og-image.jpg" />
+    <meta property="og:image" content="https://coyolrealestate.com/og-image.jpg" />
+    <meta property="og:url" content="https://coyolrealestate.com" />
+    <meta property="og:site_name" content="Coyol Real Estate" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://coyolrealestate.com/og-image.jpg" />
+    
+    <!-- SEO -->
+    <meta name="keywords" content="Nosara real estate, Costa Rica luxury homes, Blue Zone property, Guiones lots, Nosara homesites, Mar Azul, Nosara Hills, Los Coyoles, beachfront property Costa Rica" />
+    <link rel="canonical" href="https://coyolrealestate.com" />
     
     <title>{title}</title>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "RealEstateAgent",
+      "name": "Coyol Real Estate",
+      "description": "Luxury homes and homesites in Nosara, Costa Rica's Blue Zone",
+      "url": "https://coyolrealestate.com",
+      "telephone": "+506-8713-4120",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Nosara",
+        "addressRegion": "Guanacaste",
+        "addressCountry": "CR"
+      },
+      "areaServed": "Nosara, Costa Rica",
+      "priceRange": "$180,000 - $7,000,000"
+    }
+    </script>
   </head>
   <body class="bg-landrover-alaska text-landrover-santorini antialiased">
     <slot />

@@ -43,9 +43,10 @@ Three restaurants under unified management:
 | **Angelina** | Owner/Admin | Has bank statements & CC commissions. Not great at routine — ask nicely explaining why you need it |
 | **Ingrid** | Daily closings | Photos of yesterday's closings + cash count for ALL 3 locations. If missing → ask Angelina to follow up |
 | **John** | Coyol Manager | |
-| **Abner** | La Luna Manager | Staff/manpower + payroll for all locations |
+| **Abner** | La Luna Manager | Staff/manpower + payroll for all locations. Provides MDO (labor hours) data |
 | **Silvia** | Cleaning & supplies | All locations, based at La Luna |
 | **Danny** | Food & ordering | All 3 locations + oversees Esh |
+| **Anlly Villegas Chinchilla** | Office/Admin | Handles merakinosara emails |
 
 ### Meraki Reports
 - **Daily** @ 8pm → Angelina (vailas78@yahoo.com)
@@ -113,6 +114,14 @@ Marion loves the classic Land Rover colors — used for both projects:
 - **Address:** marionnosara@gmail.com
 - **Forwarding:** Setting up auto-forward to marion@agentmail.to
 
+### Meraki Email Accounts
+
+| Email | Purpose | Forwards To |
+|-------|---------|-------------|
+| merakifamilylimitada@gmail.com | Facturas electrónicas | marionnosara ✅ |
+| merakinosara@gmail.com | Retenciones & comisiones (bank/Visa fees) | marionnosara ✅ |
+| familymeraki2022@gmail.com | POS sales reports | Direct sender |
+
 ---
 
 ## 🔧 Active Projects
@@ -142,6 +151,11 @@ Marion loves the classic Land Rover colors — used for both projects:
   - Esh: Jan-Mar 2026 (₡51.9M)
   - La Luna: Jan-Mar 2026 (₡634.6M)
   - **Q1 Total: ₡999.2M**
+  - La Luna 2025: All 12 months downloaded (pending integration)
+- **Data Pending:**
+  - MDO (labor hours from Abner)
+  - Gastos (expenses 1/1/25 to 4/5/26)
+  - Retenciones/Comisiones (bank card fees via merakinosara)
 - **Features:**
   - Restaurant summary cards with logos
   - Food vs Drinks pie chart

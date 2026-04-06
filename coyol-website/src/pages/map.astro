@@ -1,404 +1,764 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navigation from '../components/Navigation.astro';
-import Footer from '../components/Footer.astro';
+
+// Properties - positioned with real GPS coordinates from DWG
+const properties = [
+  { id: 1, name: 'Ridge View 1', lat: 10.0088, lng: -85.6310, area: '2,714 m²', status: 'available', view: 'Ocean & Mountains', image: '/images/renders/render-glass-jungle.jpg' },
+  { id: 2, name: 'Ocean Vista 3', lat: 10.0085, lng: -85.6305, area: '3,580 m²', status: 'available', view: 'Pacific Ocean', image: '/images/renders/render-mountain-view.jpg' },
+  { id: 3, name: 'Jungle Canopy 7', lat: 10.0075, lng: -85.6315, area: '4,200 m²', status: 'reserved', view: 'Forest Reserve', image: '/images/renders/render-pool-deck.jpg' },
+  { id: 4, name: 'Sunset Ridge 12', lat: 10.0070, lng: -85.6308, area: '2,920 m²', status: 'available', view: 'Sunset Views', image: '/images/renders/render-living-room.jpg' },
+  { id: 5, name: 'Waterfall Estate', lat: 10.0060, lng: -85.6320, area: '3,850 m²', status: 'sold', view: 'Waterfall & Lagoon', image: '/images/renders/render-glass-jungle.jpg' },
+  { id: 6, name: 'Hilltop Haven 22', lat: 10.0065, lng: -85.6300, area: '3,100 m²', status: 'available', view: 'Hilltop Privacy', image: '/images/renders/render-mountain-view.jpg' },
+  { id: 7, name: 'Forest Edge 15', lat: 10.0055, lng: -85.6312, area: '2,650 m²', status: 'available', view: 'Nature Trails', image: '/images/renders/render-pool-deck.jpg' },
+  { id: 8, name: 'Valley View 9', lat: 10.0050, lng: -85.6295, area: '3,400 m²', status: 'available', view: 'Valley & Beach', image: '/images/renders/render-living-room.jpg' },
+];
+
+const amenities = [
+  { id: 'west-gate', name: 'West Gate', lat: 10.0080, lng: -85.6330, category: 'Entry', icon: '🚪', description: '24/7 secured entrance with guardhouse' },
+  { id: 'east-gate', name: 'East Gate', lat: 10.0045, lng: -85.6285, category: 'Entry', icon: '🚪', description: 'Secondary gated entrance' },
+  { id: 'waterfall', name: 'Natural Waterfall', lat: 10.0040, lng: -85.6318, category: 'Nature', icon: '💦', description: 'Stunning waterfall with swimming lagoon' },
+  { id: 'park', name: 'Flower Park', lat: 10.0058, lng: -85.6325, category: 'Recreation', icon: '🌺', description: 'Family park with gardens and playground' },
+  { id: 'trails', name: 'Trail Head', lat: 10.0072, lng: -85.6298, category: 'Recreation', icon: '🥾', description: 'Hiking and cycling trail network' },
+];
 ---
 
-<Layout title="Interactive Map | Coyol Real Estate">
-  <Navigation />
-  
-  <main class="pt-20">
-    <!-- Map Header -->
-    <section class="bg-landrover-limestone py-16">
-      <div class="max-w-7xl mx-auto px-8">
-        <p class="text-landrover-coniston text-xs tracking-[0.3em] uppercase mb-4">Explore Our Developments</p>
-        <h1 class="font-serif text-4xl md:text-5xl text-landrover-santorini mb-4">Interactive Map</h1>
-        <p class="text-landrover-marine/70 text-lg max-w-2xl">
-          Explore our three distinct communities. Click on any lot to view details, availability, and photos.
-        </p>
-      </div>
-    </section>
-
-    <!-- Filter Controls -->
-    <section class="bg-landrover-pangea py-6 border-b border-landrover-arles/30">
-      <div class="max-w-7xl mx-auto px-8">
-        <div class="flex flex-wrap items-center gap-4">
-          <span class="text-landrover-marine text-sm font-medium">Filter by:</span>
-          
-          <!-- Development Filter -->
-          <div class="flex gap-2">
-            <button 
-              class="dev-filter active px-4 py-2 text-xs tracking-wider uppercase bg-landrover-keswick text-white transition-colors"
-              data-development="all"
-            >
-              All
-            </button>
-            <button 
-              class="dev-filter px-4 py-2 text-xs tracking-wider uppercase bg-landrover-limestone text-landrover-marine hover:bg-landrover-keswick hover:text-white transition-colors"
-              data-development="nosara-hills"
-            >
-              Nosara Hills
-            </button>
-            <button 
-              class="dev-filter px-4 py-2 text-xs tracking-wider uppercase bg-landrover-limestone text-landrover-marine hover:bg-landrover-keswick hover:text-white transition-colors"
-              data-development="mar-azul"
-            >
-              Mar Azul
-            </button>
-          </div>
-          
-          <!-- Status Legend -->
-          <div class="flex items-center gap-4 ml-auto">
-            <div class="flex items-center gap-2">
-              <span class="w-4 h-4 bg-green-500 rounded-full"></span>
-              <span class="text-xs text-landrover-marine">Available</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="w-4 h-4 bg-yellow-500 rounded-full"></span>
-              <span class="text-xs text-landrover-marine">Reserved</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="w-4 h-4 bg-red-500 rounded-full"></span>
-              <span class="text-xs text-landrover-marine">Sold</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Map Container -->
-    <section class="relative">
-      <div id="map" class="w-full h-[70vh] min-h-[500px]"></div>
-      
-      <!-- Map Controls Overlay -->
-      <div class="absolute top-4 right-4 flex flex-col gap-2">
-        <button id="toggle-3d" class="bg-white shadow-md px-4 py-2 text-xs font-medium text-landrover-marine hover:bg-landrover-limestone transition-colors">
-          Toggle 3D Terrain
-        </button>
-        <button id="reset-view" class="bg-white shadow-md px-4 py-2 text-xs font-medium text-landrover-marine hover:bg-landrover-limestone transition-colors">
-          Reset View
-        </button>
-      </div>
-
-      <!-- Lot Info Panel (shows on click) -->
-      <div id="lot-panel" class="hidden absolute bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 bg-white shadow-xl p-6">
-        <button id="close-panel" class="absolute top-4 right-4 text-landrover-marine hover:text-landrover-keswick">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-        
-        <p id="lot-development" class="text-landrover-coniston text-xs tracking-[0.2em] uppercase mb-2"></p>
-        <h3 id="lot-name" class="font-serif text-2xl text-landrover-santorini mb-4"></h3>
-        
-        <div class="space-y-3 mb-6">
-          <div class="flex justify-between">
-            <span class="text-landrover-marine/60 text-sm">Status</span>
-            <span id="lot-status" class="text-sm font-medium"></span>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-landrover-marine/60 text-sm">Size</span>
-            <span id="lot-size" class="text-sm font-medium text-landrover-santorini">--</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-landrover-marine/60 text-sm">Type</span>
-            <span id="lot-type" class="text-sm font-medium text-landrover-santorini">--</span>
-          </div>
-        </div>
-        
-        <a 
-          href="#contact" 
-          class="block w-full bg-landrover-keswick text-white text-center px-6 py-3 text-xs font-medium tracking-wider uppercase hover:bg-landrover-coniston transition-colors"
-        >
-          Inquire About This Lot
+<Layout title="Explore Mar Azul | Coyol Real Estate">
+  <div id="app">
+    <!-- Cesium 3D Map -->
+    <div id="cesiumContainer"></div>
+    
+    <!-- Overlay UI -->
+    <div id="overlay">
+      <!-- Header -->
+      <header id="header">
+        <a href="/" id="logo">
+          <img src="/images/logo.png" alt="Coyol" />
         </a>
+        <h1>Mar Azul</h1>
+        <a href="/#contact" id="tour-btn">Schedule Tour</a>
+      </header>
+      
+      <!-- Filter Pills -->
+      <div id="filters">
+        <button class="filter active" data-filter="all">All</button>
+        <button class="filter" data-filter="properties">Properties</button>
+        <button class="filter" data-filter="amenities">Amenities</button>
       </div>
-    </section>
-
-    <!-- Development Details -->
-    <section class="py-16 bg-landrover-alaska">
-      <div class="max-w-7xl mx-auto px-8">
-        <div class="grid md:grid-cols-3 gap-8">
-          <!-- Nosara Hills Info -->
-          <div class="bg-white p-8">
-            <h3 class="font-serif text-2xl text-landrover-santorini mb-4">Nosara Hills</h3>
-            <p class="text-landrover-marine/70 text-sm mb-4">
-              A gated community offering elevated homesites with panoramic ocean and mountain views. 
-              Underground utilities, paved roads, and 24/7 security.
-            </p>
-            <ul class="space-y-2 text-sm text-landrover-marine/80">
-              <li>• 2,000 - 8,000 m² homesites</li>
-              <li>• Ocean & mountain views</li>
-              <li>• Gated with 24/7 security</li>
-              <li>• Underground utilities</li>
-            </ul>
-          </div>
-          
-          <!-- Mar Azul Info -->
-          <div class="bg-white p-8">
-            <h3 class="font-serif text-2xl text-landrover-santorini mb-4">Mar Azul</h3>
-            <p class="text-landrover-marine/70 text-sm mb-4">
-              Beachside living at its finest. These homesites offer direct access to pristine beaches 
-              while remaining immersed in tropical forest.
-            </p>
-            <ul class="space-y-2 text-sm text-landrover-marine/80">
-              <li>• 1,500 - 5,000 m² homesites</li>
-              <li>• Steps from the beach</li>
-              <li>• Tropical forest setting</li>
-              <li>• Private community</li>
-            </ul>
-          </div>
-          
-          <!-- Los Coyoles Info -->
-          <div class="bg-white p-8">
-            <h3 class="font-serif text-2xl text-landrover-santorini mb-4">Los Coyoles</h3>
-            <p class="text-landrover-marine/70 text-sm mb-4">
-              Secluded forest retreats among ancient trees. Perfect for those seeking complete privacy 
-              while staying connected to nature.
-            </p>
-            <ul class="space-y-2 text-sm text-landrover-marine/80">
-              <li>• 3,000 - 10,000 m² estates</li>
-              <li>• Forest sanctuary</li>
-              <li>• Maximum privacy</li>
-              <li>• Coming soon</li>
-            </ul>
-          </div>
+      
+      <!-- Detail Card -->
+      <div id="card" class="hidden">
+        <button id="card-close">✕</button>
+        <div id="card-image"><img src="" alt="" /></div>
+        <div id="card-body">
+          <span id="card-label">PROPERTY</span>
+          <h2 id="card-title">Name</h2>
+          <p id="card-meta"></p>
+          <p id="card-desc"></p>
+          <a href="/#contact" id="card-cta">Inquire</a>
+        </div>
+        <div id="card-nav">
+          <button id="prev">← Prev</button>
+          <span id="counter">1 / 8</span>
+          <button id="next">Next →</button>
         </div>
       </div>
-    </section>
-  </main>
-  
-  <Footer />
+      
+      <!-- List Panel -->
+      <div id="list-panel" class="hidden">
+        <div id="list-header">
+          <h3>Properties</h3>
+          <button id="list-close">✕</button>
+        </div>
+        <div id="list-items">
+          {properties.map((p, i) => (
+            <button class="list-item" data-index={i}>
+              <span class={`dot ${p.status}`}></span>
+              <span class="name">{p.name}</span>
+              <span class="area">{p.area}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      
+      <!-- Bottom Controls -->
+      <div id="bottom-bar">
+        <button id="see-all">See All Properties</button>
+        <div id="legend">
+          <span><i class="dot available"></i> Available</span>
+          <span><i class="dot reserved"></i> Reserved</span>
+          <span><i class="dot sold"></i> Sold</span>
+        </div>
+      </div>
+      
+      <!-- Zoom Controls -->
+      <div id="zoom">
+        <button id="zoom-in">+</button>
+        <button id="zoom-out">−</button>
+        <button id="zoom-reset">⌂</button>
+      </div>
+    </div>
+  </div>
 </Layout>
 
-<!-- Mapbox GL CSS -->
-<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
-
-<!-- Mapbox GL JS -->
-<script is:inline src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
-
-<script is:inline>
-  // Initialize map when DOM is ready
-  document.addEventListener('DOMContentLoaded', async () => {
-    // IMPORTANT: Replace with your Mapbox token
-    mapboxgl.accessToken = 'YOUR_MAPBOX_TOKEN';
-    
-    // Nosara coordinates (approximate center of developments)
-    const center = [-85.638, 9.998];
-    
-    // Initialize map
-    const map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/satellite-streets-v12',
-      center: center,
-      zoom: 14,
-      pitch: 45,
-      bearing: -20,
-      antialias: true
-    });
-
-    // Add navigation controls
-    map.addControl(new mapboxgl.NavigationControl(), 'top-left');
-    map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
-    
-    // State
-    let is3DEnabled = true;
-    let currentDevelopment = 'all';
-    
-    // Load map
-    map.on('load', async () => {
-      // Add 3D terrain
-      map.addSource('mapbox-dem', {
-        type: 'raster-dem',
-        url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
-        tileSize: 512,
-        maxzoom: 14
-      });
-      map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
-      
-      // Add sky
-      map.addLayer({
-        id: 'sky',
-        type: 'sky',
-        paint: {
-          'sky-type': 'atmosphere',
-          'sky-atmosphere-sun': [0.0, 90.0],
-          'sky-atmosphere-sun-intensity': 15
-        }
-      });
-      
-      // Load GeoJSON data
-      try {
-        const response = await fetch('/data/all-developments.geojson');
-        const geojson = await response.json();
-        
-        // Add source
-        map.addSource('lots', {
-          type: 'geojson',
-          data: geojson
-        });
-        
-        // Status colors
-        const statusColors = {
-          available: '#22c55e',  // green
-          reserved: '#eab308',   // yellow  
-          sold: '#ef4444'        // red
-        };
-        
-        // Add fill layer for polygons
-        map.addLayer({
-          id: 'lots-fill',
-          type: 'fill',
-          source: 'lots',
-          filter: ['==', ['geometry-type'], 'Polygon'],
-          paint: {
-            'fill-color': [
-              'match',
-              ['get', 'status'],
-              'available', statusColors.available,
-              'reserved', statusColors.reserved,
-              'sold', statusColors.sold,
-              statusColors.available
-            ],
-            'fill-opacity': 0.3
-          }
-        });
-        
-        // Add outline layer
-        map.addLayer({
-          id: 'lots-outline',
-          type: 'line',
-          source: 'lots',
-          paint: {
-            'line-color': [
-              'match',
-              ['get', 'status'],
-              'available', statusColors.available,
-              'reserved', statusColors.reserved,
-              'sold', statusColors.sold,
-              statusColors.available
-            ],
-            'line-width': 2,
-            'line-opacity': 0.8
-          }
-        });
-        
-        // Add line layer for non-polygon features (roads, boundaries)
-        map.addLayer({
-          id: 'boundaries',
-          type: 'line',
-          source: 'lots',
-          filter: ['==', ['geometry-type'], 'LineString'],
-          paint: {
-            'line-color': '#ffffff',
-            'line-width': 1,
-            'line-opacity': 0.5
-          }
-        });
-        
-        // Click handler
-        map.on('click', 'lots-fill', (e) => {
-          const feature = e.features[0];
-          const props = feature.properties;
-          
-          // Update panel
-          document.getElementById('lot-development').textContent = 
-            props.source === 'nosara-hills' ? 'Nosara Hills' : 'Mar Azul';
-          document.getElementById('lot-name').textContent = props.name || `Lot ${props.id}`;
-          document.getElementById('lot-status').textContent = props.status || 'Available';
-          document.getElementById('lot-status').className = 
-            `text-sm font-medium ${props.status === 'sold' ? 'text-red-600' : props.status === 'reserved' ? 'text-yellow-600' : 'text-green-600'}`;
-          document.getElementById('lot-type').textContent = props.layer || 'Homesite';
-          
-          // Show panel
-          document.getElementById('lot-panel').classList.remove('hidden');
-        });
-        
-        // Hover effects
-        map.on('mouseenter', 'lots-fill', () => {
-          map.getCanvas().style.cursor = 'pointer';
-        });
-        
-        map.on('mouseleave', 'lots-fill', () => {
-          map.getCanvas().style.cursor = '';
-        });
-        
-      } catch (error) {
-        console.error('Error loading GeoJSON:', error);
-      }
-    });
-    
-    // Close panel button
-    document.getElementById('close-panel').addEventListener('click', () => {
-      document.getElementById('lot-panel').classList.add('hidden');
-    });
-    
-    // Toggle 3D terrain
-    document.getElementById('toggle-3d').addEventListener('click', () => {
-      is3DEnabled = !is3DEnabled;
-      if (is3DEnabled) {
-        map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
-        map.easeTo({ pitch: 45 });
-      } else {
-        map.setTerrain(null);
-        map.easeTo({ pitch: 0 });
-      }
-    });
-    
-    // Reset view
-    document.getElementById('reset-view').addEventListener('click', () => {
-      map.flyTo({
-        center: center,
-        zoom: 14,
-        pitch: 45,
-        bearing: -20,
-        duration: 2000
-      });
-    });
-    
-    // Development filters
-    document.querySelectorAll('.dev-filter').forEach(btn => {
-      btn.addEventListener('click', () => {
-        // Update active state
-        document.querySelectorAll('.dev-filter').forEach(b => {
-          b.classList.remove('active', 'bg-landrover-keswick', 'text-white');
-          b.classList.add('bg-landrover-limestone', 'text-landrover-marine');
-        });
-        btn.classList.add('active', 'bg-landrover-keswick', 'text-white');
-        btn.classList.remove('bg-landrover-limestone', 'text-landrover-marine');
-        
-        const dev = btn.dataset.development;
-        currentDevelopment = dev;
-        
-        // Apply filter
-        if (dev === 'all') {
-          map.setFilter('lots-fill', ['==', ['geometry-type'], 'Polygon']);
-          map.setFilter('lots-outline', null);
-          map.setFilter('boundaries', ['==', ['geometry-type'], 'LineString']);
-        } else {
-          map.setFilter('lots-fill', ['all', 
-            ['==', ['geometry-type'], 'Polygon'],
-            ['==', ['get', 'source'], dev]
-          ]);
-          map.setFilter('lots-outline', ['==', ['get', 'source'], dev]);
-          map.setFilter('boundaries', ['all',
-            ['==', ['geometry-type'], 'LineString'],
-            ['==', ['get', 'source'], dev]
-          ]);
-        }
-      });
-    });
-  });
-</script>
+<!-- Cesium -->
+<link href="https://cesium.com/downloads/cesiumjs/releases/1.140/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+<script is:inline src="https://cesium.com/downloads/cesiumjs/releases/1.140/Build/Cesium/Cesium.js"></script>
 
 <style>
-  .mapboxgl-popup-content {
-    padding: 16px;
-    border-radius: 0;
-    font-family: 'Inter', sans-serif;
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  #app {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: #1a2f1a;
   }
   
-  .mapboxgl-ctrl-attrib {
-    font-size: 10px;
+  #cesiumContainer {
+    width: 100%; height: 100%;
+  }
+  
+  /* Hide Cesium default UI */
+  :global(.cesium-viewer-toolbar),
+  :global(.cesium-viewer-animationContainer),
+  :global(.cesium-viewer-timelineContainer),
+  :global(.cesium-viewer-bottom),
+  :global(.cesium-viewer-fullscreenContainer),
+  :global(.cesium-credit-logoContainer) {
+    display: none !important;
+  }
+  
+  :global(.cesium-credit-textContainer) {
+    font-size: 9px !important;
+    opacity: 0.5;
+  }
+  
+  #overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  #overlay > * { pointer-events: auto; }
+  
+  /* Header */
+  #header {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    background: linear-gradient(180deg, rgba(26,31,22,0.95) 0%, transparent 100%);
+  }
+  
+  #logo img {
+    height: 28px;
+    filter: brightness(0) invert(1);
+    opacity: 0.95;
+  }
+  
+  #header h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: #F5F3EF;
+  }
+  
+  #tour-btn {
+    padding: 10px 20px;
+    background: rgba(196,166,124,0.2);
+    border: 1px solid rgba(196,166,124,0.4);
+    border-radius: 6px;
+    color: #C4A67C;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  
+  #tour-btn:hover { background: rgba(196,166,124,0.3); }
+  
+  /* Filters */
+  #filters {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    background: rgba(26,31,22,0.95);
+    border-radius: 8px;
+    padding: 4px;
+    backdrop-filter: blur(12px);
+  }
+  
+  .filter {
+    padding: 10px 20px;
+    background: transparent;
+    border: none;
+    color: rgba(212,201,181,0.7);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  
+  .filter:hover { color: #D4C9B5; }
+  .filter.active { background: #3D4F3D; color: #F5F3EF; }
+  
+  /* Card */
+  #card {
+    position: absolute;
+    top: 90px;
+    right: 24px;
+    width: 340px;
+    background: rgba(26,31,22,0.97);
+    border-radius: 16px;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(212,201,181,0.15);
+    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.35s;
+  }
+  
+  #card.hidden {
+    transform: translateX(calc(100% + 48px));
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  #card-close {
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 32px; height: 32px;
+    background: rgba(0,0,0,0.5);
+    border: none; border-radius: 50%;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 10;
+  }
+  
+  #card-image {
+    height: 200px;
+    background: #2a3a2a;
+  }
+  
+  #card-image img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  
+  #card-body { padding: 20px; }
+  
+  #card-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #C4A67C;
+    text-transform: uppercase;
+  }
+  
+  #card-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: #F5F3EF;
+    margin: 8px 0;
+  }
+  
+  #card-meta {
+    font-size: 14px;
+    color: #8fbc8f;
+    margin-bottom: 12px;
+  }
+  
+  #card-desc {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(212,201,181,0.8);
+    margin-bottom: 16px;
+  }
+  
+  #card-cta {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #3D4F3D;
+    color: #F5F3EF;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+  
+  #card-cta:hover { background: #4A5D4A; }
+  
+  #card-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-top: 1px solid rgba(212,201,181,0.1);
+  }
+  
+  #card-nav button {
+    background: rgba(212,201,181,0.1);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    color: #D4C9B5;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  
+  #card-nav button:hover { background: rgba(212,201,181,0.2); }
+  
+  #counter {
+    font-size: 13px;
+    color: rgba(212,201,181,0.6);
+  }
+  
+  /* List Panel */
+  #list-panel {
+    position: absolute;
+    top: 90px;
+    left: 24px;
+    bottom: 140px;
+    width: 300px;
+    background: rgba(26,31,22,0.97);
+    border-radius: 16px;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(212,201,181,0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.35s;
+  }
+  
+  #list-panel.hidden {
+    transform: translateX(calc(-100% - 48px));
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  #list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid rgba(212,201,181,0.1);
+  }
+  
+  #list-header h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: #F5F3EF;
+  }
+  
+  #list-close {
+    width: 28px; height: 28px;
+    background: rgba(212,201,181,0.1);
+    border: none; border-radius: 50%;
+    color: #D4C9B5;
+    cursor: pointer;
+  }
+  
+  #list-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+  }
+  
+  .list-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 14px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s;
+  }
+  
+  .list-item:hover { background: rgba(212,201,181,0.1); }
+  
+  .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  
+  .dot.available { background: #4a7c4a; }
+  .dot.reserved { background: #C4A67C; }
+  .dot.sold { background: #8B4513; }
+  
+  .list-item .name {
+    flex: 1;
+    font-size: 14px;
+    color: #F5F3EF;
+  }
+  
+  .list-item .area {
+    font-size: 12px;
+    color: rgba(212,201,181,0.6);
+  }
+  
+  /* Bottom Bar */
+  #bottom-bar {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  #see-all {
+    padding: 12px 20px;
+    background: rgba(26,31,22,0.95);
+    border: 1px solid rgba(212,201,181,0.2);
+    border-radius: 8px;
+    color: #D4C9B5;
+    font-size: 13px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s;
+  }
+  
+  #see-all:hover { background: #3D4F3D; color: #F5F3EF; }
+  
+  #legend {
+    display: flex;
+    gap: 20px;
+    padding: 12px 20px;
+    background: rgba(26,31,22,0.9);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+  }
+  
+  #legend span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: rgba(212,201,181,0.8);
+  }
+  
+  #legend i.dot {
+    width: 8px; height: 8px;
+  }
+  
+  /* Zoom */
+  #zoom {
+    position: absolute;
+    left: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  
+  #zoom button {
+    width: 44px; height: 44px;
+    background: rgba(26,31,22,0.9);
+    border: 1px solid rgba(212,201,181,0.2);
+    color: #D4C9B5;
+    font-size: 20px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s;
+  }
+  
+  #zoom button:first-child { border-radius: 8px 8px 0 0; }
+  #zoom button:last-child { border-radius: 0 0 8px 8px; }
+  #zoom button:hover { background: #3D4F3D; color: #F5F3EF; }
+  
+  /* Mobile */
+  @media (max-width: 768px) {
+    #card {
+      left: 16px; right: 16px;
+      top: auto; bottom: 150px;
+      width: auto;
+      max-height: 50vh;
+    }
+    #card.hidden { transform: translateY(100%); }
+    
+    #list-panel {
+      left: 16px; right: 16px;
+      top: 80px; bottom: 200px;
+      width: auto;
+    }
+    #list-panel.hidden { transform: translateY(-100%); }
+    
+    #header h1 { display: none; }
+    #legend { display: none; }
   }
 </style>
+
+<script is:inline define:vars={{ properties, amenities }}>
+document.addEventListener('DOMContentLoaded', async () => {
+  // Cesium setup
+  Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4M2E5NTU4OS02ZjhiLTQ0ODItOGM0Zi00MzFhZGJlOWVlMjciLCJpZCI6NDEzNTMzLCJpYXQiOjE3NzUyNjMxMDV9.3vO61DPftOwtsluGJgtwchTXBmgJYu8AWa8fvbF-isQ';
+  
+  // Mar Azul center
+  const center = { lat: 10.006, lng: -85.631 };
+  
+  // Initialize viewer
+  const viewer = new Cesium.Viewer('cesiumContainer', {
+    terrain: Cesium.Terrain.fromWorldTerrain({
+      requestVertexNormals: true,
+      requestWaterMask: true
+    }),
+    baseLayerPicker: false,
+    geocoder: false,
+    homeButton: false,
+    sceneModePicker: false,
+    selectionIndicator: false,
+    timeline: false,
+    animation: false,
+    navigationHelpButton: false,
+    fullscreenButton: false,
+    infoBox: false,
+    skyAtmosphere: new Cesium.SkyAtmosphere(),
+  });
+  
+  // Add Bing satellite imagery with illustrated/painterly styling
+  viewer.imageryLayers.removeAll();
+  const imagery = await Cesium.IonImageryProvider.fromAssetId(2);
+  const imageryLayer = viewer.imageryLayers.addImageryProvider(imagery);
+  
+  // Stylize to look more illustrated/painterly
+  imageryLayer.saturation = 1.3;      // Boost colors
+  imageryLayer.brightness = 1.1;      // Slightly brighter
+  imageryLayer.contrast = 1.15;       // More pop
+  imageryLayer.hue = 0.05;            // Slight warm shift
+  imageryLayer.gamma = 0.9;           // Richer tones
+  
+  // Scene styling for illustrated feel
+  viewer.scene.globe.enableLighting = true;
+  viewer.scene.fog.enabled = true;
+  viewer.scene.fog.density = 0.0003;  // Atmospheric haze
+  viewer.scene.fog.minimumBrightness = 0.2;
+  viewer.scene.skyBox.show = true;
+  viewer.scene.globe.showGroundAtmosphere = true;
+  
+  // Softer, more artistic lighting
+  viewer.scene.light = new Cesium.DirectionalLight({
+    direction: new Cesium.Cartesian3(0.5, -0.5, -0.7),
+    color: new Cesium.Color(1.0, 0.98, 0.95, 1.0),
+    intensity: 2.5
+  });
+  
+  // Initial camera position - cinematic fly-in
+  viewer.camera.flyTo({
+    destination: Cesium.Cartesian3.fromDegrees(center.lng, center.lat - 0.008, 800),
+    orientation: {
+      heading: Cesium.Math.toRadians(15),
+      pitch: Cesium.Math.toRadians(-35),
+      roll: 0
+    },
+    duration: 2.5
+  });
+  
+  // Property pins
+  const propertyEntities = [];
+  properties.forEach((p, i) => {
+    const color = p.status === 'available' ? Cesium.Color.fromCssColorString('#4a7c4a') :
+                  p.status === 'reserved' ? Cesium.Color.fromCssColorString('#C4A67C') :
+                  Cesium.Color.fromCssColorString('#8B4513');
+    
+    const entity = viewer.entities.add({
+      position: Cesium.Cartesian3.fromDegrees(p.lng, p.lat, 0),
+      billboard: {
+        image: createPinImage('🏠', color.toCssColorString()),
+        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+        scale: 0.8,
+        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+        disableDepthTestDistance: Number.POSITIVE_INFINITY
+      },
+      properties: { type: 'property', index: i, data: p }
+    });
+    propertyEntities.push(entity);
+  });
+  
+  // Amenity pins
+  const amenityEntities = [];
+  amenities.forEach((a, i) => {
+    const entity = viewer.entities.add({
+      position: Cesium.Cartesian3.fromDegrees(a.lng, a.lat, 0),
+      billboard: {
+        image: createPinImage(a.icon, '#2c5282'),
+        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+        scale: 0.7,
+        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+        disableDepthTestDistance: Number.POSITIVE_INFINITY
+      },
+      properties: { type: 'amenity', index: i, data: a }
+    });
+    amenityEntities.push(entity);
+  });
+  
+  // Create pin image
+  function createPinImage(emoji, bgColor) {
+    const size = 64;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size + 20;
+    const ctx = canvas.getContext('2d');
+    
+    // Pin shape
+    ctx.beginPath();
+    ctx.arc(size/2, size/2, size/2 - 4, Math.PI, 0, false);
+    ctx.lineTo(size/2, size + 16);
+    ctx.closePath();
+    ctx.fillStyle = bgColor;
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    
+    // Emoji
+    ctx.font = '24px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(emoji, size/2, size/2 - 2);
+    
+    return canvas.toDataURL();
+  }
+  
+  // Click handling
+  const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+  handler.setInputAction((click) => {
+    const picked = viewer.scene.pick(click.position);
+    if (Cesium.defined(picked) && picked.id && picked.id.properties) {
+      const props = picked.id.properties;
+      const type = props.type.getValue();
+      const data = props.data.getValue();
+      const index = props.index.getValue();
+      showCard(type, data, index);
+    }
+  }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+  
+  // Card
+  const card = document.getElementById('card');
+  const cardTitle = document.getElementById('card-title');
+  const cardLabel = document.getElementById('card-label');
+  const cardMeta = document.getElementById('card-meta');
+  const cardDesc = document.getElementById('card-desc');
+  const cardImage = document.querySelector('#card-image img');
+  const cardCta = document.getElementById('card-cta');
+  const counter = document.getElementById('counter');
+  
+  let currentType = 'property';
+  let currentIndex = 0;
+  
+  function showCard(type, data, index) {
+    currentType = type;
+    currentIndex = index;
+    
+    cardLabel.textContent = type === 'property' ? 'PROPERTY' : 'AMENITY';
+    cardTitle.textContent = data.name;
+    cardImage.src = data.image || '/images/render-glass-jungle.jpg';
+    
+    if (type === 'property') {
+      cardMeta.textContent = `${data.area} · ${data.status.charAt(0).toUpperCase() + data.status.slice(1)}`;
+      cardDesc.textContent = `${data.view} views. Premium homesite in Mar Azul.`;
+      cardCta.textContent = data.status === 'sold' ? 'View Similar' : 'Inquire Now';
+      counter.textContent = `${index + 1} / ${properties.length}`;
+    } else {
+      cardMeta.textContent = data.category;
+      cardDesc.textContent = data.description;
+      cardCta.textContent = 'Learn More';
+      counter.textContent = `${index + 1} / ${amenities.length}`;
+    }
+    
+    card.classList.remove('hidden');
+  }
+  
+  document.getElementById('card-close').onclick = () => card.classList.add('hidden');
+  
+  document.getElementById('prev').onclick = () => {
+    const items = currentType === 'property' ? properties : amenities;
+    currentIndex = (currentIndex - 1 + items.length) % items.length;
+    showCard(currentType, items[currentIndex], currentIndex);
+    flyToItem(currentType, currentIndex);
+  };
+  
+  document.getElementById('next').onclick = () => {
+    const items = currentType === 'property' ? properties : amenities;
+    currentIndex = (currentIndex + 1) % items.length;
+    showCard(currentType, items[currentIndex], currentIndex);
+    flyToItem(currentType, currentIndex);
+  };
+  
+  function flyToItem(type, index) {
+    const item = type === 'property' ? properties[index] : amenities[index];
+    viewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(item.lng, item.lat - 0.002, 300),
+      orientation: {
+        heading: Cesium.Math.toRadians(0),
+        pitch: Cesium.Math.toRadians(-40),
+        roll: 0
+      },
+      duration: 1.0
+    });
+  }
+  
+  // Filters
+  document.querySelectorAll('.filter').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.filter').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      const filter = btn.dataset.filter;
+      propertyEntities.forEach(e => e.show = filter === 'all' || filter === 'properties');
+      amenityEntities.forEach(e => e.show = filter === 'all' || filter === 'amenities');
+    };
+  });
+  
+  // List panel
+  const listPanel = document.getElementById('list-panel');
+  document.getElementById('see-all').onclick = () => listPanel.classList.toggle('hidden');
+  document.getElementById('list-close').onclick = () => listPanel.classList.add('hidden');
+  
+  document.querySelectorAll('.list-item').forEach(item => {
+    item.onclick = () => {
+      const index = parseInt(item.dataset.index);
+      showCard('property', properties[index], index);
+      flyToItem('property', index);
+      listPanel.classList.add('hidden');
+    };
+  });
+  
+  // Zoom controls
+  document.getElementById('zoom-in').onclick = () => {
+    viewer.camera.zoomIn(viewer.camera.positionCartographic.height * 0.3);
+  };
+  
+  document.getElementById('zoom-out').onclick = () => {
+    viewer.camera.zoomOut(viewer.camera.positionCartographic.height * 0.3);
+  };
+  
+  document.getElementById('zoom-reset').onclick = () => {
+    viewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(center.lng, center.lat - 0.008, 800),
+      orientation: {
+        heading: Cesium.Math.toRadians(15),
+        pitch: Cesium.Math.toRadians(-35),
+        roll: 0
+      },
+      duration: 1.5
+    });
+  };
+});
+</script>

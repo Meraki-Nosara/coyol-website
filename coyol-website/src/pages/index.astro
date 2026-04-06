@@ -10,23 +10,40 @@ import Footer from '../components/Footer.astro';
   <Navigation />
   
   <main>
-    <!-- Hero - Full Screen Video/Image Slideshow like Zapotal -->
-    <section id="home" class="relative h-screen overflow-hidden">
-      <!-- Background slideshow -->
-      <div class="hero-slideshow absolute inset-0">
-        <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=1920&q=80')"></div>
-        <div class="slide" style="background-image: url('/images/DJI_20250326172126_0411_D.jpg')"></div>
-        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1920&q=80')"></div>
-        <div class="slide" style="background-image: url('/images/DJI_20250326130411_0403_D.jpg')"></div>
-        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1506953823976-52e1fdc0149a?w=1920&q=80')"></div>
+    <!-- Hero - Full Screen Video Background with Parallax -->
+    <section id="home" class="relative h-[150vh] overflow-hidden">
+      <!-- Video background - fixed for parallax -->
+      <div class="fixed inset-0 -z-10">
+        <!-- Desktop video (landscape) -->
+        <video 
+          id="hero-video"
+          autoplay 
+          muted 
+          playsinline
+          class="hidden md:block w-full h-full object-cover transition-opacity duration-[2000ms] ease-in-out"
+        >
+          <source src="/videos/hero-desktop.mp4" type="video/mp4" />
+        </video>
+        <!-- Mobile video (portrait) -->
+        <video 
+          id="hero-video-mobile"
+          autoplay 
+          muted 
+          loop
+          playsinline
+          class="md:hidden w-full h-full object-cover"
+        >
+          <source src="/videos/hero-video.mp4" type="video/mp4" />
+        </video>
+        <div class="absolute inset-0 bg-black/30"></div>
       </div>
-      <div class="absolute inset-0 bg-black/30"></div>
       
-      <div class="relative z-10 h-full flex flex-col items-center justify-center text-center px-8">
-        <h1 class="hero-title font-serif text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-white max-w-5xl leading-tight">
+      <!-- Floating text container -->
+      <div class="sticky top-0 h-screen flex flex-col items-center justify-center text-center px-8">
+        <h1 class="hero-title font-serif text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-white max-w-5xl leading-tight drop-shadow-2xl">
           A way of life
         </h1>
-        <p class="hero-subtitle text-white/80 text-lg md:text-xl mt-6 tracking-wide">
+        <p class="hero-subtitle text-white/90 text-lg md:text-xl mt-6 tracking-wide drop-shadow-lg">
           Nosara, Costa Rica
         </p>
       </div>
@@ -39,7 +56,7 @@ import Footer from '../components/Footer.astro';
     </section>
 
     <!-- Opening Story -->
-    <section id="story" class="py-24 lg:py-40 bg-landrover-limestone">
+    <section id="story" class="relative z-10 py-24 lg:py-40 bg-landrover-limestone">
       <div class="max-w-4xl mx-auto px-8 text-center">
         <p class="scroll-fade font-serif text-2xl md:text-3xl lg:text-4xl text-landrover-santorini leading-relaxed" data-delay="0">
           This is a place curated by a family, shaped by decades of hosting, feeding, 
@@ -54,8 +71,8 @@ import Footer from '../components/Footer.astro';
         <!-- Surfing -->
         <div class="aspect-square md:aspect-auto md:h-[80vh] relative overflow-hidden">
           <img 
-            src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=1200&q=80" 
-            alt="Surfing in Nosara"
+            src="/images/render-interior-greatroom.jpg" 
+            alt="Nosara coastline"
             class="w-full h-full object-cover"
           />
         </div>
@@ -89,8 +106,8 @@ import Footer from '../components/Footer.astro';
         <!-- Jungle/Nature -->
         <div class="aspect-square md:aspect-auto md:h-[80vh] relative overflow-hidden order-1 md:order-2">
           <img 
-            src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=80" 
-            alt="Jungle nature"
+            src="/images/render-mountain-view.jpg" 
+            alt="Mountain view home"
             class="w-full h-full object-cover"
           />
         </div>
@@ -110,7 +127,7 @@ import Footer from '../components/Footer.astro';
     <!-- Drone Aerial -->
     <section class="relative h-screen">
       <img 
-        src="/images/DJI_20250326172126_0411_D.jpg" 
+        src="/images/render-master-suite.jpg" 
         alt="Aerial view of Nosara"
         class="absolute inset-0 w-full h-full object-cover"
       />
@@ -128,26 +145,26 @@ import Footer from '../components/Footer.astro';
     <FamilyBrands />
 
     <!-- More lifestyle -->
-    <section class="bg-landrover-keswick">
+    <section class="bg-landrover-moss">
       <div class="grid md:grid-cols-3">
         <div class="aspect-[4/5] relative overflow-hidden">
           <img 
-            src="https://images.unsplash.com/photo-1506953823976-52e1fdc0149a?w=800&q=80" 
-            alt="Beach sunset"
+            src="/images/render-interior-greatroom.jpg" 
+            alt="Great room interior"
             class="w-full h-full object-cover"
           />
         </div>
         <div class="aspect-[4/5] relative overflow-hidden">
           <img 
-            src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80" 
-            alt="Yoga at sunset"
+            src="/images/render-master-suite.jpg" 
+            alt="Master suite"
             class="w-full h-full object-cover"
           />
         </div>
         <div class="aspect-[4/5] relative overflow-hidden">
           <img 
-            src="https://images.unsplash.com/photo-1559827291-72ee739d0d9a?w=800&q=80" 
-            alt="Family beach"
+            src="/images/render-kitchen.jpg" 
+            alt="Modern kitchen"
             class="w-full h-full object-cover"
           />
         </div>
@@ -155,7 +172,7 @@ import Footer from '../components/Footer.astro';
     </section>
 
     <!-- Blue Zone -->
-    <section class="py-24 lg:py-40 bg-landrover-keswick text-white">
+    <section class="py-24 lg:py-40 bg-landrover-moss text-white">
       <div class="max-w-5xl mx-auto px-8 text-center">
         <p class="scroll-fade text-landrover-limestone/60 text-xs tracking-[0.3em] uppercase mb-6" data-delay="0">Nicoya Peninsula</p>
         <h2 class="scroll-fade font-serif text-4xl md:text-5xl lg:text-6xl mb-8" data-delay="100">
@@ -208,7 +225,7 @@ import Footer from '../components/Footer.astro';
           <article class="scroll-fade group relative overflow-hidden" data-delay="100">
             <div class="aspect-[3/4] overflow-hidden">
               <img 
-                src="/images/DJI_20250326172154_0413_D.jpg"
+                src="/images/nosara-sunset-2.jpg"
                 alt="Mar Azul"
                 class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
               />
@@ -216,7 +233,7 @@ import Footer from '../components/Footer.astro';
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
             <div class="absolute bottom-0 left-0 right-0 p-8">
               <h3 class="font-serif text-3xl text-white mb-2">Mar Azul</h3>
-              <p class="text-white/70 text-sm">Steps from the ocean</p>
+              <p class="text-white/70 text-sm">High above the hills</p>
             </div>
           </article>
           
@@ -239,7 +256,7 @@ import Footer from '../components/Footer.astro';
         <div class="text-center mt-12">
           <a 
             href="/map-cesium" 
-            class="scroll-fade inline-block border border-landrover-keswick text-landrover-keswick px-10 py-4 text-xs tracking-[0.2em] uppercase hover:bg-landrover-keswick hover:text-white transition-colors"
+            class="scroll-fade inline-block border border-landrover-keswick text-landrover-keswick px-10 py-4 text-xs tracking-[0.2em] uppercase hover:bg-landrover-moss hover:text-white transition-colors"
             data-delay="200"
           >
             Explore the Land
@@ -251,7 +268,7 @@ import Footer from '../components/Footer.astro';
     <!-- Final CTA -->
     <section class="relative h-[70vh]">
       <img 
-        src="/images/DJI_20250326172126_0411_D.jpg" 
+        src="/images/DJI_20250326130411_0403_D.jpg" 
         alt="Nosara sunset"
         class="absolute inset-0 w-full h-full object-cover"
       />
@@ -372,4 +389,25 @@ import Footer from '../components/Footer.astro';
   }, { threshold: 0.1 });
   
   scrollFade.forEach(el => observer.observe(el));
+
+  // Video fade loop
+  const heroVideo = document.getElementById('hero-video');
+  if (heroVideo) {
+    heroVideo.addEventListener('timeupdate', () => {
+      const timeLeft = heroVideo.duration - heroVideo.currentTime;
+      if (timeLeft < 2.5) {
+        heroVideo.style.opacity = '0';
+      }
+    });
+    
+    heroVideo.addEventListener('ended', () => {
+      setTimeout(() => {
+        heroVideo.currentTime = 0;
+        heroVideo.play();
+        setTimeout(() => {
+          heroVideo.style.opacity = '1';
+        }, 100);
+      }, 800);
+    });
+  }
 </script>

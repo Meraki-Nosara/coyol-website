@@ -1,0 +1,378 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Available homesites - named by location/character, not lot numbers
+const homesites = [
+  {
+    id: 'ridge-view-1',
+    name: 'Ridge View 1',
+    area: '2,714 m²',
+    acres: '0.67 acres',
+    description: 'Perched at the highest point of Mar Azul, this premium homesite offers sweeping 360° views of the jungle canopy, distant mountains, and ocean glimpses through the trees.',
+    features: ['Premium elevation', 'Ocean glimpse', 'Maximum privacy'],
+    image: '/images/renders/render-glass-jungle.jpg',
+  },
+  {
+    id: 'ocean-vista-3',
+    name: 'Ocean Vista 3',
+    area: '3,580 m²',
+    acres: '0.88 acres',
+    description: 'One of the few homesites with direct sightlines to the Pacific. Wake up to sunrise over the jungle and watch the sunset paint the ocean gold.',
+    features: ['Ocean views', 'Sunrise exposure', 'Corner lot'],
+    image: '/images/renders/render-mountain-view.jpg',
+  },
+  {
+    id: 'jungle-canopy-7',
+    name: 'Jungle Canopy 7',
+    area: '4,200 m²',
+    acres: '1.04 acres',
+    description: 'Nestled within the protected forest reserve, this generous lot offers complete immersion in nature. Howler monkeys and toucans are your daily companions.',
+    features: ['Largest lot', 'Forest reserve adjacent', 'Maximum privacy'],
+    image: '/images/renders/render-pool-deck.jpg',
+  },
+  {
+    id: 'sunset-ridge-12',
+    name: 'Sunset Ridge 12',
+    area: '2,920 m²',
+    acres: '0.72 acres',
+    description: 'Positioned on the western ridge with unobstructed sunset views. The perfect orientation for outdoor living and evening entertaining.',
+    features: ['Sunset views', 'Western exposure', 'Gentle slope'],
+    image: '/images/renders/render-living-room.jpg',
+  },
+  {
+    id: 'waterfall-estate-15',
+    name: 'Waterfall Estate 15',
+    area: '3,850 m²',
+    acres: '0.95 acres',
+    description: 'Located near the natural waterfall and lagoon, this homesite offers the soothing sounds of cascading water and access to private swimming.',
+    features: ['Waterfall proximity', 'Lagoon access', 'Unique setting'],
+    image: '/images/renders/render-glass-jungle.jpg',
+  },
+  {
+    id: 'hilltop-haven-22',
+    name: 'Hilltop Haven 22',
+    area: '3,100 m²',
+    acres: '0.77 acres',
+    description: 'A serene setting along the nature trail network. Perfect for those who value morning walks through the jungle and connection with nature.',
+    features: ['Trail access', 'Flat building area', 'Central location'],
+    image: '/images/renders/render-mountain-view.jpg',
+  },
+];
+---
+
+<Layout title="Available Homesites | Mar Azul | Coyol Real Estate">
+  <!-- Hero with aerial -->
+  <section class="hero">
+    <div class="hero-image">
+      <img src="/images/DJI_20250326172154_0413_D.jpg" alt="Mar Azul aerial view" />
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <span class="overline">Mar Azul</span>
+      <h1>Available Homesites</h1>
+      <p>36 jungle homesites on a pristine ridgeline, minutes from Playa Guiones</p>
+    </div>
+  </section>
+
+  <!-- Intro -->
+  <section class="intro">
+    <div class="container">
+      <p class="lead">
+        Mar Azul's homesites are positioned to maximize privacy, natural beauty, 
+        and the spectacular views that make this ridgeline one of Nosara's most 
+        coveted locations.
+      </p>
+    </div>
+  </section>
+
+  <!-- Homesites grid -->
+  <section class="homesites">
+    <div class="container">
+      <div class="grid">
+        {homesites.map((site) => (
+          <a href={`/homesites/${site.id}`} class="homesite-card">
+            <div class="card-image">
+              <img src={site.image} alt={site.name} />
+            </div>
+            <div class="card-content">
+              <h3>{site.name}</h3>
+              <p class="specs">{site.area} · {site.acres}</p>
+              <ul class="features">
+                {site.features.map((f) => (
+                  <li>{f}</li>
+                ))}
+              </ul>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Find Your Homesite</h2>
+        <p>Schedule a private tour to explore Mar Azul and discover the perfect setting for your Costa Rica home.</p>
+        <a href="/#contact" class="cta-button">Schedule a Tour</a>
+      </div>
+      <div class="cta-image">
+        <img src="/images/DJI_20250326172154_0413_D.jpg" alt="Mar Azul from above" />
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Hero */
+  .hero {
+    position: relative;
+    height: 80vh;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      180deg,
+      rgba(26, 31, 22, 0.3) 0%,
+      rgba(26, 31, 22, 0.6) 100%
+    );
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    color: #F5F3EF;
+    padding: 0 24px;
+  }
+
+  .overline {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #C4A67C;
+    margin-bottom: 16px;
+  }
+
+  .hero-content h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 400;
+    margin: 0 0 16px 0;
+    line-height: 1.1;
+  }
+
+  .hero-content p {
+    font-size: 18px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* Intro */
+  .intro {
+    padding: 80px 24px;
+    background: #F5F3EF;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .lead {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(20px, 3vw, 28px);
+    line-height: 1.6;
+    color: #1A1F16;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  /* Homesites grid */
+  .homesites {
+    padding: 80px 24px;
+    background: #fff;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 32px;
+  }
+
+  .homesite-card {
+    display: block;
+    text-decoration: none;
+    background: #F5F3EF;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .homesite-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  .card-image {
+    aspect-ratio: 4/3;
+    overflow: hidden;
+  }
+
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+  }
+
+  .homesite-card:hover .card-image img {
+    transform: scale(1.05);
+  }
+
+  .card-content {
+    padding: 24px;
+  }
+
+  .card-content h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: #1A1F16;
+    margin: 0 0 8px 0;
+  }
+
+  .specs {
+    font-size: 14px;
+    color: #3D4F3D;
+    margin: 0 0 16px 0;
+    font-weight: 500;
+  }
+
+  .features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .features li {
+    font-size: 12px;
+    color: #666;
+    padding: 4px 12px;
+    background: rgba(61, 79, 61, 0.1);
+    border-radius: 20px;
+  }
+
+  /* CTA Section */
+  .cta-section {
+    background: #1A1F16;
+  }
+
+  .cta-section .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 500px;
+  }
+
+  .cta-content {
+    padding: 80px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .cta-content h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 40px;
+    font-weight: 400;
+    color: #F5F3EF;
+    margin: 0 0 16px 0;
+  }
+
+  .cta-content p {
+    font-size: 16px;
+    color: rgba(212, 201, 181, 0.8);
+    line-height: 1.7;
+    margin: 0 0 32px 0;
+  }
+
+  .cta-button {
+    display: inline-block;
+    padding: 16px 32px;
+    background: #3D4F3D;
+    color: #F5F3EF;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.3s;
+    align-self: flex-start;
+  }
+
+  .cta-button:hover {
+    background: #4A5D4A;
+  }
+
+  .cta-image {
+    overflow: hidden;
+  }
+
+  .cta-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Mobile */
+  @media (max-width: 900px) {
+    .cta-section .container {
+      grid-template-columns: 1fr;
+    }
+
+    .cta-content {
+      padding: 60px 24px;
+    }
+
+    .cta-image {
+      height: 300px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
