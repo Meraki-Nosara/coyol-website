@@ -63,6 +63,7 @@ Three restaurants under unified management:
   - Progress bars for targets
   - Trend lines for growth
   - Keep it clear and relevant
+- **Design principle:** Make it easy and straightforward — Angelina should understand in 2 seconds, no complex tables
 
 ### Coyol Real Estate
 Luxury real estate development company:
@@ -156,7 +157,12 @@ Marion loves the classic Land Rover colors — used for both projects:
   - Coyol 2025: Annual only (₡744.9M) — NEED monthly breakdown
   - Gastos 2025: All 3 restaurants ✅
   - Gastos 2026 (Jan-Apr): All 3 restaurants ✅
+- **Data Loaded (April 7, 2026):**
+  - Gastos 2025: All 3 restaurants (full year) — ₡971M total
+  - Gastos 2026: Jan-Apr all 3 restaurants — ₡366M total
+  - Q1 2026 Profitability: 64% gross margin (₡639M profit on ₡999M sales)
 - **Data Pending:**
+  - Pagos (actual payments made) — need from Anlly/QuickBooks
   - MDO (labor hours from Abner)
   - Coyol 2025 monthly breakdown (Marion getting it)
   - Retenciones/Comisiones (bank card fees)
