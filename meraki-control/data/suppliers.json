@@ -19,9 +19,9 @@
       "cedula": "504050547",
       "category": "produce",
       "subcategory": "fruits-vegetables",
-      "restaurant": "shared",
+      "restaurant": "laluna",
       "contact": {},
-      "notes": "Fruits and vegetables supplier - Nosara. Price list from Silvia.",
+      "notes": "Verduras - Solo La Luna",
       "products": {},
       "priceHistory": [],
       "addedAt": "2026-04-07"
@@ -167,9 +167,9 @@
       "cedula": "alpiste",
       "category": "food-dist",
       "subcategory": "general",
-      "restaurant": "shared",
+      "restaurant": "laluna",
       "contact": {},
-      "notes": "Food supplier - price list from Silvia",
+      "notes": "Solo La Luna",
       "products": {},
       "priceHistory": [],
       "addedAt": "2026-04-07"
@@ -266,6 +266,45 @@
       "products": {},
       "priceHistory": [],
       "addedAt": "2026-04-07"
+    },
+    "bluetech": {
+      "name": "Bluetech",
+      "shortName": "Bluetech",
+      "cedula": "bluetech",
+      "category": "supplies",
+      "subcategory": "tech",
+      "restaurant": "laluna",
+      "contact": {},
+      "notes": "Solo La Luna",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "villamar": {
+      "name": "Villamar",
+      "shortName": "Villamar",
+      "cedula": "villamar",
+      "category": "seafood",
+      "subcategory": "fish",
+      "restaurant": "laluna",
+      "contact": {},
+      "notes": "Solo La Luna",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "coopebrisas": {
+      "name": "Coopebrisas",
+      "shortName": "Coopebrisas",
+      "cedula": "coopebrisas",
+      "category": "food-dist",
+      "subcategory": "general",
+      "restaurant": "laluna",
+      "contact": {},
+      "notes": "Solo La Luna",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
     }
   },
   "categories": {
@@ -313,7 +352,7 @@
   "products": {},
   "metadata": {
     "lastUpdated": "2026-04-07",
-    "totalSuppliers": 20,
+    "totalSuppliers": 23,
     "unmappedCount": 3
   }
 }
