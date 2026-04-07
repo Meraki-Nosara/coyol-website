@@ -3,97 +3,60 @@ import Layout from '../layouts/Layout.astro';
 import fs from 'fs';
 import path from 'path';
 
-// Scan for PDF reports in public/reports folder
+// Scan for reports in public/reports folder
 const reportsDir = path.join(process.cwd(), 'public/reports');
 let reports: Array<{
   filename: string;
   title: string;
-  date: string;
   period: string;
-  type: 'monthly' | 'quarterly' | 'annual' | 'analysis';
-  size: string;
+  year: number;
+  month: number;
   url: string;
 }> = [];
 
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
 if (fs.existsSync(reportsDir)) {
-  // Accept both PDF and HTML files (HTML can be printed to PDF)
-  const files = fs.readdirSync(reportsDir).filter(f => f.endsWith('.pdf') || f.endsWith('.html'));
+  const files = fs.readdirSync(reportsDir).filter(f => f.endsWith('.html') || f.endsWith('.pdf'));
   
   reports = files.map(filename => {
-    const stats = fs.statSync(path.join(reportsDir, filename));
-    const sizeKB = stats.size / 1024;
-    const sizeStr = sizeKB > 1024 ? `${(sizeKB / 1024).toFixed(1)} MB` : `${Math.round(sizeKB)} KB`;
-    const isHtml = filename.endsWith('.html');
-    
-    // Parse filename to extract info
-    // Expected formats: january-2025-analysis.pdf, q1-2026-report.pdf, 2025-annual.pdf
-    let title = filename.replace('.pdf', '').replace('.html', '').replace(/-/g, ' ');
-    let period = '';
-    let type: 'monthly' | 'quarterly' | 'annual' | 'analysis' = 'analysis';
-    let date = new Date(stats.mtime).toISOString().split('T')[0];
-    
-    // Try to parse month-year pattern
+    // Parse month-year from filename (e.g., january-2025-analysis.html)
     const monthMatch = filename.match(/^(january|february|march|april|may|june|july|august|september|october|november|december)-(\d{4})/i);
-    if (monthMatch) {
-      const month = monthMatch[1].charAt(0).toUpperCase() + monthMatch[1].slice(1);
-      const year = monthMatch[2];
-      period = `${month} ${year}`;
-      type = filename.includes('analysis') ? 'analysis' : 'monthly';
-      title = `${month} ${year} ${filename.includes('analysis') ? 'Analysis' : 'Report'}`;
-    }
     
-    // Try to parse quarter pattern
-    const quarterMatch = filename.match(/^q([1-4])-(\d{4})/i);
-    if (quarterMatch) {
-      period = `Q${quarterMatch[1]} ${quarterMatch[2]}`;
-      type = 'quarterly';
-      title = `Q${quarterMatch[1]} ${quarterMatch[2]} Report`;
-    }
+    if (!monthMatch) return null;
     
-    // Try to parse annual pattern
-    const annualMatch = filename.match(/^(\d{4})-(annual|yearly)/i);
-    if (annualMatch) {
-      period = annualMatch[1];
-      type = 'annual';
-      title = `${annualMatch[1]} Annual Report`;
-    }
+    const monthName = monthMatch[1].charAt(0).toUpperCase() + monthMatch[1].slice(1).toLowerCase();
+    const year = parseInt(monthMatch[2]);
+    const monthIndex = MONTHS.findIndex(m => m.toLowerCase() === monthName.toLowerCase());
     
     return {
       filename,
-      title: title.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' '),
-      date,
-      period,
-      type,
-      size: sizeStr,
-      url: `/reports/${filename}`,
-      isHtml
+      title: `${monthName} ${year}`,
+      period: `${monthName} ${year}`,
+      year,
+      month: monthIndex + 1,
+      url: `/reports/${filename}`
     };
-  }).sort((a, b) => b.date.localeCompare(a.date)); // Most recent first
+  })
+  .filter(Boolean)
+  .sort((a, b) => {
+    // Sort by year desc, then month desc (newest first)
+    if (a.year !== b.year) return b.year - a.year;
+    return b.month - a.month;
+  });
 }
 
-// Group by type
-const analysisReports = reports.filter(r => r.type === 'analysis');
-const monthlyReports = reports.filter(r => r.type === 'monthly');
-const quarterlyReports = reports.filter(r => r.type === 'quarterly');
-const annualReports = reports.filter(r => r.type === 'annual');
+// Group by year
+const reportsByYear = reports.reduce((acc, r) => {
+  if (!acc[r.year]) acc[r.year] = [];
+  acc[r.year].push(r);
+  return acc;
+}, {} as Record<number, typeof reports>);
 
-// Icon for report type
-const typeIcons: Record<string, string> = {
-  monthly: '📅',
-  quarterly: '📊',
-  annual: '📈',
-  analysis: '🔍'
-};
-
-const typeColors: Record<string, string> = {
-  monthly: 'bg-blue-100 text-blue-700',
-  quarterly: 'bg-purple-100 text-purple-700',
-  annual: 'bg-amber-100 text-amber-700',
-  analysis: 'bg-green-100 text-green-700'
-};
+const years = Object.keys(reportsByYear).map(Number).sort((a, b) => b - a);
 ---
 
-<Layout title="Report Archive">
+<Layout title="Monthly Reports">
   <div class="min-h-screen flex">
     <!-- Sidebar -->
     <aside class="w-64 bg-landrover-keswick text-white flex-shrink-0 hidden lg:flex lg:flex-col">
@@ -110,25 +73,18 @@ const typeColors: Record<string, string> = {
           <span class="text-sm">Dashboard</span>
         </a>
         
+        <a href="/informes" class="flex items-center gap-3 px-6 py-3 bg-white/10 text-white border-l-4 border-landrover-sand">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span class="text-sm font-medium">Monthly Reports</span>
+        </a>
+        
         <a href="/reportes" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <span class="text-sm">Reports</span>
-        </a>
-        
-        <a href="/informes" class="flex items-center gap-3 px-6 py-3 bg-white/10 text-white border-l-4 border-landrover-sand">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-          </svg>
-          <span class="text-sm font-medium">Archive</span>
-        </a>
-        
-        <a href="/tendencias" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <span class="text-sm">Trends</span>
+          <span class="text-sm">Custom Reports</span>
         </a>
       </nav>
       
@@ -158,216 +114,65 @@ const typeColors: Record<string, string> = {
       <!-- Mobile Header -->
       <header class="lg:hidden bg-landrover-keswick text-white p-4 flex items-center justify-between">
         <h1 class="font-serif text-xl font-semibold">Meraki</h1>
-        <a href="/logout" class="text-landrover-limestone/80">
+        <a href="/mensual" class="text-landrover-limestone/80">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
           </svg>
         </a>
       </header>
       
       <!-- Header -->
-      <header class="bg-white border-b border-landrover-arles/30 sticky top-0 z-40">
-        <div class="px-4 lg:px-8 py-4">
-          <div class="flex items-center justify-between">
-            <div>
-              <h2 class="text-xl font-semibold text-landrover-santorini">Report Archive</h2>
-              <p class="text-sm text-landrover-marine/60">{reports.length} report{reports.length !== 1 ? 's' : ''} available</p>
-            </div>
-            
-            <div class="flex items-center gap-2">
-              <span class="text-xs text-landrover-marine/40">Click to view • Print to PDF</span>
-              <svg class="w-5 h-5 text-landrover-keswick" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-              </svg>
-            </div>
-          </div>
+      <header class="bg-white border-b border-landrover-arles/30">
+        <div class="px-4 lg:px-8 py-6">
+          <h2 class="text-2xl font-semibold text-landrover-santorini">Monthly Reports</h2>
+          <p class="text-sm text-landrover-marine/60 mt-1">Analysis reports sent by email</p>
         </div>
       </header>
 
-      <div class="p-4 lg:p-8 space-y-8">
+      <div class="p-4 lg:p-8">
         
         {reports.length === 0 ? (
           <div class="card p-12 text-center">
             <svg class="w-16 h-16 mx-auto text-landrover-marine/20 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             <h3 class="text-lg font-semibold text-landrover-santorini mb-2">No Reports Yet</h3>
-            <p class="text-landrover-marine/60">Monthly analysis reports will appear here as they are generated.</p>
-            <p class="text-sm text-landrover-marine/40 mt-4">Place PDF files in <code class="bg-landrover-limestone/50 px-2 py-1 rounded">public/reports/</code></p>
+            <p class="text-landrover-marine/60">Monthly analysis reports will appear here.</p>
           </div>
         ) : (
-          <>
-            <!-- Analysis Reports -->
-            {analysisReports.length > 0 && (
+          <div class="space-y-8">
+            {years.map(year => (
               <section>
-                <h3 class="text-lg font-semibold text-landrover-santorini mb-4 flex items-center gap-2">
-                  <span>🔍</span> Analysis Reports
-                </h3>
-                <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {analysisReports.map(report => (
+                <h3 class="text-lg font-semibold text-landrover-santorini mb-4">{year}</h3>
+                <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {reportsByYear[year].map(report => (
                     <a 
                       href={report.url}
                       target="_blank"
-                      class="card p-5 hover:shadow-lg transition-all hover:scale-[1.02] group"
+                      class="card p-4 hover:shadow-lg transition-all hover:scale-[1.02] group flex items-center gap-4"
                     >
-                      <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-red-200 transition-colors">
-                          <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4z"/>
-                          </svg>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                          <h4 class="font-semibold text-landrover-santorini group-hover:text-landrover-keswick transition-colors truncate">
-                            {report.title}
-                          </h4>
-                          <p class="text-sm text-landrover-marine/60 mt-1">{report.period}</p>
-                          <div class="flex items-center gap-3 mt-3">
-                            <span class={`text-xs px-2 py-0.5 rounded ${typeColors[report.type]}`}>
-                              {report.type}
-                            </span>
-                            <span class="text-xs text-landrover-marine/40">{report.size}</span>
-                          </div>
-                        </div>
-                        <svg class="w-5 h-5 text-landrover-marine/30 group-hover:text-landrover-keswick transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      <div class="w-10 h-10 bg-landrover-keswick/10 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-landrover-keswick/20 transition-colors">
+                        <svg class="w-5 h-5 text-landrover-keswick" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                       </div>
+                      <div class="flex-1 min-w-0">
+                        <h4 class="font-medium text-landrover-santorini group-hover:text-landrover-keswick transition-colors">
+                          {report.title}
+                        </h4>
+                        <p class="text-xs text-landrover-marine/50">Analysis</p>
+                      </div>
+                      <svg class="w-4 h-4 text-landrover-marine/30 group-hover:text-landrover-keswick transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                      </svg>
                     </a>
                   ))}
                 </div>
               </section>
-            )}
-
-            <!-- Monthly Reports -->
-            {monthlyReports.length > 0 && (
-              <section>
-                <h3 class="text-lg font-semibold text-landrover-santorini mb-4 flex items-center gap-2">
-                  <span>📅</span> Monthly Reports
-                </h3>
-                <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {monthlyReports.map(report => (
-                    <a 
-                      href={report.url}
-                      target="_blank"
-                      class="card p-5 hover:shadow-lg transition-all hover:scale-[1.02] group"
-                    >
-                      <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-blue-200 transition-colors">
-                          <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4z"/>
-                          </svg>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                          <h4 class="font-semibold text-landrover-santorini group-hover:text-landrover-keswick transition-colors truncate">
-                            {report.title}
-                          </h4>
-                          <p class="text-sm text-landrover-marine/60 mt-1">{report.period}</p>
-                          <div class="flex items-center gap-3 mt-3">
-                            <span class={`text-xs px-2 py-0.5 rounded ${typeColors[report.type]}`}>
-                              {report.type}
-                            </span>
-                            <span class="text-xs text-landrover-marine/40">{report.size}</span>
-                          </div>
-                        </div>
-                        <svg class="w-5 h-5 text-landrover-marine/30 group-hover:text-landrover-keswick transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                        </svg>
-                      </div>
-                    </a>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            <!-- Quarterly Reports -->
-            {quarterlyReports.length > 0 && (
-              <section>
-                <h3 class="text-lg font-semibold text-landrover-santorini mb-4 flex items-center gap-2">
-                  <span>📊</span> Quarterly Reports
-                </h3>
-                <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {quarterlyReports.map(report => (
-                    <a 
-                      href={report.url}
-                      target="_blank"
-                      class="card p-5 hover:shadow-lg transition-all hover:scale-[1.02] group"
-                    >
-                      <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-purple-200 transition-colors">
-                          <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4z"/>
-                          </svg>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                          <h4 class="font-semibold text-landrover-santorini group-hover:text-landrover-keswick transition-colors truncate">
-                            {report.title}
-                          </h4>
-                          <p class="text-sm text-landrover-marine/60 mt-1">{report.period}</p>
-                          <div class="flex items-center gap-3 mt-3">
-                            <span class={`text-xs px-2 py-0.5 rounded ${typeColors[report.type]}`}>
-                              {report.type}
-                            </span>
-                            <span class="text-xs text-landrover-marine/40">{report.size}</span>
-                          </div>
-                        </div>
-                        <svg class="w-5 h-5 text-landrover-marine/30 group-hover:text-landrover-keswick transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                        </svg>
-                      </div>
-                    </a>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            <!-- Annual Reports -->
-            {annualReports.length > 0 && (
-              <section>
-                <h3 class="text-lg font-semibold text-landrover-santorini mb-4 flex items-center gap-2">
-                  <span>📈</span> Annual Reports
-                </h3>
-                <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {annualReports.map(report => (
-                    <a 
-                      href={report.url}
-                      target="_blank"
-                      class="card p-5 hover:shadow-lg transition-all hover:scale-[1.02] group"
-                    >
-                      <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-amber-200 transition-colors">
-                          <svg class="w-6 h-6 text-amber-600" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4z"/>
-                          </svg>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                          <h4 class="font-semibold text-landrover-santorini group-hover:text-landrover-keswick transition-colors truncate">
-                            {report.title}
-                          </h4>
-                          <p class="text-sm text-landrover-marine/60 mt-1">{report.period}</p>
-                          <div class="flex items-center gap-3 mt-3">
-                            <span class={`text-xs px-2 py-0.5 rounded ${typeColors[report.type]}`}>
-                              {report.type}
-                            </span>
-                            <span class="text-xs text-landrover-marine/40">{report.size}</span>
-                          </div>
-                        </div>
-                        <svg class="w-5 h-5 text-landrover-marine/30 group-hover:text-landrover-keswick transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                        </svg>
-                      </div>
-                    </a>
-                  ))}
-                </div>
-              </section>
-            )}
-          </>
+            ))}
+          </div>
         )}
 
-        <!-- Info -->
-        <div class="text-center text-xs text-landrover-marine/40 pt-4">
-          <p>Reports are automatically detected from <code class="bg-landrover-limestone/50 px-1 rounded">public/reports/</code></p>
-          <p class="mt-1">Naming: <code class="bg-landrover-limestone/50 px-1 rounded">month-year-type.pdf</code> (e.g., january-2025-analysis.pdf)</p>
-        </div>
       </div>
     </main>
   </div>
