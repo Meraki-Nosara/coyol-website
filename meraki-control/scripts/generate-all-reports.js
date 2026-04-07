@@ -239,9 +239,9 @@ function generateMonthlyReport(year, month, currency = 'CRC') {
       flex-shrink: 0;
     }
     
-    .good { color: #2d7a2d; }
-    .warning { color: #b8860b; }
-    .bad { color: #c0392b; }
+    .good { color: #3D4F3D; }
+    .warning { color: #C4A67C; }
+    .bad { color: #A65D3F; }
     
     .margin-bar {
       height: 8px;
@@ -352,7 +352,7 @@ function generateMonthlyReport(year, month, currency = 'CRC') {
         <td>
           <span class="${r.margin >= 50 ? 'good' : r.margin >= 30 ? 'warning' : 'bad'}">${r.margin.toFixed(0)}%</span>
           <div class="margin-bar">
-            <div class="margin-fill" style="width: ${Math.min(r.margin, 100)}%; background: ${r.margin >= 50 ? '#2d7a2d' : r.margin >= 30 ? '#b8860b' : '#c0392b'}"></div>
+            <div class="margin-fill" style="width: ${Math.min(r.margin, 100)}%; background: ${r.margin >= 50 ? '#3D4F3D' : r.margin >= 30 ? '#C4A67C' : '#A65D3F'}"></div>
           </div>
         </td>
       </tr>
