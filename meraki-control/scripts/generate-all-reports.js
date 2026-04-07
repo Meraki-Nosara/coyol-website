@@ -10,7 +10,12 @@ const USD_RATE = 505;
 
 function fmt(amount, currency = 'CRC') {
   if (currency === 'USD') {
-    return '$' + (amount / USD_RATE / 1000000).toFixed(2) + 'M';
+    const usd = amount / USD_RATE;
+    if (usd >= 1000000) {
+      return '$' + (usd / 1000000).toFixed(2) + 'M';
+    } else {
+      return '$' + Math.round(usd / 1000).toLocaleString() + 'K';
+    }
   }
   return '₡' + (amount / 1000000).toFixed(1) + 'M';
 }
