@@ -46,8 +46,25 @@
   - Compare current prices vs negotiated/baseline prices
   - ⚠️ WARN if product >5% above negotiated price
   - ⚠️ WARN if 3+ price increases from same supplier in 3 months
-  - Show trend: "Guanapollos chicken: ₡2,800 → ₡3,100 (+10.7% in 4 months)"
-  - Monthly impact estimate: "Price creep costing ~$X this month"
+  - **SEND SEPARATE EMAIL TO ANGELINA** with:
+    ```
+    ⚠️⚠️⚠️ PRICE CREEP ALERT ⚠️⚠️⚠️
+    
+    Supplier: [NAME]
+    Product: [PRODUCT]
+    
+    Invoice #[OLD]: [DATE] - ₡X,XXX/kg
+    Invoice #[NEW]: [DATE] - ₡X,XXX/kg
+    
+    INCREASE: +XX.X% (₡XXX more per kg)
+    
+    Monthly impact: ~$XXX extra
+    
+    Recommendation: Call supplier and negotiate
+    back to original price or find alternative.
+    ```
+  - Send to: vailas78@yahoo.com
+  - Subject: "⚠️ PRICE ALERT: [Supplier] raised [Product] +XX%"
 - Send to vailas78@yahoo.com
 
 ### Monday
