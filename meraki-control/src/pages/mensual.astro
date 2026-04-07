@@ -285,12 +285,12 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
               <h3 class="font-semibold text-landrover-santorini text-sm lg:text-base">Monthly Trend: 2026 vs 2025</h3>
               <div class="flex items-center gap-4 text-xs">
                 <div class="flex items-center gap-1.5">
-                  <div class="w-3 h-3 rounded bg-gradient-to-t from-landrover-keswick to-landrover-coniston"></div>
-                  <span class="text-landrover-marine/60">2026</span>
-                </div>
-                <div class="flex items-center gap-1.5">
                   <div class="w-3 h-3 rounded bg-landrover-sand/70"></div>
                   <span class="text-landrover-marine/60">2025</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <div class="w-3 h-3 rounded bg-gradient-to-t from-landrover-keswick to-landrover-coniston"></div>
+                  <span class="text-landrover-marine/60">2026</span>
                 </div>
               </div>
             </div>
@@ -328,18 +328,18 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
                       
                       <!-- Side-by-side bars -->
                       <div class="w-full flex-1 flex items-end justify-center gap-1">
-                        {/* 2026 bar */}
-                        <div 
-                          class="w-6 lg:w-8 rounded-t-lg bg-gradient-to-t from-landrover-keswick to-landrover-coniston shadow-md"
-                          style={`height: ${height2026}%;`}
-                        ></div>
-                        {/* 2025 bar */}
+                        {/* 2025 bar (left) */}
                         {sales2025 > 0 && (
                           <div 
                             class="w-6 lg:w-8 rounded-t-lg bg-landrover-sand/70"
                             style={`height: ${height2025}%;`}
                           ></div>
                         )}
+                        {/* 2026 bar (right) */}
+                        <div 
+                          class="w-6 lg:w-8 rounded-t-lg bg-gradient-to-t from-landrover-keswick to-landrover-coniston shadow-md"
+                          style={`height: ${height2026}%;`}
+                        ></div>
                       </div>
                       
                       <!-- Month label -->
