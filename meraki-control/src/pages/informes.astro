@@ -17,7 +17,8 @@ let reports: Array<{
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 if (fs.existsSync(reportsDir)) {
-  const files = fs.readdirSync(reportsDir).filter(f => f.endsWith('.html') || f.endsWith('.pdf'));
+  // Prefer HTML files only to avoid duplicates
+  const files = fs.readdirSync(reportsDir).filter(f => f.endsWith('.html'));
   
   reports = files.map(filename => {
     // Parse month-year from filename (e.g., january-2025-analysis.html)

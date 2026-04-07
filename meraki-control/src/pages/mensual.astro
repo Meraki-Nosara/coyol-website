@@ -10,7 +10,8 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
 let analysisReports: Array<{ title: string; url: string; year: number; month: number }> = [];
 
 if (fs.existsSync(reportsDir)) {
-  const files = fs.readdirSync(reportsDir).filter(f => f.endsWith('.html') || f.endsWith('.pdf'));
+  // Prefer HTML files, avoid duplicates
+  const files = fs.readdirSync(reportsDir).filter(f => f.endsWith('.html'));
   analysisReports = files.map(filename => {
     const match = filename.match(/^(january|february|march|april|may|june|july|august|september|october|november|december)-(\d{4})/i);
     if (!match) return null;
@@ -18,7 +19,11 @@ if (fs.existsSync(reportsDir)) {
     const year = parseInt(match[2]);
     const monthIndex = MONTHS.findIndex(m => m.toLowerCase() === monthName.toLowerCase());
     return { title: `${monthName} ${year}`, url: `/reports/${filename}`, year, month: monthIndex + 1 };
-  }).filter(Boolean).sort((a, b) => b.year !== a.year ? b.year - a.year : b.month - a.month);
+  }).filter(Boolean).sort((a, b) => {
+    // Sort by year descending, then month descending (newest first)
+    if (a.year !== b.year) return b.year - a.year;
+    return b.month - a.month;
+  });
 }
 
 const data = loadMonthlyData();
