@@ -261,41 +261,68 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
           })}
         </div>
 
-        <!-- Monthly Trend Chart -->
-        {monthlyTotals.length > 1 && (
+        <!-- Monthly Trend Chart (2026 vs 2025) -->
+        {monthlyTotals.length > 0 && (
           <div class="card">
-            <div class="px-4 lg:px-6 py-3 lg:py-4 border-b border-landrover-arles/30">
-              <h3 class="font-semibold text-landrover-santorini text-sm lg:text-base">Monthly Trend</h3>
+            <div class="px-4 lg:px-6 py-3 lg:py-4 border-b border-landrover-arles/30 flex items-center justify-between">
+              <h3 class="font-semibold text-landrover-santorini text-sm lg:text-base">Monthly Trend: 2026 vs 2025</h3>
+              <div class="flex items-center gap-4 text-xs">
+                <div class="flex items-center gap-1.5">
+                  <div class="w-3 h-3 rounded bg-gradient-to-t from-landrover-keswick to-landrover-coniston"></div>
+                  <span class="text-landrover-marine/60">2026</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <div class="w-3 h-3 rounded bg-landrover-sand/70"></div>
+                  <span class="text-landrover-marine/60">2025</span>
+                </div>
+              </div>
             </div>
             
             <div class="p-4 lg:p-8">
-              <!-- Graph with labels -->
+              <!-- Graph with side-by-side bars -->
               <div class="flex items-end justify-around gap-4 lg:gap-8" style="height: 280px;">
                 {monthlyTotals.map((m, i) => {
-                  const maxSales = Math.max(...monthlyTotals.map(x => x.totalSales));
-                  // Scale relative to max, minimum 20% height
-                  const heightPct = maxSales > 0 ? Math.max(20, (m.totalSales / maxSales) * 100) : 50;
-                  const prevMonth = monthlyTotals[i - 1];
-                  const change = prevMonth && prevMonth.totalSales > 0 ? Math.round((m.totalSales - prevMonth.totalSales) / prevMonth.totalSales * 100) : 0;
+                  // Get corresponding 2025 month
+                  const monthNum = m.month.split('-')[1];
+                  const month2025 = data.monthly.filter(x => x.month === `2025-${monthNum}` && !x.partial);
+                  const sales2025 = month2025.reduce((sum, x) => sum + x.totalSales, 0);
+                  
+                  // Calculate max for scaling (include both years)
+                  const allSales = [...monthlyTotals.map(x => x.totalSales), sales2025];
+                  const maxSales = Math.max(...allSales);
+                  
+                  const height2026 = maxSales > 0 ? Math.max(10, (m.totalSales / maxSales) * 100) : 50;
+                  const height2025 = maxSales > 0 && sales2025 > 0 ? Math.max(10, (sales2025 / maxSales) * 100) : 0;
+                  
+                  // YoY change
+                  const yoyChange = sales2025 > 0 ? Math.round((m.totalSales - sales2025) / sales2025 * 100) : 0;
                   
                   return (
-                    <div class="flex-1 flex flex-col items-center max-w-32" style="height: 100%;">
-                      <!-- Value label -->
+                    <div class="flex-1 flex flex-col items-center max-w-40" style="height: 100%;">
+                      <!-- Value labels -->
                       <div class="text-center mb-2 flex-shrink-0">
-                        <p class="text-xs lg:text-base font-bold text-landrover-santorini">{fmt(m.totalSales)}</p>
-                        {i > 0 && (
-                          <p class={`text-xs font-medium ${change >= 0 ? 'text-green-600' : 'text-red-500'}`}>
-                            {change >= 0 ? '↑' : '↓'}{Math.abs(change)}%
+                        <p class="text-xs lg:text-sm font-bold text-landrover-santorini">{fmt(m.totalSales)}</p>
+                        {sales2025 > 0 && (
+                          <p class={`text-xs font-medium ${yoyChange >= 0 ? 'text-green-600' : 'text-red-500'}`}>
+                            {yoyChange >= 0 ? '↑' : '↓'}{Math.abs(yoyChange)}% vs 2025
                           </p>
                         )}
                       </div>
                       
-                      <!-- Bar container -->
-                      <div class="w-full flex-1 flex items-end justify-center">
+                      <!-- Side-by-side bars -->
+                      <div class="w-full flex-1 flex items-end justify-center gap-1">
+                        {/* 2026 bar */}
                         <div 
-                          class="w-12 lg:w-16 rounded-t-lg bg-gradient-to-t from-landrover-keswick to-landrover-coniston shadow-md"
-                          style={`height: ${heightPct}%;`}
+                          class="w-6 lg:w-8 rounded-t-lg bg-gradient-to-t from-landrover-keswick to-landrover-coniston shadow-md"
+                          style={`height: ${height2026}%;`}
                         ></div>
+                        {/* 2025 bar */}
+                        {sales2025 > 0 && (
+                          <div 
+                            class="w-6 lg:w-8 rounded-t-lg bg-landrover-sand/70"
+                            style={`height: ${height2025}%;`}
+                          ></div>
+                        )}
                       </div>
                       
                       <!-- Month label -->
