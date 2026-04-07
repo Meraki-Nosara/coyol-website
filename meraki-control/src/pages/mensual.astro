@@ -109,18 +109,25 @@ const q1_2026_total = q1_2026.reduce((sum, m) => sum + m.totalSales, 0);
 const q1_2025_total = q1_2025.reduce((sum, m) => sum + m.totalSales, 0);
 const q1_yoy_change = q1_2025_total > 0 ? ((q1_2026_total - q1_2025_total) / q1_2025_total * 100) : 0;
 
-// Profitability data (2026 Q1)
+// Profitability data (2026 Q1) - now includes MDO
 const profitability2026 = restaurants.map(code => {
-  const sales = q1_2026.filter(m => m.restaurant === code).reduce((sum, m) => sum + m.totalSales, 0);
-  const gastos = q1_2026.filter(m => m.restaurant === code).reduce((sum, m) => sum + (m.gastos || 0), 0);
+  const records = q1_2026.filter(m => m.restaurant === code);
+  const sales = records.reduce((sum, m) => sum + m.totalSales, 0);
+  const gastos = records.reduce((sum, m) => sum + (m.gastos || 0), 0);
+  const mdo = records.reduce((sum, m) => sum + (m.mdo || 0), 0);
   const grossProfit = sales - gastos;
-  const margin = sales > 0 ? (grossProfit / sales * 100) : 0;
-  return { code, sales, gastos, grossProfit, margin };
+  const netProfit = sales - gastos - mdo;
+  const grossMargin = sales > 0 ? (grossProfit / sales * 100) : 0;
+  const netMargin = sales > 0 ? (netProfit / sales * 100) : 0;
+  return { code, sales, gastos, mdo, grossProfit, netProfit, grossMargin, netMargin };
 });
 const totalSales2026Q1 = profitability2026.reduce((sum, r) => sum + r.sales, 0);
 const totalGastos2026Q1 = profitability2026.reduce((sum, r) => sum + r.gastos, 0);
+const totalMdo2026Q1 = profitability2026.reduce((sum, r) => sum + r.mdo, 0);
 const totalGrossProfit2026Q1 = totalSales2026Q1 - totalGastos2026Q1;
+const totalNetProfit2026Q1 = totalSales2026Q1 - totalGastos2026Q1 - totalMdo2026Q1;
 const totalMargin2026Q1 = totalSales2026Q1 > 0 ? (totalGrossProfit2026Q1 / totalSales2026Q1 * 100) : 0;
+const totalNetMargin2026Q1 = totalSales2026Q1 > 0 ? (totalNetProfit2026Q1 / totalSales2026Q1 * 100) : 0;
 
 // Get which months we have data for in 2026
 const months2026 = [...new Set(year2026.map(m => m.month.split('-')[1]))];
@@ -476,41 +483,56 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
         <!-- Profitability Section - Simple Visual -->
         {totalGastos2026Q1 > 0 && (
           <div class="card p-5 lg:p-8">
-            <h3 class="text-lg lg:text-xl font-semibold text-landrover-santorini mb-6">Q1 2026 Profit</h3>
+            <h3 class="text-lg lg:text-xl font-semibold text-landrover-santorini mb-6">Q1 2026 Profitability</h3>
             
-            <!-- Big Numbers -->
-            <div class="flex items-center justify-center gap-4 lg:gap-8 mb-8">
-              <div class="text-center">
-                <p class="text-3xl lg:text-5xl font-bold text-landrover-keswick">{fmt(totalSales2026Q1)}</p>
-                <p class="text-sm text-landrover-marine/60 mt-1">Sales</p>
+            <!-- Big Numbers - Sales, Costs, Profit -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              <div class="text-center p-4 bg-landrover-limestone/30 rounded-lg">
+                <p class="text-2xl lg:text-3xl font-bold text-landrover-keswick">{fmt(totalSales2026Q1)}</p>
+                <p class="text-xs text-landrover-marine/60 mt-1">Sales</p>
               </div>
-              <div class="text-3xl lg:text-5xl text-landrover-marine/30">−</div>
-              <div class="text-center">
-                <p class="text-3xl lg:text-5xl font-bold text-red-500">{fmt(totalGastos2026Q1)}</p>
-                <p class="text-sm text-landrover-marine/60 mt-1">Payments</p>
+              <div class="text-center p-4 bg-red-50 rounded-lg">
+                <p class="text-2xl lg:text-3xl font-bold text-red-500">{fmt(totalGastos2026Q1)}</p>
+                <p class="text-xs text-landrover-marine/60 mt-1">Purchases</p>
               </div>
-              <div class="text-3xl lg:text-5xl text-landrover-marine/30">=</div>
-              <div class="text-center">
-                <p class="text-3xl lg:text-5xl font-bold text-green-600">{fmt(totalGrossProfit2026Q1)}</p>
-                <p class="text-sm text-landrover-marine/60 mt-1">Profit</p>
+              <div class="text-center p-4 bg-amber-50 rounded-lg">
+                <p class="text-2xl lg:text-3xl font-bold text-amber-600">{fmt(totalMdo2026Q1)}</p>
+                <p class="text-xs text-landrover-marine/60 mt-1">Payroll (MDO)</p>
+              </div>
+              <div class="text-center p-4 bg-green-50 rounded-lg">
+                <p class="text-2xl lg:text-3xl font-bold text-green-600">{fmt(totalNetProfit2026Q1 > 0 ? totalNetProfit2026Q1 : totalGrossProfit2026Q1)}</p>
+                <p class="text-xs text-landrover-marine/60 mt-1">{totalMdo2026Q1 > 0 ? 'Net Profit' : 'Gross Profit'}</p>
               </div>
             </div>
             
             <!-- Visual Progress Bar -->
             <div class="mb-8">
               <div class="flex justify-between text-sm mb-2">
-                <span class="text-landrover-marine/60">Margin</span>
-                <span class="font-bold text-green-600 text-lg">{totalMargin2026Q1.toFixed(0)}%</span>
+                <span class="text-landrover-marine/60">{totalMdo2026Q1 > 0 ? 'Net Margin' : 'Gross Margin'}</span>
+                <span class="font-bold text-green-600 text-lg">{totalMdo2026Q1 > 0 ? totalNetMargin2026Q1.toFixed(0) : totalMargin2026Q1.toFixed(0)}%</span>
               </div>
-              <div class="h-4 lg:h-6 bg-red-100 rounded-full overflow-hidden">
+              <div class="h-4 lg:h-6 bg-gray-100 rounded-full overflow-hidden flex">
                 <div 
-                  class="h-full bg-green-500 rounded-full transition-all"
-                  style={`width: ${totalMargin2026Q1}%`}
+                  class="h-full bg-red-400"
+                  style={`width: ${(totalGastos2026Q1 / totalSales2026Q1 * 100).toFixed(0)}%`}
+                  title="Purchases"
+                ></div>
+                {totalMdo2026Q1 > 0 && (
+                  <div 
+                    class="h-full bg-amber-400"
+                    style={`width: ${(totalMdo2026Q1 / totalSales2026Q1 * 100).toFixed(0)}%`}
+                    title="Payroll"
+                  ></div>
+                )}
+                <div 
+                  class="h-full bg-green-500 flex-1"
+                  title="Profit"
                 ></div>
               </div>
               <div class="flex justify-between text-xs text-landrover-marine/40 mt-1">
-                <span>Payments {(100 - totalMargin2026Q1).toFixed(0)}%</span>
-                <span>Profit {totalMargin2026Q1.toFixed(0)}%</span>
+                <span>Purchases {(totalGastos2026Q1 / totalSales2026Q1 * 100).toFixed(0)}%</span>
+                {totalMdo2026Q1 > 0 && <span>Payroll {(totalMdo2026Q1 / totalSales2026Q1 * 100).toFixed(0)}%</span>}
+                <span>Profit {totalMdo2026Q1 > 0 ? totalNetMargin2026Q1.toFixed(0) : totalMargin2026Q1.toFixed(0)}%</span>
               </div>
             </div>
             
@@ -520,6 +542,8 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
                 const name = r.code === 'laluna' ? 'La Luna' : r.code === 'esh' ? 'Esh' : 'Coyol';
                 const colorMap: {[key: string]: string} = { esh: '#C4A67C', coyol: '#3D4F3D', laluna: '#A65D3F' };
                 const color = colorMap[r.code] || '#666';
+                const margin = r.mdo > 0 ? r.netMargin : r.grossMargin;
+                const profit = r.mdo > 0 ? r.netProfit : r.grossProfit;
                 
                 return (
                   <div>
@@ -527,18 +551,19 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
                       <div class="flex items-center gap-2">
                         <div class="w-3 h-3 rounded" style={`background-color: ${color}`}></div>
                         <span class="font-medium">{name}</span>
+                        {r.mdo > 0 && <span class="text-xs text-amber-600">(MDO: {fmt(r.mdo)})</span>}
                       </div>
                       <div class="flex items-center gap-4">
-                        <span class="text-green-600 font-bold">{fmt(r.grossProfit)}</span>
-                        <span class={`text-sm font-bold px-2 py-0.5 rounded ${r.margin >= 50 ? 'bg-green-100 text-green-700' : r.margin >= 30 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
-                          {r.margin.toFixed(0)}%
+                        <span class="text-green-600 font-bold">{fmt(profit)}</span>
+                        <span class={`text-sm font-bold px-2 py-0.5 rounded ${margin >= 50 ? 'bg-green-100 text-green-700' : margin >= 30 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
+                          {margin.toFixed(0)}%
                         </span>
                       </div>
                     </div>
-                    <div class="h-2 bg-red-100 rounded-full overflow-hidden">
+                    <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
                       <div 
                         class="h-full rounded-full"
-                        style={`width: ${r.margin}%; background-color: ${color}`}
+                        style={`width: ${Math.max(margin, 0)}%; background-color: ${color}`}
                       ></div>
                     </div>
                   </div>
@@ -547,7 +572,7 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
             </div>
             
             <p class="text-xs text-landrover-marine/40 mt-6 text-center">
-              Payments = supplier purchases only (food, drinks, supplies)
+              {totalMdo2026Q1 > 0 ? 'Net Profit = Sales − Purchases − Payroll' : 'Gross Profit = Sales − Purchases (MDO data pending)'}
             </p>
           </div>
         )}
