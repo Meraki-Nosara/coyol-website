@@ -434,7 +434,7 @@ const generated = [];
 
 // 2025 months (Esh and La Luna have data)
 for (let month = 1; month <= 12; month++) {
-  const report = generateMonthlyReport(2025, month, 'CRC');
+  const report = generateMonthlyReport(2025, month, 'USD');
   if (report) {
     const filename = `${report.monthName.toLowerCase()}-${report.year}-analysis.html`;
     const filepath = path.join(reportsDir, filename);
@@ -446,7 +446,7 @@ for (let month = 1; month <= 12; month++) {
 
 // 2026 Q1 (all 3 restaurants)
 for (let month = 1; month <= 3; month++) {
-  const report = generateMonthlyReport(2026, month, 'CRC');
+  const report = generateMonthlyReport(2026, month, 'USD');
   if (report) {
     const filename = `${report.monthName.toLowerCase()}-${report.year}-analysis.html`;
     const filepath = path.join(reportsDir, filename);
