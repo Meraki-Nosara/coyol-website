@@ -18,6 +18,9 @@
   - La Luna = Terracotta (#A65D3F)
 - Generate PNG with playwright, send via macOS Mail
 - If missing data, note which restaurants haven't reported
+- **Labor Efficiency Warning** (when weekly MDO data available):
+  - If $/MDO dropping vs last week → ⚠️ include warning in report
+  - Example: "⚠️ Esh labor efficiency down 15% this week"
 
 ### 📊 Projects Status
 - Coyol website dev server (port 4321)
@@ -33,6 +36,11 @@
 - Week totals by restaurant
 - Best/worst days
 - Week-over-week trends
+- **Labor Efficiency Check** (when MDO data available):
+  - Calculate $/MDO for each restaurant
+  - ⚠️ WARN if below target (La Luna <$10, Esh <$3.50, Coyol <$8)
+  - ⚠️ WARN if sales dropped but MDO stayed same
+  - Include recommendation: "Consider reducing X hours next week"
 - Send to vailas78@yahoo.com
 
 ### Monday
