@@ -20,9 +20,9 @@ const logos: Record<string, string> = {
   laluna: '/images/logos/laluna-black.png'
 };
 
-// Calculate totals BY RESTAURANT (aggregated across all months)
+// Calculate totals BY RESTAURANT (2026 only)
 const restaurantTotals = restaurants.map(code => {
-  const restData = data.monthly.filter(m => m.restaurant === code && !m.partial);
+  const restData = data.monthly.filter(m => m.restaurant === code && m.month.startsWith('2026') && !m.partial);
   return {
     code,
     name: data.restaurants[code]?.name || code,
