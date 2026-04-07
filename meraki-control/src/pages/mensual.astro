@@ -239,26 +239,23 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
           </div>
           
           <!-- Currency Toggle & Reports Button -->
-          <div class="flex items-center gap-4">
+          <div class="flex flex-wrap items-center gap-3">
             <div class="flex items-center gap-2">
-              <span class="text-sm text-landrover-marine/60">Currency:</span>
+              <span class="text-sm text-landrover-marine/60 hidden sm:inline">Currency:</span>
               <div class="flex bg-landrover-limestone/50 rounded overflow-hidden">
                 <a 
                   href="?currency=CRC" 
-                  class={`px-4 py-2 text-sm font-medium transition-colors ${currency === 'CRC' ? 'bg-landrover-keswick text-white' : 'text-landrover-marine hover:bg-landrover-limestone'}`}
+                  class={`px-3 py-2 text-sm font-medium transition-colors ${currency === 'CRC' ? 'bg-landrover-keswick text-white' : 'text-landrover-marine hover:bg-landrover-limestone'}`}
                 >
-                  CRC ₡
+                  ₡
                 </a>
                 <a 
                   href="?currency=USD" 
-                  class={`px-4 py-2 text-sm font-medium transition-colors ${currency === 'USD' ? 'bg-landrover-keswick text-white' : 'text-landrover-marine hover:bg-landrover-limestone'}`}
+                  class={`px-3 py-2 text-sm font-medium transition-colors ${currency === 'USD' ? 'bg-landrover-keswick text-white' : 'text-landrover-marine hover:bg-landrover-limestone'}`}
                 >
-                  USD $
+                  $
                 </a>
               </div>
-              {currency === 'USD' && (
-                <span class="text-xs text-landrover-marine/40">@ ₡{USD_RATE}/USD</span>
-              )}
             </div>
             
             <!-- Reports Dropdown -->
@@ -266,12 +263,12 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
               <button 
                 type="button"
                 onclick="document.getElementById('reports-menu').classList.toggle('hidden')"
-                class="flex items-center gap-2 px-4 py-2 bg-landrover-keswick text-white rounded-lg hover:bg-landrover-coniston transition-colors text-sm font-medium shadow-sm"
+                class="flex items-center gap-2 px-3 py-2 bg-landrover-keswick text-white rounded-lg hover:bg-landrover-coniston transition-colors text-sm font-medium shadow-sm"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                Monthly Analysis Reports
+                <span class="hidden sm:inline">Monthly Analysis</span> Reports
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
