@@ -4,7 +4,101 @@
     "coyol": { "name": "Coyol", "color": "#3D4F3D" },
     "laluna": { "name": "La Luna", "color": "#A65D3F" }
   },
+  "monthly2025": {
+    "esh": {
+      "01": { "sales": 22091312, "food": 14331706, "bar": 7759605 },
+      "02": { "sales": 18529192, "food": 12018650, "bar": 6510542 },
+      "03": { "sales": 19480804, "food": 12636598, "bar": 6844206 },
+      "04": { "sales": 15972282, "food": 10360582, "bar": 5611700 },
+      "05": { "sales": 14299852, "food": 9277254, "bar": 5022598 },
+      "06": { "sales": 12397020, "food": 8042106, "bar": 4354914 },
+      "07": { "sales": 10948350, "food": 7103174, "bar": 3845176 },
+      "08": { "sales": 9675441, "food": 6277082, "bar": 3398359 },
+      "09": { "sales": 10530293, "food": 6831010, "bar": 3699283 },
+      "10": { "sales": 11539357, "food": 7486416, "bar": 4052941 },
+      "11": { "sales": 11658545, "food": 7563687, "bar": 4094858 },
+      "12": { "sales": 17231458, "food": 11179996, "bar": 6051462 }
+    },
+    "coyol": {
+      "annual": { "sales": 744962889, "food": 433790920, "bar": 311171969, "cash": 34907662, "card": 873786548 }
+    },
+    "laluna": {
+      "01": { "sales": 221066237, "food": 131169756, "bar": 89896480 },
+      "02": { "sales": 184567614, "food": 109462892, "bar": 75104722 },
+      "03": { "sales": 209452272, "food": 124226508, "bar": 85225764 },
+      "04": { "sales": 166397290, "food": 98698550, "bar": 67698740 },
+      "05": { "sales": 85721129, "food": 50842879, "bar": 34878250 },
+      "06": { "sales": 89521410, "food": 53095997, "bar": 36425413 },
+      "07": { "sales": 124997765, "food": 74136324, "bar": 50861441 },
+      "08": { "sales": 90097290, "food": 53437594, "bar": 36659696 },
+      "09": { "sales": 37465452, "food": 22222353, "bar": 15243099 },
+      "10": { "sales": 45910167, "food": 27230264, "bar": 18679903 },
+      "11": { "sales": 115383367, "food": 68434557, "bar": 46948810 },
+      "12": { "sales": 205691230, "food": 122004977, "bar": 83686253 }
+    }
+  },
+  "totals2025": {
+    "esh": 174353907,
+    "coyol": 744962889,
+    "laluna": 1576271223,
+    "total": 2495587019
+  },
+  "monthly2026": {
+    "esh": {
+      "01": { "sales": 17299046 },
+      "02": { "sales": 16300000 },
+      "03": { "sales": 18300000 }
+    },
+    "coyol": {
+      "01": { "sales": 98500000 },
+      "02": { "sales": 102700000 },
+      "03": { "sales": 111500000 }
+    },
+    "laluna": {
+      "01": { "sales": 203000000 },
+      "02": { "sales": 210500000 },
+      "03": { "sales": 221100000 }
+    }
+  },
+  "totals2026Q1": {
+    "esh": 51899046,
+    "coyol": 312700000,
+    "laluna": 634600000,
+    "total": 999199046
+  },
   "daily": [
+    {
+      "date": "2026-04-05",
+      "restaurant": "esh",
+      "total": 144313,
+      "food": 117756,
+      "bar": 3363,
+      "cash": 0,
+      "card": 144313,
+      "transactions": 13,
+      "source": "ingrid_email"
+    },
+    {
+      "date": "2026-04-05",
+      "restaurant": "coyol",
+      "total": 4230339,
+      "food": 2546500,
+      "bar": 964550,
+      "cash": 206450,
+      "card": 4074191,
+      "transactions": 40,
+      "source": "ingrid_email"
+    },
+    {
+      "date": "2026-04-05",
+      "restaurant": "laluna",
+      "total": 9520029,
+      "food": 5722033,
+      "bar": 3198297,
+      "cash": 484075,
+      "card": 9135977,
+      "source": "ingrid_email"
+    },
     {
       "date": "2026-04-04",
       "restaurant": "coyol",
@@ -40,88 +134,7 @@
       "iva13": 1005295,
       "source": "ingrid_email",
       "cashier": "Julia Arrieta"
-    },
-    {
-      "date": "2026-04-03",
-      "restaurant": "esh",
-      "cash": 185000,
-      "card": 245000,
-      "sinpe": 55000,
-      "total": 485000,
-      "source": "sample"
-    },
-    {
-      "date": "2026-04-03",
-      "restaurant": "coyol",
-      "cash": 220000,
-      "card": 312000,
-      "sinpe": 80000,
-      "total": 612000,
-      "source": "sample"
-    },
-    {
-      "date": "2026-04-03",
-      "restaurant": "laluna",
-      "cash": 340000,
-      "card": 420000,
-      "sinpe": 130000,
-      "total": 890000,
-      "source": "sample"
-    },
-    {
-      "date": "2026-04-02",
-      "restaurant": "esh",
-      "cash": 200000,
-      "card": 260000,
-      "sinpe": 60000,
-      "total": 520000,
-      "source": "sample"
-    },
-    {
-      "date": "2026-04-02",
-      "restaurant": "coyol",
-      "cash": 210000,
-      "card": 290000,
-      "sinpe": 80000,
-      "total": 580000,
-      "source": "sample"
-    },
-    {
-      "date": "2026-04-02",
-      "restaurant": "laluna",
-      "cash": 360000,
-      "card": 430000,
-      "sinpe": 130000,
-      "total": 920000,
-      "source": "sample"
-    },
-    {
-      "date": "2026-04-01",
-      "restaurant": "esh",
-      "cash": 175000,
-      "card": 235000,
-      "sinpe": 45000,
-      "total": 455000,
-      "source": "sample"
-    },
-    {
-      "date": "2026-04-01",
-      "restaurant": "coyol",
-      "cash": 195000,
-      "card": 275000,
-      "sinpe": 70000,
-      "total": 540000,
-      "source": "sample"
-    },
-    {
-      "date": "2026-04-01",
-      "restaurant": "laluna",
-      "cash": 320000,
-      "card": 390000,
-      "sinpe": 110000,
-      "total": 820000,
-      "source": "sample"
     }
   ],
-  "lastUpdated": "2026-04-05T14:59:00.000Z"
+  "lastUpdated": "2026-04-06T21:20:00.000Z"
 }

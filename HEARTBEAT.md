@@ -8,8 +8,9 @@
 - Alert Marion if important
 - **Sales images from restaurants** → Parse and store in `meraki-control/data/sales.json`
 
-### 📊 Meraki Daily Report (8pm Costa Rica)
-- **At 8pm (20:00)**: Generate and send daily report to Angelina (vailas78@yahoo.com)
+### 📊 Meraki Daily Report (8pm Costa Rica) ⚠️ CRITICAL
+- **At 8pm (20:00) SHARP**: Generate and send daily report to Angelina (vailas78@yahoo.com)
+- **CHECK TIME EVERY HEARTBEAT** — if between 19:50 and 20:10 and report not sent today, SEND IT NOW
 - Read data from `~/.openclaw/workspace/meraki-control/data/sales.json`
 - Use HTML template with Land Rover colors:
   - Esh = Sand (#C4A67C)
