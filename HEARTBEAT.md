@@ -42,6 +42,12 @@
   - ⚠️ WARN if below target (La Luna <$10, Esh <$3.50, Coyol <$8)
   - ⚠️ WARN if sales dropped but MDO stayed same
   - Include recommendation: "Consider reducing X hours next week"
+- **Price Creep Alert** (when invoice data available):
+  - Compare current prices vs negotiated/baseline prices
+  - ⚠️ WARN if product >5% above negotiated price
+  - ⚠️ WARN if 3+ price increases from same supplier in 3 months
+  - Show trend: "Guanapollos chicken: ₡2,800 → ₡3,100 (+10.7% in 4 months)"
+  - Monthly impact estimate: "Price creep costing ~$X this month"
 - Send to vailas78@yahoo.com
 
 ### Monday
