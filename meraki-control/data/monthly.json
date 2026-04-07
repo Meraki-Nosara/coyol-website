@@ -71,7 +71,8 @@
       "avgOrder": 8598.233178654293,
       "perPerson": 14155.227272727272,
       "source": "pos_report_2025",
-      "gastos": 7041607
+      "gastos": 7041607,
+      "mdo": 3960637
     },
     {
       "month": "2025-02",
@@ -90,7 +91,8 @@
       "avgOrder": 49641.6389429801,
       "perPerson": 19491.774589713805,
       "source": "pos_report_2025",
-      "gastos": 69746103
+      "gastos": 69746103,
+      "mdo": 13511324
     },
     {
       "month": "2025-03",
@@ -309,7 +311,8 @@
       "avgOrder": 8983.69661095636,
       "perPerson": 15141.535602503913,
       "source": "pos_report_2025",
-      "gastos": 6187294
+      "gastos": 6187294,
+      "mdo": 4310785
     },
     {
       "month": "2025-08",
@@ -328,7 +331,8 @@
       "avgOrder": 45804.41813421454,
       "perPerson": 17851.652559936596,
       "source": "pos_report_2025",
-      "gastos": 23427349
+      "gastos": 23427349,
+      "mdo": 11760568
     },
     {
       "month": "2025-09",
@@ -347,7 +351,8 @@
       "avgOrder": 8397.362854864434,
       "perPerson": 8775.244183333332,
       "source": "pos_report_2025",
-      "gastos": 3611261
+      "gastos": 3611261,
+      "mdo": 4174965
     },
     {
       "month": "2025-09",
@@ -366,7 +371,8 @@
       "avgOrder": 35344.76567924528,
       "perPerson": 11789.003027061044,
       "source": "pos_report_2025",
-      "gastos": 10792292
+      "gastos": 10792292,
+      "mdo": 12265726
     },
     {
       "month": "2025-10",
@@ -385,7 +391,8 @@
       "avgOrder": 8560.35393916914,
       "perPerson": 9450.742923832924,
       "source": "pos_report_2025",
-      "gastos": 6462658
+      "gastos": 6462658,
+      "mdo": 5201590
     },
     {
       "month": "2025-10",
@@ -404,7 +411,8 @@
       "avgOrder": 39646.08563903282,
       "perPerson": 18594.6404090725,
       "source": "pos_report_2025",
-      "gastos": 18973530
+      "gastos": 18973530,
+      "mdo": 13001585
     },
     {
       "month": "2025-11",
@@ -423,7 +431,8 @@
       "avgOrder": 8387.442381294964,
       "perPerson": 10400.129268510258,
       "source": "pos_report_2025",
-      "gastos": 8131981
+      "gastos": 8131981,
+      "mdo": 3710200
     },
     {
       "month": "2025-11",
@@ -442,7 +451,8 @@
       "avgOrder": 47404.83430566968,
       "perPerson": 19408.47211101766,
       "source": "pos_report_2025",
-      "gastos": 56542057
+      "gastos": 56542057,
+      "mdo": 12219668
     },
     {
       "month": "2025-12",
@@ -678,7 +688,7 @@
       "gastos": 555577
     }
   ],
-  "lastUpdated": "2026-04-07T22:49:31.844Z",
+  "lastUpdated": "2026-04-07T23:05:02.737Z",
   "gastosTotals2025": {
     "esh": 93678771,
     "coyol": 254933429,
