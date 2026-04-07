@@ -1,6 +1,25 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { loadMonthlyData, formatCurrency, formatMonth, USD_RATE } from '../lib/monthly-data';
+import fs from 'fs';
+import path from 'path';
+
+// Get available analysis reports
+const reportsDir = path.join(process.cwd(), 'public/reports');
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+let analysisReports: Array<{ title: string; url: string; year: number; month: number }> = [];
+
+if (fs.existsSync(reportsDir)) {
+  const files = fs.readdirSync(reportsDir).filter(f => f.endsWith('.html') || f.endsWith('.pdf'));
+  analysisReports = files.map(filename => {
+    const match = filename.match(/^(january|february|march|april|may|june|july|august|september|october|november|december)-(\d{4})/i);
+    if (!match) return null;
+    const monthName = match[1].charAt(0).toUpperCase() + match[1].slice(1).toLowerCase();
+    const year = parseInt(match[2]);
+    const monthIndex = MONTHS.findIndex(m => m.toLowerCase() === monthName.toLowerCase());
+    return { title: `${monthName} ${year}`, url: `/reports/${filename}`, year, month: monthIndex + 1 };
+  }).filter(Boolean).sort((a, b) => b.year !== a.year ? b.year - a.year : b.month - a.month);
+}
 
 const data = loadMonthlyData();
 const allMonths = [...new Set(data.monthly.map(m => m.month))].sort();
@@ -237,15 +256,52 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
               )}
             </div>
             
-            <a 
-              href="/informes" 
-              class="flex items-center gap-2 px-4 py-2 bg-landrover-keswick text-white rounded-lg hover:bg-landrover-coniston transition-colors text-sm font-medium shadow-sm"
-            >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              Monthly Analysis Reports
-            </a>
+            <!-- Reports Dropdown -->
+            <div class="relative" id="reports-dropdown">
+              <button 
+                type="button"
+                onclick="document.getElementById('reports-menu').classList.toggle('hidden')"
+                class="flex items-center gap-2 px-4 py-2 bg-landrover-keswick text-white rounded-lg hover:bg-landrover-coniston transition-colors text-sm font-medium shadow-sm"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Monthly Analysis Reports
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              
+              <div 
+                id="reports-menu" 
+                class="hidden absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-landrover-arles/30 py-2 z-50 max-h-80 overflow-y-auto"
+              >
+                {analysisReports.length === 0 ? (
+                  <p class="px-4 py-2 text-sm text-landrover-marine/60">No reports available</p>
+                ) : (
+                  analysisReports.map(report => (
+                    <a 
+                      href={report.url}
+                      target="_blank"
+                      class="block px-4 py-2 text-sm text-landrover-santorini hover:bg-landrover-limestone/50 transition-colors"
+                    >
+                      {report.title}
+                    </a>
+                  ))
+                )}
+              </div>
+            </div>
+            
+            <script is:inline>
+              // Close dropdown when clicking outside
+              document.addEventListener('click', (e) => {
+                const dropdown = document.getElementById('reports-dropdown');
+                const menu = document.getElementById('reports-menu');
+                if (dropdown && menu && !dropdown.contains(e.target)) {
+                  menu.classList.add('hidden');
+                }
+              });
+            </script>
           </div>
         </div>
       </header>
