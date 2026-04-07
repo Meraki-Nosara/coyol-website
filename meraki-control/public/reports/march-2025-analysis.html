@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Meraki Financial Analysis - March 2025</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #fff;
+      color: #1a1f16;
+      padding: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #3D4F3D;
+    }
+    .header h1 {
+      font-size: 28px;
+      color: #3D4F3D;
+      margin-bottom: 5px;
+    }
+    .header h2 {
+      font-size: 20px;
+      color: #666;
+      font-weight: normal;
+    }
+    .summary-box {
+      background: #3D4F3D;
+      color: white;
+      padding: 25px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+    .summary-box h3 {
+      font-size: 16px;
+      opacity: 0.8;
+      margin-bottom: 15px;
+    }
+    .summary-stats {
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .stat { min-width: 100px; }
+    .stat-value { font-size: 28px; font-weight: bold; }
+    .stat-label { font-size: 12px; opacity: 0.7; }
+    
+    h3 {
+      color: #3D4F3D;
+      font-size: 18px;
+      margin: 30px 0 15px 0;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      font-size: 14px;
+    }
+    th {
+      background: #f5f5f5;
+      padding: 12px 10px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid #3D4F3D;
+    }
+    th:not(:first-child) { text-align: right; }
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    td:not(:first-child) { text-align: right; }
+    tr:hover { background: #fafafa; }
+    
+    .restaurant-row td:first-child {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .color-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    
+    .good { color: #2d7a2d; }
+    .warning { color: #b8860b; }
+    .bad { color: #c0392b; }
+    
+    .margin-bar {
+      height: 8px;
+      background: #eee;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+    .margin-fill {
+      height: 100%;
+      border-radius: 4px;
+    }
+    
+    .totals-row {
+      font-weight: bold;
+      background: #f9f9f9;
+    }
+    
+    .insights {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 30px;
+    }
+    .insights h3 {
+      margin-top: 0;
+      border: none;
+    }
+    .insight-item {
+      margin: 10px 0;
+      padding: 10px 15px;
+      background: white;
+      border-radius: 6px;
+      border-left: 4px solid #3D4F3D;
+    }
+    
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+    }
+    
+    @media print {
+      body { padding: 20px; }
+      .summary-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Meraki Financial Analysis</h1>
+    <h2>March 2025</h2>
+  </div>
+  
+  <div class="summary-box">
+    <h3>Monthly Summary</h3>
+    <div class="summary-stats">
+      <div class="stat">
+        <div class="stat-value">₡228.9M</div>
+        <div class="stat-label">Total Sales</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">₡87.7M</div>
+        <div class="stat-label">Expenses</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">₡141.3M</div>
+        <div class="stat-label">Gross Profit</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">62%</div>
+        <div class="stat-label">Margin</div>
+      </div>
+      
+      <div class="stat">
+        <div class="stat-value good">↑12.7%</div>
+        <div class="stat-label">vs Previous Month</div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <h3>Sales by Restaurant</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Restaurant</th>
+        <th>Sales</th>
+        <th>Food</th>
+        <th>Bar</th>
+        <th>Expenses</th>
+        <th>Profit</th>
+        <th>Margin</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr class="restaurant-row">
+        <td><span class="color-dot" style="background: #C4A67C"></span> Esh</td>
+        <td>₡19,480,804</td>
+        <td>₡12,636,598</td>
+        <td>₡6,844,206</td>
+        <td class="bad">₡10,732,570</td>
+        <td class="good">₡8,748,234</td>
+        <td>
+          <span class="warning">45%</span>
+          <div class="margin-bar">
+            <div class="margin-fill" style="width: 44.90694531909463%; background: #b8860b"></div>
+          </div>
+        </td>
+      </tr>
+      
+      <tr class="restaurant-row">
+        <td><span class="color-dot" style="background: #A65D3F"></span> La Luna</td>
+        <td>₡209,452,272</td>
+        <td>₡124,226,508</td>
+        <td>₡85,225,764</td>
+        <td class="bad">₡76,926,619</td>
+        <td class="good">₡132,525,653</td>
+        <td>
+          <span class="good">63%</span>
+          <div class="margin-bar">
+            <div class="margin-fill" style="width: 63.27248290722767%; background: #2d7a2d"></div>
+          </div>
+        </td>
+      </tr>
+      
+      <tr class="totals-row">
+        <td>Total</td>
+        <td>₡228,933,076</td>
+        <td>₡136,863,106</td>
+        <td>₡92,069,970</td>
+        <td class="bad">₡87,659,189</td>
+        <td class="good">₡141,273,887</td>
+        <td><span class="good">62%</span></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <h3>Revenue Mix</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Amount</th>
+        <th>% of Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>🍽️ Food</td>
+        <td>₡136,863,106</td>
+        <td>60%</td>
+      </tr>
+      <tr>
+        <td>🍷 Bar/Drinks</td>
+        <td>₡92,069,970</td>
+        <td>40%</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <div class="insights">
+    <h3>📊 Key Insights</h3>
+    
+    <div class="insight-item">
+      <strong>Top Performer:</strong> La Luna led with ₡209.5M in sales
+    </div>
+    
+    
+    <div class="insight-item">
+      <strong>Strong Margins:</strong> La Luna achieved 50%+ gross margin
+    </div>
+    
+    
+    <div class="insight-item">
+      <strong>Food vs Bar:</strong> Food represents 60% of revenue, Bar 40%
+    </div>
+  </div>
+  
+  <div class="footer">
+    <p>Generated by Meraki Control System • April 7, 2026</p>
+    <p>Currency: CRC </p>
+  </div>
+</body>
+</html>
