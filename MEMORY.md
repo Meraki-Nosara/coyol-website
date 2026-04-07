@@ -46,7 +46,7 @@ Three restaurants under unified management:
 | **Abner** | La Luna Manager | Staff/manpower + payroll for all locations. Provides MDO (labor hours) data |
 | **Silvia** | Cleaning & supplies | All locations, based at La Luna |
 | **Danny** | Food & ordering | All 3 locations + oversees Esh |
-| **Anlly Villegas Chinchilla** | Office/Admin | Handles merakinosara emails |
+| **Anlly Villegas Chinchilla** | Office/Admin | Handles merakinosara emails, sends gastos files |
 
 ### Meraki Reports
 - **Daily** @ 8pm → Angelina (vailas78@yahoo.com)
@@ -150,12 +150,17 @@ Marion loves the classic Land Rover colors — used for both projects:
   - Coyol: Jan-Mar 2026 (₡312.7M)
   - Esh: Jan-Mar 2026 (₡51.9M)
   - La Luna: Jan-Mar 2026 (₡634.6M)
-  - **Q1 Total: ₡999.2M**
-  - La Luna 2025: All 12 months downloaded (pending integration)
+  - **Q1 2026 Total: ₡999.2M**
+  - La Luna 2025: 12 months ✅
+  - Esh 2025: 12 months ✅
+  - Coyol 2025: Annual only (₡744.9M) — NEED monthly breakdown
+  - Gastos 2025: All 3 restaurants ✅
+  - Gastos 2026 (Jan-Apr): All 3 restaurants ✅
 - **Data Pending:**
   - MDO (labor hours from Abner)
-  - Gastos (expenses 1/1/25 to 4/5/26)
-  - Retenciones/Comisiones (bank card fees via merakinosara)
+  - Coyol 2025 monthly breakdown (Marion getting it)
+  - Retenciones/Comisiones (bank card fees)
+  - Payroll data for P&L
 - **Features:**
   - Restaurant summary cards with logos
   - Food vs Drinks pie chart
