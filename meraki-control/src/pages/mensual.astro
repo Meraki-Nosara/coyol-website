@@ -40,8 +40,9 @@ const restaurantTotals = restaurants.map(code => {
 });
 
 // Calculate totals per month (all restaurants combined) for trend chart
-// Only include months where we have complete data (all 3 restaurants)
-const monthlyTotals = allMonths
+// Only include 2026 months
+const months2026Only = allMonths.filter(m => m.startsWith('2026'));
+const monthlyTotals = months2026Only
   .map(month => {
     const monthData = data.monthly.filter(m => m.month === month && !m.partial);
     return {
@@ -50,7 +51,7 @@ const monthlyTotals = allMonths
       restaurants: monthData.length
     };
   })
-  .filter(m => m.restaurants === 3); // Only show complete months
+  .filter(m => m.totalSales > 0); // Only show months with data
 
 // Year 2026 totals
 const year2026 = data.monthly.filter(m => m.month.startsWith('2026') && !m.partial);
