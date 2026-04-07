@@ -1,6 +1,6 @@
 # MEMORY.md — Long-Term Memory
 
-*Last updated: April 3, 2026*
+*Last updated: April 7, 2026*
 
 ---
 
@@ -140,41 +140,36 @@ Marion loves the classic Land Rover colors — used for both projects:
 
 ### 2. Meraki Control System
 - **Location:** `~/.openclaw/workspace/meraki-control/`
-- **Stack:** Astro + Tailwind CSS
+- **Stack:** Astro + Tailwind CSS + Chart.js
 - **Dev Server:** Port 4400
-- **Status:** **LIVE** with Q1 2026 data
-- **Auth:** Angelina / masro
-- **Production URL:** https://sea-lion-app-9kpar.ondigitalocean.app
+- **Production URL:** https://meraki.livingnosara.com
 - **Hosting:** DigitalOcean App Platform (auto-deploys from GitHub)
+- **Auth:** Angelina / masro
 - **Deployed:** April 5, 2026
-- **Data Loaded:**
-  - Coyol: Jan-Mar 2026 (₡312.7M)
-  - Esh: Jan-Mar 2026 (₡51.9M)
-  - La Luna: Jan-Mar 2026 (₡634.6M)
-  - **Q1 2026 Total: ₡999.2M**
-  - La Luna 2025: 12 months ✅
-  - Esh 2025: 12 months ✅
-  - Coyol 2025: Annual only (₡744.9M) — NEED monthly breakdown
-  - Gastos 2025: All 3 restaurants ✅
-  - Gastos 2026 (Jan-Apr): All 3 restaurants ✅
-- **Data Loaded (April 7, 2026):**
-  - Gastos 2025: All 3 restaurants (full year) — ₡971M total
-  - Gastos 2026: Jan-Apr all 3 restaurants — ₡366M total
-  - Q1 2026 Profitability: 64% gross margin (₡639M profit on ₡999M sales)
+- **Full state:** See `projects/meraki-control-state.md`
+- **Sales Data:**
+  - Q1 2026: ₡999.2M (Coyol ₡312.7M + Esh ₡51.9M + La Luna ₡634.6M)
+  - 2025: La Luna & Esh complete, Coyol annual only (₡744.9M)
+- **Gastos Data:**
+  - 2025: All 3 restaurants (₡971M total)
+  - 2026 Jan-Apr: All 3 restaurants (₡366M total)
+  - Q1 2026 Gross Margin: 64% (₡639M profit)
+- **Suppliers Database:** 20 suppliers loaded
+  - 11 shared suppliers (visit all 3 restaurants) — need OCR for invoice tags
+  - Categories: protein, seafood, produce, beverages, food-dist, groceries, services, supplies
+- **Invoice Pipeline:** Planned (email → parse → OCR → categorize → dashboard)
 - **Data Pending:**
-  - Pagos (actual payments made) — need from Anlly/QuickBooks
-  - MDO (labor hours from Abner)
-  - Coyol 2025 monthly breakdown (Marion getting it)
+  - Pagos (actual payments) — from Anlly/QuickBooks
+  - MDO (labor hours) — from Abner
+  - Coyol 2025 monthly breakdown — Marion getting it
   - Retenciones/Comisiones (bank card fees)
   - Payroll data for P&L
-- **Features:**
+- **Features Live:**
   - Restaurant summary cards with logos
   - Food vs Drinks pie chart
   - Cash vs Card pie chart
   - Monthly trend bar chart
   - Currency toggle (CRC/USD @ ₡505)
-- **Himalaya Gmail:** Configured for marionnosara@gmail.com
-- **Pending:** Daily data from Ingrid, permanent domain
 
 ---
 

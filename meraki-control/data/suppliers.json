@@ -1,0 +1,319 @@
+{
+  "suppliers": {
+    "503320281": {
+      "name": "WALLY ROMAN FONSECA VILLEGAS",
+      "shortName": "Wally Fonseca",
+      "cedula": "503320281",
+      "category": "unknown",
+      "subcategory": "unknown",
+      "restaurant": "unknown",
+      "contact": {},
+      "notes": "Individual supplier - needs classification",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "504050547": {
+      "name": "JOSE ALEXIS RANGEL CARRILLO",
+      "shortName": "Frutas Nosara (Rangel)",
+      "cedula": "504050547",
+      "category": "produce",
+      "subcategory": "fruits-vegetables",
+      "restaurant": "shared",
+      "contact": {},
+      "notes": "Fruits and vegetables supplier - Nosara. Price list from Silvia.",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "602760131": {
+      "name": "KARLA DE LOS ANGELES MARTINEZ OVIEDO",
+      "shortName": "Karla Martinez",
+      "cedula": "602760131",
+      "category": "unknown",
+      "subcategory": "unknown",
+      "restaurant": "unknown",
+      "contact": {},
+      "notes": "Individual supplier - needs classification",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "3002617388": {
+      "name": "ASOCIACION DE RECICLAJE DE DESECHOS DE NOSARA",
+      "shortName": "Reciclaje Nosara",
+      "cedula": "3002617388",
+      "category": "services",
+      "subcategory": "waste",
+      "restaurant": "shared",
+      "contact": {},
+      "notes": "Recycling/waste management",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "3101074903": {
+      "name": "EXPORTADORA PMT S.A.",
+      "shortName": "PMT",
+      "cedula": "3101074903",
+      "category": "food-dist",
+      "subcategory": "general",
+      "restaurant": "shared",
+      "contact": {
+        "email": "FacturacionElectronica1@grupopmtcr.com"
+      },
+      "notes": "Food exporter/distributor | Visits all 3 locations - needs invoice tag",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "3101109180": {
+      "name": "Distribuidora Isleña de Alimentos, S.A.",
+      "shortName": "Distribuidora Isleña",
+      "cedula": "3101109180",
+      "category": "food-dist",
+      "subcategory": "general",
+      "restaurant": "shared",
+      "contact": {},
+      "notes": "Food distributor - multiple products | Visits all 3 locations - needs invoice tag",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "3101395115": {
+      "name": "Guana Pollo S.A.",
+      "shortName": "Guanapollos",
+      "cedula": "3101395115",
+      "category": "protein",
+      "subcategory": "chicken",
+      "restaurant": "shared",
+      "contact": {
+        "phone": "41011700",
+        "email": "facturaelectronica@guanapollo.com"
+      },
+      "notes": "Main chicken supplier | Visits all 3 locations - needs invoice tag",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "3101409261": {
+      "name": "NCQ Solutions S.A.",
+      "shortName": "NCQ Solutions",
+      "cedula": "3101409261",
+      "category": "services",
+      "subcategory": "unknown",
+      "restaurant": "shared",
+      "contact": {},
+      "notes": "Unknown - needs classification",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "3101794410": {
+      "name": "AGRO LOS CARTAGOS SOCIEDAD ANONIMA",
+      "shortName": "Agro Los Cartagos",
+      "cedula": "3101794410",
+      "category": "produce",
+      "subcategory": "vegetables",
+      "restaurant": "shared",
+      "contact": {},
+      "notes": "Fresh produce supplier",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "3102765685": {
+      "name": "CR AGUA AZUL INC SOCIEDAD DE RESPONSABILIDAD LIMITADA",
+      "shortName": "Organico Grocer",
+      "cedula": "3102765685",
+      "category": "groceries",
+      "subcategory": "organic",
+      "restaurant": "shared",
+      "contact": {},
+      "notes": "Organic grocer and bakery",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "3102852678": {
+      "name": "GRUPO SUPERMERCADO NOSARA LIMITADA",
+      "shortName": "Super Nosara",
+      "cedula": "3102852678",
+      "category": "groceries",
+      "subcategory": "general",
+      "restaurant": "shared",
+      "contact": {},
+      "notes": "Local supermarket for misc items",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "belca": {
+      "name": "Belca",
+      "shortName": "Belca",
+      "cedula": "belca",
+      "category": "food-dist",
+      "subcategory": "general",
+      "restaurant": "shared",
+      "contact": {},
+      "notes": "Food distributor - price list from Silvia | Visits all 3 locations - needs invoice tag",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "alpiste": {
+      "name": "Alpiste",
+      "shortName": "Alpiste",
+      "cedula": "alpiste",
+      "category": "food-dist",
+      "subcategory": "general",
+      "restaurant": "shared",
+      "contact": {},
+      "notes": "Food supplier - price list from Silvia",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "carne-san-martin": {
+      "name": "Carne San Martin",
+      "shortName": "Carne San Martin",
+      "cedula": "carne-san-martin",
+      "category": "protein",
+      "subcategory": "beef",
+      "restaurant": "shared",
+      "contact": {},
+      "notes": "Beef supplier - price list from Silvia | Visits all 3 locations - needs invoice tag",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "carnes-la-anexion": {
+      "name": "Carnes La Anexion",
+      "shortName": "Carnes La Anexion",
+      "cedula": "carnes-la-anexion",
+      "category": "protein",
+      "subcategory": "beef",
+      "restaurant": "shared",
+      "contact": {},
+      "notes": "Beef supplier - price list from Silvia | Visits all 3 locations - needs invoice tag",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "licorerias-herrera": {
+      "name": "Licorerias Herrera SRL",
+      "shortName": "Licorerias Herrera",
+      "cedula": "3102120908",
+      "category": "beverages",
+      "subcategory": "liquor",
+      "restaurant": "shared",
+      "contact": {
+        "phone": "26866063"
+      },
+      "notes": "Liquor distributor - April 2026 price list from Silvia | Visits all 3 locations - needs invoice tag",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "priscermat": {
+      "name": "Priscermat",
+      "shortName": "Priscermat",
+      "cedula": "priscermat",
+      "category": "food-dist",
+      "subcategory": "general",
+      "restaurant": "shared",
+      "contact": {},
+      "notes": "Visits all 3 locations - needs invoice tag",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "green-solutions": {
+      "name": "Green Solutions",
+      "shortName": "Green Solutions",
+      "cedula": "green-solutions",
+      "category": "supplies",
+      "subcategory": "cleaning",
+      "restaurant": "shared",
+      "contact": {},
+      "notes": "Visits all 3 locations - needs invoice tag",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "mayca": {
+      "name": "Mayca",
+      "shortName": "Mayca",
+      "cedula": "mayca",
+      "category": "food-dist",
+      "subcategory": "general",
+      "restaurant": "shared",
+      "contact": {},
+      "notes": "Visits all 3 locations - needs invoice tag",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    },
+    "mariscos-paulo": {
+      "name": "Mariscos Paulo",
+      "shortName": "Mariscos Paulo",
+      "cedula": "mariscos-paulo",
+      "category": "seafood",
+      "subcategory": "fish",
+      "restaurant": "shared",
+      "contact": {},
+      "notes": "Seafood - Visits all 3 locations - needs invoice tag",
+      "products": {},
+      "priceHistory": [],
+      "addedAt": "2026-04-07"
+    }
+  },
+  "categories": {
+    "protein": {
+      "label": "Proteins",
+      "icon": "🥩"
+    },
+    "produce": {
+      "label": "Produce",
+      "icon": "🥬"
+    },
+    "dairy": {
+      "label": "Dairy",
+      "icon": "🧀"
+    },
+    "beverages": {
+      "label": "Beverages",
+      "icon": "🍷"
+    },
+    "groceries": {
+      "label": "Groceries",
+      "icon": "🛒"
+    },
+    "seafood": {
+      "label": "Seafood",
+      "icon": "🐟"
+    },
+    "bakery": {
+      "label": "Bakery",
+      "icon": "🥖"
+    },
+    "food-dist": {
+      "label": "Food Distributor",
+      "icon": "📦"
+    },
+    "services": {
+      "label": "Services",
+      "icon": "🔧"
+    },
+    "unknown": {
+      "label": "Uncategorized",
+      "icon": "❓"
+    }
+  },
+  "products": {},
+  "metadata": {
+    "lastUpdated": "2026-04-07",
+    "totalSuppliers": 20,
+    "unmappedCount": 3
+  }
+}

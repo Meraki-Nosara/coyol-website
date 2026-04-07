@@ -1,0 +1,310 @@
+{
+  "facturas": [
+    {
+      "clave": "50606042600060276013100100001010000000322100041769",
+      "consecutivo": "00100001010000000322",
+      "fecha": "2026-04-06T21:41:36-06:00",
+      "supplierId": "602760131",
+      "supplierName": "KARLA DE LOS ANGELES MARTINEZ OVIEDO",
+      "total": 21210,
+      "subtotal": 21000,
+      "impuesto": 210,
+      "moneda": "CRC",
+      "restaurant": "unknown",
+      "itemCount": 1,
+      "processedAt": "2026-04-07T21:11:44.245Z"
+    },
+    {
+      "clave": "50606042600060276013100100001010000000323100041769",
+      "consecutivo": "00100001010000000323",
+      "fecha": "2026-04-06T21:45:14-06:00",
+      "supplierId": "602760131",
+      "supplierName": "KARLA DE LOS ANGELES MARTINEZ OVIEDO",
+      "total": 31815,
+      "subtotal": 31500,
+      "impuesto": 315,
+      "moneda": "CRC",
+      "restaurant": "unknown",
+      "itemCount": 1,
+      "processedAt": "2026-04-07T21:11:44.257Z"
+    },
+    {
+      "clave": "50606042600310107490301000001010001076970172952857",
+      "consecutivo": "01000001010001076970",
+      "fecha": "2026-04-06T11:34:45",
+      "supplierId": "3101074903",
+      "supplierName": "EXPORTADORA PMT S.A.",
+      "total": 168064,
+      "subtotal": 166400,
+      "impuesto": 1664,
+      "moneda": "CRC",
+      "restaurant": "shared",
+      "itemCount": 1,
+      "processedAt": "2026-04-07T21:11:44.257Z"
+    },
+    {
+      "clave": "50606042600310110918000200002010000165830106042630",
+      "consecutivo": "00200002010000165830",
+      "fecha": "2026-04-06T15:50:18",
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "total": 56781.94,
+      "subtotal": 50249.5,
+      "impuesto": 6532.44,
+      "moneda": "CRC",
+      "restaurant": "shared",
+      "itemCount": 1,
+      "processedAt": "2026-04-07T21:11:44.257Z"
+    },
+    {
+      "clave": "50606042600310110918000200002010000165853106042653",
+      "consecutivo": "00200002010000165853",
+      "fecha": "2026-04-06T18:27:12",
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "total": 98795.29,
+      "subtotal": 87429.46,
+      "impuesto": 11365.83,
+      "moneda": "CRC",
+      "restaurant": "shared",
+      "itemCount": 3,
+      "processedAt": "2026-04-07T21:11:44.257Z"
+    },
+    {
+      "clave": "50606042600310110918000200002010000165865106042665",
+      "consecutivo": "00200002010000165865",
+      "fecha": "2026-04-06T18:30:13",
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "total": 45317.94,
+      "subtotal": 40104.37,
+      "impuesto": 5213.57,
+      "moneda": "CRC",
+      "restaurant": "shared",
+      "itemCount": 1,
+      "processedAt": "2026-04-07T21:11:44.257Z"
+    },
+    {
+      "clave": "50606042600310110918000200002010000165873106042673",
+      "consecutivo": "00200002010000165873",
+      "fecha": "2026-04-06T18:32:57",
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "total": 463475.71,
+      "subtotal": 421305.83,
+      "impuesto": 42169.88,
+      "moneda": "CRC",
+      "restaurant": "shared",
+      "itemCount": 9,
+      "processedAt": "2026-04-07T21:11:44.257Z"
+    },
+    {
+      "clave": "50606042600310110918000200002010000165875106042675",
+      "consecutivo": "00200002010000165875",
+      "fecha": "2026-04-06T18:33:33",
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "total": 52030.83,
+      "subtotal": 46905.16,
+      "impuesto": 5125.67,
+      "moneda": "CRC",
+      "restaurant": "shared",
+      "itemCount": 3,
+      "processedAt": "2026-04-07T21:11:44.258Z"
+    },
+    {
+      "clave": "50606042600310110918000200002010000165962106042662",
+      "consecutivo": "00200002010000165962",
+      "fecha": "2026-04-06T20:57:09",
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "total": 130210.71,
+      "subtotal": 127333.05,
+      "impuesto": 2877.66,
+      "moneda": "CRC",
+      "restaurant": "shared",
+      "itemCount": 6,
+      "processedAt": "2026-04-07T21:11:44.258Z"
+    },
+    {
+      "clave": "50606042600310140926100100001010000112270115119505",
+      "consecutivo": "00100001010000112270",
+      "fecha": "2026-04-06T16:38:32-06:00",
+      "supplierId": "3101409261",
+      "supplierName": "NCQ Solutions S.A.",
+      "total": 39550,
+      "subtotal": 35000,
+      "impuesto": 4550,
+      "moneda": "CRC",
+      "restaurant": "shared",
+      "itemCount": 1,
+      "processedAt": "2026-04-07T21:11:44.258Z"
+    },
+    {
+      "clave": "50607042600050405054700100001010000006568187258224",
+      "consecutivo": "00100001010000006568",
+      "fecha": "2026-04-07T06:37:44-06:00",
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "total": 746885.10109,
+      "subtotal": 719664.14617,
+      "impuesto": 27220.95492,
+      "moneda": "CRC",
+      "restaurant": "unknown",
+      "itemCount": 35,
+      "processedAt": "2026-04-07T21:11:44.258Z"
+    },
+    {
+      "clave": "50607042600310139511500201003010000008602300008602",
+      "consecutivo": "00201003010000008602",
+      "fecha": "2026-04-07T10:32:00.0000000",
+      "supplierId": "3101395115",
+      "supplierName": "Guana Pollo S.A.",
+      "total": 112857.4,
+      "subtotal": 111740,
+      "impuesto": 1117.4,
+      "moneda": "CRC",
+      "restaurant": "shared",
+      "itemCount": 1,
+      "processedAt": "2026-04-07T21:11:44.258Z"
+    },
+    {
+      "clave": "50607042600310179441000400001010000052013135565932",
+      "consecutivo": "00400001010000052013",
+      "fecha": "2026-04-07T14:28:06-06:00",
+      "supplierId": "3101794410",
+      "supplierName": "AGRO LOS CARTAGOS",
+      "total": 1200,
+      "subtotal": 1061.9469,
+      "impuesto": 138.0531,
+      "moneda": "CRC",
+      "restaurant": "shared",
+      "itemCount": 1,
+      "processedAt": "2026-04-07T21:11:44.258Z"
+    },
+    {
+      "clave": "50607042600310276568500100001010000074986147041966",
+      "consecutivo": "00100001010000074986",
+      "fecha": "2026-04-07T13:23:34-06:00",
+      "supplierId": "3102765685",
+      "supplierName": "CR AGUA AZUL INC SOCIEDAD DE RESPONSABILIDAD LIMITADA",
+      "total": 11624.99998,
+      "subtotal": 10287.6106,
+      "impuesto": 1337.38938,
+      "moneda": "CRC",
+      "restaurant": "shared",
+      "itemCount": 1,
+      "processedAt": "2026-04-07T21:11:44.258Z"
+    },
+    {
+      "clave": "50607042600310285267800100001010000119037115731496",
+      "consecutivo": "00100001010000119037",
+      "fecha": "2026-04-07T10:39:55-06:00",
+      "supplierId": "3102852678",
+      "supplierName": "GRUPO SUPERMERCADO NOSARA LIMITADA",
+      "total": 13600.00001,
+      "subtotal": 12035.39824,
+      "impuesto": 1564.60177,
+      "moneda": "CRC",
+      "restaurant": "shared",
+      "itemCount": 1,
+      "processedAt": "2026-04-07T21:11:44.258Z"
+    },
+    {
+      "clave": "50606042600050332028100100001010000005522139536935",
+      "consecutivo": "00100001010000005522",
+      "fecha": "2026-04-06T16:35:33-06:00",
+      "supplierId": "503320281",
+      "supplierName": "WALLY ROMAN FONSECA VILLEGAS",
+      "total": 17599.98,
+      "subtotal": 15575.2,
+      "impuesto": 2024.78,
+      "moneda": "CRC",
+      "restaurant": "unknown",
+      "itemCount": 1,
+      "processedAt": "2026-04-07T21:11:44.259Z"
+    },
+    {
+      "clave": "50606042600300261738800100001010000001346112360909",
+      "consecutivo": "00100001010000001346",
+      "fecha": "2026-04-06T15:21:00-06:00",
+      "supplierId": "3002617388",
+      "supplierName": "ASOCIACION DE RECICLAJE DE DESECHOS DE NOSARA",
+      "total": 45.2,
+      "subtotal": 40,
+      "impuesto": 5.2,
+      "moneda": "USD",
+      "restaurant": "shared",
+      "itemCount": 1,
+      "processedAt": "2026-04-07T21:11:44.259Z"
+    }
+  ],
+  "lastProcessed": "2026-04-07T21:11:44.259Z",
+  "totals": {
+    "2026-04": {
+      "total": 2011064.10108,
+      "count": 17,
+      "byRestaurant": {
+        "unknown": 817510.08109,
+        "shared": 1193554.01999
+      },
+      "bySupplier": {
+        "503320281": {
+          "name": "WALLY ROMAN FONSECA VILLEGAS",
+          "total": 17599.98,
+          "count": 1
+        },
+        "504050547": {
+          "name": "JOSE ALEXIS RANGEL CARRILLO",
+          "total": 746885.10109,
+          "count": 1
+        },
+        "602760131": {
+          "name": "KARLA DE LOS ANGELES MARTINEZ OVIEDO",
+          "total": 53025,
+          "count": 2
+        },
+        "3002617388": {
+          "name": "ASOCIACION DE RECICLAJE DE DESECHOS DE NOSARA",
+          "total": 45.2,
+          "count": 1
+        },
+        "3101074903": {
+          "name": "EXPORTADORA PMT S.A.",
+          "total": 168064,
+          "count": 1
+        },
+        "3101109180": {
+          "name": "Distribuidora Isleña de Alimentos, S.A.",
+          "total": 846612.4199999999,
+          "count": 6
+        },
+        "3101395115": {
+          "name": "Guana Pollo S.A.",
+          "total": 112857.4,
+          "count": 1
+        },
+        "3101409261": {
+          "name": "NCQ Solutions S.A.",
+          "total": 39550,
+          "count": 1
+        },
+        "3101794410": {
+          "name": "AGRO LOS CARTAGOS",
+          "total": 1200,
+          "count": 1
+        },
+        "3102765685": {
+          "name": "CR AGUA AZUL INC SOCIEDAD DE RESPONSABILIDAD LIMITADA",
+          "total": 11624.99998,
+          "count": 1
+        },
+        "3102852678": {
+          "name": "GRUPO SUPERMERCADO NOSARA LIMITADA",
+          "total": 13600.00001,
+          "count": 1
+        }
+      }
+    }
+  }
+}

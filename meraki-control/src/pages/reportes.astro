@@ -1,0 +1,522 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { loadMonthlyData, formatCurrency, formatMonth, USD_RATE } from '../lib/monthly-data';
+
+const data = loadMonthlyData();
+const allMonths = [...new Set(data.monthly.map(m => m.month))].sort();
+const restaurants = ['esh', 'coyol', 'laluna'] as const;
+
+// Get params from URL
+const url = new URL(Astro.request.url);
+const currency = (url.searchParams.get('currency') as 'CRC' | 'USD') || 'CRC';
+const startDate = url.searchParams.get('start') || allMonths[allMonths.length - 3] || '2026-01';
+const endDate = url.searchParams.get('end') || allMonths[allMonths.length - 1] || '2026-03';
+const selectedRestaurant = url.searchParams.get('restaurant') || 'all';
+
+// Helper to format with current currency
+const fmt = (amount: number) => formatCurrency(amount, currency);
+
+// Logo paths
+const logos: Record<string, string> = {
+  esh: '/images/logos/esh-black.png',
+  coyol: '/images/logos/coyol-black.png',
+  laluna: '/images/logos/laluna-black.png'
+};
+
+// Filter data by date range and restaurant
+const filteredData = data.monthly.filter(m => {
+  const inRange = m.month >= startDate && m.month <= endDate;
+  const matchesRestaurant = selectedRestaurant === 'all' || m.restaurant === selectedRestaurant;
+  return inRange && matchesRestaurant && !m.partial;
+});
+
+// Calculate totals for filtered data
+const totals = {
+  totalSales: filteredData.reduce((sum, m) => sum + m.totalSales, 0),
+  food: filteredData.reduce((sum, m) => sum + m.food, 0),
+  bar: filteredData.reduce((sum, m) => sum + m.bar, 0),
+  cash: filteredData.reduce((sum, m) => sum + m.cash, 0),
+  card: filteredData.reduce((sum, m) => sum + m.card, 0),
+  customers: filteredData.reduce((sum, m) => sum + m.customers, 0),
+  orders: filteredData.reduce((sum, m) => sum + m.orders, 0),
+  gastos: filteredData.reduce((sum, m) => sum + (m.gastos || 0), 0),
+};
+
+const grossProfit = totals.totalSales - totals.gastos;
+const margin = totals.totalSales > 0 ? (grossProfit / totals.totalSales * 100) : 0;
+
+// Per restaurant breakdown (for the selected period)
+const restaurantBreakdown = restaurants.map(code => {
+  const restData = filteredData.filter(m => m.restaurant === code);
+  const sales = restData.reduce((sum, m) => sum + m.totalSales, 0);
+  const gastos = restData.reduce((sum, m) => sum + (m.gastos || 0), 0);
+  const profit = sales - gastos;
+  const restMargin = sales > 0 ? (profit / sales * 100) : 0;
+  
+  return {
+    code,
+    name: data.restaurants[code]?.name || code,
+    color: data.restaurants[code]?.color || '#666',
+    logo: logos[code],
+    sales,
+    food: restData.reduce((sum, m) => sum + m.food, 0),
+    bar: restData.reduce((sum, m) => sum + m.bar, 0),
+    cash: restData.reduce((sum, m) => sum + m.cash, 0),
+    card: restData.reduce((sum, m) => sum + m.card, 0),
+    customers: restData.reduce((sum, m) => sum + m.customers, 0),
+    orders: restData.reduce((sum, m) => sum + m.orders, 0),
+    gastos,
+    profit,
+    margin: restMargin,
+    months: restData.length
+  };
+}).filter(r => selectedRestaurant === 'all' || r.code === selectedRestaurant);
+
+// Monthly breakdown for the selected period
+const monthlyBreakdown = [...new Set(filteredData.map(m => m.month))].sort().map(month => {
+  const monthData = filteredData.filter(m => m.month === month);
+  return {
+    month,
+    totalSales: monthData.reduce((sum, m) => sum + m.totalSales, 0),
+    food: monthData.reduce((sum, m) => sum + m.food, 0),
+    bar: monthData.reduce((sum, m) => sum + m.bar, 0),
+    gastos: monthData.reduce((sum, m) => sum + (m.gastos || 0), 0),
+  };
+});
+
+// Format date range for display
+const formatDateRange = () => {
+  const start = formatMonth(startDate);
+  const end = formatMonth(endDate);
+  if (startDate === endDate) return start;
+  return `${start} — ${end}`;
+};
+
+// Get comparison period (same length, previous period)
+const monthsBetween = monthlyBreakdown.length;
+const compareStartIndex = allMonths.indexOf(startDate) - monthsBetween;
+const compareEndIndex = allMonths.indexOf(startDate) - 1;
+let comparisonData = null;
+
+if (compareStartIndex >= 0 && compareEndIndex >= 0) {
+  const compareStart = allMonths[compareStartIndex];
+  const compareEnd = allMonths[compareEndIndex];
+  
+  const compareFiltered = data.monthly.filter(m => {
+    const inRange = m.month >= compareStart && m.month <= compareEnd;
+    const matchesRestaurant = selectedRestaurant === 'all' || m.restaurant === selectedRestaurant;
+    return inRange && matchesRestaurant && !m.partial;
+  });
+  
+  if (compareFiltered.length > 0) {
+    const compareSales = compareFiltered.reduce((sum, m) => sum + m.totalSales, 0);
+    const change = compareSales > 0 ? ((totals.totalSales - compareSales) / compareSales * 100) : 0;
+    comparisonData = {
+      period: `${formatMonth(compareStart)} — ${formatMonth(compareEnd)}`,
+      sales: compareSales,
+      change
+    };
+  }
+}
+---
+
+<Layout title="Reports">
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-landrover-keswick text-white flex-shrink-0 hidden lg:flex lg:flex-col">
+      <div class="p-6">
+        <h1 class="font-serif text-2xl font-semibold tracking-wide">Meraki</h1>
+        <p class="text-landrover-limestone/60 text-xs mt-1">Financial Control</p>
+      </div>
+      
+      <nav class="mt-4 flex-1">
+        <a href="/mensual" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          <span class="text-sm">Dashboard</span>
+        </a>
+        
+        <a href="/reportes" class="flex items-center gap-3 px-6 py-3 bg-white/10 text-white border-l-4 border-landrover-sand">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span class="text-sm font-medium">Reports</span>
+        </a>
+        
+        <a href="/tendencias" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span class="text-sm">Trends</span>
+        </a>
+      </nav>
+      
+      <!-- User & Logout -->
+      <div class="p-6 border-t border-white/10">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-landrover-sand rounded-full flex items-center justify-center text-landrover-keswick font-semibold">
+              AP
+            </div>
+            <div>
+              <p class="text-sm font-medium">Angelina</p>
+              <p class="text-xs text-landrover-limestone/60">Admin</p>
+            </div>
+          </div>
+          <a href="/logout" class="text-landrover-limestone/60 hover:text-white transition-colors" title="Log out">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-auto">
+      <!-- Mobile Header -->
+      <header class="lg:hidden bg-landrover-keswick text-white p-4 flex items-center justify-between">
+        <h1 class="font-serif text-xl font-semibold">Meraki</h1>
+        <a href="/logout" class="text-landrover-limestone/80">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+        </a>
+      </header>
+      
+      <!-- Header with Filters -->
+      <header class="bg-white border-b border-landrover-arles/30 sticky top-0 z-40">
+        <div class="px-4 lg:px-8 py-4">
+          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-semibold text-landrover-santorini">Custom Reports</h2>
+              <p class="text-sm text-landrover-marine/60">{formatDateRange()}</p>
+            </div>
+            
+            <!-- Currency Toggle -->
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-landrover-marine/60">Currency:</span>
+              <div class="flex bg-landrover-limestone/50 rounded overflow-hidden">
+                <button 
+                  onclick={`window.location.href='?start=${startDate}&end=${endDate}&restaurant=${selectedRestaurant}&currency=CRC'`}
+                  class={`px-3 py-1.5 text-sm font-medium transition-colors ${currency === 'CRC' ? 'bg-landrover-keswick text-white' : 'text-landrover-marine hover:bg-landrover-limestone'}`}
+                >
+                  CRC ₡
+                </button>
+                <button 
+                  onclick={`window.location.href='?start=${startDate}&end=${endDate}&restaurant=${selectedRestaurant}&currency=USD'`}
+                  class={`px-3 py-1.5 text-sm font-medium transition-colors ${currency === 'USD' ? 'bg-landrover-keswick text-white' : 'text-landrover-marine hover:bg-landrover-limestone'}`}
+                >
+                  USD $
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Date Range & Restaurant Filter -->
+          <form class="mt-4 flex flex-wrap items-end gap-3" method="GET">
+            <input type="hidden" name="currency" value={currency} />
+            
+            <div>
+              <label class="block text-xs text-landrover-marine/60 mb-1">Start Date</label>
+              <select name="start" class="px-3 py-2 bg-white border border-landrover-arles/30 rounded text-sm focus:outline-none focus:ring-2 focus:ring-landrover-keswick/20">
+                {allMonths.map(m => (
+                  <option value={m} selected={m === startDate}>{formatMonth(m)}</option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <label class="block text-xs text-landrover-marine/60 mb-1">End Date</label>
+              <select name="end" class="px-3 py-2 bg-white border border-landrover-arles/30 rounded text-sm focus:outline-none focus:ring-2 focus:ring-landrover-keswick/20">
+                {allMonths.map(m => (
+                  <option value={m} selected={m === endDate}>{formatMonth(m)}</option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <label class="block text-xs text-landrover-marine/60 mb-1">Restaurant</label>
+              <select name="restaurant" class="px-3 py-2 bg-white border border-landrover-arles/30 rounded text-sm focus:outline-none focus:ring-2 focus:ring-landrover-keswick/20">
+                <option value="all" selected={selectedRestaurant === 'all'}>All Restaurants</option>
+                <option value="laluna" selected={selectedRestaurant === 'laluna'}>La Luna</option>
+                <option value="coyol" selected={selectedRestaurant === 'coyol'}>Coyol</option>
+                <option value="esh" selected={selectedRestaurant === 'esh'}>Esh</option>
+              </select>
+            </div>
+            
+            <button 
+              type="submit"
+              class="px-4 py-2 bg-landrover-keswick text-white rounded text-sm font-medium hover:bg-landrover-coniston transition-colors"
+            >
+              Generate Report
+            </button>
+            
+            <!-- Quick Presets -->
+            <div class="flex gap-2 ml-auto">
+              <a href={`?start=2026-01&end=2026-03&restaurant=${selectedRestaurant}&currency=${currency}`} 
+                 class="px-3 py-2 text-xs bg-landrover-limestone/50 text-landrover-marine rounded hover:bg-landrover-limestone transition-colors">
+                Q1 2026
+              </a>
+              <a href={`?start=2025-01&end=2025-12&restaurant=${selectedRestaurant}&currency=${currency}`} 
+                 class="px-3 py-2 text-xs bg-landrover-limestone/50 text-landrover-marine rounded hover:bg-landrover-limestone transition-colors">
+                Full 2025
+              </a>
+              <a href={`?start=2025-01&end=2025-03&restaurant=${selectedRestaurant}&currency=${currency}`} 
+                 class="px-3 py-2 text-xs bg-landrover-limestone/50 text-landrover-marine rounded hover:bg-landrover-limestone transition-colors">
+                Q1 2025
+              </a>
+            </div>
+          </form>
+        </div>
+      </header>
+
+      <div class="p-4 lg:p-8 space-y-6">
+        
+        {filteredData.length === 0 ? (
+          <div class="card p-8 text-center">
+            <p class="text-landrover-marine/60">No data available for the selected period.</p>
+          </div>
+        ) : (
+          <>
+            <!-- Summary Card -->
+            <div class="card p-5 lg:p-8 bg-landrover-keswick text-white">
+              <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                <div>
+                  <p class="text-landrover-limestone/60 text-xs uppercase tracking-wider mb-1">Total Sales</p>
+                  <p class="text-4xl lg:text-5xl font-semibold">{fmt(totals.totalSales)}</p>
+                  <p class="text-landrover-limestone/60 text-sm mt-2">
+                    {totals.customers > 0 ? `${totals.customers.toLocaleString()} customers • ` : ''}
+                    {totals.orders > 0 ? `${totals.orders.toLocaleString()} orders • ` : ''}
+                    {monthlyBreakdown.length} month{monthlyBreakdown.length !== 1 ? 's' : ''}
+                  </p>
+                </div>
+                
+                {comparisonData && (
+                  <div class="text-right">
+                    <p class="text-landrover-limestone/60 text-xs uppercase">vs Previous Period</p>
+                    <p class={`text-3xl font-bold ${comparisonData.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                      {comparisonData.change >= 0 ? '↑' : '↓'}{Math.abs(comparisonData.change).toFixed(1)}%
+                    </p>
+                    <p class="text-landrover-limestone/60 text-xs mt-1">{comparisonData.period}</p>
+                  </div>
+                )}
+              </div>
+              
+              <div class="flex gap-6 pt-4 mt-4 border-t border-white/20">
+                <div>
+                  <p class="text-landrover-limestone/60 text-xs uppercase">Food</p>
+                  <p class="text-xl font-semibold">{fmt(totals.food)}</p>
+                </div>
+                <div>
+                  <p class="text-landrover-limestone/60 text-xs uppercase">Bar</p>
+                  <p class="text-xl font-semibold">{fmt(totals.bar)}</p>
+                </div>
+                <div>
+                  <p class="text-landrover-limestone/60 text-xs uppercase">Cash</p>
+                  <p class="text-xl font-semibold">{fmt(totals.cash)}</p>
+                </div>
+                <div>
+                  <p class="text-landrover-limestone/60 text-xs uppercase">Card</p>
+                  <p class="text-xl font-semibold">{fmt(totals.card)}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profitability (if gastos data exists) -->
+            {totals.gastos > 0 && (
+              <div class="card p-5 lg:p-8">
+                <h3 class="text-lg font-semibold text-landrover-santorini mb-6">Profitability</h3>
+                
+                <div class="flex items-center justify-center gap-4 lg:gap-8 mb-6">
+                  <div class="text-center">
+                    <p class="text-2xl lg:text-4xl font-bold text-landrover-keswick">{fmt(totals.totalSales)}</p>
+                    <p class="text-sm text-landrover-marine/60">Sales</p>
+                  </div>
+                  <div class="text-2xl lg:text-4xl text-landrover-marine/30">−</div>
+                  <div class="text-center">
+                    <p class="text-2xl lg:text-4xl font-bold text-red-500">{fmt(totals.gastos)}</p>
+                    <p class="text-sm text-landrover-marine/60">Payments</p>
+                  </div>
+                  <div class="text-2xl lg:text-4xl text-landrover-marine/30">=</div>
+                  <div class="text-center">
+                    <p class="text-2xl lg:text-4xl font-bold text-green-600">{fmt(grossProfit)}</p>
+                    <p class="text-sm text-landrover-marine/60">Profit</p>
+                  </div>
+                </div>
+                
+                <div class="mb-4">
+                  <div class="flex justify-between text-sm mb-2">
+                    <span class="text-landrover-marine/60">Margin</span>
+                    <span class="font-bold text-green-600 text-lg">{margin.toFixed(0)}%</span>
+                  </div>
+                  <div class="h-4 bg-red-100 rounded-full overflow-hidden">
+                    <div 
+                      class="h-full bg-green-500 rounded-full transition-all"
+                      style={`width: ${margin}%`}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <!-- Per Restaurant Breakdown -->
+            {selectedRestaurant === 'all' && restaurantBreakdown.length > 0 && (
+              <div class="card">
+                <div class="px-4 lg:px-6 py-3 lg:py-4 border-b border-landrover-arles/30">
+                  <h3 class="font-semibold text-landrover-santorini">By Restaurant</h3>
+                </div>
+                
+                <div class="overflow-x-auto">
+                  <table class="w-full text-sm">
+                    <thead>
+                      <tr class="border-b border-landrover-arles/30">
+                        <th class="px-4 py-3 text-left font-medium text-landrover-marine/60">Restaurant</th>
+                        <th class="px-4 py-3 text-right font-medium text-landrover-marine/60">Sales</th>
+                        <th class="px-4 py-3 text-right font-medium text-landrover-marine/60">Food</th>
+                        <th class="px-4 py-3 text-right font-medium text-landrover-marine/60">Bar</th>
+                        {restaurantBreakdown.some(r => r.gastos > 0) && (
+                          <>
+                            <th class="px-4 py-3 text-right font-medium text-landrover-marine/60">Payments</th>
+                            <th class="px-4 py-3 text-right font-medium text-landrover-marine/60">Profit</th>
+                            <th class="px-4 py-3 text-right font-medium text-landrover-marine/60">Margin</th>
+                          </>
+                        )}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {restaurantBreakdown.map(r => (
+                        <tr class="border-b border-landrover-arles/10 hover:bg-landrover-limestone/20">
+                          <td class="px-4 py-3">
+                            <div class="flex items-center gap-3">
+                              <div class="w-3 h-3 rounded" style={`background-color: ${r.color}`}></div>
+                              <span class="font-medium">{r.name}</span>
+                            </div>
+                          </td>
+                          <td class="px-4 py-3 text-right font-semibold">{fmt(r.sales)}</td>
+                          <td class="px-4 py-3 text-right">{fmt(r.food)}</td>
+                          <td class="px-4 py-3 text-right">{fmt(r.bar)}</td>
+                          {restaurantBreakdown.some(x => x.gastos > 0) && (
+                            <>
+                              <td class="px-4 py-3 text-right text-red-500">{fmt(r.gastos)}</td>
+                              <td class="px-4 py-3 text-right text-green-600 font-semibold">{fmt(r.profit)}</td>
+                              <td class="px-4 py-3 text-right">
+                                <span class={`px-2 py-0.5 rounded text-xs font-bold ${r.margin >= 50 ? 'bg-green-100 text-green-700' : r.margin >= 30 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
+                                  {r.margin.toFixed(0)}%
+                                </span>
+                              </td>
+                            </>
+                          )}
+                        </tr>
+                      ))}
+                    </tbody>
+                    <tfoot>
+                      <tr class="bg-landrover-limestone/30 font-semibold">
+                        <td class="px-4 py-3">Total</td>
+                        <td class="px-4 py-3 text-right">{fmt(totals.totalSales)}</td>
+                        <td class="px-4 py-3 text-right">{fmt(totals.food)}</td>
+                        <td class="px-4 py-3 text-right">{fmt(totals.bar)}</td>
+                        {restaurantBreakdown.some(r => r.gastos > 0) && (
+                          <>
+                            <td class="px-4 py-3 text-right text-red-500">{fmt(totals.gastos)}</td>
+                            <td class="px-4 py-3 text-right text-green-600">{fmt(grossProfit)}</td>
+                            <td class="px-4 py-3 text-right">
+                              <span class="px-2 py-0.5 rounded text-xs font-bold bg-green-100 text-green-700">
+                                {margin.toFixed(0)}%
+                              </span>
+                            </td>
+                          </>
+                        )}
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            <!-- Monthly Breakdown -->
+            {monthlyBreakdown.length > 1 && (
+              <div class="card">
+                <div class="px-4 lg:px-6 py-3 lg:py-4 border-b border-landrover-arles/30">
+                  <h3 class="font-semibold text-landrover-santorini">Monthly Breakdown</h3>
+                </div>
+                
+                <div class="overflow-x-auto">
+                  <table class="w-full text-sm">
+                    <thead>
+                      <tr class="border-b border-landrover-arles/30">
+                        <th class="px-4 py-3 text-left font-medium text-landrover-marine/60">Month</th>
+                        <th class="px-4 py-3 text-right font-medium text-landrover-marine/60">Sales</th>
+                        <th class="px-4 py-3 text-right font-medium text-landrover-marine/60">Food</th>
+                        <th class="px-4 py-3 text-right font-medium text-landrover-marine/60">Bar</th>
+                        {monthlyBreakdown.some(m => m.gastos > 0) && (
+                          <th class="px-4 py-3 text-right font-medium text-landrover-marine/60">Payments</th>
+                        )}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {monthlyBreakdown.map(m => (
+                        <tr class="border-b border-landrover-arles/10 hover:bg-landrover-limestone/20">
+                          <td class="px-4 py-3 font-medium">{formatMonth(m.month)}</td>
+                          <td class="px-4 py-3 text-right font-semibold">{fmt(m.totalSales)}</td>
+                          <td class="px-4 py-3 text-right">{fmt(m.food)}</td>
+                          <td class="px-4 py-3 text-right">{fmt(m.bar)}</td>
+                          {monthlyBreakdown.some(x => x.gastos > 0) && (
+                            <td class="px-4 py-3 text-right text-red-500">{fmt(m.gastos)}</td>
+                          )}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            <!-- Chart -->
+            {monthlyBreakdown.length > 1 && (
+              <div class="card">
+                <div class="px-4 lg:px-6 py-3 lg:py-4 border-b border-landrover-arles/30">
+                  <h3 class="font-semibold text-landrover-santorini">Sales Trend</h3>
+                </div>
+                
+                <div class="p-4 lg:p-8">
+                  <div class="flex items-end justify-around gap-4" style="height: 200px;">
+                    {monthlyBreakdown.map(m => {
+                      const maxSales = Math.max(...monthlyBreakdown.map(x => x.totalSales));
+                      const height = maxSales > 0 ? Math.max(10, (m.totalSales / maxSales) * 100) : 50;
+                      
+                      return (
+                        <div class="flex-1 flex flex-col items-center max-w-24" style="height: 100%;">
+                          <div class="text-center mb-2 flex-shrink-0">
+                            <p class="text-xs font-bold text-landrover-santorini">{fmt(m.totalSales)}</p>
+                          </div>
+                          
+                          <div class="w-full flex-1 flex items-end justify-center">
+                            <div 
+                              class="w-10 rounded-t-lg bg-gradient-to-t from-landrover-keswick to-landrover-coniston shadow-md"
+                              style={`height: ${height}%;`}
+                            ></div>
+                          </div>
+                          
+                          <p class="text-xs font-semibold text-landrover-marine mt-2 flex-shrink-0">
+                            {formatMonth(m.month).split(' ')[0].slice(0, 3)}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        <!-- Data Info -->
+        <p class="text-xs text-landrover-marine/40 text-center">
+          Last updated: {data.lastUpdated ? new Date(data.lastUpdated).toLocaleString('en-US') : 'N/A'}
+        </p>
+      </div>
+    </main>
+  </div>
+</Layout>

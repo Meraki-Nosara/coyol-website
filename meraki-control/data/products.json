@@ -1,0 +1,1665 @@
+{
+  "products": {
+    "602760131_huevo de pastoreo cartn de 15 unidades 2100": {
+      "supplierId": "602760131",
+      "supplierName": "KARLA DE LOS ANGELES MARTINEZ OVIEDO",
+      "description": "HUEVO DE PASTOREO, CARTÓN DE 15 UNIDADES. 2100",
+      "normalizedName": "huevo de pastoreo cartn de 15 unidades 2100",
+      "cabyCode": "0231200000000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 2100,
+          "quantity": 10,
+          "invoiceClave": "50606042600060276013100100001010000000322100041769"
+        },
+        {
+          "date": "2026-04-06",
+          "unitPrice": 2100,
+          "quantity": 15,
+          "invoiceClave": "50606042600060276013100100001010000000323100041769"
+        }
+      ]
+    },
+    "3101074903_carne molida star ranch angus": {
+      "supplierId": "3101074903",
+      "supplierName": "EXPORTADORA PMT S.A.",
+      "description": "CARNE MOLIDA STAR RANCH ANGUS",
+      "normalizedName": "carne molida star ranch angus",
+      "cabyCode": "2113100030100",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 20800,
+          "quantity": 8,
+          "invoiceClave": "50606042600310107490301000001010001076970172952857"
+        }
+      ]
+    },
+    "3101109180_queso granapadano granarolo pz 1kaprx x1": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "QUESO GRANAPADANO GRANAROLO PZ 1kAPRX x1",
+      "normalizedName": "queso granapadano granarolo pz 1kaprx x1",
+      "cabyCode": "2225900000000",
+      "unit": "Kg",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 14650,
+          "quantity": 4.9,
+          "invoiceClave": "50606042600310110918000200002010000165830106042630"
+        },
+        {
+          "date": "2026-04-06",
+          "unitPrice": 14650,
+          "quantity": 3.65,
+          "invoiceClave": "50606042600310110918000200002010000165865106042665"
+        }
+      ]
+    },
+    "3101109180_salami genoa importador pieza 2pc": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "SALAMI GENOA IMPORTADOR PIEZA 2PC",
+      "normalizedName": "salami genoa importador pieza 2pc",
+      "cabyCode": "2118499990099",
+      "unit": "Kg",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 6375,
+          "quantity": 2.95,
+          "invoiceClave": "50606042600310110918000200002010000165853106042653"
+        }
+      ]
+    },
+    "3101109180_pepperoni importado swift rebanado 227 kg": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "PEPPERONI IMPORTADO SWIFT REBANADO  2.27 kg",
+      "normalizedName": "pepperoni importado swift rebanado 227 kg",
+      "cabyCode": "2118499010099",
+      "unit": "Kg",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 7680,
+          "quantity": 2.27,
+          "invoiceClave": "50606042600310110918000200002010000165853106042653"
+        }
+      ]
+    },
+    "3101109180_prosciutto crudo silver citterio rebanado pack 500gr": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "PROSCIUTTO CRUDO SILVER CITTERIO REBANADO PACK 500GR",
+      "normalizedName": "prosciutto crudo silver citterio rebanado pack 500gr",
+      "cabyCode": "2118902000100",
+      "unit": "Kg",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 22839,
+          "quantity": 3,
+          "invoiceClave": "50606042600310110918000200002010000165853106042653"
+        }
+      ]
+    },
+    "3101109180_harina trigo nacarina 25 kg": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "HARINA TRIGO NACARINA 25 KG",
+      "normalizedName": "harina trigo nacarina 25 kg",
+      "cabyCode": "2311000000100",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 19959,
+          "quantity": 4,
+          "invoiceClave": "50606042600310110918000200002010000165873106042673"
+        }
+      ]
+    },
+    "3101109180_vinagre claro galon pippo x4": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "VINAGRE CLARO GALON PIPPO X4",
+      "normalizedName": "vinagre claro galon pippo x4",
+      "cabyCode": "2399400000100",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 1725,
+          "quantity": 8,
+          "invoiceClave": "50606042600310110918000200002010000165873106042673"
+        }
+      ]
+    },
+    "3101109180_tahini roland 1814k 1x1": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "TAHINI ROLAND 18.14k 1X1",
+      "normalizedName": "tahini roland 1814k 1x1",
+      "cabyCode": "2399501990000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 101630,
+          "quantity": 1,
+          "invoiceClave": "50606042600310110918000200002010000165873106042673"
+        }
+      ]
+    },
+    "3101109180_hig jroll aquastream bco 2hojas lucart 340m 1x6 812222": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "HIG JROLL AQUASTREAM BCO 2HOJAS LUCART 340M 1X6 812222",
+      "normalizedName": "hig jroll aquastream bco 2hojas lucart 340m 1x6 812222",
+      "cabyCode": "3219301000000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 19251,
+          "quantity": 1,
+          "invoiceClave": "50606042600310110918000200002010000165873106042673"
+        }
+      ]
+    },
+    "3101109180_leche de coco roland 400ml 1x24": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "LECHE DE COCO ROLAND 400ml 1X24",
+      "normalizedName": "leche de coco roland 400ml 1x24",
+      "cabyCode": "2222900009900",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 1720,
+          "quantity": 10,
+          "invoiceClave": "50606042600310110918000200002010000165873106042673"
+        },
+        {
+          "date": "2026-04-06",
+          "unitPrice": 1720,
+          "quantity": 15,
+          "invoiceClave": "50606042600310110918000200002010000165875106042675"
+        }
+      ]
+    },
+    "3101109180_crema de coco costamar 16k 1x12": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "CREMA DE COCO COSTAMAR 1.6k 1X12",
+      "normalizedName": "crema de coco costamar 16k 1x12",
+      "cabyCode": "2222900009900",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 6296,
+          "quantity": 2,
+          "invoiceClave": "50606042600310110918000200002010000165873106042673"
+        }
+      ]
+    },
+    "3101109180_couscous roland 500g 1x20": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "COUSCOUS ROLAND 500g 1X20",
+      "normalizedName": "couscous roland 500g 1x20",
+      "cabyCode": "2372200000000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 3499.88,
+          "quantity": 8,
+          "invoiceClave": "50606042600310110918000200002010000165873106042673"
+        }
+      ]
+    },
+    "3101109180_azucar en bolsa 2 kg 1x12": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "AZUCAR EN BOLSA 2 KG 1X12",
+      "normalizedName": "azucar en bolsa 2 kg 1x12",
+      "cabyCode": "2352001010000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 1554,
+          "quantity": 12,
+          "invoiceClave": "50606042600310110918000200002010000165873106042673"
+        }
+      ]
+    },
+    "3101109180_olio sansa luglio 5 lt x2": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "OLIO SANSA LUGLIO 5 LT X2",
+      "normalizedName": "olio sansa luglio 5 lt x2",
+      "cabyCode": "2169300000000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 18067.5,
+          "quantity": 12,
+          "invoiceClave": "50606042600310110918000200002010000165873106042673"
+        }
+      ]
+    },
+    "3101109180_aceite sesamo roland 17l 1x10": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "ACEITE SESAMO ROLAND 1.7L 1X10",
+      "normalizedName": "aceite sesamo roland 17l 1x10",
+      "cabyCode": "2169300000000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 21370.78,
+          "quantity": 1,
+          "invoiceClave": "50606042600310110918000200002010000165875106042675"
+        }
+      ]
+    },
+    "3101109180_levadura salada tempo 500 gramos 1x20": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "LEVADURA SALADA TEMPO 500 GRAMOS 1X20",
+      "normalizedName": "levadura salada tempo 500 gramos 1x20",
+      "cabyCode": "2399602000100",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 1800,
+          "quantity": 5,
+          "invoiceClave": "50606042600310110918000200002010000165875106042675"
+        },
+        {
+          "date": "2026-04-06",
+          "unitPrice": 1800,
+          "quantity": 2,
+          "invoiceClave": "50606042600310110918000200002010000165962106042662"
+        }
+      ]
+    },
+    "3101109180_harina flores saco 25 kg": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "HARINA FLORES SACO 25 KG",
+      "normalizedName": "harina flores saco 25 kg",
+      "cabyCode": "2312000000500",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 18621,
+          "quantity": 5,
+          "invoiceClave": "50606042600310110918000200002010000165962106042662"
+        }
+      ]
+    },
+    "3101109180_azucar zukra sachets 1x100": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "AZUCAR ZUKRA SACHETS 1X100",
+      "normalizedName": "azucar zukra sachets 1x100",
+      "cabyCode": "2351101000000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 813,
+          "quantity": 1,
+          "invoiceClave": "50606042600310110918000200002010000165962106042662"
+        }
+      ]
+    },
+    "3101109180_sal saltarina fina 500 gr 95 pureza": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "SAL SALTARINA FINA 500 GR 95% PUREZA",
+      "normalizedName": "sal saltarina fina 500 gr 95 pureza",
+      "cabyCode": "2399908000200",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 220,
+          "quantity": 25,
+          "invoiceClave": "50606042600310110918000200002010000165962106042662"
+        }
+      ]
+    },
+    "3101109180_azucar en bolsa 5 kg 1x6": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "AZUCAR EN BOLSA 5 KG 1X6",
+      "normalizedName": "azucar en bolsa 5 kg 1x6",
+      "cabyCode": "2352001010000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 3856,
+          "quantity": 6,
+          "invoiceClave": "50606042600310110918000200002010000165962106042662"
+        }
+      ]
+    },
+    "3101109180_aceite spray vegalene premium 617 oz 482 gr 1x6": {
+      "supplierId": "3101109180",
+      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "description": "ACEITE SPRAY VEGALENE PREMIUM 6/17 OZ 482 GR 1X6",
+      "normalizedName": "aceite spray vegalene premium 617 oz 482 gr 1x6",
+      "cabyCode": "2169300000000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 4940,
+          "quantity": 3,
+          "invoiceClave": "50606042600310110918000200002010000165962106042662"
+        }
+      ]
+    },
+    "3101409261_alquiler licencia rh": {
+      "supplierId": "3101409261",
+      "supplierName": "NCQ Solutions S.A.",
+      "description": "ALQUILER LICENCIA RH",
+      "normalizedName": "alquiler licencia rh",
+      "cabyCode": "7331100000000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 35000,
+          "quantity": 1,
+          "invoiceClave": "50606042600310140926100100001010000112270115119505"
+        }
+      ]
+    },
+    "504050547_aguacate kg": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "AGUACATE KG",
+      "normalizedName": "aguacate kg",
+      "cabyCode": "0131100020400",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 2600,
+          "quantity": 30,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_ajo pelado kg": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "AJO PELADO KG",
+      "normalizedName": "ajo pelado kg",
+      "cabyCode": "0125200000100",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 3250,
+          "quantity": 3,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_albahaca kg": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "ALBAHACA KG",
+      "normalizedName": "albahaca kg",
+      "cabyCode": "0193009010000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 2600,
+          "quantity": 1,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_berenjena und": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "BERENJENA UND",
+      "normalizedName": "berenjena und",
+      "cabyCode": "0123300000000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 780,
+          "quantity": 50,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_camote kg": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "CAMOTE KG",
+      "normalizedName": "camote kg",
+      "cabyCode": "0153099010000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 1040,
+          "quantity": 3,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_cebolla morada kg": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "CEBOLLA MORADA KG",
+      "normalizedName": "cebolla morada kg",
+      "cabyCode": "0125300020300",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 1690,
+          "quantity": 50,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_chayote negro und": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "CHAYOTE NEGRO UND",
+      "normalizedName": "chayote negro und",
+      "cabyCode": "0123902000200",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 650,
+          "quantity": 5,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_chile dulce und": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "CHILE DULCE UND",
+      "normalizedName": "chile dulce und",
+      "cabyCode": "0123100021200",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 598,
+          "quantity": 90,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_culantro castilla rollo": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "CULANTRO CASTILLA ROLLO",
+      "normalizedName": "culantro castilla rollo",
+      "cabyCode": "0129019020200",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 260,
+          "quantity": 40,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_hierba buena kg": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "HIERBA BUENA KG",
+      "normalizedName": "hierba buena kg",
+      "cabyCode": "0193013010000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 3900,
+          "quantity": 3,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_lechuga americana unid": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "LECHUGA AMERICANA UNID",
+      "normalizedName": "lechuga americana unid",
+      "cabyCode": "0121402020800",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 325,
+          "quantity": 10,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_papa blanca kg": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "PAPA BLANCA KG",
+      "normalizedName": "papa blanca kg",
+      "cabyCode": "0151002020100",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 812.5,
+          "quantity": 80,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_kell kg": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "KELL KG",
+      "normalizedName": "kell kg",
+      "cabyCode": "0121201020500",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 3120,
+          "quantity": 2,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_pepino kg": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "PEPINO KG",
+      "normalizedName": "pepino kg",
+      "cabyCode": "0123200000100",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 390,
+          "quantity": 25,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_perejil kilo": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "PEREJIL KILO",
+      "normalizedName": "perejil kilo",
+      "cabyCode": "0121999020600",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 4290,
+          "quantity": 4,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_platano verde unid": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "PLATANO VERDE  UNID",
+      "normalizedName": "platano verde unid",
+      "cabyCode": "0131302000200",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 299,
+          "quantity": 60,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_tiquisque kg": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "TIQUISQUE KG",
+      "normalizedName": "tiquisque kg",
+      "cabyCode": "0159102010000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 2080,
+          "quantity": 3,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_tomate primera kg": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "TOMATE PRIMERA KG",
+      "normalizedName": "tomate primera kg",
+      "cabyCode": "0123400029900",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 2028,
+          "quantity": 50,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_yuca kg": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "YUCA KG",
+      "normalizedName": "yuca kg",
+      "cabyCode": "0152000010000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 715,
+          "quantity": 3,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_zuquini und": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "ZUQUINI UND",
+      "normalizedName": "zuquini und",
+      "cabyCode": "0123507009900",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 1040,
+          "quantity": 12,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_flor comestible band": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "FLOR COMESTIBLE BAND",
+      "normalizedName": "flor comestible band",
+      "cabyCode": "0196201009900",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 1755,
+          "quantity": 30,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_hongo blanco band": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "HONGO BLANCO BAND",
+      "normalizedName": "hongo blanco band",
+      "cabyCode": "0127001000500",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 1820,
+          "quantity": 15,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_maiz dulce bandeja400g": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "MAIZ DULCE BANDEJA400G",
+      "normalizedName": "maiz dulce bandeja400g",
+      "cabyCode": "0129008020300",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 1690,
+          "quantity": 4,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_mini vainica bolsa 400g": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "MINI VAINICA BOLSA 400G",
+      "normalizedName": "mini vainica bolsa 400g",
+      "cabyCode": "0129017020100",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 1950,
+          "quantity": 20,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_mini zanahoria band 500g": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "MINI ZANAHORIA BAND 500G",
+      "normalizedName": "mini zanahoria band 500g",
+      "cabyCode": "0125101019900",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 1560,
+          "quantity": 3,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_tomate cherry band 400 g": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "TOMATE CHERRY BAND 400 G",
+      "normalizedName": "tomate cherry band 400 g",
+      "cabyCode": "0123400020100",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 1430,
+          "quantity": 6,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_uchua pelada band": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "UCHUA PELADA BAND",
+      "normalizedName": "uchua pelada band",
+      "cabyCode": "0135935000000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 1430,
+          "quantity": 6,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_arandanos bandeja": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "ARANDANOS BANDEJA",
+      "normalizedName": "arandanos bandeja",
+      "cabyCode": "0135501009900",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 1495.572,
+          "quantity": 6,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_kiwi kg": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "KIWI KG",
+      "normalizedName": "kiwi kg",
+      "cabyCode": "0135200000000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 3364.881,
+          "quantity": 0.5,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_limon mesino unid": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "LIMON MESINO UNID",
+      "normalizedName": "limon mesino unid",
+      "cabyCode": "0132200000500",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 195,
+          "quantity": 20,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_manzana gala 80": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "MANZANA GALA 80",
+      "normalizedName": "manzana gala 80",
+      "cabyCode": "0134100000500",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 386.139,
+          "quantity": 3,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_manzana granny 80 und": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "MANZANA GRANNY 80 UND",
+      "normalizedName": "manzana granny 80 und",
+      "cabyCode": "0134100000800",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 386.139,
+          "quantity": 3,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_naranaja und": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "NARANAJA UND",
+      "normalizedName": "naranaja und",
+      "cabyCode": "0132300019900",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 161.2,
+          "quantity": 80,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_pina primera unid": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "PINA PRIMERA UNID",
+      "normalizedName": "pina primera unid",
+      "cabyCode": "0131800029900",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 1235,
+          "quantity": 10,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "504050547_sandia kg": {
+      "supplierId": "504050547",
+      "supplierName": "JOSE ALEXIS RANGEL CARRILLO",
+      "description": "SANDIA KG",
+      "normalizedName": "sandia kg",
+      "cabyCode": "0122100009900",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 585,
+          "quantity": 51.5,
+          "invoiceClave": "50607042600050405054700100001010000006568187258224"
+        }
+      ]
+    },
+    "3101395115_pechuga especial 5k x bolsa fresco": {
+      "supplierId": "3101395115",
+      "supplierName": "Guana Pollo S.A.",
+      "description": "Pechuga Especial  5K X Bolsa Fresco",
+      "normalizedName": "pechuga especial 5k x bolsa fresco",
+      "cabyCode": "2114100030300",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 3700,
+          "quantity": 30.2,
+          "invoiceClave": "50607042600310139511500201003010000008602300008602"
+        }
+      ]
+    },
+    "3101794410_eneldo rollo": {
+      "supplierId": "3101794410",
+      "supplierName": "AGRO LOS CARTAGOS",
+      "description": "ENELDO ROLLO",
+      "normalizedName": "eneldo rollo",
+      "cabyCode": "0169906020000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 530.97345,
+          "quantity": 2,
+          "invoiceClave": "50607042600310179441000400001010000052013135565932"
+        }
+      ]
+    },
+    "3102765685_incienso palo santo masala 12u": {
+      "supplierId": "3102765685",
+      "supplierName": "CR AGUA AZUL INC SOCIEDAD DE RESPONSABILIDAD LIMITADA",
+      "description": "INCIENSO PALO SANTO MASALA 12U",
+      "normalizedName": "incienso palo santo masala 12u",
+      "cabyCode": "3533101000000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 2057.52212,
+          "quantity": 5,
+          "invoiceClave": "50607042600310276568500100001010000074986147041966"
+        }
+      ]
+    },
+    "3102852678_swiss cheese 907gr": {
+      "supplierId": "3102852678",
+      "supplierName": "GRUPO SUPERMERCADO NOSARA LIMITADA",
+      "description": "SWISS CHEESE 907GR",
+      "normalizedName": "swiss cheese 907gr",
+      "cabyCode": "2225102010200",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-07",
+          "unitPrice": 6017.69912,
+          "quantity": 2,
+          "invoiceClave": "50607042600310285267800100001010000119037115731496"
+        }
+      ]
+    },
+    "503320281_hielo en cubo 10k": {
+      "supplierId": "503320281",
+      "supplierName": "WALLY ROMAN FONSECA VILLEGAS",
+      "description": "HIELO EN CUBO 10K",
+      "normalizedName": "hielo en cubo 10k",
+      "cabyCode": "1740001000000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 973.45,
+          "quantity": 16,
+          "invoiceClave": "50606042600050332028100100001010000005522139536935"
+        }
+      ]
+    },
+    "3002617388_servicios de recoleccin de materiales reciclables no peligrosos otros": {
+      "supplierId": "3002617388",
+      "supplierName": "ASOCIACION DE RECICLAJE DE DESECHOS DE NOSARA",
+      "description": "Servicios de recolección de materiales reciclables no peligrosos, otros",
+      "normalizedName": "servicios de recoleccin de materiales reciclables no peligrosos otros",
+      "cabyCode": "9422900000000",
+      "unit": "Unid",
+      "category": "unknown",
+      "prices": [
+        {
+          "date": "2026-04-06",
+          "unitPrice": 40,
+          "quantity": 1,
+          "invoiceClave": "50606042600300261738800100001010000001346112360909"
+        }
+      ]
+    }
+  },
+  "priceHistory": [
+    {
+      "date": "2026-04-06",
+      "productKey": "602760131_huevo de pastoreo cartn de 15 unidades 2100",
+      "description": "HUEVO DE PASTOREO, CARTÓN DE 15 UNIDADES. 2100",
+      "supplierId": "602760131",
+      "unitPrice": 2100,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "602760131_huevo de pastoreo cartn de 15 unidades 2100",
+      "description": "HUEVO DE PASTOREO, CARTÓN DE 15 UNIDADES. 2100",
+      "supplierId": "602760131",
+      "unitPrice": 2100,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101074903_carne molida star ranch angus",
+      "description": "CARNE MOLIDA STAR RANCH ANGUS",
+      "supplierId": "3101074903",
+      "unitPrice": 20800,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_queso granapadano granarolo pz 1kaprx x1",
+      "description": "QUESO GRANAPADANO GRANAROLO PZ 1kAPRX x1",
+      "supplierId": "3101109180",
+      "unitPrice": 14650,
+      "unit": "Kg"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_salami genoa importador pieza 2pc",
+      "description": "SALAMI GENOA IMPORTADOR PIEZA 2PC",
+      "supplierId": "3101109180",
+      "unitPrice": 6375,
+      "unit": "Kg"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_pepperoni importado swift rebanado 227 kg",
+      "description": "PEPPERONI IMPORTADO SWIFT REBANADO  2.27 kg",
+      "supplierId": "3101109180",
+      "unitPrice": 7680,
+      "unit": "Kg"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_prosciutto crudo silver citterio rebanado pack 500gr",
+      "description": "PROSCIUTTO CRUDO SILVER CITTERIO REBANADO PACK 500GR",
+      "supplierId": "3101109180",
+      "unitPrice": 22839,
+      "unit": "Kg"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_queso granapadano granarolo pz 1kaprx x1",
+      "description": "QUESO GRANAPADANO GRANAROLO PZ 1kAPRX x1",
+      "supplierId": "3101109180",
+      "unitPrice": 14650,
+      "unit": "Kg"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_harina trigo nacarina 25 kg",
+      "description": "HARINA TRIGO NACARINA 25 KG",
+      "supplierId": "3101109180",
+      "unitPrice": 19959,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_vinagre claro galon pippo x4",
+      "description": "VINAGRE CLARO GALON PIPPO X4",
+      "supplierId": "3101109180",
+      "unitPrice": 1725,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_tahini roland 1814k 1x1",
+      "description": "TAHINI ROLAND 18.14k 1X1",
+      "supplierId": "3101109180",
+      "unitPrice": 101630,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_hig jroll aquastream bco 2hojas lucart 340m 1x6 812222",
+      "description": "HIG JROLL AQUASTREAM BCO 2HOJAS LUCART 340M 1X6 812222",
+      "supplierId": "3101109180",
+      "unitPrice": 19251,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_leche de coco roland 400ml 1x24",
+      "description": "LECHE DE COCO ROLAND 400ml 1X24",
+      "supplierId": "3101109180",
+      "unitPrice": 1720,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_crema de coco costamar 16k 1x12",
+      "description": "CREMA DE COCO COSTAMAR 1.6k 1X12",
+      "supplierId": "3101109180",
+      "unitPrice": 6296,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_couscous roland 500g 1x20",
+      "description": "COUSCOUS ROLAND 500g 1X20",
+      "supplierId": "3101109180",
+      "unitPrice": 3499.88,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_azucar en bolsa 2 kg 1x12",
+      "description": "AZUCAR EN BOLSA 2 KG 1X12",
+      "supplierId": "3101109180",
+      "unitPrice": 1554,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_olio sansa luglio 5 lt x2",
+      "description": "OLIO SANSA LUGLIO 5 LT X2",
+      "supplierId": "3101109180",
+      "unitPrice": 18067.5,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_aceite sesamo roland 17l 1x10",
+      "description": "ACEITE SESAMO ROLAND 1.7L 1X10",
+      "supplierId": "3101109180",
+      "unitPrice": 21370.78,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_levadura salada tempo 500 gramos 1x20",
+      "description": "LEVADURA SALADA TEMPO 500 GRAMOS 1X20",
+      "supplierId": "3101109180",
+      "unitPrice": 1800,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_leche de coco roland 400ml 1x24",
+      "description": "LECHE DE COCO ROLAND 400ml 1X24",
+      "supplierId": "3101109180",
+      "unitPrice": 1720,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_harina flores saco 25 kg",
+      "description": "HARINA FLORES SACO 25 KG",
+      "supplierId": "3101109180",
+      "unitPrice": 18621,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_azucar zukra sachets 1x100",
+      "description": "AZUCAR ZUKRA SACHETS 1X100",
+      "supplierId": "3101109180",
+      "unitPrice": 813,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_sal saltarina fina 500 gr 95 pureza",
+      "description": "SAL SALTARINA FINA 500 GR 95% PUREZA",
+      "supplierId": "3101109180",
+      "unitPrice": 220,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_levadura salada tempo 500 gramos 1x20",
+      "description": "LEVADURA SALADA TEMPO 500 GRAMOS 1X20",
+      "supplierId": "3101109180",
+      "unitPrice": 1800,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_azucar en bolsa 5 kg 1x6",
+      "description": "AZUCAR EN BOLSA 5 KG 1X6",
+      "supplierId": "3101109180",
+      "unitPrice": 3856,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101109180_aceite spray vegalene premium 617 oz 482 gr 1x6",
+      "description": "ACEITE SPRAY VEGALENE PREMIUM 6/17 OZ 482 GR 1X6",
+      "supplierId": "3101109180",
+      "unitPrice": 4940,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3101409261_alquiler licencia rh",
+      "description": "ALQUILER LICENCIA RH",
+      "supplierId": "3101409261",
+      "unitPrice": 35000,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_aguacate kg",
+      "description": "AGUACATE KG",
+      "supplierId": "504050547",
+      "unitPrice": 2600,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_ajo pelado kg",
+      "description": "AJO PELADO KG",
+      "supplierId": "504050547",
+      "unitPrice": 3250,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_albahaca kg",
+      "description": "ALBAHACA KG",
+      "supplierId": "504050547",
+      "unitPrice": 2600,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_berenjena und",
+      "description": "BERENJENA UND",
+      "supplierId": "504050547",
+      "unitPrice": 780,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_camote kg",
+      "description": "CAMOTE KG",
+      "supplierId": "504050547",
+      "unitPrice": 1040,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_cebolla morada kg",
+      "description": "CEBOLLA MORADA KG",
+      "supplierId": "504050547",
+      "unitPrice": 1690,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_chayote negro und",
+      "description": "CHAYOTE NEGRO UND",
+      "supplierId": "504050547",
+      "unitPrice": 650,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_chile dulce und",
+      "description": "CHILE DULCE UND",
+      "supplierId": "504050547",
+      "unitPrice": 598,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_culantro castilla rollo",
+      "description": "CULANTRO CASTILLA ROLLO",
+      "supplierId": "504050547",
+      "unitPrice": 260,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_hierba buena kg",
+      "description": "HIERBA BUENA KG",
+      "supplierId": "504050547",
+      "unitPrice": 3900,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_lechuga americana unid",
+      "description": "LECHUGA AMERICANA UNID",
+      "supplierId": "504050547",
+      "unitPrice": 325,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_papa blanca kg",
+      "description": "PAPA BLANCA KG",
+      "supplierId": "504050547",
+      "unitPrice": 812.5,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_kell kg",
+      "description": "KELL KG",
+      "supplierId": "504050547",
+      "unitPrice": 3120,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_pepino kg",
+      "description": "PEPINO KG",
+      "supplierId": "504050547",
+      "unitPrice": 390,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_perejil kilo",
+      "description": "PEREJIL KILO",
+      "supplierId": "504050547",
+      "unitPrice": 4290,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_platano verde unid",
+      "description": "PLATANO VERDE  UNID",
+      "supplierId": "504050547",
+      "unitPrice": 299,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_tiquisque kg",
+      "description": "TIQUISQUE KG",
+      "supplierId": "504050547",
+      "unitPrice": 2080,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_tomate primera kg",
+      "description": "TOMATE PRIMERA KG",
+      "supplierId": "504050547",
+      "unitPrice": 2028,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_yuca kg",
+      "description": "YUCA KG",
+      "supplierId": "504050547",
+      "unitPrice": 715,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_zuquini und",
+      "description": "ZUQUINI UND",
+      "supplierId": "504050547",
+      "unitPrice": 1040,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_flor comestible band",
+      "description": "FLOR COMESTIBLE BAND",
+      "supplierId": "504050547",
+      "unitPrice": 1755,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_hongo blanco band",
+      "description": "HONGO BLANCO BAND",
+      "supplierId": "504050547",
+      "unitPrice": 1820,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_maiz dulce bandeja400g",
+      "description": "MAIZ DULCE BANDEJA400G",
+      "supplierId": "504050547",
+      "unitPrice": 1690,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_mini vainica bolsa 400g",
+      "description": "MINI VAINICA BOLSA 400G",
+      "supplierId": "504050547",
+      "unitPrice": 1950,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_mini zanahoria band 500g",
+      "description": "MINI ZANAHORIA BAND 500G",
+      "supplierId": "504050547",
+      "unitPrice": 1560,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_tomate cherry band 400 g",
+      "description": "TOMATE CHERRY BAND 400 G",
+      "supplierId": "504050547",
+      "unitPrice": 1430,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_uchua pelada band",
+      "description": "UCHUA PELADA BAND",
+      "supplierId": "504050547",
+      "unitPrice": 1430,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_arandanos bandeja",
+      "description": "ARANDANOS BANDEJA",
+      "supplierId": "504050547",
+      "unitPrice": 1495.572,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_kiwi kg",
+      "description": "KIWI KG",
+      "supplierId": "504050547",
+      "unitPrice": 3364.881,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_limon mesino unid",
+      "description": "LIMON MESINO UNID",
+      "supplierId": "504050547",
+      "unitPrice": 195,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_manzana gala 80",
+      "description": "MANZANA GALA 80",
+      "supplierId": "504050547",
+      "unitPrice": 386.139,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_manzana granny 80 und",
+      "description": "MANZANA GRANNY 80 UND",
+      "supplierId": "504050547",
+      "unitPrice": 386.139,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_naranaja und",
+      "description": "NARANAJA UND",
+      "supplierId": "504050547",
+      "unitPrice": 161.2,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_pina primera unid",
+      "description": "PINA PRIMERA UNID",
+      "supplierId": "504050547",
+      "unitPrice": 1235,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "504050547_sandia kg",
+      "description": "SANDIA KG",
+      "supplierId": "504050547",
+      "unitPrice": 585,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "3101395115_pechuga especial 5k x bolsa fresco",
+      "description": "Pechuga Especial  5K X Bolsa Fresco",
+      "supplierId": "3101395115",
+      "unitPrice": 3700,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "3101794410_eneldo rollo",
+      "description": "ENELDO ROLLO",
+      "supplierId": "3101794410",
+      "unitPrice": 530.97345,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "3102765685_incienso palo santo masala 12u",
+      "description": "INCIENSO PALO SANTO MASALA 12U",
+      "supplierId": "3102765685",
+      "unitPrice": 2057.52212,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-07",
+      "productKey": "3102852678_swiss cheese 907gr",
+      "description": "SWISS CHEESE 907GR",
+      "supplierId": "3102852678",
+      "unitPrice": 6017.69912,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "503320281_hielo en cubo 10k",
+      "description": "HIELO EN CUBO 10K",
+      "supplierId": "503320281",
+      "unitPrice": 973.45,
+      "unit": "Unid"
+    },
+    {
+      "date": "2026-04-06",
+      "productKey": "3002617388_servicios de recoleccin de materiales reciclables no peligrosos otros",
+      "description": "Servicios de recolección de materiales reciclables no peligrosos, otros",
+      "supplierId": "3002617388",
+      "unitPrice": 40,
+      "unit": "Unid"
+    }
+  ],
+  "metadata": {
+    "lastUpdated": "2026-04-07T21:11:44.259Z"
+  }
+}

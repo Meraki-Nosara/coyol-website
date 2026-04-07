@@ -1,0 +1,271 @@
+---
+import Layout from '../layouts/Layout.astro';
+import fs from 'fs';
+import path from 'path';
+import { loadMonthlyData, formatCurrency, formatMonth, USD_RATE } from '../lib/monthly-data';
+
+// Load all data
+const data = loadMonthlyData();
+const dataDir = path.join(process.cwd(), 'data');
+
+// Load MDO data
+let mdoData: any = { months: {} };
+const mdoPath = path.join(dataDir, 'mdo.json');
+if (fs.existsSync(mdoPath)) {
+  mdoData = JSON.parse(fs.readFileSync(mdoPath, 'utf8'));
+}
+
+// Load facturas/gastos data
+let facturasData: any = { totals: {} };
+const facturasPath = path.join(dataDir, 'facturas.json');
+if (fs.existsSync(facturasPath)) {
+  facturasData = JSON.parse(fs.readFileSync(facturasPath, 'utf8'));
+}
+
+// Get all months that have any data
+const allMonths = [...new Set([
+  ...data.monthly.map(m => m.month),
+  ...Object.keys(mdoData.months),
+])].sort().reverse(); // Most recent first
+
+// Check which reports exist
+const reportsDir = path.join(process.cwd(), 'reports');
+if (!fs.existsSync(reportsDir)) {
+  fs.mkdirSync(reportsDir, { recursive: true });
+}
+
+const existingReports = fs.existsSync(reportsDir) 
+  ? fs.readdirSync(reportsDir).filter(f => f.endsWith('.pdf'))
+  : [];
+
+// Build report status for each month
+const monthlyReports = allMonths.map(month => {
+  const monthData = data.monthly.filter(m => m.month === month && !m.partial);
+  const hasSales = monthData.length > 0;
+  const hasMDO = !!mdoData.months[month];
+  const hasGastos = monthData.some(m => m.gastos && m.gastos > 0);
+  
+  // Calculate totals
+  const sales = monthData.reduce((sum, m) => sum + m.totalSales, 0);
+  const gastos = monthData.reduce((sum, m) => sum + (m.gastos || 0), 0);
+  const mdo = hasMDO ? (mdoData.months[month].laluna + mdoData.months[month].coyol + mdoData.months[month].esh) : 0;
+  
+  // Check if PDF exists
+  const pdfName = `${month}-analysis.pdf`;
+  const hasPDF = existingReports.includes(pdfName);
+  
+  // Completeness
+  const isComplete = hasSales && hasMDO && hasGastos;
+  const status = isComplete ? 'complete' : hasSales ? 'partial' : 'missing';
+  const canGenerate = isComplete;
+  
+  return {
+    month,
+    label: formatMonth(month),
+    hasSales,
+    hasMDO,
+    hasGastos,
+    hasPDF,
+    pdfName,
+    status,
+    sales,
+    gastos,
+    mdo,
+    profit: sales - gastos - mdo,
+    margin: sales > 0 ? ((sales - gastos - mdo) / sales * 100) : 0,
+    isComplete
+  };
+});
+
+// URL params
+const url = new URL(Astro.request.url);
+const generated = url.searchParams.get('generated');
+---
+
+<Layout title="Monthly Reports">
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-landrover-keswick text-white flex-shrink-0 hidden lg:flex lg:flex-col">
+      <div class="p-6">
+        <h1 class="font-serif text-2xl font-semibold tracking-wide">Meraki</h1>
+        <p class="text-landrover-limestone/60 text-xs mt-1">Financial Control</p>
+      </div>
+      
+      <nav class="mt-4 flex-1">
+        <a href="/mensual" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          <span class="text-sm">Dashboard</span>
+        </a>
+        
+        <a href="/reportes" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span class="text-sm">Custom Reports</span>
+        </a>
+        
+        <a href="/informes" class="flex items-center gap-3 px-6 py-3 bg-white/10 text-white border-l-4 border-landrover-sand">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+          </svg>
+          <span class="text-sm font-medium">PDF Reports</span>
+        </a>
+        
+        <a href="/facturas" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span class="text-sm">Facturas</span>
+        </a>
+      </nav>
+      
+      <!-- User & Logout -->
+      <div class="p-6 border-t border-white/10">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-landrover-sand rounded-full flex items-center justify-center text-landrover-keswick font-semibold">
+              AP
+            </div>
+            <div>
+              <p class="text-sm font-medium">Angelina</p>
+              <p class="text-xs text-landrover-limestone/60">Admin</p>
+            </div>
+          </div>
+          <a href="/logout" class="text-landrover-limestone/60 hover:text-white transition-colors" title="Log out">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-auto">
+      <!-- Header -->
+      <header class="bg-white border-b border-landrover-arles/30 sticky top-0 z-40">
+        <div class="px-4 lg:px-8 py-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-xl font-semibold text-landrover-santorini">Monthly Analysis Reports</h2>
+              <p class="text-sm text-landrover-marine/60">Download PDF reports for each month</p>
+            </div>
+            
+            {generated && (
+              <div class="bg-green-100 text-green-700 px-4 py-2 rounded text-sm">
+                ✓ Report generated successfully
+              </div>
+            )}
+          </div>
+        </div>
+      </header>
+
+      <div class="p-4 lg:p-8 space-y-6">
+        
+        <!-- Legend -->
+        <div class="flex flex-wrap gap-4 text-sm">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-green-500"></span>
+            <span class="text-landrover-marine/60">Complete (Sales + MDO + Payments)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+            <span class="text-landrover-marine/60">Partial data</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-gray-300"></span>
+            <span class="text-landrover-marine/60">No data</span>
+          </div>
+        </div>
+
+        <!-- Reports Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {monthlyReports.map(report => (
+            <div class={`card overflow-hidden ${report.status === 'complete' ? 'border-green-200' : report.status === 'partial' ? 'border-yellow-200' : 'border-gray-200'} border-2`}>
+              <div class={`h-2 ${report.status === 'complete' ? 'bg-green-500' : report.status === 'partial' ? 'bg-yellow-500' : 'bg-gray-300'}`}></div>
+              
+              <div class="p-4">
+                <div class="flex items-center justify-between mb-3">
+                  <h3 class="font-semibold text-landrover-santorini text-lg">{report.label}</h3>
+                  <div class="flex gap-1">
+                    {report.hasSales && <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Sales</span>}
+                    {report.hasMDO && <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded">MDO</span>}
+                    {report.hasGastos && <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">Payments</span>}
+                  </div>
+                </div>
+                
+                {report.hasSales && (
+                  <div class="space-y-1 text-sm mb-4">
+                    <div class="flex justify-between">
+                      <span class="text-landrover-marine/60">Sales</span>
+                      <span class="font-medium">₡{Math.round(report.sales / 1000000)}M</span>
+                    </div>
+                    {report.hasGastos && (
+                      <div class="flex justify-between">
+                        <span class="text-landrover-marine/60">Payments</span>
+                        <span class="font-medium text-red-500">₡{Math.round(report.gastos / 1000000)}M</span>
+                      </div>
+                    )}
+                    {report.hasMDO && (
+                      <div class="flex justify-between">
+                        <span class="text-landrover-marine/60">MDO</span>
+                        <span class="font-medium text-purple-600">₡{Math.round(report.mdo / 1000000)}M</span>
+                      </div>
+                    )}
+                    {(report.hasGastos || report.hasMDO) && (
+                      <div class="flex justify-between pt-1 border-t border-landrover-arles/30">
+                        <span class="text-landrover-marine/60">Profit</span>
+                        <span class={`font-bold ${report.profit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          ₡{Math.round(report.profit / 1000000)}M ({report.margin.toFixed(0)}%)
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
+                
+                <div class="flex gap-2">
+                  {report.hasPDF ? (
+                    <a 
+                      href={`/api/report-download?month=${report.month}`}
+                      class="flex-1 px-4 py-2 bg-landrover-keswick text-white text-center text-sm font-medium rounded hover:bg-landrover-coniston transition-colors"
+                    >
+                      📄 Download PDF
+                    </a>
+                  ) : report.isComplete ? (
+                    <a 
+                      href={`/api/report-generate?month=${report.month}`}
+                      class="flex-1 px-4 py-2 bg-landrover-sand text-landrover-santorini text-center text-sm font-medium rounded hover:bg-landrover-sand/80 transition-colors"
+                    >
+                      ⚡ Generate PDF
+                    </a>
+                  ) : (
+                    <div class="flex-1 px-4 py-2 bg-gray-100 text-gray-500 text-center text-sm rounded">
+                      Missing: {!report.hasSales ? 'Sales ' : ''}{!report.hasMDO ? 'MDO ' : ''}{!report.hasGastos ? 'Payments' : ''}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Instructions -->
+        <div class="card p-6 bg-landrover-limestone/20">
+          <h3 class="font-semibold text-landrover-santorini mb-2">📋 Report Contents</h3>
+          <p class="text-sm text-landrover-marine/70 mb-4">
+            Each PDF report includes:
+          </p>
+          <ul class="text-sm text-landrover-marine/70 space-y-1 ml-4 list-disc">
+            <li>Executive summary with total sales and profit</li>
+            <li>Per-restaurant breakdown (La Luna, Coyol, Esh)</li>
+            <li>Key findings and performance indicators</li>
+            <li>Industry benchmark comparison</li>
+            <li>Recommendations for improvement</li>
+          </ul>
+        </div>
+      </div>
+    </main>
+  </div>
+</Layout>

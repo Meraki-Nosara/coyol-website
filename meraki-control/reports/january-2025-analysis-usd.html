@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Meraki Financial Analysis - January 2025 (USD)</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #fff;
+      color: #1a1f16;
+      padding: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    /* Page break control */
+    .page { 
+      page-break-after: always;
+      padding-bottom: 20px;
+    }
+    .page:last-child {
+      page-break-after: avoid;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #3D4F3D;
+    }
+    .header h1 {
+      font-size: 28px;
+      color: #3D4F3D;
+      margin-bottom: 5px;
+    }
+    .header h2 {
+      font-size: 20px;
+      color: #666;
+      font-weight: normal;
+    }
+    .note {
+      background: #FFF9E6;
+      border-left: 4px solid #C4A67C;
+      padding: 15px;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    .summary-box {
+      background: #3D4F3D;
+      color: white;
+      padding: 25px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+    .summary-box h3 {
+      font-size: 16px;
+      opacity: 0.8;
+      margin-bottom: 15px;
+    }
+    .summary-stats {
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+    }
+    .stat { }
+    .stat-value { font-size: 32px; font-weight: bold; }
+    .stat-label { font-size: 12px; opacity: 0.7; }
+    
+    h3 {
+      color: #3D4F3D;
+      font-size: 18px;
+      margin: 30px 0 15px 0;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #ddd;
+    }
+    h3:first-child {
+      margin-top: 0;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      font-size: 14px;
+    }
+    th {
+      background: #f5f5f5;
+      padding: 12px 10px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid #3D4F3D;
+    }
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    tr:hover { background: #fafafa; }
+    
+    .good { color: #2d7a2d; font-weight: bold; }
+    .warning { color: #b8860b; font-weight: bold; }
+    .bad { color: #c0392b; font-weight: bold; }
+    
+    .finding {
+      margin: 15px 0;
+      padding: 15px;
+      border-radius: 6px;
+    }
+    .finding-good { background: #e8f5e9; border-left: 4px solid #2d7a2d; }
+    .finding-warning { background: #fff8e1; border-left: 4px solid #b8860b; }
+    .finding-bad { background: #ffebee; border-left: 4px solid #c0392b; }
+    .finding h4 { margin-bottom: 8px; }
+    .finding p { font-size: 14px; color: #555; }
+    
+    .recommendations {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    .recommendations ol {
+      margin-left: 20px;
+    }
+    .recommendations li {
+      margin: 15px 0;
+    }
+    .recommendations strong {
+      color: #3D4F3D;
+    }
+    
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+      font-size: 12px;
+      color: #888;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<!-- PAGE 1: Summary & Performance -->
+<div class="page">
+  <div class="header">
+    <h1>Meraki Financial Analysis</h1>
+    <h2>January 2025 — Historical Baseline</h2>
+  </div>
+
+  <div class="note">
+    <strong>Note:</strong> This analysis covers January 2025 — 15 months ago. This serves as our baseline for comparison as we receive more recent data. This report will be updated monthly as new MDO data arrives from Abner.<br><br>
+    <strong>Exchange Rate:</strong> $1 = ₡505
+  </div>
+
+  <div class="summary-box">
+    <h3>Combined January 2025 Results</h3>
+    <div class="summary-stats">
+      <div class="stat">
+        <div class="stat-value">$604K</div>
+        <div class="stat-label">TOTAL SALES</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">$218K</div>
+        <div class="stat-label">TOTAL PROFIT</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">36%</div>
+        <div class="stat-label">OVERALL MARGIN</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Restaurant Performance</h3>
+  <table>
+    <tr>
+      <th>Restaurant</th>
+      <th>Sales</th>
+      <th>Payments</th>
+      <th>MDO</th>
+      <th>Profit</th>
+      <th>Margin</th>
+    </tr>
+    <tr>
+      <td><strong>La Luna</strong></td>
+      <td>$438K</td>
+      <td>$164K (38%)</td>
+      <td>$71K (16%)</td>
+      <td class="good">$202K</td>
+      <td class="good">46% ✓</td>
+    </tr>
+    <tr>
+      <td><strong>Coyol</strong></td>
+      <td>$123K</td>
+      <td>$77K (63%)</td>
+      <td>$24K (19%)</td>
+      <td class="warning">$22K</td>
+      <td class="warning">18% ⚠</td>
+    </tr>
+    <tr>
+      <td><strong>Esh</strong></td>
+      <td>$44K</td>
+      <td>$28K (64%)</td>
+      <td>$23K (50%)</td>
+      <td class="bad">-$6K</td>
+      <td class="bad">-14% ✗</td>
+    </tr>
+  </table>
+</div>
+
+<!-- PAGE 2: Key Findings -->
+<div class="page">
+  <h3>Key Findings</h3>
+
+  <div class="finding finding-good">
+    <h4>✓ La Luna — Excellent Performance</h4>
+    <p>46% profit margin, well above industry standard (10-15%). Food cost at 38%, labor at 16%. La Luna generated 93% of total group profit this month.</p>
+  </div>
+
+  <div class="finding finding-warning">
+    <h4>⚠ Coyol — High Food Costs</h4>
+    <p>63% food cost vs industry target of 28-35%. Labor is reasonable at 19%. We recommend reviewing supplier pricing, portion sizes, and menu prices.</p>
+  </div>
+
+  <div class="finding finding-bad">
+    <h4>✗ Esh — Operating at Loss</h4>
+    <p>50% labor cost, way above 25-35% target. Sales volume ($44K/month) may not justify current staffing levels. Consider reducing hours or sharing staff with Coyol.</p>
+  </div>
+
+  <h3>Industry Benchmarks Comparison</h3>
+  <table>
+    <tr>
+      <th>Cost Category</th>
+      <th>Target</th>
+      <th>La Luna</th>
+      <th>Coyol</th>
+      <th>Esh</th>
+    </tr>
+    <tr>
+      <td>Food & Beverage</td>
+      <td>28-35%</td>
+      <td>38%</td>
+      <td class="warning">63%</td>
+      <td class="warning">64%</td>
+    </tr>
+    <tr>
+      <td>Labor (MDO)</td>
+      <td>25-35%</td>
+      <td class="good">16%</td>
+      <td class="good">19%</td>
+      <td class="bad">50%</td>
+    </tr>
+    <tr>
+      <td><strong>Total Costs</strong></td>
+      <td>55-65%</td>
+      <td class="good">54%</td>
+      <td class="warning">82%</td>
+      <td class="bad">114%</td>
+    </tr>
+    <tr>
+      <td><strong>Profit Margin</strong></td>
+      <td>10-15%</td>
+      <td class="good">46%</td>
+      <td class="good">18%</td>
+      <td class="bad">-14%</td>
+    </tr>
+  </table>
+</div>
+
+<!-- PAGE 3: Recommendations & Status -->
+<div class="page">
+  <h3>Recommendations</h3>
+  <div class="recommendations">
+    <ol>
+      <li>
+        <strong>Coyol — Reduce Food Cost</strong><br>
+        Audit supplier invoices for price increases. Review portion sizes and consider menu price adjustments.<br>
+        <em>Target: Reduce from 63% to 45%</em>
+      </li>
+      <li>
+        <strong>Esh — Reduce Labor Cost</strong><br>
+        Current staffing is too high for the sales volume. Consider sharing staff with Coyol during slow hours.<br>
+        <em>Target: Reduce from 50% to 30%</em>
+      </li>
+      <li>
+        <strong>La Luna — Maintain Excellence</strong><br>
+        Continue current operations. Consider if any best practices can be transferred to other locations.
+      </li>
+    </ol>
+  </div>
+
+  <h3>Data Status</h3>
+  <table>
+    <tr>
+      <th>Period</th>
+      <th>Sales</th>
+      <th>Payments</th>
+      <th>MDO</th>
+      <th>Status</th>
+    </tr>
+    <tr>
+      <td>Jan 2025</td>
+      <td class="good">✓</td>
+      <td class="good">✓</td>
+      <td class="good">✓</td>
+      <td><strong>Complete</strong></td>
+    </tr>
+    <tr>
+      <td>Feb 2025</td>
+      <td class="good">✓</td>
+      <td class="good">✓</td>
+      <td class="bad">✗</td>
+      <td>Waiting on Abner</td>
+    </tr>
+    <tr>
+      <td>Mar-Jun 2025</td>
+      <td class="good">✓</td>
+      <td class="good">✓</td>
+      <td class="warning">⏳</td>
+      <td>Received — processing</td>
+    </tr>
+    <tr>
+      <td>Jul-Dec 2025</td>
+      <td class="good">✓</td>
+      <td class="good">✓</td>
+      <td class="bad">✗</td>
+      <td>Waiting on Abner</td>
+    </tr>
+    <tr>
+      <td>Jan-Mar 2026</td>
+      <td class="good">✓</td>
+      <td class="good">✓</td>
+      <td class="bad">✗</td>
+      <td>Waiting on Abner</td>
+    </tr>
+  </table>
+
+  <div class="footer">
+    Report generated: April 7, 2026 | Exchange rate: $1 = ₡505<br>
+    This is a living document — will be updated as new data arrives<br>
+    Data sources: Ingrid (Sales), Anlly (Payments), Abner (MDO)
+  </div>
+</div>
+
+</body>
+</html>
