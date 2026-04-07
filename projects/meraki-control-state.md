@@ -1,6 +1,6 @@
 # Meraki Control System — State Document
 
-*Last updated: April 7, 2026*
+*Last updated: April 7, 2026 @ 4:37pm*
 
 ---
 
@@ -40,6 +40,31 @@
 |--------|--------|
 | 2025 (all 3 restaurants) | ✅ Complete |
 | 2026 Jan-Apr (all 3 restaurants) | ✅ Complete |
+
+---
+
+## 📄 Monthly Analysis Reports
+
+**15 reports available** in USD format
+
+### 2026
+- March 2026
+- February 2026
+- January 2026
+
+### 2025 (Full Year)
+- January → December 2025
+
+**Features:**
+- Dropdown on dashboard header ("Monthly Analysis Reports" button)
+- Also accessible at /informes
+- Shows sales, expenses, profit, margin per restaurant
+- Food vs Bar breakdown
+- Month-over-month comparison
+- Key insights
+
+**Format:** USD with K (thousands) notation
+- Example: $690K, $270K, etc.
 
 ---
 
@@ -115,12 +140,12 @@ These 11 suppliers deliver to multiple restaurants. Invoices need handwritten ta
 | Coyol | Keswick Green | #3D4F3D |
 | La Luna | Terracotta | #A65D3F |
 
-### Report Themes
-| Report | Theme | Notes |
-|--------|-------|-------|
-| Daily | Light mode | White/cream, clean daytime feel |
-| Weekly | Dark + Green | Keswick Green accent, growth vibe |
-| Monthly | Dark + Gold | Terracotta/Gold accent, executive feel |
+### Report Colors
+| Status | Color | Hex |
+|--------|-------|-----|
+| Good/Profit | Keswick Green | #3D4F3D |
+| Warning | Sand | #C4A67C |
+| Bad/Expenses | Terracotta | #A65D3F |
 
 ### Logos
 - Black on white (inverted)
@@ -137,6 +162,7 @@ These 11 suppliers deliver to multiple restaurants. Invoices need handwritten ta
 - ✅ Currency toggle (CRC/USD @ ₡505)
 - ✅ Authentication (basic)
 - ✅ Responsive design
+- ✅ Monthly Analysis Reports dropdown (15 reports)
 
 ---
 
@@ -160,6 +186,7 @@ These 11 suppliers deliver to multiple restaurants. Invoices need handwritten ta
 - [x] Cash/Card breakdown
 - [x] Currency toggle
 - [x] Deploy to production
+- [x] Monthly Analysis Reports archive
 
 ### Phase 2 — Expenses & P&L
 - [x] Gastos data structure
@@ -214,9 +241,21 @@ meraki-control/data/
 └── products.json       # Product catalog (pending)
 ```
 
-### Himalaya Email Config
-- Account: marionnosara@gmail.com
-- Status: Configured and working
+### Report Generation
+```
+meraki-control/scripts/
+├── generate-all-reports.js  # Generates 15 monthly HTML reports
+└── html-to-pdf.js           # Converts HTML to PDF (playwright)
+```
+
+### Public Reports
+```
+meraki-control/public/reports/
+├── january-2025-analysis.html
+├── february-2025-analysis.html
+├── ... (15 total)
+└── march-2026-analysis.html
+```
 
 ---
 
