@@ -84,14 +84,30 @@ const q1_2026_total = q1_2026.reduce((sum, m) => sum + m.totalSales, 0);
 const q1_2025_total = q1_2025.reduce((sum, m) => sum + m.totalSales, 0);
 const q1_yoy_change = q1_2025_total > 0 ? ((q1_2026_total - q1_2025_total) / q1_2025_total * 100) : 0;
 
-// Per-restaurant 2025 totals
+// Get which months we have data for in 2026
+const months2026 = [...new Set(year2026.map(m => m.month.split('-')[1]))];
+
+// Per-restaurant 2025 totals (only same months as 2026 data)
 const restaurant2025Totals = restaurants.map(code => {
-  const restData = year2025.filter(m => m.restaurant === code);
+  const restData = data.monthly.filter(m => 
+    m.restaurant === code && 
+    m.month.startsWith('2025') && 
+    months2026.includes(m.month.split('-')[1]) &&
+    !m.partial
+  );
   return {
     code,
     totalSales: restData.reduce((sum, m) => sum + m.totalSales, 0)
   };
 });
+
+// Recalculate 2025 totals for same period
+const year2025SamePeriod = data.monthly.filter(m => 
+  m.month.startsWith('2025') && 
+  months2026.includes(m.month.split('-')[1]) &&
+  !m.partial
+);
+const year2025SamePeriodTotal = year2025SamePeriod.reduce((sum, m) => sum + m.totalSales, 0);
 
 // Grand total
 const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
