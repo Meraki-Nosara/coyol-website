@@ -16,15 +16,18 @@ let reports: Array<{
 }> = [];
 
 if (fs.existsSync(reportsDir)) {
-  const files = fs.readdirSync(reportsDir).filter(f => f.endsWith('.pdf'));
+  // Accept both PDF and HTML files (HTML can be printed to PDF)
+  const files = fs.readdirSync(reportsDir).filter(f => f.endsWith('.pdf') || f.endsWith('.html'));
   
   reports = files.map(filename => {
     const stats = fs.statSync(path.join(reportsDir, filename));
-    const sizeMB = (stats.size / 1024 / 1024).toFixed(1);
+    const sizeKB = stats.size / 1024;
+    const sizeStr = sizeKB > 1024 ? `${(sizeKB / 1024).toFixed(1)} MB` : `${Math.round(sizeKB)} KB`;
+    const isHtml = filename.endsWith('.html');
     
     // Parse filename to extract info
     // Expected formats: january-2025-analysis.pdf, q1-2026-report.pdf, 2025-annual.pdf
-    let title = filename.replace('.pdf', '').replace(/-/g, ' ');
+    let title = filename.replace('.pdf', '').replace('.html', '').replace(/-/g, ' ');
     let period = '';
     let type: 'monthly' | 'quarterly' | 'annual' | 'analysis' = 'analysis';
     let date = new Date(stats.mtime).toISOString().split('T')[0];
@@ -61,8 +64,9 @@ if (fs.existsSync(reportsDir)) {
       date,
       period,
       type,
-      size: `${sizeMB} MB`,
-      url: `/reports/${filename}`
+      size: sizeStr,
+      url: `/reports/${filename}`,
+      isHtml
     };
   }).sort((a, b) => b.date.localeCompare(a.date)); // Most recent first
 }
@@ -171,9 +175,9 @@ const typeColors: Record<string, string> = {
             </div>
             
             <div class="flex items-center gap-2">
-              <span class="text-xs text-landrover-marine/40">PDF reports</span>
-              <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM8.5 13h1c.55 0 1 .45 1 1v4c0 .55-.45 1-1 1h-1c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1zm3 0h1.5c.83 0 1.5.67 1.5 1.5v3c0 .83-.67 1.5-1.5 1.5H11.5c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1zm4.5 0h1c.55 0 1 .45 1 1s-.45 1-1 1h-1v1h1c.55 0 1 .45 1 1s-.45 1-1 1h-1c-.55 0-1-.45-1-1v-3c0-.55.45-1 1-1z"/>
+              <span class="text-xs text-landrover-marine/40">Click to view • Print to PDF</span>
+              <svg class="w-5 h-5 text-landrover-keswick" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
               </svg>
             </div>
           </div>
