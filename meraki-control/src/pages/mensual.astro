@@ -127,7 +127,7 @@ const year2025SamePeriodTotal = year2025SamePeriod.reduce((sum, m) => sum + m.to
 const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
 ---
 
-<Layout title="Sales Summary">
+<Layout title="Control Dashboard">
   <div class="min-h-screen flex">
     <!-- Sidebar -->
     <aside class="w-64 bg-landrover-keswick text-white flex-shrink-0 hidden lg:flex lg:flex-col">
@@ -141,7 +141,7 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
           </svg>
-          <span class="text-sm font-medium">Summary</span>
+          <span class="text-sm font-medium">Dashboard</span>
         </a>
         
         <a href="/tendencias" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
@@ -189,7 +189,7 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
       <header class="bg-white border-b border-landrover-arles/30 sticky top-0 z-40">
         <div class="px-4 lg:px-8 py-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <h2 class="text-xl font-semibold text-landrover-santorini">Sales Summary 2026</h2>
+            <h2 class="text-xl font-semibold text-landrover-santorini">Control Dashboard</h2>
             <p class="text-sm text-landrover-marine/60">Year to date • {allMonths.length} months</p>
           </div>
           
