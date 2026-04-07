@@ -30,7 +30,8 @@
       "netReceipts": 26186747.330000002,
       "avgOrder": 8646.306007827789,
       "perPerson": 8861.33648215002,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 13616951
     },
     {
       "month": "2025-01",
@@ -48,7 +49,8 @@
       "netReceipts": 271206245.48,
       "avgOrder": 50575.66611301762,
       "perPerson": 17531.02589849326,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 83321682
     },
     {
       "month": "2025-02",
@@ -66,7 +68,8 @@
       "netReceipts": 21912466.54,
       "avgOrder": 8598.233178654293,
       "perPerson": 14155.227272727272,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 7041607
     },
     {
       "month": "2025-02",
@@ -80,17 +83,18 @@
       "customers": 9469,
       "discounts": 1114545.28,
       "serviceTax": 17932060.35,
-      "iva": 23822666.0,
+      "iva": 23822666,
       "netReceipts": 226322339.94,
       "avgOrder": 49641.6389429801,
       "perPerson": 19491.774589713805,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 69746103
     },
     {
       "month": "2025-03",
       "restaurant": "esh",
       "totalSales": 19480804.24,
-      "food": 12402913.0,
+      "food": 12402913,
       "bar": 7077891.25,
       "cash": 4319384.69,
       "card": 18284762.31,
@@ -102,7 +106,8 @@
       "netReceipts": 22917486.79,
       "avgOrder": 8665.83818505338,
       "perPerson": 6977.365415472779,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 10732570
     },
     {
       "month": "2025-03",
@@ -120,7 +125,8 @@
       "netReceipts": 256808527.48,
       "avgOrder": 54052.1993316129,
       "perPerson": 19366.830551086452,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 76926619
     },
     {
       "month": "2025-04",
@@ -138,7 +144,8 @@
       "netReceipts": 18953881.98,
       "avgOrder": 8250.1457696281,
       "perPerson": 11675.644890350877,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 8868772
     },
     {
       "month": "2025-04",
@@ -156,7 +163,8 @@
       "netReceipts": 204132098.94,
       "avgOrder": 51724.36744171588,
       "perPerson": 17848.04140941757,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 65337085
     },
     {
       "month": "2025-05",
@@ -174,7 +182,8 @@
       "netReceipts": 16880545.23,
       "avgOrder": 7692.2278698224845,
       "perPerson": 9219.762482269503,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 6215282
     },
     {
       "month": "2025-05",
@@ -192,7 +201,8 @@
       "netReceipts": 105073722.22000001,
       "avgOrder": 41331.30610896818,
       "perPerson": 18008.640518907563,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 36667723
     },
     {
       "month": "2025-06",
@@ -210,7 +220,8 @@
       "netReceipts": 14703315.02,
       "avgOrder": 8376.365155405405,
       "perPerson": 12347.629910358566,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 6760261
     },
     {
       "month": "2025-06",
@@ -228,7 +239,8 @@
       "netReceipts": 109797408.76,
       "avgOrder": 51508.29113348676,
       "perPerson": 18114.409144071225,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 32396975
     },
     {
       "month": "2025-07",
@@ -246,7 +258,8 @@
       "netReceipts": 12996003.95,
       "avgOrder": 8421.807784615385,
       "perPerson": 13754.208693467335,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 6738874
     },
     {
       "month": "2025-07",
@@ -264,7 +277,8 @@
       "netReceipts": 153345610.66,
       "avgOrder": 51909.37104651163,
       "perPerson": 18430.811778236508,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 49806994
     },
     {
       "month": "2025-08",
@@ -282,7 +296,8 @@
       "netReceipts": 11447132.73,
       "avgOrder": 8983.69661095636,
       "perPerson": 15141.535602503913,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 6187294
     },
     {
       "month": "2025-08",
@@ -300,7 +315,8 @@
       "netReceipts": 110451207.11,
       "avgOrder": 45804.41813421454,
       "perPerson": 17851.652559936596,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 23427349
     },
     {
       "month": "2025-09",
@@ -318,7 +334,8 @@
       "netReceipts": 12661068.17,
       "avgOrder": 8397.362854864434,
       "perPerson": 8775.244183333332,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 3611261
     },
     {
       "month": "2025-09",
@@ -336,7 +353,8 @@
       "netReceipts": 45839184.03,
       "avgOrder": 35344.76567924528,
       "perPerson": 11789.003027061044,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 10792292
     },
     {
       "month": "2025-10",
@@ -354,7 +372,8 @@
       "netReceipts": 13927221.93,
       "avgOrder": 8560.35393916914,
       "perPerson": 9450.742923832924,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 6462658
     },
     {
       "month": "2025-10",
@@ -372,7 +391,8 @@
       "netReceipts": 56200746.24,
       "avgOrder": 39646.08563903282,
       "perPerson": 18594.6404090725,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 18973530
     },
     {
       "month": "2025-11",
@@ -390,7 +410,8 @@
       "netReceipts": 14013013.48,
       "avgOrder": 8387.442381294964,
       "perPerson": 10400.129268510258,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 8131981
     },
     {
       "month": "2025-11",
@@ -408,7 +429,8 @@
       "netReceipts": 141493007.87,
       "avgOrder": 47404.83430566968,
       "perPerson": 19408.47211101766,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 56542057
     },
     {
       "month": "2025-12",
@@ -426,7 +448,8 @@
       "netReceipts": 20720494.03,
       "avgOrder": 9514.88549972391,
       "perPerson": 10136.151552941177,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 9311260
     },
     {
       "month": "2025-12",
@@ -444,7 +467,8 @@
       "netReceipts": 252085312.39,
       "avgOrder": 55323.08498386229,
       "perPerson": 20063.522236636752,
-      "source": "pos_report_2025"
+      "source": "pos_report_2025",
+      "gastos": 98458591
     },
     {
       "month": "2026-01",
@@ -462,7 +486,8 @@
       "netReceipts": 131511520,
       "avgOrder": 158639,
       "perPerson": 41218,
-      "source": "pos_report"
+      "source": "pos_report",
+      "gastos": 26803268
     },
     {
       "month": "2026-01",
@@ -480,7 +505,8 @@
       "netReceipts": 21734879,
       "avgOrder": 10755,
       "perPerson": 10068,
-      "source": "pos_report"
+      "source": "pos_report",
+      "gastos": 10260546
     },
     {
       "month": "2026-01",
@@ -499,7 +525,8 @@
       "avgOrder": 0,
       "perPerson": 0,
       "source": "pos_report",
-      "note": "File labeled Abril dias actual but contains January data"
+      "note": "File labeled Abril dias actual but contains January data",
+      "gastos": 73461437
     },
     {
       "month": "2026-02",
@@ -517,7 +544,8 @@
       "netReceipts": 112983126,
       "avgOrder": 138800,
       "perPerson": 40242,
-      "source": "pos_report"
+      "source": "pos_report",
+      "gastos": 25096979
     },
     {
       "month": "2026-02",
@@ -535,7 +563,8 @@
       "netReceipts": 19997318,
       "avgOrder": 8753,
       "perPerson": 9522,
-      "source": "pos_report"
+      "source": "pos_report",
+      "gastos": 10796061
     },
     {
       "month": "2026-02",
@@ -554,7 +583,8 @@
       "avgOrder": 0,
       "perPerson": 0,
       "source": "pos_report",
-      "note": "File labeled Marzo but contains February data"
+      "note": "File labeled Marzo but contains February data",
+      "gastos": 78139230
     },
     {
       "month": "2026-03",
@@ -572,7 +602,8 @@
       "netReceipts": 133667721,
       "avgOrder": 158455,
       "perPerson": 40940,
-      "source": "pos_report"
+      "source": "pos_report",
+      "gastos": 30008401
     },
     {
       "month": "2026-03",
@@ -590,7 +621,8 @@
       "netReceipts": 20095135,
       "avgOrder": 8796,
       "perPerson": 7986,
-      "source": "pos_report"
+      "source": "pos_report",
+      "gastos": 10691011
     },
     {
       "month": "2026-03",
@@ -609,7 +641,8 @@
       "avgOrder": 0,
       "perPerson": 0,
       "source": "pos_report",
-      "note": "File labeled Febrero but contains March data"
+      "note": "File labeled Febrero but contains March data",
+      "gastos": 95182068
     },
     {
       "month": "2026-04",
@@ -629,8 +662,85 @@
       "perPerson": 10608,
       "source": "pos_report",
       "partial": true,
-      "note": "Apr 1-4 only"
+      "note": "Apr 1-4 only",
+      "gastos": 555577
     }
   ],
-  "lastUpdated": "2026-04-06T22:19:00.000Z"
+  "lastUpdated": "2026-04-07T13:06:26.851Z",
+  "gastosTotals2025": {
+    "esh": 93678771,
+    "coyol": 254933429,
+    "laluna": 622397000,
+    "total": 971009200
+  },
+  "gastosTotals2026Q1": {
+    "esh": 31747618,
+    "coyol": 81908648,
+    "laluna": 246782735,
+    "total": 360439001
+  },
+  "gastos2025": {
+    "esh": {
+      "10": 6462658,
+      "11": 8131981,
+      "12": 9311260,
+      "01": 13616951,
+      "02": 7041607,
+      "03": 10732570,
+      "04": 8868772,
+      "05": 6215282,
+      "06": 6760261,
+      "07": 6738874,
+      "08": 6187294,
+      "09": 3611261
+    },
+    "coyol": {
+      "10": 3338776,
+      "11": 22306324,
+      "12": 33226143,
+      "01": 39447932,
+      "02": 30883167,
+      "03": 33321453,
+      "04": 28555939,
+      "05": 15780833,
+      "06": 13910535,
+      "07": 21473399,
+      "08": 10093538,
+      "09": 2595391
+    },
+    "laluna": {
+      "10": 18973530,
+      "11": 56542057,
+      "12": 98458591,
+      "01": 83321682,
+      "02": 69746103,
+      "03": 76926619,
+      "04": 65337085,
+      "05": 36667723,
+      "06": 32396975,
+      "07": 49806994,
+      "08": 23427349,
+      "09": 10792292
+    }
+  },
+  "gastos2026": {
+    "esh": {
+      "01": 10260546,
+      "02": 10796061,
+      "03": 10691011,
+      "04": 555577
+    },
+    "coyol": {
+      "01": 26803268,
+      "02": 25096979,
+      "03": 30008401,
+      "04": 1058445
+    },
+    "laluna": {
+      "01": 73461437,
+      "02": 78139230,
+      "03": 95182068,
+      "04": 4014438
+    }
+  }
 }

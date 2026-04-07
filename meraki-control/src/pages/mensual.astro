@@ -85,6 +85,19 @@ const q1_2026_total = q1_2026.reduce((sum, m) => sum + m.totalSales, 0);
 const q1_2025_total = q1_2025.reduce((sum, m) => sum + m.totalSales, 0);
 const q1_yoy_change = q1_2025_total > 0 ? ((q1_2026_total - q1_2025_total) / q1_2025_total * 100) : 0;
 
+// Profitability data (2026 Q1)
+const profitability2026 = restaurants.map(code => {
+  const sales = q1_2026.filter(m => m.restaurant === code).reduce((sum, m) => sum + m.totalSales, 0);
+  const gastos = q1_2026.filter(m => m.restaurant === code).reduce((sum, m) => sum + (m.gastos || 0), 0);
+  const grossProfit = sales - gastos;
+  const margin = sales > 0 ? (grossProfit / sales * 100) : 0;
+  return { code, sales, gastos, grossProfit, margin };
+});
+const totalSales2026Q1 = profitability2026.reduce((sum, r) => sum + r.sales, 0);
+const totalGastos2026Q1 = profitability2026.reduce((sum, r) => sum + r.gastos, 0);
+const totalGrossProfit2026Q1 = totalSales2026Q1 - totalGastos2026Q1;
+const totalMargin2026Q1 = totalSales2026Q1 > 0 ? (totalGrossProfit2026Q1 / totalSales2026Q1 * 100) : 0;
+
 // Get which months we have data for in 2026
 const months2026 = [...new Set(year2026.map(m => m.month.split('-')[1]))];
 
@@ -404,6 +417,81 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
                   </tr>
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        <!-- Profitability Section -->
+        {totalGastos2026Q1 > 0 && (
+          <div class="card">
+            <div class="px-4 lg:px-6 py-3 lg:py-4 border-b border-landrover-arles/30 flex items-center justify-between">
+              <h3 class="font-semibold text-landrover-santorini text-sm lg:text-base">💰 Profitability Q1 2026</h3>
+              <span class="text-xs text-landrover-marine/60 bg-landrover-limestone/30 px-2 py-1 rounded">Sales vs Gastos</span>
+            </div>
+            
+            <div class="p-4 lg:p-6">
+              <!-- Summary Cards -->
+              <div class="grid grid-cols-3 gap-3 mb-6">
+                <div class="bg-landrover-keswick/10 p-4 rounded-lg text-center">
+                  <p class="text-xs text-landrover-marine/60 uppercase tracking-wider mb-1">Total Sales</p>
+                  <p class="text-xl lg:text-2xl font-bold text-landrover-keswick">{fmt(totalSales2026Q1)}</p>
+                </div>
+                <div class="bg-red-50 p-4 rounded-lg text-center">
+                  <p class="text-xs text-landrover-marine/60 uppercase tracking-wider mb-1">Total Gastos</p>
+                  <p class="text-xl lg:text-2xl font-bold text-red-600">{fmt(totalGastos2026Q1)}</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg text-center">
+                  <p class="text-xs text-landrover-marine/60 uppercase tracking-wider mb-1">Gross Profit</p>
+                  <p class="text-xl lg:text-2xl font-bold text-green-600">{fmt(totalGrossProfit2026Q1)}</p>
+                  <p class="text-xs text-green-600 font-medium">{totalMargin2026Q1.toFixed(0)}% margin</p>
+                </div>
+              </div>
+              
+              <!-- Per Restaurant Breakdown -->
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-landrover-arles/20">
+                    <th class="text-left py-2 text-landrover-marine/60 font-medium">Restaurant</th>
+                    <th class="text-right py-2 text-landrover-marine/60 font-medium">Sales</th>
+                    <th class="text-right py-2 text-landrover-marine/60 font-medium">Gastos</th>
+                    <th class="text-right py-2 text-landrover-marine/60 font-medium">Gross Profit</th>
+                    <th class="text-right py-2 text-landrover-marine/60 font-medium">Margin</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {profitability2026.map(r => {
+                    const name = r.code === 'laluna' ? 'La Luna' : r.code === 'esh' ? 'Esh' : 'Coyol';
+                    const colorMap: {[key: string]: string} = { esh: '#C4A67C', coyol: '#3D4F3D', laluna: '#A65D3F' };
+                    const color = colorMap[r.code] || '#666';
+                    
+                    return (
+                      <tr class="border-b border-landrover-arles/10">
+                        <td class="py-3 flex items-center gap-2">
+                          <div class="w-2 h-2 rounded-full" style={`background-color: ${color}`}></div>
+                          {name}
+                        </td>
+                        <td class="text-right py-3 font-medium">{fmt(r.sales)}</td>
+                        <td class="text-right py-3 text-red-600">{fmt(r.gastos)}</td>
+                        <td class="text-right py-3 text-green-600 font-medium">{fmt(r.grossProfit)}</td>
+                        <td class={`text-right py-3 font-bold ${r.margin >= 50 ? 'text-green-600' : r.margin >= 30 ? 'text-yellow-600' : 'text-red-500'}`}>
+                          {r.margin.toFixed(0)}%
+                        </td>
+                      </tr>
+                    );
+                  })}
+                  <tr class="font-semibold bg-landrover-limestone/20">
+                    <td class="py-3">Total</td>
+                    <td class="text-right py-3">{fmt(totalSales2026Q1)}</td>
+                    <td class="text-right py-3 text-red-600">{fmt(totalGastos2026Q1)}</td>
+                    <td class="text-right py-3 text-green-600">{fmt(totalGrossProfit2026Q1)}</td>
+                    <td class="text-right py-3 text-green-600">{totalMargin2026Q1.toFixed(0)}%</td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <p class="text-xs text-landrover-marine/40 mt-4 text-center">
+                Note: Gastos = supplier purchases (COGS). Excludes payroll, rent, utilities.
+              </p>
             </div>
           </div>
         )}
