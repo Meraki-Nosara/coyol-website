@@ -396,7 +396,7 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
               <div class="text-3xl lg:text-5xl text-landrover-marine/30">−</div>
               <div class="text-center">
                 <p class="text-3xl lg:text-5xl font-bold text-red-500">{fmt(totalGastos2026Q1)}</p>
-                <p class="text-sm text-landrover-marine/60 mt-1">Costs</p>
+                <p class="text-sm text-landrover-marine/60 mt-1">Payments</p>
               </div>
               <div class="text-3xl lg:text-5xl text-landrover-marine/30">=</div>
               <div class="text-center">
@@ -418,7 +418,7 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
                 ></div>
               </div>
               <div class="flex justify-between text-xs text-landrover-marine/40 mt-1">
-                <span>Costs {(100 - totalMargin2026Q1).toFixed(0)}%</span>
+                <span>Payments {(100 - totalMargin2026Q1).toFixed(0)}%</span>
                 <span>Profit {totalMargin2026Q1.toFixed(0)}%</span>
               </div>
             </div>
@@ -456,7 +456,7 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
             </div>
             
             <p class="text-xs text-landrover-marine/40 mt-6 text-center">
-              Costs = supplier purchases only (food, drinks, supplies)
+              Payments = supplier purchases only (food, drinks, supplies)
             </p>
           </div>
         )}
