@@ -4,6 +4,8 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const salesData = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/sales.json'), 'utf8'));
+const monthlyData = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/monthly.json'), 'utf8'));
+const mdoData = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/mdo.json'), 'utf8'));
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const USD_RATE = 505;
@@ -43,6 +45,12 @@ function generateMonthlyReport(year, month, currency = 'CRC') {
   const lalunagastos = salesData[gastosKey]?.laluna?.[monthNum] || 0;
   const coyolGastos = salesData[gastosKey]?.coyol?.[monthNum] || 0;
   
+  // Get MDO data
+  const mdoMonth = mdoData.months?.[`${year}-${monthNum}`] || {};
+  const eshMdo = mdoMonth.esh || 0;
+  const lalunaMdo = mdoMonth.laluna || 0;
+  const coyolMdo = mdoMonth.coyol || 0;
+  
   // For 2026, use different structure
   const is2026 = year === 2026;
   let esh, laluna, coyol;
@@ -70,8 +78,10 @@ function generateMonthlyReport(year, month, currency = 'CRC') {
   let totalBar = 0;
   
   if (esh) {
-    const profit = esh.sales - eshGastos;
-    const margin = esh.sales > 0 ? (profit / esh.sales * 100) : 0;
+    const grossProfit = esh.sales - eshGastos;
+    const netProfit = esh.sales - eshGastos - eshMdo;
+    const grossMargin = esh.sales > 0 ? (grossProfit / esh.sales * 100) : 0;
+    const netMargin = esh.sales > 0 ? (netProfit / esh.sales * 100) : 0;
     restaurants.push({
       name: 'Esh',
       color: '#C4A67C',
@@ -79,8 +89,11 @@ function generateMonthlyReport(year, month, currency = 'CRC') {
       food: esh.food || Math.round(esh.sales * 0.65),
       bar: esh.bar || Math.round(esh.sales * 0.35),
       gastos: eshGastos,
-      profit,
-      margin
+      mdo: eshMdo,
+      grossProfit,
+      netProfit,
+      grossMargin,
+      netMargin
     });
     totalSales += esh.sales;
     totalGastos += eshGastos;
@@ -89,8 +102,10 @@ function generateMonthlyReport(year, month, currency = 'CRC') {
   }
   
   if (laluna) {
-    const profit = laluna.sales - lalunagastos;
-    const margin = laluna.sales > 0 ? (profit / laluna.sales * 100) : 0;
+    const grossProfit = laluna.sales - lalunagastos;
+    const netProfit = laluna.sales - lalunagastos - lalunaMdo;
+    const grossMargin = laluna.sales > 0 ? (grossProfit / laluna.sales * 100) : 0;
+    const netMargin = laluna.sales > 0 ? (netProfit / laluna.sales * 100) : 0;
     restaurants.push({
       name: 'La Luna',
       color: '#A65D3F',
@@ -98,8 +113,11 @@ function generateMonthlyReport(year, month, currency = 'CRC') {
       food: laluna.food || Math.round(laluna.sales * 0.59),
       bar: laluna.bar || Math.round(laluna.sales * 0.41),
       gastos: lalunagastos,
-      profit,
-      margin
+      mdo: lalunaMdo,
+      grossProfit,
+      netProfit,
+      grossMargin,
+      netMargin
     });
     totalSales += laluna.sales;
     totalGastos += lalunagastos;
@@ -108,8 +126,10 @@ function generateMonthlyReport(year, month, currency = 'CRC') {
   }
   
   if (coyol) {
-    const profit = coyol.sales - coyolGastos;
-    const margin = coyol.sales > 0 ? (profit / coyol.sales * 100) : 0;
+    const grossProfit = coyol.sales - coyolGastos;
+    const netProfit = coyol.sales - coyolGastos - coyolMdo;
+    const grossMargin = coyol.sales > 0 ? (grossProfit / coyol.sales * 100) : 0;
+    const netMargin = coyol.sales > 0 ? (netProfit / coyol.sales * 100) : 0;
     restaurants.push({
       name: 'Coyol',
       color: '#3D4F3D',
@@ -117,8 +137,11 @@ function generateMonthlyReport(year, month, currency = 'CRC') {
       food: coyol.food || Math.round(coyol.sales * 0.58),
       bar: coyol.bar || Math.round(coyol.sales * 0.42),
       gastos: coyolGastos,
-      profit,
-      margin
+      mdo: coyolMdo,
+      grossProfit,
+      netProfit,
+      grossMargin,
+      netMargin
     });
     totalSales += coyol.sales;
     totalGastos += coyolGastos;
@@ -126,8 +149,11 @@ function generateMonthlyReport(year, month, currency = 'CRC') {
     totalBar += coyol.bar || Math.round(coyol.sales * 0.42);
   }
   
-  const totalProfit = totalSales - totalGastos;
-  const totalMargin = totalSales > 0 ? (totalProfit / totalSales * 100) : 0;
+  const totalMdo = restaurants.reduce((sum, r) => sum + (r.mdo || 0), 0);
+  const totalGrossProfit = totalSales - totalGastos;
+  const totalNetProfit = totalSales - totalGastos - totalMdo;
+  const totalGrossMargin = totalSales > 0 ? (totalGrossProfit / totalSales * 100) : 0;
+  const totalNetMargin = totalSales > 0 ? (totalNetProfit / totalSales * 100) : 0;
   const foodPct = totalSales > 0 ? (totalFood / totalSales * 100) : 0;
   const barPct = totalSales > 0 ? (totalBar / totalSales * 100) : 0;
   
@@ -313,14 +339,18 @@ function generateMonthlyReport(year, month, currency = 'CRC') {
       </div>
       <div class="stat">
         <div class="stat-value">${fmt(totalGastos, currency)}</div>
-        <div class="stat-label">Expenses</div>
+        <div class="stat-label">Purchases</div>
+      </div>
+      ${totalMdo > 0 ? `<div class="stat">
+        <div class="stat-value">${fmt(totalMdo, currency)}</div>
+        <div class="stat-label">Payroll (MDO)</div>
+      </div>` : ''}
+      <div class="stat">
+        <div class="stat-value">${fmt(totalMdo > 0 ? totalNetProfit : totalGrossProfit, currency)}</div>
+        <div class="stat-label">${totalMdo > 0 ? 'Net Profit' : 'Gross Profit'}</div>
       </div>
       <div class="stat">
-        <div class="stat-value">${fmt(totalProfit, currency)}</div>
-        <div class="stat-label">Gross Profit</div>
-      </div>
-      <div class="stat">
-        <div class="stat-value">${totalMargin.toFixed(0)}%</div>
+        <div class="stat-value">${(totalMdo > 0 ? totalNetMargin : totalGrossMargin).toFixed(0)}%</div>
         <div class="stat-label">Margin</div>
       </div>
       ${prevTotalSales > 0 ? `
@@ -338,38 +368,38 @@ function generateMonthlyReport(year, month, currency = 'CRC') {
       <tr>
         <th>Restaurant</th>
         <th>Sales</th>
-        <th>Food</th>
-        <th>Bar</th>
-        <th>Expenses</th>
-        <th>Profit</th>
+        <th>Purchases</th>
+        ${totalMdo > 0 ? '<th>Payroll</th>' : ''}
+        <th>${totalMdo > 0 ? 'Net Profit' : 'Gross Profit'}</th>
         <th>Margin</th>
       </tr>
     </thead>
     <tbody>
-      ${restaurants.map(r => `
+      ${restaurants.map(r => {
+        const profit = r.mdo > 0 ? r.netProfit : r.grossProfit;
+        const margin = r.mdo > 0 ? r.netMargin : r.grossMargin;
+        return `
       <tr class="restaurant-row">
         <td><span class="color-dot" style="background: ${r.color}"></span> ${r.name}</td>
         <td>${fmtFull(r.sales, currency)}</td>
-        <td>${fmtFull(r.food, currency)}</td>
-        <td>${fmtFull(r.bar, currency)}</td>
         <td class="bad">${fmtFull(r.gastos, currency)}</td>
-        <td class="good">${fmtFull(r.profit, currency)}</td>
+        ${r.mdo > 0 ? `<td class="warning">${fmtFull(r.mdo, currency)}</td>` : (totalMdo > 0 ? '<td>-</td>' : '')}
+        <td class="good">${fmtFull(profit, currency)}</td>
         <td>
-          <span class="${r.margin >= 50 ? 'good' : r.margin >= 30 ? 'warning' : 'bad'}">${r.margin.toFixed(0)}%</span>
+          <span class="${margin >= 50 ? 'good' : margin >= 30 ? 'warning' : 'bad'}">${margin.toFixed(0)}%</span>
           <div class="margin-bar">
-            <div class="margin-fill" style="width: ${Math.min(r.margin, 100)}%; background: ${r.margin >= 50 ? '#3D4F3D' : r.margin >= 30 ? '#C4A67C' : '#A65D3F'}"></div>
+            <div class="margin-fill" style="width: ${Math.min(Math.max(margin, 0), 100)}%; background: ${margin >= 50 ? '#3D4F3D' : margin >= 30 ? '#C4A67C' : '#A65D3F'}"></div>
           </div>
         </td>
       </tr>
-      `).join('')}
+      `}).join('')}
       <tr class="totals-row">
         <td>Total</td>
         <td>${fmtFull(totalSales, currency)}</td>
-        <td>${fmtFull(totalFood, currency)}</td>
-        <td>${fmtFull(totalBar, currency)}</td>
         <td class="bad">${fmtFull(totalGastos, currency)}</td>
-        <td class="good">${fmtFull(totalProfit, currency)}</td>
-        <td><span class="${totalMargin >= 50 ? 'good' : totalMargin >= 30 ? 'warning' : 'bad'}">${totalMargin.toFixed(0)}%</span></td>
+        ${totalMdo > 0 ? `<td class="warning">${fmtFull(totalMdo, currency)}</td>` : ''}
+        <td class="good">${fmtFull(totalMdo > 0 ? totalNetProfit : totalGrossProfit, currency)}</td>
+        <td><span class="${(totalMdo > 0 ? totalNetMargin : totalGrossMargin) >= 50 ? 'good' : (totalMdo > 0 ? totalNetMargin : totalGrossMargin) >= 30 ? 'warning' : 'bad'}">${(totalMdo > 0 ? totalNetMargin : totalGrossMargin).toFixed(0)}%</span></td>
       </tr>
     </tbody>
   </table>
