@@ -471,7 +471,8 @@
       "avgOrder": 9514.88549972391,
       "perPerson": 10136.151552941177,
       "source": "pos_report_2025",
-      "gastos": 9311260
+      "gastos": 9311260,
+      "mdo": 4354495
     },
     {
       "month": "2025-12",
@@ -490,7 +491,8 @@
       "avgOrder": 55323.08498386229,
       "perPerson": 20063.522236636752,
       "source": "pos_report_2025",
-      "gastos": 98458591
+      "gastos": 98458591,
+      "mdo": 14379408
     },
     {
       "month": "2026-01",
@@ -509,7 +511,8 @@
       "avgOrder": 158639,
       "perPerson": 41218,
       "source": "pos_report",
-      "gastos": 26803268
+      "gastos": 26803268,
+      "mdo": 2170298
     },
     {
       "month": "2026-01",
@@ -528,7 +531,8 @@
       "avgOrder": 10755,
       "perPerson": 10068,
       "source": "pos_report",
-      "gastos": 10260546
+      "gastos": 10260546,
+      "mdo": 1460178
     },
     {
       "month": "2026-01",
@@ -548,7 +552,8 @@
       "perPerson": 0,
       "source": "pos_report",
       "note": "File labeled Abril dias actual but contains January data",
-      "gastos": 73461437
+      "gastos": 73461437,
+      "mdo": 4959020
     },
     {
       "month": "2026-02",
@@ -688,7 +693,7 @@
       "gastos": 555577
     }
   ],
-  "lastUpdated": "2026-04-07T23:05:02.737Z",
+  "lastUpdated": "2026-04-07T23:35:42.147Z",
   "gastosTotals2025": {
     "esh": 93678771,
     "coyol": 254933429,
