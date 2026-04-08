@@ -72,11 +72,29 @@ Luxury real estate development company:
 |-------------|--------|----------|
 | **Nosara Hills** | Active | ✅ 1,379 features |
 | **Mar Azul** | Active | ✅ 2,856 features |
-| **Los Coyoles** | Coming Soon | ❌ Need KML |
+| **Los Coyoles** | Coming Soon | ✅ KML loaded |
 
 - **Website:** coyolrealestate.com (rebuilding)
 - **Style:** Discovery Land Company / Zapotal-inspired
 - **Colors:** Land Rover Heritage palette
+
+### Meraki Data Status (Updated April 8, 2026)
+
+**Sales Data Complete:**
+- Coyol 2025: ✅ All 12 months (from John)
+- Coyol Q1 2026: ✅ Jan/Feb/Mar with food/bar split
+- La Luna 2025: ✅ All 12 months
+- Esh 2025: ✅ All 12 months
+- Daily cierres: ✅ April 1-7, 2026
+
+**Invoices:**
+- 32 facturas parsed into invoices.json
+- Top suppliers: PMT, Mayca, Distribuidora Isleña
+
+**Pending:**
+- MDO (labor hours) data - files downloaded, need parsing
+- Lafise commission report - downloaded, need parsing
+- More facturas arriving daily
 
 ---
 
