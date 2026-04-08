@@ -106,14 +106,36 @@ Marion loves the classic Land Rover colors — used for both projects:
 
 ## 📧 Email Configuration
 
-### AgentMail
-- **Inbox:** marion@agentmail.to
-- **API Key:** `am_us_e66b9d779b060c4f69330f5c5d46bf0a7ee4b66bd8bc690ee2cc0de584847714`
-- **Purpose:** Receive forwarded sales/payment emails, invoices
+### Primary: Himalaya CLI (USE THIS!)
+- **Account name:** `meraki` (default in himalaya config)
+- **Email:** marionnosara@gmail.com
+- **Protocol:** Gmail IMAP/SMTP
+- **Receives:** ALL Meraki emails — cierres, facturas, supplier lists, etc.
 
-### Gmail
-- **Address:** marionnosara@gmail.com
-- **Forwarding:** Setting up auto-forward to marion@agentmail.to
+**⚠️ CHECK EVERY 30 MINUTES DURING HEARTBEATS!**
+
+**Daily operations:**
+```bash
+himalaya envelope list                    # List inbox
+himalaya envelope list --page-size 50     # More results  
+himalaya message read <ID>                # Read email body
+himalaya attachment download <ID>         # Download attachments to current dir
+himalaya flag add <ID> seen               # Mark as read after processing
+```
+
+**Workflow:**
+1. Check for unread emails (look for `*` flag)
+2. Download attachments for cierres/reports
+3. OCR images / parse Excel files
+4. Update `meraki-control/data/sales.json`
+5. Mark as read
+6. Alert Marion if urgent
+
+**IMPORTANT:** Always mark emails as read after processing!
+
+### AgentMail (Not used for Meraki)
+- **Inbox:** marion@agentmail.to  
+- **Note:** NOT connected to Meraki operations — ignore for restaurant data
 
 ### Meraki Email Accounts
 

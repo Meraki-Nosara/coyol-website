@@ -1,0 +1,787 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+  <name>Los Coyoles - D1 Masterplan</name>
+  <description>Preliminary subdivision design - 45 homesites</description>
+  
+  <!-- STYLES -->
+  
+  <!-- Estate Lots -->
+  <Style id="estate-lot">
+    <IconStyle>
+      <color>ff4080d4</color>
+      <scale>1.2</scale>
+      <Icon><href>http://maps.google.com/mapfiles/kml/shapes/homegardenbusiness.png</href></Icon>
+    </IconStyle>
+    <LabelStyle><scale>0.8</scale></LabelStyle>
+  </Style>
+  
+  <!-- Hillside Lots -->
+  <Style id="hillside-lot">
+    <IconStyle>
+      <color>ff78a8b8</color>
+      <scale>1.0</scale>
+      <Icon><href>http://maps.google.com/mapfiles/kml/shapes/homegardenbusiness.png</href></Icon>
+    </IconStyle>
+    <LabelStyle><scale>0.7</scale></LabelStyle>
+  </Style>
+  
+  <!-- Garden Lots -->
+  <Style id="garden-lot">
+    <IconStyle>
+      <color>ff8c9ca8</color>
+      <scale>0.9</scale>
+      <Icon><href>http://maps.google.com/mapfiles/kml/shapes/homegardenbusiness.png</href></Icon>
+    </IconStyle>
+    <LabelStyle><scale>0.7</scale></LabelStyle>
+  </Style>
+  
+  <!-- Roads -->
+  <Style id="main-road">
+    <LineStyle>
+      <color>ff445566</color>
+      <width>6</width>
+    </LineStyle>
+  </Style>
+  
+  <Style id="ridge-road">
+    <LineStyle>
+      <color>ff556677</color>
+      <width>4</width>
+    </LineStyle>
+  </Style>
+  
+  <!-- Amenities -->
+  <Style id="amenity">
+    <IconStyle>
+      <color>ff00aaff</color>
+      <scale>1.3</scale>
+      <Icon><href>http://maps.google.com/mapfiles/kml/shapes/star.png</href></Icon>
+    </IconStyle>
+  </Style>
+  
+  <!-- Conservation -->
+  <Style id="corridor">
+    <PolyStyle>
+      <color>6600aa00</color>
+      <outline>1</outline>
+    </PolyStyle>
+    <LineStyle>
+      <color>ff008800</color>
+      <width>2</width>
+    </LineStyle>
+  </Style>
+  
+  <!-- Phases -->
+  <Style id="phase1">
+    <PolyStyle><color>3300ff00</color></PolyStyle>
+    <LineStyle><color>ff00aa00</color><width>2</width></LineStyle>
+  </Style>
+  
+  <Style id="phase2">
+    <PolyStyle><color>33ff8800</color></PolyStyle>
+    <LineStyle><color>ffcc6600</color><width>2</width></LineStyle>
+  </Style>
+  
+  <Style id="phase3">
+    <PolyStyle><color>330088ff</color></PolyStyle>
+    <LineStyle><color>ff0066cc</color><width>2</width></LineStyle>
+  </Style>
+
+  <!-- ============================================ -->
+  <!-- PHASE BOUNDARIES -->
+  <!-- ============================================ -->
+  
+  <Folder>
+    <name>Phase Boundaries</name>
+    
+    <Placemark>
+      <name>Phase 1: The Sunset Ridge</name>
+      <description>32 hectares - 18 homesites - Best sunset views</description>
+      <styleUrl>#phase1</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              -85.643,9.992,0
+              -85.643,10.007,0
+              -85.632,10.007,0
+              -85.632,9.992,0
+              -85.643,9.992,0
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    
+    <Placemark>
+      <name>Phase 2: The Panorama</name>
+      <description>34 hectares - 15 homesites - 360° views</description>
+      <styleUrl>#phase2</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              -85.632,9.992,0
+              -85.632,10.007,0
+              -85.620,10.007,0
+              -85.620,9.992,0
+              -85.632,9.992,0
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    
+    <Placemark>
+      <name>Phase 3: The Reserve</name>
+      <description>25 hectares - 12 homesites - Nature-forward</description>
+      <styleUrl>#phase3</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              -85.620,9.992,0
+              -85.620,10.007,0
+              -85.610,10.007,0
+              -85.610,9.992,0
+              -85.620,9.992,0
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+  </Folder>
+
+  <!-- ============================================ -->
+  <!-- BIOLOGICAL CORRIDOR -->
+  <!-- ============================================ -->
+  
+  <Folder>
+    <name>Conservation</name>
+    
+    <Placemark>
+      <name>Biological Corridor</name>
+      <description>~36 hectares protected - Quebradas and riparian habitat</description>
+      <styleUrl>#corridor</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              -85.643,9.9925,0
+              -85.610,9.9935,0
+              -85.610,9.987,0
+              -85.643,9.987,0
+              -85.643,9.9925,0
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+  </Folder>
+
+  <!-- ============================================ -->
+  <!-- ROAD NETWORK -->
+  <!-- ============================================ -->
+  
+  <Folder>
+    <name>Roads</name>
+    
+    <Placemark>
+      <name>Main Entry Road</name>
+      <description>8m paved - Connection from Mar Azul</description>
+      <styleUrl>#main-road</styleUrl>
+      <LineString>
+        <coordinates>
+          -85.645,9.996,0
+          -85.636,9.996,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+    
+    <Placemark>
+      <name>Spine Road</name>
+      <description>8m paved - Main artery through all phases</description>
+      <styleUrl>#main-road</styleUrl>
+      <LineString>
+        <coordinates>
+          -85.636,9.996,0
+          -85.627,9.996,0
+          -85.615,9.996,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+    
+    <Placemark>
+      <name>Phase 1 Ridge Road</name>
+      <description>6m paved - Serves estate lots</description>
+      <styleUrl>#ridge-road</styleUrl>
+      <LineString>
+        <coordinates>
+          -85.636,9.996,0
+          -85.637,9.999,0
+          -85.638,10.002,0
+          -85.638,10.004,0
+          -85.637,10.006,0
+          -85.635,10.005,0
+          -85.634,10.003,0
+          -85.635,10.000,0
+          -85.636,9.996,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+    
+    <Placemark>
+      <name>Phase 2 Ridge Road</name>
+      <description>6m paved - Premium panoramic lots</description>
+      <styleUrl>#ridge-road</styleUrl>
+      <LineString>
+        <coordinates>
+          -85.627,9.996,0
+          -85.628,9.999,0
+          -85.629,10.002,0
+          -85.628,10.004,0
+          -85.626,10.005,0
+          -85.624,10.003,0
+          -85.623,10.001,0
+          -85.624,9.998,0
+          -85.627,9.996,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+    
+    <Placemark>
+      <name>Phase 3 Ridge Road</name>
+      <description>6m paved - The Reserve loop</description>
+      <styleUrl>#ridge-road</styleUrl>
+      <LineString>
+        <coordinates>
+          -85.615,9.996,0
+          -85.616,9.999,0
+          -85.616,10.002,0
+          -85.615,10.005,0
+          -85.613,10.006,0
+          -85.611,10.004,0
+          -85.612,10.001,0
+          -85.614,9.999,0
+          -85.615,9.996,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Folder>
+
+  <!-- ============================================ -->
+  <!-- AMENITIES -->
+  <!-- ============================================ -->
+  
+  <Folder>
+    <name>Amenities</name>
+    
+    <Placemark>
+      <name>The Coyoles Club</name>
+      <description>Main clubhouse - Restaurant, bar, infinity pool, spa, fitness</description>
+      <styleUrl>#amenity</styleUrl>
+      <Point><coordinates>-85.636,9.9965,0</coordinates></Point>
+    </Placemark>
+    
+    <Placemark>
+      <name>Infinity Pool</name>
+      <description>Ocean view, heated, 25m lap lanes</description>
+      <styleUrl>#amenity</styleUrl>
+      <Point><coordinates>-85.636,9.994,0</coordinates></Point>
+    </Placemark>
+    
+    <Placemark>
+      <name>Racquet Club</name>
+      <description>2 tennis courts, 4 pickleball courts</description>
+      <styleUrl>#amenity</styleUrl>
+      <Point><coordinates>-85.639,9.994,0</coordinates></Point>
+    </Placemark>
+    
+    <Placemark>
+      <name>Family Zone</name>
+      <description>Playground, splash pad, picnic area</description>
+      <styleUrl>#amenity</styleUrl>
+      <Point><coordinates>-85.633,9.994,0</coordinates></Point>
+    </Placemark>
+    
+    <Placemark>
+      <name>The Farm</name>
+      <description>Organic gardens, farm-to-table, education center</description>
+      <styleUrl>#amenity</styleUrl>
+      <Point><coordinates>-85.627,9.994,0</coordinates></Point>
+    </Placemark>
+    
+    <Placemark>
+      <name>Equestrian Center</name>
+      <description>Stables, riding arena, trail access</description>
+      <styleUrl>#amenity</styleUrl>
+      <Point><coordinates>-85.615,9.995,0</coordinates></Point>
+    </Placemark>
+    
+    <Placemark>
+      <name>Trail Center</name>
+      <description>Bikes, maps, nature guides - Access to corridor trails</description>
+      <styleUrl>#amenity</styleUrl>
+      <Point><coordinates>-85.636,9.992,0</coordinates></Point>
+    </Placemark>
+  </Folder>
+
+  <!-- ============================================ -->
+  <!-- PHASE 1 LOTS - THE SUNSET RIDGE -->
+  <!-- ============================================ -->
+  
+  <Folder>
+    <name>Phase 1: The Sunset Ridge (18 lots)</name>
+    
+    <Folder>
+      <name>Estate Lots (8)</name>
+      
+      <Placemark>
+        <name>Lot 1 - Sunset Estate</name>
+        <description>6,500 m² - Premium ocean view - West ridge</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.642,10.005,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 2 - Sunset Estate</name>
+        <description>5,800 m² - Ocean view</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.641,10.003,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 3 - Sunset Estate</name>
+        <description>5,500 m² - Ocean view</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.640,10.001,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 4 - Sunset Estate</name>
+        <description>7,200 m² - Premium corner lot</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.639,10.005,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 5 - Sunset Estate</name>
+        <description>6,000 m² - Ocean view</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.638,10.003,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 6 - Sunset Estate</name>
+        <description>8,000 m² - FLAGSHIP LOT - Best views, largest</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.637,10.006,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 7 - Sunset Estate</name>
+        <description>5,500 m² - Ocean view</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.636,10.004,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 8 - Sunset Estate</name>
+        <description>5,000 m² - Ocean view</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.635,10.002,0</coordinates></Point>
+      </Placemark>
+    </Folder>
+    
+    <Folder>
+      <name>Hillside Lots (6)</name>
+      
+      <Placemark>
+        <name>Lot 9 - Hillside</name>
+        <description>3,500 m² - Mountain and partial ocean view</description>
+        <styleUrl>#hillside-lot</styleUrl>
+        <Point><coordinates>-85.641,9.999,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 10 - Hillside</name>
+        <description>3,200 m² - Valley view</description>
+        <styleUrl>#hillside-lot</styleUrl>
+        <Point><coordinates>-85.639,9.998,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 11 - Hillside</name>
+        <description>3,800 m² - Central location</description>
+        <styleUrl>#hillside-lot</styleUrl>
+        <Point><coordinates>-85.637,10.000,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 12 - Hillside</name>
+        <description>3,000 m² - Near amenities</description>
+        <styleUrl>#hillside-lot</styleUrl>
+        <Point><coordinates>-85.635,9.999,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 13 - Hillside</name>
+        <description>3,500 m² - Inner ridge</description>
+        <styleUrl>#hillside-lot</styleUrl>
+        <Point><coordinates>-85.640,10.004,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 14 - Hillside</name>
+        <description>3,200 m² - Inner ridge</description>
+        <styleUrl>#hillside-lot</styleUrl>
+        <Point><coordinates>-85.638,10.001,0</coordinates></Point>
+      </Placemark>
+    </Folder>
+    
+    <Folder>
+      <name>Garden Lots (4)</name>
+      
+      <Placemark>
+        <name>Lot 15 - Garden</name>
+        <description>2,500 m² - Adjacent to clubhouse</description>
+        <styleUrl>#garden-lot</styleUrl>
+        <Point><coordinates>-85.639,9.996,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 16 - Garden</name>
+        <description>2,800 m² - Pool view</description>
+        <styleUrl>#garden-lot</styleUrl>
+        <Point><coordinates>-85.637,9.996,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 17 - Garden</name>
+        <description>2,500 m² - Near amenities</description>
+        <styleUrl>#garden-lot</styleUrl>
+        <Point><coordinates>-85.635,9.996,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 18 - Garden</name>
+        <description>2,200 m² - Trail access</description>
+        <styleUrl>#garden-lot</styleUrl>
+        <Point><coordinates>-85.633,9.997,0</coordinates></Point>
+      </Placemark>
+    </Folder>
+  </Folder>
+
+  <!-- ============================================ -->
+  <!-- PHASE 2 LOTS - THE PANORAMA -->
+  <!-- ============================================ -->
+  
+  <Folder>
+    <name>Phase 2: The Panorama (15 lots)</name>
+    
+    <Folder>
+      <name>Estate Lots (7)</name>
+      
+      <Placemark>
+        <name>Lot 19 - Panorama Estate</name>
+        <description>7,000 m² - 360° panoramic views</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.631,10.004,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 20 - Panorama Estate</name>
+        <description>7,500 m² - Premium ridge lot</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.629,10.005,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 21 - Panorama Estate</name>
+        <description>6,500 m² - Ocean and mountain views</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.627,10.004,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 22 - Panorama Estate</name>
+        <description>6,000 m² - Central ridge</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.625,10.003,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 23 - Panorama Estate</name>
+        <description>5,500 m² - Ridge terminus</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.623,10.002,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 24 - Panorama Estate</name>
+        <description>5,800 m² - Inner ridge</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.628,10.002,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 25 - Panorama Estate</name>
+        <description>5,200 m² - Inner ridge</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.626,10.001,0</coordinates></Point>
+      </Placemark>
+    </Folder>
+    
+    <Folder>
+      <name>Hillside Lots (5)</name>
+      
+      <Placemark>
+        <name>Lot 26 - Hillside</name>
+        <description>3,500 m² - Farm adjacent</description>
+        <styleUrl>#hillside-lot</styleUrl>
+        <Point><coordinates>-85.631,10.001,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 27 - Hillside</name>
+        <description>3,800 m² - Valley view</description>
+        <styleUrl>#hillside-lot</styleUrl>
+        <Point><coordinates>-85.629,10.000,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 28 - Hillside</name>
+        <description>3,200 m² - Central</description>
+        <styleUrl>#hillside-lot</styleUrl>
+        <Point><coordinates>-85.627,9.999,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 29 - Hillside</name>
+        <description>3,500 m² - Trail access</description>
+        <styleUrl>#hillside-lot</styleUrl>
+        <Point><coordinates>-85.624,10.000,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 30 - Hillside</name>
+        <description>3,000 m² - Eastern edge</description>
+        <styleUrl>#hillside-lot</styleUrl>
+        <Point><coordinates>-85.622,9.999,0</coordinates></Point>
+      </Placemark>
+    </Folder>
+    
+    <Folder>
+      <name>Garden Lots (3)</name>
+      
+      <Placemark>
+        <name>Lot 31 - Garden</name>
+        <description>2,800 m² - Farm view</description>
+        <styleUrl>#garden-lot</styleUrl>
+        <Point><coordinates>-85.630,9.996,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 32 - Garden</name>
+        <description>2,500 m² - Near farm</description>
+        <styleUrl>#garden-lot</styleUrl>
+        <Point><coordinates>-85.627,9.996,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 33 - Garden</name>
+        <description>2,500 m² - Trail access</description>
+        <styleUrl>#garden-lot</styleUrl>
+        <Point><coordinates>-85.624,9.996,0</coordinates></Point>
+      </Placemark>
+    </Folder>
+  </Folder>
+
+  <!-- ============================================ -->
+  <!-- PHASE 3 LOTS - THE RESERVE -->
+  <!-- ============================================ -->
+  
+  <Folder>
+    <name>Phase 3: The Reserve (12 lots)</name>
+    
+    <Folder>
+      <name>Estate Lots (5)</name>
+      
+      <Placemark>
+        <name>Lot 34 - Reserve Estate</name>
+        <description>6,000 m² - Eastern ridge, private</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.617,10.005,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 35 - Reserve Estate</name>
+        <description>7,000 m² - Highest point Phase 3</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.615,10.006,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 36 - Reserve Estate</name>
+        <description>6,500 m² - Forest edge</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.613,10.005,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 37 - Reserve Estate</name>
+        <description>5,500 m² - Most secluded</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.611,10.003,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 38 - Reserve Estate</name>
+        <description>5,000 m² - Inner reserve</description>
+        <styleUrl>#estate-lot</styleUrl>
+        <Point><coordinates>-85.614,10.003,0</coordinates></Point>
+      </Placemark>
+    </Folder>
+    
+    <Folder>
+      <name>Hillside Lots (4)</name>
+      
+      <Placemark>
+        <name>Lot 39 - Hillside</name>
+        <description>3,500 m² - Equestrian adjacent</description>
+        <styleUrl>#hillside-lot</styleUrl>
+        <Point><coordinates>-85.618,10.002,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 40 - Hillside</name>
+        <description>3,200 m² - Trail head</description>
+        <styleUrl>#hillside-lot</styleUrl>
+        <Point><coordinates>-85.616,10.001,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 41 - Hillside</name>
+        <description>3,500 m² - Forest view</description>
+        <styleUrl>#hillside-lot</styleUrl>
+        <Point><coordinates>-85.613,10.001,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 42 - Hillside</name>
+        <description>3,000 m² - Western edge</description>
+        <styleUrl>#hillside-lot</styleUrl>
+        <Point><coordinates>-85.619,9.999,0</coordinates></Point>
+      </Placemark>
+    </Folder>
+    
+    <Folder>
+      <name>Garden Lots (3)</name>
+      
+      <Placemark>
+        <name>Lot 43 - Garden</name>
+        <description>2,800 m² - Equestrian view</description>
+        <styleUrl>#garden-lot</styleUrl>
+        <Point><coordinates>-85.617,9.997,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 44 - Garden</name>
+        <description>2,500 m² - Near stables</description>
+        <styleUrl>#garden-lot</styleUrl>
+        <Point><coordinates>-85.614,9.997,0</coordinates></Point>
+      </Placemark>
+      
+      <Placemark>
+        <name>Lot 45 - Garden</name>
+        <description>2,200 m² - Trail access</description>
+        <styleUrl>#garden-lot</styleUrl>
+        <Point><coordinates>-85.612,9.998,0</coordinates></Point>
+      </Placemark>
+    </Folder>
+  </Folder>
+
+  <!-- ============================================ -->
+  <!-- TRAILS -->
+  <!-- ============================================ -->
+  
+  <Folder>
+    <name>Trail System</name>
+    
+    <Placemark>
+      <name>Main Corridor Trail</name>
+      <description>5km - Through biological corridor</description>
+      <Style>
+        <LineStyle>
+          <color>ff5588aa</color>
+          <width>3</width>
+        </LineStyle>
+      </Style>
+      <LineString>
+        <coordinates>
+          -85.636,9.992,0
+          -85.630,9.9915,0
+          -85.625,9.991,0
+          -85.620,9.9915,0
+          -85.615,9.992,0
+          -85.610,9.9925,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+    
+    <Placemark>
+      <name>Phase 1 Trail Connector</name>
+      <Style>
+        <LineStyle>
+          <color>ff5588aa</color>
+          <width>2</width>
+        </LineStyle>
+      </Style>
+      <LineString>
+        <coordinates>
+          -85.636,9.996,0
+          -85.636,9.994,0
+          -85.636,9.992,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+    
+    <Placemark>
+      <name>Phase 2 Trail Connector</name>
+      <Style>
+        <LineStyle>
+          <color>ff5588aa</color>
+          <width>2</width>
+        </LineStyle>
+      </Style>
+      <LineString>
+        <coordinates>
+          -85.627,9.996,0
+          -85.627,9.994,0
+          -85.627,9.992,0
+          -85.625,9.991,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+    
+    <Placemark>
+      <name>Phase 3 Trail Connector</name>
+      <Style>
+        <LineStyle>
+          <color>ff5588aa</color>
+          <width>2</width>
+        </LineStyle>
+      </Style>
+      <LineString>
+        <coordinates>
+          -85.615,9.996,0
+          -85.615,9.994,0
+          -85.615,9.992,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Folder>
+
+</Document>
+</kml>

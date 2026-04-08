@@ -20,6 +20,18 @@
       "12": { "sales": 17231458, "food": 11179996, "bar": 6051462 }
     },
     "coyol": {
+      "01": { "sales": 108666750, "food": 60891000, "bar": 47775750, "cash": 6237786, "card": 126878902 },
+      "02": { "sales": 99356050, "food": 57720600, "bar": 41635450, "cash": 7504833, "card": 113917151 },
+      "03": { "sales": 106849200, "food": 62677600, "bar": 44171600, "cash": 4641670, "card": 124512610 },
+      "04": { "sales": 87904106, "food": 49583500, "bar": 38320606, "cash": 3147179, "card": 104674468 },
+      "05": { "sales": 35739900, "food": 21108800, "bar": 14631100, "cash": 1237691, "card": 42020758 },
+      "06": { "sales": 44698720, "food": 26928820, "bar": 17769900, "cash": 1817935, "card": 52806502 },
+      "07": { "sales": 56531350, "food": 33690200, "bar": 22841150, "cash": 2351179, "card": 67010735 },
+      "08": { "sales": 34880250, "food": 21477100, "bar": 13403150, "cash": 1828459, "card": 40447219 },
+      "09": { "sales": 12068450, "food": 6958200, "bar": 5110250, "cash": 793627, "card": 13713781 },
+      "10": { "sales": 5859850, "food": 3641400, "bar": 2218450, "cash": 418800, "card": 6771166 },
+      "11": { "sales": 53616650, "food": 30508500, "bar": 23108150, "cash": 2015870, "card": 63744690 },
+      "12": { "sales": 98791613, "food": 58605200, "bar": 40186413, "cash": 2912634, "card": 117288566 },
       "annual": { "sales": 744962889, "food": 433790920, "bar": 311171969, "cash": 34907662, "card": 873786548 }
     },
     "laluna": {
@@ -84,9 +96,9 @@
       "03": { "sales": 18300000 }
     },
     "coyol": {
-      "01": { "sales": 98500000 },
-      "02": { "sales": 102700000 },
-      "03": { "sales": 111500000 }
+      "01": { "sales": 108802015, "food": 61340900, "bar": 47461115, "cash": 6371750, "card": 125139770 },
+      "02": { "sales": 93441010, "food": 53836500, "bar": 39604510, "cash": 3838389, "card": 109144737 },
+      "03": { "sales": 110438993, "food": 65665300, "bar": 44773693, "cash": 6680171, "card": 126987550 }
     },
     "laluna": {
       "01": { "sales": 203000000 },
@@ -96,9 +108,9 @@
   },
   "totals2026Q1": {
     "esh": 51899046,
-    "coyol": 312700000,
+    "coyol": 312682018,
     "laluna": 634600000,
-    "total": 999199046
+    "total": 999181064
   },
   "gastosTotals2026Q1": {
     "esh": 31747618,
@@ -107,6 +119,141 @@
     "total": 360439001
   },
   "daily": [
+    {
+      "date": "2026-04-07",
+      "restaurant": "coyol",
+      "total": 4345113,
+      "food": 2219400,
+      "bar": 1271600,
+      "netSales": 3491100,
+      "cash": 396500,
+      "card": 3948613,
+      "service10": 349110,
+      "iva13": 453843,
+      "source": "ingrid_email_apr8_himalaya"
+    },
+    {
+      "date": "2026-04-07",
+      "restaurant": "esh",
+      "total": 663370,
+      "netSales": 558884,
+      "cash": 87725,
+      "card": 458961,
+      "service10": 31831,
+      "iva13": 72655,
+      "source": "ingrid_email_apr8_himalaya"
+    },
+    {
+      "date": "2026-04-07",
+      "restaurant": "laluna",
+      "total": 8421008,
+      "netSales": 6852267,
+      "cash": 225200,
+      "card": 8195787,
+      "service10": 677946,
+      "iva13": 890795,
+      "source": "ingrid_email_apr8_himalaya"
+    },
+    {
+      "date": "2026-04-03",
+      "restaurant": "coyol",
+      "total": 5190662,
+      "food": 2921800,
+      "bar": 1380600,
+      "netSales": 4220050,
+      "cash": 184992,
+      "card": 5055669,
+      "service10": 422005,
+      "iva13": 548607,
+      "source": "ingrid_email_apr8"
+    },
+    {
+      "date": "2026-04-03",
+      "restaurant": "esh",
+      "total": 765819,
+      "netSales": 632188,
+      "cash": 82263,
+      "card": 662558,
+      "service10": 51413,
+      "iva13": 82185,
+      "source": "ingrid_email_apr8"
+    },
+    {
+      "date": "2026-04-03",
+      "restaurant": "laluna",
+      "total": 9558122,
+      "netSales": 7776336,
+      "cash": 439710,
+      "card": 9816328,
+      "service10": 770862,
+      "iva13": 1010924,
+      "source": "ingrid_email_apr8"
+    },
+    {
+      "date": "2026-04-02",
+      "restaurant": "coyol",
+      "total": 3663924,
+      "food": 1804900,
+      "bar": 1213700,
+      "netSales": 2978800,
+      "cash": 203000,
+      "card": 3511502,
+      "service10": 297880,
+      "iva13": 387244,
+      "source": "ingrid_email_apr8"
+    },
+    {
+      "date": "2026-04-02",
+      "restaurant": "esh",
+      "total": 648089,
+      "netSales": 547442,
+      "cash": 31068,
+      "card": 624335,
+      "service10": 29479,
+      "iva13": 71168,
+      "source": "ingrid_email_apr8"
+    },
+    {
+      "date": "2026-04-02",
+      "restaurant": "laluna",
+      "total": 11010188,
+      "netSales": 8969416,
+      "cash": 539500,
+      "card": 10571450,
+      "service10": 882292,
+      "iva13": 1158480,
+      "source": "ingrid_email_apr8"
+    },
+    {
+      "date": "2026-04-01",
+      "restaurant": "coyol",
+      "total": 4849644,
+      "food": 1864800,
+      "bar": 1542300,
+      "cash": 37269,
+      "card": 4812375,
+      "source": "ingrid_email_apr8"
+    },
+    {
+      "date": "2026-04-01",
+      "restaurant": "esh",
+      "total": 792991,
+      "netSales": 663856,
+      "cash": 2797232,
+      "card": 235731,
+      "service10": 43307,
+      "iva13": 85827,
+      "source": "ingrid_email_apr8"
+    },
+    {
+      "date": "2026-04-01",
+      "restaurant": "laluna",
+      "total": 8550646,
+      "netSales": 6864309,
+      "cash": 718500,
+      "card": 7831318,
+      "source": "ingrid_email_apr8"
+    },
     {
       "date": "2026-04-05",
       "restaurant": "esh",
@@ -176,5 +323,5 @@
       "cashier": "Julia Arrieta"
     }
   ],
-  "lastUpdated": "2026-04-07T13:10:00.000Z"
+  "lastUpdated": "2026-04-08T16:10:00.000Z"
 }

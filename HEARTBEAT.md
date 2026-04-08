@@ -2,11 +2,28 @@
 
 ## Priority Checks
 
-### 📧 Email (marion@agentmail.to)
-- Check for new forwarded sales/payment emails
-- Parse and log any new data
-- Alert Marion if important
-- **Sales images from restaurants** → Parse and store in `meraki-control/data/sales.json`
+### 📧 Email — CHECK EVERY 30 MINUTES!
+**Account:** marionnosara@gmail.com via Himalaya CLI
+
+```bash
+himalaya envelope list --page-size 30     # Check inbox
+himalaya attachment download <ID>         # Get attachments  
+himalaya flag add <ID> seen               # Mark read after processing
+```
+
+**What to look for:**
+- 🧾 **Ingrid cierres** (daily closing photos) → OCR → sales.json
+- 📋 **Silvia price lists** → Update suppliers.json
+- 🧾 **Facturas electrónicas** → Parse for cost tracking
+- 💳 **Lafise TCR reports** → Card commission data
+- 👷 **MDO/Salary files** → Labor hours data
+
+**After processing:**
+1. Update `meraki-control/data/sales.json`
+2. Mark email as read: `himalaya flag add <ID> seen`
+3. Alert Marion if anything urgent
+
+⚠️ **EVERY 30 MINUTES** — This is critical for daily operations!
 
 ### 📊 Meraki Daily Report (8pm Costa Rica) ⚠️ CRITICAL
 - **At 8pm (20:00) SHARP**: Generate and send daily report to Angelina (vailas78@yahoo.com)

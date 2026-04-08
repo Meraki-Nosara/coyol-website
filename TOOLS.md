@@ -1,9 +1,28 @@
 # TOOLS.md — Local Configuration & Notes
 
 ## Email
-- **AgentMail Inbox:** marion@agentmail.to
+
+### Primary Method: Himalaya CLI
+Use Himalaya for all email operations — reading, attachments, marking read.
+
+- **Account:** `meraki` (default)
+- **Email:** marionnosara@gmail.com
+- **Connected to:** Gmail IMAP/SMTP
+- **Receives:** All Meraki emails (cierres, facturas, supplier lists, etc.)
+
+**Common commands:**
+```bash
+himalaya envelope list                    # List inbox
+himalaya envelope list --page-size 50     # More results
+himalaya message read <ID>                # Read email body
+himalaya attachment download <ID>         # Download attachments
+himalaya flag add <ID> seen               # Mark as read
+```
+
+### AgentMail (NOT for Meraki)
+- **Inbox:** marion@agentmail.to
 - **API Key:** `am_us_e66b9d779b060c4f69330f5c5d46bf0a7ee4b66bd8bc690ee2cc0de584847714`
-- **Gmail:** marionnosara@gmail.com
+- **Note:** NOT connected to Meraki operations. Use only for other projects.
 
 ## API Keys
 - **OpenRouter:** Configured in ~/.openclaw/.env

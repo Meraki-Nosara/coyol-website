@@ -153,25 +153,29 @@
       "shortName": "Belca",
       "cedula": "belca",
       "category": "food-dist",
-      "subcategory": "general",
+      "subcategory": "groceries",
       "restaurant": "shared",
       "contact": {},
-      "notes": "Food distributor - price list from Silvia | Visits all 3 locations - needs invoice tag",
+      "notes": "Food/grocery distributor - nuts, seeds, siropes, spices. April 2026 price list | Visits all 3 locations",
       "products": {},
-      "priceHistory": [],
+      "priceHistory": [
+        { "date": "2026-04-06", "source": "silvia_email", "file": "LISTA DE PRECIOS BELCA.xlsx" }
+      ],
       "addedAt": "2026-04-07"
     },
     "alpiste": {
       "name": "Alpiste",
       "shortName": "Alpiste",
       "cedula": "alpiste",
-      "category": "food-dist",
-      "subcategory": "general",
-      "restaurant": "laluna",
+      "category": "beverages",
+      "subcategory": "wine",
+      "restaurant": "shared",
       "contact": {},
-      "notes": "Solo La Luna",
+      "notes": "Wine distributor - April 2026 price list from Silvia. Italian, Spanish, Chilean wines.",
       "products": {},
-      "priceHistory": [],
+      "priceHistory": [
+        { "date": "2026-04-06", "source": "silvia_email", "file": "LISTA DE PRECIOS ALPISTE.xlsx" }
+      ],
       "addedAt": "2026-04-07"
     },
     "carne-san-martin": {
@@ -208,11 +212,16 @@
       "subcategory": "liquor",
       "restaurant": "shared",
       "contact": {
-        "phone": "26866063"
+        "phone": "2686-6063",
+        "fax": "2686-7571",
+        "email": "info@lh.co.cr",
+        "location": "Nicoya, Guanacaste"
       },
-      "notes": "Liquor distributor - April 2026 price list from Silvia | Visits all 3 locations - needs invoice tag",
+      "notes": "Liquor distributor - Whisky, Vodka, Tequila, Rum, Gin, etc. April 2026 price list | Visits all 3 locations",
       "products": {},
-      "priceHistory": [],
+      "priceHistory": [
+        { "date": "2026-04-06", "source": "silvia_email", "file": "LISTA PRECIOS LICORERIAS HERRERA S.R.L.ABRIL 2026.xlsx" }
+      ],
       "addedAt": "2026-04-07"
     },
     "priscermat": {
@@ -351,8 +360,16 @@
   },
   "products": {},
   "metadata": {
-    "lastUpdated": "2026-04-07",
+    "lastUpdated": "2026-04-08",
     "totalSuppliers": 23,
-    "unmappedCount": 3
+    "unmappedCount": 3,
+    "priceListsLoaded": [
+      "Alpiste (wine) - April 2026",
+      "Licorerias Herrera (liquor) - April 2026",
+      "Belca (groceries) - April 2026",
+      "Carne San Martin (beef) - April 2026",
+      "Carnes La Anexion (beef) - April 2026",
+      "PMT (general) - April 2026"
+    ]
   }
 }
