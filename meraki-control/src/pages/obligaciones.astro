@@ -1,0 +1,470 @@
+---
+import Layout from '../layouts/Layout.astro';
+import fs from 'fs';
+import path from 'path';
+
+// Load obligations data
+const dataPath = path.join(process.cwd(), 'data/obligaciones.json');
+let obligations: Array<{
+  id: string;
+  name: string;
+  type: 'iva' | 'renta' | 'ccss' | 'patente' | 'other';
+  frequency: 'monthly' | 'quarterly' | 'annual';
+  dueDay: number; // Day of month (for monthly) or month (for annual)
+  dueMonth?: number; // For annual obligations
+  description: string;
+  haciendaCode?: string;
+  lastPaid?: string; // ISO date
+  lastPaidAmount?: number;
+  notes?: string;
+}> = [];
+
+const defaultObligations = [
+  {
+    id: 'iva-d104',
+    name: 'IVA (D-104)',
+    type: 'iva' as const,
+    frequency: 'monthly' as const,
+    dueDay: 15,
+    description: 'Declaración y pago del Impuesto al Valor Agregado',
+    haciendaCode: 'D-104'
+  },
+  {
+    id: 'ccss-patronal',
+    name: 'CCSS Patronal',
+    type: 'ccss' as const,
+    frequency: 'monthly' as const,
+    dueDay: 15,
+    description: 'Cuotas obrero-patronales de la Caja'
+  },
+  {
+    id: 'renta-d101',
+    name: 'Renta (D-101)',
+    type: 'renta' as const,
+    frequency: 'annual' as const,
+    dueDay: 15,
+    dueMonth: 12,
+    description: 'Declaración anual del Impuesto sobre la Renta',
+    haciendaCode: 'D-101'
+  },
+  {
+    id: 'patente-nosara',
+    name: 'Patente Municipal',
+    type: 'patente' as const,
+    frequency: 'quarterly' as const,
+    dueDay: 1,
+    description: 'Licencia comercial - Municipalidad de Nicoya'
+  },
+  {
+    id: 'd151-clientes',
+    name: 'D-151 Clientes',
+    type: 'other' as const,
+    frequency: 'annual' as const,
+    dueDay: 30,
+    dueMonth: 11,
+    description: 'Declaración informativa de clientes y proveedores',
+    haciendaCode: 'D-151'
+  }
+];
+
+if (fs.existsSync(dataPath)) {
+  try {
+    obligations = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+  } catch (e) {
+    obligations = defaultObligations;
+  }
+} else {
+  obligations = defaultObligations;
+}
+
+// Calculate status for each obligation
+const now = new Date();
+const currentYear = now.getFullYear();
+const currentMonth = now.getMonth() + 1;
+const currentDay = now.getDate();
+
+interface ObligationStatus {
+  obligation: typeof obligations[0];
+  nextDue: Date;
+  daysUntilDue: number;
+  status: 'overdue' | 'due-soon' | 'upcoming' | 'paid';
+  statusColor: string;
+  statusText: string;
+  period: string;
+}
+
+const getObligationStatus = (obl: typeof obligations[0]): ObligationStatus => {
+  let nextDue: Date;
+  let period: string;
+  
+  if (obl.frequency === 'monthly') {
+    // Due this month on dueDay, or next month if already past
+    if (currentDay <= obl.dueDay) {
+      nextDue = new Date(currentYear, currentMonth - 1, obl.dueDay);
+      period = new Date(currentYear, currentMonth - 2, 1).toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
+    } else {
+      nextDue = new Date(currentYear, currentMonth, obl.dueDay);
+      period = new Date(currentYear, currentMonth - 1, 1).toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
+    }
+  } else if (obl.frequency === 'quarterly') {
+    // Quarters: Q1 (Jan-Mar) due Apr 1, Q2 due Jul 1, Q3 due Oct 1, Q4 due Jan 1
+    const quarterDues = [
+      { month: 4, quarter: 'Q1' },
+      { month: 7, quarter: 'Q2' },
+      { month: 10, quarter: 'Q3' },
+      { month: 1, quarter: 'Q4' }
+    ];
+    const nextQuarter = quarterDues.find(q => 
+      q.month > currentMonth || (q.month === currentMonth && currentDay <= obl.dueDay)
+    ) || quarterDues[0];
+    const year = nextQuarter.month < currentMonth ? currentYear + 1 : currentYear;
+    nextDue = new Date(year, nextQuarter.month - 1, obl.dueDay);
+    period = nextQuarter.quarter + ' ' + (nextQuarter.month === 1 ? year - 1 : year);
+  } else {
+    // Annual
+    const dueMonth = obl.dueMonth || 12;
+    if (currentMonth < dueMonth || (currentMonth === dueMonth && currentDay <= obl.dueDay)) {
+      nextDue = new Date(currentYear, dueMonth - 1, obl.dueDay);
+    } else {
+      nextDue = new Date(currentYear + 1, dueMonth - 1, obl.dueDay);
+    }
+    period = 'Año fiscal ' + (nextDue.getFullYear() - 1);
+  }
+  
+  const daysUntilDue = Math.ceil((nextDue.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  
+  // Check if already paid for this period
+  let isPaid = false;
+  if (obl.lastPaid) {
+    const lastPaidDate = new Date(obl.lastPaid);
+    if (obl.frequency === 'monthly') {
+      // Paid if last payment was in the current or previous month (for current period)
+      isPaid = lastPaidDate >= new Date(currentYear, currentMonth - 2, 1);
+    } else if (obl.frequency === 'annual') {
+      isPaid = lastPaidDate.getFullYear() === currentYear;
+    }
+  }
+  
+  let status: 'overdue' | 'due-soon' | 'upcoming' | 'paid';
+  let statusColor: string;
+  let statusText: string;
+  
+  if (isPaid) {
+    status = 'paid';
+    statusColor = 'bg-green-100 text-green-800 border-green-300';
+    statusText = '✓ Al día';
+  } else if (daysUntilDue < 0) {
+    status = 'overdue';
+    statusColor = 'bg-red-100 text-red-800 border-red-300';
+    statusText = `⚠️ Vencido hace ${Math.abs(daysUntilDue)} días`;
+  } else if (daysUntilDue <= 5) {
+    status = 'due-soon';
+    statusColor = 'bg-amber-100 text-amber-800 border-amber-300';
+    statusText = daysUntilDue === 0 ? '⏰ Vence HOY' : `⏰ Vence en ${daysUntilDue} días`;
+  } else {
+    status = 'upcoming';
+    statusColor = 'bg-landrover-limestone text-landrover-santorini border-landrover-coniston/30';
+    statusText = `${daysUntilDue} días`;
+  }
+  
+  return { obligation: obl, nextDue, daysUntilDue, status, statusColor, statusText, period };
+};
+
+const statuses = obligations.map(getObligationStatus).sort((a, b) => a.daysUntilDue - b.daysUntilDue);
+
+const overdue = statuses.filter(s => s.status === 'overdue');
+const dueSoon = statuses.filter(s => s.status === 'due-soon');
+const upcoming = statuses.filter(s => s.status === 'upcoming');
+const paid = statuses.filter(s => s.status === 'paid');
+
+// Type colors
+const typeColors: Record<string, { bg: string; text: string }> = {
+  iva: { bg: 'bg-blue-100', text: 'text-blue-700' },
+  renta: { bg: 'bg-purple-100', text: 'text-purple-700' },
+  ccss: { bg: 'bg-teal-100', text: 'text-teal-700' },
+  patente: { bg: 'bg-orange-100', text: 'text-orange-700' },
+  other: { bg: 'bg-gray-100', text: 'text-gray-700' }
+};
+
+const typeLabels: Record<string, string> = {
+  iva: 'IVA',
+  renta: 'Renta',
+  ccss: 'CCSS',
+  patente: 'Patente',
+  other: 'Otro'
+};
+
+const frequencyLabels: Record<string, string> = {
+  monthly: 'Mensual',
+  quarterly: 'Trimestral',
+  annual: 'Anual'
+};
+
+const formatDate = (date: Date) => date.toLocaleDateString('es-CR', { 
+  day: 'numeric', 
+  month: 'short', 
+  year: 'numeric' 
+});
+---
+
+<Layout title="Obligaciones Tributarias">
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-landrover-keswick text-white flex-shrink-0 hidden lg:flex lg:flex-col">
+      <div class="p-6">
+        <h1 class="font-serif text-2xl font-semibold tracking-wide">Meraki</h1>
+        <p class="text-landrover-limestone/60 text-xs mt-1">Financial Control</p>
+      </div>
+      
+      <nav class="mt-4 flex-1">
+        <a href="/mensual" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          <span class="text-sm font-medium">Dashboard</span>
+        </a>
+        
+        <a href="/reportes" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span class="text-sm">Reports</span>
+        </a>
+        
+        <a href="/informes" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+          </svg>
+          <span class="text-sm">PDF Reports</span>
+        </a>
+        
+        <a href="/facturas" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span class="text-sm">Facturas</span>
+        </a>
+        
+        <a href="/obligaciones" class="flex items-center gap-3 px-6 py-3 bg-white/10 text-white border-l-4 border-landrover-sand">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span class="text-sm font-medium">Obligaciones</span>
+        </a>
+      </nav>
+      
+      <!-- User & Logout -->
+      <div class="p-6 border-t border-white/10">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-landrover-sand rounded-full flex items-center justify-center text-landrover-keswick font-semibold">
+              AP
+            </div>
+            <div>
+              <p class="text-sm font-medium">Angelina</p>
+              <p class="text-xs text-landrover-limestone/60">Admin</p>
+            </div>
+          </div>
+          <a href="/logout" class="text-landrover-limestone/60 hover:text-white transition-colors" title="Log out">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-auto">
+      <!-- Mobile Header -->
+      <header class="lg:hidden bg-landrover-keswick text-white p-4 flex items-center justify-between">
+        <h1 class="font-serif text-xl font-semibold">Meraki</h1>
+        <a href="/logout" class="text-landrover-limestone/80">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+        </a>
+      </header>
+      
+      <div class="p-6 lg:p-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+          <h2 class="text-2xl lg:text-3xl font-serif font-semibold text-landrover-santorini">Obligaciones Tributarias</h2>
+          <p class="text-landrover-santorini/60 mt-1">Calendario de impuestos y pagos obligatorios</p>
+        </div>
+
+        <!-- Alert Summary -->
+        {(overdue.length > 0 || dueSoon.length > 0) && (
+          <div class="mb-8 p-4 rounded-xl bg-red-50 border border-red-200">
+            <div class="flex items-start gap-3">
+              <div class="text-2xl">⚠️</div>
+              <div>
+                <h3 class="font-semibold text-red-800">Atención Requerida</h3>
+                <p class="text-red-700 text-sm mt-1">
+                  {overdue.length > 0 && <span class="font-medium">{overdue.length} vencido{overdue.length > 1 ? 's' : ''}</span>}
+                  {overdue.length > 0 && dueSoon.length > 0 && ' • '}
+                  {dueSoon.length > 0 && <span>{dueSoon.length} por vencer</span>}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <!-- Status Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-center">
+            <div class="text-3xl font-bold text-red-700">{overdue.length}</div>
+            <div class="text-sm text-red-600">Vencidos</div>
+          </div>
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-center">
+            <div class="text-3xl font-bold text-amber-700">{dueSoon.length}</div>
+            <div class="text-sm text-amber-600">Por vencer</div>
+          </div>
+          <div class="bg-landrover-limestone rounded-xl p-4 text-center border border-landrover-coniston/20">
+            <div class="text-3xl font-bold text-landrover-santorini">{upcoming.length}</div>
+            <div class="text-sm text-landrover-santorini/70">Próximos</div>
+          </div>
+          <div class="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
+            <div class="text-3xl font-bold text-green-700">{paid.length}</div>
+            <div class="text-sm text-green-600">Al día</div>
+          </div>
+        </div>
+
+        <!-- Obligations List -->
+        <div class="space-y-4">
+          {statuses.map(({ obligation, nextDue, status, statusColor, statusText, period }) => (
+            <div class={`bg-white rounded-xl border-2 p-5 transition-all hover:shadow-md ${
+              status === 'overdue' ? 'border-red-300' : 
+              status === 'due-soon' ? 'border-amber-300' : 
+              status === 'paid' ? 'border-green-300' : 
+              'border-landrover-limestone'
+            }`}>
+              <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                <div class="flex-1">
+                  <div class="flex items-center gap-3 mb-2">
+                    <h3 class="text-lg font-semibold text-landrover-santorini">{obligation.name}</h3>
+                    <span class={`px-2 py-0.5 rounded-full text-xs font-medium ${typeColors[obligation.type].bg} ${typeColors[obligation.type].text}`}>
+                      {typeLabels[obligation.type]}
+                    </span>
+                    <span class="px-2 py-0.5 rounded-full text-xs bg-gray-100 text-gray-600">
+                      {frequencyLabels[obligation.frequency]}
+                    </span>
+                  </div>
+                  <p class="text-sm text-landrover-santorini/60">{obligation.description}</p>
+                  <p class="text-sm text-landrover-santorini/80 mt-1">
+                    <span class="font-medium">Período:</span> {period} • 
+                    <span class="font-medium">Vence:</span> {formatDate(nextDue)}
+                  </p>
+                  {obligation.lastPaid && (
+                    <p class="text-xs text-green-600 mt-1">
+                      ✓ Último pago: {new Date(obligation.lastPaid).toLocaleDateString('es-CR')}
+                      {obligation.lastPaidAmount && ` — ₡${obligation.lastPaidAmount.toLocaleString()}`}
+                    </p>
+                  )}
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class={`px-4 py-2 rounded-lg border text-sm font-medium ${statusColor}`}>
+                    {statusText}
+                  </span>
+                  <button 
+                    class="px-4 py-2 bg-landrover-keswick text-white rounded-lg text-sm font-medium hover:bg-landrover-coniston transition-colors"
+                    onclick={`markPaid('${obligation.id}')`}
+                  >
+                    Marcar pagado
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Portal Links -->
+        <div class="mt-8 p-6 bg-landrover-limestone rounded-xl">
+          <h3 class="font-semibold text-landrover-santorini mb-4">Enlaces Útiles</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <a href="https://www.hacienda.go.cr/ATV/Login.aspx" target="_blank" 
+               class="flex items-center gap-3 p-4 bg-white rounded-lg border border-landrover-coniston/20 hover:border-landrover-keswick transition-colors">
+              <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+              </div>
+              <div>
+                <p class="font-medium text-landrover-santorini">Portal ATV</p>
+                <p class="text-xs text-landrover-santorini/60">Hacienda</p>
+              </div>
+            </a>
+            <a href="https://sfa.ccss.sa.cr" target="_blank"
+               class="flex items-center gap-3 p-4 bg-white rounded-lg border border-landrover-coniston/20 hover:border-landrover-keswick transition-colors">
+              <div class="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </div>
+              <div>
+                <p class="font-medium text-landrover-santorini">Portal CCSS</p>
+                <p class="text-xs text-landrover-santorini/60">Seguro Social</p>
+              </div>
+            </a>
+            <a href="https://www.nicoya.go.cr/" target="_blank"
+               class="flex items-center gap-3 p-4 bg-white rounded-lg border border-landrover-coniston/20 hover:border-landrover-keswick transition-colors">
+              <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 text-orange-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+                </svg>
+              </div>
+              <div>
+                <p class="font-medium text-landrover-santorini">Municipalidad</p>
+                <p class="text-xs text-landrover-santorini/60">Nicoya</p>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Info Box -->
+        <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+          <div class="flex gap-3">
+            <div class="text-blue-500">ℹ️</div>
+            <div class="text-sm text-blue-800">
+              <p class="font-medium">¿Cómo funciona?</p>
+              <p class="mt-1">Este calendario muestra las obligaciones tributarias de Meraki Family Limitada. 
+              Cuando realices un pago, haz clic en "Marcar pagado" para actualizar el estado. 
+              El sistema calculará automáticamente la próxima fecha de vencimiento.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</Layout>
+
+<script>
+  async function markPaid(obligationId: string) {
+    const amount = prompt('Monto pagado (opcional):');
+    const today = new Date().toISOString().split('T')[0];
+    
+    try {
+      const response = await fetch('/api/obligaciones', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'mark-paid',
+          id: obligationId,
+          date: today,
+          amount: amount ? parseFloat(amount.replace(/[^0-9.]/g, '')) : null
+        })
+      });
+      
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        alert('Error al actualizar. Intente de nuevo.');
+      }
+    } catch (e) {
+      alert('Error de conexión.');
+    }
+  }
+  
+  // Make function available globally
+  (window as any).markPaid = markPaid;
+</script>

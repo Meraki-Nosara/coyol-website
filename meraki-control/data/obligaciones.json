@@ -1,0 +1,62 @@
+[
+  {
+    "id": "iva-d104",
+    "name": "IVA (D-104)",
+    "type": "iva",
+    "frequency": "monthly",
+    "dueDay": 15,
+    "description": "Declaración y pago del Impuesto al Valor Agregado",
+    "haciendaCode": "D-104",
+    "notes": "Pago mensual del IVA recaudado. Se declara el mes anterior."
+  },
+  {
+    "id": "ccss-patronal",
+    "name": "CCSS Patronal",
+    "type": "ccss",
+    "frequency": "monthly",
+    "dueDay": 15,
+    "description": "Cuotas obrero-patronales de la Caja Costarricense de Seguro Social",
+    "notes": "Incluye: seguro de salud, pensiones, IVM, SEM, Banco Popular, IMAS, INA."
+  },
+  {
+    "id": "renta-d101",
+    "name": "Renta (D-101)",
+    "type": "renta",
+    "frequency": "annual",
+    "dueDay": 15,
+    "dueMonth": 12,
+    "description": "Declaración anual del Impuesto sobre la Renta",
+    "haciendaCode": "D-101",
+    "notes": "Año fiscal Oct-Sep. Declaración en diciembre."
+  },
+  {
+    "id": "patente-nosara",
+    "name": "Patente Municipal",
+    "type": "patente",
+    "frequency": "quarterly",
+    "dueDay": 1,
+    "description": "Licencia comercial - Municipalidad de Nicoya (distrito Nosara)",
+    "notes": "Pago trimestral. Renovación anual de permisos."
+  },
+  {
+    "id": "d151-clientes",
+    "name": "D-151 Clientes y Proveedores",
+    "type": "other",
+    "frequency": "annual",
+    "dueDay": 30,
+    "dueMonth": 11,
+    "description": "Declaración informativa anual de clientes, proveedores y gastos específicos",
+    "haciendaCode": "D-151",
+    "notes": "Informativo, no genera pago. Reporta transacciones >₡2.5M anuales."
+  },
+  {
+    "id": "ins-poliza",
+    "name": "Póliza INS (Riesgos del Trabajo)",
+    "type": "other",
+    "frequency": "annual",
+    "dueDay": 1,
+    "dueMonth": 1,
+    "description": "Seguro obligatorio de riesgos del trabajo - Instituto Nacional de Seguros",
+    "notes": "Renovación anual. Cubre accidentes laborales."
+  }
+]
