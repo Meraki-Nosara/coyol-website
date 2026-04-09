@@ -1504,8 +1504,391 @@
         }
       ],
       "parsed_at": "2026-04-08T10:33:34.276588"
+    },
+    {
+      "clave": "50608042600310175902500200001010000101733116193571",
+      "supplier": "RINDE MAS GUANACASTE S.A",
+      "supplier_id": "3101759025",
+      "receiver": "MERAKI FAMILY Ltda                                                              ",
+      "date": "2026-04-08",
+      "subtotal": 5336.28319,
+      "iva": 693.71681,
+      "total": 6030.0,
+      "items": [
+        {
+          "product": "CREMA DULCE DOS PINOS TB 1L",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 5336.28319,
+          "total": 6030.0
+        }
+      ],
+      "parsed_at": "2026-04-08T18:39:48.065010"
+    },
+    {
+      "clave": "50608042600310263070000100212010000074702100074702",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "receiver": "MERAKI FAMILY LTDA",
+      "date": "2026-04-08",
+      "subtotal": 36734.13,
+      "iva": 4775.4369,
+      "total": 41509.5669,
+      "items": [
+        {
+          "product": "ARENA METRO CUBICO F4-F6 S1:3298662043511 S2:101985",
+          "qty": 0.5,
+          "unit": "Unid",
+          "unit_price": 30000.0,
+          "total": 16950.0
+        },
+        {
+          "product": "PIEDRA QUINTA BLANCA 12.5MM F1-F2-F4 S1:3179892021749 S2:800010",
+          "qty": 0.5,
+          "unit": "Unid",
+          "unit_price": 19752.1,
+          "total": 11159.9365
+        },
+        {
+          "product": "CEMENTO GRIS PROGRESO UG VERDE 50 KG S1:3107322000965 S2:000612",
+          "qty": 2.0,
+          "unit": "Unid",
+          "unit_price": 5929.04,
+          "total": 13399.6304
+        }
+      ],
+      "parsed_at": "2026-04-08T18:39:48.067506"
+    },
+    {
+      "clave": "50608042600310212090800100001010000047878100002825",
+      "supplier": "LICORERIAS HERRERA SRL",
+      "supplier_id": "3102120908",
+      "receiver": "MERAKI FAMILY LTDA                                                                                  ",
+      "date": "2026-04-08",
+      "subtotal": 1321357.5,
+      "iva": 171776.48,
+      "total": 1493133.98,
+      "items": [
+        {
+          "product": "PATRON SILVER 700 ML",
+          "qty": 3.0,
+          "unit": "Unid",
+          "unit_price": 40665.0,
+          "total": 124068.92
+        },
+        {
+          "product": "PATRON REPOSADO 700 ML",
+          "qty": 3.0,
+          "unit": "Unid",
+          "unit_price": 43690.0,
+          "total": 133298.19
+        },
+        {
+          "product": "DON JULIO BLANCO 750ML",
+          "qty": 6.0,
+          "unit": "Unid",
+          "unit_price": 27000.0,
+          "total": 164754.0
+        },
+        {
+          "product": "JARANA BLANCO 1000ML",
+          "qty": 6.0,
+          "unit": "Unid",
+          "unit_price": 10050.0,
+          "total": 61325.1
+        },
+        {
+          "product": "FLOR 4 ANOS 1000 ML",
+          "qty": 6.0,
+          "unit": "Unid",
+          "unit_price": 7665.0,
+          "total": 46771.83
+        },
+        {
+          "product": "JOHNNIE RED 1000ML",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 10350.0,
+          "total": 11695.5
+        },
+        {
+          "product": "LICOR APEROL 700ML",
+          "qty": 6.0,
+          "unit": "Unid",
+          "unit_price": 12700.0,
+          "total": 77495.4
+        },
+        {
+          "product": "AMARETO DISARONNO LITRO",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 19500.0,
+          "total": 19831.5
+        },
+        {
+          "product": "GRAND MARNIER ROJO 700 ML",
+          "qty": 6.0,
+          "unit": "Unid",
+          "unit_price": 27560.0,
+          "total": 168171.12
+        },
+        {
+          "product": "COINTREAU 1000ML",
+          "qty": 4.0,
+          "unit": "Unid",
+          "unit_price": 20730.0,
+          "total": 84329.64
+        },
+        {
+          "product": "HENDRICK S GIN 700ML",
+          "qty": 4.0,
+          "unit": "Unid",
+          "unit_price": 22250.0,
+          "total": 90513.0
+        },
+        {
+          "product": "TITOS HANDMADE 1000ML",
+          "qty": 5.0,
+          "unit": "Unid",
+          "unit_price": 18260.0,
+          "total": 92852.1
+        },
+        {
+          "product": "TEQUILA NOSOTROS BLANCO 750 ML",
+          "qty": 8.0,
+          "unit": "Unid",
+          "unit_price": 29030.0,
+          "total": 236188.08
+        },
+        {
+          "product": "TEQUILA NOSOTROS REPOSADO 750 ML",
+          "qty": 4.0,
+          "unit": "Unid",
+          "unit_price": 33600.0,
+          "total": 136684.8
+        },
+        {
+          "product": "SANTA CAROLINA RESERVADO BRUT 750 ML",
+          "qty": 12.0,
+          "unit": "Unid",
+          "unit_price": 3700.0,
+          "total": 45154.8
+        }
+      ],
+      "parsed_at": "2026-04-08T18:39:48.071980"
+    },
+    {
+      "clave": "50608042600310287286400100001010000000858120603088",
+      "supplier": "IMPORTACION Y DISTRIBUCION DE VINOS",
+      "supplier_id": "3102872864",
+      "receiver": "Meraki Family LTDA",
+      "date": "2026-04-08",
+      "subtotal": 383.5,
+      "iva": 49.86,
+      "total": 433.36,
+      "items": [
+        {
+          "product": "vino tinto LOS BARBAROS",
+          "qty": 6.0,
+          "unit": "Unid",
+          "unit_price": 31.25,
+          "total": 211.88
+        },
+        {
+          "product": "mezcal MADRE ESPADIN",
+          "qty": 4.0,
+          "unit": "Unid",
+          "unit_price": 49.0,
+          "total": 221.48
+        }
+      ],
+      "parsed_at": "2026-04-08T18:39:48.074345"
+    },
+    {
+      "clave": "50608042600310263136500100003010000048801128282860",
+      "supplier": "Green Solutions Tiquicia SRL",
+      "supplier_id": "3102631365",
+      "receiver": "Meraki Family LTDA / La Luna",
+      "date": "2026-04-08",
+      "subtotal": 181876.09,
+      "iva": 23643.9,
+      "total": 205519.99,
+      "items": [
+        {
+          "product": "Caja Kraft Retro #3",
+          "qty": 4.0,
+          "unit": "Unid",
+          "unit_price": 22000.0,
+          "total": 99440.0
+        },
+        {
+          "product": "Caja Kraft Retro #1",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 27000.0,
+          "total": 30510.0
+        },
+        {
+          "product": "Vasos de Carton 12 onz. Doble Pared",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 27000.0,
+          "total": 30510.0
+        },
+        {
+          "product": "Tapa vaso 90mm (12oz-22oz) Bagazo Bebida caliente",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 24300.89,
+          "total": 27460.01
+        },
+        {
+          "product": "Tenedor Madera Desechable ( 10 UDS)",
+          "qty": 20.0,
+          "unit": "Unid",
+          "unit_price": 389.38,
+          "total": 8799.99
+        },
+        {
+          "product": "Cuchara Madera Desechable ( 10 UDS)",
+          "qty": 20.0,
+          "unit": "Unid",
+          "unit_price": 389.38,
+          "total": 8799.99
+        }
+      ],
+      "parsed_at": "2026-04-08T18:39:48.074683"
+    },
+    {
+      "clave": "50608042600310285267800100001010000119188111607681",
+      "supplier": "GRUPO SUPERMERCADO NOSARA LIMITADA",
+      "supplier_id": "3102852678",
+      "receiver": "MERAKI FAMILY S.A                                                               ",
+      "date": "2026-04-08",
+      "subtotal": 1814.15929,
+      "iva": 235.84071,
+      "total": 2050.0,
+      "items": [
+        {
+          "product": "BADIA GRAJEAS POSTRES 113GR",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 1814.15929,
+          "total": 2050.0
+        }
+      ],
+      "parsed_at": "2026-04-08T18:39:48.074991"
+    },
+    {
+      "clave": "50608042600310162292500100061010000023289185765597",
+      "supplier": "3101622925 S.A",
+      "supplier_id": "3101622925",
+      "receiver": "MERAKI FAMILY S.A.",
+      "date": "2026-04-08",
+      "subtotal": 233735.02,
+      "iva": 0.0,
+      "total": 233735.02,
+      "items": [
+        {
+          "product": "LITROS DE GAS-GRANEL",
+          "qty": 1262.0,
+          "unit": "L",
+          "unit_price": 185.21,
+          "total": 233735.02
+        }
+      ],
+      "parsed_at": "2026-04-08T18:39:48.078019"
+    },
+    {
+      "clave": "50608042600310212090800100001010000047872100002825",
+      "supplier": "LICORERIAS HERRERA SRL",
+      "supplier_id": "3102120908",
+      "receiver": "MERAKI FAMILY LTDA                                                                                  ",
+      "date": "2026-04-08",
+      "subtotal": 233095.5,
+      "iva": 30302.42,
+      "total": 263397.92,
+      "items": [
+        {
+          "product": "JIM BEAM WHITE 1000ML",
+          "qty": 2.0,
+          "unit": "Unid",
+          "unit_price": 18215.0,
+          "total": 37049.31
+        },
+        {
+          "product": "ABSOLUT 1750ML",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 32515.0,
+          "total": 33067.76
+        },
+        {
+          "product": "O.S CRANBERRY 64 OZ",
+          "qty": 2.0,
+          "unit": "Unid",
+          "unit_price": 3650.0,
+          "total": 7424.1
+        },
+        {
+          "product": "TITOS HANDMADE 1000ML",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 18260.0,
+          "total": 18570.42
+        },
+        {
+          "product": "GIN BOMBAY 1000 ML",
+          "qty": 2.0,
+          "unit": "Unid",
+          "unit_price": 16935.0,
+          "total": 34445.79
+        },
+        {
+          "product": "LIMONCELLO 700 ML IL MALLO",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 14500.0,
+          "total": 14746.5
+        },
+        {
+          "product": "TEQUILA NOSOTROS BLANCO 750 ML",
+          "qty": 4.0,
+          "unit": "Unid",
+          "unit_price": 29030.0,
+          "total": 118094.04
+        }
+      ],
+      "parsed_at": "2026-04-08T18:39:48.078379"
+    },
+    {
+      "clave": "50608042600310287286400100001010000000859161382581",
+      "supplier": "IMPORTACION Y DISTRIBUCION DE VINOS",
+      "supplier_id": "3102872864",
+      "receiver": "Meraki Family LTDA",
+      "date": "2026-04-08",
+      "subtotal": 696.0,
+      "iva": 90.48,
+      "total": 786.48,
+      "items": [
+        {
+          "product": "vino blanco BOTTER PINOT-GRIGIO",
+          "qty": 12.0,
+          "unit": "Unid",
+          "unit_price": 15.5,
+          "total": 210.18
+        },
+        {
+          "product": "vino tinto MACHARD POMMARD",
+          "qty": 6.0,
+          "unit": "Unid",
+          "unit_price": 85.0,
+          "total": 576.3
+        }
+      ],
+      "parsed_at": "2026-04-08T18:39:48.079922"
     }
   ],
-  "lastUpdated": "2026-04-08T10:33:34.276710",
-  "count": 32
+  "lastUpdated": "2026-04-08T18:39:48.080539",
+  "count": 41
 }
