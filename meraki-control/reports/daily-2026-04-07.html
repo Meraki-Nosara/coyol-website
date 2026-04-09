@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meraki Daily Report - April 7, 2026</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #FAFAF8;
+      color: #1A1F16;
+      padding: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 2px solid #E5E5E0;
+    }
+    
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1A1F16;
+      margin-bottom: 8px;
+    }
+    
+    .header .date {
+      font-size: 16px;
+      color: #666;
+      font-weight: 500;
+    }
+    
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    
+    .restaurant-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border-left: 4px solid;
+    }
+    
+    .restaurant-card.esh { border-color: #C4A67C; }
+    .restaurant-card.coyol { border-color: #3D4F3D; }
+    .restaurant-card.laluna { border-color: #A65D3F; }
+    
+    .restaurant-card h3 {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+    
+    .restaurant-card.esh h3 { color: #C4A67C; }
+    .restaurant-card.coyol h3 { color: #3D4F3D; }
+    .restaurant-card.laluna h3 { color: #A65D3F; }
+    
+    .restaurant-card .total {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1A1F16;
+      margin-bottom: 16px;
+    }
+    
+    .restaurant-card .breakdown {
+      font-size: 13px;
+      color: #666;
+    }
+    
+    .restaurant-card .breakdown div {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    
+    .total-card {
+      background: #1A1F16;
+      color: white;
+      border-radius: 12px;
+      padding: 32px;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    
+    .total-card h2 {
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.7;
+      margin-bottom: 8px;
+    }
+    
+    .total-card .amount {
+      font-size: 42px;
+      font-weight: 700;
+    }
+    
+    .total-card .usd {
+      font-size: 18px;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+    
+    .payment-breakdown {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    
+    .payment-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      text-align: center;
+    }
+    
+    .payment-card h4 {
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    
+    .payment-card .amount {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1A1F16;
+    }
+    
+    .payment-card .percent {
+      font-size: 14px;
+      color: #666;
+      margin-top: 4px;
+    }
+    
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+      padding-top: 24px;
+      border-top: 1px solid #E5E5E0;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Meraki Daily Report</h1>
+    <div class="date">Tuesday, April 7, 2026</div>
+  </div>
+
+  <div class="total-card">
+    <h2>Total Sales</h2>
+    <div class="amount">₡13,429,491</div>
+    <div class="usd">$26,593 USD</div>
+  </div>
+
+  <div class="summary-grid">
+    <div class="restaurant-card laluna">
+      <h3>La Luna</h3>
+      <div class="total">₡8,421,008</div>
+      <div class="breakdown">
+        <div><span>Cash</span><span>₡225,200</span></div>
+        <div><span>Card</span><span>₡8,195,787</span></div>
+        <div><span>Share</span><span>62.7%</span></div>
+      </div>
+    </div>
+    
+    <div class="restaurant-card coyol">
+      <h3>Coyol</h3>
+      <div class="total">₡4,345,113</div>
+      <div class="breakdown">
+        <div><span>Cash</span><span>₡396,500</span></div>
+        <div><span>Card</span><span>₡3,948,613</span></div>
+        <div><span>Share</span><span>32.4%</span></div>
+      </div>
+    </div>
+    
+    <div class="restaurant-card esh">
+      <h3>Esh</h3>
+      <div class="total">₡663,370</div>
+      <div class="breakdown">
+        <div><span>Cash</span><span>₡87,725</span></div>
+        <div><span>Card</span><span>₡458,961</span></div>
+        <div><span>Share</span><span>4.9%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="payment-breakdown">
+    <div class="payment-card">
+      <h4>Cash</h4>
+      <div class="amount">₡709,425</div>
+      <div class="percent">5.3% of total</div>
+    </div>
+    <div class="payment-card">
+      <h4>Card</h4>
+      <div class="amount">₡12,603,361</div>
+      <div class="percent">93.8% of total</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Generated by Meraki Control · Data from Ingrid's daily closing reports
+  </div>
+</body>
+</html>
