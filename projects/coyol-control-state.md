@@ -1,13 +1,13 @@
 # Coyol Control System — State Documentation
 
-*Last updated: April 8, 2026 — 9:54 PM*
+*Last updated: April 8, 2026 — 10:49 PM*
 
 ---
 
 ## Overview
 
 **Purpose:** Internal property management system for Coyol Real Estate
-**URL:** https://coyol-control.vercel.app (or similar)
+**URL:** https://coyol-control.vercel.app
 **Repo:** https://github.com/Meraki-Nosara/coyol-control (private)
 **Local:** `~/.openclaw/workspace/coyol-control/`
 **Stack:** Astro + Tailwind CSS + GSAP
@@ -146,13 +146,20 @@ Each lot goes through these steps before sale:
 
 ## To Do
 
+- [ ] **Get lot preparation status from Marion** — which lots have what documents
 - [ ] Add lot sizes to Nosara Hills (from planos or Excel)
-- [ ] Set up email reminders to team
-- [ ] Add contact info for Topógrafo, Abogado
+- [ ] Set up email reminders to team (Topógrafo, Abogado, Anlly)
+- [ ] Add contact info for Topógrafo, Abogado, Anlly
 - [ ] Fix polygon shapes to match actual boundaries precisely
 - [ ] Add other Nosara Hills etapas (2, 3, 4)
 - [ ] Add Los Coyoles lot data
 - [ ] Set up obscure domain for security
+
+## Key Notes
+
+- **Mar Azul** = Condominio (shared infrastructure, HOA)
+- **Nosara Hills** = Parcelas Agrícolas (individual agricultural parcels)
+- **Main priority** = Get lots READY TO SELL (fully permitted)
 
 ---
 
