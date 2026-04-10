@@ -438,8 +438,8 @@ const formatDate = (date: Date) => date.toLocaleDateString('es-CR', {
                     </p>
                   )}
                   <p class="text-sm text-landrover-santorini/80 mt-1">
-                    {period && <><span class="font-medium">Período:</span> {period} • </>}
-                    {status !== 'paid' && <><span class="font-medium">Vence:</span> {formatDate(nextDue)}</>}
+                    {period && <span><span class="font-medium">Período:</span> {period} • </span>}
+                    {status !== 'paid' && <span><span class="font-medium">Vence:</span> {formatDate(nextDue)}</span>}
                   </p>
                   {obligation.lastPaid && (
                     <p class="text-xs text-green-600 mt-1">
