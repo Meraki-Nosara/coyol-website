@@ -73,22 +73,69 @@
 
 ## 📧 Email Workflow
 
-**When Marion starts a lot (Nosara Hills only):**
-1. Email sent to: Olger, Anlly, Alessia (all 3)
-2. Subject: Segregación Lote #X - [Development]
-3. Message: "Deseamos segregar Lote #X en [Desarrollo]. Coordinar visita al sitio si es necesario y preparar el plano."
+### Step 1: Marion Starts a Lot
+**Trigger:** Marion says "start lot X" or clicks button in system
+**Action:** Email to Olger, Anlly, Alessia
+**Subject:** Plano y Escritura Lote X - [Development]
+**Message:**
+> Necesitamos preparar el Lote X de [Development] para venta.
+> - Olger: Preparar plano catastrado
+> - Alessia: Preparar escritura de transferencia
+> - Anlly: Coordinar y subir documentos a Google Drive
 
-**When plano is uploaded:**
-1. Email to: Alessia (CC: Anlly)
-2. Message: "El plano del Lote #X está listo. Preparar escritura y registrar en Registro Nacional."
+**System:** Lot status → "Plano en Proceso"
 
-**When plano is registered (cabeza propia):**
-1. Email to: Anlly
-2. Message: "El plano del Lote #X está registrado. Nuevo número: [#]. Solicitar Carta de Agua (AyA) y Uso de Suelo (Municipalidad)."
+---
 
-**Mar Azul (condominium):**
-- NO segregation emails
-- Anlly uploads existing condominium permits to each lot folder for due diligence
+### Step 2: Olger Sends Plano
+**Trigger:** Email received at coyolcontrol@gmail.com with plano attachment
+**Action (AUTOMATIC, no approval needed):**
+1. Download attachment
+2. Upload to Google Drive (Development / Lot #X /)
+3. Extract plano info (number, area)
+4. Update lot in system
+5. **IMMEDIATELY email Alessia + Anlly:**
+   > Subject: Plano Listo - Lote X [Development]
+   > El plano del Lote X está listo. Preparar escritura y registrar en Registro Nacional.
+6. Move lot to next step: "Registro"
+7. Notify Marion (optional update)
+
+---
+
+### Step 3: Alessia Registers & Sends Escritura
+**Trigger:** Email received with escritura attachment
+**Action (AUTOMATIC):**
+1. Upload to Google Drive
+2. Extract info (cédula jurídica, finca, date)
+3. Update lot in system
+4. **Email Anlly:**
+   > Subject: Escritura Lista - Lote X [Development]
+   > La escritura del Lote X está registrada. Solicitar Carta de Agua (AyA) y Uso de Suelo (Municipalidad).
+5. Move lot to next step: "Cartas"
+
+---
+
+### Step 4: Anlly Sends Cartas
+**Trigger:** Email received with Carta de Agua + Uso de Suelo
+**Action (AUTOMATIC):**
+1. Upload to Google Drive
+2. Update lot in system
+3. Move lot to: ✅ "Listo para Venta"
+4. **Notify Marion:**
+   > Lote X [Development] está listo para venta. Todos los documentos completos.
+
+---
+
+### Email Detection Rules
+**Subject patterns to watch:**
+- "Plano" + lot number → Step 2
+- "Escritura" + lot number → Step 3
+- "Carta" or "Uso de Suelo" + lot number → Step 4
+
+**Sender trust:**
+- fijoteolab@gmail.com (Olger) → Planos
+- alessia.aguirre@gmail.com (Alessia) → Escrituras
+- info@nosaraconstruction.com (Anlly) → Cartas, admin docs
 
 ---
 
@@ -126,12 +173,14 @@
 
 ## 🔑 Key Rules
 
-1. **Mar Azul = NO pipeline** (condominium since 2024)
-2. **Nosara Hills = pipeline** (parcelas need segregation)
-3. **Sold lots = NO pipeline** (already registered to third parties)
-4. **Holding lots = NO pipeline** (already segregated by company)
-5. **Documents can be uploaded anytime** (even without pipeline)
-6. **Marion chooses which lot enters pipeline** (Nosara Hills only)
+1. **Mar Azul Rancho MA lots = CAN enter pipeline** (need plano + escritura to transfer from Rancho MA)
+2. **Mar Azul Sold/Holding lots = NO pipeline** (already have plano + escritura)
+3. **Nosara Hills = pipeline** (parcelas need segregation)
+4. **Sold lots = NO pipeline** (already registered to third parties)
+5. **Holding lots = NO pipeline** (already have documents)
+6. **Documents can be uploaded anytime** (even without pipeline)
+7. **Marion chooses which lot enters pipeline**
+8. **Automatic handoffs** — no approval needed between steps, just notify Marion
 
 ---
 
