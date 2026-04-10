@@ -600,35 +600,57 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
           </div>
         )}
 
-        <!-- Labor Efficiency (MDO) - only show if we have MDO data -->
+        <!-- Labor Cost Analysis - only show if we have MDO data -->
         {totalMdo2026Q1 > 0 && (
           <div class="card p-5 lg:p-6">
-            <h3 class="text-lg font-semibold text-landrover-santorini mb-4">Labor Efficiency</h3>
-            <p class="text-sm text-landrover-marine/60 mb-4">Revenue generated per $1 spent on payroll</p>
+            <h3 class="text-lg font-semibold text-landrover-santorini mb-2">Labor Cost Analysis</h3>
+            <p class="text-sm text-landrover-marine/60 mb-4">Base wages (MDO) + estimated cargas sociales</p>
             
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-3 gap-4 mb-4">
               {profitability2026.filter(r => r.mdo > 0).map(r => {
                 const name = r.code === 'laluna' ? 'La Luna' : r.code === 'esh' ? 'Esh' : 'Coyol';
                 const colorMap: {[key: string]: string} = { esh: '#C4A67C', coyol: '#3D4F3D', laluna: '#A65D3F' };
                 const color = colorMap[r.code] || '#666';
-                const revenuePerMdo = r.mdo > 0 ? (r.sales / r.mdo).toFixed(1) : '—';
-                const mdoPercent = r.mdo > 0 ? (r.mdo / r.sales * 100).toFixed(0) : '—';
+                
+                // MDO is base wages only
+                const baseMdo = r.mdo;
+                // Cargas sociales multiplier: CCSS 26.5% + Aguinaldo 8.33% + Vacaciones 4.17% + Cesantía 5.33% + INS ~3% = ~47%
+                const cargasMultiplier = 1.47;
+                const totalLabor = baseMdo * cargasMultiplier;
+                const laborPercent = r.sales > 0 ? (totalLabor / r.sales * 100).toFixed(1) : '—';
+                const basePercent = r.sales > 0 ? (baseMdo / r.sales * 100).toFixed(1) : '—';
+                
+                // Status color based on labor %
+                const laborPct = parseFloat(laborPercent) || 0;
+                const statusColor = laborPct < 25 ? 'text-green-600' : laborPct < 35 ? 'text-amber-600' : 'text-red-600';
+                const statusBg = laborPct < 25 ? 'bg-green-50' : laborPct < 35 ? 'bg-amber-50' : 'bg-red-50';
                 
                 return (
-                  <div class="text-center p-4 rounded-lg" style={`background-color: ${color}15`}>
+                  <div class={`text-center p-4 rounded-lg ${statusBg}`}>
                     <div class="w-3 h-3 rounded mx-auto mb-2" style={`background-color: ${color}`}></div>
                     <p class="font-medium text-sm mb-1">{name}</p>
-                    <p class="text-2xl font-bold" style={`color: ${color}`}>${revenuePerMdo}</p>
-                    <p class="text-xs text-landrover-marine/50">per $1 MDO</p>
-                    <p class="text-xs text-landrover-marine/40 mt-2">MDO = {mdoPercent}% of sales</p>
+                    <p class={`text-2xl font-bold ${statusColor}`}>{laborPercent}%</p>
+                    <p class="text-xs text-landrover-marine/50">total labor cost</p>
+                    <div class="mt-2 pt-2 border-t border-gray-200">
+                      <p class="text-xs text-landrover-marine/60">Base MDO: {basePercent}%</p>
+                      <p class="text-xs text-landrover-marine/40">+47% cargas</p>
+                    </div>
                   </div>
                 );
               })}
             </div>
             
-            <p class="text-xs text-landrover-marine/40 mt-4 text-center">
-              Higher = more efficient • Target: $100+ per $1 MDO
-            </p>
+            <div class="bg-landrover-limestone/30 rounded-lg p-3">
+              <p class="text-xs text-landrover-marine/60">
+                <strong>Benchmark:</strong> Restaurant industry target is 25-35% of sales for total labor.
+                <span class="text-green-600">✓ Under 25%</span> = excellent | 
+                <span class="text-amber-600">25-35%</span> = normal | 
+                <span class="text-red-600">Over 35%</span> = review needed
+              </p>
+              <p class="text-xs text-landrover-marine/40 mt-1">
+                Cargas sociales: CCSS 26.5% + Aguinaldo 8.33% + Vacaciones 4.17% + Cesantía 5.33% + INS ~3%
+              </p>
+            </div>
           </div>
         )}
 
