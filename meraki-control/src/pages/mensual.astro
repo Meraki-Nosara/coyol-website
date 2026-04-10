@@ -324,6 +324,22 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
 
       <div class="p-4 lg:p-8 space-y-6">
         
+        <!-- Tax Alert Card -->
+        <a href="/obligaciones" class="block p-4 bg-amber-50 border-2 border-amber-300 rounded-xl hover:bg-amber-100 transition-colors">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="text-2xl">⚠️</div>
+              <div>
+                <p class="font-semibold text-amber-800">IVA Marzo pendiente: ₡2,685,286</p>
+                <p class="text-sm text-amber-600">Vence 15 de abril (5 días) • Click para ver obligaciones</p>
+              </div>
+            </div>
+            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </a>
+
         <!-- Grand Total Card -->
         <div class="card p-5 lg:p-8 bg-landrover-keswick text-white">
           <div class="flex flex-col gap-4">
