@@ -10,24 +10,40 @@ const gastosDataPath = path.join(process.cwd(), 'data/gastos.json');
 let q1Profit = 0;
 let lastYearRenta = 19246723; // From accountant data - Renta 2025 paid
 
-try {
-  // Q1 2026 P&L from accountant:
-  // Enero: Ventas ₡345.0M, Utilidad ₡184.3M
-  // Febrero: Ventas ₡291.2M, Utilidad ₡131.7M
-  // Marzo: Ventas ₡347.9M, Utilidad ₡160.2M
-  // Total Q1: ₡984.1M ventas, ₡476.2M utilidad
-  q1Profit = 476200000; // From P&L images
-} catch (e) {
-  q1Profit = 0;
-}
+// Q1 2026 P&L from accountant (Jan-Mar):
+// Enero: ₡345.0M ventas, ₡184.3M utilidad
+// Febrero: ₡291.2M ventas, ₡131.7M utilidad  
+// Marzo: ₡347.9M ventas, ₡160.2M utilidad
+// Total Q1: ₡984.1M ventas, ₡476.2M utilidad
+const q1Sales = 984100000;
+q1Profit = 476200000;
+
+// 2025 annual data for comparison
+const sales2025 = {
+  laluna: 2263000000,  // From accountant data
+  coyol: 744900000,
+  esh: 187500000,
+  total: 3195400000
+};
+
+// Nosara restaurant seasonality (based on typical tourist patterns):
+// High season: Dec-Apr (5 months) = ~55-60% of annual
+// Low season: May-Nov (7 months) = ~40-45% of annual
+// Q1 (Jan-Mar) specifically represents about 30-35% of annual
+// April adds another ~12%, then steep drop May onwards
+
+// Method: Use 2025 as baseline, adjust for Q1 2026 performance
+const q1_2025_estimate = sales2025.total * 0.32; // Q1 typically 32% of annual
+const q1_growth_rate = (q1Sales - q1_2025_estimate) / q1_2025_estimate;
+
+// Project 2026 based on 2025 actuals + observed Q1 growth
+const projected2026Sales = sales2025.total * (1 + q1_growth_rate * 0.5); // Dampen growth for conservative estimate
+
+// Profit margin from Q1: 48.4%
+const profitMargin = q1Profit / q1Sales;
+const projectedAnnualProfit = projected2026Sales * profitMargin * 0.9; // 10% buffer for low season margin compression
 
 // Costa Rica tax brackets for companies (2025-2026)
-// Up to ₡5,761,000: 5%
-// ₡5,761,001 - ₡8,643,000: 10%
-// ₡8,643,001 - ₡17,286,000: 15%
-// ₡17,286,001 - ₡34,572,000: 20%
-// Over ₡34,572,000: 30%
-
 const calculateRenta = (annualProfit: number): number => {
   if (annualProfit <= 0) return 0;
   
@@ -54,9 +70,6 @@ const calculateRenta = (annualProfit: number): number => {
   return tax;
 };
 
-// Seasonal adjustment: Q1 is high season (35% of annual), rest is 65%
-const seasonalMultiplier = 1 / 0.35; // Q1 represents ~35% of annual revenue
-const projectedAnnualProfit = q1Profit * seasonalMultiplier * 0.85; // Conservative 15% reduction
 const estimatedRenta = calculateRenta(projectedAnnualProfit);
 const monthlyProvision = Math.ceil(estimatedRenta / 12);
 
@@ -487,10 +500,11 @@ const formatDate = (date: Date) => date.toLocaleDateString('es-CR', {
             </div>
             
             <div class="text-xs text-purple-600 bg-white/50 rounded-lg p-3">
-              <strong>💡 Nota:</strong> Q1 es temporada alta (~35% de ingresos anuales). 
-              Proyección conservadora considera baja temporada Q2-Q3. 
-              Renta 2025 pagada: ₡{(lastYearRenta/1000000).toFixed(1)}M.
-              <br/><strong>Próximo pago:</strong> 3 anticipos trimestrales de ~₡{(estimatedRenta/4/1000000).toFixed(1)}M cada uno.
+              <strong>💡 Metodología:</strong> Basado en ventas 2025 (₡{(sales2025.total/1000000).toFixed(0)}M), 
+              ajustado por crecimiento Q1 2026 y estacionalidad (baja temporada May-Nov = ~40% de ingresos). 
+              Margen utilidad Q1: {(profitMargin*100).toFixed(1)}%.
+              <br/><strong>Renta 2025 pagada:</strong> ₡{(lastYearRenta/1000000).toFixed(1)}M.
+              <strong>Anticipos:</strong> 3 pagos trimestrales de ~₡{(estimatedRenta/4/1000000).toFixed(1)}M.
             </div>
           </div>
         )}
