@@ -107,6 +107,20 @@
 - **Google Drive:** Coyol Control folder (coyolcontrol@gmail.com)
 - **Structure:** Development / Lot # / documents
 - **Email:** coyolcontrol@gmail.com for document uploads
+- **Access:** rclone configured (`rclone ls coyol:`)
+
+### Document Types
+
+**Condominium-level (shared by ALL Mar Azul lots):**
+- SETENA (Viabilidad Ambiental)
+- MUNI (Uso de Suelo)
+- MINAET Aguas (Concesión de Pozo)
+
+**Lot-specific:**
+- Plano Catastrado
+- Escritura
+- Construction Permits (Permiso de Construcción)
+- Sales Agreements (Contrato de Compraventa)
 
 ---
 
