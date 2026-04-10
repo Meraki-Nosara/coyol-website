@@ -1,6 +1,6 @@
 # Coyol Control System — State Documentation
 
-*Last updated: April 8, 2026 — 10:49 PM*
+*Last updated: April 9, 2026 — 6:38 PM*
 
 ---
 
@@ -14,14 +14,44 @@
 
 ---
 
+## Email Configuration
+
+- **Coyol inbox:** coyolcontrol@gmail.com
+- **Himalaya account:** `coyol`
+- **Status:** Connected and working
+
+---
+
+## Team Contacts
+
+| Name | Role | Email |
+|------|------|-------|
+| Olger | Topógrafo | fijoteolab@gmail.com |
+| Alessia Aguirre | Abogada | alessia.aguirre@gmail.com |
+| Anlly Villegas Chinchilla | Admin | info@nosaraconstruction.com |
+
+---
+
 ## Authentication
 
 | User | Password | Role | Access |
 |------|----------|------|--------|
 | `marion` | `coyol2026` | Admin | Full access |
+| `olger` | `topo2026` | Topógrafo | Survey tasks |
+| `alessia` | `legal2026` | Abogada | Legal tasks |
+| `anlly` | `admin2026` | Admin | Admin tasks |
 | `office` | `manager2026` | Manager | All properties, no financials |
 | `realtor` | `ventas2026` | Realtor | Limited developments |
 | `guest` | `visitor2026` | Guest | Mar Azul only |
+
+---
+
+## Welcome PDFs
+
+Personalized onboarding documents for team:
+- `docs/welcome-olger.html` → PDF for Olger
+- `docs/welcome-alessia.html` → PDF for Alessia  
+- `docs/welcome-anlly.html` → PDF for Anlly
 
 ---
 
@@ -149,7 +179,7 @@ Each lot goes through these steps before sale:
 - [ ] **Get lot preparation status from Marion** — which lots have what documents
 - [ ] Add lot sizes to Nosara Hills (from planos or Excel)
 - [ ] Set up email reminders to team (Topógrafo, Abogado, Anlly)
-- [ ] Add contact info for Topógrafo, Abogado, Anlly
+- [x] Add contact info for Topógrafo, Abogado, Anlly
 - [ ] Fix polygon shapes to match actual boundaries precisely
 - [ ] Add other Nosara Hills etapas (2, 3, 4)
 - [ ] Add Los Coyoles lot data
