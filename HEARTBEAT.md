@@ -2,7 +2,32 @@
 
 ## Priority Checks
 
-### 📧 Email — CHECK EVERY 30 MINUTES!
+### 🏠 Coyol Control — CHECK EVERY HEARTBEAT!
+**Account:** coyolcontrol@gmail.com via Himalaya CLI (`-a coyol`)
+
+**Watch for pipeline documents:**
+- From Olger (fijoteolab@gmail.com) → Planos
+- From Alessia (alessia.aguirre@gmail.com) → Escrituras  
+- From Anlly (info@nosaraconstruction.com) → Cartas, admin docs
+
+**When document received:**
+1. Download attachment
+2. Upload to Google Drive (`rclone copy`)
+3. Get share link (`rclone link`)
+4. Extract info from PDF (`pdftotext`)
+5. Update lot data in JSON
+6. Send handoff email to next person
+7. Git commit + push
+8. Notify Marion if lot reaches "Listo para Venta"
+
+**Check command:**
+```bash
+himalaya envelope list -a coyol --page-size 10
+```
+
+---
+
+### 📧 Meraki Email — CHECK EVERY 30 MINUTES!
 **Account:** marionnosara@gmail.com via Himalaya CLI
 
 ```bash
