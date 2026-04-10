@@ -10,11 +10,14 @@ let obligations: Array<{
   name: string;
   type: 'iva' | 'renta' | 'ccss' | 'patente' | 'other';
   frequency: 'monthly' | 'quarterly' | 'annual';
-  dueDay: number; // Day of month (for monthly) or month (for annual)
-  dueMonth?: number; // For annual obligations
+  dueDay: number;
+  dueMonth?: number;
   description: string;
   haciendaCode?: string;
-  lastPaid?: string; // ISO date
+  amount?: number;
+  period?: string;
+  status?: 'pending' | 'paid' | 'adjustment' | 'recurring';
+  lastPaid?: string;
   lastPaidAmount?: number;
   notes?: string;
 }> = [];
@@ -97,8 +100,60 @@ const getObligationStatus = (obl: typeof obligations[0]): ObligationStatus => {
   let nextDue: Date;
   let period: string;
   
+  // If obligation has explicit status, use it
+  if (obl.status === 'paid') {
+    nextDue = obl.lastPaid ? new Date(obl.lastPaid) : now;
+    period = obl.period || '';
+    return {
+      obligation: obl,
+      nextDue,
+      daysUntilDue: 0,
+      status: 'paid',
+      statusColor: 'bg-green-100 text-green-800 border-green-300',
+      statusText: '✓ Pagado',
+      period
+    };
+  }
+  
+  if (obl.status === 'adjustment') {
+    nextDue = now;
+    period = obl.period || '';
+    return {
+      obligation: obl,
+      nextDue,
+      daysUntilDue: 999,
+      status: 'upcoming',
+      statusColor: 'bg-gray-100 text-gray-600 border-gray-300',
+      statusText: '📋 Ajuste',
+      period
+    };
+  }
+  
+  if (obl.status === 'pending' && obl.dueMonth) {
+    // Explicit pending with due date
+    nextDue = new Date(currentYear, obl.dueMonth - 1, obl.dueDay);
+    period = obl.period || '';
+    const daysUntilDue = Math.ceil((nextDue.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    
+    let status: 'overdue' | 'due-soon' | 'upcoming' | 'paid' = 'upcoming';
+    let statusColor = 'bg-landrover-limestone text-landrover-santorini border-landrover-coniston/30';
+    let statusText = `${daysUntilDue} días`;
+    
+    if (daysUntilDue < 0) {
+      status = 'overdue';
+      statusColor = 'bg-red-100 text-red-800 border-red-300';
+      statusText = `⚠️ Vencido hace ${Math.abs(daysUntilDue)} días`;
+    } else if (daysUntilDue <= 5) {
+      status = 'due-soon';
+      statusColor = 'bg-amber-100 text-amber-800 border-amber-300';
+      statusText = daysUntilDue === 0 ? '⏰ Vence HOY' : `⏰ ${daysUntilDue} días`;
+    }
+    
+    return { obligation: obl, nextDue, daysUntilDue, status, statusColor, statusText, period };
+  }
+  
+  // Recurring obligations without explicit status
   if (obl.frequency === 'monthly') {
-    // Due this month on dueDay, or next month if already past
     if (currentDay <= obl.dueDay) {
       nextDue = new Date(currentYear, currentMonth - 1, obl.dueDay);
       period = new Date(currentYear, currentMonth - 2, 1).toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
@@ -107,7 +162,6 @@ const getObligationStatus = (obl: typeof obligations[0]): ObligationStatus => {
       period = new Date(currentYear, currentMonth - 1, 1).toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
     }
   } else if (obl.frequency === 'quarterly') {
-    // Quarters: Q1 (Jan-Mar) due Apr 1, Q2 due Jul 1, Q3 due Oct 1, Q4 due Jan 1
     const quarterDues = [
       { month: 4, quarter: 'Q1' },
       { month: 7, quarter: 'Q2' },
@@ -121,7 +175,6 @@ const getObligationStatus = (obl: typeof obligations[0]): ObligationStatus => {
     nextDue = new Date(year, nextQuarter.month - 1, obl.dueDay);
     period = nextQuarter.quarter + ' ' + (nextQuarter.month === 1 ? year - 1 : year);
   } else {
-    // Annual
     const dueMonth = obl.dueMonth || 12;
     if (currentMonth < dueMonth || (currentMonth === dueMonth && currentDay <= obl.dueDay)) {
       nextDue = new Date(currentYear, dueMonth - 1, obl.dueDay);
@@ -133,12 +186,10 @@ const getObligationStatus = (obl: typeof obligations[0]): ObligationStatus => {
   
   const daysUntilDue = Math.ceil((nextDue.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
   
-  // Check if already paid for this period
   let isPaid = false;
   if (obl.lastPaid) {
     const lastPaidDate = new Date(obl.lastPaid);
     if (obl.frequency === 'monthly') {
-      // Paid if last payment was in the current or previous month (for current period)
       isPaid = lastPaidDate >= new Date(currentYear, currentMonth - 2, 1);
     } else if (obl.frequency === 'annual') {
       isPaid = lastPaidDate.getFullYear() === currentYear;
@@ -176,6 +227,14 @@ const overdue = statuses.filter(s => s.status === 'overdue');
 const dueSoon = statuses.filter(s => s.status === 'due-soon');
 const upcoming = statuses.filter(s => s.status === 'upcoming');
 const paid = statuses.filter(s => s.status === 'paid');
+
+// Calculate totals
+const totalPending = statuses
+  .filter(s => s.status !== 'paid' && s.obligation.amount)
+  .reduce((sum, s) => sum + (s.obligation.amount || 0), 0);
+const totalPaidThisMonth = statuses
+  .filter(s => s.status === 'paid' && s.obligation.lastPaid && new Date(s.obligation.lastPaid).getMonth() === currentMonth - 1)
+  .reduce((sum, s) => sum + (s.obligation.lastPaidAmount || 0), 0);
 
 // Type colors
 const typeColors: Record<string, { bg: string; text: string }> = {
@@ -310,6 +369,28 @@ const formatDate = (date: Date) => date.toLocaleDateString('es-CR', {
           </div>
         )}
 
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+          <div class="bg-amber-50 border-2 border-amber-300 rounded-xl p-5">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-sm text-amber-700 font-medium">Pendiente de Pago</div>
+                <div class="text-2xl lg:text-3xl font-bold text-amber-800">₡{totalPending.toLocaleString()}</div>
+              </div>
+              <div class="text-4xl">💳</div>
+            </div>
+          </div>
+          <div class="bg-green-50 border-2 border-green-300 rounded-xl p-5">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-sm text-green-700 font-medium">Pagado en Abril</div>
+                <div class="text-2xl lg:text-3xl font-bold text-green-800">₡{totalPaidThisMonth.toLocaleString()}</div>
+              </div>
+              <div class="text-4xl">✅</div>
+            </div>
+          </div>
+        </div>
+
         <!-- Status Cards -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-center">
@@ -351,15 +432,23 @@ const formatDate = (date: Date) => date.toLocaleDateString('es-CR', {
                     </span>
                   </div>
                   <p class="text-sm text-landrover-santorini/60">{obligation.description}</p>
+                  {obligation.amount && status !== 'paid' && (
+                    <p class="text-lg font-bold text-landrover-santorini mt-1">
+                      ₡{obligation.amount.toLocaleString()}
+                    </p>
+                  )}
                   <p class="text-sm text-landrover-santorini/80 mt-1">
-                    <span class="font-medium">Período:</span> {period} • 
-                    <span class="font-medium">Vence:</span> {formatDate(nextDue)}
+                    {period && <><span class="font-medium">Período:</span> {period} • </>}
+                    {status !== 'paid' && <><span class="font-medium">Vence:</span> {formatDate(nextDue)}</>}
                   </p>
                   {obligation.lastPaid && (
                     <p class="text-xs text-green-600 mt-1">
-                      ✓ Último pago: {new Date(obligation.lastPaid).toLocaleDateString('es-CR')}
+                      ✓ Pagado: {new Date(obligation.lastPaid).toLocaleDateString('es-CR')}
                       {obligation.lastPaidAmount && ` — ₡${obligation.lastPaidAmount.toLocaleString()}`}
                     </p>
+                  )}
+                  {obligation.notes && (
+                    <p class="text-xs text-landrover-santorini/50 mt-1 italic">{obligation.notes}</p>
                   )}
                 </div>
                 <div class="flex items-center gap-3">
@@ -382,16 +471,16 @@ const formatDate = (date: Date) => date.toLocaleDateString('es-CR', {
         <div class="mt-8 p-6 bg-landrover-limestone rounded-xl">
           <h3 class="font-semibold text-landrover-santorini mb-4">Enlaces Útiles</h3>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <a href="https://www.hacienda.go.cr/ATV/Login.aspx" target="_blank" 
-               class="flex items-center gap-3 p-4 bg-white rounded-lg border border-landrover-coniston/20 hover:border-landrover-keswick transition-colors">
+            <a href="https://ovitribucr.hacienda.go.cr/" target="_blank" 
+               class="flex items-center gap-3 p-4 bg-white rounded-lg border-2 border-blue-300 hover:border-blue-500 transition-colors">
               <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                 <svg class="w-5 h-5 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
               </div>
               <div>
-                <p class="font-medium text-landrover-santorini">Portal ATV</p>
-                <p class="text-xs text-landrover-santorini/60">Hacienda</p>
+                <p class="font-medium text-landrover-santorini">Portal Tribu</p>
+                <p class="text-xs text-landrover-santorini/60">Hacienda (nuevo)</p>
               </div>
             </a>
             <a href="https://sfa.ccss.sa.cr" target="_blank"

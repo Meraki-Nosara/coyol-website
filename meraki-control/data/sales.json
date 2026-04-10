@@ -570,9 +570,45 @@
       "iva13": 1005295,
       "source": "ingrid_email",
       "cashier": "Julia Arrieta"
+    },
+    {
+      "date": "2026-04-09",
+      "restaurant": "laluna",
+      "cash": 242100,
+      "card": 7074665,
+      "total": 7316765,
+      "netSales": 5958088,
+      "service10": 584125,
+      "iva13": 774552,
+      "source": "ingrid_email",
+      "cashier": "Carmen Mu\u00f1oz"
+    },
+    {
+      "date": "2026-04-09",
+      "restaurant": "coyol",
+      "cash": 202000,
+      "card": 5416517,
+      "total": 5618517,
+      "netSales": 4567900,
+      "service10": 456790,
+      "iva13": 593827,
+      "source": "ingrid_email",
+      "cashier": "George Lopez"
+    },
+    {
+      "date": "2026-04-09",
+      "restaurant": "esh",
+      "cash": 90700,
+      "card": 752296,
+      "total": 842996,
+      "netSales": 840112,
+      "service10": 37535,
+      "iva13": 0,
+      "source": "ingrid_email",
+      "cashier": "Raul Rodriguez"
     }
   ],
-  "lastUpdated": "2026-04-09T18:11:00.000Z",
+  "lastUpdated": "2026-04-09T18:40:00.000Z",
   "payroll2025": {
     "01": 96600000,
     "02": 57800000,
@@ -601,5 +637,38 @@
       "laluna_hours": 11426,
       "total_labor_cost": 39032536
     }
-  }
+  },
+  "daily2026": [
+    {
+      "date": "2026-04-08",
+      "restaurant": "esh",
+      "total": 592217,
+      "netSales": 454744,
+      "cash": 112000,
+      "card": 478719,
+      "source": "ingrid_cierre_apr9"
+    },
+    {
+      "date": "2026-04-08",
+      "restaurant": "coyol",
+      "total": 4823617,
+      "netSales": 3921640,
+      "cash": 69000,
+      "card": 4803642,
+      "food": 2599100,
+      "bar": 1322500,
+      "source": "ingrid_cierre_apr9"
+    },
+    {
+      "date": "2026-04-08",
+      "restaurant": "laluna",
+      "total": 8363850,
+      "netSales": 6807971,
+      "cash": 999152,
+      "card": 7464486,
+      "food": 4888634,
+      "bar": 1919337,
+      "source": "ingrid_cierre_apr9"
+    }
+  ]
 }
