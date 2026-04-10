@@ -572,7 +572,7 @@
       "cashier": "Julia Arrieta"
     }
   ],
-  "lastUpdated": "2026-04-08T18:45:00.000Z",
+  "lastUpdated": "2026-04-09T18:11:00.000Z",
   "payroll2025": {
     "01": 96600000,
     "02": 57800000,
@@ -592,6 +592,14 @@
   "payroll2026": {
     "01": 79500000,
     "02": 14000000,
-    "note": "Partial data - more files needed"
+    "03": 39000000,
+    "note": "March 2026: Fixed admin \u20a115M + La Luna base salaries \u20a124M. Tips (\u20a172M) excluded as pass-through.",
+    "march_detail": {
+      "fixed_admin": 15028850,
+      "laluna_base": 24003686,
+      "laluna_tips": 71866409,
+      "laluna_hours": 11426,
+      "total_labor_cost": 39032536
+    }
   }
 }

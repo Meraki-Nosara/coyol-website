@@ -47,7 +47,7 @@
       "consecutivo": "00200002010000165830",
       "fecha": "2026-04-06T15:50:18",
       "supplierId": "3101109180",
-      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "supplierName": "Distribuidora Isle\u00f1a de Alimentos, S.A.",
       "total": 56781.94,
       "subtotal": 50249.5,
       "impuesto": 6532.44,
@@ -61,7 +61,7 @@
       "consecutivo": "00200002010000165853",
       "fecha": "2026-04-06T18:27:12",
       "supplierId": "3101109180",
-      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "supplierName": "Distribuidora Isle\u00f1a de Alimentos, S.A.",
       "total": 98795.29,
       "subtotal": 87429.46,
       "impuesto": 11365.83,
@@ -75,7 +75,7 @@
       "consecutivo": "00200002010000165865",
       "fecha": "2026-04-06T18:30:13",
       "supplierId": "3101109180",
-      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "supplierName": "Distribuidora Isle\u00f1a de Alimentos, S.A.",
       "total": 45317.94,
       "subtotal": 40104.37,
       "impuesto": 5213.57,
@@ -89,7 +89,7 @@
       "consecutivo": "00200002010000165873",
       "fecha": "2026-04-06T18:32:57",
       "supplierId": "3101109180",
-      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "supplierName": "Distribuidora Isle\u00f1a de Alimentos, S.A.",
       "total": 463475.71,
       "subtotal": 421305.83,
       "impuesto": 42169.88,
@@ -103,7 +103,7 @@
       "consecutivo": "00200002010000165875",
       "fecha": "2026-04-06T18:33:33",
       "supplierId": "3101109180",
-      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "supplierName": "Distribuidora Isle\u00f1a de Alimentos, S.A.",
       "total": 52030.83,
       "subtotal": 46905.16,
       "impuesto": 5125.67,
@@ -117,7 +117,7 @@
       "consecutivo": "00200002010000165962",
       "fecha": "2026-04-06T20:57:09",
       "supplierId": "3101109180",
-      "supplierName": "Distribuidora Isleña de Alimentos, S.A.",
+      "supplierName": "Distribuidora Isle\u00f1a de Alimentos, S.A.",
       "total": 130210.71,
       "subtotal": 127333.05,
       "impuesto": 2877.66,
@@ -237,74 +237,369 @@
       "restaurant": "shared",
       "itemCount": 1,
       "processedAt": "2026-04-07T21:11:44.259Z"
+    },
+    {
+      "clave": "50607042600310263070000100212010000074546100074546",
+      "supplierName": "Ferreter\u00edas Grupo Nosara S.R.L",
+      "supplierId": "3102630700",
+      "total": 30563.98853,
+      "fecha": "2026-04-07",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50609042600310263070000100218010000077046100077046",
+      "supplierName": "Ferreter\u00edas Grupo Nosara S.R.L",
+      "supplierId": "3102630700",
+      "total": 42762.1945,
+      "fecha": "2026-04-09",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50608042600310117226700100001010002562070177178129",
+      "supplierName": "Mayca Distribuidores, S.A.",
+      "supplierId": "3101172267",
+      "total": 492698.67,
+      "fecha": "2026-04-08",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50608042600310117226700100001010002562071177654013",
+      "supplierName": "Mayca Distribuidores, S.A.",
+      "supplierId": "3101172267",
+      "total": 220256.51,
+      "fecha": "2026-04-08",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50609042600310179441000900001010000014111115465911",
+      "supplierName": "AGRO LOS CARTAGOS",
+      "supplierId": "3101794410",
+      "total": 10024.99998,
+      "fecha": "2026-04-09",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50608042600310175902500200001010000101733116193571",
+      "supplierName": "RINDE MAS GUANACASTE S.A",
+      "supplierId": "3101759025",
+      "total": 6030.0,
+      "fecha": "2026-04-08",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50609042600310179441000400001010000052108176182907",
+      "supplierName": "AGRO LOS CARTAGOS",
+      "supplierId": "3101794410",
+      "total": 15625.99999,
+      "fecha": "2026-04-09",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50608042600310117226700100001010002562072177192221",
+      "supplierName": "Mayca Distribuidores, S.A.",
+      "supplierId": "3101172267",
+      "total": 24162.23,
+      "fecha": "2026-04-08",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50609042600310109007300100012010000011079112164235",
+      "supplierName": "Tienda Internacional de Productos Sensacionales SOCIEDAD ANONIMA",
+      "supplierId": "3101090073",
+      "total": 46800.0348,
+      "fecha": "2026-04-09",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50607042600310107490301000001010001078077171299413",
+      "supplierName": "EXPORTADORA PMT S.A.",
+      "supplierId": "3101074903",
+      "total": 201899.34,
+      "fecha": "2026-04-07",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50608042600300405115600100265010000002721134998414",
+      "supplierName": "COOPEBRISAS R.L.",
+      "supplierId": "3004051156",
+      "total": 23764.41,
+      "fecha": "2026-04-08",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50608042600310263070000100212010000074702100074702",
+      "supplierName": "Ferreter\u00edas Grupo Nosara S.R.L",
+      "supplierId": "3102630700",
+      "total": 41509.5669,
+      "fecha": "2026-04-08",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50608042600310100815000100009010015763699190649951",
+      "supplierName": "CENTRO INTERNACIONAL DE INVERSIONES, S.A",
+      "supplierId": "3101008150",
+      "total": 82309.93,
+      "fecha": "2026-04-08",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50609042600310154869000100502010000001797161711316",
+      "supplierName": "AUTOSERVICIO Y REPUESTOS NOSARA S.A.",
+      "supplierId": "3101548690",
+      "total": 45000.0013,
+      "fecha": "2026-04-09",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50609042600310179773900100003010000003009188429504",
+      "supplierName": "DISTRIBUIDORA LA ANEXION SOCIEDAD ANONIMA",
+      "supplierId": "3101797739",
+      "total": 195624.1932,
+      "fecha": "2026-04-09",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50609042600310263070000100218010000077096100077096",
+      "supplierName": "Ferreter\u00edas Grupo Nosara S.R.L",
+      "supplierId": "3102630700",
+      "total": 28115.7786,
+      "fecha": "2026-04-09",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50607042600310107490301000001010001078593118544496",
+      "supplierName": "EXPORTADORA PMT S.A.",
+      "supplierId": "3101074903",
+      "total": 664726.92,
+      "fecha": "2026-04-07",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50607042600310263070000100212010000074549100074549",
+      "supplierName": "Ferreter\u00edas Grupo Nosara S.R.L",
+      "supplierId": "3102630700",
+      "total": 14215.8539,
+      "fecha": "2026-04-07",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50609042600312018220200100001010000000243198778254",
+      "supplierName": "Christopher Stockholm ",
+      "supplierId": "3120182202",
+      "total": 796650.0,
+      "fecha": "2026-04-09",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50607042600310107490301000001010001078292150150645",
+      "supplierName": "EXPORTADORA PMT S.A.",
+      "supplierId": "3101074903",
+      "total": 104638.0,
+      "fecha": "2026-04-07",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50608042600310212090800100001010000047878100002825",
+      "supplierName": "LICORERIAS HERRERA SRL",
+      "supplierId": "3102120908",
+      "total": 1493133.98,
+      "fecha": "2026-04-08",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50609042600310276984600100001010000002725144811766",
+      "supplierName": "Pupalito Sociedad de Responsabilidad Limitada",
+      "supplierId": "3102769846",
+      "total": 21084.0,
+      "fecha": "2026-04-09",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50609042600310285267800100001010000119259198501601",
+      "supplierName": "GRUPO SUPERMERCADO NOSARA LIMITADA",
+      "supplierId": "3102852678",
+      "total": 78300.0,
+      "fecha": "2026-04-09",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50609042600312018220200100001010000000244146331137",
+      "supplierName": "Christopher Stockholm ",
+      "supplierId": "3120182202",
+      "total": 728850.0,
+      "fecha": "2026-04-09",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50608042600310287286400100001010000000858120603088",
+      "supplierName": "IMPORTACION Y DISTRIBUCION DE VINOS",
+      "supplierId": "3102872864",
+      "total": 433.36,
+      "fecha": "2026-04-08",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50608042600310263136500100003010000048801128282860",
+      "supplierName": "Green Solutions Tiquicia SRL",
+      "supplierId": "3102631365",
+      "total": 205519.99,
+      "fecha": "2026-04-08",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50608042600310285267800100001010000119188111607681",
+      "supplierName": "GRUPO SUPERMERCADO NOSARA LIMITADA",
+      "supplierId": "3102852678",
+      "total": 2050.0,
+      "fecha": "2026-04-08",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50607042600310107490301000001010001078206160932485",
+      "supplierName": "EXPORTADORA PMT S.A.",
+      "supplierId": "3101074903",
+      "total": 348062.45,
+      "fecha": "2026-04-07",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50608042600310117226700100001010002562069177837602",
+      "supplierName": "Mayca Distribuidores, S.A.",
+      "supplierId": "3101172267",
+      "total": 309308.4,
+      "fecha": "2026-04-08",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50609042600310101423900100001010000006926109232851",
+      "supplierName": "HACIENDA SANTA PAULA S.A.",
+      "supplierId": "3101014239",
+      "total": 16950.0,
+      "fecha": "2026-04-09",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50609042600050334087800100001010000001752148175081",
+      "supplierName": "MAURICIO GONZALEZ VASQUEZ",
+      "supplierId": "503340878",
+      "total": 13255.25,
+      "fecha": "2026-04-09",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50608042600310100815000100009010015763701179448558",
+      "supplierName": "CENTRO INTERNACIONAL DE INVERSIONES, S.A",
+      "supplierId": "3101008150",
+      "total": 266373.94,
+      "fecha": "2026-04-08",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50608042600310162292500100061010000023289185765597",
+      "supplierName": "3101622925 S.A",
+      "supplierId": "3101622925",
+      "total": 233735.02,
+      "fecha": "2026-04-08",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50608042600310212090800100001010000047872100002825",
+      "supplierName": "LICORERIAS HERRERA SRL",
+      "supplierId": "3102120908",
+      "total": 263397.92,
+      "fecha": "2026-04-08",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50609042600310101117300100085010000003659100230405",
+      "supplierName": "Roma Prince S.A.",
+      "supplierId": "3101011173",
+      "total": 15560.06,
+      "fecha": "2026-04-09",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50609042600310280291900100001010000019831119691876",
+      "supplierName": "ITALIANA COSTENA SOCIEDAD DE RESPONSABILIDAD LIMITADA",
+      "supplierId": "3102802919",
+      "total": 16990.00001,
+      "fecha": "2026-04-09",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50608042600310287286400100001010000000859161382581",
+      "supplierName": "IMPORTACION Y DISTRIBUCION DE VINOS",
+      "supplierId": "3102872864",
+      "total": 786.48,
+      "fecha": "2026-04-08",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50631032600310261882000100002010000004941101004941",
+      "supplierName": "MERAKI FAMILY LTDA",
+      "supplierId": "3102618820",
+      "total": 13700.0,
+      "fecha": "2026-03-31",
+      "restaurant": "unknown",
+      "source": "email_apr9"
+    },
+    {
+      "clave": "50607042600310107490301000001010001078292150150645",
+      "supplierName": "EXPORTADORA PMT S.A.",
+      "supplierId": "3101074903",
+      "total": 104638.0,
+      "fecha": "2026-04-07",
+      "restaurant": "unknown",
+      "source": "email_apr9"
     }
   ],
   "lastProcessed": "2026-04-07T21:11:44.259Z",
   "totals": {
     "2026-04": {
-      "total": 2011064.10108,
-      "count": 17,
-      "byRestaurant": {
-        "unknown": 817510.08109,
-        "shared": 1193554.01999
-      },
-      "bySupplier": {
-        "503320281": {
-          "name": "WALLY ROMAN FONSECA VILLEGAS",
-          "total": 17599.98,
-          "count": 1
-        },
-        "504050547": {
-          "name": "JOSE ALEXIS RANGEL CARRILLO",
-          "total": 746885.10109,
-          "count": 1
-        },
-        "602760131": {
-          "name": "KARLA DE LOS ANGELES MARTINEZ OVIEDO",
-          "total": 53025,
-          "count": 2
-        },
-        "3002617388": {
-          "name": "ASOCIACION DE RECICLAJE DE DESECHOS DE NOSARA",
-          "total": 45.2,
-          "count": 1
-        },
-        "3101074903": {
-          "name": "EXPORTADORA PMT S.A.",
-          "total": 168064,
-          "count": 1
-        },
-        "3101109180": {
-          "name": "Distribuidora Isleña de Alimentos, S.A.",
-          "total": 846612.4199999999,
-          "count": 6
-        },
-        "3101395115": {
-          "name": "Guana Pollo S.A.",
-          "total": 112857.4,
-          "count": 1
-        },
-        "3101409261": {
-          "name": "NCQ Solutions S.A.",
-          "total": 39550,
-          "count": 1
-        },
-        "3101794410": {
-          "name": "AGRO LOS CARTAGOS",
-          "total": 1200,
-          "count": 1
-        },
-        "3102765685": {
-          "name": "CR AGUA AZUL INC SOCIEDAD DE RESPONSABILIDAD LIMITADA",
-          "total": 11624.99998,
-          "count": 1
-        },
-        "3102852678": {
-          "name": "GRUPO SUPERMERCADO NOSARA LIMITADA",
-          "total": 13600.00001,
-          "count": 1
-        }
-      }
+      "total": 9216871.572790002,
+      "count": 55
+    },
+    "2026-03": {
+      "total": 13700.0,
+      "count": 1
     }
-  }
+  },
+  "lastUpdated": "2026-04-09T18:12:35.770152"
 }
