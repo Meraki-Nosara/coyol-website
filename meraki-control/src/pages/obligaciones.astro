@@ -3,6 +3,66 @@ import Layout from '../layouts/Layout.astro';
 import fs from 'fs';
 import path from 'path';
 
+// Load P&L data for Renta estimate
+const salesDataPath = path.join(process.cwd(), 'data/sales.json');
+const gastosDataPath = path.join(process.cwd(), 'data/gastos.json');
+
+let q1Profit = 0;
+let lastYearRenta = 19246723; // From accountant data - Renta 2025 paid
+
+try {
+  // Q1 2026 P&L from accountant:
+  // Enero: Ventas ₡345.0M, Utilidad ₡184.3M
+  // Febrero: Ventas ₡291.2M, Utilidad ₡131.7M
+  // Marzo: Ventas ₡347.9M, Utilidad ₡160.2M
+  // Total Q1: ₡984.1M ventas, ₡476.2M utilidad
+  q1Profit = 476200000; // From P&L images
+} catch (e) {
+  q1Profit = 0;
+}
+
+// Costa Rica tax brackets for companies (2025-2026)
+// Up to ₡5,761,000: 5%
+// ₡5,761,001 - ₡8,643,000: 10%
+// ₡8,643,001 - ₡17,286,000: 15%
+// ₡17,286,001 - ₡34,572,000: 20%
+// Over ₡34,572,000: 30%
+
+const calculateRenta = (annualProfit: number): number => {
+  if (annualProfit <= 0) return 0;
+  
+  let tax = 0;
+  const brackets = [
+    { limit: 5761000, rate: 0.05 },
+    { limit: 8643000, rate: 0.10 },
+    { limit: 17286000, rate: 0.15 },
+    { limit: 34572000, rate: 0.20 },
+    { limit: Infinity, rate: 0.30 }
+  ];
+  
+  let remaining = annualProfit;
+  let prevLimit = 0;
+  
+  for (const bracket of brackets) {
+    const taxableInBracket = Math.min(remaining, bracket.limit - prevLimit);
+    if (taxableInBracket <= 0) break;
+    tax += taxableInBracket * bracket.rate;
+    remaining -= taxableInBracket;
+    prevLimit = bracket.limit;
+  }
+  
+  return tax;
+};
+
+// Seasonal adjustment: Q1 is high season (35% of annual), rest is 65%
+const seasonalMultiplier = 1 / 0.35; // Q1 represents ~35% of annual revenue
+const projectedAnnualProfit = q1Profit * seasonalMultiplier * 0.85; // Conservative 15% reduction
+const estimatedRenta = calculateRenta(projectedAnnualProfit);
+const monthlyProvision = Math.ceil(estimatedRenta / 12);
+
+// Comparison with last year
+const rentaChange = lastYearRenta > 0 ? ((estimatedRenta - lastYearRenta) / lastYearRenta * 100) : 0;
+
 // Load obligations data
 const dataPath = path.join(process.cwd(), 'data/obligaciones.json');
 let obligations: Array<{
@@ -390,6 +450,50 @@ const formatDate = (date: Date) => date.toLocaleDateString('es-CR', {
             </div>
           </div>
         </div>
+
+        <!-- Renta Forecast -->
+        {q1Profit > 0 && (
+          <div class="mb-8 p-6 rounded-xl bg-gradient-to-br from-purple-50 to-indigo-50 border-2 border-purple-200">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="text-3xl">📊</div>
+              <div>
+                <h3 class="text-lg font-semibold text-purple-900">Proyección Renta 2026</h3>
+                <p class="text-sm text-purple-600">Basado en Q1 2026 y datos históricos</p>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+              <div class="bg-white/70 rounded-lg p-4">
+                <div class="text-xs text-purple-600 font-medium">Utilidad Q1 2026</div>
+                <div class="text-xl font-bold text-purple-900">₡{(q1Profit/1000000).toFixed(1)}M</div>
+              </div>
+              <div class="bg-white/70 rounded-lg p-4">
+                <div class="text-xs text-purple-600 font-medium">Proyección Anual</div>
+                <div class="text-xl font-bold text-purple-900">₡{(projectedAnnualProfit/1000000).toFixed(1)}M</div>
+                <div class="text-xs text-purple-500">Ajustado por estacionalidad</div>
+              </div>
+              <div class="bg-white/70 rounded-lg p-4 border-2 border-purple-300">
+                <div class="text-xs text-purple-600 font-medium">Renta Estimada</div>
+                <div class="text-xl font-bold text-purple-900">₡{(estimatedRenta/1000000).toFixed(1)}M</div>
+                <div class="text-xs {rentaChange > 0 ? 'text-red-500' : 'text-green-500'}">
+                  {rentaChange > 0 ? '↑' : '↓'} {Math.abs(rentaChange).toFixed(0)}% vs 2025
+                </div>
+              </div>
+              <div class="bg-purple-100 rounded-lg p-4">
+                <div class="text-xs text-purple-600 font-medium">Provisión Mensual</div>
+                <div class="text-xl font-bold text-purple-900">₡{(monthlyProvision/1000000).toFixed(2)}M</div>
+                <div class="text-xs text-purple-500">Recomendado apartar</div>
+              </div>
+            </div>
+            
+            <div class="text-xs text-purple-600 bg-white/50 rounded-lg p-3">
+              <strong>💡 Nota:</strong> Q1 es temporada alta (~35% de ingresos anuales). 
+              Proyección conservadora considera baja temporada Q2-Q3. 
+              Renta 2025 pagada: ₡{(lastYearRenta/1000000).toFixed(1)}M.
+              <br/><strong>Próximo pago:</strong> 3 anticipos trimestrales de ~₡{(estimatedRenta/4/1000000).toFixed(1)}M cada uno.
+            </div>
+          </div>
+        )}
 
         <!-- Status Cards -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
