@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { loadMonthlyData, formatCurrency, formatMonth, USD_RATE } from '../lib/monthly-data';
+import { loadMonthlyData, formatCurrency, formatMonth, USD_RATE, loadDailySales, getDailyTotals, getLastUpdated } from '../lib/monthly-data';
 import fs from 'fs';
 import path from 'path';
 
@@ -44,22 +44,33 @@ const logos: Record<string, string> = {
   laluna: '/images/logos/laluna-black.png'
 };
 
-// Calculate totals BY RESTAURANT (2026 only)
+// Load daily sales data
+const dailySales = loadDailySales();
+const dailyTotals = getDailyTotals();
+const lastUpdated = getLastUpdated();
+
+// Calculate totals BY RESTAURANT (2026 monthly + daily)
 const restaurantTotals = restaurants.map(code => {
-  const restData = data.monthly.filter(m => m.restaurant === code && m.month.startsWith('2026') && !m.partial);
+  // Monthly data (Q1: Jan-Mar)
+  const restMonthly = data.monthly.filter(m => m.restaurant === code && m.month.startsWith('2026') && !m.partial);
+  // Daily data (April onwards)
+  const restDaily = dailyTotals.find(d => d.restaurant === code) || { total: 0, cash: 0, card: 0, food: 0, bar: 0, days: 0 };
+  
   return {
     code,
     name: data.restaurants[code]?.name || code,
     color: data.restaurants[code]?.color || '#666',
     logo: logos[code],
-    totalSales: restData.reduce((sum, m) => sum + m.totalSales, 0),
-    food: restData.reduce((sum, m) => sum + m.food, 0),
-    bar: restData.reduce((sum, m) => sum + m.bar, 0),
-    cash: restData.reduce((sum, m) => sum + m.cash, 0),
-    card: restData.reduce((sum, m) => sum + m.card, 0),
-    customers: restData.reduce((sum, m) => sum + m.customers, 0),
-    orders: restData.reduce((sum, m) => sum + m.orders, 0),
-    months: restData.length
+    // Combine monthly + daily totals
+    totalSales: restMonthly.reduce((sum, m) => sum + m.totalSales, 0) + restDaily.total,
+    food: restMonthly.reduce((sum, m) => sum + m.food, 0) + restDaily.food,
+    bar: restMonthly.reduce((sum, m) => sum + m.bar, 0) + restDaily.bar,
+    cash: restMonthly.reduce((sum, m) => sum + m.cash, 0) + restDaily.cash,
+    card: restMonthly.reduce((sum, m) => sum + m.card, 0) + restDaily.card,
+    customers: restMonthly.reduce((sum, m) => sum + m.customers, 0),
+    orders: restMonthly.reduce((sum, m) => sum + m.orders, 0),
+    months: restMonthly.length,
+    dailyDays: restDaily.days
   };
 });
 
@@ -77,14 +88,20 @@ const monthlyTotals = months2026Only
   })
   .filter(m => m.totalSales > 0); // Only show months with data
 
-// Year 2026 totals
+// Year 2026 totals (monthly + daily)
 const year2026 = data.monthly.filter(m => m.month.startsWith('2026') && !m.partial);
+const dailyTotal = dailyTotals.reduce((sum, d) => sum + d.total, 0);
+const dailyCash = dailyTotals.reduce((sum, d) => sum + d.cash, 0);
+const dailyCard = dailyTotals.reduce((sum, d) => sum + d.card, 0);
+const dailyFood = dailyTotals.reduce((sum, d) => sum + d.food, 0);
+const dailyBar = dailyTotals.reduce((sum, d) => sum + d.bar, 0);
+
 const yearTotals = {
-  totalSales: year2026.reduce((sum, m) => sum + m.totalSales, 0),
-  food: year2026.reduce((sum, m) => sum + m.food, 0),
-  bar: year2026.reduce((sum, m) => sum + m.bar, 0),
-  cash: year2026.reduce((sum, m) => sum + m.cash, 0),
-  card: year2026.reduce((sum, m) => sum + m.card, 0),
+  totalSales: year2026.reduce((sum, m) => sum + m.totalSales, 0) + dailyTotal,
+  food: year2026.reduce((sum, m) => sum + m.food, 0) + dailyFood,
+  bar: year2026.reduce((sum, m) => sum + m.bar, 0) + dailyBar,
+  cash: year2026.reduce((sum, m) => sum + m.cash, 0) + dailyCash,
+  card: year2026.reduce((sum, m) => sum + m.card, 0) + dailyCard,
   customers: year2026.reduce((sum, m) => sum + m.customers, 0),
   orders: year2026.reduce((sum, m) => sum + m.orders, 0),
   netReceipts: year2026.reduce((sum, m) => sum + m.netReceipts, 0)

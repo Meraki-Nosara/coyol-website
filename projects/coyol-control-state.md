@@ -189,7 +189,8 @@
 5. **Holding lots = NO pipeline** (already have documents)
 6. **Documents can be uploaded anytime** (even without pipeline)
 7. **Marion chooses which lot enters pipeline**
-8. **Automatic handoffs** — no approval needed between steps, just notify Marion
+8. **NO DOCUMENT = NO MOVE** — lot cannot advance unless required document is received, uploaded to Drive, and linked in system
+9. **Automatic handoffs** — once document is filed, auto-email next person and notify Marion
 
 ---
 
