@@ -146,6 +146,8 @@
 | Olger | Topógrafo | fijoteolab@gmail.com | Plano catastrado |
 | Alessia Aguirre | Abogada | alessia.aguirre@gmail.com | Cabeza Propia, Registro Nacional |
 | Anlly Villegas | Admin | info@nosaraconstruction.com | Carta de Agua, Uso de Suelo, uploads |
+| Jorge Delgado | Ingeniero Responsable | (pending) | CFIA registered, Mar Azul obras civiles, construction control all developments |
+| Milagro Castro | Arquitecta | design@nosaraconstruction.com | Construction permits, architectural plans |
 
 ---
 
