@@ -171,6 +171,15 @@
 
 ---
 
+## ❓ To Investigate
+
+**Parcelas Agrícolas (Nosara Hills) — confirm with Olger/Alessia:**
+- Do they need Carta de Agua + Disponibilidad Eléctrica BEFORE plano catastrado?
+- If yes, pipeline needs to change: Cartas → Plano → Registro → Listo
+- Sources: AyA/ASADA for water, ICE/Coopeguanacaste for electric?
+
+---
+
 ## 🔑 Key Rules
 
 1. **Mar Azul Rancho MA lots = CAN enter pipeline** (need plano + escritura to transfer from Rancho MA)
