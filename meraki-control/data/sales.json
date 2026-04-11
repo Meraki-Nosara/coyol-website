@@ -606,9 +606,45 @@
       "iva13": 0,
       "source": "ingrid_email",
       "cashier": "Raul Rodriguez"
+    },
+    {
+      "date": "2026-04-10",
+      "restaurant": "laluna",
+      "cash": 403951,
+      "card": 5833545,
+      "total": 6237496,
+      "netSales": 4816843,
+      "service10": 473317,
+      "iva13": 626190,
+      "source": "ingrid_email",
+      "cashier": "Julia Arrieta"
+    },
+    {
+      "date": "2026-04-10",
+      "restaurant": "coyol",
+      "cash": 50000,
+      "card": 2477774,
+      "total": 2527774,
+      "netSales": 2014450,
+      "service10": 201445,
+      "iva13": 261878,
+      "source": "ingrid_email",
+      "cashier": "George Lopez"
+    },
+    {
+      "date": "2026-04-10",
+      "restaurant": "esh",
+      "cash": 158100,
+      "card": 520620,
+      "total": 678720,
+      "netSales": 593502,
+      "service10": 32754,
+      "iva13": 77156,
+      "source": "ingrid_email",
+      "cashier": "Diego"
     }
   ],
-  "lastUpdated": "2026-04-09T18:40:00.000Z",
+  "lastUpdated": "2026-04-11T17:30:00.000Z",
   "payroll2025": {
     "01": 96600000,
     "02": 57800000,
@@ -669,6 +705,42 @@
       "food": 4888634,
       "bar": 1919337,
       "source": "ingrid_cierre_apr9"
+    },
+    {
+      "date": "2026-04-10",
+      "restaurant": "coyol",
+      "total": 2477774,
+      "netSales": 2014450,
+      "cash": 50000,
+      "card": 2706667,
+      "service10": 201445,
+      "iva13": 261878,
+      "source": "ingrid_cierre_apr11",
+      "cashier": "George Lopez"
+    },
+    {
+      "date": "2026-04-10",
+      "restaurant": "esh",
+      "total": 703412,
+      "netSales": 593502,
+      "cash": 158100,
+      "card": 520620,
+      "service10": 32754,
+      "iva13": 77156,
+      "source": "ingrid_cierre_apr11",
+      "cashier": "Diego Rodriguez"
+    },
+    {
+      "date": "2026-04-10",
+      "restaurant": "laluna",
+      "total": 6006350,
+      "netSales": 4816843,
+      "cash": 403951,
+      "card": 5833545,
+      "service10": 473317,
+      "iva13": 626190,
+      "source": "ingrid_cierre_apr11",
+      "cashier": "Julia Arrieta"
     }
   ]
 }
