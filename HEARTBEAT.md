@@ -1,5 +1,17 @@
 # HEARTBEAT.md — Periodic Checks
 
+## 🚨 NON-NEGOTIABLE DAILY TASKS (DO THESE FIRST!)
+
+These tasks MUST be completed before any project work:
+
+1. **Ingrid cierres** — Check marionnosara@gmail.com for closing photos, OCR immediately
+2. **Facturas** — Parse any new electronic invoices, update invoices.json
+3. **8pm Daily Report** — Generate and send to Angelina (vailas78@yahoo.com)
+
+**NO EXCUSES. If you get distracted by other work, STOP and do these first.**
+
+---
+
 ## Priority Checks
 
 ### 🏠 Coyol Control — CHECK EVERY HEARTBEAT!
