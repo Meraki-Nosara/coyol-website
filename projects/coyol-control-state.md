@@ -71,6 +71,14 @@
 
 ---
 
+### Coyol Farm House Boutique Hotel — PLANNING
+- **Type:** Boutique Hotel
+- **Location:** Upper left portion of main farm (dense forest area)
+- **Status:** Planning and permits in process
+- **Pipeline:** Not yet — hotel project, not lot subdivision
+
+---
+
 ## 📧 Email Workflow
 
 ### Step 1: Marion Starts a Lot

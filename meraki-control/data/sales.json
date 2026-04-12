@@ -644,7 +644,7 @@
       "cashier": "Diego"
     }
   ],
-  "lastUpdated": "2026-04-11T17:30:00.000Z",
+  "lastUpdated": "2026-04-12T04:16:00.000Z",
   "payroll2025": {
     "01": 96600000,
     "02": 57800000,
@@ -662,17 +662,35 @@
     "note": "Base salaries from MDO files. Add 26.5% for CCSS patronal."
   },
   "payroll2026": {
-    "01": 79500000,
-    "02": 14000000,
-    "03": 39000000,
-    "note": "March 2026: Fixed admin \u20a115M + La Luna base salaries \u20a124M. Tips (\u20a172M) excluded as pass-through.",
-    "march_detail": {
-      "fixed_admin": 15028850,
-      "laluna_base": 24003686,
-      "laluna_tips": 71866409,
-      "laluna_hours": 11426,
-      "total_labor_cost": 39032536
-    }
+    "01": 27406793,
+    "02": 23141551,
+    "03": 23085183,
+    "note": "Q1 2026 Salario Bruto only (excludes 10% service tips pass-through). Missing: week 27 Feb - 05 Mar.",
+    "breakdown": {
+      "january": {
+        "weekly_laluna": 13111929,
+        "weekly_coyol": 3114822,
+        "weekly_esh": 3230432,
+        "weekly_especial": 3239593,
+        "fijos": 4710017
+      },
+      "february": {
+        "weekly_laluna": 10149071,
+        "weekly_coyol": 4033016,
+        "weekly_esh": 3519307,
+        "weekly_especial": 1083315,
+        "fijos": 4356842
+      },
+      "march": {
+        "weekly_laluna": 12956542,
+        "weekly_coyol": 1300632,
+        "weekly_esh": 3503654,
+        "weekly_especial": 1039183,
+        "fijos": 4285172
+      }
+    },
+    "q1_total": 73633527,
+    "q1_total_usd": 145809
   },
   "daily2026": [
     {
