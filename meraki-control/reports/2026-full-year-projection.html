@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Meraki 2026 Full Year Projection</title>
+  <style>
+    @page { size: A4 landscape; margin: 15mm; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      color: #1A1F16;
+      line-height: 1.4;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px;
+      font-size: 12px;
+    }
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #3D4F3D;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      color: #3D4F3D;
+      margin: 0;
+      font-size: 24px;
+    }
+    .header .subtitle {
+      color: #666;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+    h2 {
+      color: #3D4F3D;
+      font-size: 14px;
+      border-left: 4px solid #3D4F3D;
+      padding-left: 10px;
+      margin-top: 25px;
+      margin-bottom: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 11px;
+    }
+    th {
+      background: #3D4F3D;
+      color: white;
+      padding: 8px 6px;
+      text-align: right;
+      font-weight: 600;
+    }
+    th:first-child { text-align: left; }
+    td {
+      padding: 6px;
+      border-bottom: 1px solid #ddd;
+      text-align: right;
+    }
+    td:first-child { text-align: left; font-weight: 500; }
+    tr:nth-child(even) { background: #f9f9f9; }
+    .total-row { background: #E8F5E9 !important; font-weight: bold; }
+    .total-row td { border-top: 2px solid #3D4F3D; }
+    .negative { color: #D32F2F; }
+    .positive { color: #2E7D32; }
+    .highlight { background: #FFF3E0 !important; }
+    .low-season { background: #FFEBEE !important; }
+    .summary-box {
+      display: inline-block;
+      padding: 15px 25px;
+      margin: 10px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .summary-box.green { background: #E8F5E9; border: 2px solid #4CAF50; }
+    .summary-box.red { background: #FFEBEE; border: 2px solid #F44336; }
+    .summary-box.blue { background: #E3F2FD; border: 2px solid #2196F3; }
+    .summary-box .number { font-size: 28px; font-weight: bold; }
+    .summary-box .label { font-size: 11px; color: #666; margin-top: 5px; }
+    .summary-container { text-align: center; margin: 20px 0; }
+    .note {
+      font-size: 10px;
+      color: #666;
+      font-style: italic;
+      margin-top: 5px;
+    }
+    .warning-box {
+      background: #FFF3E0;
+      border-left: 4px solid #FF9800;
+      padding: 10px 15px;
+      margin: 15px 0;
+    }
+    .assumptions {
+      background: #F5F5F5;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+    }
+    .assumptions h3 { margin-top: 0; font-size: 12px; }
+    .assumptions ul { margin: 5px 0; padding-left: 20px; }
+    .assumptions li { margin: 3px 0; }
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 15px;
+      border-top: 1px solid #ddd;
+      color: #666;
+      font-size: 10px;
+    }
+    .two-col { display: flex; gap: 20px; }
+    .two-col > div { flex: 1; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>MERAKI 2026 — FULL YEAR PROJECTION</h1>
+    <div class="subtitle">Based on 2025 Actual Performance + Q1 2026 Actuals</div>
+  </div>
+
+  <div class="summary-container">
+    <div class="summary-box green">
+      <div class="number">₡5,070M</div>
+      <div class="label">Projected Sales<br>($10.0M USD)</div>
+    </div>
+    <div class="summary-box red">
+      <div class="number">₡1,971M</div>
+      <div class="label">Total Costs<br>(Purchases + Labor)</div>
+    </div>
+    <div class="summary-box blue">
+      <div class="number">₡2,320M</div>
+      <div class="label">Operating Profit<br>Before Renta</div>
+    </div>
+    <div class="summary-box green">
+      <div class="number">₡1,740M</div>
+      <div class="label">Net After Renta<br>($3.4M USD)</div>
+    </div>
+  </div>
+
+  <h2>Monthly Sales Projection (All Restaurants Combined)</h2>
+  <table>
+    <tr>
+      <th>Month</th>
+      <th>2025 Actual</th>
+      <th>2026 Projected</th>
+      <th>Growth</th>
+      <th>Purchases</th>
+      <th>Labor*</th>
+      <th>Operating Profit</th>
+      <th>Margin</th>
+    </tr>
+    <tr>
+      <td>January</td>
+      <td>₡351.8M</td>
+      <td>₡351.3M</td>
+      <td>0%</td>
+      <td>₡136.6M</td>
+      <td>₡40.3M</td>
+      <td class="positive">₡174.4M</td>
+      <td>50%</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>₡302.5M</td>
+      <td>₡294.4M</td>
+      <td>-3%</td>
+      <td>₡114.0M</td>
+      <td>₡34.0M</td>
+      <td class="positive">₡146.4M</td>
+      <td>50%</td>
+    </tr>
+    <tr>
+      <td>March</td>
+      <td>₡335.8M</td>
+      <td>₡353.4M</td>
+      <td>+5%</td>
+      <td>₡135.9M</td>
+      <td>₡34.0M</td>
+      <td class="positive">₡183.5M</td>
+      <td>52%</td>
+    </tr>
+    <tr class="highlight">
+      <td>April</td>
+      <td>₡270.3M</td>
+      <td>₡280.0M</td>
+      <td>+4%</td>
+      <td>₡102.8M</td>
+      <td>₡55.7M</td>
+      <td class="positive">₡121.5M</td>
+      <td>43%</td>
+    </tr>
+    <tr class="low-season">
+      <td>May</td>
+      <td>₡135.8M</td>
+      <td>₡140.0M</td>
+      <td>+3%</td>
+      <td>₡58.7M</td>
+      <td>₡63.5M</td>
+      <td class="positive">₡17.8M</td>
+      <td>13%</td>
+    </tr>
+    <tr class="low-season">
+      <td>June</td>
+      <td>₡146.6M</td>
+      <td>₡150.0M</td>
+      <td>+2%</td>
+      <td>₡53.1M</td>
+      <td>₡68.4M</td>
+      <td class="positive">₡28.5M</td>
+      <td>19%</td>
+    </tr>
+    <tr>
+      <td>July</td>
+      <td>₡192.5M</td>
+      <td>₡200.0M</td>
+      <td>+4%</td>
+      <td>₡78.0M</td>
+      <td>₡88.3M</td>
+      <td class="positive">₡33.7M</td>
+      <td>17%</td>
+    </tr>
+    <tr class="low-season">
+      <td>August</td>
+      <td>₡134.7M</td>
+      <td>₡140.0M</td>
+      <td>+4%</td>
+      <td>₡39.7M</td>
+      <td>₡45.1M</td>
+      <td class="positive">₡55.2M</td>
+      <td>39%</td>
+    </tr>
+    <tr class="low-season">
+      <td>September 💀</td>
+      <td>₡60.1M</td>
+      <td>₡65.0M</td>
+      <td>+8%</td>
+      <td>₡17.0M</td>
+      <td>₡30.3M</td>
+      <td class="positive">₡17.7M</td>
+      <td>27%</td>
+    </tr>
+    <tr class="low-season">
+      <td>October 💀</td>
+      <td>₡63.3M</td>
+      <td>₡68.0M</td>
+      <td>+7%</td>
+      <td>₡28.8M</td>
+      <td>₡16.8M</td>
+      <td class="positive">₡22.4M</td>
+      <td>33%</td>
+    </tr>
+    <tr>
+      <td>November</td>
+      <td>₡180.7M</td>
+      <td>₡190.0M</td>
+      <td>+5%</td>
+      <td>₡87.0M</td>
+      <td>₡70.4M</td>
+      <td class="positive">₡32.6M</td>
+      <td>17%</td>
+    </tr>
+    <tr>
+      <td>December</td>
+      <td>₡321.7M</td>
+      <td>₡340.0M</td>
+      <td>+6%</td>
+      <td>₡141.0M</td>
+      <td>₡94.8M</td>
+      <td class="positive">₡104.2M</td>
+      <td>31%</td>
+    </tr>
+    <tr class="total-row">
+      <td><strong>FULL YEAR</strong></td>
+      <td><strong>₡2,496M</strong></td>
+      <td><strong>₡2,572M</strong></td>
+      <td><strong>+3%</strong></td>
+      <td><strong>₡993M</strong></td>
+      <td><strong>₡642M</strong></td>
+      <td class="positive"><strong>₡937M</strong></td>
+      <td><strong>36%</strong></td>
+    </tr>
+  </table>
+  <p class="note">* Labor includes base wages + 47% cargas sociales (CCSS, aguinaldo, vacaciones, cesantía, INS). 💀 = Lowest months.</p>
+
+  <h2>Annual P&L Summary</h2>
+  <div class="two-col">
+    <div>
+      <table>
+        <tr>
+          <th colspan="3">Revenue & Costs</th>
+        </tr>
+        <tr>
+          <td>Gross Sales</td>
+          <td>₡2,572M</td>
+          <td>$5.1M</td>
+        </tr>
+        <tr>
+          <td>(-) Purchases / COGS</td>
+          <td class="negative">₡993M</td>
+          <td>39%</td>
+        </tr>
+        <tr>
+          <td>(-) Labor (base + cargas)</td>
+          <td class="negative">₡642M</td>
+          <td>25%</td>
+        </tr>
+        <tr class="total-row">
+          <td><strong>Operating Profit</strong></td>
+          <td class="positive"><strong>₡937M</strong></td>
+          <td><strong>36%</strong></td>
+        </tr>
+        <tr>
+          <td>(-) Estimated Renta (~25%)</td>
+          <td class="negative">₡234M</td>
+          <td></td>
+        </tr>
+        <tr class="total-row">
+          <td><strong>Net Profit After Tax</strong></td>
+          <td class="positive"><strong>₡703M</strong></td>
+          <td><strong>$1.4M</strong></td>
+        </tr>
+      </table>
+    </div>
+    <div>
+      <table>
+        <tr>
+          <th colspan="2">Key Metrics</th>
+        </tr>
+        <tr>
+          <td>Gross Margin (after purchases)</td>
+          <td class="positive">61%</td>
+        </tr>
+        <tr>
+          <td>Operating Margin</td>
+          <td class="positive">36%</td>
+        </tr>
+        <tr>
+          <td>Net Margin (after renta)</td>
+          <td class="positive">27%</td>
+        </tr>
+        <tr>
+          <td>Labor % of Sales</td>
+          <td>25%</td>
+        </tr>
+        <tr>
+          <td>COGS % of Sales</td>
+          <td>39%</td>
+        </tr>
+        <tr>
+          <td>Break-even Monthly</td>
+          <td>~₡136M</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <h2>By Restaurant — 2026 Projection</h2>
+  <table>
+    <tr>
+      <th>Restaurant</th>
+      <th>2025 Sales</th>
+      <th>2026 Projected</th>
+      <th>Purchases</th>
+      <th>Labor</th>
+      <th>Operating Profit</th>
+      <th>Margin</th>
+    </tr>
+    <tr>
+      <td style="color: #A65D3F; font-weight: bold;">La Luna</td>
+      <td>₡1,576M</td>
+      <td>₡1,620M</td>
+      <td>₡641M (40%)</td>
+      <td>₡405M (25%)</td>
+      <td class="positive">₡574M</td>
+      <td>35%</td>
+    </tr>
+    <tr>
+      <td style="color: #3D4F3D; font-weight: bold;">Coyol</td>
+      <td>₡745M</td>
+      <td>₡770M</td>
+      <td>₡262M (34%)</td>
+      <td>₡193M (25%)</td>
+      <td class="positive">₡315M</td>
+      <td>41%</td>
+    </tr>
+    <tr>
+      <td style="color: #C4A67C; font-weight: bold;">Esh</td>
+      <td>₡174M</td>
+      <td>₡182M</td>
+      <td>₡96M (53%)</td>
+      <td>₡46M (25%)</td>
+      <td class="positive">₡40M</td>
+      <td>22%</td>
+    </tr>
+    <tr class="total-row">
+      <td><strong>TOTAL</strong></td>
+      <td><strong>₡2,496M</strong></td>
+      <td><strong>₡2,572M</strong></td>
+      <td><strong>₡999M</strong></td>
+      <td><strong>₡644M</strong></td>
+      <td class="positive"><strong>₡929M</strong></td>
+      <td><strong>36%</strong></td>
+    </tr>
+  </table>
+
+  <div class="warning-box">
+    <strong>⚠️ Critical Seasonality Warning</strong><br>
+    Sep-Oct 2025 combined sales were only ₡123M (vs ₡687M in Jan-Feb). If labor isn't cut during low season, those months can run at a loss. The 2025 payroll data shows labor was reduced (Sep: ₡20.6M, Oct: ₡11.4M) — <strong>this must continue in 2026</strong>.
+  </div>
+
+  <div class="assumptions">
+    <h3>📊 Assumptions & Notes</h3>
+    <ul>
+      <li><strong>Sales growth:</strong> Conservative +3% YoY (Q1 2026 actual was +5% vs Q1 2025)</li>
+      <li><strong>Purchases:</strong> Based on 2025 actual gastos by month (avg 39% of sales)</li>
+      <li><strong>Labor:</strong> Base wages from MDO files + 47% cargas sociales multiplier</li>
+      <li><strong>Cargas breakdown:</strong> CCSS 26.5% + Aguinaldo 8.33% + Vacaciones 4.17% + Cesantía 5.33% + INS ~3%</li>
+      <li><strong>Renta estimate:</strong> 25% of operating profit (actual rate depends on deductions)</li>
+      <li><strong>NOT included:</strong> Bank fees/commissions, utilities, rent, maintenance, marketing, insurance</li>
+      <li><strong>Exchange rate:</strong> ₡505 = $1 USD</li>
+    </ul>
+  </div>
+
+  <h2>Cash Flow Risk: Low Season</h2>
+  <table>
+    <tr>
+      <th>Month</th>
+      <th>Projected Sales</th>
+      <th>Fixed Costs*</th>
+      <th>Cash Position</th>
+      <th>Risk Level</th>
+    </tr>
+    <tr>
+      <td>May</td>
+      <td>₡140M</td>
+      <td>~₡122M</td>
+      <td class="positive">+₡18M</td>
+      <td>⚠️ Tight</td>
+    </tr>
+    <tr>
+      <td>June</td>
+      <td>₡150M</td>
+      <td>~₡122M</td>
+      <td class="positive">+₡28M</td>
+      <td>⚠️ Tight</td>
+    </tr>
+    <tr class="low-season">
+      <td>September</td>
+      <td>₡65M</td>
+      <td>~₡47M</td>
+      <td class="positive">+₡18M</td>
+      <td>🔴 High Risk</td>
+    </tr>
+    <tr class="low-season">
+      <td>October</td>
+      <td>₡68M</td>
+      <td>~₡46M</td>
+      <td class="positive">+₡22M</td>
+      <td>🔴 High Risk</td>
+    </tr>
+  </table>
+  <p class="note">* Fixed costs = estimated minimum labor + purchases at reduced capacity. Assumes aggressive cost control in low season.</p>
+
+  <div class="footer">
+    <p>Meraki Restaurant Group — 2026 Full Year Projection<br>
+    Based on 2025 Actual Data + Q1 2026 Results<br>
+    Generated: April 12, 2026</p>
+  </div>
+</body>
+</html>

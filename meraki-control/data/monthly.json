@@ -512,7 +512,7 @@
       "perPerson": 41218,
       "source": "pos_report",
       "gastos": 26803268,
-      "mdo": 7824415
+      "mdo": 5576655
     },
     {
       "month": "2026-01",
@@ -532,7 +532,7 @@
       "perPerson": 10068,
       "source": "pos_report",
       "gastos": 10260546,
-      "mdo": 4800449
+      "mdo": 3643629
     },
     {
       "month": "2026-01",
@@ -553,7 +553,7 @@
       "source": "pos_report",
       "note": "File labeled Abril dias actual but contains January data",
       "gastos": 73461437,
-      "mdo": 14781929
+      "mdo": 18186509
     },
     {
       "month": "2026-02",
@@ -573,7 +573,7 @@
       "perPerson": 40242,
       "source": "pos_report",
       "gastos": 25096979,
-      "mdo": 5452297
+      "mdo": 5759655
     },
     {
       "month": "2026-02",
@@ -593,7 +593,7 @@
       "perPerson": 9522,
       "source": "pos_report",
       "gastos": 10796061,
-      "mdo": 4875149
+      "mdo": 3830175
     },
     {
       "month": "2026-02",
@@ -614,7 +614,7 @@
       "source": "pos_report",
       "note": "File labeled Marzo but contains February data",
       "gastos": 78139230,
-      "mdo": 12814105
+      "mdo": 13551721
     },
     {
       "month": "2026-03",
@@ -634,7 +634,7 @@
       "perPerson": 40940,
       "source": "pos_report",
       "gastos": 30008401,
-      "mdo": 5585804
+      "mdo": 2964303
     },
     {
       "month": "2026-03",
@@ -654,7 +654,7 @@
       "perPerson": 7986,
       "source": "pos_report",
       "gastos": 10691011,
-      "mdo": 4542837
+      "mdo": 3757513
     },
     {
       "month": "2026-03",
@@ -675,7 +675,7 @@
       "source": "pos_report",
       "note": "File labeled Febrero but contains March data",
       "gastos": 95182068,
-      "mdo": 12956542
+      "mdo": 16363367
     },
     {
       "month": "2026-04",
@@ -699,7 +699,7 @@
       "gastos": 555577
     }
   ],
-  "lastUpdated": "2026-04-12T18:20:00.000Z",
+  "lastUpdated": "2026-04-13T00:25:02.925Z",
   "gastosTotals2025": {
     "esh": 93678771,
     "coyol": 254933429,
