@@ -767,15 +767,6 @@
   "daily2026": [
     {
       "date": "2026-04-08",
-      "restaurant": "esh",
-      "total": 592217,
-      "netSales": 454744,
-      "cash": 112000,
-      "card": 478719,
-      "source": "ingrid_cierre_apr9"
-    },
-    {
-      "date": "2026-04-08",
       "restaurant": "coyol",
       "total": 4823617,
       "netSales": 3921640,
@@ -783,6 +774,15 @@
       "card": 4803642,
       "food": 2599100,
       "bar": 1322500,
+      "source": "ingrid_cierre_apr9"
+    },
+    {
+      "date": "2026-04-08",
+      "restaurant": "esh",
+      "total": 592217,
+      "netSales": 454744,
+      "cash": 112000,
+      "card": 478719,
       "source": "ingrid_cierre_apr9"
     },
     {
