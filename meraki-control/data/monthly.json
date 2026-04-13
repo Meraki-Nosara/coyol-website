@@ -512,7 +512,7 @@
       "perPerson": 41218,
       "source": "pos_report",
       "gastos": 26803268,
-      "mdo": 2170298
+      "mdo": 7824415
     },
     {
       "month": "2026-01",
@@ -532,7 +532,7 @@
       "perPerson": 10068,
       "source": "pos_report",
       "gastos": 10260546,
-      "mdo": 1460178
+      "mdo": 4800449
     },
     {
       "month": "2026-01",
@@ -553,7 +553,7 @@
       "source": "pos_report",
       "note": "File labeled Abril dias actual but contains January data",
       "gastos": 73461437,
-      "mdo": 4959020
+      "mdo": 14781929
     },
     {
       "month": "2026-02",
@@ -572,7 +572,8 @@
       "avgOrder": 138800,
       "perPerson": 40242,
       "source": "pos_report",
-      "gastos": 25096979
+      "gastos": 25096979,
+      "mdo": 5452297
     },
     {
       "month": "2026-02",
@@ -591,7 +592,8 @@
       "avgOrder": 8753,
       "perPerson": 9522,
       "source": "pos_report",
-      "gastos": 10796061
+      "gastos": 10796061,
+      "mdo": 4875149
     },
     {
       "month": "2026-02",
@@ -611,7 +613,8 @@
       "perPerson": 0,
       "source": "pos_report",
       "note": "File labeled Marzo but contains February data",
-      "gastos": 78139230
+      "gastos": 78139230,
+      "mdo": 12814105
     },
     {
       "month": "2026-03",
@@ -630,7 +633,8 @@
       "avgOrder": 158455,
       "perPerson": 40940,
       "source": "pos_report",
-      "gastos": 30008401
+      "gastos": 30008401,
+      "mdo": 5585804
     },
     {
       "month": "2026-03",
@@ -649,7 +653,8 @@
       "avgOrder": 8796,
       "perPerson": 7986,
       "source": "pos_report",
-      "gastos": 10691011
+      "gastos": 10691011,
+      "mdo": 4542837
     },
     {
       "month": "2026-03",
@@ -669,7 +674,8 @@
       "perPerson": 0,
       "source": "pos_report",
       "note": "File labeled Febrero but contains March data",
-      "gastos": 95182068
+      "gastos": 95182068,
+      "mdo": 12956542
     },
     {
       "month": "2026-04",
@@ -693,7 +699,7 @@
       "gastos": 555577
     }
   ],
-  "lastUpdated": "2026-04-07T23:35:42.147Z",
+  "lastUpdated": "2026-04-12T18:20:00.000Z",
   "gastosTotals2025": {
     "esh": 93678771,
     "coyol": 254933429,

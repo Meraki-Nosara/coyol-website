@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @page { size: A4; margin: 20mm; }
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      color: #1A1F16;
+      line-height: 1.5;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px;
+    }
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #3D4F3D;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      color: #3D4F3D;
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 1px;
+    }
+    .header .subtitle {
+      color: #666;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+    .confidential {
+      background: #A65D3F;
+      color: white;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: bold;
+      display: inline-block;
+      margin-top: 10px;
+      letter-spacing: 1px;
+    }
+    h2 {
+      color: #3D4F3D;
+      border-left: 4px solid #3D4F3D;
+      padding-left: 12px;
+      margin-top: 30px;
+    }
+    .alert-box {
+      background: #FFF3E0;
+      border-left: 4px solid #A65D3F;
+      padding: 15px 20px;
+      margin: 20px 0;
+    }
+    .alert-box h3 {
+      color: #A65D3F;
+      margin: 0 0 10px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 13px;
+    }
+    th {
+      background: #3D4F3D;
+      color: white;
+      padding: 10px;
+      text-align: left;
+    }
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    tr:nth-child(even) { background: #f9f9f9; }
+    .highlight { background: #FFEBEE !important; }
+    .good { background: #E8F5E9 !important; }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+    }
+    .stat-box {
+      text-align: center;
+      padding: 20px;
+      flex: 1;
+      margin: 0 10px;
+    }
+    .stat-box.coyol { background: #3D4F3D; color: white; }
+    .stat-box.laluna { background: #A65D3F; color: white; }
+    .stat-box.esh { background: #C4A67C; color: #1A1F16; }
+    .stat-box .number {
+      font-size: 32px;
+      font-weight: bold;
+    }
+    .stat-box .label {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+    .recommendations {
+      background: #E8F5E9;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .recommendations h3 {
+      color: #3D4F3D;
+      margin-top: 0;
+    }
+    .recommendations ol {
+      margin: 0;
+      padding-left: 20px;
+    }
+    .recommendations li {
+      margin: 10px 0;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+      color: #666;
+      font-size: 11px;
+    }
+    .note {
+      font-size: 12px;
+      color: #666;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>CASH vs CARD ANALYSIS</h1>
+    <div class="subtitle">Meraki Restaurant Group — April 2026</div>
+    <div class="confidential">CONFIDENTIAL — INTERNAL USE ONLY</div>
+  </div>
+
+  <div class="alert-box">
+    <h3>⚠️ SUMMARY: Coyol Shows Abnormally Low Cash Receipts</h3>
+    <p>Industry standard for restaurants is <strong>15-25% cash payments</strong>. Coyol consistently reports only <strong>3-6% cash</strong>, which is significantly below expectations even for tourist areas.</p>
+  </div>
+
+  <h2>Cash Payment Ratios by Restaurant</h2>
+  
+  <div class="stat-row">
+    <div class="stat-box coyol">
+      <div class="number">4.5%</div>
+      <div class="label">COYOL<br>Average Cash</div>
+    </div>
+    <div class="stat-box laluna">
+      <div class="number">5.3%</div>
+      <div class="label">LA LUNA<br>Average Cash</div>
+    </div>
+    <div class="stat-box esh">
+      <div class="number">13.4%</div>
+      <div class="label">ESH<br>Average Cash</div>
+    </div>
+  </div>
+
+  <h2>Coyol Q1 2026 — Monthly Breakdown</h2>
+  <table>
+    <tr>
+      <th>Month</th>
+      <th>Total Sales</th>
+      <th>Cash</th>
+      <th>Cash %</th>
+      <th>Status</th>
+    </tr>
+    <tr class="highlight">
+      <td>January</td>
+      <td>₡108.8M</td>
+      <td>₡6.4M</td>
+      <td>5.9%</td>
+      <td>⚠️ Low</td>
+    </tr>
+    <tr class="highlight">
+      <td>February</td>
+      <td>₡93.4M</td>
+      <td>₡3.8M</td>
+      <td>4.1%</td>
+      <td>⚠️ Very Low</td>
+    </tr>
+    <tr class="highlight">
+      <td>March</td>
+      <td>₡110.4M</td>
+      <td>₡6.7M</td>
+      <td>6.1%</td>
+      <td>⚠️ Low</td>
+    </tr>
+  </table>
+
+  <h2>Daily Comparison — April 2026</h2>
+  <table>
+    <tr>
+      <th>Date</th>
+      <th>Coyol Cash %</th>
+      <th>La Luna Cash %</th>
+      <th>Esh Cash %</th>
+    </tr>
+    <tr>
+      <td>Apr 1</td>
+      <td class="highlight">0.8% 🚨</td>
+      <td>8.4%</td>
+      <td class="good">—</td>
+    </tr>
+    <tr>
+      <td>Apr 2</td>
+      <td>5.5%</td>
+      <td>4.9%</td>
+      <td>4.8%</td>
+    </tr>
+    <tr>
+      <td>Apr 3</td>
+      <td class="highlight">3.6%</td>
+      <td>4.6%</td>
+      <td class="good">10.7%</td>
+    </tr>
+    <tr>
+      <td>Apr 4</td>
+      <td class="highlight">3.7%</td>
+      <td>6.6%</td>
+      <td class="good">18.4%</td>
+    </tr>
+    <tr>
+      <td>Apr 5</td>
+      <td>4.9%</td>
+      <td>5.1%</td>
+      <td>0%</td>
+    </tr>
+    <tr>
+      <td>Apr 7</td>
+      <td class="good">9.1%</td>
+      <td class="highlight">2.7%</td>
+      <td class="good">13.2%</td>
+    </tr>
+    <tr>
+      <td>Apr 8</td>
+      <td class="highlight">1.4% 🚨</td>
+      <td class="good">11.9%</td>
+      <td class="good">18.9%</td>
+    </tr>
+    <tr>
+      <td>Apr 9</td>
+      <td class="highlight">3.6%</td>
+      <td class="highlight">3.3%</td>
+      <td class="good">10.8%</td>
+    </tr>
+    <tr>
+      <td>Apr 10</td>
+      <td class="highlight">2.0% 🚨</td>
+      <td>6.7%</td>
+      <td class="good">22.5%</td>
+    </tr>
+  </table>
+
+  <h2>Possible Explanations</h2>
+  <table>
+    <tr>
+      <th>Scenario</th>
+      <th>Likelihood</th>
+      <th>Notes</th>
+    </tr>
+    <tr>
+      <td>Tourist clientele prefers cards</td>
+      <td>Partial</td>
+      <td>Explains some gap, but not 3-6% vs industry 15-25%</td>
+    </tr>
+    <tr>
+      <td>Staff encouraging card payments</td>
+      <td>Possible</td>
+      <td>Check if there's a reason to push cards</td>
+    </tr>
+    <tr>
+      <td>Cash being removed before counting</td>
+      <td>Investigate</td>
+      <td>Would explain consistent low percentages</td>
+    </tr>
+    <tr>
+      <td>Under-reporting on daily closings</td>
+      <td>Investigate</td>
+      <td>Compare with surprise counts</td>
+    </tr>
+  </table>
+
+  <div class="recommendations">
+    <h3>📋 Recommended Actions</h3>
+    <ol>
+      <li><strong>Surprise Cash Count</strong> — Visit Coyol unannounced at closing to count cash drawer before Ingrid/staff process it</li>
+      <li><strong>Bank Reconciliation</strong> — Verify card totals match Lafise/BAC deposit reports exactly</li>
+      <li><strong>Direct Conversation</strong> — Ask John why Coyol gets so much less cash than other Nosara restaurants</li>
+      <li><strong>Test Transaction</strong> — Send someone to pay cash and verify it appears on the closing report</li>
+      <li><strong>Compare Weekends</strong> — Weekends with more locals should show higher cash; check if pattern holds</li>
+    </ol>
+  </div>
+
+  <h2>Context: ESH as Benchmark</h2>
+  <p>Esh shows <strong>10-22% cash</strong>, which is much closer to industry norms. This suggests the low cash at Coyol and La Luna is not simply due to "Nosara being a tourist town" — since all three restaurants serve the same market.</p>
+
+  <p class="note">Note: This analysis is based on daily closing reports (cierres) received from Ingrid. Data accuracy depends on correct reporting at each location.</p>
+
+  <div class="footer">
+    <p>Meraki Restaurant Group — Internal Analysis<br>
+    Generated: April 12, 2026<br>
+    Prepared for: Angelina Peri</p>
+  </div>
+</body>
+</html>
