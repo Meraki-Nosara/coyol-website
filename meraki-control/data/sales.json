@@ -581,7 +581,7 @@
       "service10": 584125,
       "iva13": 774552,
       "source": "ingrid_email",
-      "cashier": "Carmen Mu\u00f1oz"
+      "cashier": "Carmen Muñoz"
     },
     {
       "date": "2026-04-09",
@@ -678,9 +678,45 @@
       "iva13": 15996,
       "source": "ingrid_email",
       "cashier": "Raul Rodriguez"
+    },
+    {
+      "date": "2026-04-12",
+      "restaurant": "laluna",
+      "cash": 561575,
+      "card": 6179121,
+      "total": 6740696,
+      "netSales": 5484753,
+      "service10": 542925,
+      "iva13": 713018,
+      "source": "ingrid_email",
+      "cashier": "Julia Arrieta"
+    },
+    {
+      "date": "2026-04-12",
+      "restaurant": "coyol",
+      "cash": 203073,
+      "card": 2871620,
+      "total": 3074693,
+      "netSales": 2459100,
+      "service10": 245910,
+      "iva13": 319683,
+      "source": "ingrid_email",
+      "cashier": "George Lopez"
+    },
+    {
+      "date": "2026-04-12",
+      "restaurant": "esh",
+      "cash": 58275,
+      "card": 63257,
+      "total": 121532,
+      "netSales": 60192,
+      "service10": 3505,
+      "iva13": 7825,
+      "source": "ingrid_email",
+      "cashier": "Juan Castillo"
     }
   ],
-  "lastUpdated": "2026-04-12T04:16:00.000Z",
+  "lastUpdated": "2026-04-13T07:30:00.000Z",
   "payroll2025": {
     "01": 96600000,
     "02": 57800000,
@@ -794,6 +830,42 @@
       "service10": 473317,
       "iva13": 626190,
       "source": "ingrid_cierre_apr11",
+      "cashier": "Julia Arrieta"
+    },
+    {
+      "date": "2026-04-12",
+      "restaurant": "coyol",
+      "total": 3024693,
+      "netSales": 2459100,
+      "cash": 203073,
+      "card": 2871619,
+      "service10": 245910,
+      "iva13": 319683,
+      "source": "ingrid_cierre_apr13",
+      "cashier": "George Lopez"
+    },
+    {
+      "date": "2026-04-12",
+      "restaurant": "esh",
+      "total": 71522,
+      "netSales": 60192,
+      "cash": 58275,
+      "card": 63257,
+      "service10": 3505,
+      "iva13": 7825,
+      "source": "ingrid_cierre_apr13",
+      "cashier": "Juan Castillo"
+    },
+    {
+      "date": "2026-04-12",
+      "restaurant": "laluna",
+      "total": 6740696,
+      "netSales": 5484753,
+      "cash": 561575,
+      "card": 6279206,
+      "service10": 542925,
+      "iva13": 713018,
+      "source": "ingrid_cierre_apr13",
       "cashier": "Julia Arrieta"
     }
   ]
