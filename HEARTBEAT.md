@@ -14,6 +14,46 @@ These tasks MUST be completed before any project work:
 
 ## Priority Checks
 
+### 🏗️ NC Control Orders — CHECK EVERY HEARTBEAT!
+**Supabase URL:** https://mnxjzvqgrrodalcmtntf.supabase.co
+**Anon Key:** sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD
+
+**Check for new pending orders:**
+```bash
+curl -s "https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/orders?status=eq.pending&select=*" \
+  -H "apikey: sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD" \
+  -H "Authorization: Bearer sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD"
+```
+
+**When NEW pending order found (not already notified):**
+1. Send email to Anlly:
+```bash
+cat << 'EOF' | himalaya message send -a coyol
+From: coyolcontrol@gmail.com
+To: info@nosaraconstruction.com
+Subject: 📦 Nueva Orden - [PROJECT_NAME]
+
+Hola Anlly,
+
+[CREATED_BY] acaba de crear una nueva orden de materiales.
+
+Proyecto: [PROJECT_NAME]
+Prioridad: [URGENCY]
+
+Revisa los detalles en NC Control:
+https://nc-control.vercel.app
+
+Usuario: anlly
+Contraseña: admin2026
+
+Gracias!
+EOF
+```
+2. Update order status to 'notified' or track in memory file
+3. Notify Marion if urgent
+
+---
+
 ### 🏠 Coyol Control — CHECK EVERY HEARTBEAT!
 **Account:** coyolcontrol@gmail.com via Himalaya CLI (`-a coyol`)
 
