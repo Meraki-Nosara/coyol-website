@@ -1,0 +1,1492 @@
+{
+  "description": "Potential tax deductions (renta) - non-restaurant expenses",
+  "year": 2026,
+  "deductions": [
+    {
+      "clave": "50613042600310263070000100212010000075134100075134",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "date": "2026-04-13",
+      "subtotal": 3773.93,
+      "iva": 490.6109,
+      "total": 4264.5409,
+      "items": [
+        {
+          "product": "BEST VALUE GANCH ABIER 1.1/2 4PC F01805 S1:7453001132554",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 879.53,
+          "total": 993.8689
+        },
+        {
+          "product": "TACO HULE RECT 1\" X 2\" 25X50MM INTER S1:3349892101752",
+          "qty": 4.0,
+          "unit": "Unid",
+          "unit_price": 723.6,
+          "total": 3270.672
+        }
+      ],
+      "restaurant": "coyol",
+      "source_file": "50613042600310263070000100212010000075134100075134.xml"
+    },
+    {
+      "clave": "50613042600310263070000100218010000077357100077357",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "date": "2026-04-13",
+      "subtotal": 71488.7475,
+      "iva": 9293.53717,
+      "total": 80782.28467,
+      "items": [
+        {
+          "product": "PLYWOOD  9MM CTE PRIMERA 1.22X2.44 (100) S1:3103192017997 S2:101903",
+          "qty": 5.0,
+          "unit": "Unid",
+          "unit_price": 10356.67,
+          "total": 49737.90767
+        },
+        {
+          "product": "LANCO SILICONFLEX ALMENDRA CC768-18 S1:3150452014890 S2:718594768182",
+          "qty": 5.0,
+          "unit": "Unid",
+          "unit_price": 2999.76,
+          "total": 14406.3474
+        },
+        {
+          "product": "NO MAS CLAVOS HENKEL PATTEX 353G TUBO S1:3064322001609 S2:0079340649453 S3:07934",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 6485.4,
+          "total": 5862.8016
+        },
+        {
+          "product": "LOCTITE SUPER BONDER PRECISION 5G 162882 S1:3368122122329 S2:7891200308866",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 2500.0,
+          "total": 2260.0
+        },
+        {
+          "product": "ACEITE PENETRANTE WD-40 11 OZS S1:079567110996 S2:079567520115 S3:079567520221",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 3800.0,
+          "total": 3435.2
+        },
+        {
+          "product": "MASKING TAPE AZUL ARQUITECTONICO 2 S1:721672033485 S2:721672008261 S3:7216720263",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 5619.5,
+          "total": 5080.028
+        }
+      ],
+      "restaurant": "coyol",
+      "source_file": "50613042600310263070000100218010000077357100077357.xml"
+    },
+    {
+      "clave": "50613042600310263070000100218010000077362100077362",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "date": "2026-04-13",
+      "subtotal": 240956.0196,
+      "iva": 31324.28254,
+      "total": 272280.30214,
+      "items": [
+        {
+          "product": "GYPSUM PASTA  5 GLS S1:3021682014069 S2:022332023014",
+          "qty": 7.0,
+          "unit": "Unid",
+          "unit_price": 17249.19,
+          "total": 120068.16175
+        },
+        {
+          "product": "GYPSUM LAMINA REGULAR 1/2\" S1:3097902017776 S2:106042",
+          "qty": 15.0,
+          "unit": "Unid",
+          "unit_price": 5682.57,
+          "total": 89577.19219
+        },
+        {
+          "product": "GYPSUM LAMINA MR VERDE 1/2\" P/EXTERIOR S1:3101732017940 S2:106621",
+          "qty": 7.0,
+          "unit": "Unid",
+          "unit_price": 7440.27,
+          "total": 54732.8582
+        },
+        {
+          "product": "TORNILLO GYPSUM P.BROCA #6 X 1.1/4\" S1:3138982006851 S2:101077",
+          "qty": 1500.0,
+          "unit": "Unid",
+          "unit_price": 5.18,
+          "total": 7902.09
+        }
+      ],
+      "restaurant": "coyol",
+      "source_file": "50613042600310263070000100218010000077362100077362.xml"
+    },
+    {
+      "clave": "50613042600310263070000100223030000004200100004200",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "date": "2026-04-13",
+      "subtotal": 56637.16814,
+      "iva": 7362.83186,
+      "total": 64000.0,
+      "items": [
+        {
+          "product": "LANCO WALL PREP CUB WP823-2 S1:3027142253450 S2:718594004624",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 70796.46018,
+          "total": 64000.0
+        }
+      ],
+      "restaurant": "coyol",
+      "source_file": "50613042600310263070000100223030000004200100004200.xml"
+    },
+    {
+      "clave": "50613042600310168709300100001010000087275141470000",
+      "supplier": "Representaciones Centroamericanas De Envases Exclusivos S.A.",
+      "supplier_id": "3101687093",
+      "date": "2026-04-13",
+      "subtotal": 165.02471,
+      "iva": 21.45321,
+      "total": 186.47792,
+      "items": [
+        {
+          "product": "Tapa - Metálica - 82 Twist-Off - Negra",
+          "qty": 180.0,
+          "unit": "Unid",
+          "unit_price": 0.2604,
+          "total": 51.90605
+        },
+        {
+          "product": "Envío: Paquete 10.1 a 30 kg (1 a 3 días hábiles) Envío fuera de la GAM.",
+          "qty": 2.0,
+          "unit": "Os",
+          "unit_price": 9.75,
+          "total": 22.035
+        },
+        {
+          "product": "Frasco Transparente - Cilindrico - Vidrio 444 ml - 82 Twist-Off - C-1468",
+          "qty": 180.0,
+          "unit": "Unid",
+          "unit_price": 0.56457,
+          "total": 112.53687
+        }
+      ],
+      "restaurant": null,
+      "source_file": "FE-50613042600310168709300100001010000087275141470000.xml"
+    },
+    {
+      "clave": "50613042613760002982500100001010000001265100001337",
+      "supplier": "HAGIT MOSS",
+      "supplier_id": "137600029825",
+      "date": "2026-04-13",
+      "subtotal": 82800.0,
+      "iva": 0.0,
+      "total": 82800.0,
+      "items": [
+        {
+          "product": "blue lemonade",
+          "qty": 12.0,
+          "unit": "Unid",
+          "unit_price": 2300.0,
+          "total": 27600.0
+        },
+        {
+          "product": "Chia drink",
+          "qty": 12.0,
+          "unit": "Unid",
+          "unit_price": 2300.0,
+          "total": 27600.0
+        },
+        {
+          "product": "pink lemonade",
+          "qty": 12.0,
+          "unit": "Unid",
+          "unit_price": 2300.0,
+          "total": 27600.0
+        }
+      ],
+      "restaurant": null,
+      "source_file": "FE-50613042613760002982500100001010000001265100001337.xml"
+    },
+    {
+      "clave": "50613042600050371048600100001010000001216100020115",
+      "supplier": "ALEX CASTRO HERNANDEZ",
+      "supplier_id": "503710486",
+      "date": "2026-04-13",
+      "subtotal": 220000.0,
+      "iva": 0.0,
+      "total": 220000.0,
+      "items": [
+        {
+          "product": "Pajillas de Bambú",
+          "qty": 4000.0,
+          "unit": "Unid",
+          "unit_price": 55.0,
+          "total": 220000.0
+        }
+      ],
+      "restaurant": null,
+      "source_file": "50613042600050371048600100001010000001216100020115.xml"
+    },
+    {
+      "clave": "50613042600310263070000100218010000077361100077361",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "date": "2026-04-13",
+      "subtotal": 96671.0795,
+      "iva": 12567.24034,
+      "total": 109238.31984,
+      "items": [
+        {
+          "product": "PVC TUBO CONDUIT 2\" TIPO A S1:3128822019257 S2:008932",
+          "qty": 15.0,
+          "unit": "Unid",
+          "unit_price": 6000.0,
+          "total": 81360.0
+        },
+        {
+          "product": "PVC UNION CONDUIT 2\" TIPO A S1:3137022009180 S2:7441102816671 S3:7441018838187",
+          "qty": 15.0,
+          "unit": "Unid",
+          "unit_price": 440.21,
+          "total": 5969.2476
+        },
+        {
+          "product": "PVC CURVA CONDUIT 90°X2\" TIPO A S1:3007762013313 S2:7441102807426 S3:74410188382",
+          "qty": 7.0,
+          "unit": "Unid",
+          "unit_price": 3126.71,
+          "total": 21022.43469
+        },
+        {
+          "product": "GAZA EMT SENCI 2 S1:3146722020050 S2:101440",
+          "qty": 6.0,
+          "unit": "Unid",
+          "unit_price": 153.85,
+          "total": 886.63755
+        }
+      ],
+      "restaurant": "coyol",
+      "source_file": "50613042600310263070000100218010000077361100077361.xml"
+    },
+    {
+      "clave": "50613042615581547203100100001010000001634149463904",
+      "supplier": "MARIO GONZALEZ OLIVERA",
+      "supplier_id": "155815472031",
+      "date": "2026-04-13",
+      "subtotal": 35000.0,
+      "iva": 0.0,
+      "total": 35000.0,
+      "items": [
+        {
+          "product": "Cilindro de  100 lbs GLP",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 35000.0,
+          "total": 35000.0
+        }
+      ],
+      "restaurant": null,
+      "source_file": "FE-50613042615581547203100100001010000001634149463904.xml"
+    },
+    {
+      "clave": "50612042600310263070000100224010000036889300036889",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "date": "2026-04-12",
+      "subtotal": 1765.90375,
+      "iva": 229.56749,
+      "total": 1995.47124,
+      "items": [
+        {
+          "product": "TORN TECHO GALV P.CTE 1/4\" X 2\" TTPC0 S1:3152892011385 S2:102622",
+          "qty": 28.0,
+          "unit": "Unid",
+          "unit_price": 36.25,
+          "total": 1146.95
+        },
+        {
+          "product": "CLAVO CTE S/CABEZA 1.1/4 S1:3116502018591 S2:100782",
+          "qty": 0.125,
+          "unit": "Unid",
+          "unit_price": 2607.23,
+          "total": 368.27124
+        },
+        {
+          "product": "TRUPER CUBO P/TECHO 3/8 X UND 12940 S1:3365902120186 S2:7506240673002",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 425.0,
+          "total": 480.25
+        }
+      ],
+      "restaurant": "coyol",
+      "source_file": "50612042600310263070000100224010000036889300036889.xml"
+    },
+    {
+      "clave": "50612042600310127115900300004010000021869100061482",
+      "supplier": "APARTE D Y E SOCIEDAD ANONIMA",
+      "supplier_id": "3101271159",
+      "date": "2026-04-12",
+      "subtotal": 40064.0,
+      "iva": 0.0,
+      "total": 40064.0,
+      "items": [
+        {
+          "product": "Diesel",
+          "qty": 75.592,
+          "unit": "L",
+          "unit_price": 530.0,
+          "total": 40064.0
+        }
+      ],
+      "restaurant": null,
+      "source_file": "FE_00300004010000021869_XML.xml"
+    },
+    {
+      "clave": "50611042600310187612290200207010000001721100004097",
+      "supplier": "Cadena de Farmacias Dokka S.A. (FLB)",
+      "supplier_id": "3101876122",
+      "date": "2026-04-11",
+      "subtotal": 76169.92,
+      "iva": 2558.6765,
+      "total": 78728.5965,
+      "items": [
+        {
+          "product": "ENANTYUM PLUS TAB 75MG/25MG X10",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 1740.64,
+          "total": 1775.4528
+        },
+        {
+          "product": "DIOVAN TAB 80MG X14",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 1022.35,
+          "total": 1042.797
+        },
+        {
+          "product": "PROBIO I3 CAP X30",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 20907.08,
+          "total": 17718.7503
+        },
+        {
+          "product": "FLOXACIN TAB 500MG X10",
+          "qty": 4.0,
+          "unit": "Unid",
+          "unit_price": 1660.63,
+          "total": 6775.3704
+        },
+        {
+          "product": "FLOXACIN TAB 500MG X10",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 16606.3,
+          "total": 16938.426
+        },
+        {
+          "product": "TENSIOMETRO BASICO AUT BP3AQ1-1",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 34477.8,
+          "total": 34477.8
+        }
+      ],
+      "restaurant": null,
+      "source_file": "FE-50611042600310187612290200207010000001721100004097.xml"
+    },
+    {
+      "clave": "50611042600310191086700100001010000015111182078762",
+      "supplier": "FERRETERIA Y MATERIALES DE CONSTRUCCION AEROPUERTO NOSARA SOCIEDAD ANONIMA",
+      "supplier_id": "3101910867",
+      "date": "2026-04-11",
+      "subtotal": 41969.02744,
+      "iva": 5455.97353,
+      "total": 47425.00097,
+      "items": [
+        {
+          "product": "LAMINA GYPSUM INTERIOR 1/2&quot; - 1.22 X 2.44MTS",
+          "qty": 3.0,
+          "unit": "Unid",
+          "unit_price": 5973.45133,
+          "total": 20250.0
+        },
+        {
+          "product": "PASTA P/ GYPSUM PREPARADA EASY SAND USG SECADO 45 MINUTOS 8.1KG",
+          "qty": 2.0,
+          "unit": "Unid",
+          "unit_price": 7942.47788,
+          "total": 17950.0
+        },
+        {
+          "product": "TORNILLO GYPSUM P/ BROCA 6MM X 1 1/4&quot;",
+          "qty": 200.0,
+          "unit": "Unid",
+          "unit_price": 5.0885,
+          "total": 1150.001
+        },
+        {
+          "product": "CILINDRO GAS BUTANO GAS-220X TRUPER 11920",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 1393.80531,
+          "total": 1575.0
+        },
+        {
+          "product": "SOPLETE P/ CILINDRO DE GAS BUTANO 1/4 VUELTA BOQ-90P TRUPER 101969",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 3628.31858,
+          "total": 4099.99999
+        },
+        {
+          "product": "FELPA P/ PINTAR ANTIGOTA 1/2&quot; X 9&quot; COOFIX CFH-Y05102-9",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 663.71681,
+          "total": 749.99999
+        },
+        {
+          "product": "BROCHA CERDA POLIESTER 3&quot; PAINTER ELITE GBS - GBSY2300",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 1460.17699,
+          "total": 1649.99999
+        }
+      ],
+      "restaurant": null,
+      "source_file": "003101910867-FE-00100001010000015111.xml"
+    },
+    {
+      "clave": "50611042600050386022000100001010000000402149765961",
+      "supplier": "LARA HERNANDEZ JOSE EMMANUEL",
+      "supplier_id": "503860220",
+      "date": "2026-04-11",
+      "subtotal": 150000.0,
+      "iva": 1500.0,
+      "total": 151500.0,
+      "items": [
+        {
+          "product": "Limones y limas, frescos o refrigerados, n.c.p.",
+          "qty": 1000.0,
+          "unit": "Unid",
+          "unit_price": 150.0,
+          "total": 151500.0
+        }
+      ],
+      "restaurant": null,
+      "source_file": "FacturaElectronica.xml"
+    },
+    {
+      "clave": "50610042600010937077500100001010000001180120172198",
+      "supplier": "LING CHAN MORALES",
+      "supplier_id": "109370775",
+      "date": "2026-04-10",
+      "subtotal": 158000.0,
+      "iva": 20540.0,
+      "total": 178540.0,
+      "items": [
+        {
+          "product": "Piston",
+          "qty": 1.0,
+          "unit": "St",
+          "unit_price": 84000.0,
+          "total": 94920.0
+        },
+        {
+          "product": "Sellos y guías",
+          "qty": 1.0,
+          "unit": "St",
+          "unit_price": 70000.0,
+          "total": 79100.0
+        },
+        {
+          "product": "Encomienda",
+          "qty": 1.0,
+          "unit": "St",
+          "unit_price": 4000.0,
+          "total": 4520.0
+        }
+      ],
+      "restaurant": null,
+      "source_file": "FE-50610042600010937077500100001010000001180120172198_1.xml"
+    },
+    {
+      "clave": "50610042600050322095400100001010000003408133809026",
+      "supplier": "PAULO CESAR CRUZ PEREZ",
+      "supplier_id": "503220954",
+      "date": "2026-04-10",
+      "subtotal": 375828.0,
+      "iva": 3758.28,
+      "total": 379586.28,
+      "items": [
+        {
+          "product": "camaron J",
+          "qty": 10.14,
+          "unit": "Kg",
+          "unit_price": 9900.0,
+          "total": 101389.86
+        },
+        {
+          "product": "Calamar entero",
+          "qty": 20.64,
+          "unit": "Kg",
+          "unit_price": 6800.0,
+          "total": 141755.52
+        },
+        {
+          "product": "Pargo entero",
+          "qty": 17.1,
+          "unit": "Kg",
+          "unit_price": 7900.0,
+          "total": 136440.9
+        }
+      ],
+      "restaurant": null,
+      "source_file": "000503220954-FE-00100001010000003408_1.xml"
+    },
+    {
+      "clave": "50610042600050322095400100001010000003409154905620",
+      "supplier": "PAULO CESAR CRUZ PEREZ",
+      "supplier_id": "503220954",
+      "date": "2026-04-10",
+      "subtotal": 115900.0,
+      "iva": 1159.0,
+      "total": 117059.0,
+      "items": [
+        {
+          "product": "pescado atun",
+          "qty": 12.2,
+          "unit": "Kg",
+          "unit_price": 9500.0,
+          "total": 117059.0
+        }
+      ],
+      "restaurant": null,
+      "source_file": "000503220954-FE-00100001010000003409_1.xml"
+    },
+    {
+      "clave": "50610042600310142101000200001010000018927100018927",
+      "supplier": "DISTRIBUIDORA VILLA MAR KC, SA",
+      "supplier_id": "3101421010",
+      "date": "2026-04-10",
+      "subtotal": 46408.0,
+      "iva": 464.08,
+      "total": 46872.08,
+      "items": [
+        {
+          "product": "CHORIZO HIERBAS FINAS 600GR",
+          "qty": 4.0,
+          "unit": "Unid",
+          "unit_price": 4150.0,
+          "total": 16766.0
+        },
+        {
+          "product": "CHORIZO  1 KG",
+          "qty": 6.21,
+          "unit": "Unid",
+          "unit_price": 4800.0,
+          "total": 30106.08
+        }
+      ],
+      "restaurant": null,
+      "source_file": "Firmado_50610042600310142101000200001010000018927100018927.xml"
+    },
+    {
+      "clave": "50609042600310263070000100218010000077046100077046",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "date": "2026-04-09",
+      "subtotal": 37842.65,
+      "iva": 4919.5445,
+      "total": 42762.1945,
+      "items": [
+        {
+          "product": "PVC UNION CONDUIT 3/4\" TIPO A S1:3183182009140 S2:7441102816633",
+          "qty": 10.0,
+          "unit": "Unid",
+          "unit_price": 146.52,
+          "total": 1655.676
+        },
+        {
+          "product": "PVC CONECTOR CONDUIT 3/4\" TIPO A S1:3093872009087 S2:7441102816602",
+          "qty": 15.0,
+          "unit": "Unid",
+          "unit_price": 161.77,
+          "total": 2742.0015
+        },
+        {
+          "product": "DW BROCA ROCK C 3/4X10X12 DW5455 S1:3232342008087 S2:028874054554",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 14130.05,
+          "total": 15966.9565
+        },
+        {
+          "product": "DW CINCEL SDS PLUS 3/4 X 10' DW5350 S1:3135962008515 S2:028874053502",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 10703.68,
+          "total": 12095.1584
+        },
+        {
+          "product": "TRUPER CINCEL 5/8\"X12\" 12136 S1:3260042020870 S2:7501206633519",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 2053.7,
+          "total": 2320.681
+        },
+        {
+          "product": "LAPIZ CARPINTERIA LYRA VERDE 9.1/2 S1:3162232008920 S2:4084900210222",
+          "qty": 2.0,
+          "unit": "Unid",
+          "unit_price": 623.65,
+          "total": 1409.449
+        },
+        {
+          "product": "LAPIZ CARPINTERIA LYRA ROJO 9.1/2 S1:3135702005446 S2:4084900210086",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 626.65,
+          "total": 708.1145
+        },
+        {
+          "product": "KOMELON REPUESTO HOJAS 18MM LB5-10 18 S1:3393232145265 S2:8803005002282",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 3522.96,
+          "total": 3980.9448
+        },
+        {
+          "product": "PRETUL CUCHILLA P/C CARTON REF 6' 22396 S1:3373662127475 S2:7501206685082",
+          "qty": 2.0,
+          "unit": "Unid",
+          "unit_price": 833.28,
+          "total": 1883.2128
+        }
+      ],
+      "restaurant": "coyol",
+      "source_file": "50609042600310263070000100218010000077046100077046.xml"
+    },
+    {
+      "clave": "50609042600310109007300100012010000011079112164235",
+      "supplier": "Tienda Internacional de Productos Sensacionales SOCIEDAD ANONIMA",
+      "supplier_id": "3101090073",
+      "date": "2026-04-09",
+      "subtotal": 41415.96,
+      "iva": 5384.0748,
+      "total": 46800.0348,
+      "items": [
+        {
+          "product": "SARTEN ALUMINIO 7 3.5 MM",
+          "qty": 8.0,
+          "unit": "Unid",
+          "unit_price": 6902.66,
+          "total": 46800.0348
+        }
+      ],
+      "restaurant": null,
+      "source_file": "50609042600310109007300100012010000011079112164235.xml"
+    },
+    {
+      "clave": "50609042600310283040700100001010000065506199999999",
+      "supplier": "Distribuidora AYR Ltda",
+      "supplier_id": "3102830407",
+      "date": "2026-04-09",
+      "subtotal": 884762.09,
+      "iva": 115019.0717,
+      "total": 999781.1617,
+      "items": [
+        {
+          "product": "lomito 3up",
+          "qty": 74.3,
+          "unit": "Unid",
+          "unit_price": 14884.96,
+          "total": 999781.1617
+        }
+      ],
+      "restaurant": null,
+      "source_file": "50609042600310283040700100001010000065506199999999Estado procesando.xml"
+    },
+    {
+      "clave": "50609042600310154869000100502010000001797161711316",
+      "supplier": "AUTOSERVICIO Y REPUESTOS NOSARA S.A.",
+      "supplier_id": "3101548690",
+      "date": "2026-04-09",
+      "subtotal": 39823.01,
+      "iva": 5176.9913,
+      "total": 45000.0013,
+      "items": [
+        {
+          "product": "ACEITE STARFIRE AW 68 CUB",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 39823.01,
+          "total": 45000.0013
+        }
+      ],
+      "restaurant": null,
+      "source_file": "50609042600310154869000100502010000001797161711316.xml"
+    },
+    {
+      "clave": "50609042600310263070000100218010000077096100077096",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "date": "2026-04-09",
+      "subtotal": 24881.22,
+      "iva": 3234.5586,
+      "total": 28115.7786,
+      "items": [
+        {
+          "product": "TRUPER ASPERSOR METÁL 1 VÍA ESTAC 10318 S1:3011792039571 S2:7501206655306",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 5664.96,
+          "total": 6401.4048
+        },
+        {
+          "product": "ESPUMA BLANCA 100cm X 190cm X 4 S1:3063122016158 S2:104114",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 19216.26,
+          "total": 21714.3738
+        }
+      ],
+      "restaurant": "coyol",
+      "source_file": "50609042600310263070000100218010000077096100077096.xml"
+    },
+    {
+      "clave": "50609042600312018220200100001010000000243198778254",
+      "supplier": "Christopher Stockholm ",
+      "supplier_id": "3120182202",
+      "date": "2026-04-09",
+      "subtotal": 705000.0,
+      "iva": 91650.0,
+      "total": 796650.0,
+      "items": [
+        {
+          "product": "BZB Jungle Haze IPA",
+          "qty": 3.0,
+          "unit": "Unid",
+          "unit_price": 70000.0,
+          "total": 237300.0
+        },
+        {
+          "product": "BZB Pelada Pale Ale",
+          "qty": 3.0,
+          "unit": "Unid",
+          "unit_price": 70000.0,
+          "total": 237300.0
+        },
+        {
+          "product": "BZB Mexican Lager",
+          "qty": 3.0,
+          "unit": "Unid",
+          "unit_price": 70000.0,
+          "total": 237300.0
+        },
+        {
+          "product": "CO2 tank refill 9kg",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 75000.0,
+          "total": 84750.0
+        }
+      ],
+      "restaurant": "laluna",
+      "source_file": "FE-50609042600312018220200100001010000000243198778254.xml"
+    },
+    {
+      "clave": "50609042600310276984600100001010000002725144811766",
+      "supplier": "Pupalito Sociedad de Responsabilidad Limitada",
+      "supplier_id": "3102769846",
+      "date": "2026-04-09",
+      "subtotal": 21084.0,
+      "iva": 0.0,
+      "total": 21084.0,
+      "items": [
+        {
+          "product": "Yogurt Griego - 740g",
+          "qty": 4.0,
+          "unit": "Unid",
+          "unit_price": 5271.0,
+          "total": 21084.0
+        }
+      ],
+      "restaurant": null,
+      "source_file": "FE-50609042600310276984600100001010000002725144811766.xml"
+    },
+    {
+      "clave": "50609042600312018220200100001010000000244146331137",
+      "supplier": "Christopher Stockholm ",
+      "supplier_id": "3120182202",
+      "date": "2026-04-09",
+      "subtotal": 645000.0,
+      "iva": 83850.0,
+      "total": 728850.0,
+      "items": [
+        {
+          "product": "BZB Jungle Haze IPA",
+          "qty": 3.0,
+          "unit": "Unid",
+          "unit_price": 75000.0,
+          "total": 254250.0
+        },
+        {
+          "product": "BZB Mexican Lager",
+          "qty": 3.0,
+          "unit": "Unid",
+          "unit_price": 70000.0,
+          "total": 237300.0
+        },
+        {
+          "product": "BZB Pelada Pale Ale",
+          "qty": 2.0,
+          "unit": "Unid",
+          "unit_price": 70000.0,
+          "total": 158200.0
+        },
+        {
+          "product": "CO2 tank refill 2kg",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 25000.0,
+          "total": 28250.0
+        },
+        {
+          "product": "CO2 tank refill 4kg",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 45000.0,
+          "total": 50850.0
+        }
+      ],
+      "restaurant": "coyol",
+      "source_file": "FE-50609042600312018220200100001010000000244146331137.xml"
+    },
+    {
+      "clave": "50609042600310283040700100001010000065505199999999",
+      "supplier": "Distribuidora AYR Ltda",
+      "supplier_id": "3102830407",
+      "date": "2026-04-09",
+      "subtotal": 1615299.93,
+      "iva": 192525.5445,
+      "total": 1807825.4745,
+      "items": [
+        {
+          "product": "RIBEYE SIN HUESO",
+          "qty": 52.0,
+          "unit": "Unid",
+          "unit_price": 9853.98,
+          "total": 521117.8625
+        },
+        {
+          "product": "costilla san louis",
+          "qty": 26.28,
+          "unit": "Unid",
+          "unit_price": 7910.89,
+          "total": 146984.0072
+        },
+        {
+          "product": "lomito 3up",
+          "qty": 84.7,
+          "unit": "Unid",
+          "unit_price": 14884.96,
+          "total": 1139723.6048
+        }
+      ],
+      "restaurant": null,
+      "source_file": "50609042600310283040700100001010000065505199999999Estado procesando.xml"
+    },
+    {
+      "clave": "50609042600050334087800100001010000001752148175081",
+      "supplier": "MAURICIO GONZALEZ VASQUEZ",
+      "supplier_id": "503340878",
+      "date": "2026-04-09",
+      "subtotal": 11730.31,
+      "iva": 1524.94,
+      "total": 13255.25,
+      "items": [
+        {
+          "product": "AC HEMBRA CATERPILLAR HY0404 90",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 3522.0,
+          "total": 3979.86
+        },
+        {
+          "product": "AC HEMBRA CATERPILLAR 0404 HY",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 3178.0,
+          "total": 3591.14
+        },
+        {
+          "product": "MANGUERA 100R2 1/4",
+          "qty": 0.27,
+          "unit": "Unid",
+          "unit_price": 3553.0,
+          "total": 1084.02
+        },
+        {
+          "product": "PRENSADO",
+          "qty": 1.0,
+          "unit": "Os",
+          "unit_price": 4071.0,
+          "total": 4600.23
+        }
+      ],
+      "restaurant": null,
+      "source_file": "FE-50609042600050334087800100001010000001752148175081.xml"
+    },
+    {
+      "clave": "50609042600310101117300100085010000003659100230405",
+      "supplier": "Roma Prince S.A.",
+      "supplier_id": "3101011173",
+      "date": "2026-04-09",
+      "subtotal": 15406.0,
+      "iva": 154.06,
+      "total": 15560.06,
+      "items": [
+        {
+          "product": "ROMA CARACOLITOS 8x1000 g",
+          "qty": 3.0,
+          "unit": "Unid",
+          "unit_price": 2104.0,
+          "total": 6375.12
+        },
+        {
+          "product": "ROMA SPAGHETTI CAJA 10X1000g",
+          "qty": 3.0,
+          "unit": "Unid",
+          "unit_price": 1813.0,
+          "total": 5493.39
+        },
+        {
+          "product": "PRONTO 4 PACK ATUN TROZO ACEITE 140 GR",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 3655.0,
+          "total": 3691.55
+        }
+      ],
+      "restaurant": null,
+      "source_file": "FE-50609042600310101117300100085010000003659100230405.xml"
+    },
+    {
+      "clave": "50608042600310100815000100009010015763699190649951",
+      "consecutivo": "00100009010015763699",
+      "supplier": "CENTRO INTERNACIONAL DE INVERSIONES, S.A",
+      "supplier_id": "3101008150",
+      "receiver": "MERAKI FAMILY LTDA",
+      "date": "2026-04-08",
+      "subtotal": 74258.5,
+      "iva": 8051.43,
+      "total": 82309.93,
+      "items": [
+        {
+          "product": "MARANON HORNEADO MITADES SNACK BAR UD 1KG",
+          "qty": 2.0,
+          "unit": "Unid",
+          "unit_price": 7726.0,
+          "total": 17460.76
+        },
+        {
+          "product": "ALMENDRA PELADA REBANADA NUTS FRU UD 1KG",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 14601.0,
+          "total": 16499.13
+        },
+        {
+          "product": "SEMILLA CALABAZA NUTS FRU UD 1KG",
+          "qty": 3.0,
+          "unit": "Unid",
+          "unit_price": 7064.0,
+          "total": 23946.96
+        },
+        {
+          "product": "ALMENDRA ENTERA SUPREME NUTS FRU UD 1KG",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 9662.0,
+          "total": 10918.06
+        },
+        {
+          "product": "SEMILLA AJONJOLI NUTS FRU UD 1KG",
+          "qty": 3.0,
+          "unit": "Unid",
+          "unit_price": 4945.0,
+          "total": 13485.02
+        }
+      ],
+      "parsed_at": "2026-04-08T10:33:34.273901"
+    },
+    {
+      "clave": "50608042600310100815000100009010015763701179448558",
+      "consecutivo": "00100009010015763701",
+      "supplier": "CENTRO INTERNACIONAL DE INVERSIONES, S.A",
+      "supplier_id": "3101008150",
+      "receiver": "MERAKI FAMILY LTDA",
+      "date": "2026-04-08",
+      "subtotal": 251378.0,
+      "iva": 14995.94,
+      "total": 266373.94,
+      "items": [
+        {
+          "product": "MARANON HORNEADO MITADES SNACK BAR UD 1KG",
+          "qty": 2.0,
+          "unit": "Unid",
+          "unit_price": 7726.0,
+          "total": 17460.76
+        },
+        {
+          "product": "ALMENDRA PELADA REBANADA NUTS FRU UD 1KG",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 14601.0,
+          "total": 16499.13
+        },
+        {
+          "product": "NUEZ PECANA ENTERA NUTS FRU UD 1KG",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 15806.0,
+          "total": 17860.78
+        },
+        {
+          "product": "SEMILLA CALABAZA NUTS FRU UD 1KG",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 7064.0,
+          "total": 7982.32
+        },
+        {
+          "product": "SEMILLA GIRASOL PELADA NUTS FRU UD 1KG",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 3711.0,
+          "total": 4193.43
+        },
+        {
+          "product": "QUINOA BLANCA ANDEAN VALLEY UD 1KG",
+          "qty": 2.0,
+          "unit": "Unid",
+          "unit_price": 4452.0,
+          "total": 10061.52
+        },
+        {
+          "product": "CREMA P BATIR AMBIANTE WHITE PURATOS UD 1LT",
+          "qty": 4.0,
+          "unit": "Unid",
+          "unit_price": 3690.0,
+          "total": 16678.8
+        },
+        {
+          "product": "BOLSA HERMETICA 10 5X11 ELENAS HAUS CJ 50UD",
+          "qty": 10.0,
+          "unit": "Unid",
+          "unit_price": 2372.0,
+          "total": 26803.6
+        },
+        {
+          "product": "BOLSA NEGRA OXO GDE 61X72 BELCA PQ 4PQ 25UD",
+          "qty": 3.0,
+          "unit": "Unid",
+          "unit_price": 6600.0,
+          "total": 19998.0
+        },
+        {
+          "product": "BOLSA TRANS OXO GDE 62X77 BELCA PQ 4PQ 25UD",
+          "qty": 3.0,
+          "unit": "Unid",
+          "unit_price": 12570.0,
+          "total": 38087.1
+        },
+        {
+          "product": "BOLSA NEGRA OXO JARDIN 85X120 BELCA PQ 4PQ 10UD",
+          "qty": 3.0,
+          "unit": "Unid",
+          "unit_price": 10584.0,
+          "total": 32069.52
+        },
+        {
+          "product": "BOLSA TRANS OXO JARDIN 85X120 BELCA PQ 4PQ 10UD",
+          "qty": 3.0,
+          "unit": "Unid",
+          "unit_price": 13745.0,
+          "total": 41647.35
+        },
+        {
+          "product": "QUESO CREMA FOODIE UD 1GL",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 16863.0,
+          "total": 17031.63
+        }
+      ],
+      "parsed_at": "2026-04-08T10:33:34.274530"
+    },
+    {
+      "clave": "50608042600310175902500200001010000101733116193571",
+      "supplier": "RINDE MAS GUANACASTE S.A",
+      "supplier_id": "3101759025",
+      "receiver": "MERAKI FAMILY Ltda                                                              ",
+      "date": "2026-04-08",
+      "subtotal": 5336.28319,
+      "iva": 693.71681,
+      "total": 6030.0,
+      "items": [
+        {
+          "product": "CREMA DULCE DOS PINOS TB 1L",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 5336.28319,
+          "total": 6030.0
+        }
+      ],
+      "parsed_at": "2026-04-08T18:39:48.065010"
+    },
+    {
+      "clave": "50608042600310263070000100212010000074702100074702",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "receiver": "MERAKI FAMILY LTDA",
+      "date": "2026-04-08",
+      "subtotal": 36734.13,
+      "iva": 4775.4369,
+      "total": 41509.5669,
+      "items": [
+        {
+          "product": "ARENA METRO CUBICO F4-F6 S1:3298662043511 S2:101985",
+          "qty": 0.5,
+          "unit": "Unid",
+          "unit_price": 30000.0,
+          "total": 16950.0
+        },
+        {
+          "product": "PIEDRA QUINTA BLANCA 12.5MM F1-F2-F4 S1:3179892021749 S2:800010",
+          "qty": 0.5,
+          "unit": "Unid",
+          "unit_price": 19752.1,
+          "total": 11159.9365
+        },
+        {
+          "product": "CEMENTO GRIS PROGRESO UG VERDE 50 KG S1:3107322000965 S2:000612",
+          "qty": 2.0,
+          "unit": "Unid",
+          "unit_price": 5929.04,
+          "total": 13399.6304
+        }
+      ],
+      "parsed_at": "2026-04-08T18:39:48.067506"
+    },
+    {
+      "clave": "50608042600310263136500100003010000048801128282860",
+      "supplier": "Green Solutions Tiquicia SRL",
+      "supplier_id": "3102631365",
+      "receiver": "Meraki Family LTDA / La Luna",
+      "date": "2026-04-08",
+      "subtotal": 181876.09,
+      "iva": 23643.9,
+      "total": 205519.99,
+      "items": [
+        {
+          "product": "Caja Kraft Retro #3",
+          "qty": 4.0,
+          "unit": "Unid",
+          "unit_price": 22000.0,
+          "total": 99440.0
+        },
+        {
+          "product": "Caja Kraft Retro #1",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 27000.0,
+          "total": 30510.0
+        },
+        {
+          "product": "Vasos de Carton 12 onz. Doble Pared",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 27000.0,
+          "total": 30510.0
+        },
+        {
+          "product": "Tapa vaso 90mm (12oz-22oz) Bagazo Bebida caliente",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 24300.89,
+          "total": 27460.01
+        },
+        {
+          "product": "Tenedor Madera Desechable ( 10 UDS)",
+          "qty": 20.0,
+          "unit": "Unid",
+          "unit_price": 389.38,
+          "total": 8799.99
+        },
+        {
+          "product": "Cuchara Madera Desechable ( 10 UDS)",
+          "qty": 20.0,
+          "unit": "Unid",
+          "unit_price": 389.38,
+          "total": 8799.99
+        }
+      ],
+      "parsed_at": "2026-04-08T18:39:48.074683"
+    },
+    {
+      "clave": "50608042600310162292500100061010000023289185765597",
+      "supplier": "3101622925 S.A",
+      "supplier_id": "3101622925",
+      "receiver": "MERAKI FAMILY S.A.",
+      "date": "2026-04-08",
+      "subtotal": 233735.02,
+      "iva": 0.0,
+      "total": 233735.02,
+      "items": [
+        {
+          "product": "LITROS DE GAS-GRANEL",
+          "qty": 1262.0,
+          "unit": "L",
+          "unit_price": 185.21,
+          "total": 233735.02
+        }
+      ],
+      "parsed_at": "2026-04-08T18:39:48.078019"
+    },
+    {
+      "clave": "50607042600310139511500201003010000008602300008602",
+      "consecutivo": "00201003010000008602",
+      "supplier": "Guana Pollo S.A.",
+      "supplier_id": "3101395115",
+      "receiver": "MERAKI FAMILY LIMITADA",
+      "date": "2026-04-07",
+      "subtotal": 111740.0,
+      "iva": 1117.4,
+      "total": 112857.4,
+      "items": [
+        {
+          "product": "Pechuga Especial  5K X Bolsa Fresco",
+          "qty": 30.2,
+          "unit": "Unid",
+          "unit_price": 3700.0,
+          "total": 112857.4
+        }
+      ],
+      "parsed_at": "2026-04-08T10:33:34.270987"
+    },
+    {
+      "clave": "50607042600310263070000100212010000074546100074546",
+      "consecutivo": "00100212010000074546",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "receiver": "MERAKI FAMILY LTDA (RESTAURANTE EL COYOL)",
+      "date": "2026-04-07",
+      "subtotal": 27047.77745,
+      "iva": 3516.21107,
+      "total": 30563.98853,
+      "items": [
+        {
+          "product": "TORN TECHO BLANCO P.BROCA 1/4\" X 3\" S1:3064582016221",
+          "qty": 100.0,
+          "unit": "Unid",
+          "unit_price": 92.54,
+          "total": 8365.616
+        },
+        {
+          "product": "LANCO POLYFLEX BLACK 10.3ONZ CC347-18 S1:3047112014447 S2:718594347189",
+          "qty": 3.0,
+          "unit": "Unid",
+          "unit_price": 4435.55,
+          "total": 12029.2116
+        },
+        {
+          "product": "MASKING TAPE VERDE 1 S1:3115192001760 S2:721672026227",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 2812.275,
+          "total": 2542.2966
+        },
+        {
+          "product": "MASKING TAPE VERDE 1 S1:3115192001760 S2:721672026227",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 2812.275,
+          "total": 2542.2966
+        },
+        {
+          "product": "SELLADOR DURETAN NEGRO TUBO 300ML S1:3172502001643 S2:7501316141508",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 5253.52,
+          "total": 4749.18208
+        },
+        {
+          "product": "TRUPER MINI RASPADOR 1.1/2 12352 S1:3318932238130 S2:7506240620617",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 270.78235,
+          "total": 275.38565
+        },
+        {
+          "product": "OXO BOLSA MANIGUETA 10X20 S1:3330612247690",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 66.37168,
+          "total": 60.0
+        }
+      ],
+      "parsed_at": "2026-04-08T10:33:34.272206"
+    },
+    {
+      "clave": "50607042600310263070000100212010000074549100074549",
+      "consecutivo": "00100212010000074549",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "receiver": "MERAKI FAMILY LTDA (RESTAURANTE EL COYOL)",
+      "date": "2026-04-07",
+      "subtotal": 12580.40168,
+      "iva": 1635.45222,
+      "total": 14215.8539,
+      "items": [
+        {
+          "product": "TRUPER JGO LLAVE ALLEN 30PZ MM-STD 15562 S1:3072042035545 S2:7501206626108",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 12514.03,
+          "total": 14140.8539
+        },
+        {
+          "product": "OXO BOLSA MANIGUETA 8X16 S1:3330622247703",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 66.37168,
+          "total": 75.0
+        }
+      ],
+      "parsed_at": "2026-04-08T10:33:34.272666"
+    },
+    {
+      "clave": "50607042600310276568500100001010000074986147041966",
+      "consecutivo": "00100001010000074986",
+      "supplier": "CR AGUA AZUL INC SOCIEDAD DE RESPONSABILIDAD LIMITADA",
+      "supplier_id": "3102765685",
+      "receiver": "MERAKI FAMILY LIMITADA                                                          ",
+      "date": "2026-04-07",
+      "subtotal": 10287.6106,
+      "iva": 1337.38938,
+      "total": 11624.99998,
+      "items": [
+        {
+          "product": "INCIENSO PALO SANTO MASALA 12U",
+          "qty": 5.0,
+          "unit": "Unid",
+          "unit_price": 2057.52212,
+          "total": 11624.99998
+        }
+      ],
+      "parsed_at": "2026-04-08T10:33:34.273104"
+    },
+    {
+      "clave": "50606042600310140926100100001010000112270115119505",
+      "consecutivo": "00100001010000112270",
+      "supplier": "NCQ Solutions S.A.",
+      "supplier_id": "3101409261",
+      "receiver": "MERAKI FAMILYLIMITADA                                                           ",
+      "date": "2026-04-06",
+      "subtotal": 35000.0,
+      "iva": 4550.0,
+      "total": 39550.0,
+      "items": [
+        {
+          "product": "ALQUILER LICENCIA RH",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 35000.0,
+          "total": 39550.0
+        }
+      ],
+      "parsed_at": "2026-04-08T10:33:34.266721"
+    },
+    {
+      "clave": "50606042600050332028100100001010000005522139536935",
+      "consecutivo": "00100001010000005522",
+      "supplier": "WALLY ROMAN FONSECA VILLEGAS",
+      "supplier_id": "503320281",
+      "receiver": "Meraki Family Limitada",
+      "date": "2026-04-06",
+      "subtotal": 15575.2,
+      "iva": 2024.78,
+      "total": 17599.98,
+      "items": [
+        {
+          "product": "HIELO EN CUBO 10K",
+          "qty": 16.0,
+          "unit": "Unid",
+          "unit_price": 973.45,
+          "total": 17599.98
+        }
+      ],
+      "parsed_at": "2026-04-08T10:33:34.275696"
+    },
+    {
+      "clave": "50606042600300261738800100001010000001346112360909",
+      "consecutivo": "00100001010000001346",
+      "supplier": "ASOCIACION DE RECICLAJE DE DESECHOS DE NOSARA",
+      "supplier_id": "3002617388",
+      "receiver": "Meraki Family Limitada",
+      "date": "2026-04-06",
+      "subtotal": 40.0,
+      "iva": 5.2,
+      "total": 45.2,
+      "items": [
+        {
+          "product": "Servicios de recolección de materiales reciclables no peligrosos, otros",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 40.0,
+          "total": 45.2
+        }
+      ],
+      "parsed_at": "2026-04-08T10:33:34.276141"
+    },
+    {
+      "clave": "50631032600310261882000100002010000004941101004941",
+      "consecutivo": "00100002010000004941",
+      "supplier": "MERAKI FAMILY LTDA",
+      "supplier_id": "3102618820",
+      "receiver": "Inversiones Veterinarias",
+      "date": "2026-03-31",
+      "subtotal": 12123.9,
+      "iva": 1576.1,
+      "total": 13700.0,
+      "items": [
+        {
+          "product": "Cinnamon Roll",
+          "qty": 2.0,
+          "unit": "Unid",
+          "unit_price": 1858.4,
+          "total": 4199.98
+        },
+        {
+          "product": "Babka",
+          "qty": 5.0,
+          "unit": "Unid",
+          "unit_price": 1681.42,
+          "total": 9500.02
+        }
+      ],
+      "parsed_at": "2026-04-08T10:33:34.276588"
+    }
+  ]
+}
