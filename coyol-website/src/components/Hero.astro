@@ -4,31 +4,36 @@
 <section id="home" class="relative h-screen min-h-[700px]">
   <!-- Fixed Video Background with Parallax -->
   <div id="hero-video-container" class="fixed inset-0 w-full h-screen z-0">
-    <!-- Desktop Video -->
+    <!-- Video (same for desktop/mobile, responsive via object-cover) -->
     <video 
       id="hero-video"
       autoplay 
       muted 
       loop 
       playsinline
-      class="hidden md:block w-full h-full object-cover"
+      poster="/video/poster-1.jpg"
+      class="w-full h-full object-cover"
     >
-      <source src="/videos/hero-desktop.mp4" type="video/mp4" />
-    </video>
-    
-    <!-- Mobile Video -->
-    <video 
-      autoplay 
-      muted 
-      loop 
-      playsinline
-      class="md:hidden w-full h-full object-cover"
-    >
-      <source src="/videos/hero-video.mp4" type="video/mp4" />
+      <source src="/video/mar-azul-1.mp4" type="video/mp4" />
     </video>
     
     <!-- Gradient Overlay -->
     <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/40"></div>
+    
+    <!-- Sound Toggle Button -->
+    <button 
+      id="sound-toggle"
+      class="absolute bottom-24 right-6 z-20 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-all backdrop-blur-sm"
+      aria-label="Toggle sound"
+    >
+      <svg id="sound-off-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+      </svg>
+      <svg id="sound-on-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+      </svg>
+    </button>
   </div>
 
   <!-- Content (scrolls normally) -->
@@ -79,8 +84,25 @@
   // Video stays fixed, content scrolls over it
   const videoContainer = document.getElementById('hero-video-container');
   const heroSection = document.getElementById('home');
+  const video = document.getElementById('hero-video') as HTMLVideoElement;
+  const soundToggle = document.getElementById('sound-toggle');
+  const soundOffIcon = document.getElementById('sound-off-icon');
+  const soundOnIcon = document.getElementById('sound-on-icon');
   
   let ticking = false;
+  
+  // Sound toggle functionality
+  soundToggle?.addEventListener('click', () => {
+    if (video.muted) {
+      video.muted = false;
+      soundOffIcon?.classList.add('hidden');
+      soundOnIcon?.classList.remove('hidden');
+    } else {
+      video.muted = true;
+      soundOffIcon?.classList.remove('hidden');
+      soundOnIcon?.classList.add('hidden');
+    }
+  });
   
   function updateParallax() {
     const scrollY = window.scrollY;
@@ -95,6 +117,12 @@
     // Hide video container completely when scrolled well past hero
     if (scrollY > heroHeight * 1.2) {
       videoContainer.style.visibility = 'hidden';
+      // Mute when not visible to save resources
+      if (!video.muted) {
+        video.muted = true;
+        soundOffIcon?.classList.remove('hidden');
+        soundOnIcon?.classList.add('hidden');
+      }
     } else {
       videoContainer.style.visibility = 'visible';
     }

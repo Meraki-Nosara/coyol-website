@@ -768,6 +768,54 @@
       "iva13": 64522,
       "source": "ingrid_email",
       "cashier": "Raul Rodriguez"
+    },
+    {
+      "date": "2026-04-14",
+      "coyol": {
+        "total": 2493087,
+        "food": 2026900,
+        "bar": 466187,
+        "cash": 67329,
+        "card": 2308896
+      },
+      "esh": {
+        "total": 615491,
+        "food": 513587,
+        "bar": 101904,
+        "cash": 2450,
+        "card": 563251
+      },
+      "laluna": {
+        "total": 4499940,
+        "food": 3660912,
+        "bar": 839028,
+        "cash": 132350,
+        "card": 2993208
+      }
+    },
+    {
+      "date": "2026-04-14",
+      "restaurant": "coyol",
+      "cash": 319829,
+      "card": 2355057,
+      "total": 2493087,
+      "netSales": 2026900,
+      "service10": 202690,
+      "iva13": 263497,
+      "source": "ingrid_email",
+      "cashier": "John Freiser"
+    },
+    {
+      "date": "2026-04-14",
+      "restaurant": "esh",
+      "cash": 37800,
+      "card": 563349,
+      "total": 615491,
+      "netSales": 513587,
+      "service10": 35138,
+      "iva13": 66767,
+      "source": "ingrid_email",
+      "cashier": "Juan Castillo"
     }
   ],
   "lastUpdated": "2026-04-13T07:30:00.000Z",
@@ -921,6 +969,52 @@
       "iva13": 713018,
       "source": "ingrid_cierre_apr13",
       "cashier": "Julia Arrieta"
+    },
+    {
+      "date": "2026-04-14",
+      "restaurant": "coyol",
+      "total": 2493087,
+      "netSales": 2026900,
+      "cash": 320329,
+      "cashUSD": 500,
+      "card": 2355054,
+      "service10": 202690,
+      "iva13": 263497,
+      "tipsCard": 154268,
+      "source": "ingrid_cierre_apr15",
+      "cashier": "John"
+    },
+    {
+      "date": "2026-04-14",
+      "restaurant": "laluna",
+      "total": 4499940,
+      "netSales": 3660912,
+      "cash": 514200,
+      "cashUSD": 905,
+      "cardBCR": 269342,
+      "cardLafise": 3084102,
+      "card": 3353444,
+      "service10": 363109,
+      "iva13": 475919,
+      "tipsCard": 330992,
+      "source": "ingrid_cierre_apr15",
+      "cashier": "Isa Prendas"
+    },
+    {
+      "date": "2026-04-14",
+      "restaurant": "esh",
+      "total": 615491,
+      "netSales": 513587,
+      "cash": 2450,
+      "cashUSD": 70,
+      "cardBCR": 443710,
+      "cardLafise": 119639,
+      "card": 563349,
+      "service10": 35138,
+      "iva13": 66767,
+      "tipsCard": 4398,
+      "source": "ingrid_cierre_apr15",
+      "cashier": "Juan C."
     }
   ]
 }

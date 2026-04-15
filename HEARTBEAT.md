@@ -12,6 +12,24 @@ These tasks MUST be completed before any project work:
 
 ---
 
+## 🏗️ Coyol Control Pipeline — AUTO-PROGRESSION
+
+**When Olger uploads a plano:**
+1. Update lot's `pipelineStep` from `plano-catastrado` → `escritura`
+2. Send email to Alessia (alessia.aguirre@gmail.com) requesting escritura
+3. Notify Marion that lot progressed
+
+**When Alessia uploads an escritura:**
+1. Update lot's `pipelineStep` from `escritura` → `complete`
+2. Update lot's `pipelineComplete` = true
+3. Notify Marion that lot is ready for sale
+
+**Check for uploads:**
+- Watch coyolcontrol@gmail.com for document submissions
+- Check Supabase storage for new files in `coyol-control/` folder
+
+---
+
 ## Priority Checks
 
 ### 🏗️ NC Control Orders — CHECK EVERY HEARTBEAT!

@@ -1,0 +1,24 @@
+{
+  "reportDate": "2026-04-07",
+  "transactionDate": "2026-04-06",
+  "source": "lafise_tcr_email_663",
+  "summary": {
+    "LA LUNA (RESTAURANTE)": {
+      "gross": 2988781.42,
+      "commission": 58281.28,
+      "retVenta": 158704.1,
+      "retRenta": 52602.330000000016,
+      "net": 2719193.7099999995,
+      "count": 42
+    },
+    "RESTAURANTE COYOL": {
+      "gross": 4073016.800000001,
+      "commission": 79423.83,
+      "retVenta": 216277.05999999997,
+      "retRenta": 71684.98000000001,
+      "net": 3705630.9299999997,
+      "count": 27
+    }
+  },
+  "transactionCount": 69
+}
