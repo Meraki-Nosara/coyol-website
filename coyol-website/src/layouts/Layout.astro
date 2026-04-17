@@ -4,7 +4,7 @@ interface Props {
   description?: string;
 }
 
-const { title, description = "Coyol Real Estate - Luxury homes and homesites in Nosara, Costa Rica's Blue Zone. From the creators of La Luna, Coyol Restaurant, and Esh." } = Astro.props;
+const { title, description = "Luxury homes and jungle homesites in Nosara, Costa Rica — the world's only Blue Zone beach town. Private developments with ocean views, world-class amenities, and a lifestyle rooted in nature." } = Astro.props;
 ---
 
 <!doctype html>
@@ -22,17 +22,24 @@ const { title, description = "Coyol Real Estate - Luxury homes and homesites in 
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://coyolrealestate.com/og-image.jpg" />
-    <meta property="og:url" content="https://coyolrealestate.com" />
-    <meta property="og:site_name" content="Coyol Real Estate" />
+    <meta property="og:image" content="https://coyolnosara.com/images/og-image.jpg" />
+    <meta property="og:url" content="https://coyolnosara.com" />
+    <meta property="og:site_name" content="Coyol Nosara" />
+    <meta property="og:locale" content="en_US" />
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://coyolrealestate.com/og-image.jpg" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://coyolnosara.com/images/og-image.jpg" />
     
     <!-- SEO -->
-    <meta name="keywords" content="Nosara real estate, Costa Rica luxury homes, Blue Zone property, Guiones lots, Nosara homesites, Mar Azul, Nosara Hills, Los Coyoles, beachfront property Costa Rica" />
-    <link rel="canonical" href="https://coyolrealestate.com" />
+    <meta name="keywords" content="Nosara real estate, Costa Rica luxury homes, Blue Zone property, Guiones beach homes, Nosara homesites, Mar Azul development, Nosara Hills, Los Coyoles, jungle homes Costa Rica, ocean view lots Nosara, Nicoya Peninsula real estate, expat homes Costa Rica, surf town property" />
+    <link rel="canonical" href="https://coyolnosara.com" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Coyol Real Estate" />
+    <meta name="geo.region" content="CR-G" />
+    <meta name="geo.placename" content="Nosara" />
     
     <title>{title}</title>
     
@@ -42,9 +49,14 @@ const { title, description = "Coyol Real Estate - Luxury homes and homesites in 
       "@context": "https://schema.org",
       "@type": "RealEstateAgent",
       "name": "Coyol Real Estate",
-      "description": "Luxury homes and homesites in Nosara, Costa Rica's Blue Zone",
-      "url": "https://coyolrealestate.com",
-      "telephone": "+506-8713-4120",
+      "description": "Luxury homes and jungle homesites in Nosara, Costa Rica — the world's only Blue Zone beach town",
+      "url": "https://coyolnosara.com",
+      "telephone": "+1-818-401-8068",
+      "email": "info@coyolnosara.com",
+      "image": "https://coyolnosara.com/images/og-image.jpg",
+      "sameAs": [
+        "https://www.instagram.com/coyolnosara"
+      ],
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Nosara",

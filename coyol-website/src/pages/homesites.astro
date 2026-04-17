@@ -61,6 +61,7 @@ const homesites = [
     description: 'Classic hacienda architecture with clay tile roof and covered terraces. A completed masterpiece ready for its next chapter.',
     features: ['Hacienda Style', 'Clay Tile Roof', 'Completed'],
     image: '/images/properties/casa-elle.jpg',
+    floorplan: '/images/floorplans/casa-elle-floorplan.jpg',
     status: 'Completed'
   },
 ];
@@ -96,20 +97,38 @@ const homesites = [
     <div class="container">
       <div class="grid">
         {homesites.map((site) => (
-          <a href={`/homesites/${site.id}`} class="homesite-card">
-            <div class="card-image">
-              <img src={site.image} alt={site.name} />
+          <div class={`homesite-card ${site.floorplan ? 'has-floorplan' : ''}`}>
+            <div class="card-inner">
+              <div class="card-front">
+                <div class="card-image">
+                  <img src={site.image} alt={site.name} />
+                  {site.floorplan && <span class="flip-hint">Tap for floor plan</span>}
+                </div>
+                <div class="card-content">
+                  <h3>{site.name}</h3>
+                  <p class="specs">{site.area} · {site.acres}</p>
+                  <ul class="features">
+                    {site.features.map((f) => (
+                      <li>{f}</li>
+                    ))}
+                  </ul>
+                  <a href={`/homesites/${site.id}`} class="view-details" onclick="event.stopPropagation()">More Info</a>
+                </div>
+              </div>
+              {site.floorplan && (
+                <div class="card-back">
+                  <div class="card-image">
+                    <img src={site.floorplan} alt={`${site.name} Floor Plan`} />
+                    <span class="flip-hint">Tap to go back</span>
+                  </div>
+                  <div class="card-content">
+                    <h3>{site.name} — Floor Plan</h3>
+                    <a href={`/homesites/${site.id}`} class="view-details" onclick="event.stopPropagation()">More Info</a>
+                  </div>
+                </div>
+              )}
             </div>
-            <div class="card-content">
-              <h3>{site.name}</h3>
-              <p class="specs">{site.area} · {site.acres}</p>
-              <ul class="features">
-                {site.features.map((f) => (
-                  <li>{f}</li>
-                ))}
-              </ul>
-            </div>
-          </a>
+          </div>
         ))}
       </div>
     </div>
@@ -242,6 +261,7 @@ const homesites = [
     border-radius: 12px;
     overflow: hidden;
     transition: transform 0.3s, box-shadow 0.3s;
+    perspective: 1000px;
   }
 
   .homesite-card:hover {
@@ -249,9 +269,81 @@ const homesites = [
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
   }
 
+  /* Flip card styles */
+  .homesite-card.has-floorplan {
+    cursor: pointer;
+  }
+
+  .homesite-card .card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+
+  .homesite-card.has-floorplan.flipped .card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .homesite-card .card-front,
+  .homesite-card .card-back {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .homesite-card .card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotateY(180deg);
+    background: #1A1F16;
+  }
+
+  .homesite-card .card-back .card-content {
+    background: #1A1F16;
+  }
+
+  .homesite-card .card-back .card-content h3 {
+    color: #F5F3EF;
+  }
+
+  .flip-hint {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .view-details {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 10px 20px;
+    background: #3D4F3D;
+    color: #F5F3EF;
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.3s;
+  }
+
+  .view-details:hover {
+    background: #4A5D4A;
+  }
+
   .card-image {
     aspect-ratio: 4/3;
     overflow: hidden;
+    position: relative;
   }
 
   .card-image img {
@@ -261,7 +353,19 @@ const homesites = [
     transition: transform 0.5s;
   }
 
-  .homesite-card:hover .card-image img {
+  /* Floor plan should show full image, not cropped */
+  .card-back .card-image {
+    aspect-ratio: auto;
+    background: #1A1F16;
+    padding: 16px;
+  }
+
+  .card-back .card-image img {
+    object-fit: contain;
+    max-height: 400px;
+  }
+
+  .homesite-card:hover .card-front .card-image img {
     transform: scale(1.05);
   }
 
@@ -382,3 +486,14 @@ const homesites = [
     }
   }
 </style>
+
+<script>
+  // Flip card interaction for cards with floor plans
+  document.querySelectorAll('.homesite-card.has-floorplan').forEach(card => {
+    card.addEventListener('click', (e) => {
+      // Don't flip if clicking on the "View Details" link
+      if ((e.target as HTMLElement).closest('.view-details')) return;
+      card.classList.toggle('flipped');
+    });
+  });
+</script>
