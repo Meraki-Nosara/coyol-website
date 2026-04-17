@@ -1,61 +1,67 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-// Available homesites - named by location/character, not lot numbers
+// Homes for sale - actual properties with renders/photos
 const homesites = [
   {
-    id: 'ridge-view-1',
-    name: 'Ridge View 1',
-    area: '2,714 m²',
-    acres: '0.67 acres',
-    description: 'Perched at the highest point of Mar Azul, this premium homesite offers sweeping 360° views of the jungle canopy, distant mountains, and ocean glimpses through the trees.',
-    features: ['Premium elevation', 'Ocean glimpse', 'Maximum privacy'],
-    image: '/images/renders/render-glass-jungle.jpg',
+    id: 'casa-nest',
+    name: 'Casa Nest',
+    area: 'Lot 28',
+    acres: 'Mar Azul',
+    description: 'A dramatic cantilevered design with infinity pool, fire pit deck, and panoramic jungle views. Bold modern architecture that floats above the landscape.',
+    features: ['Cantilevered Design', 'Infinity Pool', 'Ocean Views'],
+    image: '/images/properties/casa-nest.jpg',
+    status: 'Design'
   },
   {
-    id: 'ocean-vista-3',
-    name: 'Ocean Vista 3',
-    area: '3,580 m²',
-    acres: '0.88 acres',
-    description: 'One of the few homesites with direct sightlines to the Pacific. Wake up to sunrise over the jungle and watch the sunset paint the ocean gold.',
-    features: ['Ocean views', 'Sunrise exposure', 'Corner lot'],
-    image: '/images/renders/render-mountain-view.jpg',
+    id: 'casa-lefki',
+    name: 'Casa Lefki',
+    area: 'Lot 25',
+    acres: 'Mar Azul',
+    description: 'Modern glass pavilion nestled among mature Guanacaste trees. Floor-to-ceiling windows frame the jungle canopy and distant ocean.',
+    features: ['Modern Glass', 'Guanacaste Trees', 'Pool Terrace'],
+    image: '/images/properties/casa-lefki.jpg',
+    status: 'Design'
   },
   {
-    id: 'jungle-canopy-7',
-    name: 'Jungle Canopy 7',
-    area: '4,200 m²',
-    acres: '1.04 acres',
-    description: 'Nestled within the protected forest reserve, this generous lot offers complete immersion in nature. Howler monkeys and toucans are your daily companions.',
-    features: ['Largest lot', 'Forest reserve adjacent', 'Maximum privacy'],
-    image: '/images/renders/render-pool-deck.jpg',
+    id: 'casa-umi',
+    name: 'Casa Umi',
+    area: 'Lot 34',
+    acres: 'Mar Azul',
+    description: 'Contemporary design featuring black charred wood cladding and gabion stone walls. A bold statement in harmony with the forest.',
+    features: ['Black Wood', 'Gabion Walls', 'Forest Setting'],
+    image: '/images/properties/casa-umi.jpg',
+    status: 'Design'
   },
   {
-    id: 'sunset-ridge-12',
-    name: 'Sunset Ridge 12',
-    area: '2,920 m²',
-    acres: '0.72 acres',
-    description: 'Positioned on the western ridge with unobstructed sunset views. The perfect orientation for outdoor living and evening entertaining.',
-    features: ['Sunset views', 'Western exposure', 'Gentle slope'],
-    image: '/images/renders/render-living-room.jpg',
+    id: 'casa-cacao',
+    name: 'Casa Cacao',
+    area: 'Lot 21',
+    acres: 'Mar Azul',
+    description: 'Stone and charred wood combine in this modern farmhouse design. Sweeping mountain views from every room.',
+    features: ['Stone & Wood', 'Mountain Views', 'Modern Farmhouse'],
+    image: '/images/properties/casa-cacao.jpg',
+    status: 'Design'
   },
   {
-    id: 'waterfall-estate-15',
-    name: 'Waterfall Estate 15',
-    area: '3,850 m²',
-    acres: '0.95 acres',
-    description: 'Located near the natural waterfall and lagoon, this homesite offers the soothing sounds of cascading water and access to private swimming.',
-    features: ['Waterfall proximity', 'Lagoon access', 'Unique setting'],
-    image: '/images/renders/render-glass-jungle.jpg',
+    id: 'casa-luz',
+    name: 'Casa Luz',
+    area: 'Lot 21',
+    acres: 'Mar Azul',
+    description: 'A compound of connected pavilions with stone details and jungle courtyards. Indoor-outdoor living at its finest.',
+    features: ['Pavilion Style', 'Stone Details', 'Jungle Compound'],
+    image: '/images/properties/casa-luz.jpg',
+    status: 'Design'
   },
   {
-    id: 'hilltop-haven-22',
-    name: 'Hilltop Haven 22',
-    area: '3,100 m²',
-    acres: '0.77 acres',
-    description: 'A serene setting along the nature trail network. Perfect for those who value morning walks through the jungle and connection with nature.',
-    features: ['Trail access', 'Flat building area', 'Central location'],
-    image: '/images/renders/render-mountain-view.jpg',
+    id: 'casa-elle',
+    name: 'Casa Elle',
+    area: 'Lot 14',
+    acres: 'Mar Azul',
+    description: 'Classic hacienda architecture with clay tile roof and covered terraces. A completed masterpiece ready for its next chapter.',
+    features: ['Hacienda Style', 'Clay Tile Roof', 'Completed'],
+    image: '/images/properties/casa-elle.jpg',
+    status: 'Completed'
   },
 ];
 ---
@@ -64,7 +70,7 @@ const homesites = [
   <!-- Hero with aerial -->
   <section class="hero">
     <div class="hero-image">
-      <img src="/images/DJI_20250326172154_0413_D.jpg" alt="Mar Azul aerial view" />
+      <img src="/images/homesite-construction.jpg" alt="Homesite under construction in Mar Azul" />
       <div class="hero-overlay"></div>
     </div>
     <div class="hero-content">
@@ -118,7 +124,7 @@ const homesites = [
         <a href="/#contact" class="cta-button">Schedule a Tour</a>
       </div>
       <div class="cta-image">
-        <img src="/images/DJI_20250326172154_0413_D.jpg" alt="Mar Azul from above" />
+        <img src="/images/lot-markers.jpg" alt="Mar Azul lot markers" />
       </div>
     </div>
   </section>

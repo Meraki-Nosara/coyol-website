@@ -1,7 +1,6 @@
 ---
 const navLinks = [
   { href: '/#home', label: 'Home' },
-  { href: '/#about', label: 'About' },
   { href: '/#family', label: 'Family' },
   { href: '/gallery', label: 'Gallery' },
   { href: '/homesites', label: 'Real Estate' },
@@ -9,7 +8,13 @@ const navLinks = [
 ];
 ---
 
-<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+<!-- Restaurant redirect banner -->
+<div id="restaurant-banner" class="bg-landrover-keswick text-white text-center py-2 px-4 text-sm">
+  <span>Looking for <strong>Coyol Restaurant</strong>?</span>
+  <a href="https://coyolrestaurant.com" target="_blank" class="underline ml-2 hover:text-landrover-sand">Visit coyolrestaurant.com →</a>
+</div>
+
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" style="top: 36px;">
   <div class="max-w-7xl mx-auto px-6 lg:px-8">
     <div class="flex items-center justify-between h-20">
       <!-- Logo -->

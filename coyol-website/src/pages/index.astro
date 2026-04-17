@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
+import RealEstate from '../components/RealEstate.astro';
 import FamilyBrands from '../components/FamilyBrands.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
@@ -93,13 +94,13 @@ import Footer from '../components/Footer.astro';
       <div class="grid md:grid-cols-2">
         <div class="flex items-center justify-center p-12 lg:p-20 order-2 md:order-1">
           <div class="max-w-md">
-            <p class="scroll-fade text-landrover-limestone/60 text-xs tracking-[0.3em] uppercase mb-4" data-delay="0">Nature</p>
+            <p class="scroll-fade text-landrover-limestone/60 text-xs tracking-[0.3em] uppercase mb-4" data-delay="0">The Wild</p>
             <h2 class="scroll-fade font-serif text-3xl md:text-4xl lg:text-5xl text-white mb-6 leading-tight" data-delay="100">
-              Wake to howler monkeys
+              Where the howlers call at dawn
             </h2>
             <p class="scroll-fade text-landrover-limestone/70 text-lg leading-relaxed" data-delay="200">
-              The jungle is your neighbor. Toucans, monkeys, and countless species 
-              share this land with you.
+              Here, the forest is not a backdrop — it is your companion. 
+              Birdsong greets the dawn; troops of monkeys pass through the canopy above.
             </p>
           </div>
         </div>
@@ -118,8 +119,8 @@ import Footer from '../components/Footer.astro';
     <section class="py-24 lg:py-40 bg-landrover-pangea">
       <div class="max-w-4xl mx-auto px-8 text-center">
         <p class="scroll-fade font-serif text-2xl md:text-3xl lg:text-4xl text-landrover-santorini leading-relaxed" data-delay="0">
-          Created and imagined by the same hands and minds, these homesites grow from 
-          a way of life rooted in generosity, connection, and time.
+          Every home is shaped by the land it sits on — the way the light falls, 
+          the trees that remain, the views that unfold.
         </p>
       </div>
     </section>
@@ -140,6 +141,9 @@ import Footer from '../components/Footer.astro';
         </div>
       </div>
     </section>
+
+    <!-- Real Estate - Residences -->
+    <RealEstate />
 
     <!-- Family Brands - The Legacy -->
     <FamilyBrands />
@@ -207,7 +211,7 @@ import Footer from '../components/Footer.astro';
         </div>
         
         <div class="grid md:grid-cols-3 gap-6">
-          <article class="scroll-fade group relative overflow-hidden" data-delay="0">
+          <a href="https://wa.me/18184018068?text=Hello%2C%20I'm%20interested%20in%20Nosara%20Hills" target="_blank" class="scroll-fade group relative overflow-hidden block cursor-pointer" data-delay="0">
             <div class="aspect-[3/4] overflow-hidden">
               <img 
                 src="/images/developments/nosara-hills.jpg"
@@ -220,9 +224,9 @@ import Footer from '../components/Footer.astro';
               <h3 class="font-serif text-3xl text-white mb-2">Nosara Hills</h3>
               <p class="text-white/70 text-sm">Elevated views, morning mist</p>
             </div>
-          </article>
+          </a>
           
-          <article class="scroll-fade group relative overflow-hidden" data-delay="100">
+          <a href="https://wa.me/18184018068?text=Hello%2C%20I'm%20interested%20in%20Mar%20Azul" target="_blank" class="scroll-fade group relative overflow-hidden block cursor-pointer" data-delay="100">
             <div class="aspect-[3/4] overflow-hidden">
               <img 
                 src="/images/developments/mar-azul.jpg"
@@ -235,9 +239,9 @@ import Footer from '../components/Footer.astro';
               <h3 class="font-serif text-3xl text-white mb-2">Mar Azul</h3>
               <p class="text-white/70 text-sm">High above the hills</p>
             </div>
-          </article>
+          </a>
           
-          <article class="scroll-fade group relative overflow-hidden" data-delay="200">
+          <a href="https://wa.me/18184018068?text=Hello%2C%20I'm%20interested%20in%20Los%20Coyoles" target="_blank" class="scroll-fade group relative overflow-hidden block cursor-pointer" data-delay="200">
             <div class="aspect-[3/4] overflow-hidden">
               <img 
                 src="/images/developments/los-coyoles.jpg"
@@ -250,9 +254,10 @@ import Footer from '../components/Footer.astro';
               <h3 class="font-serif text-3xl text-white mb-2">Los Coyoles</h3>
               <p class="text-white/70 text-sm">Among ancient trees</p>
             </div>
-          </article>
+          </a>
         </div>
         
+        <!-- 3D Map suspended for now
         <div class="text-center mt-12">
           <a 
             href="/map-cesium" 
@@ -262,6 +267,7 @@ import Footer from '../components/Footer.astro';
             Explore the Land
           </a>
         </div>
+        -->
       </div>
     </section>
 
@@ -270,7 +276,7 @@ import Footer from '../components/Footer.astro';
       <img 
         src="/images/firepit-conversation.jpg" 
         alt="Friends around the firepit"
-        class="absolute inset-0 w-full h-full object-cover"
+        class="absolute inset-0 w-full h-full object-cover object-[center_40%] md:object-center"
       />
       <div class="absolute inset-0 bg-black/40"></div>
       <div class="relative z-20 h-full flex items-center justify-center">
