@@ -2,6 +2,7 @@
 const properties = [
   {
     name: 'Casa Nest',
+    slug: null,
     lot: 'Lot 28',
     development: 'Mar Azul',
     image: '/images/properties/casa-nest.jpg',
@@ -10,6 +11,7 @@ const properties = [
   },
   {
     name: 'Casa Lefki',
+    slug: null,
     lot: 'Lot 25',
     development: 'Mar Azul',
     image: '/images/properties/casa-lefki.jpg',
@@ -18,6 +20,7 @@ const properties = [
   },
   {
     name: 'Casa Umi',
+    slug: null,
     lot: 'Lot 34',
     development: 'Mar Azul',
     image: '/images/properties/casa-umi.jpg',
@@ -26,6 +29,7 @@ const properties = [
   },
   {
     name: 'Casa Cacao',
+    slug: null,
     lot: 'Lot 21',
     development: 'Mar Azul',
     image: '/images/properties/casa-cacao.jpg',
@@ -34,6 +38,7 @@ const properties = [
   },
   {
     name: 'Casa Luz',
+    slug: null,
     lot: 'Lot 21',
     development: 'Mar Azul',
     image: '/images/properties/casa-luz.jpg',
@@ -42,6 +47,7 @@ const properties = [
   },
   {
     name: 'Casa Elle',
+    slug: 'casa-elle',
     lot: 'Lot 14',
     development: 'Mar Azul',
     image: '/images/properties/casa-elle.jpg',
@@ -61,7 +67,7 @@ const properties = [
         Residences
       </h2>
       <p class="scroll-fade text-landrover-limestone/60 text-lg max-w-2xl mx-auto" data-delay="200">
-        Every home is shaped by the land it sits on — the way the light falls, 
+        Every home is shaped by the land it sits on, the way the light falls, 
         the trees that shelter it, the views that unfold.
       </p>
     </div>
@@ -69,7 +75,7 @@ const properties = [
     <!-- Property Grid -->
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
       {properties.map((property, index) => (
-        <article class="scroll-fade group cursor-pointer" data-delay={index * 100}>
+        <a href={property.slug ? `/homesites/${property.slug}` : '#'} class={`scroll-fade group ${property.slug ? 'cursor-pointer' : 'cursor-default'}`} data-delay={index * 100}>
           <!-- Image Container -->
           <div class="relative aspect-[4/3] overflow-hidden mb-6">
             <img 
@@ -113,7 +119,7 @@ const properties = [
               ))}
             </div>
           </div>
-        </article>
+        </a>
       ))}
     </div>
 

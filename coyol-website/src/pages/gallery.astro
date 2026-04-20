@@ -50,7 +50,7 @@ const images = [
     <div class="relative text-center z-10 px-6">
       <h1 class="text-5xl md:text-6xl font-serif text-white mb-4">Gallery</h1>
       <p class="text-lg text-white/80 max-w-2xl mx-auto">
-        Life in Nosara — where jungle meets the sea
+        Life in Nosara, where jungle meets the sea
       </p>
     </div>
   </section>
@@ -84,9 +84,8 @@ const images = [
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="gallery-grid">
         {images.map((img, i) => (
           <div 
-            class="gallery-item group relative aspect-[4/3] overflow-hidden rounded-lg cursor-pointer"
+            class="gallery-item group relative aspect-[4/3] overflow-hidden rounded-lg"
             data-category={img.category}
-            data-index={i}
           >
             <img 
               src={img.src} 
@@ -106,16 +105,7 @@ const images = [
     </div>
   </section>
   
-  <!-- Lightbox -->
-  <div id="lightbox" class="fixed inset-0 bg-black/95 z-50 hidden items-center justify-center">
-    <button id="lightbox-close" class="absolute top-6 right-6 text-white text-4xl hover:text-white/70">&times;</button>
-    <button id="lightbox-prev" class="absolute left-6 text-white text-4xl hover:text-white/70">&larr;</button>
-    <button id="lightbox-next" class="absolute right-6 text-white text-4xl hover:text-white/70">&rarr;</button>
-    <img id="lightbox-img" class="max-w-[90vw] max-h-[90vh] object-contain" />
-    <div class="absolute bottom-6 left-0 right-0 text-center">
-      <h3 id="lightbox-title" class="text-white text-xl font-serif"></h3>
-    </div>
-  </div>
+  
   
   <Footer />
 </Layout>
@@ -138,21 +128,7 @@ const images = [
 </style>
 
 <script>
-  const images = [
-    { src: '/images/gallery/IMG_3662.jpg', title: 'Tropical Living' },
-    { src: '/images/gallery/DJI_20250326172154_0413_D.jpg', title: 'La Luna Beach' },
-    { src: '/images/gallery/DJI_20250326172126_0411_D.jpg', title: 'La Luna Restaurant' },
-    { src: '/images/gallery/IMG_1692.jpg', title: 'Horseback Riding' },
-    { src: '/images/gallery/IMG_9939.jpg', title: 'Golden Hour Ride' },
-    { src: '/images/gallery/IMG_1677.jpg', title: 'Tennis in the Jungle' },
-    { src: '/images/gallery/DJI_20250326130411_0403_D.jpg', title: 'Mountain Views' },
-    { src: '/images/gallery/IMG_0185.jpg', title: 'Modern Interiors' },
-    { src: '/images/gallery/IMG_9739.jpg', title: 'Farm to Table' },
-  ];
-  
-  let currentIndex = 0;
-  
-  // Filter functionality
+  // Filter functionality only
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -167,55 +143,5 @@ const images = [
         }
       });
     });
-  });
-  
-  // Lightbox
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
-  const lightboxTitle = document.getElementById('lightbox-title');
-  
-  document.querySelectorAll('.gallery-item').forEach(item => {
-    item.addEventListener('click', () => {
-      currentIndex = parseInt(item.dataset.index || '0');
-      showImage(currentIndex);
-      lightbox?.classList.remove('hidden');
-      lightbox?.classList.add('flex');
-    });
-  });
-  
-  function showImage(index: number) {
-    if (lightboxImg) lightboxImg.src = images[index].src;
-    if (lightboxTitle) lightboxTitle.textContent = images[index].title;
-  }
-  
-  document.getElementById('lightbox-close')?.addEventListener('click', () => {
-    lightbox?.classList.add('hidden');
-    lightbox?.classList.remove('flex');
-  });
-  
-  document.getElementById('lightbox-prev')?.addEventListener('click', () => {
-    currentIndex = (currentIndex - 1 + images.length) % images.length;
-    showImage(currentIndex);
-  });
-  
-  document.getElementById('lightbox-next')?.addEventListener('click', () => {
-    currentIndex = (currentIndex + 1) % images.length;
-    showImage(currentIndex);
-  });
-  
-  // Close on escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      lightbox?.classList.add('hidden');
-      lightbox?.classList.remove('flex');
-    }
-    if (e.key === 'ArrowLeft') {
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
-      showImage(currentIndex);
-    }
-    if (e.key === 'ArrowRight') {
-      currentIndex = (currentIndex + 1) % images.length;
-      showImage(currentIndex);
-    }
   });
 </script>
