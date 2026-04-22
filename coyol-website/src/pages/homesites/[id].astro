@@ -52,6 +52,7 @@ const properties: Record<string, any> = {
     location: 'Lot 21, Mar Azul',
     status: 'Design',
     image: '/images/properties/casa-luz.jpg',
+    floorplan: '/images/properties/casa-luz-floorplan.jpg',
     features: ['Pavilion Style', 'Stone Details', 'Jungle Compound', 'Indoor-Outdoor Living']
   }
 };
@@ -90,6 +91,15 @@ const property = properties[id as string];
       </div>
     </div>
   </section>
+
+  {property.floorplan && (
+    <section class="floorplan-section">
+      <div class="container">
+        <h2>Floor Plan</h2>
+        <img src={property.floorplan} alt={`${property.name} Floor Plan`} class="floorplan-image" />
+      </div>
+    </section>
+  )}
 
   <section class="back-section">
     <a href="/homesites" class="back-link">← Back to All Properties</a>
@@ -224,6 +234,26 @@ const property = properties[id as string];
 
   .cta-button:hover {
     background: #4A5D4A;
+  }
+
+  .floorplan-section {
+    padding: 60px 24px;
+    background: #1A1F16;
+    text-align: center;
+  }
+
+  .floorplan-section h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: #F5F3EF;
+    margin: 0 0 32px 0;
+  }
+
+  .floorplan-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
   }
 
   .back-section {

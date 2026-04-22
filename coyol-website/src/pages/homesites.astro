@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
 
 // Homes for sale - actual properties with renders/photos
 const homesites = [
@@ -68,6 +69,8 @@ const homesites = [
 ---
 
 <Layout title="Available Homesites | Mar Azul | Coyol Real Estate">
+  <Navigation />
+  
   <!-- Hero with aerial -->
   <section class="hero">
     <div class="hero-image">

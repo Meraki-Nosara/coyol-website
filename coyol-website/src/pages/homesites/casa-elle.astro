@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
 
 const property = {
   name: 'Casa Elle',
@@ -63,6 +64,7 @@ const property = {
 ---
 
 <Layout title={`${property.name} | Coyol`}>
+  <Navigation />
   
   <!-- Dwell-style Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Serif+Display&display=swap" rel="stylesheet" slot="head" />
