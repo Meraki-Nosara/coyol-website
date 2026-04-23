@@ -5,24 +5,21 @@ import Navigation from '../components/Navigation.astro';
 // Homes for sale - actual properties with renders/photos
 const homesites = [
   {
-    id: 'casa-nest',
-    name: 'Casa Nest',
-    area: 'Lot 28',
+    id: 'casa-elle',
+    name: 'Casa Elle',
+    area: 'Lot 14',
     acres: 'Mar Azul',
-    description: 'A dramatic cantilevered design with infinity pool, fire pit deck, and panoramic jungle views. Bold modern architecture that floats above the landscape.',
-    features: ['Cantilevered Design', 'Infinity Pool', 'Ocean Views'],
-    image: '/images/properties/casa-nest.jpg',
-    status: 'Design'
-  },
-  {
-    id: 'casa-lefki',
-    name: 'Casa Lefki',
-    area: 'Lot 25',
-    acres: 'Mar Azul',
-    description: 'Modern glass pavilion nestled among mature Guanacaste trees. Floor-to-ceiling windows frame the jungle canopy and distant ocean.',
-    features: ['Modern Glass', 'Guanacaste Trees', 'Pool Terrace'],
-    image: '/images/properties/casa-lefki.jpg',
-    status: 'Design'
+    description: 'Classic hacienda architecture with clay tile roof and covered terraces. A completed masterpiece ready for its next chapter.',
+    features: ['Hacienda Style', 'Clay Tile Roof', 'Completed'],
+    image: '/images/properties/casa-elle.jpg',
+    floorplan: '/images/floorplans/casa-elle-floorplan.jpg',
+    status: 'Completed',
+    specs: {
+      indoor: 490,
+      terrace: 130,
+      deck: 185,
+      pool: 110
+    }
   },
   {
     id: 'casa-umi',
@@ -32,38 +29,93 @@ const homesites = [
     description: 'Contemporary design featuring black charred wood cladding and gabion stone walls. A bold statement in harmony with the forest.',
     features: ['Black Wood', 'Gabion Walls', 'Forest Setting'],
     image: '/images/properties/casa-umi.jpg',
-    status: 'Design'
-  },
-  {
-    id: 'casa-cacao',
-    name: 'Casa Cacao',
-    area: 'Lot 18',
-    acres: 'Mar Azul',
-    description: 'Stone and charred wood combine in this modern farmhouse design. Sweeping mountain views from every room.',
-    features: ['Stone & Wood', 'Mountain Views', 'Modern Farmhouse'],
-    image: '/images/properties/casa-cacao.jpg',
-    status: 'Design'
+    status: 'Design',
+    specs: {
+      indoor: 556,
+      terrace: 121,
+      deck: 175,
+      pool: 62
+    }
   },
   {
     id: 'casa-luz',
     name: 'Casa Luz',
-    area: 'Lot 18',
+    area: 'Lot 21',
     acres: 'Mar Azul',
     description: 'A compound of connected pavilions with stone details and jungle courtyards. Indoor-outdoor living at its finest.',
     features: ['Pavilion Style', 'Stone Details', 'Jungle Compound'],
     image: '/images/properties/casa-luz.jpg',
-    status: 'Design'
+    status: 'Design',
+    specs: {
+      indoor: 285,
+      terrace: 65,
+      deck: 148,
+      pool: 65
+    }
   },
   {
-    id: 'casa-elle',
-    name: 'Casa Elle',
-    area: 'Lot 14',
+    id: 'casa-cacao',
+    name: 'Casa Cacao',
+    area: 'Lot 19',
     acres: 'Mar Azul',
-    description: 'Classic hacienda architecture with clay tile roof and covered terraces. A completed masterpiece ready for its next chapter.',
-    features: ['Hacienda Style', 'Clay Tile Roof', 'Completed'],
-    image: '/images/properties/casa-elle.jpg',
-    floorplan: '/images/floorplans/casa-elle-floorplan.jpg',
-    status: 'Completed'
+    description: 'Stone and charred wood combine in this modern farmhouse design. Sweeping mountain views from every room.',
+    features: ['Stone & Wood', 'Mountain Views', 'Modern Farmhouse'],
+    image: '/images/properties/casa-cacao.jpg',
+    status: 'Design',
+    specs: {
+      indoor: 285,
+      terrace: 60,
+      deck: 50,
+      pool: 60
+    }
+  },
+  {
+    id: 'casa-lefki',
+    name: 'Casa Lefki',
+    area: 'Lot 24',
+    acres: 'Mar Azul',
+    description: 'Modern glass pavilion nestled among mature Guanacaste trees. Floor-to-ceiling windows frame the jungle canopy and distant ocean.',
+    features: ['Modern Glass', 'Guanacaste Trees', 'Pool Terrace'],
+    image: '/images/properties/casa-lefki.jpg',
+    status: 'Design',
+    specs: {
+      indoor: 245,
+      terrace: 60,
+      deck: 90,
+      pool: 75
+    }
+  },
+  {
+    id: 'casa-perch',
+    name: 'Casa Perch',
+    area: 'Lot 27',
+    acres: 'Mar Azul',
+    description: 'Intimate jungle retreat with efficient design. Perfect for those seeking a private escape in nature.',
+    features: ['Compact Design', 'Jungle Setting', 'Private'],
+    image: '/images/properties/casa-perch.jpg',
+    status: 'Design',
+    specs: {
+      indoor: 120,
+      terrace: 30,
+      deck: 40,
+      pool: 20
+    }
+  },
+  {
+    id: 'casa-nest',
+    name: 'Casa Nest',
+    area: 'Lot 28',
+    acres: 'Mar Azul',
+    description: 'A dramatic cantilevered design with infinity pool, fire pit deck, and panoramic jungle views. Bold modern architecture that floats above the landscape.',
+    features: ['Cantilevered Design', 'Infinity Pool', 'Ocean Views'],
+    image: '/images/properties/casa-nest.jpg',
+    status: 'Design',
+    specs: {
+      indoor: 92,
+      terrace: 20,
+      deck: 20,
+      pool: 16
+    }
   },
 ];
 ---
@@ -109,13 +161,28 @@ const homesites = [
                 </div>
                 <div class="card-content">
                   <h3>{site.name}</h3>
-                  <p class="specs">{site.area} · {site.acres}</p>
-                  <ul class="features">
-                    {site.features.map((f) => (
-                      <li>{f}</li>
-                    ))}
-                  </ul>
-                  <a href={`/homesites/${site.id}`} class="view-details" onclick="event.stopPropagation()">More Info</a>
+                  <p class="location">{site.area} · {site.acres}</p>
+                  {site.specs && (
+                    <div class="property-specs">
+                      <div class="spec-item">
+                        <span class="spec-value">{site.specs.indoor}</span>
+                        <span class="spec-label">m² Indoor</span>
+                      </div>
+                      <div class="spec-item">
+                        <span class="spec-value">{site.specs.terrace}</span>
+                        <span class="spec-label">m² Terrace</span>
+                      </div>
+                      <div class="spec-item">
+                        <span class="spec-value">{site.specs.deck}</span>
+                        <span class="spec-label">m² Deck</span>
+                      </div>
+                      <div class="spec-item">
+                        <span class="spec-value">{site.specs.pool}</span>
+                        <span class="spec-label">m² Pool</span>
+                      </div>
+                    </div>
+                  )}
+                  <a href={`/homesites/${site.id}`} class="view-details" onclick="event.stopPropagation()">View Details</a>
                 </div>
               </div>
               {site.floorplan && (
@@ -384,11 +451,42 @@ const homesites = [
     margin: 0 0 8px 0;
   }
 
-  .specs {
+  .location {
     font-size: 14px;
     color: #3D4F3D;
     margin: 0 0 16px 0;
     font-weight: 500;
+  }
+
+  .property-specs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin: 16px 0;
+    padding: 16px 0;
+    border-top: 1px solid #e0ddd5;
+    border-bottom: 1px solid #e0ddd5;
+  }
+
+  .spec-item {
+    text-align: center;
+  }
+
+  .spec-value {
+    display: block;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: #1A1F16;
+  }
+
+  .spec-label {
+    display: block;
+    font-size: 10px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
   }
 
   .features {
