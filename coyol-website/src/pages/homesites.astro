@@ -18,7 +18,9 @@ const homesites = [
       indoor: 490,
       terrace: 130,
       deck: 185,
-      pool: 110
+      pool: 110,
+      bedrooms: 4,
+      bathrooms: 4.5
     }
   },
   {
@@ -34,7 +36,9 @@ const homesites = [
       indoor: 556,
       terrace: 121,
       deck: 175,
-      pool: 62
+      pool: 62,
+      bedrooms: 5,
+      bathrooms: 5.5
     }
   },
   {
@@ -50,7 +54,9 @@ const homesites = [
       indoor: 285,
       terrace: 65,
       deck: 148,
-      pool: 65
+      pool: 65,
+      bedrooms: 3,
+      bathrooms: 3.5
     }
   },
   {
@@ -66,7 +72,9 @@ const homesites = [
       indoor: 285,
       terrace: 60,
       deck: 50,
-      pool: 60
+      pool: 60,
+      bedrooms: 3,
+      bathrooms: 3.5
     }
   },
   {
@@ -82,7 +90,9 @@ const homesites = [
       indoor: 245,
       terrace: 60,
       deck: 90,
-      pool: 75
+      pool: 75,
+      bedrooms: 3,
+      bathrooms: 3.5
     }
   },
   {
@@ -98,7 +108,9 @@ const homesites = [
       indoor: 120,
       terrace: 30,
       deck: 40,
-      pool: 20
+      pool: 20,
+      bedrooms: 3,
+      bathrooms: 2
     }
   },
   {
@@ -114,7 +126,9 @@ const homesites = [
       indoor: 92,
       terrace: 20,
       deck: 20,
-      pool: 16
+      pool: 16,
+      bedrooms: 2,
+      bathrooms: 2
     }
   },
 ];
@@ -163,24 +177,29 @@ const homesites = [
                   <h3>{site.name}</h3>
                   <p class="location">{site.area} · {site.acres}</p>
                   {site.specs && (
-                    <div class="property-specs">
-                      <div class="spec-item">
-                        <span class="spec-value">{site.specs.indoor}</span>
-                        <span class="spec-label">m² Indoor</span>
+                    <>
+                      <div class="bedroom-bath">
+                        <span>{site.specs.bedrooms} Bed</span>
+                        <span class="separator">·</span>
+                        <span>{site.specs.bathrooms} Bath</span>
+                        <span class="separator">·</span>
+                        <span>{site.specs.indoor} m²</span>
                       </div>
-                      <div class="spec-item">
-                        <span class="spec-value">{site.specs.terrace}</span>
-                        <span class="spec-label">m² Terrace</span>
+                      <div class="property-specs">
+                        <div class="spec-item">
+                          <span class="spec-value">{site.specs.terrace}</span>
+                          <span class="spec-label">m² Terrace</span>
+                        </div>
+                        <div class="spec-item">
+                          <span class="spec-value">{site.specs.deck}</span>
+                          <span class="spec-label">m² Deck</span>
+                        </div>
+                        <div class="spec-item">
+                          <span class="spec-value">{site.specs.pool}</span>
+                          <span class="spec-label">m² Pool</span>
+                        </div>
                       </div>
-                      <div class="spec-item">
-                        <span class="spec-value">{site.specs.deck}</span>
-                        <span class="spec-label">m² Deck</span>
-                      </div>
-                      <div class="spec-item">
-                        <span class="spec-value">{site.specs.pool}</span>
-                        <span class="spec-label">m² Pool</span>
-                      </div>
-                    </div>
+                    </>
                   )}
                   <a href={`/homesites/${site.id}`} class="view-details" onclick="event.stopPropagation()">View Details</a>
                 </div>
@@ -458,12 +477,27 @@ const homesites = [
     font-weight: 500;
   }
 
+  .bedroom-bath {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #1A1F16;
+    margin: 12px 0;
+  }
+
+  .bedroom-bath .separator {
+    color: #999;
+  }
+
   .property-specs {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 8px;
-    margin: 16px 0;
-    padding: 16px 0;
+    margin: 12px 0 16px;
+    padding: 12px 0;
     border-top: 1px solid #e0ddd5;
     border-bottom: 1px solid #e0ddd5;
   }
