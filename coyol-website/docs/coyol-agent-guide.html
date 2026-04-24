@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coyol Group — Agent & Investor Guide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --limestone: #D4C9B5;
+      --keswick: #3D4F3D;
+      --santorini: #1A1F16;
+      --sand: #C4A67C;
+      --cream: #F5F3EF;
+      --coniston: #4A5D4A;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--limestone);
+      color: var(--santorini);
+      line-height: 1.6;
+    }
+    
+    .page {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--cream);
+      min-height: 100vh;
+    }
+    
+    /* Cover */
+    .cover {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: var(--santorini);
+      color: var(--cream);
+      padding: 60px 40px;
+      position: relative;
+    }
+    
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      right: 40px;
+      bottom: 40px;
+      border: 1px solid var(--sand);
+      opacity: 0.3;
+    }
+    
+    .logo {
+      width: 80px;
+      margin-bottom: 40px;
+      opacity: 0.9;
+    }
+    
+    .cover h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 48px;
+      font-weight: 400;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    
+    .cover .subtitle {
+      font-size: 14px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--sand);
+      margin-bottom: 60px;
+    }
+    
+    .cover .tagline {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 20px;
+      font-style: italic;
+      opacity: 0.8;
+      max-width: 400px;
+    }
+    
+    /* Section */
+    .section {
+      padding: 80px 60px;
+      border-bottom: 1px solid rgba(61, 79, 61, 0.1);
+      page-break-inside: avoid;
+    }
+    
+    .section:last-child {
+      border-bottom: none;
+    }
+    
+    .section-dark {
+      background: var(--santorini);
+      color: var(--cream);
+    }
+    
+    .section-limestone {
+      background: var(--limestone);
+    }
+    
+    .overline {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--sand);
+      margin-bottom: 16px;
+    }
+    
+    h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 24px;
+      line-height: 1.2;
+    }
+    
+    h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 400;
+      margin-bottom: 16px;
+      color: var(--keswick);
+    }
+    
+    .section-dark h3 {
+      color: var(--sand);
+    }
+    
+    p {
+      font-size: 15px;
+      margin-bottom: 16px;
+      color: inherit;
+      opacity: 0.9;
+    }
+    
+    .lead {
+      font-size: 18px;
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+    
+    /* Lists */
+    ul {
+      list-style: none;
+      margin: 24px 0;
+    }
+    
+    ul li {
+      padding: 12px 0;
+      padding-left: 24px;
+      position: relative;
+      font-size: 15px;
+    }
+    
+    ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 18px;
+      width: 8px;
+      height: 1px;
+      background: var(--sand);
+    }
+    
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 32px 0;
+    }
+    
+    th, td {
+      padding: 16px 20px;
+      text-align: left;
+      font-size: 14px;
+      border-bottom: 1px solid rgba(61, 79, 61, 0.1);
+    }
+    
+    th {
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 11px;
+      color: var(--keswick);
+    }
+    
+    .section-dark th,
+    .section-dark td {
+      border-color: rgba(245, 243, 239, 0.1);
+    }
+    
+    .section-dark th {
+      color: var(--sand);
+    }
+    
+    /* Price highlight */
+    .price {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      color: var(--keswick);
+    }
+    
+    .section-dark .price {
+      color: var(--sand);
+    }
+    
+    /* Grid */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin: 32px 0;
+    }
+    
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin: 32px 0;
+    }
+    
+    /* Cards */
+    .card {
+      background: var(--cream);
+      padding: 32px;
+      border: 1px solid rgba(61, 79, 61, 0.1);
+    }
+    
+    .section-dark .card {
+      background: rgba(245, 243, 239, 0.05);
+      border-color: rgba(245, 243, 239, 0.1);
+    }
+    
+    .card-value {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 32px;
+      color: var(--keswick);
+      margin-bottom: 8px;
+    }
+    
+    .section-dark .card-value {
+      color: var(--sand);
+    }
+    
+    .card-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.7;
+    }
+    
+    /* Neighbourhood list */
+    .neighbourhood {
+      display: flex;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(61, 79, 61, 0.1);
+    }
+    
+    .neighbourhood:last-child {
+      border-bottom: none;
+    }
+    
+    .neighbourhood-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      width: 160px;
+      flex-shrink: 0;
+    }
+    
+    .neighbourhood-desc {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+    
+    /* Footer */
+    .footer {
+      background: var(--santorini);
+      color: var(--cream);
+      padding: 60px;
+      text-align: center;
+    }
+    
+    .footer-logo {
+      width: 60px;
+      margin-bottom: 24px;
+      opacity: 0.8;
+    }
+    
+    .footer p {
+      font-size: 13px;
+      opacity: 0.6;
+    }
+    
+    .footer a {
+      color: var(--sand);
+      text-decoration: none;
+    }
+    
+    /* Print styles */
+    @media print {
+      .page {
+        max-width: none;
+      }
+      
+      .section {
+        page-break-inside: avoid;
+      }
+      
+      .cover {
+        page-break-after: always;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    
+    <!-- Cover -->
+    <section class="cover">
+      <img src="https://coyolnosara.com/images/logo.png" alt="Coyol" class="logo">
+      <h1>Coyol</h1>
+      <p class="subtitle">Agent & Investor Guide</p>
+      <p class="tagline">Building legacy homes in Nosara since 2006</p>
+    </section>
+    
+    <!-- About -->
+    <section class="section">
+      <p class="overline">About Coyol Group</p>
+      <h2>Vertically Integrated Development</h2>
+      <p class="lead">Unlike competitors who sell lots and disappear, Coyol is a fully integrated development company. We design communities, design homes, build homes, and stay committed for the long term.</p>
+      
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-value">60+</div>
+          <div class="card-label">Homes built since 2006</div>
+        </div>
+        <div class="card">
+          <div class="card-value">20</div>
+          <div class="card-label">Years in Nosara</div>
+        </div>
+        <div class="card">
+          <div class="card-value">3</div>
+          <div class="card-label">Restaurants operated</div>
+        </div>
+      </div>
+      
+      <p>Our family operates La Luna, Coyol, and Esh — three of Nosara's most beloved restaurants. We're not outside investors. We live here, raise our children here, and our reputation is on the line with every home we build.</p>
+    </section>
+    
+    <!-- Developments -->
+    <section class="section section-limestone">
+      <p class="overline">Our Developments</p>
+      <h2>Mar Azul & Nosara Hills</h2>
+      
+      <div class="grid-2">
+        <div>
+          <h3>Mar Azul</h3>
+          <p>36 jungle homesites on a pristine ridgeline, minutes from Playa Guiones. Panoramic views of ocean and jungle canopy. Home to the upcoming Coyol Farmhouse boutique hotel.</p>
+          <ul>
+            <li>36 homesites</li>
+            <li>Ocean & jungle views</li>
+            <li>5 minutes to beach</li>
+            <li>Gated, 24/7 security</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Nosara Hills</h3>
+          <p>Eco-community set among rolling hills with mountain views. Established infrastructure and a growing community of like-minded homeowners.</p>
+          <ul>
+            <li>40+ homesites</li>
+            <li>Mountain views</li>
+            <li>Eco-focused community</li>
+            <li>Maintained trails</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Farmhouse -->
+    <section class="section section-dark">
+      <p class="overline">Coming Soon</p>
+      <h2>Coyol Farmhouse</h2>
+      <p class="lead">A 55-cabin boutique hotel at the heart of Mar Azul. Not a mega-resort — an intimate retreat with world-class amenities.</p>
+      
+      <div class="grid-2">
+        <ul>
+          <li>55 private cabins</li>
+          <li>Main Rancho gathering space</li>
+          <li>Farm-to-table restaurant</li>
+          <li>Full-service spa</li>
+        </ul>
+        <ul>
+          <li>Nature trails throughout</li>
+          <li>Horse farm & riding programs</li>
+          <li>Permits in progress</li>
+          <li>Rancho & trails underway</li>
+        </ul>
+      </div>
+      
+      <p>Homeowners in Mar Azul will have resort amenities on their doorstep — without the crowds or the compromise.</p>
+    </section>
+    
+    <!-- Pricing -->
+    <section class="section">
+      <p class="overline">Investment</p>
+      <h2>Home + Land Packages</h2>
+      <p>Turnkey pricing includes land, design, and construction. Every home is bespoke — designed for its specific lot and view orientation.</p>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Home Size</th>
+            <th>Lot Size</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Entry</td>
+            <td>100 m²</td>
+            <td>500 m²</td>
+            <td class="price">$900K</td>
+          </tr>
+          <tr>
+            <td>Mid-Range</td>
+            <td>250 m²</td>
+            <td>½ acre</td>
+            <td class="price">$2.3M</td>
+          </tr>
+          <tr>
+            <td>Estate</td>
+            <td>600 m²</td>
+            <td>2+ acres</td>
+            <td class="price">$5M+</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    
+    <!-- Value Protection -->
+    <section class="section section-limestone">
+      <p class="overline">Long-Term Value</p>
+      <h2>Protecting Your Investment</h2>
+      <p class="lead">We ensure our developments hold and grow value through active management and architectural standards.</p>
+      
+      <ul>
+        <li><strong>Maintained amenities</strong> — Trails, common areas, and landscaping kept pristine year-round</li>
+        <li><strong>24/7 security</strong> — Gated access with professional security team</li>
+        <li><strong>Professional administration</strong> — HOA managed properly, not neglected</li>
+        <li><strong>Architectural standards</strong> — Future homes must meet the same high-end, bespoke design criteria</li>
+        <li><strong>Build quality control</strong> — Every home built to premium standards</li>
+      </ul>
+      
+      <p>No mismatched spec homes. No deferred maintenance. No absentee management.</p>
+    </section>
+    
+    <!-- Financing -->
+    <section class="section section-dark">
+      <p class="overline">Financing</p>
+      <h2>Banco Lafise Partnership</h2>
+      <p class="lead">Local financing available for Canadian and US buyers — a rarity in Costa Rica.</p>
+      
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-value">25</div>
+          <div class="card-label">Year terms available</div>
+        </div>
+        <div class="card">
+          <div class="card-value">USD</div>
+          <div class="card-label">Dollar-denominated loans</div>
+        </div>
+      </div>
+      
+      <p>Most international buyers assume they need to pay cash in Costa Rica. Banco Lafise's program opens the door to buyers who want to preserve capital while building their dream home.</p>
+      <p>Contact us for current rates and pre-approval process.</p>
+    </section>
+    
+    <!-- Closing Costs -->
+    <section class="section">
+      <p class="overline">Transaction</p>
+      <h2>Closing Costs & Process</h2>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Transfer Tax</td>
+            <td>1.5% of registered value</td>
+          </tr>
+          <tr>
+            <td>Legal Fees</td>
+            <td>1.0 – 1.5%</td>
+          </tr>
+          <tr>
+            <td>Notary</td>
+            <td>0.5 – 1.0%</td>
+          </tr>
+          <tr>
+            <td>Stamps & Registration</td>
+            <td>~0.5%</td>
+          </tr>
+          <tr>
+            <td><strong>Total</strong></td>
+            <td><strong>3.5 – 4.5%</strong></td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <h3>Timeline</h3>
+      <p>Typical closing: <strong>30-60 days</strong></p>
+      <p>Due diligence includes title search, survey verification, and corporation review (most properties are held in Costa Rican S.A. corporations for flexibility and estate planning benefits).</p>
+    </section>
+    
+    <!-- Nosara Overview -->
+    <section class="section section-limestone">
+      <p class="overline">Location</p>
+      <h2>Nosara Neighbourhoods</h2>
+      
+      <div class="neighbourhood">
+        <div class="neighbourhood-name">Playa Guiones</div>
+        <div class="neighbourhood-desc">Main surf beach. Walkable town center with restaurants, yoga studios, and boutiques. The heart of Nosara.</div>
+      </div>
+      <div class="neighbourhood">
+        <div class="neighbourhood-name">Playa Pelada</div>
+        <div class="neighbourhood-desc">Quieter beach north of Guiones. More local feel, tide pools, sunset views.</div>
+      </div>
+      <div class="neighbourhood">
+        <div class="neighbourhood-name">Esperanza</div>
+        <div class="neighbourhood-desc">Established hillside community above Guiones. Ocean views, mature trees, luxury homes.</div>
+      </div>
+      <div class="neighbourhood">
+        <div class="neighbourhood-name">Garza</div>
+        <div class="neighbourhood-desc">Traditional fishing village south of Guiones. Calmer waters, local character.</div>
+      </div>
+      <div class="neighbourhood">
+        <div class="neighbourhood-name">Mar Azul</div>
+        <div class="neighbourhood-desc">Ridge above Guiones with ocean and jungle views. Home to Coyol Farmhouse. Our flagship development.</div>
+      </div>
+      <div class="neighbourhood">
+        <div class="neighbourhood-name">Nosara Hills</div>
+        <div class="neighbourhood-desc">Inland eco-community with mountain views. Quiet, nature-focused living.</div>
+      </div>
+    </section>
+    
+    <!-- Costa Rica Markets -->
+    <section class="section section-dark">
+      <p class="overline">Market Context</p>
+      <h2>Costa Rica's Luxury Markets</h2>
+      
+      <h3>Peninsula Papagayo</h3>
+      <p>Where Jeff Bezos landed. Home to Four Seasons, Rosewood, and Waldorf Astoria. Ultra-private gated peninsula with marina, golf, and private airport access. Estates from $10M to $50M+.</p>
+      
+      <h3>Why Papagayo Commands Top Dollar</h3>
+      <ul>
+        <li>Total exclusivity — gated peninsula, limited access</li>
+        <li>World-class hotel brands on-site</li>
+        <li>Private marina and golf course</li>
+        <li>Billionaire neighbors as social proof</li>
+        <li>Dry Guanacaste climate</li>
+      </ul>
+      
+      <h3>Other Luxury Pockets</h3>
+      <p><strong>Santa Teresa / Mal País</strong> — Surf luxury on the southern Nicoya Peninsula. Celebrity favorites.</p>
+      <p><strong>Nosara</strong> — Blue Zone wellness culture, world-class surf, bohemian luxury. More authentic than resort destinations.</p>
+      <p><strong>Dominical / Uvita</strong> — Southern Zone jungle meets ocean. Emerging market.</p>
+    </section>
+    
+    <!-- Contact -->
+    <section class="footer">
+      <img src="https://coyolnosara.com/images/logo.png" alt="Coyol" class="footer-logo">
+      <p style="font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 24px; opacity: 1;">Coyol Group</p>
+      <p>Nosara, Guanacaste, Costa Rica</p>
+      <p><a href="https://coyolnosara.com">coyolnosara.com</a></p>
+      <p><a href="mailto:info@coyolnosara.com">info@coyolnosara.com</a></p>
+      <p>WhatsApp: +1 (818) 401-8068</p>
+    </section>
+    
+  </div>
+</body>
+</html>
