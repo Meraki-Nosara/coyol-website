@@ -10,8 +10,10 @@
     "haciendaCode": "D-104",
     "amount": 2685286,
     "period": "202603",
-    "status": "pending",
-    "notes": "Contador resolviendo presentación en nuevo sistema Tribu. Esperando fondos en cuenta Hacienda."
+    "status": "paid",
+    "notes": "Contador resolviendo presentación en nuevo sistema Tribu. Esperando fondos en cuenta Hacienda.",
+    "lastPaid": "2026-04-26",
+    "lastPaidAmount": 3494247
   },
   {
     "id": "iva-202602",
