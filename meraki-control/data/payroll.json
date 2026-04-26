@@ -1,0 +1,68 @@
+{
+  "weeks": [
+    {
+      "weekStart": "2026-04-17",
+      "weekEnd": "2026-04-23",
+      "source": "PLANILLA MERAKI SEMANA 17 ABRIL 2026 A 23 ABRIL 2026.xls",
+      "restaurants": {
+        "laluna": {
+          "employees": 33,
+          "hoursRegular": 1304.8,
+          "hoursExtra": 20.1,
+          "salarioBruto": 3163931,
+          "salarioNeto": 2746277,
+          "ccssPatronal": 848883,
+          "ccssEmpleado": 342654,
+          "serviceTaxCocina": 972677,
+          "serviceTaxSalonTips": 5482553,
+          "trampasGrasa": 52500,
+          "prestamos": 75000,
+          "totalPagar": 9201507
+        },
+        "coyol": {
+          "employees": 17,
+          "hoursRegular": 541.66,
+          "hoursExtra": 34.36,
+          "salarioBruto": 1310770,
+          "salarioNeto": 1168814,
+          "ccssPatronal": 351680,
+          "ccssEmpleado": 141956,
+          "serviceTaxCocina": 503119,
+          "serviceTaxSalonTips": 2467742,
+          "limpiezaCoyol": 15714,
+          "prestamos": 0,
+          "totalPagar": 4139675
+        },
+        "esh": {
+          "employees": 11,
+          "hoursRegular": 424.15,
+          "hoursExtra": 7,
+          "salarioBruto": 1044095,
+          "salarioNeto": 931020,
+          "ccssPatronal": 280131,
+          "ccssEmpleado": 113075,
+          "serviceTaxCocina": 105402,
+          "serviceTaxSalonTips": 155096,
+          "incapacidadNoPagada": 96,
+          "prestamos": 0,
+          "totalPagar": 1191517
+        },
+        "especial": {
+          "employees": 3,
+          "hoursRegular": 84.64,
+          "hoursExtra": 0,
+          "salarioBruto": 185844,
+          "salarioNeto": 135844,
+          "serviceTaxSalonTips": 360506,
+          "prestamos": 50000,
+          "totalPagar": 496349
+        }
+      },
+      "totals": {
+        "totalPagar": 15029048,
+        "totalHours": 2416.91,
+        "totalEmployees": 64
+      }
+    }
+  ]
+}

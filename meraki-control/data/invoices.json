@@ -4037,6 +4037,244 @@
       ],
       "restaurant": "coyol",
       "source_file": "50616042600310263070000100212010000075504100075504.xml"
+    },
+    {
+      "clave": "50625042600310117226700100001010002584850177250358",
+      "supplier": "Mayca Distribuidores, S.A.",
+      "supplier_id": "3101172267",
+      "date": "2026-04-25",
+      "subtotal": 60223.0,
+      "iva": 5925.43,
+      "total": 66148.43,
+      "items": [
+        {
+          "product": "LECHE EVAPORADA IDEAL 1 UN/360 GR",
+          "qty": 20.0,
+          "unit": "Unid",
+          "unit_price": 993.0,
+          "total": 22441.8
+        },
+        {
+          "product": "ALAMBRINAS # 40 1/25 UDS.",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 8922.0,
+          "total": 10081.86
+        },
+        {
+          "product": "GALLETA MOLIDA MARIA POZUELO 1/1 KG",
+          "qty": 2.0,
+          "unit": "Otros",
+          "unit_price": 4731.0,
+          "total": 9556.62
+        },
+        {
+          "product": "MAYONESA RELIANCE SYSCO 1/3.78L",
+          "qty": 1.0,
+          "unit": "Gal",
+          "unit_price": 6401.0,
+          "total": 6465.01
+        },
+        {
+          "product": "HELADO VAINILLA DOS PINOS 1/2.5 GALONES",
+          "qty": 1.0,
+          "unit": "Gal",
+          "unit_price": 15578.0,
+          "total": 17603.14
+        }
+      ],
+      "restaurant": null,
+      "source_file": "003101172267-FC-00100001010002584850.xml"
+    },
+    {
+      "clave": "50625042600310117226700100001010002584851177295209",
+      "supplier": "Mayca Distribuidores, S.A.",
+      "supplier_id": "3101172267",
+      "date": "2026-04-25",
+      "subtotal": 171157.0,
+      "iva": 9918.13,
+      "total": 181075.13,
+      "items": [
+        {
+          "product": "AJO EN POLVO MFS 1/454GR",
+          "qty": 2.0,
+          "unit": "Unid",
+          "unit_price": 3751.0,
+          "total": 8477.26
+        },
+        {
+          "product": "CREMA DULCE CORSO 32% 1/1 GL",
+          "qty": 2.0,
+          "unit": "Gal",
+          "unit_price": 12890.0,
+          "total": 29131.4
+        },
+        {
+          "product": "HARINA DE TRIGO NACARINA 1/ 25KG",
+          "qty": 2.0,
+          "unit": "Unid",
+          "unit_price": 20958.0,
+          "total": 42335.16
+        },
+        {
+          "product": "HARINA MASECA 1/20 KG",
+          "qty": 1.0,
+          "unit": "Otros",
+          "unit_price": 16038.0,
+          "total": 16198.38
+        },
+        {
+          "product": "HELADO VAINILLA DOS PINOS 1/2.5 GALONES",
+          "qty": 2.0,
+          "unit": "Gal",
+          "unit_price": 15578.0,
+          "total": 35206.28
+        }
+      ],
+      "restaurant": null,
+      "source_file": "003101172267-FE-00100001010002584851.xml"
+    },
+    {
+      "clave": "50625042600310129586800100001010012113711177809339",
+      "supplier": "Distribuidora La Florida S.A.",
+      "supplier_id": "3101295868",
+      "date": "2026-04-25",
+      "subtotal": 150908.4,
+      "iva": 19618.1,
+      "total": 170526.5,
+      "items": [
+        {
+          "product": "PILSEN 350ML VR",
+          "qty": 48.0,
+          "unit": "Otros",
+          "unit_price": 698.65,
+          "total": 37894.78
+        },
+        {
+          "product": "IMPERIAL 350ML VR",
+          "qty": 120.0,
+          "unit": "Otros",
+          "unit_price": 698.65,
+          "total": 94736.94
+        },
+        {
+          "product": "IMPERIAL LIGHT 350ML VR",
+          "qty": 48.0,
+          "unit": "Otros",
+          "unit_price": 698.65,
+          "total": 37894.78
+        }
+      ],
+      "restaurant": null,
+      "source_file": "003101295868-FE-00100001010012113711.xml"
+    },
+    {
+      "clave": "50624042600310107490301000001010001089370128121635",
+      "supplier": "EXPORTADORA PMT S.A.",
+      "supplier_id": "3101074903",
+      "date": "2026-04-24",
+      "subtotal": 28731.27,
+      "iva": 287.31,
+      "total": 29018.58,
+      "items": [
+        {
+          "product": "LECHE FOODIE ENTERA 12X1L",
+          "qty": 3.0,
+          "unit": "Unid",
+          "unit_price": 9577.09,
+          "total": 29018.58
+        }
+      ],
+      "restaurant": null,
+      "source_file": "50624042600310107490301000001010001089370128121635.xml"
+    },
+    {
+      "clave": "50624042600310107490301000001010001089483142884621",
+      "supplier": "EXPORTADORA PMT S.A.",
+      "supplier_id": "3101074903",
+      "date": "2026-04-24",
+      "subtotal": 333878.0,
+      "iva": 8738.78,
+      "total": 342616.78,
+      "items": [
+        {
+          "product": "ACEITE DORAL FRITURA ALTO REND",
+          "qty": 4.0,
+          "unit": "Unid",
+          "unit_price": 19330.0,
+          "total": 78093.2
+        },
+        {
+          "product": "MOLDE RED 8.3CM; 55 UD; DULCE",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 45000.0,
+          "total": 50850.0
+        },
+        {
+          "product": "TIRA DE ASADO CJ",
+          "qty": 30.44,
+          "unit": "Kg",
+          "unit_price": 6950.0,
+          "total": 213673.58
+        }
+      ],
+      "restaurant": null,
+      "source_file": "50624042600310107490301000001010001089483142884621.xml"
+    },
+    {
+      "clave": "50624042600310107490301000001010001089484121703361",
+      "supplier": "EXPORTADORA PMT S.A.",
+      "supplier_id": "3101074903",
+      "date": "2026-04-24",
+      "subtotal": 319929.0,
+      "iva": 27673.17,
+      "total": 347602.17,
+      "items": [
+        {
+          "product": "ACEITE DORAL FRITURA ALTO REND",
+          "qty": 6.0,
+          "unit": "Unid",
+          "unit_price": 19330.0,
+          "total": 117139.8
+        },
+        {
+          "product": "CA DEL LAGO PINOT GRIGIO",
+          "qty": 12.0,
+          "unit": "Unid",
+          "unit_price": 4955.75,
+          "total": 67199.97
+        },
+        {
+          "product": "MOZZARELLA BLOQUE CONG EEUU KG",
+          "qty": 44.8,
+          "unit": "Kg",
+          "unit_price": 3225.0,
+          "total": 163262.4
+        }
+      ],
+      "restaurant": null,
+      "source_file": "50624042600310107490301000001010001089484121703361.xml"
+    },
+    {
+      "clave": "50625042600310278551500100001010000000758199999999",
+      "supplier": "TUCAN TICO TROPICAL EXPERIENCE S.R.L.",
+      "supplier_id": "3102785515",
+      "date": "2026-04-25",
+      "subtotal": 58500.0,
+      "iva": 585.0,
+      "total": 59085.0,
+      "items": [
+        {
+          "product": "Mermelada Fresa de Las Brumas Kilo",
+          "qty": 6.0,
+          "unit": "Unid",
+          "unit_price": 9750.0,
+          "total": 59085.0
+        }
+      ],
+      "restaurant": null,
+      "source_file": "50625042600310278551500100001010000000758199999999.xml"
     }
   ]
 }
