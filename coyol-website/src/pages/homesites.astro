@@ -2,6 +2,28 @@
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 
+// Sold & Built - completed homes to showcase
+const soldBuilt = [
+  {
+    id: 'coyol-xl',
+    name: 'Coyol XL',
+    area: 'Lot 20',
+    acres: 'Mar Azul',
+    description: 'Expansive luxury residence with infinity pool overlooking the mountains. A masterpiece of indoor-outdoor living, now complete.',
+    features: ['Infinity Pool', 'Mountain Views', 'Completed'],
+    image: '/images/properties/coyol-xl.jpg',
+    status: 'Sold & Built',
+    specs: {
+      indoor: 450,
+      terrace: 120,
+      deck: 200,
+      pool: 85,
+      bedrooms: 4,
+      bathrooms: 4.5
+    }
+  }
+];
+
 // Homes for sale - actual properties with renders/photos
 const homesites = [
   {
@@ -222,6 +244,45 @@ const homesites = [
       </div>
     </div>
   </section>
+
+  <!-- Sold & Built -->
+  {soldBuilt.length > 0 && (
+    <section class="sold-built">
+      <div class="container">
+        <h2 class="section-title">Sold & Built</h2>
+        <p class="section-subtitle">Recent completions in Mar Azul</p>
+        <div class="grid">
+          {soldBuilt.map((site) => (
+            <div class="homesite-card sold">
+              <div class="card-inner">
+                <div class="card-front">
+                  <div class="card-image">
+                    <img src={site.image} alt={site.name} />
+                    <span class="sold-badge">Sold & Built</span>
+                  </div>
+                  <div class="card-content">
+                    <h3>{site.name}</h3>
+                    <p class="location">{site.area} · {site.acres}</p>
+                    {site.specs && (
+                      <>
+                        <div class="bedroom-bath">
+                          <span>{site.specs.bedrooms} Bed</span>
+                          <span class="separator">·</span>
+                          <span>{site.specs.bathrooms} Bath</span>
+                          <span class="separator">·</span>
+                          <span>{site.specs.indoor} m²</span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 
   <!-- CTA -->
   <section class="cta-section">
@@ -619,6 +680,46 @@ const homesites = [
     .grid {
       grid-template-columns: 1fr;
     }
+  }
+
+  /* Sold & Built Section */
+  .sold-built {
+    padding: 80px 0;
+    background: #1A1F16;
+  }
+
+  .sold-built .section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: #F5F3EF;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .sold-built .section-subtitle {
+    font-size: 14px;
+    color: rgba(212, 201, 181, 0.7);
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .sold-built .homesite-card {
+    opacity: 0.9;
+  }
+
+  .sold-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: #A65D3F;
+    color: #F5F3EF;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 12px;
+    border-radius: 4px;
   }
 </style>
 
