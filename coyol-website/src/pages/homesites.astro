@@ -53,7 +53,8 @@ const homesites = [
     description: 'Contemporary design featuring black charred wood cladding and gabion stone walls. A bold statement in harmony with the forest.',
     features: ['Black Wood', 'Gabion Walls', 'Forest Setting'],
     image: '/images/properties/casa-umi.jpg',
-    floorplan: '/images/floorplans/casa-umi-floorplan.jpg',
+    floorplan: '/images/floorplans/casa-umi-level1.jpg',
+    floorplan2: '/images/floorplans/casa-umi-level2.jpg',
     status: 'Design',
     specs: {
       indoor: 556,
@@ -192,7 +193,7 @@ const homesites = [
     <div class="container">
       <div class="grid">
         {homesites.map((site) => (
-          <div class={`homesite-card ${site.floorplan ? 'has-floorplan' : ''}`}>
+          <div class={`homesite-card ${site.floorplan ? 'has-floorplan' : ''} ${site.floorplan2 ? 'has-two-floors' : ''}`} data-floors={site.floorplan2 ? '2' : '1'}>
             <div class="card-inner">
               <div class="card-front">
                 <div class="card-image">
@@ -234,10 +235,22 @@ const homesites = [
                 <div class="card-back">
                   <div class="card-image">
                     <img src={site.floorplan} alt={`${site.name} Floor Plan`} />
+                    <span class="flip-hint">{site.floorplan2 ? 'Tap for Level 2' : 'Tap to go back'}</span>
+                  </div>
+                  <div class="card-content">
+                    <h3>{site.name}: {site.floorplan2 ? 'Level 1' : 'Floor Plan'}</h3>
+                    <a href={`/homesites/${site.id}`} class="view-details" onclick="event.stopPropagation()">More Info</a>
+                  </div>
+                </div>
+              )}
+              {site.floorplan2 && (
+                <div class="card-third">
+                  <div class="card-image">
+                    <img src={site.floorplan2} alt={`${site.name} Level 2`} />
                     <span class="flip-hint">Tap to go back</span>
                   </div>
                   <div class="card-content">
-                    <h3>{site.name}: Floor Plan</h3>
+                    <h3>{site.name}: Level 2</h3>
                     <a href={`/homesites/${site.id}`} class="view-details" onclick="event.stopPropagation()">More Info</a>
                   </div>
                 </div>
@@ -725,15 +738,61 @@ const homesites = [
     padding: 6px 12px;
     border-radius: 4px;
   }
+
+  /* Third card face for 2-story homes */
+  .card-third {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    transform: rotateY(180deg);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .card-third .card-image,
+  .card-third .card-content {
+    /* Same styles as card-back */
+  }
+
+  .homesite-card.show-third .card-back {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .homesite-card.show-third .card-third {
+    opacity: 1;
+    pointer-events: auto;
+  }
 </style>
 
 <script>
   // Flip card interaction for cards with floor plans
   document.querySelectorAll('.homesite-card.has-floorplan').forEach(card => {
+    const hasTwoFloors = card.classList.contains('has-two-floors');
+    let state = 0; // 0 = front, 1 = back (level 1), 2 = third (level 2)
+    
     card.addEventListener('click', (e) => {
       // Don't flip if clicking on the "View Details" link
       if ((e.target as HTMLElement).closest('.view-details')) return;
-      card.classList.toggle('flipped');
+      
+      if (hasTwoFloors) {
+        state = (state + 1) % 3;
+        if (state === 0) {
+          card.classList.remove('flipped', 'show-third');
+        } else if (state === 1) {
+          card.classList.add('flipped');
+          card.classList.remove('show-third');
+        } else {
+          card.classList.add('flipped', 'show-third');
+        }
+      } else {
+        card.classList.toggle('flipped');
+      }
     });
   });
 </script>
