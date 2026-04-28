@@ -749,24 +749,50 @@ const homesites = [
     overflow: hidden;
     background: #fff;
     transform: rotateY(180deg);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s;
+    display: none;
   }
 
-  .card-third .card-image,
+  .card-third .card-image {
+    position: relative;
+    height: 280px;
+    overflow: hidden;
+  }
+
+  .card-third .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
   .card-third .card-content {
-    /* Same styles as card-back */
+    padding: 20px;
+    text-align: center;
+  }
+
+  .card-third .card-content h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .card-third .flip-hint {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.6);
+    color: white;
+    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 4px;
   }
 
   .homesite-card.show-third .card-back {
-    opacity: 0;
-    pointer-events: none;
+    display: none;
   }
 
   .homesite-card.show-third .card-third {
-    opacity: 1;
-    pointer-events: auto;
+    display: block;
   }
 </style>
 
