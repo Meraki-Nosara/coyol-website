@@ -42,6 +42,28 @@ const soldBuilt = [
   }
 ];
 
+// Under Construction
+const underConstruction = [
+  {
+    id: 'casa-nispero',
+    name: 'Casa Níspero',
+    area: 'Lot 2',
+    acres: 'Mar Azul',
+    description: 'Stone walls and black metal roofing create a striking contemporary farmhouse. Fire pit terrace and reflecting pool frame mountain views.',
+    features: ['Stone Walls', 'Fire Pit', 'Reflecting Pool'],
+    image: '/images/properties/casa-nispero.jpg',
+    status: 'Under Construction',
+    specs: {
+      indoor: 320,
+      terrace: 80,
+      deck: 120,
+      pool: 60,
+      bedrooms: 3,
+      bathrooms: 3.5
+    }
+  }
+];
+
 // Homes for sale - actual properties with renders/photos
 const homesites = [
   {
@@ -279,6 +301,45 @@ const homesites = [
       </div>
     </div>
   </section>
+
+  <!-- Under Construction -->
+  {underConstruction.length > 0 && (
+    <section class="under-construction">
+      <div class="container">
+        <h2 class="section-title">Under Construction</h2>
+        <p class="section-subtitle">Coming soon to Mar Azul</p>
+        <div class="grid">
+          {underConstruction.map((site) => (
+            <div class="homesite-card construction">
+              <div class="card-inner">
+                <div class="card-front">
+                  <div class="card-image">
+                    <img src={site.image} alt={site.name} />
+                    <span class="construction-badge">Under Construction</span>
+                  </div>
+                  <div class="card-content">
+                    <h3>{site.name}</h3>
+                    <p class="location">{site.area} · {site.acres}</p>
+                    {site.specs && (
+                      <>
+                        <div class="bedroom-bath">
+                          <span>{site.specs.bedrooms} Bed</span>
+                          <span class="separator">·</span>
+                          <span>{site.specs.bathrooms} Bath</span>
+                          <span class="separator">·</span>
+                          <span>{site.specs.indoor} m²</span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 
   <!-- Sold & Built -->
   {soldBuilt.length > 0 && (
@@ -715,6 +776,42 @@ const homesites = [
     .grid {
       grid-template-columns: 1fr;
     }
+  }
+
+  /* Under Construction Section */
+  .under-construction {
+    padding: 80px 0;
+    background: #3D4F3D;
+  }
+
+  .under-construction .section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: #F5F3EF;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .under-construction .section-subtitle {
+    font-size: 14px;
+    color: rgba(212, 201, 181, 0.7);
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .construction-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: #C4A67C;
+    color: #1A1F16;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 12px;
+    border-radius: 4px;
   }
 
   /* Sold & Built Section */
