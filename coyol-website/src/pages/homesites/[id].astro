@@ -3,17 +3,30 @@ import Layout from '../../layouts/Layout.astro';
 
 export function getStaticPaths() {
   return [
+    { params: { id: 'casa-elle' } },
     { params: { id: 'casa-nest' } },
     { params: { id: 'casa-lefki' } },
     { params: { id: 'casa-umi' } },
     { params: { id: 'casa-cacao' } },
     { params: { id: 'casa-luz' } },
+    { params: { id: 'casa-perch' } },
+    { params: { id: 'coyol-xl' } },
+    { params: { id: 'modern-barn' } },
+    { params: { id: 'casa-nispero' } },
   ];
 }
 
 const { id } = Astro.params;
 
 const properties: Record<string, any> = {
+  'casa-elle': {
+    name: 'Casa Elle',
+    tagline: 'Classic hacienda architecture with clay tile roof',
+    location: 'Lot 14, Mar Azul',
+    status: 'Completed',
+    image: '/images/properties/casa-elle.jpg',
+    features: ['Hacienda Style', 'Clay Tile Roof', 'Completed', 'Covered Terraces']
+  },
   'casa-nest': {
     name: 'Casa Nest',
     tagline: 'A dramatic cantilevered design floating above the landscape',
@@ -49,11 +62,42 @@ const properties: Record<string, any> = {
   'casa-luz': {
     name: 'Casa Luz',
     tagline: 'Connected pavilions with jungle courtyards',
-    location: 'Lot 18, Mar Azul',
+    location: 'Lot 21, Mar Azul',
     status: 'Design',
     image: '/images/properties/casa-luz.jpg',
-    floorplan: '/images/properties/casa-luz-floorplan.jpg',
     features: ['Pavilion Style', 'Stone Details', 'Jungle Compound', 'Indoor-Outdoor Living']
+  },
+  'casa-perch': {
+    name: 'Casa Perch',
+    tagline: 'Compact modern living with panoramic views',
+    location: 'Lot 27, Mar Azul',
+    status: 'Design',
+    image: '/images/properties/casa-perch.jpg',
+    features: ['Modern Design', 'Compact Living', 'Ocean Views', 'Efficient Layout']
+  },
+  'coyol-xl': {
+    name: 'Coyol XL',
+    tagline: 'Expansive luxury residence with infinity pool',
+    location: 'Lot 20, Mar Azul',
+    status: 'Sold & Built',
+    image: '/images/properties/coyol-xl.jpg',
+    features: ['Infinity Pool', 'Mountain Views', 'Completed', 'Indoor-Outdoor Living']
+  },
+  'modern-barn': {
+    name: 'Modern Barn',
+    tagline: 'Contemporary barn architecture with charred wood cladding',
+    location: 'Lot 32, Mar Azul',
+    status: 'Sold & Built',
+    image: '/images/properties/modern-barn.jpg',
+    features: ['Black Wood', 'Mountain Views', 'Completed', 'Bold Design']
+  },
+  'casa-nispero': {
+    name: 'Casa Níspero',
+    tagline: 'Stone walls and black metal roofing create a striking farmhouse',
+    location: 'Lot 2, Mar Azul',
+    status: 'Under Construction',
+    image: '/images/properties/casa-nispero.jpg',
+    features: ['Stone Walls', 'Fire Pit', 'Reflecting Pool', 'Mountain Views']
   }
 };
 
