@@ -13,6 +13,7 @@ export function getStaticPaths() {
     { params: { id: 'coyol-xl' } },
     { params: { id: 'modern-barn' } },
     { params: { id: 'casa-nispero' } },
+    { params: { id: 'casa-eclipse' } },
   ];
 }
 
@@ -98,6 +99,14 @@ const properties: Record<string, any> = {
     status: 'Under Construction',
     image: '/images/properties/casa-nispero.jpg',
     features: ['Stone Walls', 'Fire Pit', 'Reflecting Pool', 'Mountain Views']
+  },
+  'casa-eclipse': {
+    name: 'Casa Eclipse',
+    tagline: 'Twin pavilions with infinity pool and mountain views',
+    location: 'Lot 12, Mar Azul',
+    status: 'Sold & Built',
+    image: '/images/properties/casa-eclipse.jpg',
+    features: ['Twin Pavilions', 'Infinity Pool', 'Black Metal Roof', 'Garden Level']
   }
 };
 
