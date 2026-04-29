@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Casa Cacao — Finish Selector | Coyol</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --limestone: #D4C9B5;
+      --keswick: #3D4F3D;
+      --santorini: #1A1F16;
+      --sand: #C4A67C;
+      --cream: #F5F3EF;
+      --terracotta: #A65D3F;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--cream);
+      color: var(--santorini);
+      line-height: 1.6;
+    }
+    
+    /* Cover */
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: var(--santorini);
+      color: var(--cream);
+      padding: 60px 40px;
+      position: relative;
+    }
+    
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      right: 40px;
+      bottom: 40px;
+      border: 1px solid var(--sand);
+      opacity: 0.3;
+      pointer-events: none;
+    }
+    
+    .cover-logo {
+      width: 80px;
+      margin-bottom: 40px;
+      filter: brightness(0) invert(1);
+    }
+    
+    .cover h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 56px;
+      font-weight: 400;
+      letter-spacing: 4px;
+      margin-bottom: 16px;
+    }
+    
+    .cover .lot {
+      font-size: 14px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--sand);
+      margin-bottom: 40px;
+    }
+    
+    .cover .tagline {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-style: italic;
+      opacity: 0.8;
+      max-width: 500px;
+    }
+    
+    .cover .scroll-hint {
+      position: absolute;
+      bottom: 60px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+    
+    /* Section */
+    .section {
+      min-height: 100vh;
+      padding: 80px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .section-dark {
+      background: var(--santorini);
+      color: var(--cream);
+    }
+    
+    .section-limestone {
+      background: var(--limestone);
+    }
+    
+    .section-keswick {
+      background: var(--keswick);
+      color: var(--cream);
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    
+    .section-header .overline {
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--sand);
+      margin-bottom: 16px;
+    }
+    
+    .section-header h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      margin-bottom: 16px;
+    }
+    
+    .section-header p {
+      font-size: 16px;
+      opacity: 0.7;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    /* Selector Layout */
+    .selector-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 60px;
+      align-items: center;
+    }
+    
+    @media (max-width: 900px) {
+      .selector-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+    }
+    
+    /* Render Display */
+    .render-display {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+    
+    .render-display img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: opacity 0.3s ease;
+    }
+    
+    .render-placeholder {
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, #e0ddd5 0%, #d4c9b5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--keswick);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    
+    /* Options Panel */
+    .options-panel {
+      background: white;
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    }
+    
+    .section-dark .options-panel {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+    }
+    
+    .option-group {
+      margin-bottom: 32px;
+    }
+    
+    .option-group:last-child {
+      margin-bottom: 0;
+    }
+    
+    .option-group h4 {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--keswick);
+      margin-bottom: 16px;
+    }
+    
+    .section-dark .option-group h4 {
+      color: var(--sand);
+    }
+    
+    .option-choices {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .option-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border: 2px solid #e0ddd5;
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-width: 80px;
+    }
+    
+    .option-btn:hover {
+      border-color: var(--keswick);
+    }
+    
+    .option-btn.selected {
+      border-color: var(--keswick);
+      background: var(--cream);
+    }
+    
+    .option-swatch {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    
+    .option-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--santorini);
+      text-align: center;
+    }
+    
+    /* Summary Section */
+    .summary {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .summary-card {
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    }
+    
+    .summary-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 28px;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+    
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    
+    @media (max-width: 600px) {
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid #e0ddd5;
+    }
+    
+    .summary-item-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #666;
+    }
+    
+    .summary-item-value {
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .summary-item-swatch {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    
+    /* CTA */
+    .cta-button {
+      display: inline-block;
+      padding: 18px 40px;
+      background: var(--keswick);
+      color: white;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background 0.3s;
+      margin-top: 40px;
+    }
+    
+    .cta-button:hover {
+      background: var(--santorini);
+    }
+    
+    /* Progress Bar */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--sand);
+      z-index: 100;
+      transition: width 0.3s;
+    }
+    
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 60px 40px;
+      background: var(--santorini);
+      color: var(--cream);
+    }
+    
+    .footer-logo {
+      width: 60px;
+      margin-bottom: 24px;
+      filter: brightness(0) invert(1);
+    }
+    
+    .footer p {
+      font-size: 14px;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="progress-bar" id="progress"></div>
+  
+  <!-- Cover -->
+  <section class="cover">
+    <img src="https://coyolnosara.com/images/logo.png" alt="Coyol" class="cover-logo">
+    <h1>Casa Cacao</h1>
+    <p class="lot">Lot 18 · Mar Azul</p>
+    <p class="tagline">Make it yours</p>
+    <p class="scroll-hint">Scroll to begin →</p>
+  </section>
+  
+  <!-- Intro -->
+  <section class="section">
+    <div class="section-header">
+      <p class="overline">Finish Selection</p>
+      <h2>Design Your Home</h2>
+      <p>Select from our curated palette of finishes. Every option has been chosen to complement the architecture and environment of Mar Azul.</p>
+    </div>
+  </section>
+  
+  <!-- Exterior -->
+  <section class="section section-limestone" id="exterior">
+    <div class="section-header">
+      <p class="overline">01</p>
+      <h2>Exterior</h2>
+    </div>
+    <div class="selector-container">
+      <div class="render-display">
+        <div class="render-placeholder">Exterior render coming soon</div>
+      </div>
+      <div class="options-panel">
+        <div class="option-group">
+          <h4>Wall Color</h4>
+          <div class="option-choices" data-category="exterior-wall">
+            <button class="option-btn selected" data-value="white">
+              <span class="option-swatch" style="background: #F5F3EF;"></span>
+              <span class="option-label">White</span>
+            </button>
+            <button class="option-btn" data-value="warm-grey">
+              <span class="option-swatch" style="background: #B8B0A8;"></span>
+              <span class="option-label">Warm Grey</span>
+            </button>
+            <button class="option-btn" data-value="terracotta">
+              <span class="option-swatch" style="background: #C4A67C;"></span>
+              <span class="option-label">Sand</span>
+            </button>
+          </div>
+        </div>
+        <div class="option-group">
+          <h4>Pool Finish</h4>
+          <div class="option-choices" data-category="pool">
+            <button class="option-btn selected" data-value="blue">
+              <span class="option-swatch" style="background: #4A90A4;"></span>
+              <span class="option-label">Ocean Blue</span>
+            </button>
+            <button class="option-btn" data-value="green">
+              <span class="option-swatch" style="background: #5D7A6A;"></span>
+              <span class="option-label">Natural Green</span>
+            </button>
+          </div>
+        </div>
+        <div class="option-group">
+          <h4>Deck Stone</h4>
+          <div class="option-choices" data-category="deck">
+            <button class="option-btn selected" data-value="travertine">
+              <span class="option-swatch" style="background: #D4C9B5;"></span>
+              <span class="option-label">Travertine</span>
+            </button>
+            <button class="option-btn" data-value="grey-stone">
+              <span class="option-swatch" style="background: #8A8A8A;"></span>
+              <span class="option-label">Grey Stone</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Kitchen -->
+  <section class="section section-dark" id="kitchen">
+    <div class="section-header">
+      <p class="overline">02</p>
+      <h2>Kitchen</h2>
+    </div>
+    <div class="selector-container">
+      <div class="render-display">
+        <div class="render-placeholder" style="background: linear-gradient(135deg, #2a2f24 0%, #1a1f16 100%); color: #D4C9B5;">Kitchen render coming soon</div>
+      </div>
+      <div class="options-panel">
+        <div class="option-group">
+          <h4>Cabinetry</h4>
+          <div class="option-choices" data-category="kitchen-cabinet">
+            <button class="option-btn selected" data-value="natural">
+              <span class="option-swatch" style="background: #B8956B;"></span>
+              <span class="option-label">Natural Wood</span>
+            </button>
+            <button class="option-btn" data-value="white">
+              <span class="option-swatch" style="background: #F5F3EF;"></span>
+              <span class="option-label">White</span>
+            </button>
+            <button class="option-btn" data-value="charcoal">
+              <span class="option-swatch" style="background: #3A3A3A;"></span>
+              <span class="option-label">Charcoal</span>
+            </button>
+          </div>
+        </div>
+        <div class="option-group">
+          <h4>Countertop</h4>
+          <div class="option-choices" data-category="kitchen-counter">
+            <button class="option-btn selected" data-value="marble">
+              <span class="option-swatch" style="background: linear-gradient(135deg, #fff 0%, #e8e4e0 50%, #fff 100%);"></span>
+              <span class="option-label">Carrara Marble</span>
+            </button>
+            <button class="option-btn" data-value="granite">
+              <span class="option-swatch" style="background: #2A2A2A;"></span>
+              <span class="option-label">Black Granite</span>
+            </button>
+            <button class="option-btn" data-value="concrete">
+              <span class="option-swatch" style="background: #9A9A9A;"></span>
+              <span class="option-label">Concrete</span>
+            </button>
+          </div>
+        </div>
+        <div class="option-group">
+          <h4>Fixtures</h4>
+          <div class="option-choices" data-category="kitchen-tap">
+            <button class="option-btn selected" data-value="black">
+              <span class="option-swatch" style="background: #1A1A1A;"></span>
+              <span class="option-label">Matte Black</span>
+            </button>
+            <button class="option-btn" data-value="brass">
+              <span class="option-swatch" style="background: linear-gradient(135deg, #D4A857 0%, #C4973D 100%);"></span>
+              <span class="option-label">Brushed Brass</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Bathroom -->
+  <section class="section" id="bathroom">
+    <div class="section-header">
+      <p class="overline">03</p>
+      <h2>Master Bathroom</h2>
+    </div>
+    <div class="selector-container">
+      <div class="render-display">
+        <div class="render-placeholder">Bathroom render coming soon</div>
+      </div>
+      <div class="options-panel">
+        <div class="option-group">
+          <h4>Tile</h4>
+          <div class="option-choices" data-category="bath-tile">
+            <button class="option-btn selected" data-value="terrazzo">
+              <span class="option-swatch" style="background: linear-gradient(135deg, #E8E4E0 0%, #D4C9B5 100%);"></span>
+              <span class="option-label">Terrazzo</span>
+            </button>
+            <button class="option-btn" data-value="grey">
+              <span class="option-swatch" style="background: #7A7A7A;"></span>
+              <span class="option-label">Large Grey</span>
+            </button>
+            <button class="option-btn" data-value="stone">
+              <span class="option-swatch" style="background: #A89F94;"></span>
+              <span class="option-label">Natural Stone</span>
+            </button>
+          </div>
+        </div>
+        <div class="option-group">
+          <h4>Fixtures</h4>
+          <div class="option-choices" data-category="bath-tap">
+            <button class="option-btn selected" data-value="black">
+              <span class="option-swatch" style="background: #1A1A1A;"></span>
+              <span class="option-label">Matte Black</span>
+            </button>
+            <button class="option-btn" data-value="brass">
+              <span class="option-swatch" style="background: linear-gradient(135deg, #D4A857 0%, #C4973D 100%);"></span>
+              <span class="option-label">Brushed Brass</span>
+            </button>
+          </div>
+        </div>
+        <div class="option-group">
+          <h4>Shower</h4>
+          <div class="option-choices" data-category="bath-shower">
+            <button class="option-btn selected" data-value="rain">
+              <span class="option-swatch" style="background: #3A3A3A;"></span>
+              <span class="option-label">Rain Head</span>
+            </button>
+            <button class="option-btn" data-value="dual">
+              <span class="option-swatch" style="background: #5A5A5A;"></span>
+              <span class="option-label">Dual System</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Bedroom -->
+  <section class="section section-keswick" id="bedroom">
+    <div class="section-header">
+      <p class="overline">04</p>
+      <h2>Bedroom</h2>
+    </div>
+    <div class="selector-container">
+      <div class="render-display">
+        <div class="render-placeholder" style="background: linear-gradient(135deg, #4a5d4a 0%, #3d4f3d 100%); color: #D4C9B5;">Bedroom render coming soon</div>
+      </div>
+      <div class="options-panel">
+        <div class="option-group">
+          <h4>Wall Color</h4>
+          <div class="option-choices" data-category="bed-wall">
+            <button class="option-btn selected" data-value="white">
+              <span class="option-swatch" style="background: #F5F3EF;"></span>
+              <span class="option-label">White</span>
+            </button>
+            <button class="option-btn" data-value="warm">
+              <span class="option-swatch" style="background: #E8E0D5;"></span>
+              <span class="option-label">Warm Cream</span>
+            </button>
+            <button class="option-btn" data-value="sage">
+              <span class="option-swatch" style="background: #C5CEC0;"></span>
+              <span class="option-label">Sage</span>
+            </button>
+          </div>
+        </div>
+        <div class="option-group">
+          <h4>Closet Finish</h4>
+          <div class="option-choices" data-category="bed-closet">
+            <button class="option-btn selected" data-value="natural">
+              <span class="option-swatch" style="background: #B8956B;"></span>
+              <span class="option-label">Natural Wood</span>
+            </button>
+            <button class="option-btn" data-value="white">
+              <span class="option-swatch" style="background: #F5F3EF;"></span>
+              <span class="option-label">White</span>
+            </button>
+          </div>
+        </div>
+        <div class="option-group">
+          <h4>Door Style</h4>
+          <div class="option-choices" data-category="bed-door">
+            <button class="option-btn selected" data-value="pivot">
+              <span class="option-swatch" style="background: #4A4A4A;"></span>
+              <span class="option-label">Pivot</span>
+            </button>
+            <button class="option-btn" data-value="barn">
+              <span class="option-swatch" style="background: #8B6914;"></span>
+              <span class="option-label">Barn Door</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Laundry -->
+  <section class="section section-limestone" id="laundry">
+    <div class="section-header">
+      <p class="overline">05</p>
+      <h2>Laundry</h2>
+    </div>
+    <div class="selector-container">
+      <div class="render-display">
+        <img src="/images/finishes/laundry-placeholder.jpg" alt="Laundry" onerror="this.outerHTML='<div class=\'render-placeholder\'>Laundry render coming soon</div>'">
+      </div>
+      <div class="options-panel">
+        <div class="option-group">
+          <h4>Cabinetry</h4>
+          <div class="option-choices" data-category="laundry-cabinet">
+            <button class="option-btn selected" data-value="natural">
+              <span class="option-swatch" style="background: #B8956B;"></span>
+              <span class="option-label">Natural Wood</span>
+            </button>
+            <button class="option-btn" data-value="white">
+              <span class="option-swatch" style="background: #F5F3EF;"></span>
+              <span class="option-label">White</span>
+            </button>
+          </div>
+        </div>
+        <div class="option-group">
+          <h4>Countertop</h4>
+          <div class="option-choices" data-category="laundry-counter">
+            <button class="option-btn selected" data-value="quartz">
+              <span class="option-swatch" style="background: #E8E4E0;"></span>
+              <span class="option-label">White Quartz</span>
+            </button>
+            <button class="option-btn" data-value="concrete">
+              <span class="option-swatch" style="background: #9A9A9A;"></span>
+              <span class="option-label">Concrete</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Summary -->
+  <section class="section section-dark" id="summary">
+    <div class="section-header">
+      <p class="overline">Your Selections</p>
+      <h2>Summary</h2>
+    </div>
+    <div class="summary">
+      <div class="summary-card">
+        <h3 class="summary-title">Casa Cacao — Lot 18</h3>
+        <div class="summary-grid" id="summary-grid">
+          <!-- Filled by JavaScript -->
+        </div>
+        <div style="text-align: center;">
+          <a href="mailto:info@coyolnosara.com?subject=Casa%20Cacao%20Finish%20Selections" class="cta-button">Submit Selections</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <section class="footer">
+    <img src="https://coyolnosara.com/images/logo.png" alt="Coyol" class="footer-logo">
+    <p>Coyol Group · Mar Azul, Nosara</p>
+    <p style="margin-top: 8px;">coyolnosara.com</p>
+  </section>
+  
+  <script>
+    // Selection state
+    const selections = {
+      'exterior-wall': { value: 'white', label: 'White', color: '#F5F3EF' },
+      'pool': { value: 'blue', label: 'Ocean Blue', color: '#4A90A4' },
+      'deck': { value: 'travertine', label: 'Travertine', color: '#D4C9B5' },
+      'kitchen-cabinet': { value: 'natural', label: 'Natural Wood', color: '#B8956B' },
+      'kitchen-counter': { value: 'marble', label: 'Carrara Marble', color: '#fff' },
+      'kitchen-tap': { value: 'black', label: 'Matte Black', color: '#1A1A1A' },
+      'bath-tile': { value: 'terrazzo', label: 'Terrazzo', color: '#E8E4E0' },
+      'bath-tap': { value: 'black', label: 'Matte Black', color: '#1A1A1A' },
+      'bath-shower': { value: 'rain', label: 'Rain Head', color: '#3A3A3A' },
+      'bed-wall': { value: 'white', label: 'White', color: '#F5F3EF' },
+      'bed-closet': { value: 'natural', label: 'Natural Wood', color: '#B8956B' },
+      'bed-door': { value: 'pivot', label: 'Pivot', color: '#4A4A4A' },
+      'laundry-cabinet': { value: 'natural', label: 'Natural Wood', color: '#B8956B' },
+      'laundry-counter': { value: 'quartz', label: 'White Quartz', color: '#E8E4E0' }
+    };
+    
+    const categoryLabels = {
+      'exterior-wall': 'Exterior Wall',
+      'pool': 'Pool Finish',
+      'deck': 'Deck Stone',
+      'kitchen-cabinet': 'Kitchen Cabinets',
+      'kitchen-counter': 'Kitchen Counter',
+      'kitchen-tap': 'Kitchen Fixtures',
+      'bath-tile': 'Bathroom Tile',
+      'bath-tap': 'Bathroom Fixtures',
+      'bath-shower': 'Shower',
+      'bed-wall': 'Bedroom Walls',
+      'bed-closet': 'Closet Finish',
+      'bed-door': 'Door Style',
+      'laundry-cabinet': 'Laundry Cabinets',
+      'laundry-counter': 'Laundry Counter'
+    };
+    
+    // Handle option clicks
+    document.querySelectorAll('.option-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const container = this.closest('.option-choices');
+        const category = container.dataset.category;
+        
+        // Update UI
+        container.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+        this.classList.add('selected');
+        
+        // Update state
+        const swatch = this.querySelector('.option-swatch');
+        selections[category] = {
+          value: this.dataset.value,
+          label: this.querySelector('.option-label').textContent,
+          color: swatch.style.background
+        };
+        
+        // Update summary
+        updateSummary();
+        
+        // Here we would swap the render image
+        // swapRender(category, this.dataset.value);
+      });
+    });
+    
+    function updateSummary() {
+      const grid = document.getElementById('summary-grid');
+      grid.innerHTML = '';
+      
+      for (const [category, selection] of Object.entries(selections)) {
+        const item = document.createElement('div');
+        item.className = 'summary-item';
+        item.innerHTML = `
+          <span class="summary-item-label">${categoryLabels[category]}</span>
+          <span class="summary-item-value">
+            <span class="summary-item-swatch" style="background: ${selection.color};"></span>
+            ${selection.label}
+          </span>
+        `;
+        grid.appendChild(item);
+      }
+    }
+    
+    // Progress bar
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      document.getElementById('progress').style.width = progress + '%';
+    });
+    
+    // Initial summary
+    updateSummary();
+  </script>
+</body>
+</html>
