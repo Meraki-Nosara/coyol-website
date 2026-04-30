@@ -390,6 +390,54 @@
       
       <div class="divider"></div>
       
+      <!-- Kitchen Section Header -->
+      <div class="panel-header" style="margin-top: 24px;">
+        <div class="panel-number">02</div>
+        <h2 class="panel-title">Kitchen Finishes</h2>
+      </div>
+      
+      <!-- Countertop Marble -->
+      <div class="swatches-section">
+        <div class="swatches-label">Countertop</div>
+        <div class="swatches-row" data-category="countertop">
+          <div class="swatch selected" data-value="stormwave" data-label="Stormwave">
+            <div class="swatch-circle" style="background-image: url('/images/finishes/swatches/marble-stormwave.jpg');"></div>
+            <span class="swatch-name">Stormwave</span>
+          </div>
+          <div class="swatch" data-value="emerald" data-label="Emerald">
+            <div class="swatch-circle" style="background-image: url('/images/finishes/swatches/marble-emerald.jpg');"></div>
+            <span class="swatch-name">Emerald</span>
+          </div>
+          <div class="swatch" data-value="arctic" data-label="Arctic Flow">
+            <div class="swatch-circle" style="background-image: url('/images/finishes/swatches/marble-arctic-flow.jpg');"></div>
+            <span class="swatch-name">Arctic Flow</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="divider"></div>
+      
+      <!-- Cabinet Wood -->
+      <div class="swatches-section">
+        <div class="swatches-label">Cabinetry</div>
+        <div class="swatches-row" data-category="cabinet">
+          <div class="swatch selected" data-value="walnut" data-label="Dark Walnut">
+            <div class="swatch-circle" style="background-image: url('/images/finishes/swatches/wood-walnut.jpg');"></div>
+            <span class="swatch-name">Dark Walnut</span>
+          </div>
+          <div class="swatch" data-value="oak" data-label="Natural Oak">
+            <div class="swatch-circle" style="background-image: url('/images/finishes/swatches/wood-oak.jpg');"></div>
+            <span class="swatch-name">Natural Oak</span>
+          </div>
+          <div class="swatch" data-value="black" data-label="Black Stain">
+            <div class="swatch-circle" style="background-image: url('/images/finishes/swatches/wood-black.jpg');"></div>
+            <span class="swatch-name">Black Stain</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="divider"></div>
+      
       <!-- Submit -->
       <div class="cta-section">
         <a href="#" class="cta-button" id="submit-btn">Submit Selections</a>
@@ -407,7 +455,9 @@
     const selections = {
       wall: { value: 'white', label: 'White Venetian' },
       pool: { value: 'sukabumi', label: 'Sukabumi Stone' },
-      deck: { value: 'travertino', label: 'Travertino' }
+      deck: { value: 'travertino', label: 'Travertino' },
+      countertop: { value: 'stormwave', label: 'Stormwave' },
+      cabinet: { value: 'walnut', label: 'Dark Walnut' }
     };
     
     // Handle swatch clicks
@@ -458,11 +508,16 @@
     document.getElementById('submit-btn').addEventListener('click', function(e) {
       e.preventDefault();
       
-      const body = encodeURIComponent(`Casa Cacao - Lot 18 - Exterior Finish Selections
+      const body = encodeURIComponent(`Casa Cacao - Lot 18 - Finish Selections
 
+EXTERIOR
 Wall Finish: ${selections.wall.label}
 Pool Finish: ${selections.pool.label}
 Deck Stone: ${selections.deck.label}
+
+KITCHEN
+Countertop: ${selections.countertop.label}
+Cabinetry: ${selections.cabinet.label}
 
 ---
 Submitted via Coyol Finish Selector`);
