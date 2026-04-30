@@ -363,10 +363,7 @@
       </div>
       
       <div class="render-frame">
-        <div class="render-placeholder" id="exterior-render">
-          <span>Exterior render</span>
-          <small>Waiting for Milagro's renders</small>
-        </div>
+        <img src="/images/finishes/renders/exterior_white_sukabumi_travertino.jpg" alt="Exterior render" class="render-image" id="exterior-render">
       </div>
       
       <!-- Wall Color -->
@@ -501,20 +498,20 @@
     }
     
     function updateRender() {
-      // This will swap the render image when Milagro's renders are ready
+      // Swap render based on selections
       // Filename format: exterior_[wall]_[pool]_[deck].jpg
-      const filename = `exterior_${selections.wall.value}_${selections.pool.value}_${selections.deck.value}.jpg`;
+      const wallMap = { white: 'white', beige: 'beige', black: 'black' };
+      const poolMap = { sukabumi: 'sukabumi', onix: 'onix' };
+      const deckMap = { travertino: 'travertino', piedra: 'piedra' };
+      
+      const wall = wallMap[selections.wall.value] || 'white';
+      const pool = poolMap[selections.pool.value] || 'sukabumi';
+      const deck = deckMap[selections.deck.value] || 'travertino';
+      
+      const filename = `exterior_${wall}_${pool}_${deck}.jpg`;
       const renderEl = document.getElementById('exterior-render');
       
-      // Check if render exists (for now, show placeholder)
-      const img = new Image();
-      img.onload = function() {
-        renderEl.innerHTML = `<img src="/images/finishes/renders/${filename}" class="render-image" alt="Exterior render">`;
-      };
-      img.onerror = function() {
-        // Keep placeholder
-      };
-      img.src = `/images/finishes/renders/${filename}`;
+      renderEl.src = `/images/finishes/renders/${filename}`;
     }
     
     function updateSummary() {
