@@ -359,10 +359,65 @@
       }
     }
     
-    /* Landscape phone */
+    /* Landscape phone - use side-by-side layout */
     @media (max-width: 900px) and (orientation: landscape) {
+      .main {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+      
+      .render-panel {
+        position: sticky;
+        top: 70px;
+        height: calc(100vh - 70px);
+        padding: 12px;
+      }
+      
       .render-frame {
-        max-height: 50vh;
+        max-height: none;
+        height: 100%;
+        aspect-ratio: auto;
+      }
+      
+      .render-image {
+        object-fit: contain;
+      }
+      
+      .current-selection {
+        display: none;
+      }
+      
+      .swatches-panel {
+        border-left: 1px solid rgba(0,0,0,0.05);
+        border-top: none;
+        padding: 16px;
+        overflow-y: auto;
+        max-height: calc(100vh - 70px);
+      }
+      
+      .panel-header {
+        margin-bottom: 16px;
+      }
+      
+      .panel-title {
+        font-size: 18px;
+      }
+      
+      .swatches-section {
+        margin-bottom: 16px;
+      }
+      
+      .swatch-circle {
+        width: 48px;
+        height: 48px;
+      }
+      
+      .swatches-row {
+        gap: 12px;
+      }
+      
+      .divider {
+        margin: 8px 0 16px;
       }
     }
   </style>

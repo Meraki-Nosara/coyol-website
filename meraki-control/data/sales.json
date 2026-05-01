@@ -1320,6 +1320,42 @@
       "iva13": 59630,
       "source": "ingrid_email",
       "cashier": "Jerry Serrano"
+    },
+    {
+      "date": "2026-04-30",
+      "restaurant": "laluna",
+      "cash": 256180,
+      "card": 3611506,
+      "total": 3867686,
+      "netSales": 3149914,
+      "service10": 308283,
+      "iva13": 409489,
+      "source": "ingrid_email",
+      "cashier": "Julia Arrieta"
+    },
+    {
+      "date": "2026-04-30",
+      "restaurant": "coyol",
+      "cash": 52000,
+      "card": 884734,
+      "total": 936734,
+      "netSales": 725800,
+      "service10": 72580,
+      "iva13": 94354,
+      "source": "ingrid_email",
+      "cashier": "George Lopez"
+    },
+    {
+      "date": "2026-04-30",
+      "restaurant": "esh",
+      "cash": 413152,
+      "card": 319047,
+      "total": 732199,
+      "netSales": 507872,
+      "service10": 66028,
+      "iva13": 0,
+      "source": "ingrid_email",
+      "cashier": "Raul Rodriguez"
     }
   ],
   "lastUpdated": "2026-04-13T07:30:00.000Z",
