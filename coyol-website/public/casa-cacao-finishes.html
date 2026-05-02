@@ -438,7 +438,7 @@
     <!-- Left - Render -->
     <div class="render-panel">
       <div class="render-frame">
-        <img src="/images/finishes/renders/exterior_white_sukabumi_travertino.jpg" alt="Exterior render" class="render-image" id="exterior-render">
+        <img src="/images/finishes/renders/exterior_white_sukabumi_travertino.png" alt="Exterior render" class="render-image" id="exterior-render">
       </div>
       <div class="current-selection">
         <div class="current-selection-label">Current Selection</div>
@@ -614,12 +614,8 @@
       const pool = selections.pool.value;
       const deck = selections.deck.value;
       
-      // PNG for sukabumi combinations (green pool), JPG for others
-      let ext = 'jpg';
-      if (pool === 'sukabumi') {
-        ext = 'png';
-      }
-      let filename = `exterior_${wall}_${pool}_${deck}.${ext}`;
+      // All renders now PNG for consistency
+      let filename = `exterior_${wall}_${pool}_${deck}.png`;
       
       const renderEl = document.getElementById('exterior-render');
       renderEl.src = `/images/finishes/renders/${filename}`;
