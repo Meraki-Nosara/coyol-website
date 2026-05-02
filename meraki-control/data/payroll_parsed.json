@@ -1,0 +1,221 @@
+{
+  "by_restaurant": {
+    "null": {
+      "paid": 162846096.94000003,
+      "gross": 140667055.53000003,
+      "hours": 11402688.509999998,
+      "employee_count": 55,
+      "employees": [
+        "DIEGO ALEJANDRO LOPEZ ALVAREZ",
+        "SILVIA ELENA DUARTE VEGA",
+        "GRACIELA GARCIA CASTILLO",
+        "ROSAURA CASTILLO ALVARADO",
+        "NELLY MATARRITA ROSALES",
+        "ALEJANDRO XAVIER SALAZAR CARVAJAL",
+        "LEINER RODRIGUEZ VILLALOBOS",
+        "MARIA NELA HERNANDEZ GUTIERREZ",
+        "ALVARO LUIS PIÑAR JIMENEZ",
+        "LUZ MERCEDES ESPINOZA MENDOZA",
+        "MARCO GERVASINI MARTINEZ",
+        "JORGE LUIS MATAMOROS DIAZ",
+        "ISABEL CRISTINA PRENDAS HERNANDEZ",
+        "SOFIA NATALIA CAMPOS BRENEZ",
+        "MAURICIO ZUÑIGA CENTENO",
+        "MARISELA DEL CARMEN MENDOZA CALERO",
+        "JOHN FREISER LOPEZ JIMENEZ",
+        "JAIRO ZUÑIGA PEREZ",
+        "LEONARDO LOPEZ MEJIA",
+        "FRANKLIN ALI MENDOZA",
+        "JOHANNA MARBETH PARRA REYES",
+        "LINDA LORENA GUEVARA TORRES",
+        "JULIA MARIA ARRIETA EDUARTE",
+        "DANIEL ARTURO BLANCO PALACIOS",
+        "LUIS GUILLERMO QUESADA HERRADORA",
+        "KIMBERLEEN PAOLA MOLINA SOTO",
+        "EIMER EMANUEL VALENCIA SERRANO",
+        "VERONICA MEJIA GONZALES",
+        "NIELSI SELENE NAVARRETE GOMEZ",
+        "INGRID MEJIAS ANGULO",
+        "BYRON ANTONIO ESPINOZA ALVARADO",
+        "GEORGE DANIEL LOPEZ GOMEZ",
+        "ELIZABETH SABALLO MAYORGA",
+        "ESMERALDA DAYANA LOPEZ MATARRITA",
+        "DARWIN TUGWELL FONSECA",
+        "EDER JESUS ROJAS HERNANDEZ",
+        "JERRY SERRANO CASTRO",
+        "BRYAN ONIEL ZAMORA CRUZ",
+        "VERONICA MEJIAS GONZALES",
+        "PABLO ALEJANDRO ROMERO MONTIEL",
+        "IVAN OBANDO REYES",
+        "MARYON PERI",
+        "MARY JOSE CASTILLO RUIZ",
+        "BRYAN PILA REFUERZO",
+        "SHARON TATIANA MATARRITA SEGURA",
+        "JENNY ISABEL MUÑOZ  ESPINOZA",
+        "ANDRES NAUN ROJAS CHAVARRIA",
+        "MARIA TERESA SABALLO MAYORGA",
+        "INGRID MEJIAS ANGULO out NO CCSS",
+        "KEISY DANIELA RUIZ RUIZ",
+        "AUNNER CARRILLO RANGEL",
+        "CARMEN ISABEL MUÑOZ ESPINOZA",
+        "INGRID MEJIAS ANGULO out",
+        "JORGE JOSE SILVA ESPINOZA",
+        "KEYLA ARLINA REYES NARVAEZ"
+      ]
+    },
+    "laluna": {
+      "paid": 505851984.67000014,
+      "gross": 191708351.32,
+      "hours": 4256204.9,
+      "employee_count": 50,
+      "employees": [
+        "DIEGO ALEJANDRO LOPEZ ALVAREZ",
+        "GRACIELA GARCIA CASTILLO",
+        "ROSAURA CASTILLO ALVARADO",
+        "ALEJANDRO XAVIER SALAZAR CARVAJAL",
+        "LEINER RODRIGUEZ VILLALOBOS",
+        "CARLOS VARGAS FERNANDEZ",
+        "JORDAN ENRIQUE JIMENEZ GONZALES",
+        "MARIA NELA HERNANDEZ GUTIERREZ",
+        "LUZ MERCEDES ESPINOZA MENDOZA",
+        "MARCO GERVASINI MARTINEZ",
+        "ISABEL CRISTINA PRENDAS HERNANDEZ",
+        "SOFIA NATALIA CAMPOS BRENEZ",
+        "MAURICIO ZUÑIGA CENTENO",
+        "MARISELA DEL CARMEN MENDOZA CALERO",
+        "LEONARDO LOPEZ MEJIA",
+        "JAIRO ZUÑIGA PEREZ",
+        "YERLING CARRILLO LEAL",
+        "FRANKLIN ALI MENDOZA",
+        "JOHANNA MARBETH PARRA REYES",
+        "LINDA LORENA GUEVARA TORRES",
+        "JULIA MARIA ARRIETA EDUARTE",
+        "ZULEYMA RUIZ CAMPOS",
+        "KIMBERLEEN PAOLA MOLINA SOTO",
+        "EIMER EMANUEL VALENCIA SERRANO",
+        "VERONICA MEJIA GONZALES",
+        "NIELSI SELENE NAVARRETE GOMEZ",
+        "EVELYN UGALDE RODRIGUEZ",
+        "BYRON ANTONIO ESPINOZA ALVARADO",
+        "ELIZABETH SABALLO MAYORGA",
+        "CHARLIN CORDOBA LOPEZ",
+        "ESMERALDA DAYANA LOPEZ MATARRITA",
+        "DARWIN TUGWELL FONSECA",
+        "EDER JESUS ROJAS HERNANDEZ",
+        "JERRY SERRANO CASTRO",
+        "BRYAN ONIEL ZAMORA CRUZ",
+        "VERONICA MEJIAS GONZALES",
+        "RONALD OLIVIER CRUZ NOINDICAOTRO",
+        "CINDY VANESSA VARGAS HERRERA",
+        "MARY JOSE CASTILLO RUIZ",
+        "SHARON TATIANA MATARRITA SEGURA",
+        "JENNY ISABEL MUÑOZ  ESPINOZA",
+        "ANDRES NAUN ROJAS CHAVARRIA",
+        "MARIA TERESA SABALLO MAYORGA",
+        "ZELANDIA CRUZ BRENES",
+        "MARCO CESAR SANDOVAL JUAREZ",
+        "KEISY DANIELA RUIZ RUIZ",
+        "CARMEN ISABEL MUÑOZ ESPINOZA",
+        "JORGE JOSE SILVA ESPINOZA",
+        "KEYLA ARLINA REYES NARVAEZ",
+        "ERICK ANTONIO CISNE SILVA"
+      ]
+    }
+  },
+  "by_month": {
+    "2026-04": {
+      "paid": 20717878.610000003,
+      "gross": 10613871.8,
+      "count": 3
+    },
+    "2026-03": {
+      "paid": 68598145.69,
+      "gross": 26418316.599999998,
+      "count": 7
+    },
+    "2025-01": {
+      "paid": 54798295.14,
+      "gross": 22443625.060000002,
+      "count": 6
+    },
+    "2025-04": {
+      "paid": 37598423.9,
+      "gross": 22703808.870000005,
+      "count": 6
+    },
+    "2025-02": {
+      "paid": 31120010.260000005,
+      "gross": 13789771.4,
+      "count": 4
+    },
+    "2025-03": {
+      "paid": 45170755.13,
+      "gross": 21232935.0,
+      "count": 6
+    },
+    "2026-02": {
+      "paid": 34024056.36999999,
+      "gross": 10521042.7,
+      "count": 3
+    },
+    "2025-08": {
+      "paid": 25635840.240000002,
+      "gross": 16285178.88,
+      "count": 5
+    },
+    "2026-01": {
+      "paid": 54991041.370000005,
+      "gross": 23595582.419999998,
+      "count": 6
+    },
+    "2025-05": {
+      "paid": 28708746.150000006,
+      "gross": 18220470.35,
+      "count": 6
+    },
+    "2025-12": {
+      "paid": 47002656.400000006,
+      "gross": 23548561.160000004,
+      "count": 6
+    },
+    "2025-09": {
+      "paid": 19022325.6,
+      "gross": 16660741.86,
+      "count": 5
+    },
+    "2025-11": {
+      "paid": 35884862.17,
+      "gross": 19654811.52,
+      "count": 6
+    },
+    "2026-08": {
+      "paid": 5802622.3100000005,
+      "gross": 3366019.4,
+      "count": 1
+    },
+    "2025-10": {
+      "paid": 15172497.89,
+      "gross": 12331746.73,
+      "count": 4
+    },
+    "2025-07": {
+      "paid": 42304995.73,
+      "gross": 18523186.91,
+      "count": 7
+    },
+    "2026-09": {
+      "paid": 4358976.94,
+      "gross": 3141299.3000000003,
+      "count": 1
+    },
+    "2025-06": {
+      "paid": 29424509.16,
+      "gross": 16821639.66,
+      "count": 6
+    }
+  },
+  "grand_total_paid": 505851984.67000014,
+  "grand_total_gross": 191708351.32,
+  "grand_total_hours": 4256204.9,
+  "files_parsed": 97
+}
