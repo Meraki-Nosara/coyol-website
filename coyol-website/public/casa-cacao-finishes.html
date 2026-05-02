@@ -614,11 +614,12 @@
       const pool = selections.pool.value;
       const deck = selections.deck.value;
       
-      // Try jpg first, fall back to png for black_sukabumi_piedra
-      let filename = `exterior_${wall}_${pool}_${deck}.jpg`;
-      if (wall === 'black' && pool === 'sukabumi' && deck === 'piedra') {
-        filename = `exterior_${wall}_${pool}_${deck}.png`;
+      // PNG for sukabumi combinations (green pool), JPG for others
+      let ext = 'jpg';
+      if (pool === 'sukabumi') {
+        ext = 'png';
       }
+      let filename = `exterior_${wall}_${pool}_${deck}.${ext}`;
       
       const renderEl = document.getElementById('exterior-render');
       renderEl.src = `/images/finishes/renders/${filename}`;
