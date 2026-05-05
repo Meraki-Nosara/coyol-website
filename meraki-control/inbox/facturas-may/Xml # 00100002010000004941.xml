@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FacturaElectronica xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica">
+  <Clave>50631032600310261882000100002010000004941101004941</Clave>
+  <ProveedorSistemas>3101750500</ProveedorSistemas>
+  <CodigoActividadEmisor>5610.0</CodigoActividadEmisor>
+  <CodigoActividadReceptor>7500.0</CodigoActividadReceptor>
+  <NumeroConsecutivo>00100002010000004941</NumeroConsecutivo>
+  <FechaEmision>2026-03-31T14:53:21</FechaEmision>
+  <Emisor>
+    <Nombre>MERAKI FAMILY LTDA</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3102618820</Numero>
+    </Identificacion>
+    <Ubicacion>
+      <Provincia>5</Provincia>
+      <Canton>02</Canton>
+      <Distrito>06</Distrito>
+      <OtrasSenas>200 norte del BCR</OtrasSenas>
+    </Ubicacion>
+    <CorreoElectronico>merakifamilylimitada@gmail.com</CorreoElectronico>
+  </Emisor>
+  <Receptor>
+    <Nombre>Inversiones Veterinarias</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3101644244</Numero>
+    </Identificacion>
+    <CorreoElectronico>safarianimalclinic@gmail.com</CorreoElectronico>
+  </Receptor>
+  <CondicionVenta>01</CondicionVenta>
+  <DetalleServicio>
+    <LineaDetalle>
+      <NumeroLinea>1</NumeroLinea>
+      <CodigoCABYS>2349002019900</CodigoCABYS>
+      <Cantidad>2.0</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <Detalle>Cinnamon Roll</Detalle>
+      <PrecioUnitario>1858.4</PrecioUnitario>
+      <MontoTotal>3716.8</MontoTotal>
+      <SubTotal>3716.8</SubTotal>
+      <BaseImponible>3716.8</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13</Tarifa>
+        <Monto>483.18</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>483.18</ImpuestoNeto>
+      <MontoTotalLinea>4199.98</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>2</NumeroLinea>
+      <CodigoCABYS>2349002019900</CodigoCABYS>
+      <Cantidad>5.0</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <Detalle>Babka</Detalle>
+      <PrecioUnitario>1681.42</PrecioUnitario>
+      <MontoTotal>8407.10</MontoTotal>
+      <SubTotal>8407.10</SubTotal>
+      <BaseImponible>8407.10</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13</Tarifa>
+        <Monto>1092.92</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>1092.92</ImpuestoNeto>
+      <MontoTotalLinea>9500.02</MontoTotalLinea>
+    </LineaDetalle>
+  </DetalleServicio>
+  <ResumenFactura>
+    <CodigoTipoMoneda>
+      <CodigoMoneda>CRC</CodigoMoneda>
+      <TipoCambio>1</TipoCambio>
+    </CodigoTipoMoneda>
+    <TotalServGravados>0</TotalServGravados>
+    <TotalServExentos>0</TotalServExentos>
+    <TotalServNoSujeto>0</TotalServNoSujeto>
+    <TotalMercanciasGravadas>12123.90</TotalMercanciasGravadas>
+    <TotalMercanciasExentas>0</TotalMercanciasExentas>
+    <TotalMercNoSujeta>0</TotalMercNoSujeta>
+    <TotalGravado>12123.90</TotalGravado>
+    <TotalExento>0</TotalExento>
+    <TotalNoSujeto>0</TotalNoSujeto>
+    <TotalVenta>12123.90</TotalVenta>
+    <TotalDescuentos>0</TotalDescuentos>
+    <TotalVentaNeta>12123.90</TotalVentaNeta>
+    <TotalDesgloseImpuesto>
+      <Codigo>01</Codigo>
+      <CodigoTarifaIVA>08</CodigoTarifaIVA>
+      <TotalMontoImpuesto>1576.10</TotalMontoImpuesto>
+    </TotalDesgloseImpuesto>
+    <TotalImpuesto>1576.10</TotalImpuesto>
+    <TotalImpAsumEmisorFabrica>0</TotalImpAsumEmisorFabrica>
+    <TotalOtrosCargos>0</TotalOtrosCargos>
+    <MedioPago>
+      <TipoMedioPago>01</TipoMedioPago>
+      <TotalMedioPago>13700.00</TotalMedioPago>
+    </MedioPago>
+    <TotalComprobante>13700.00</TotalComprobante>
+  </ResumenFactura>
+  <Otros>
+    <OtroTexto codigo="Observaciones">No.Interno: 111271</OtroTexto>
+    <OtroTexto codigo="CRC">1</OtroTexto>
+    <OtroTexto codigo="TipoMedioPago">01</OtroTexto>
+    <OtroTexto codigo="TotalMedioPago">13700.00</OtroTexto>
+    <OtroTexto codigo="ConvertidoV44">Enrutador</OtroTexto>
+    <OtroTexto codigo="CABYS">INCLUIDO</OtroTexto>
+    <OtroTexto codigo="Resumen">Generado automaticamente</OtroTexto>
+  </Otros>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-5c9961b5-982b-4c3b-8c3e-2ed599ec6468"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" /><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" /><ds:Reference Id="Reference-ac29b2df-764b-4703-bbfa-c26130d01200" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>hH+l4KNgonseviw/t35m4KB9Gu+VLvT2pu0FfNsXk+A=</ds:DigestValue></ds:Reference><ds:Reference Id="ReferenceKeyInfo" URI="#KeyInfoId-Signature-5c9961b5-982b-4c3b-8c3e-2ed599ec6468"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>5g21N7uz193L023opxrYW/W0KW+mO1tXiXnwG6AIkFA=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-Signature-5c9961b5-982b-4c3b-8c3e-2ed599ec6468"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>7bdXudxrzcyP01l/LMz7DxvSNigz35CL+N9fRWAK+uw=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue-5c9961b5-982b-4c3b-8c3e-2ed599ec6468">QTSKz8gJfU9BYGGvmmEiZKFClSBI3FbFdsHtdFD+AdAsq7AW8BrDLYsTtdl62VN0Yg9yJnGogW9xdNlNQR+FpdwwqIiGCHKjIE5s1RKktxYPYgsIk/hPkMxX+42CiKmPPgYUiPoSdeqlbuhEbScIZNR+/c8mHiRGhbnXSeabgUezT+nxLOizebJNG9lVd2lXISqlMWONLmxYDuoBb+8nfLhLzKtGNPZ4xSYJwqw6oI+OQan9xLoxnriKeQHO5UsUxb2DqJq2uvwUVoxd4//l6G9jbsUGQEXO5mtIsYW93cpiP/F0HwMAf6gK/Hy0LWz4twCMeiHZxUGkQESXv4c3rA==</ds:SignatureValue><ds:KeyInfo Id="KeyInfoId-Signature-5c9961b5-982b-4c3b-8c3e-2ed599ec6468"><ds:X509Data><ds:X509Certificate>MIIFFzCCAv+gAwIBAgIGAYotmQ1DMA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYDVQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBFUlNPTkEgSlVSSURJQ0EwHhcNMjMwODI1MTY0ODM5WhcNMjcwODI0MTY0ODM5WjByMRkwFwYDVQQFExBDUEotMy0xMDItNjE4ODIwMQswCQYDVQQGEwJDUjEZMBcGA1UECgwQUEVSU09OQSBKVVJJRElDQTEMMAoGA1UECwwDQ1BKMR8wHQYDVQQDDBZNRVJBS0kgRkFNSUxZIExJTUlUQURBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv4zRPUZdzvB+BocvivwQHDA9qgSgA3V2S5CNYvDC6+ASAsk9kJQ1KeK/qOQuwXhfqOmRprP9SGfOcsF3A/A4DfHwkqubk1YmSF1Kd6eW7bByAVFNcop/HFYvRzclUBmyFzCTK5OBxyukiw3dalqOqt9P41cC/8YJhaS/9kmaImQTYHuOoq+BRtEC8FuR1FclxE54IdYkrqOCVd+Pv5YGSv+Lw5myMOv7UWMOvLzIM+F88QttSK3ATRvL6JQKEcm4sh3WXNc8cbBFfkjmsRAz6JjSO2mehbfdNLEcE1pDhlP4fQ8WapEOuL04qv+Zl8S1nYTcRoobfZRdZQY1VYQ1KwIDAQABo4HKMIHHMB8GA1UdIwQYMBaAFDttV/XWfOmeEAIgQeO9GszPs06VMB0GA1UdDgQWBBQf5KTLps/IBZG5Lbk3O1HpkZi11zALBgNVHQ8EBAMCBsAwEwYDVR0lBAwwCgYIKwYBBQUHAwQwYwYIKwYBBQUHAQEEVzBVMFMGCCsGAQUFBzAChkdodHRwczovL3BraS5jb21wcm9iYW50ZXNlbGVjdHJvbmljb3MuZ28uY3IvcHJvZC9pbnRlcm1lZGlhdGUtcGotcGVtLmNydDANBgkqhkiG9w0BAQsFAAOCAgEAQ76swag0piHiIEddiSVejFnB1f/cxo4BM29CJEmPQgdg19corobRpBvIho1qPHMtgHvT9dACsw65GppTzl2klb3eV7sLe81X7jrd4hVj3ueWjzEoU+om8xLl0EOhDUWAY3U+17t1IQgGSDVbdGznXMzgdwovwM8OpyrRGK5qmZq4Io74Q+dwl6lkSJ3UP4tt62qhw5zaIEgd6NlOGu5Q14WnNbGZhaQ4DgIoEqhFP1x1QqEPgbbYa/Tsxl5N64Fq7OnZNzGB6vyHpCAVa/8pq6LDJsVghVo5jGWsq+Q2XmOVtzW34EU2NupiLEJ+ZyvmdKy3d6S/xeys8BOinF7YZsobwBcXSRAhdtgnYRl0nYYDqQhNaL9ndqX3q1y/2unNdSkTC6vXa1ENFVV7YnPgsyOnPHfXHAdvztE/P0tW3DlLfRcgotp1F1tbtNJU+iY4kI8B/oa81ickoJ5zNBz0ZuP6f8z9CYeXY+2WeE2S2XFwj4byY+W9M5b5DZ2/UqoghwyxReOSh5v3uwMJ4IYBZaNJhAkqZkpHMEPiSb+XBzh3hsgB6JxTVW2FAHdBP9cNk2zzJnm0yhw9yP1T9uvXo75EvwvhLanYO9WOBXL/IHPE89/M1ApWtsaDtOk1s8ioUYRFrD01qFmDd3iSCF/GlpyBiY5E0oHy5Wyt4fUOlmY=</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>v4zRPUZdzvB+BocvivwQHDA9qgSgA3V2S5CNYvDC6+ASAsk9kJQ1KeK/qOQuwXhfqOmRprP9SGfOcsF3A/A4DfHwkqubk1YmSF1Kd6eW7bByAVFNcop/HFYvRzclUBmyFzCTK5OBxyukiw3dalqOqt9P41cC/8YJhaS/9kmaImQTYHuOoq+BRtEC8FuR1FclxE54IdYkrqOCVd+Pv5YGSv+Lw5myMOv7UWMOvLzIM+F88QttSK3ATRvL6JQKEcm4sh3WXNc8cbBFfkjmsRAz6JjSO2mehbfdNLEcE1pDhlP4fQ8WapEOuL04qv+Zl8S1nYTcRoobfZRdZQY1VYQ1Kw==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="XadesObjectId-464c8174-153c-4be8-b6f1-8eb868c05af3"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="QualifyingProperties-ed547bd9-bdf0-4614-80c2-a2f61cf354aa" Target="#Signature-5c9961b5-982b-4c3b-8c3e-2ed599ec6468"><xades:SignedProperties Id="SignedProperties-Signature-5c9961b5-982b-4c3b-8c3e-2ed599ec6468"><xades:SignedSignatureProperties><xades:SigningTime>2026-03-31T14:54:43-06:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>OdR7wz624AMex56jjFX3smV7+dh0YKLTDlccAMyjei0=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA PERSONA JURIDICA, OU=DGT, O=MINISTERIO DE HACIENDA, C=CR</ds:X509IssuerName><ds:X509SerialNumber>1692982119747</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://tribunet.hacienda.go.cr/docs/esquemas/2016/v4.1/Resolucion_Comprobantes_Electronicos_DGT-R-48-2016.pdf</xades:Identifier><xades:Description /></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><ds:DigestValue>V8lVVNGDCPen6VELRD1Ja8HARFk=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-ac29b2df-764b-4703-bbfa-c26130d01200"><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>UTF-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></FacturaElectronica>

@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaElectronica xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica">
+  <Clave>50613042600310263070000100218010000077357100077357</Clave>
+  <ProveedorSistemas>3101769529</ProveedorSistemas>
+  <CodigoActividadEmisor>4752.1</CodigoActividadEmisor>
+  <CodigoActividadReceptor>5610.0</CodigoActividadReceptor>
+  <NumeroConsecutivo>00100218010000077357</NumeroConsecutivo>
+  <FechaEmision>2026-04-13T16:51:49</FechaEmision>
+  <Emisor>
+    <Nombre>Ferreterías Grupo Nosara S.R.L</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3102630700</Numero>
+    </Identificacion>
+    <NombreComercial>Ferreterías Grupo Nosara</NombreComercial>
+    <Ubicacion>
+      <Provincia>5</Provincia>
+      <Canton>02</Canton>
+      <Distrito>05</Distrito>
+      <OtrasSenas>Nosara, Guanacaste, detras de las oficinas del BCR.</OtrasSenas>
+    </Ubicacion>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>45001919</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>facturasgruponosara@gmail.com</CorreoElectronico>
+  </Emisor>
+  <Receptor>
+    <Nombre>MERAKI FAMILY LTDA (RESTAURANTE EL COYOL)</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3102618820</Numero>
+    </Identificacion>
+    <NombreComercial>MERAKI FAMILY LTDA</NombreComercial>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>84197595</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>merakifamilylimitada@gmail.com</CorreoElectronico>
+  </Receptor>
+  <CondicionVenta>01</CondicionVenta>
+  <CondicionVentaOtros>Transferencia Bancaria,VALE                                                                         </CondicionVentaOtros>
+  <PlazoCredito>1</PlazoCredito>
+  <DetalleServicio>
+    <LineaDetalle>
+      <NumeroLinea>1</NumeroLinea>
+      <CodigoCABYS>4823300009900</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>101903</Codigo>
+      </CodigoComercial>
+      <Cantidad>5.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>PLYWOOD  9MM CTE PRIMERA 1.22X2.44 (100) S1:3103192017997 S2:101903</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>10356.67000</PrecioUnitario>
+      <MontoTotal>51783.35000</MontoTotal>
+      <Descuento>
+        <MontoDescuento>7767.50250</MontoDescuento>
+        <CodigoDescuento>07</CodigoDescuento>
+        <CodigoDescuentoOTRO>DESCUENTO</CodigoDescuentoOTRO>
+        <NaturalezaDescuento>DESCUENTO LINEA</NaturalezaDescuento>
+      </Descuento>
+      <SubTotal>44015.84750</SubTotal>
+      <BaseImponible>44015.84750</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>5722.06017</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>5722.06017</ImpuestoNeto>
+      <MontoTotalLinea>49737.90767</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>2</NumeroLinea>
+      <CodigoCABYS>3511003000100</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>002557</Codigo>
+      </CodigoComercial>
+      <Cantidad>5.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>LANCO SILICONFLEX ALMENDRA CC768-18 S1:3150452014890 S2:718594768182</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>2999.76000</PrecioUnitario>
+      <MontoTotal>14998.80000</MontoTotal>
+      <Descuento>
+        <MontoDescuento>2249.82000</MontoDescuento>
+        <CodigoDescuento>07</CodigoDescuento>
+        <CodigoDescuentoOTRO>DESCUENTO</CodigoDescuentoOTRO>
+        <NaturalezaDescuento>DESCUENTO LINEA</NaturalezaDescuento>
+      </Descuento>
+      <SubTotal>12748.98000</SubTotal>
+      <BaseImponible>12748.98000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>1657.36740</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>1657.36740</ImpuestoNeto>
+      <MontoTotalLinea>14406.34740</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>3</NumeroLinea>
+      <CodigoCABYS>3511003009900</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>001510</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>NO MAS CLAVOS HENKEL PATTEX 353G TUBO S1:3064322001609 S2:0079340649453 S3:079340649453</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>6485.40000</PrecioUnitario>
+      <MontoTotal>6485.40000</MontoTotal>
+      <Descuento>
+        <MontoDescuento>1297.08000</MontoDescuento>
+        <CodigoDescuento>07</CodigoDescuento>
+        <CodigoDescuentoOTRO>DESCUENTO</CodigoDescuentoOTRO>
+        <NaturalezaDescuento>DESCUENTO LINEA</NaturalezaDescuento>
+      </Descuento>
+      <SubTotal>5188.32000</SubTotal>
+      <BaseImponible>5188.32000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>674.48160</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>674.48160</ImpuestoNeto>
+      <MontoTotalLinea>5862.80160</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>4</NumeroLinea>
+      <CodigoCABYS>3542099990000</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>026195</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>LOCTITE SUPER BONDER PRECISION 5G 162882 S1:3368122122329 S2:7891200308866</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>2500.00000</PrecioUnitario>
+      <MontoTotal>2500.00000</MontoTotal>
+      <Descuento>
+        <MontoDescuento>500.00000</MontoDescuento>
+        <CodigoDescuento>07</CodigoDescuento>
+        <CodigoDescuentoOTRO>DESCUENTO</CodigoDescuentoOTRO>
+        <NaturalezaDescuento>DESCUENTO LINEA</NaturalezaDescuento>
+      </Descuento>
+      <SubTotal>2000.00000</SubTotal>
+      <BaseImponible>2000.00000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>260.00000</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>260.00000</ImpuestoNeto>
+      <MontoTotalLinea>2260.00000</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>5</NumeroLinea>
+      <CodigoCABYS>3532201030100</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>101492</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>ACEITE PENETRANTE WD-40 11 OZS S1:079567110996 S2:079567520115 S3:079567520221</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>3800.00000</PrecioUnitario>
+      <MontoTotal>3800.00000</MontoTotal>
+      <Descuento>
+        <MontoDescuento>760.00000</MontoDescuento>
+        <CodigoDescuento>07</CodigoDescuento>
+        <CodigoDescuentoOTRO>DESCUENTO</CodigoDescuentoOTRO>
+        <NaturalezaDescuento>DESCUENTO LINEA</NaturalezaDescuento>
+      </Descuento>
+      <SubTotal>3040.00000</SubTotal>
+      <BaseImponible>3040.00000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>395.20000</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>395.20000</ImpuestoNeto>
+      <MontoTotalLinea>3435.20000</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>6</NumeroLinea>
+      <CodigoCABYS>3625000000100</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>005694</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>MASKING TAPE AZUL ARQUITECTONICO 2 S1:721672033485 S2:721672008261 S3:721672026326</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>5619.50000</PrecioUnitario>
+      <MontoTotal>5619.50000</MontoTotal>
+      <Descuento>
+        <MontoDescuento>1123.90000</MontoDescuento>
+        <CodigoDescuento>07</CodigoDescuento>
+        <CodigoDescuentoOTRO>DESCUENTO</CodigoDescuentoOTRO>
+        <NaturalezaDescuento>DESCUENTO LINEA</NaturalezaDescuento>
+      </Descuento>
+      <SubTotal>4495.60000</SubTotal>
+      <BaseImponible>4495.60000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>584.42800</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>584.42800</ImpuestoNeto>
+      <MontoTotalLinea>5080.02800</MontoTotalLinea>
+    </LineaDetalle>
+  </DetalleServicio>
+  <ResumenFactura>
+    <CodigoTipoMoneda>
+      <CodigoMoneda>CRC</CodigoMoneda>
+      <TipoCambio>1.00000</TipoCambio>
+    </CodigoTipoMoneda>
+    <TotalServGravados>0.00000</TotalServGravados>
+    <TotalServExentos>0.00000</TotalServExentos>
+    <TotalServExonerado>0.00000</TotalServExonerado>
+    <TotalServNoSujeto>0.00000</TotalServNoSujeto>
+    <TotalMercanciasGravadas>85187.05000</TotalMercanciasGravadas>
+    <TotalMercanciasExentas>0.00000</TotalMercanciasExentas>
+    <TotalMercExonerada>0.00000</TotalMercExonerada>
+    <TotalMercNoSujeta>0.00000</TotalMercNoSujeta>
+    <TotalGravado>85187.05000</TotalGravado>
+    <TotalExento>0.00000</TotalExento>
+    <TotalExonerado>0.00000</TotalExonerado>
+    <TotalNoSujeto>0.00000</TotalNoSujeto>
+    <TotalVenta>85187.05000</TotalVenta>
+    <TotalDescuentos>13698.30250</TotalDescuentos>
+    <TotalVentaNeta>71488.74750</TotalVentaNeta>
+    <TotalDesgloseImpuesto>
+      <Codigo>01</Codigo>
+      <CodigoTarifaIVA>08</CodigoTarifaIVA>
+      <TotalMontoImpuesto>9293.53717</TotalMontoImpuesto>
+    </TotalDesgloseImpuesto>
+    <TotalImpuesto>9293.53717</TotalImpuesto>
+    <TotalImpAsumEmisorFabrica>0.00000</TotalImpAsumEmisorFabrica>
+    <TotalIVADevuelto>0.00000</TotalIVADevuelto>
+    <TotalOtrosCargos>0.00000</TotalOtrosCargos>
+    <MedioPago>
+      <TipoMedioPago>04</TipoMedioPago>
+      <MedioPagoOtros>Transferencia - Depósito Bancario</MedioPagoOtros>
+      <TotalMedioPago>27650.40635</TotalMedioPago>
+    </MedioPago>
+    <MedioPago>
+      <TipoMedioPago>99</TipoMedioPago>
+      <MedioPagoOtros>OTROS</MedioPagoOtros>
+      <TotalMedioPago>53131.87832</TotalMedioPago>
+    </MedioPago>
+    <TotalComprobante>80782.28467</TotalComprobante>
+  </ResumenFactura>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-debbf010-8741-4cfb-b3f2-562805846b5a"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" /><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" /><ds:Reference Id="Reference-5984ded4-2c26-4bd3-a269-8af87adbff87" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>NEAIhy7oN6pa4qlN3ts+BMsHBNwHNFGS1ozO1UXWQwo=</ds:DigestValue></ds:Reference><ds:Reference Id="ReferenceKeyInfo" URI="#KeyInfoId-Signature-debbf010-8741-4cfb-b3f2-562805846b5a"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>vO8weN6cRy4MvQZFReJLFDDgQv7MXfgPbvol9SulEVs=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-Signature-debbf010-8741-4cfb-b3f2-562805846b5a"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>SEZwYY123mQNJa8QHl9l7wzPVip+OFZHJS8+RDtExAM=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue-debbf010-8741-4cfb-b3f2-562805846b5a">QC+iMt55qrfg0YN+mgCA2BS8AC7ha/f7QfhkG6VqEGzWRS+E3VAQ9k8EN74hLQTi3BYX7Z0Ki5Sl0+q+AZy3jYsacbUaBS8WYJ9SSdvt5kLJgT/QtnZoWpoFOpSOdD6/4R9+p3CPhl9+m3hjbs7LoiDG64how1zm2l4FMSJEYtM0cd1MkC6W7ca4DKqP8AEs1GfvdbtHcJ5lWYIgKaW5ETEuxvZjZA+WccOcQ9xKgVXGRvPDa+BpX1Rx4QKa3V2rHr1plFtqTpHGeMz+kzboMqLRiPRQRZUigE3Dwh8TJx77Q1pU5Mn5vD0rI+Aes2hrEjiS+whDhqezIXh2SvSQ2g==</ds:SignatureValue><ds:KeyInfo Id="KeyInfoId-Signature-debbf010-8741-4cfb-b3f2-562805846b5a"><ds:X509Data><ds:X509Certificate>MIIFSTCCAzGgAwIBAgIGAYkDRNNpMA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYDVQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBFUlNPTkEgSlVSSURJQ0EwHhcNMjMwNjI4MTgyOTQ5WhcNMjcwNjI3MTgyOTQ5WjCBozEZMBcGA1UEBRMQQ1BKLTMtMTAyLTYzMDcwMDELMAkGA1UEBhMCQ1IxGTAXBgNVBAoMEFBFUlNPTkEgSlVSSURJQ0ExDDAKBgNVBAsMA0NQSjFQME4GA1UEAwxHR1JVUE8gTk9TQVJBIEZFUlJFVEVSSUEgWSBBQ0FCQURPUyBTT0NJRURBRCBERSBSRVNQT05TQUJJTElEQUQgTElNSVRBREEwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCVCqHGDczzshGALyyonaokvFk8g1b3I7r4PtS4gdqPUGcHifDlzwuQUSslIhviMhtwgVpszxMeE8ksmJ2HnuAIs/w/m8iLHLBKC7CeHn67RttW7X+HMWEwemnO0mqaiAESk5FlWvsboTWi66HroWsQ6hMhT/RqkYBTjgHzWOZIjugT2N75IQ9EbEj9PYvSQxYycQ0ZIofQv7v/EIzhsh+MvGzjlnTZLgaSd22AJtidqP9AoX6q7e1q75hucpB8oCTv5NYdNCE+6QLaYAFytWoIIVO1O1CjR+ta5lbdac6BXBiWcomMpVLehsR5TtwQaFhxTUrPAzVQKmdAINVB8KunAgMBAAGjgcowgccwHwYDVR0jBBgwFoAUO21X9dZ86Z4QAiBB470azM+zTpUwHQYDVR0OBBYEFDdQ/7mA3/3Egn3JJXad+tdJ6USSMAsGA1UdDwQEAwIGwDATBgNVHSUEDDAKBggrBgEFBQcDBDBjBggrBgEFBQcBAQRXMFUwUwYIKwYBBQUHMAKGR2h0dHBzOi8vcGtpLmNvbXByb2JhbnRlc2VsZWN0cm9uaWNvcy5nby5jci9wcm9kL2ludGVybWVkaWF0ZS1wai1wZW0uY3J0MA0GCSqGSIb3DQEBCwUAA4ICAQB0BMbk3JTyN2zuE/P3JUkwQ+VQV5tnm1cxUCRRC+aIlW7Hiu/QlVPskbQY9UW3g8JSBrCSbg/F8Q7A48O9HE0MchE9Jc7uoRKr9l/PVAzb2xRWYz6g0/Rn7zjiD8qrisGqc5Bgjxme6WlWEEIM2Yk98/4wy6BaGkUaDaPSXUuyvBkTzdX+0Q7RjIxGjSi1cuso/Wart3xSXdJgfENVWcgvvBRJ7+BY+sdqDc10/QZCbfJ5TNmDlwF1TOX49kASFLbBxxd/MQ9QKS5cipNCWiRX++7V8FfjCJx2FaoivDg7TEUFdlPmkmXGPkV2TxEciLdAWv4rpOkC0zq59EeEPUBnUWuuizPo8kgw/Hm9jTf5MmbNSF8RzLeA0KwUriiYZo813/s8IS9Ej6k+zGQmesA4H14O7smpsVZ+7oiuc1gd1mykWFWA9CGPr4abM/lQupDNTQULNa4MHGPMFjlegBqhPNMr9p8MBOlpsM/BYfapBnLqnhqr3ZVTWuZ2dwk/h8YEfg0fNTYf6M24XNx2m1QxlSltuH5Q17hR4IeTbj00gT+lq21wq+fkHEGvRpkTk/DP/kMltUVsRq6GkfxHXoOzh1pB3cNBeUNs7GMHj1ZiazJHaV1Tiq0o4tRWrtO2EKecrWsjWDc0ZlgsI6nbQgrBheLt9Fn4X1Bj2Se++0Obiw==</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>lQqhxg3M87IRgC8sqJ2qJLxZPINW9yO6+D7UuIHaj1BnB4nw5c8LkFErJSIb4jIbcIFabM8THhPJLJidh57gCLP8P5vIixywSguwnh5+u0bbVu1/hzFhMHppztJqmogBEpORZVr7G6E1ouuh66FrEOoTIU/0apGAU44B81jmSI7oE9je+SEPRGxI/T2L0kMWMnENGSKH0L+7/xCM4bIfjLxs45Z02S4GkndtgCbYnaj/QKF+qu3tau+YbnKQfKAk7+TWHTQhPukC2mABcrVqCCFTtTtQo0frWuZW3WnOgVwYlnKJjKVS3obEeU7cEGhYcU1KzwM1UCpnQCDVQfCrpw==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="XadesObjectId-80754f2d-84a1-48e1-bb2e-0c06bb8df9c8"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="QualifyingProperties-6ec353ee-6b13-4f20-8031-3a2548f1c2ec" Target="#Signature-debbf010-8741-4cfb-b3f2-562805846b5a"><xades:SignedProperties Id="SignedProperties-Signature-debbf010-8741-4cfb-b3f2-562805846b5a"><xades:SignedSignatureProperties><xades:SigningTime>2026-04-13T17:01:40-06:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>az4povTWmb6TDhvcsc5mTs+zq4+bP04ZbaBpxTqz1eU=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA PERSONA JURIDICA, OU=DGT, O=MINISTERIO DE HACIENDA, C=CR</ds:X509IssuerName><ds:X509SerialNumber>1687976989545</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://atv.hacienda.go.cr/ATV/ComprobanteElectronico/docs/esquemas/2024/v4.4/Resoluci%C3%B3n_General_sobre_disposiciones_t%C3%A9cnicas_comprobantes_electr%C3%B3nicos_para_efectos_tributarios.pdf</xades:Identifier><xades:Description /></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>DWxin1xWOeI8OuWQXazh4VjLWAaCLAA954em7DMh0h8=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier><xades:SignerRole><xades:ClaimedRoles><xades:ClaimedRole>emisor</xades:ClaimedRole></xades:ClaimedRoles></xades:SignerRole></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-5984ded4-2c26-4bd3-a269-8af87adbff87"><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>UTF-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></FacturaElectronica>

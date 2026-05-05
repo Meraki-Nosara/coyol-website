@@ -1,0 +1,129 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const menuSections = [
+  {
+    name: "To Start",
+    items: [
+      { name: "Bruschetta", description: "Grilled sourdough, heirloom tomatoes, basil, aged balsamic", price: "₡8,500" },
+      { name: "Carpaccio", description: "Beef tenderloin, arugula, capers, parmesan, truffle oil", price: "₡12,000" },
+      { name: "Burrata", description: "Fresh burrata, cherry tomatoes, pesto, grilled bread", price: "₡14,500" },
+      { name: "Ceviche", description: "Catch of the day, lime, cilantro, red onion, coconut milk", price: "₡11,000" },
+      { name: "Grilled Octopus", description: "Spanish octopus, fingerling potatoes, olive tapenade", price: "₡16,000" },
+    ]
+  },
+  {
+    name: "From the Sea",
+    items: [
+      { name: "Whole Grilled Fish", description: "Market fish, lemon, herbs, olive oil (serves 2)", price: "₡38,000" },
+      { name: "Seared Tuna", description: "Sesame crusted, wakame, ponzu, wasabi aioli", price: "₡24,000" },
+      { name: "Grilled Prawns", description: "Jumbo prawns, garlic butter, chili, herbs", price: "₡28,000" },
+      { name: "Seafood Risotto", description: "Arborio rice, shrimp, squid, mussels, saffron", price: "₡26,000" },
+      { name: "Catch of the Day", description: "Ask your server for today's preparation", price: "Market" },
+    ]
+  },
+  {
+    name: "Mains",
+    items: [
+      { name: "Ribeye", description: "400g grass-fed, chimichurri, roasted vegetables", price: "₡32,000" },
+      { name: "Lamb Chops", description: "New Zealand lamb, mint pesto, gratin potatoes", price: "₡34,000" },
+      { name: "Pork Belly", description: "Slow roasted, apple cider glaze, seasonal vegetables", price: "₡22,000" },
+      { name: "Truffle Pasta", description: "Handmade tagliatelle, black truffle, parmesan cream", price: "₡24,000" },
+      { name: "Vegetable Tagine", description: "Moroccan spices, chickpeas, couscous, harissa (v)", price: "₡18,000" },
+    ]
+  },
+  {
+    name: "To Finish",
+    items: [
+      { name: "Tiramisu", description: "Classic Italian, mascarpone, espresso, cocoa", price: "₡9,000" },
+      { name: "Crème Brûlée", description: "Tahitian vanilla, caramelized sugar", price: "₡8,500" },
+      { name: "Chocolate Fondant", description: "Warm center, vanilla gelato", price: "₡10,000" },
+      { name: "Tropical Fruit Plate", description: "Seasonal selection, passion fruit sorbet", price: "₡8,000" },
+      { name: "Cheese Selection", description: "Artisan cheeses, honeycomb, nuts", price: "₡14,000" },
+    ]
+  }
+];
+---
+
+<Layout title="Menu | La Luna">
+  <header class="py-6 bg-white border-b border-stone-100">
+    <div class="max-w-6xl mx-auto px-6 flex items-center justify-between">
+      <a href="/">
+        <img src="/images/logo.png" alt="La Luna" class="h-10" />
+      </a>
+      <nav class="flex gap-8">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/menu" class="nav-link active">Menu</a>
+        <a href="/events" class="nav-link">Events</a>
+        <a href="/reserve" class="nav-link">Reserve</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="py-16 bg-cream-50 min-h-screen">
+    <div class="max-w-4xl mx-auto px-6">
+      
+      <div class="text-center mb-16">
+        <h1 class="font-serif text-5xl text-stone-800 mb-4">Menu</h1>
+        <p class="text-stone-400 tracking-widest text-sm uppercase">Mediterranean · Seafood · Seasonal</p>
+      </div>
+
+      {menuSections.map((section, idx) => (
+        <section class="mb-16">
+          <h2 class="font-serif text-3xl text-stone-800 text-center mb-8">{section.name}</h2>
+          <div class="space-y-6">
+            {section.items.map(item => (
+              <div class="menu-item">
+                <div class="flex justify-between items-baseline">
+                  <h3 class="font-serif text-xl text-stone-800">{item.name}</h3>
+                  <span class="text-stone-600 font-medium">{item.price}</span>
+                </div>
+                <p class="text-stone-400 mt-1">{item.description}</p>
+              </div>
+            ))}
+          </div>
+          {idx < menuSections.length - 1 && <hr class="mt-16 border-stone-200" />}
+        </section>
+      ))}
+
+      <div class="text-center mt-16 pt-8 border-t border-stone-200">
+        <p class="text-stone-400 text-sm italic">
+          Menu changes seasonally. Prices in Costa Rican Colones.<br />
+          Please inform your server of any allergies or dietary requirements.
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="py-12 bg-white text-center border-t border-stone-100">
+    <a href="/reserve" class="inline-block px-10 py-4 bg-stone-800 text-white text-sm tracking-widest uppercase hover:bg-stone-700 transition-colors">
+      Reserve a Table
+    </a>
+  </footer>
+
+  <style>
+    .nav-link {
+      font-size: 0.875rem;
+      color: #78716c;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: #292524;
+    }
+    .menu-item {
+      padding-bottom: 1rem;
+    }
+    .space-y-6 > * + * {
+      margin-top: 1.5rem;
+    }
+    .border-t { border-top-width: 1px; }
+    .border-b { border-bottom-width: 1px; }
+    .border-stone-100 { border-color: #f5f5f4; }
+    .border-stone-200 { border-color: #e7e5e4; }
+    .pt-8 { padding-top: 2rem; }
+    .italic { font-style: italic; }
+    hr { border: none; border-top: 1px solid; }
+  </style>
+</Layout>

@@ -1,0 +1,209 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Events | La Luna">
+  <header class="py-6 bg-white border-b border-stone-100">
+    <div class="max-w-6xl mx-auto px-6 flex items-center justify-between">
+      <a href="/">
+        <img src="/images/logo.png" alt="La Luna" class="h-10" />
+      </a>
+      <nav class="flex gap-8">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/menu" class="nav-link">Menu</a>
+        <a href="/events" class="nav-link active">Events</a>
+        <a href="/reserve" class="nav-link">Reserve</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="py-24 bg-cream-50 text-center">
+    <h1 class="font-serif text-5xl md:text-6xl text-stone-800 mb-6">Celebrations</h1>
+    <p class="text-stone-500 text-lg max-w-2xl mx-auto px-6">
+      From intimate dinners to grand celebrations, La Luna offers an unforgettable 
+      setting for life's most treasured moments.
+    </p>
+  </section>
+
+  <!-- Event Types -->
+  <section class="py-16 bg-white">
+    <div class="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-12">
+      
+      <div class="event-card">
+        <div class="aspect-[4/3] bg-stone-200 mb-6"></div>
+        <h3 class="font-serif text-2xl text-stone-800 mb-3">Weddings</h3>
+        <p class="text-stone-500 leading-relaxed mb-4">
+          Exchange vows under the stars with the ocean as your witness. 
+          Our garden and terrace accommodate up to 120 guests for a magical 
+          beachside celebration.
+        </p>
+        <ul class="text-stone-400 text-sm space-y-1">
+          <li>• Ceremony & reception packages</li>
+          <li>• Custom menus</li>
+          <li>• Full venue buyout available</li>
+          <li>• Coordination services</li>
+        </ul>
+      </div>
+
+      <div class="event-card">
+        <div class="aspect-[4/3] bg-stone-200 mb-6"></div>
+        <h3 class="font-serif text-2xl text-stone-800 mb-3">Private Dining</h3>
+        <p class="text-stone-500 leading-relaxed mb-4">
+          Host an intimate gathering in our garden lounge area. Perfect for 
+          birthday celebrations, anniversaries, or special occasions with 
+          groups of 10-30 guests.
+        </p>
+        <ul class="text-stone-400 text-sm space-y-1">
+          <li>• Semi-private garden sections</li>
+          <li>• Set menu options</li>
+          <li>• Wine pairing available</li>
+          <li>• Personal service</li>
+        </ul>
+      </div>
+
+      <div class="event-card">
+        <div class="aspect-[4/3] bg-stone-200 mb-6"></div>
+        <h3 class="font-serif text-2xl text-stone-800 mb-3">Corporate Events</h3>
+        <p class="text-stone-500 leading-relaxed mb-4">
+          Impress clients or reward your team in paradise. Our venue offers 
+          a unique setting for retreats, dinners, and celebrations far from 
+          the ordinary.
+        </p>
+        <ul class="text-stone-400 text-sm space-y-1">
+          <li>• Lunch or dinner programs</li>
+          <li>• Cocktail receptions</li>
+          <li>• Team building dinners</li>
+          <li>• A/V equipment available</li>
+        </ul>
+      </div>
+
+      <div class="event-card">
+        <div class="aspect-[4/3] bg-stone-200 mb-6"></div>
+        <h3 class="font-serif text-2xl text-stone-800 mb-3">Full Venue Buyout</h3>
+        <p class="text-stone-500 leading-relaxed mb-4">
+          Make La Luna exclusively yours for an evening. Perfect for large 
+          celebrations, product launches, or milestone events requiring 
+          complete privacy.
+        </p>
+        <ul class="text-stone-400 text-sm space-y-1">
+          <li>• Capacity: 100-150 guests</li>
+          <li>• Indoor + outdoor spaces</li>
+          <li>• Full kitchen capabilities</li>
+          <li>• Custom event design</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Inquiry Form -->
+  <section id="inquiry" class="py-24 bg-cream-50">
+    <div class="max-w-2xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <h2 class="font-serif text-4xl text-stone-800 mb-4">Plan Your Event</h2>
+        <p class="text-stone-500">Tell us about your celebration and we'll be in touch within 24 hours.</p>
+      </div>
+
+      <form class="bg-white p-8 shadow-sm">
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label class="block text-sm text-stone-500 mb-2">Event Type</label>
+            <select name="event_type" required class="input-field">
+              <option value="">Select type</option>
+              <option value="wedding">Wedding</option>
+              <option value="private_dining">Private Dining</option>
+              <option value="corporate">Corporate Event</option>
+              <option value="celebration">Birthday / Anniversary</option>
+              <option value="buyout">Full Venue Buyout</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm text-stone-500 mb-2">Preferred Date</label>
+            <input type="date" name="event_date" class="input-field" />
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label class="block text-sm text-stone-500 mb-2">Number of Guests</label>
+            <input type="number" name="guest_count" placeholder="Estimated" class="input-field" />
+          </div>
+          <div>
+            <label class="block text-sm text-stone-500 mb-2">Budget Range</label>
+            <select name="budget" class="input-field">
+              <option value="">Prefer not to say</option>
+              <option value="under-5k">Under $5,000</option>
+              <option value="5k-10k">$5,000 - $10,000</option>
+              <option value="10k-25k">$10,000 - $25,000</option>
+              <option value="25k+">$25,000+</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <label class="block text-sm text-stone-500 mb-2">Your Name</label>
+          <input type="text" name="name" required placeholder="Full name" class="input-field" />
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label class="block text-sm text-stone-500 mb-2">Email</label>
+            <input type="email" name="email" required placeholder="your@email.com" class="input-field" />
+          </div>
+          <div>
+            <label class="block text-sm text-stone-500 mb-2">Phone</label>
+            <input type="tel" name="phone" placeholder="+506 8888-8888" class="input-field" />
+          </div>
+        </div>
+
+        <div class="mb-8">
+          <label class="block text-sm text-stone-500 mb-2">Tell Us More</label>
+          <textarea name="message" rows="4" class="input-field resize-none" 
+            placeholder="Share any details about your vision, special requirements, or questions..."></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-4 bg-stone-800 text-white text-sm tracking-widest uppercase hover:bg-stone-700 transition-colors">
+          Send Inquiry
+        </button>
+      </form>
+
+      <p class="text-center text-stone-400 text-sm mt-6">
+        Events coordinated by Esperanza · <a href="mailto:events@lalunanosara.com" class="underline">events@lalunanosara.com</a>
+      </p>
+    </div>
+  </section>
+
+  <style>
+    .nav-link {
+      font-size: 0.875rem;
+      color: #78716c;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: #292524;
+    }
+    .event-card {
+      padding-bottom: 2rem;
+    }
+    .input-field {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #e7e5e4;
+      outline: none;
+      transition: border-color 0.2s;
+      background: white;
+    }
+    .input-field:focus {
+      border-color: #a8a29e;
+    }
+    .space-y-1 > * + * {
+      margin-top: 0.25rem;
+    }
+    .underline { text-decoration: underline; }
+    .resize-none { resize: none; }
+    .shadow-sm { box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+  </style>
+</Layout>

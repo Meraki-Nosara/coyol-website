@@ -1,0 +1,79 @@
+{
+  "restaurant": {
+    "name": "La Luna",
+    "slug": "laluna",
+    "phone": "+506 2682-0122",
+    "email": "reservations@lalunanosara.com",
+    "address": "Playa Pelada, Nosara, Guanacaste, Costa Rica"
+  },
+  "zones": [
+    {
+      "id": "indoor",
+      "name": "Indoor",
+      "tables": [
+        { "id": "high-1", "name": "High Table 1", "capacity": 4, "type": "high" },
+        { "id": "high-2", "name": "High Table 2", "capacity": 4, "type": "high" },
+        { "id": "sofa-1", "name": "Indoor Sofa 1", "capacity": 4, "type": "sofa" },
+        { "id": "sofa-2", "name": "Indoor Sofa 2", "capacity": 4, "type": "sofa" },
+        { "id": "sofa-3", "name": "Indoor Sofa 3", "capacity": 4, "type": "sofa" },
+        { "id": "sofa-4", "name": "Indoor Sofa 4", "capacity": 4, "type": "sofa" },
+        { "id": "sofa-5", "name": "Indoor Sofa 5", "capacity": 4, "type": "sofa" },
+        { "id": "sofa-6", "name": "Indoor Sofa 6", "capacity": 4, "type": "sofa" },
+        { "id": "bar", "name": "Bar", "capacity": 8, "type": "bar" }
+      ]
+    },
+    {
+      "id": "patio",
+      "name": "Patio Terrace",
+      "tables": [
+        { "id": "t1", "name": "Table 1", "capacity": 6, "type": "round" },
+        { "id": "t2", "name": "Table 2", "capacity": 6, "type": "round" },
+        { "id": "t3", "name": "Table 3", "capacity": 4, "type": "round" },
+        { "id": "t4", "name": "Table 4", "capacity": 4, "type": "square" },
+        { "id": "t5", "name": "Table 5", "capacity": 4, "type": "square" },
+        { "id": "t6", "name": "Table 6", "capacity": 4, "type": "square" },
+        { "id": "t7", "name": "Table 7", "capacity": 4, "type": "square" },
+        { "id": "t8", "name": "Table 8", "capacity": 4, "type": "square" },
+        { "id": "t9", "name": "Table 9", "capacity": 4, "type": "round" },
+        { "id": "t10", "name": "Table 10", "capacity": 4, "type": "square" },
+        { "id": "t11", "name": "Table 11", "capacity": 4, "type": "square" },
+        { "id": "t12", "name": "Table 12", "capacity": 4, "type": "square" }
+      ]
+    },
+    {
+      "id": "garden",
+      "name": "Garden",
+      "tables": [
+        { "id": "t17", "name": "Table 17", "capacity": 4, "type": "square" },
+        { "id": "t18", "name": "Table 18 (Long)", "capacity": 16, "type": "communal" },
+        { "id": "t19", "name": "Table 19", "capacity": 4, "type": "square" },
+        { "id": "t20", "name": "Table 20", "capacity": 4, "type": "diamond" },
+        { "id": "t22", "name": "Table 22", "capacity": 4, "type": "square" },
+        { "id": "t24", "name": "Table 24", "capacity": 4, "type": "square" },
+        { "id": "t25", "name": "Table 25", "capacity": 8, "type": "round" },
+        { "id": "t26", "name": "Table 26", "capacity": 8, "type": "round" },
+        { "id": "sofa-13", "name": "Sofa 13", "capacity": 4, "type": "sofa" },
+        { "id": "sofa-14", "name": "Sofa 14", "capacity": 4, "type": "sofa" },
+        { "id": "sofa-15", "name": "Sofa 15", "capacity": 4, "type": "sofa" },
+        { "id": "sofa-16", "name": "Sofa 16", "capacity": 4, "type": "sofa" },
+        { "id": "sofa-21", "name": "Sofa 21", "capacity": 4, "type": "sofa" },
+        { "id": "sofa-23", "name": "Sofa 23", "capacity": 4, "type": "sofa" }
+      ]
+    }
+  ],
+  "shifts": [
+    { "id": "lunch", "name": "Lunch", "start": "12:00", "end": "15:00" },
+    { "id": "dinner1", "name": "Dinner 1", "start": "16:45", "end": "18:30" },
+    { "id": "dinner2", "name": "Dinner 2", "start": "18:30", "end": "22:00" }
+  ],
+  "settings": {
+    "defaultDuration": 150,
+    "bookingWindowDays": 30,
+    "cancellationHours": 2,
+    "daysOpen": [0, 1, 2, 3, 4, 5, 6]
+  },
+  "timeSlots": [
+    "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
+    "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00"
+  ]
+}

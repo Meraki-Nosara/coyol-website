@@ -1,0 +1,392 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="La Luna | Nosara">
+  <div class="page">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-content">
+        <img src="/images/logo.png" alt="La Luna" class="logo" />
+        <p class="tagline">Playa Pelada · Nosara</p>
+        <h1 class="title">La Luna</h1>
+        <p class="subtitle">Where the ocean meets the table</p>
+        <a href="/reserve" class="cta-btn">Reserve a Table</a>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about">
+      <div class="about-content">
+        <h2>A Gathering Place</h2>
+        <p>Perched above Playa Pelada with views of the Pacific, La Luna has been Nosara's gathering place for over two decades. Fresh seafood, wood-fired dishes, and cocktails crafted with care — all under the Costa Rican moon.</p>
+      </div>
+    </section>
+
+    <!-- Three Cards -->
+    <nav class="cards">
+      <a href="/menu" class="card">
+        <span class="card-title">Menu</span>
+        <p class="card-desc">Fresh seafood & wood-fired specialties</p>
+        <span class="card-arrow">→</span>
+      </a>
+      <a href="/reserve" class="card card-highlight">
+        <span class="card-title">Reserve</span>
+        <p class="card-desc">Book your table online</p>
+        <span class="card-arrow">→</span>
+      </a>
+      <a href="/events" class="card">
+        <span class="card-title">Events</span>
+        <p class="card-desc">Live music & special nights</p>
+        <span class="card-arrow">→</span>
+      </a>
+    </nav>
+
+    <!-- Image Gallery Preview -->
+    <section class="gallery-preview">
+      <div class="gallery-grid">
+        <div class="gallery-item" style="background-image: url('/images/garden-tables.jpg')"></div>
+        <div class="gallery-text">
+          <h3>Ocean Views</h3>
+          <p>Sunset dinners with the best view in Nosara</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-logo">
+        <img src="/images/logo.png" alt="La Luna" />
+      </div>
+      <div class="footer-info">
+        <div class="footer-col">
+          <p class="footer-label">Hours</p>
+          <p>Breakfast 7:30–10am</p>
+          <p>Lunch 12–3pm</p>
+          <p>Dinner 5–10pm</p>
+        </div>
+        <div class="footer-col">
+          <p class="footer-label">Location</p>
+          <p>Playa Pelada</p>
+          <p>Nosara, Guanacaste</p>
+          <p>Costa Rica</p>
+        </div>
+        <div class="footer-col">
+          <p class="footer-label">Contact</p>
+          <p>+506 2682-0122</p>
+          <a href="https://instagram.com/lalunanosara" class="footer-link">@lalunanosara</a>
+        </div>
+      </div>
+      <p class="copyright">© 2026 La Luna · Nosara</p>
+    </footer>
+  </div>
+</Layout>
+
+<style>
+  :root {
+    --keswick: #3D4F3D;
+    --limestone: #D4C9B5;
+    --sand: #C4A67C;
+    --terracotta: #A65D3F;
+    --santorini: #1A1F16;
+    --cream: #F5F3EF;
+    --parchment: #EAE5DA;
+  }
+
+  .page {
+    min-height: 100vh;
+    background: var(--cream);
+  }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--santorini) 0%, var(--keswick) 100%);
+  }
+
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('/images/garden-tables.jpg') center/cover;
+    opacity: 0.3;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .logo {
+    height: 120px;
+    margin-bottom: 2rem;
+    filter: brightness(0) invert(1);
+  }
+
+  .tagline {
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--sand);
+    margin-bottom: 1rem;
+  }
+
+  .title {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    font-weight: 400;
+    color: white;
+    margin: 0 0 0.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 640px) {
+    .title { font-size: 3.5rem; }
+    .logo { height: 80px; }
+  }
+
+  .subtitle {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--limestone);
+    margin-bottom: 3rem;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    background: var(--terracotta);
+    color: white;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+
+  .cta-btn:hover {
+    background: var(--sand);
+    transform: translateY(-2px);
+  }
+
+  /* About */
+  .about {
+    padding: 6rem 2rem;
+    background: var(--cream);
+  }
+
+  .about-content {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .about h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 400;
+    color: var(--santorini);
+    margin-bottom: 1.5rem;
+  }
+
+  .about p {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: var(--keswick);
+  }
+
+  /* Cards */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: var(--parchment);
+  }
+
+  @media (max-width: 768px) {
+    .cards { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 2rem;
+    text-decoration: none;
+    color: var(--santorini);
+    border-right: 1px solid var(--limestone);
+    transition: all 0.3s;
+    text-align: center;
+  }
+
+  .card:last-child { border-right: none; }
+
+  @media (max-width: 768px) {
+    .card {
+      border-right: none;
+      border-bottom: 1px solid var(--limestone);
+    }
+    .card:last-child { border-bottom: none; }
+  }
+
+  .card:hover {
+    background: var(--cream);
+  }
+
+  .card-highlight {
+    background: var(--keswick);
+    color: white;
+  }
+
+  .card-highlight:hover {
+    background: var(--santorini);
+  }
+
+  .card-highlight .card-desc {
+    color: var(--limestone);
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .card-desc {
+    font-size: 1rem;
+    color: var(--keswick);
+    margin-bottom: 1rem;
+  }
+
+  .card-arrow {
+    font-size: 1.25rem;
+    opacity: 0.4;
+    transition: all 0.3s;
+  }
+
+  .card:hover .card-arrow {
+    opacity: 1;
+    transform: translateX(5px);
+  }
+
+  /* Gallery Preview */
+  .gallery-preview {
+    padding: 0;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    min-height: 400px;
+  }
+
+  @media (max-width: 768px) {
+    .gallery-grid { grid-template-columns: 1fr; }
+  }
+
+  .gallery-item {
+    background-size: cover;
+    background-position: center;
+    min-height: 400px;
+  }
+
+  .gallery-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem;
+    background: var(--santorini);
+    color: white;
+  }
+
+  .gallery-text h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+  }
+
+  .gallery-text p {
+    color: var(--limestone);
+    line-height: 1.6;
+  }
+
+  /* Footer */
+  .footer {
+    background: var(--santorini);
+    color: white;
+    padding: 4rem 2rem 2rem;
+  }
+
+  .footer-logo {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .footer-logo img {
+    height: 60px;
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
+  }
+
+  .footer-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 800px;
+    margin: 0 auto 3rem;
+    text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .footer-info { grid-template-columns: 1fr; gap: 2rem; }
+  }
+
+  .footer-label {
+    font-size: 0.625rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sand);
+    margin-bottom: 1rem;
+  }
+
+  .footer-col p {
+    font-size: 0.9375rem;
+    line-height: 1.8;
+    color: var(--limestone);
+  }
+
+  .footer-link {
+    color: var(--limestone);
+    text-decoration: none;
+  }
+
+  .footer-link:hover {
+    color: var(--sand);
+  }
+
+  .copyright {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--limestone);
+    opacity: 0.5;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+</style>
+</Layout>

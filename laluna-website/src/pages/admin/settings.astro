@@ -1,0 +1,982 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Settings | La Luna Admin">
+  <div class="admin">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="/images/luna-logo.png" alt="La Luna" />
+      </div>
+      <nav class="sidebar-nav">
+        <a href="/admin" class="nav-icon" title="Dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </a>
+        <a href="/admin/floor" class="nav-icon" title="Floor Plan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+        </a>
+        <a href="/admin/settings" class="nav-icon active" title="Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="/" class="nav-icon" title="View Site">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <header class="header">
+        <h1>Settings</h1>
+      </header>
+
+      <div class="content">
+        <!-- Shifts Section -->
+        <section class="card">
+          <div class="card-header">
+            <h2>Recurring Shifts</h2>
+            <button class="btn-primary" onclick="openShiftModal()">+ New Shift</button>
+          </div>
+          <div class="shifts-grid" id="shiftsGrid">
+            <!-- Rendered by JS -->
+          </div>
+        </section>
+
+        <!-- Booking Settings -->
+        <section class="card">
+          <div class="card-header">
+            <h2>Booking Settings</h2>
+          </div>
+          <div class="settings-grid">
+            <div class="setting-item">
+              <label>Default Seating Duration</label>
+              <select id="seatingDuration" class="select-input">
+                <option value="60">1 hour</option>
+                <option value="90">1h 30m</option>
+                <option value="120">2 hours</option>
+                <option value="150" selected>2h 30m</option>
+                <option value="180">3 hours</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <label>Booking Window</label>
+              <select id="bookingWindow" class="select-input">
+                <option value="7">7 days ahead</option>
+                <option value="14">14 days ahead</option>
+                <option value="30" selected>30 days ahead</option>
+                <option value="60">60 days ahead</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <label>Time Slot Interval</label>
+              <select id="timeInterval" class="select-input">
+                <option value="15">15 minutes</option>
+                <option value="30" selected>30 minutes</option>
+                <option value="60">1 hour</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <label>Max Party Size (Online)</label>
+              <select id="maxParty" class="select-input">
+                <option value="6">6 guests</option>
+                <option value="8" selected>8 guests</option>
+                <option value="10">10 guests</option>
+                <option value="12">12 guests</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <!-- Table Capacity Settings -->
+        <section class="card">
+          <div class="card-header">
+            <h2>Table Capacity</h2>
+          </div>
+          <div class="capacity-info">
+            <p class="capacity-desc">Define min/max diners per table type to prevent small parties booking large tables.</p>
+          </div>
+          <div class="capacity-grid" id="capacityGrid">
+            <div class="capacity-row header">
+              <span>Table Type</span>
+              <span>Min Guests</span>
+              <span>Max Guests</span>
+            </div>
+            <div class="capacity-row" data-type="square">
+              <span class="table-type">🪑 Square (2-top)</span>
+              <select class="cap-select" data-field="min"><option value="1">1</option><option value="2" selected>2</option></select>
+              <select class="cap-select" data-field="max"><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option></select>
+            </div>
+            <div class="capacity-row" data-type="round">
+              <span class="table-type">⭕ Round (4-top)</span>
+              <select class="cap-select" data-field="min"><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option></select>
+              <select class="cap-select" data-field="max"><option value="4">4</option><option value="5">5</option><option value="6" selected>6</option></select>
+            </div>
+            <div class="capacity-row" data-type="round-lg">
+              <span class="table-type">⭕ Round Large</span>
+              <select class="cap-select" data-field="min"><option value="4" selected>4</option><option value="5">5</option><option value="6">6</option></select>
+              <select class="cap-select" data-field="max"><option value="6">6</option><option value="7">7</option><option value="8" selected>8</option></select>
+            </div>
+            <div class="capacity-row" data-type="round-xl">
+              <span class="table-type">⭕ Round XL</span>
+              <select class="cap-select" data-field="min"><option value="6" selected>6</option><option value="7">7</option><option value="8">8</option></select>
+              <select class="cap-select" data-field="max"><option value="8">8</option><option value="10" selected>10</option><option value="12">12</option></select>
+            </div>
+            <div class="capacity-row" data-type="sofa">
+              <span class="table-type">🛋️ Sofa/Lounge</span>
+              <select class="cap-select" data-field="min"><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option></select>
+              <select class="cap-select" data-field="max"><option value="4" selected>4</option><option value="5">5</option><option value="6">6</option></select>
+            </div>
+            <div class="capacity-row" data-type="communal">
+              <span class="table-type">📏 Communal Table</span>
+              <select class="cap-select" data-field="min"><option value="1" selected>1</option><option value="2">2</option></select>
+              <select class="cap-select" data-field="max"><option value="12">12</option><option value="16" selected>16</option><option value="20">20</option></select>
+            </div>
+          </div>
+        </section>
+
+        <!-- Notifications -->
+        <section class="card">
+          <div class="card-header">
+            <h2>Notifications</h2>
+          </div>
+          <div class="toggle-list">
+            <div class="toggle-item">
+              <div class="toggle-info">
+                <span class="toggle-title">Email Confirmations</span>
+                <span class="toggle-desc">Send confirmation email to guests after booking</span>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="toggle-item">
+              <div class="toggle-info">
+                <span class="toggle-title">SMS Reminders</span>
+                <span class="toggle-desc">Send reminder 2 hours before reservation</span>
+              </div>
+              <label class="toggle">
+                <input type="checkbox">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="toggle-item">
+              <div class="toggle-info">
+                <span class="toggle-title">Staff Notifications</span>
+                <span class="toggle-desc">Alert staff when new reservation comes in</span>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Shift Modal -->
+    <div class="modal" id="shiftModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modalTitle">New Shift</h2>
+          <button class="modal-close" onclick="closeShiftModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Shift Name</label>
+            <input type="text" id="shiftName" class="form-input" placeholder="e.g. Breakfast, Dinner" />
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Start Time</label>
+              <input type="time" id="shiftStart" class="form-input" value="18:00" />
+            </div>
+            <div class="form-group">
+              <label>End Time</label>
+              <input type="time" id="shiftEnd" class="form-input" value="22:00" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Days Active</label>
+            <div class="days-selector">
+              <button type="button" class="day-btn" data-day="0">Sun</button>
+              <button type="button" class="day-btn active" data-day="1">Mon</button>
+              <button type="button" class="day-btn active" data-day="2">Tue</button>
+              <button type="button" class="day-btn active" data-day="3">Wed</button>
+              <button type="button" class="day-btn active" data-day="4">Thu</button>
+              <button type="button" class="day-btn active" data-day="5">Fri</button>
+              <button type="button" class="day-btn active" data-day="6">Sat</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="toggle-inline">
+              <input type="checkbox" id="shiftActive" checked />
+              <span>Shift is active (accepting reservations)</span>
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-delete" id="deleteShiftBtn" onclick="deleteShift()" style="display: none;">Delete</button>
+          <div class="modal-actions">
+            <button class="btn-secondary" onclick="closeShiftModal()">Cancel</button>
+            <button class="btn-primary" onclick="saveShift()">Save Shift</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --keswick: #3D4F3D;
+      --coniston: #4A5D4A;
+      --limestone: #D4C9B5;
+      --sand: #C4A67C;
+      --terracotta: #A65D3F;
+      --santorini: #1A1F16;
+      --cream: #F5F3EF;
+      --parchment: #EAE5DA;
+    }
+
+    .admin {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      min-height: 100vh;
+      background: var(--parchment);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: var(--santorini);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .sidebar-logo {
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--keswick);
+      margin-bottom: 1rem;
+    }
+
+    .sidebar-logo img {
+      height: 2.5rem; width: 2.5rem;
+      filter: brightness(0) invert(1);
+      opacity: 0.9;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .nav-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--limestone);
+      border-radius: 8px;
+      transition: all 0.15s;
+    }
+
+    .nav-icon svg { width: 20px; height: 20px; }
+    .nav-icon:hover { color: var(--cream); background: var(--keswick); }
+    .nav-icon.active { color: var(--cream); background: var(--terracotta); }
+
+    .sidebar-footer {
+      border-top: 1px solid var(--keswick);
+      padding-top: 1rem;
+    }
+
+    /* Main */
+    .main {
+      padding: 2rem 2.5rem;
+      max-width: 900px;
+      overflow-y: auto;
+    }
+
+    .header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--limestone);
+    }
+
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--santorini);
+      letter-spacing: -0.02em;
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--cream);
+      border-radius: 16px;
+      border: 1px solid var(--limestone);
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 1.5rem;
+      background: var(--cream);
+      border-bottom: 1px solid var(--limestone);
+    }
+
+    .card-header h2 {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--santorini);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .btn-primary {
+      padding: 0.5rem 1rem;
+      background: var(--terracotta);
+      color: var(--cream);
+      border: none;
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-primary:hover { background: #8B4D33; }
+
+    .btn-secondary {
+      padding: 0.5rem 1rem;
+      background: var(--cream);
+      color: var(--santorini);
+      border: 1px solid var(--limestone);
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover { background: var(--parchment); }
+
+    .btn-delete {
+      padding: 0.5rem 1rem;
+      background: transparent;
+      color: #dc2626;
+      border: 1px solid #dc2626;
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+    }
+
+    .btn-delete:hover { background: #fef2f2; }
+
+    /* Shifts Grid */
+    .shifts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+      padding: 1.25rem;
+    }
+
+    :global(.shift-card) {
+      background: white;
+      border: 1px solid var(--limestone);
+      border-radius: 12px;
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    :global(.shift-card:hover) {
+      border-color: var(--sand);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+
+    :global(.shift-card.inactive) {
+      background: var(--parchment);
+      opacity: 0.7;
+    }
+
+    :global(.shift-name) {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1875rem;
+      font-weight: 500;
+      color: var(--santorini);
+      margin-bottom: 0.625rem;
+    }
+
+    :global(.shift-time) {
+      font-size: 0.9375rem;
+      color: var(--keswick);
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    :global(.shift-time::before) {
+      content: '';
+      width: 16px;
+      height: 16px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233D4F3D' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpolyline points='12 6 12 12 16 14'/%3E%3C/svg%3E") center/contain no-repeat;
+      opacity: 0.7;
+    }
+
+    :global(.shift-days) {
+      display: flex;
+      gap: 0.375rem;
+      margin-bottom: 1rem;
+    }
+
+    :global(.day-dot) {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      background: var(--parchment);
+      color: var(--limestone);
+      border: 1px solid var(--limestone);
+      font-family: 'Inter', sans-serif;
+    }
+
+    :global(.day-dot.active) {
+      background: var(--keswick);
+      color: var(--cream);
+      border-color: var(--keswick);
+    }
+
+    :global(.shift-status) {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.75rem;
+      padding: 0.375rem 0.875rem;
+      border-radius: 16px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+    }
+
+    :global(.shift-status.active) {
+      background: rgba(61, 79, 61, 0.12);
+      color: var(--keswick);
+    }
+
+    :global(.shift-status.inactive) {
+      background: rgba(166, 93, 63, 0.12);
+      color: var(--terracotta);
+    }
+
+    :global(.shift-status::before) {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* Settings Grid */
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+      padding: 1.25rem;
+    }
+
+    .setting-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .setting-item label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--keswick);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .select-input {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--limestone);
+      border-radius: 8px;
+      background: var(--cream);
+      color: var(--santorini);
+      font-size: 0.9375rem;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    .select-input:hover { border-color: var(--sand); }
+    .select-input:focus { outline: none; border-color: var(--keswick); }
+
+    /* Table Capacity Settings */
+    .capacity-info {
+      padding: 1rem 1.5rem 0;
+    }
+
+    .capacity-desc {
+      font-size: 0.875rem;
+      color: var(--keswick);
+      margin-bottom: 0;
+    }
+
+    .capacity-grid {
+      padding: 1rem 1.5rem 1.5rem;
+    }
+
+    .capacity-row {
+      display: grid;
+      grid-template-columns: 1fr 100px 100px;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--parchment);
+      align-items: center;
+    }
+
+    .capacity-row.header {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      color: var(--keswick);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--limestone);
+      padding-bottom: 0.75rem;
+    }
+
+    .capacity-row:last-child {
+      border-bottom: none;
+    }
+
+    .table-type {
+      font-size: 0.9375rem;
+      color: var(--santorini);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .cap-select {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--limestone);
+      border-radius: 6px;
+      background: white;
+      color: var(--santorini);
+      font-size: 0.875rem;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+    }
+
+    .cap-select:hover {
+      border-color: var(--sand);
+    }
+
+    .cap-select:focus {
+      outline: none;
+      border-color: var(--keswick);
+    }
+
+    /* Toggle List */
+    .toggle-list {
+      padding: 0.5rem 1.25rem;
+    }
+
+    .toggle-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--parchment);
+    }
+
+    .toggle-item:last-child { border-bottom: none; }
+
+    .toggle-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .toggle-title {
+      font-weight: 500;
+      color: var(--santorini);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .toggle-desc {
+      font-size: 0.8125rem;
+      color: var(--keswick);
+    }
+
+    /* Toggle Switch */
+    .toggle {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 26px;
+    }
+
+    .toggle input { opacity: 0; width: 0; height: 0; }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: var(--limestone);
+      border-radius: 26px;
+      transition: 0.2s;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: '';
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: 0.2s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .toggle input:checked + .toggle-slider { background: var(--keswick); }
+    .toggle input:checked + .toggle-slider:before { transform: translateX(22px); }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 31, 22, 0.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.open { display: flex; }
+
+    .modal-content {
+      background: var(--cream);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 440px;
+      border: 1px solid var(--limestone);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--limestone);
+      background: var(--parchment);
+      border-radius: 12px 12px 0 0;
+    }
+
+    .modal-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: var(--santorini);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--keswick);
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .modal-body {
+      padding: 1.25rem;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--limestone);
+      background: var(--parchment);
+      border-radius: 0 0 12px 12px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--keswick);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--limestone);
+      border-radius: 8px;
+      font-size: 0.9375rem;
+      background: var(--cream);
+      color: var(--santorini);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--keswick);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .days-selector {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .day-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid var(--limestone);
+      background: var(--cream);
+      color: var(--keswick);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .day-btn:hover {
+      border-color: var(--sand);
+    }
+
+    .day-btn.active {
+      background: var(--keswick);
+      border-color: var(--keswick);
+      color: var(--cream);
+    }
+
+    .toggle-inline {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      font-size: 0.9375rem;
+      color: var(--santorini);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .toggle-inline input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--keswick);
+    }
+  </style>
+
+  <script is:inline>
+    const SHIFTS_KEY = 'laluna_shifts';
+    let editingShiftId = null;
+    
+    const defaultShifts = [
+      { id: 1, name: 'Breakfast', days: [0,1,2,3,4,5,6], start: '07:30', end: '09:45', active: true },
+      { id: 2, name: 'Brunch', days: [0,1,2,3,4,5,6], start: '10:00', end: '11:45', active: true },
+      { id: 3, name: 'Lunch', days: [0,1,2,3,4,5,6], start: '12:00', end: '15:00', active: true },
+      { id: 4, name: 'Dinner 1', days: [0,1,2,3,4,5,6], start: '16:45', end: '17:30', active: true },
+      { id: 5, name: 'Dinner 2', days: [0,1,2,3,4,5,6], start: '19:30', end: '22:00', active: true },
+    ];
+
+    function getShifts() {
+      const saved = localStorage.getItem(SHIFTS_KEY);
+      return saved ? JSON.parse(saved) : defaultShifts;
+    }
+
+    function saveShifts(shifts) {
+      localStorage.setItem(SHIFTS_KEY, JSON.stringify(shifts));
+    }
+
+    function formatTime(time) {
+      const [h, m] = time.split(':');
+      const hour = parseInt(h);
+      const ampm = hour >= 12 ? 'pm' : 'am';
+      const h12 = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
+      return `${h12}:${m}${ampm}`;
+    }
+
+    function renderShifts() {
+      const shifts = getShifts();
+      const dayLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+      
+      document.getElementById('shiftsGrid').innerHTML = shifts.map(shift => `
+        <div class="shift-card ${shift.active ? '' : 'inactive'}" onclick="editShift(${shift.id})">
+          <div class="shift-name">${shift.name}</div>
+          <div class="shift-time">${formatTime(shift.start)} – ${formatTime(shift.end)}</div>
+          <div class="shift-days">
+            ${dayLabels.map((d, i) => `
+              <span class="day-dot ${shift.days.includes(i) ? 'active' : ''}">${d}</span>
+            `).join('')}
+          </div>
+          <span class="shift-status ${shift.active ? 'active' : 'inactive'}">
+            ${shift.active ? 'Active' : 'Paused'}
+          </span>
+        </div>
+      `).join('');
+    }
+
+    window.openShiftModal = openShiftModal;
+    function openShiftModal(shift = null) {
+      editingShiftId = shift ? shift.id : null;
+      
+      document.getElementById('modalTitle').textContent = shift ? 'Edit Shift' : 'New Shift';
+      document.getElementById('shiftName').value = shift ? shift.name : '';
+      document.getElementById('shiftStart').value = shift ? shift.start : '18:00';
+      document.getElementById('shiftEnd').value = shift ? shift.end : '22:00';
+      document.getElementById('shiftActive').checked = shift ? shift.active : true;
+      document.getElementById('deleteShiftBtn').style.display = shift ? 'block' : 'none';
+      
+      // Set days
+      const days = shift ? shift.days : [1,2,3,4,5,6];
+      document.querySelectorAll('.day-btn').forEach(btn => {
+        const day = parseInt(btn.dataset.day);
+        btn.classList.toggle('active', days.includes(day));
+      });
+      
+      document.getElementById('shiftModal').classList.add('open');
+    }
+
+    function closeShiftModal() {
+      document.getElementById('shiftModal').classList.remove('open');
+      editingShiftId = null;
+    }
+    window.closeShiftModal = closeShiftModal;
+
+    function editShift(id) {
+      const shifts = getShifts();
+      const shift = shifts.find(s => s.id === id);
+      if (shift) openShiftModal(shift);
+    }
+    // Make editShift globally accessible for onclick
+    window.editShift = editShift;
+
+    window.saveShift = saveShift;
+    function saveShift() {
+      const name = document.getElementById('shiftName').value.trim();
+      if (!name) {
+        alert('Please enter a shift name');
+        return;
+      }
+
+      const days = [];
+      document.querySelectorAll('.day-btn.active').forEach(btn => {
+        days.push(parseInt(btn.dataset.day));
+      });
+
+      if (days.length === 0) {
+        alert('Please select at least one day');
+        return;
+      }
+
+      const shiftData = {
+        name,
+        start: document.getElementById('shiftStart').value,
+        end: document.getElementById('shiftEnd').value,
+        days,
+        active: document.getElementById('shiftActive').checked
+      };
+
+      const shifts = getShifts();
+      
+      if (editingShiftId) {
+        const idx = shifts.findIndex(s => s.id === editingShiftId);
+        if (idx !== -1) {
+          shifts[idx] = { ...shifts[idx], ...shiftData };
+        }
+      } else {
+        shiftData.id = Date.now();
+        shifts.push(shiftData);
+      }
+
+      saveShifts(shifts);
+      closeShiftModal();
+      renderShifts();
+    }
+
+    window.deleteShift = deleteShift;
+    function deleteShift() {
+      if (!editingShiftId || !confirm('Delete this shift?')) return;
+      
+      const shifts = getShifts().filter(s => s.id !== editingShiftId);
+      saveShifts(shifts);
+      closeShiftModal();
+      renderShifts();
+    }
+
+    // Day button toggle
+    document.querySelectorAll('.day-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('active');
+      });
+    });
+
+    // Close modal on backdrop click
+    document.getElementById('shiftModal').addEventListener('click', (e) => {
+      if (e.target.id === 'shiftModal') closeShiftModal();
+    });
+
+    // Initial render
+    renderShifts();
+  </script>
+</Layout>
