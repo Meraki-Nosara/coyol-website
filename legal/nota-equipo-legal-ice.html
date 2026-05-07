@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Nota Interna — Documentación Eléctrica Mar Azul</title>
+  <style>
+    @page {
+      size: letter;
+      margin: 2.5cm 2cm;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12pt;
+      line-height: 1.5;
+      color: #1a1a1a;
+      background: white;
+      padding: 40px 60px;
+      max-width: 8.5in;
+      margin: 0 auto;
+    }
+    
+    .header {
+      border-bottom: 1px solid #333;
+      padding-bottom: 15px;
+      margin-bottom: 25px;
+    }
+    
+    .header-title {
+      font-size: 11pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #333;
+    }
+    
+    .memo-block {
+      margin: 20px 0 30px 0;
+    }
+    
+    .memo-line {
+      display: flex;
+      margin-bottom: 5px;
+    }
+    
+    .memo-label {
+      font-weight: bold;
+      width: 80px;
+      flex-shrink: 0;
+    }
+    
+    .memo-value {
+      flex: 1;
+    }
+    
+    h1 {
+      font-size: 14pt;
+      font-weight: bold;
+      text-align: center;
+      margin: 30px 0 20px 0;
+      text-transform: uppercase;
+    }
+    
+    h2 {
+      font-size: 12pt;
+      font-weight: bold;
+      margin: 25px 0 12px 0;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
+    }
+    
+    h3 {
+      font-size: 11pt;
+      font-weight: bold;
+      margin: 18px 0 10px 0;
+    }
+    
+    p {
+      margin-bottom: 12px;
+      text-align: justify;
+    }
+    
+    .intro-box {
+      background: #f9f9f9;
+      border-left: 3px solid #444;
+      padding: 15px 20px;
+      margin: 20px 0;
+    }
+    
+    .intro-box ol {
+      margin: 10px 0 0 20px;
+    }
+    
+    .intro-box li {
+      margin-bottom: 6px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      font-size: 10pt;
+    }
+    
+    th, td {
+      border: 1px solid #999;
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    
+    th {
+      background: #eee;
+      font-weight: bold;
+    }
+    
+    .conclusion {
+      background: #f5f5f5;
+      padding: 12px 15px;
+      margin: 15px 0;
+      font-style: italic;
+    }
+    
+    .section-divider {
+      border-top: 2px solid #333;
+      margin: 30px 0;
+    }
+    
+    ul.docs-list {
+      margin: 15px 0 15px 25px;
+    }
+    
+    ul.docs-list li {
+      margin-bottom: 6px;
+    }
+    
+    .checkbox {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 1px solid #333;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    
+    .final-conclusion {
+      margin-top: 25px;
+      padding: 20px;
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+    }
+    
+    .signature-block {
+      margin-top: 50px;
+      padding-top: 20px;
+    }
+    
+    .signature-line {
+      width: 250px;
+      border-top: 1px solid #333;
+      margin-top: 40px;
+      padding-top: 5px;
+    }
+    
+    .key-point {
+      margin: 15px 0;
+      padding-left: 20px;
+    }
+    
+    .key-point ul {
+      margin: 8px 0 8px 20px;
+    }
+    
+    .key-point li {
+      margin-bottom: 4px;
+    }
+    
+    .highlight {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-title">Nota Interna — Confidencial</div>
+  </div>
+  
+  <div class="memo-block">
+    <div class="memo-line">
+      <span class="memo-label">PARA:</span>
+      <span class="memo-value">Equipo Legal</span>
+    </div>
+    <div class="memo-line">
+      <span class="memo-label">DE:</span>
+      <span class="memo-value">Marion Peri</span>
+    </div>
+    <div class="memo-line">
+      <span class="memo-label">FECHA:</span>
+      <span class="memo-value">6 de mayo de 2026</span>
+    </div>
+    <div class="memo-line">
+      <span class="memo-label">ASUNTO:</span>
+      <span class="memo-value">Cronología y documentación de instalaciones eléctricas — Condominio Mar Azul</span>
+    </div>
+  </div>
+
+  <h1>Resumen de Documentación Eléctrica</h1>
+  
+  <div class="intro-box">
+    <p style="margin-bottom: 10px;">El presente documento resume la cronología de comunicaciones y documentación oficial que demuestra:</p>
+    <ol>
+      <li>Las instalaciones eléctricas fueron inspeccionadas por ICE <strong>antes</strong> de aprobar el macro medidor</li>
+      <li>ICE (específicamente Elmer Torres Gómez, Área Desarrollo Santa Rita) está plenamente consciente de que Mar Azul es un condominio y ha colaborado activamente con nuestro ingeniero</li>
+      <li>Las líneas eléctricas fueron aprobadas por CFIA <strong>antes</strong> de la instalación del macro medidor</li>
+    </ol>
+  </div>
+
+  <h2>I. Cronología Documentada</h2>
+  
+  <h3>A. Infraestructura Original (2014)</h3>
+  
+  <table>
+    <tr>
+      <th style="width: 120px;">Fecha</th>
+      <th style="width: 180px;">Documento</th>
+      <th>Detalle</th>
+    </tr>
+    <tr>
+      <td>Agosto 2014</td>
+      <td>Correo electrónico ICE</td>
+      <td>Erik Chaves Sánchez (Sub Región Santa Rita) coordina visita de sitio para proyecto "Línea nueva en Camino Las Flores". Visita programada: 20 de agosto 2014.</td>
+    </tr>
+    <tr>
+      <td>31 Oct 2014</td>
+      <td>Sello CFIA OC 662440</td>
+      <td>Proyecto eléctrico aprobado. Monto: ₡50,904,000. Profesional responsable: IME-15995. Longitud: 2,365 metros. Bitácora: 208445.</td>
+    </tr>
+    <tr>
+      <td>Octubre 2014</td>
+      <td>Levantamiento CFIA</td>
+      <td>Planos aprobados (as-built) mostrando ubicación de líneas en fincas Mar Azul y Nosara Hills.</td>
+    </tr>
+    <tr>
+      <td>Post-2014</td>
+      <td>Inspección ICE</td>
+      <td>ICE inspeccionó líneas construidas y aprobó macro medidor, conectando el proyecto a la red.</td>
+    </tr>
+  </table>
+  
+  <div class="conclusion">
+    <strong>Conclusión:</strong> Las líneas fueron diseñadas por ingeniero colegiado, aprobadas por CFIA, construidas, inspeccionadas por ICE, y conectadas al macro medidor. Secuencia legal completa.
+  </div>
+
+  <h3>B. Cartas de Disponibilidad ICE (2020-2021)</h3>
+  
+  <table>
+    <tr>
+      <th style="width: 120px;">Fecha</th>
+      <th style="width: 180px;">Documento</th>
+      <th>Detalle</th>
+    </tr>
+    <tr>
+      <td>14 Oct 2020</td>
+      <td>Carta ICE Ref. 23108592020</td>
+      <td>Firmada por Rosales Dinarte María (Agencia Nosara). Indica que no existe disponibilidad de red pública frente a la propiedad. Propiedad: Desarrollo Rancho Mar Azul Nosara Ltda.</td>
+    </tr>
+    <tr>
+      <td>28 Ene 2021</td>
+      <td>Carta ICE Ref. 23100882021</td>
+      <td>Misma funcionaria. Hace referencia expresa a "LINEA PRIVADA MARYON" — ICE reconoce la existencia de nuestra línea privada.</td>
+    </tr>
+  </table>
+  
+  <div class="conclusion">
+    <strong>Conclusión:</strong> ICE documenta que no hay red pública disponible, pero reconoce expresamente la existencia de la "Línea Privada Maryon", confirmando que nuestra infraestructura de 2014 está registrada en sus sistemas.
+  </div>
+
+  <h3>C. Coordinación Activa con ICE (Septiembre 2024)</h3>
+  
+  <table>
+    <tr>
+      <th style="width: 120px;">Fecha</th>
+      <th style="width: 180px;">Documento</th>
+      <th>Detalle</th>
+    </tr>
+    <tr>
+      <td>16 Sept 2024</td>
+      <td>Borrador carta</td>
+      <td>Ing. Gustavo Castro Arce (IME-24016) prepara solicitud de capacidad eléctrica.</td>
+    </tr>
+    <tr>
+      <td>17 Sept 2024</td>
+      <td>Correo M. Peri → Elmer</td>
+      <td>Se envía solicitud a Elmer Torres Gómez, ICE Área Desarrollo Santa Rita.</td>
+    </tr>
+    <tr>
+      <td>18 Sept 2024<br>8:31 a.m.</td>
+      <td>Correo Elmer → M. Peri</td>
+      <td>Elmer confirma recepción: "Recibido, nos firman la nota, además, tienen el insumo y detalles de los cálculos."</td>
+    </tr>
+    <tr>
+      <td>18 Sept 2024<br>9:44 a.m.</td>
+      <td>Correo Gustavo → Elmer</td>
+      <td>Gustavo se presenta y explica metodología de cálculos basada en consumo real de 6 casas ya habitadas.</td>
+    </tr>
+    <tr>
+      <td>18 Sept 2024<br>12:13 p.m.</td>
+      <td>Correo Elmer con tabla</td>
+      <td>Elmer envía tabla de cargas revisada. Indica: "entre más real los datos del proyecto así nosotros justificamos ante nuestros superiores la demanda energética."</td>
+    </tr>
+    <tr>
+      <td>18 Sept 2024<br>1:07 p.m.</td>
+      <td>Correo Gustavo → Elmer</td>
+      <td>Confirma cálculos finales. Mar Azul: 36 unidades = 440 KVA.</td>
+    </tr>
+    <tr>
+      <td>18 Sept 2024</td>
+      <td>Carta formal (PDF)</td>
+      <td>Solicitud oficial firmada por Ing. Castro. Total proyectos: 1,660 KVA.</td>
+    </tr>
+    <tr>
+      <td>22 Sept 2024</td>
+      <td>Correo Elmer → equipo</td>
+      <td>Elmer responde: "Estamos analizando las 4 etapas... deben referenciarlo desde el trifásico." Solicita cronograma.</td>
+    </tr>
+  </table>
+  
+  <div class="conclusion">
+    <strong>Conclusión:</strong> Elmer Torres de ICE Área Desarrollo conoce que Mar Azul es un condominio, colabora activamente con nuestro ingeniero, y está planificando internamente la ampliación a trifásico. No hay mención de irregularidades.
+  </div>
+
+  <div class="section-divider"></div>
+
+  <h2>II. Llamada Telefónica Reciente con ICE</h2>
+  
+  <p>En una llamada telefónica realizada la última semana de abril 2026 con Elmer Torres Gómez (ICE Área Desarrollo Santa Rita), el funcionario indicó que <strong>"ICE no tiene conocimiento del Condominio Mar Azul"</strong> y que procederían a inspeccionar por posibles irregularidades.</p>
+  
+  <p>Esta afirmación es contradictoria con la documentación existente por las siguientes razones:</p>
+  
+  <ol style="margin: 15px 0 15px 25px;">
+    <li><strong>El mismo Elmer Torres</strong> intercambió múltiples correos con nuestro equipo en septiembre 2024, donde se calcularon cargas específicamente para "Condominio Mar Azul — 36 unidades"</li>
+    <li><strong>ICE Área Desarrollo</strong> (a través de Erik Chaves) coordinó la instalación original de las líneas en 2014</li>
+    <li><strong>ICE inspeccionó las líneas</strong> antes de aprobar y conectar el macro medidor</li>
+    <li><strong>Las cartas de 2020-2021</strong> hacen referencia a "Línea Privada Maryon" dentro de la propiedad</li>
+  </ol>
+  
+  <p>Respecto a la amenaza de inspeccionar por irregularidades, cabe señalar que <strong>todas las instalaciones fueron aprobadas por CFIA e inspeccionadas por el mismo ICE</strong> previo a la conexión del macro medidor. No es posible que existan "irregularidades" en instalaciones que ICE mismo verificó y conectó.</p>
+  
+  <div class="conclusion">
+    <strong>Conclusión:</strong> La afirmación de Elmer Torres de que "ICE no tiene conocimiento" del condominio es fácticamente incorrecta y queda desvirtuada por sus propios correos electrónicos de septiembre 2024. Cualquier inspección que realicen confirmará que las instalaciones fueron debidamente aprobadas por CFIA e inspeccionadas por ICE antes de su conexión.
+  </div>
+
+  <div class="section-divider"></div>
+  
+  <h2>III. Puntos Clave para Defensa Legal</h2>
+  
+  <div class="key-point">
+    <h3>1. Instalaciones Inspeccionadas Antes del Macro Medidor</h3>
+    <p>ICE no conecta macro medidores sin inspeccionar la infraestructura. La secuencia documentada de 2014 demuestra:</p>
+    <ul>
+      <li>Proyecto aprobado CFIA (Contrato OC 662440)</li>
+      <li>Construcción de 2,365 metros de línea</li>
+      <li>Levantamiento aprobado por CFIA</li>
+      <li><span class="highlight">Inspección por parte de ICE</span></li>
+      <li>Aprobación y conexión de macro medidor</li>
+    </ul>
+  </div>
+  
+  <div class="key-point">
+    <h3>2. ICE Consciente de que Mar Azul es Condominio</h3>
+    <p>Los correos de septiembre 2024 demuestran que:</p>
+    <ul>
+      <li>Elmer Torres Gómez (ICE Área Desarrollo) trabaja directamente con nosotros</li>
+      <li>Conoce que Mar Azul tiene 36 unidades habitacionales</li>
+      <li>Está calculando cargas específicamente para el condominio</li>
+      <li>Está justificando ante sus superiores la demanda energética del proyecto</li>
+    </ul>
+  </div>
+  
+  <div class="key-point">
+    <h3>3. Líneas Aprobadas por CFIA Antes del Macro Medidor</h3>
+    <p>Documentación de octubre 2014:</p>
+    <ul>
+      <li>Sello CFIA OC 662440 con número de bitácora 208445</li>
+      <li>Profesional responsable: IME-15995</li>
+      <li>Inversión documentada: ₡50,904,000</li>
+      <li>Levantamiento (as-built) aprobado</li>
+      <li><span class="highlight">Todo anterior a la conexión del macro medidor</span></li>
+    </ul>
+  </div>
+
+  <div class="section-divider"></div>
+  
+  <h2>IV. Documentos Disponibles</h2>
+  
+  <ul class="docs-list">
+    <li><span class="checkbox"></span>Correo Erik Chaves, ICE (Agosto 2014)</li>
+    <li><span class="checkbox"></span>Sello CFIA OC 662440 (31 Octubre 2014)</li>
+    <li><span class="checkbox"></span>Plano levantamiento CFIA (Octubre 2014)</li>
+    <li><span class="checkbox"></span>Carta ICE Ref. 23108592020 (14 Octubre 2020)</li>
+    <li><span class="checkbox"></span>Carta ICE Ref. 23100882021 (28 Enero 2021)</li>
+    <li><span class="checkbox"></span>Cadena de correos Gustavo Castro - Elmer Torres (Septiembre 2024)</li>
+    <li><span class="checkbox"></span>Carta solicitud formal en PDF (18 Septiembre 2024)</li>
+  </ul>
+
+  <div class="section-divider"></div>
+  
+  <div class="final-conclusion">
+    <h2 style="border: none; margin-top: 0;">V. Conclusión</h2>
+    <p>No existe irregularidad alguna en las instalaciones eléctricas de Condominio Mar Azul. Toda la infraestructura fue:</p>
+    <ul style="margin: 15px 0 15px 25px;">
+      <li>Diseñada por profesional colegiado ante el CFIA</li>
+      <li>Aprobada por CFIA antes de su construcción</li>
+      <li>Construida conforme a los planos aprobados</li>
+      <li>Levantamiento (as-built) aprobado por CFIA</li>
+      <li>Inspeccionada por ICE previo a conexión</li>
+      <li>Conectada formalmente al macro medidor por ICE</li>
+    </ul>
+    <p>Posteriormente, ICE ha colaborado activamente con nuestro equipo técnico para planificar la ampliación de capacidad necesaria para el desarrollo completo de los proyectos.</p>
+    <p><strong>Cualquier alegato de "irregularidad" carece de fundamento fáctico y documental.</strong></p>
+  </div>
+
+  <div class="signature-block">
+    <div class="signature-line">
+      Marion Peri<br>
+      6 de mayo de 2026
+    </div>
+  </div>
+
+</body>
+</html>

@@ -9,6 +9,7 @@ import Layout from '../layouts/Layout.astro';
       <header class="form-header">
         <a href="/" class="back-link">← Back</a>
         <img src="/images/logo.png" alt="La Luna" class="logo" />
+        <div class="spacer"></div>
       </header>
 
       <div class="form-container">
@@ -194,10 +195,15 @@ import Layout from '../layouts/Layout.astro';
       font-size: 0.875rem;
       color: #78716c;
       text-decoration: none;
+      width: 60px;
     }
 
     .logo {
       height: 5rem;
+    }
+
+    .spacer {
+      width: 60px;
     }
 
     .form-container {
@@ -538,8 +544,8 @@ import Layout from '../layouts/Layout.astro';
     .image-overlay {
       position: absolute;
       inset: 0;
-      background: url('/images/garden-tables.jpg') center/cover;
-      opacity: 0.3;
+      background: url('/images/laluna-exterior.jpg') center/cover;
+      opacity: 0.4;
     }
 
     @media (max-width: 768px) {
