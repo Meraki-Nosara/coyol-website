@@ -1,5 +1,20 @@
 [
   {
+    "id": "iva-202604",
+    "name": "IVA Abril 2026",
+    "type": "iva",
+    "frequency": "monthly",
+    "dueDay": 15,
+    "dueMonth": 5,
+    "description": "IVA abril 2026",
+    "haciendaCode": "D-104",
+    "amount": 3494000,
+    "period": "202604",
+    "status": "paid",
+    "lastPaid": "2026-05-08",
+    "lastPaidAmount": 3494000
+  },
+  {
     "id": "iva-202603",
     "name": "IVA Marzo 2026",
     "type": "iva",
