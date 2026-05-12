@@ -11,7 +11,7 @@ const url = new URL(Astro.request.url);
 const currency = (url.searchParams.get('currency') as 'CRC' | 'USD') || 'CRC';
 
 // Helper to format with current currency
-const fmt = (amount: number) => formatCurrency(amount, currency);
+const fmt = (amount: number) => formatCurrency(amount, currency, false);
 
 // Logo paths
 const logos: Record<string, string> = {

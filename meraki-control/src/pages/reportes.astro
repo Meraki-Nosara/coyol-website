@@ -14,7 +14,7 @@ const endDate = url.searchParams.get('end') || allMonths[allMonths.length - 1] |
 const selectedRestaurant = url.searchParams.get('restaurant') || 'all';
 
 // Helper to format with current currency
-const fmt = (amount: number) => formatCurrency(amount, currency);
+const fmt = (amount: number) => formatCurrency(amount, currency, false);
 
 // Logo paths
 const logos: Record<string, string> = {
