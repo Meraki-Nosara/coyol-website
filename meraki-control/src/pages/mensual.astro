@@ -272,8 +272,7 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
         <div class="px-4 lg:px-8 py-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
             <h2 class="text-xl font-semibold text-landrover-santorini">Dashboard</h2>
-            <p class="text-sm text-landrover-marine/60">Year to date • {allMonths.length} months</p>
-            <p class="text-base font-semibold text-landrover-keswick mt-1">Last updated: {lastUpdated ? new Date(lastUpdated).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'N/A'}</p>
+            <p class="text-lg font-bold text-landrover-keswick">Updated: {lastUpdated ? new Date(lastUpdated).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'N/A'}</p>
           </div>
           
           <!-- Currency Toggle & Reports Button -->
