@@ -44,8 +44,15 @@ def get_daily_sales(data, target_date):
             }
     return results
 
-def format_colones(amount):
-    """Format as Costa Rican colones"""
+def format_colones(amount, abbreviate=True):
+    """Format as Costa Rican colones
+    
+    Args:
+        amount: Number in colones
+        abbreviate: If True, use K/M suffixes. If False, show full number.
+    """
+    if not abbreviate:
+        return f"₡{amount:,.0f}"
     if amount >= 1_000_000:
         return f"₡{amount/1_000_000:.1f}M"
     elif amount >= 1000:
@@ -146,7 +153,7 @@ def generate_html(date_str, sales_data):
     
     <div class="total-banner">
         <div class="label">TOTAL SALES</div>
-        <div class="amount">{format_colones(total_all)}</div>
+        <div class="amount">{format_colones(total_all, abbreviate=False)}</div>
     </div>
     
     <div class="restaurants">

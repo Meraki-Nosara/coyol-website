@@ -84,9 +84,12 @@ export function getYearData(year: string): MonthlySale[] {
 // Exchange rate (approximate - update as needed)
 export const USD_RATE = 505; // 1 USD = 505 CRC
 
-export function formatCurrency(amount: number, currency: 'CRC' | 'USD' = 'CRC'): string {
+export function formatCurrency(amount: number, currency: 'CRC' | 'USD' = 'CRC', abbreviate: boolean = true): string {
   if (currency === 'USD') {
     const usd = amount / USD_RATE;
+    if (!abbreviate) {
+      return `$${usd.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+    }
     if (usd >= 1000000) {
       return `$${(usd / 1000000).toFixed(1)}M`;
     } else if (usd >= 1000) {
@@ -96,12 +99,20 @@ export function formatCurrency(amount: number, currency: 'CRC' | 'USD' = 'CRC'):
   }
   
   // CRC (Colones)
+  if (!abbreviate) {
+    return `₡${amount.toLocaleString()}`;
+  }
   if (amount >= 1000000) {
     return `₡${(amount / 1000000).toFixed(1)}M`;
   } else if (amount >= 1000) {
     return `₡${(amount / 1000).toFixed(0)}K`;
   }
   return `₡${amount.toLocaleString()}`;
+}
+
+// Full number format (no abbreviation) - useful for headers
+export function formatCurrencyFull(amount: number, currency: 'CRC' | 'USD' = 'CRC'): string {
+  return formatCurrency(amount, currency, false);
 }
 
 // Legacy function for backwards compatibility
