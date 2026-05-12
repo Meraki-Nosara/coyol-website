@@ -1706,7 +1706,7 @@
       "cashier": "Juan Castillo"
     }
   ],
-  "lastUpdated": "2026-04-13T07:30:00.000Z",
+  "lastUpdated": "2026-05-12T12:22:00.000Z",
   "payroll2025": {
     "10": 11400000,
     "11": 47900000,
@@ -2245,31 +2245,93 @@
       "card": 172780,
       "dollars": 61,
       "source": "ingrid_cierre_may04"
-    }
-  ]
-}
-,
+    },
     {
       "date": "2026-05-10",
       "restaurant": "coyol",
-      "total": 1880820,
+      "total": 2313409,
+      "netSales": 1880820,
+      "service10": 189082,
+      "iva13": 244507,
       "cash": 143080,
-      "card": 2370646,
-      "source": "ingrid-cierre"
+      "card": 2219569,
+      "source": "ingrid_cierre_may11"
     },
     {
       "date": "2026-05-10",
       "restaurant": "laluna",
-      "total": 3912945,
+      "total": 4800450,
+      "netSales": 3912945,
+      "service10": 378822,
+      "iva13": 508683,
       "cash": 545000,
-      "card": 994936,
-      "source": "ingrid-cierre"
+      "card": 4356692,
+      "source": "ingrid_cierre_may11"
     },
     {
       "date": "2026-05-10",
       "restaurant": "esh",
-      "total": 217319,
+      "total": 260073,
+      "netSales": 217319,
+      "service10": 14502,
+      "iva13": 28252,
       "cash": 0,
-      "card": 263073,
-      "source": "ingrid-cierre"
+      "card": 260073,
+      "source": "ingrid_cierre_may11"
+    },
+    {
+      "date": "2026-05-09",
+      "restaurant": "coyol",
+      "total": 2083067,
+      "netSales": 1893550,
+      "cash": 2130712,
+      "card": 2063432,
+      "source": "ingrid_cierre_may10"
+    },
+    {
+      "date": "2026-05-09",
+      "restaurant": "laluna",
+      "total": 3589116,
+      "netSales": 2926788,
+      "cash": 392000,
+      "card": 3417880,
+      "source": "ingrid_cierre_may10"
+    },
+    {
+      "date": "2026-05-09",
+      "restaurant": "esh",
+      "total": 514833,
+      "netSales": 430131,
+      "cash": 24575,
+      "card": 317792,
+      "source": "ingrid_cierre_may10"
+    },
+    {
+      "date": "2026-05-08",
+      "restaurant": "coyol",
+      "total": 2358771,
+      "netSales": 1917700,
+      "cash": 109532,
+      "card": 2299239,
+      "source": "ingrid_cierre_may09"
+    },
+    {
+      "date": "2026-05-08",
+      "restaurant": "laluna",
+      "total": 4712957,
+      "netSales": 3844645,
+      "cash": 401000,
+      "card": 4411542,
+      "source": "ingrid_cierre_may09"
+    },
+    {
+      "date": "2026-05-08",
+      "restaurant": "esh",
+      "total": 515567,
+      "netSales": 433433,
+      "cash": 131650,
+      "card": 415889,
+      "source": "ingrid_cierre_may09"
     }
+  ]
+}
