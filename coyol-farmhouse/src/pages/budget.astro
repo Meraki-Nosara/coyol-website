@@ -1,0 +1,301 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Construction cost basis
+const costPerM2 = 1000; // USD
+
+// Cabin models - PHASE 1
+const cabins = {
+  coyol1BR: { name: 'Coyol Cabin 1BR', size: 65, quantity: 20 },
+  family2BR: { name: 'Family Pavilion 2BR', size: 75, quantity: 10 }
+};
+
+// Calculate cabin costs
+const coyolTotal = cabins.coyol1BR.size * cabins.coyol1BR.quantity * costPerM2;
+const familyTotal = cabins.family2BR.size * cabins.family2BR.quantity * costPerM2;
+const totalCabinArea = (cabins.coyol1BR.size * cabins.coyol1BR.quantity) + (cabins.family2BR.size * cabins.family2BR.quantity);
+const totalCabinCost = coyolTotal + familyTotal;
+
+// Other buildings (estimates)
+const otherBuildings = [
+  { name: 'Main Lobby / Restaurant / Café', size: 600, cost: 600 * costPerM2 },
+  { name: 'Spa & Gym', size: 300, cost: 300 * costPerM2 },
+  { name: 'Pool House & Retail', size: 200, cost: 200 * costPerM2 },
+  { name: 'Rancho House (renovation)', size: 300, cost: 300 * 500 }, // Lower cost for reno
+  { name: 'Yoga Decks (4)', size: 200, cost: 200 * 300 }, // Lower cost, open structure
+  { name: 'Tennis Pavilion', size: 50, cost: 50 * costPerM2 },
+];
+
+const totalOtherCost = otherBuildings.reduce((sum, b) => sum + b.cost, 0);
+const totalOtherArea = otherBuildings.reduce((sum, b) => sum + b.size, 0);
+
+// Infrastructure (from infrastructure page)
+const infrastructure = {
+  roads: { name: 'Roads (1.5km × 4m, dirt)', cost: 30000 },
+  wastewater: { name: 'Wastewater (8 clusters + main)', cost: 130000 },
+  electrical: { name: 'Electrical distribution', cost: 200000 },
+  water: { name: 'Water system (tanks, pipes, pumps)', cost: 150000 },
+  landscaping: { name: 'Landscaping & trails', cost: 200000 },
+  pool: { name: 'Main pool construction', cost: 150000 },
+  tennis: { name: 'Tennis courts (2)', cost: 80000 },
+  parking: { name: 'Main parking lot', cost: 60000 },
+  golfCarts: { name: 'Golf cart fleet (15)', cost: 120000 },
+};
+
+const totalInfraCost = Object.values(infrastructure).reduce((sum, i) => sum + i.cost, 0);
+
+// Soft costs
+const softCosts = {
+  permits: { name: 'Permits & studies (SETENA, INVU, etc.)', cost: 100000 },
+  design: { name: 'Architecture & engineering (salaried team)', cost: 72000 }, // $6k/month x 12 months
+  legal: { name: 'Legal & administrative', cost: 50000 },
+  contingency: { name: 'Contingency (10%)', cost: 0 }, // Calculated below
+  financing: { name: 'Financing costs (if applicable)', cost: 0 },
+};
+
+// Calculate subtotals
+const constructionSubtotal = totalCabinCost + totalOtherCost;
+const hardCostSubtotal = constructionSubtotal + totalInfraCost;
+const softCostBase = softCosts.permits.cost + softCosts.design.cost + softCosts.legal.cost;
+const contingency = Math.round((hardCostSubtotal + softCostBase) * 0.10);
+softCosts.contingency.cost = contingency;
+
+const totalSoftCost = softCostBase + contingency;
+const grandTotal = hardCostSubtotal + totalSoftCost;
+---
+
+<Layout title="Budget — Coyol Farmhouse">
+  <!-- PHASE 1: 30 cabins (20 Coyol + 10 Family) -->
+  <div class="min-h-screen bg-lr-santorini">
+    
+    <!-- Header -->
+    <header class="border-b border-lr-moss/30 bg-lr-santorini/80 backdrop-blur sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div>
+          <a href="/" class="text-2xl font-serif text-lr-sand hover:text-lr-terracotta transition">COYOL FARMHOUSE</a>
+          <p class="text-sm text-lr-limestone/70">Construction Budget</p>
+        </div>
+        <a href="/" class="text-sm text-lr-limestone hover:text-lr-sand transition">← Back to Dashboard</a>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8">
+
+      <!-- Phase 1 Banner -->
+      <div class="bg-lr-terracotta/20 border border-lr-terracotta/50 rounded-xl p-4 mb-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="text-lr-terracotta font-medium">PHASE 1</span>
+            <span class="text-lr-limestone ml-2">30 cabins (20 Coyol + 10 Family)</span>
+          </div>
+          <div class="text-sm text-lr-limestone/70">
+            Expandable to 50 cabins in Phase 2
+          </div>
+        </div>
+      </div>
+
+      <!-- Cost Basis -->
+      <div class="bg-lr-sand/10 border border-lr-sand/30 rounded-xl p-4 mb-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="text-lr-limestone">Construction Cost Basis:</span>
+            <span class="text-2xl font-serif text-lr-sand ml-2">${costPerM2.toLocaleString()}/m²</span>
+          </div>
+          <div class="text-sm text-slate-400">
+            Mid-range quality, Costa Rica 2026
+          </div>
+        </div>
+      </div>
+
+      <!-- Cabins Section -->
+      <section class="mb-8">
+        <h2 class="text-xl font-serif text-lr-sand mb-4"> Cabins</h2>
+        <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 overflow-hidden">
+          <table class="w-full text-sm">
+            <thead class="bg-lr-moss/20">
+              <tr class="text-left text-lr-limestone">
+                <th class="p-3">Model</th>
+                <th class="p-3 text-right">Size</th>
+                <th class="p-3 text-right">Qty</th>
+                <th class="p-3 text-right">Total m²</th>
+                <th class="p-3 text-right">Cost</th>
+              </tr>
+            </thead>
+            <tbody class="text-lr-limestone/80">
+              <tr class="border-t border-lr-moss/20">
+                <td class="p-3">{cabins.coyol1BR.name}</td>
+                <td class="p-3 text-right">{cabins.coyol1BR.size} m²</td>
+                <td class="p-3 text-right">{cabins.coyol1BR.quantity}</td>
+                <td class="p-3 text-right">{(cabins.coyol1BR.size * cabins.coyol1BR.quantity).toLocaleString()} m²</td>
+                <td class="p-3 text-right font-mono">${coyolTotal.toLocaleString()}</td>
+              </tr>
+              <tr class="border-t border-lr-moss/20">
+                <td class="p-3">{cabins.family2BR.name}</td>
+                <td class="p-3 text-right">{cabins.family2BR.size} m²</td>
+                <td class="p-3 text-right">{cabins.family2BR.quantity}</td>
+                <td class="p-3 text-right">{(cabins.family2BR.size * cabins.family2BR.quantity).toLocaleString()} m²</td>
+                <td class="p-3 text-right font-mono">${familyTotal.toLocaleString()}</td>
+              </tr>
+              <tr class="border-t-2 border-lr-sand/50 bg-lr-sand/10 font-medium">
+                <td class="p-3 text-lr-sand" colspan="3">SUBTOTAL CABINS</td>
+                <td class="p-3 text-right text-lr-sand">{totalCabinArea.toLocaleString()} m²</td>
+                <td class="p-3 text-right font-mono text-lr-sand">${totalCabinCost.toLocaleString()}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Other Buildings Section -->
+      <section class="mb-8">
+        <h2 class="text-xl font-serif text-lr-sand mb-4"> Other Buildings</h2>
+        <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 overflow-hidden">
+          <table class="w-full text-sm">
+            <thead class="bg-lr-moss/20">
+              <tr class="text-left text-lr-limestone">
+                <th class="p-3">Building</th>
+                <th class="p-3 text-right">Size</th>
+                <th class="p-3 text-right">Cost</th>
+              </tr>
+            </thead>
+            <tbody class="text-lr-limestone/80">
+              {otherBuildings.map(b => (
+                <tr class="border-t border-lr-moss/20">
+                  <td class="p-3">{b.name}</td>
+                  <td class="p-3 text-right">{b.size} m²</td>
+                  <td class="p-3 text-right font-mono">${b.cost.toLocaleString()}</td>
+                </tr>
+              ))}
+              <tr class="border-t-2 border-lr-sand/50 bg-lr-sand/10 font-medium">
+                <td class="p-3 text-lr-sand">SUBTOTAL OTHER</td>
+                <td class="p-3 text-right text-lr-sand">{totalOtherArea.toLocaleString()} m²</td>
+                <td class="p-3 text-right font-mono text-lr-sand">${totalOtherCost.toLocaleString()}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Infrastructure Section -->
+      <section class="mb-8">
+        <h2 class="text-xl font-serif text-lr-sand mb-4"> Infrastructure</h2>
+        <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 overflow-hidden">
+          <table class="w-full text-sm">
+            <thead class="bg-lr-moss/20">
+              <tr class="text-left text-lr-limestone">
+                <th class="p-3">Item</th>
+                <th class="p-3 text-right">Cost</th>
+              </tr>
+            </thead>
+            <tbody class="text-lr-limestone/80">
+              {Object.values(infrastructure).map(item => (
+                <tr class="border-t border-lr-moss/20">
+                  <td class="p-3">{item.name}</td>
+                  <td class="p-3 text-right font-mono">${item.cost.toLocaleString()}</td>
+                </tr>
+              ))}
+              <tr class="border-t-2 border-lr-sand/50 bg-lr-sand/10 font-medium">
+                <td class="p-3 text-lr-sand">SUBTOTAL INFRASTRUCTURE</td>
+                <td class="p-3 text-right font-mono text-lr-sand">${totalInfraCost.toLocaleString()}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Soft Costs Section -->
+      <section class="mb-8">
+        <h2 class="text-xl font-serif text-lr-sand mb-4"> Soft Costs</h2>
+        <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 overflow-hidden">
+          <table class="w-full text-sm">
+            <thead class="bg-lr-moss/20">
+              <tr class="text-left text-lr-limestone">
+                <th class="p-3">Item</th>
+                <th class="p-3 text-right">Cost</th>
+              </tr>
+            </thead>
+            <tbody class="text-lr-limestone/80">
+              {Object.values(softCosts).map(item => (
+                <tr class="border-t border-lr-moss/20">
+                  <td class="p-3">{item.name}</td>
+                  <td class="p-3 text-right font-mono">${item.cost.toLocaleString()}</td>
+                </tr>
+              ))}
+              <tr class="border-t-2 border-lr-sand/50 bg-lr-sand/10 font-medium">
+                <td class="p-3 text-lr-sand">SUBTOTAL SOFT COSTS</td>
+                <td class="p-3 text-right font-mono text-lr-sand">${totalSoftCost.toLocaleString()}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Grand Total -->
+      <section class="mb-8">
+        <div class="bg-lr-terracotta/20 border-2 border-lr-terracotta rounded-xl p-6">
+          <h2 class="text-xl font-serif text-lr-terracotta mb-4"> Total Project Budget</h2>
+          <div class="space-y-3">
+            <div class="flex justify-between text-lr-limestone">
+              <span>Construction (Cabins + Buildings)</span>
+              <span class="font-mono">${constructionSubtotal.toLocaleString()}</span>
+            </div>
+            <div class="flex justify-between text-lr-limestone">
+              <span>Infrastructure</span>
+              <span class="font-mono">${totalInfraCost.toLocaleString()}</span>
+            </div>
+            <div class="flex justify-between text-lr-limestone">
+              <span>Soft Costs (permits, design, contingency)</span>
+              <span class="font-mono">${totalSoftCost.toLocaleString()}</span>
+            </div>
+            <div class="flex justify-between pt-3 border-t-2 border-lr-terracotta/50">
+              <span class="text-2xl font-serif text-lr-terracotta">GRAND TOTAL</span>
+              <span class="text-2xl font-serif text-lr-terracotta">${grandTotal.toLocaleString()}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Per-Unit Analysis -->
+      <section class="mb-8">
+        <h2 class="text-xl font-serif text-lr-sand mb-4"> Per-Unit Analysis</h2>
+        <div class="grid md:grid-cols-3 gap-4">
+          <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 p-4 text-center">
+            <div class="text-3xl font-serif text-lr-sand">${Math.round(grandTotal / 50).toLocaleString()}</div>
+            <div class="text-sm text-lr-limestone/70">Cost per cabin (all-in)</div>
+          </div>
+          <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 p-4 text-center">
+            <div class="text-3xl font-serif text-lr-sand">${Math.round(grandTotal / (totalCabinArea + totalOtherArea)).toLocaleString()}</div>
+            <div class="text-sm text-lr-limestone/70">Cost per m² (all-in)</div>
+          </div>
+          <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 p-4 text-center">
+            <div class="text-3xl font-serif text-lr-sand">{((totalCabinArea + totalOtherArea) / 10000).toFixed(2)} ha</div>
+            <div class="text-sm text-lr-limestone/70">Total built area</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROI Quick Look -->
+      <section class="bg-green-900/20 border border-green-600/50 rounded-xl p-6">
+        <h2 class="text-lg font-serif text-green-400 mb-4"> ROI Quick Look (Phase 1: 30 cabins)</h2>
+        <div class="grid md:grid-cols-3 gap-6 text-sm">
+          <div>
+            <div class="text-slate-400">Annual Revenue (70% occ.)</div>
+            <div class="text-xl font-serif text-green-300">$3.8M</div>
+            <div class="text-xs text-slate-500">20×$425 + 10×$675 @ 70%</div>
+          </div>
+          <div>
+            <div class="text-slate-400">Total Investment</div>
+            <div class="text-xl font-serif text-lr-limestone">${grandTotal.toLocaleString()}</div>
+          </div>
+          <div>
+            <div class="text-slate-400">Simple Payback</div>
+            <div class="text-xl font-serif text-green-300">{(grandTotal / 3800000).toFixed(1)} years</div>
+            <div class="text-xs text-slate-500">Before OpEx</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+</Layout>

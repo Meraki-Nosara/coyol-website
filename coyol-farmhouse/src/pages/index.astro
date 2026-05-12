@@ -1,0 +1,184 @@
+---
+import Layout from '../layouts/Layout.astro';
+import permits from '../data/permits.json';
+import project from '../data/project.json';
+
+const criticalPermits = permits.permits.filter(p => p.priority === 'critical');
+const prerequisites = permits.prerequisites;
+
+const statusColors: Record<string, string> = {
+  'pending': 'bg-slate-800/80 text-slate-400',
+  'in-progress': 'bg-amber-900/40 text-amber-400',
+  'submitted': 'bg-emerald-900/40 text-emerald-400',
+  'approved': 'bg-green-900/40 text-green-400',
+  'complete': 'bg-green-900/40 text-green-400',
+  'blocked': 'bg-red-900/40 text-red-400'
+};
+---
+
+<Layout title="Coyol Farmhouse — Planning">
+  <div class="min-h-screen">
+    
+    <!-- Header -->
+    <header class="border-b border-lr-moss/20 bg-lr-santorini/95 backdrop-blur-md sticky top-0 z-50">
+      <div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-serif tracking-wide text-lr-sand">COYOL FARMHOUSE</h1>
+          <p class="text-xs text-lr-limestone/60 tracking-widest uppercase mt-0.5">Development Planning</p>
+        </div>
+        <nav class="flex gap-6 text-sm">
+          <a href="/masterplan" class="text-lr-limestone/70 hover:text-lr-sand transition">Masterplan</a>
+          <a href="/permits" class="text-lr-limestone/70 hover:text-lr-sand transition">Permits</a>
+          <a href="/budget" class="text-lr-limestone/70 hover:text-lr-sand transition">Budget</a>
+          <a href="/team" class="text-lr-limestone/70 hover:text-lr-sand transition">Team</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-10">
+      
+      <!-- Hero Stats -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+        <div class="gradient-card rounded-2xl p-5 border border-lr-moss/20">
+          <div class="text-4xl font-serif text-lr-sand">55</div>
+          <div class="text-sm text-lr-limestone/60 mt-1">Hectares</div>
+        </div>
+        <div class="gradient-card rounded-2xl p-5 border border-lr-moss/20">
+          <div class="text-4xl font-serif text-lr-sand">50</div>
+          <div class="text-sm text-lr-limestone/60 mt-1">Cabins</div>
+        </div>
+        <div class="gradient-card rounded-2xl p-5 border border-lr-moss/20">
+          <div class="text-4xl font-serif text-lr-sand">$6.7M</div>
+          <div class="text-sm text-lr-limestone/60 mt-1">Total Budget</div>
+        </div>
+        <div class="gradient-card rounded-2xl p-5 border border-lr-moss/20">
+          <div class="text-4xl font-serif text-lr-sand">D1</div>
+          <div class="text-sm text-lr-limestone/60 mt-1">SETENA (in progress)</div>
+        </div>
+      </div>
+
+      <!-- Masterplan Preview -->
+      <section class="mb-12">
+        <div class="rounded-2xl overflow-hidden border border-lr-moss/20 bg-lr-santorini/50">
+          <div class="px-6 py-4 border-b border-lr-moss/20 flex justify-between items-center">
+            <div>
+              <h2 class="font-serif text-lg text-lr-sand">Masterplan</h2>
+              <p class="text-xs text-lr-limestone/50 mt-0.5">55 hectares • Quebrada La Yegua</p>
+            </div>
+            <a href="/masterplan" class="text-sm text-lr-sand/80 hover:text-lr-sand transition flex items-center gap-1">
+              View Full
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+          <a href="/masterplan" class="block">
+            <img src="/images/masterplan.png" alt="Coyol Farmhouse Masterplan" class="w-full hover:opacity-95 transition" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Two Column Layout -->
+      <div class="grid md:grid-cols-2 gap-6 mb-12">
+        
+        <!-- Prerequisites -->
+        <section class="rounded-2xl border border-lr-moss/20 overflow-hidden">
+          <div class="px-6 py-4 border-b border-lr-moss/20 bg-lr-moss/5">
+            <h2 class="font-serif text-lg text-lr-sand">Prerequisites</h2>
+            <p class="text-xs text-lr-limestone/50 mt-0.5">Complete before permits</p>
+          </div>
+          <div class="p-4 space-y-3">
+            {prerequisites.map(prereq => (
+              <div class="p-4 rounded-xl bg-lr-santorini/80 border border-lr-moss/10 hover:border-lr-moss/30 transition">
+                <div class="flex justify-between items-start mb-2">
+                  <span class="font-medium text-lr-alaska text-sm">{prereq.name}</span>
+                  <span class={`badge ${statusColors[prereq.status]}`}>
+                    {prereq.status.replace('-', ' ')}
+                  </span>
+                </div>
+                <div class="text-xs text-lr-limestone/50">{prereq.estimatedCost}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <!-- Critical Permits -->
+        <section class="rounded-2xl border border-lr-moss/20 overflow-hidden">
+          <div class="px-6 py-4 border-b border-lr-moss/20 bg-lr-moss/5">
+            <h2 class="font-serif text-lg text-lr-sand">Critical Permits</h2>
+            <p class="text-xs text-lr-limestone/50 mt-0.5">Required for construction</p>
+          </div>
+          <div class="p-4 space-y-3">
+            {criticalPermits.map(permit => (
+              <div class="p-4 rounded-xl bg-lr-santorini/80 border border-lr-moss/10 hover:border-lr-moss/30 transition">
+                <div class="flex justify-between items-start mb-2">
+                  <span class="font-medium text-lr-alaska text-sm">{permit.name}</span>
+                  <span class={`badge ${statusColors[permit.status]}`}>
+                    {permit.status.replace('-', ' ')}
+                  </span>
+                </div>
+                <div class="flex justify-between text-xs text-lr-limestone/50">
+                  <span>{permit.institution}</span>
+                  <span>{permit.estimatedTime}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Quick Navigation -->
+      <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a href="/permits" class="card-hover gradient-card rounded-2xl p-6 border border-lr-moss/20 text-center">
+          <div class="text-3xl mb-3 opacity-80"></div>
+          <div class="font-medium text-lr-sand text-sm">All Permits</div>
+          <div class="text-xs text-lr-limestone/50 mt-1">12 required</div>
+        </a>
+        <a href="/cabins" class="card-hover gradient-card rounded-2xl p-6 border border-lr-moss/20 text-center">
+          <div class="text-3xl mb-3 opacity-80"></div>
+          <div class="font-medium text-lr-sand text-sm">Cabin Models</div>
+          <div class="text-xs text-lr-limestone/50 mt-1">2 designs</div>
+        </a>
+        <a href="/infrastructure" class="card-hover gradient-card rounded-2xl p-6 border border-lr-moss/20 text-center">
+          <div class="text-3xl mb-3 opacity-80"></div>
+          <div class="font-medium text-lr-sand text-sm">Infrastructure</div>
+          <div class="text-xs text-lr-limestone/50 mt-1">Roads, water, power</div>
+        </a>
+        <a href="/budget" class="card-hover gradient-card rounded-2xl p-6 border border-lr-moss/20 text-center">
+          <div class="text-3xl mb-3 opacity-80"></div>
+          <div class="font-medium text-lr-sand text-sm">Budget</div>
+          <div class="text-xs text-lr-limestone/50 mt-1">~$4.7M Phase 1</div>
+        </a>
+        <a href="/water" class="card-hover gradient-card rounded-2xl p-6 border border-lr-moss/20 text-center">
+          <div class="text-3xl mb-3 opacity-80"></div>
+          <div class="font-medium text-lr-sand text-sm">Water</div>
+          <div class="text-xs text-lr-limestone/50 mt-1">ASADA planning</div>
+        </a>
+        <a href="/team" class="card-hover gradient-card rounded-2xl p-6 border border-lr-moss/20 text-center">
+          <div class="text-3xl mb-3 opacity-80"></div>
+          <div class="font-medium text-lr-sand text-sm">Team</div>
+          <div class="text-xs text-lr-limestone/50 mt-1">6 members</div>
+        </a>
+        <a href="/masterplan" class="card-hover gradient-card rounded-2xl p-6 border border-lr-moss/20 text-center">
+          <div class="text-3xl mb-3 opacity-80"></div>
+          <div class="font-medium text-lr-sand text-sm">Masterplan</div>
+          <div class="text-xs text-lr-limestone/50 mt-1">Site layout</div>
+        </a>
+        <a href="/" class="card-hover gradient-card rounded-2xl p-6 border border-lr-moss/20 text-center opacity-50">
+          <div class="text-3xl mb-3 opacity-80"></div>
+          <div class="font-medium text-lr-sand text-sm">Timeline</div>
+          <div class="text-xs text-lr-limestone/50 mt-1">Coming soon</div>
+        </a>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-lr-moss/10 mt-16 py-8 text-center">
+      <p class="text-xs text-lr-limestone/40 tracking-widest uppercase">Coyol Family</p>
+      <p class="text-xs text-lr-limestone/30 mt-1">Nosara, Costa Rica</p>
+    </footer>
+
+  </div>
+</Layout>

@@ -1,0 +1,237 @@
+---
+import Layout from '../layouts/Layout.astro';
+import teamData from '../data/team.json';
+
+const team = teamData.team;
+const workstreams = teamData.workstreams;
+
+const statusColors: Record<string, string> = {
+  'pending': 'bg-slate-700 text-slate-300',
+  'in-progress': 'bg-yellow-900/50 text-yellow-300',
+  'complete': 'bg-green-900/50 text-green-300',
+  'blocked': 'bg-red-900/50 text-red-300'
+};
+
+const roleColors: Record<string, string> = {
+  'marion': 'border-lr-sand',
+  'milagro': 'border-pink-500',
+  'anlly': 'border-blue-500',
+  'jorge': 'border-orange-500',
+  'alessia': 'border-green-500',
+  'olger': 'border-purple-500'
+};
+---
+
+<Layout title="Team — Coyol Farmhouse">
+  <div class="min-h-screen bg-lr-santorini">
+    
+    <!-- Header -->
+    <header class="border-b border-lr-moss/30 bg-lr-santorini/80 backdrop-blur sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div>
+          <a href="/" class="text-2xl font-serif text-lr-sand hover:text-lr-terracotta transition">COYOL FARMHOUSE</a>
+          <p class="text-sm text-lr-limestone/70">Team & Workload</p>
+        </div>
+        <a href="/" class="text-sm text-lr-limestone hover:text-lr-sand transition">← Back to Dashboard</a>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8">
+
+      <!-- Workstreams Overview -->
+      <section class="mb-8">
+        <h2 class="text-xl font-serif text-lr-sand mb-4"> Workstreams</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {workstreams.map((ws, i) => (
+            <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 p-4">
+              <div class="text-xs text-lr-terracotta mb-1">Phase {i + 1}</div>
+              <h3 class="font-medium text-lr-alaska mb-2">{ws.name.replace(`Phase ${i+1}: `, '')}</h3>
+              <div class="text-sm text-lr-limestone/70 mb-3">
+                Lead: <span class="text-lr-sand">{team.find(t => t.id === ws.owner)?.name}</span>
+              </div>
+              <div class="flex flex-wrap gap-1 mb-3">
+                {ws.members.map(m => (
+                  <span class={`text-xs px-2 py-0.5 rounded border ${roleColors[m]} bg-lr-santorini/50`}>
+                    {team.find(t => t.id === m)?.name.split(' ')[0]}
+                  </span>
+                ))}
+              </div>
+              <ul class="text-xs text-slate-400 space-y-1">
+                {ws.tasks.slice(0, 3).map(task => (
+                  <li>• {task}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Team Members -->
+      <section>
+        <h2 class="text-xl font-serif text-lr-sand mb-4"> Team Members</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {team.map(member => (
+            <div class={`bg-lr-moss/10 rounded-xl border-l-4 ${roleColors[member.id]} border border-lr-moss/30 p-4`}>
+              <div class="flex justify-between items-start mb-3">
+                <div>
+                  <h3 class="font-medium text-lr-alaska text-lg">{member.name}</h3>
+                  <div class="text-sm text-lr-terracotta">{member.role}</div>
+                </div>
+              </div>
+              
+              {member.email && (
+                <div class="text-xs text-slate-400 mb-3">
+                  📧 {member.email}
+                </div>
+              )}
+
+              <div class="mb-3">
+                <div class="text-xs text-slate-500 mb-1">Responsibilities:</div>
+                <ul class="text-sm text-lr-limestone/80 space-y-0.5">
+                  {member.responsibilities.map(r => (
+                    <li>• {r}</li>
+                  ))}
+                </ul>
+              </div>
+
+              {member.permits.length > 0 && (
+                <div class="mb-3">
+                  <div class="text-xs text-slate-500 mb-1">Assigned Permits:</div>
+                  <div class="flex flex-wrap gap-1">
+                    {member.permits.map(p => (
+                      <span class="text-xs px-2 py-0.5 rounded bg-lr-terracotta/20 text-lr-terracotta">
+                        {p}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <div class="text-xs text-slate-500 mb-1">Current Tasks:</div>
+                <ul class="space-y-1">
+                  {member.tasks.map(t => (
+                    <li class="flex items-center gap-2 text-sm">
+                      <span class={`w-2 h-2 rounded-full ${t.status === 'in-progress' ? 'bg-yellow-400' : t.status === 'complete' ? 'bg-green-400' : 'bg-slate-500'}`}></span>
+                      <span class="text-lr-limestone/80">{t.task}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Quick Assignments Summary -->
+      <section class="mt-8 bg-lr-sand/10 rounded-xl border border-lr-sand/30 p-6">
+        <h2 class="text-lg font-serif text-lr-sand mb-4"> Permit Assignments</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left text-slate-400 border-b border-lr-moss/30">
+                <th class="pb-2">Permit</th>
+                <th class="pb-2">Institution</th>
+                <th class="pb-2">Assigned To</th>
+                <th class="pb-2">Status</th>
+              </tr>
+            </thead>
+            <tbody class="text-lr-limestone">
+              <tr class="border-b border-lr-moss/20">
+                <td class="py-2">SETENA D2</td>
+                <td>SETENA</td>
+                <td class="text-green-400">Alessia</td>
+                <td><span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-300">PENDING</span></td>
+              </tr>
+              <tr class="border-b border-lr-moss/20">
+                <td class="py-2">SINAC Anuencia</td>
+                <td>SINAC/MINAE</td>
+                <td class="text-green-400">Alessia</td>
+                <td><span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-300">PENDING</span></td>
+              </tr>
+              <tr class="border-b border-lr-moss/20">
+                <td class="py-2">Water Concession</td>
+                <td>MINAE/AyA</td>
+                <td class="text-green-400">Alessia</td>
+                <td><span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-300">PENDING</span></td>
+              </tr>
+              <tr class="border-b border-lr-moss/20">
+                <td class="py-2">INVU Tourism</td>
+                <td>INVU</td>
+                <td class="text-lr-sand">Marion</td>
+                <td><span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-300">PENDING</span></td>
+              </tr>
+              <tr class="border-b border-lr-moss/20">
+                <td class="py-2">ICT License</td>
+                <td>ICT</td>
+                <td class="text-lr-sand">Marion</td>
+                <td><span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-300">PENDING</span></td>
+              </tr>
+              <tr class="border-b border-lr-moss/20">
+                <td class="py-2">CFIA Stamps</td>
+                <td>CFIA</td>
+                <td class="text-pink-400">Milagro</td>
+                <td><span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-300">PENDING</span></td>
+              </tr>
+              <tr class="border-b border-lr-moss/20">
+                <td class="py-2">Bomberos</td>
+                <td>Bomberos</td>
+                <td class="text-orange-400">Jorge</td>
+                <td><span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-300">PENDING</span></td>
+              </tr>
+              <tr class="border-b border-lr-moss/20">
+                <td class="py-2">Municipal Permit</td>
+                <td>Municipalidad</td>
+                <td class="text-blue-400">Anlly</td>
+                <td><span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-300">PENDING</span></td>
+              </tr>
+              <tr class="border-b border-lr-moss/20">
+                <td class="py-2">Salud Permits (3)</td>
+                <td>Min. Salud</td>
+                <td class="text-blue-400">Anlly</td>
+                <td><span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-300">PENDING</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- First Actions -->
+      <section class="mt-8 bg-yellow-900/20 border border-yellow-600/50 rounded-xl p-6">
+        <h2 class="text-lg font-serif text-yellow-400 mb-4"> First Actions (This Week)</h2>
+        <div class="grid md:grid-cols-2 gap-4 text-sm">
+          <div>
+            <h3 class="text-lr-terracotta font-medium mb-2">Olger</h3>
+            <ul class="text-lr-limestone space-y-1">
+              <li>• Schedule topographic survey of 55ha</li>
+              <li>• Map quebrada La Yegua with GPS</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-lr-terracotta font-medium mb-2">Anlly</h3>
+            <ul class="text-lr-limestone space-y-1">
+              <li>• Get copy of Plan Regulador for property</li>
+              <li>• Verify current zoning classification</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-lr-terracotta font-medium mb-2">Alessia</h3>
+            <ul class="text-lr-limestone space-y-1">
+              <li>• Research D2 environmental consultants</li>
+              <li>• Get 3 quotes for SETENA study</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-lr-terracotta font-medium mb-2">Marion</h3>
+            <ul class="text-lr-limestone space-y-1">
+              <li>• Decide water strategy (new well vs extend MA)</li>
+              <li>• Meet with architect on detailed plans</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+</Layout>

@@ -1,0 +1,78 @@
+{
+  "name": "Coyol Farmhouse",
+  "tagline": "A Nosara Countryside Retreat",
+  "location": "Nosara, Guanacaste, Costa Rica",
+  "totalArea": "55 hectares (550,000 m²)",
+  "finca": "Finca Madre Mar Azul",
+  "access": "Las Flores Public Road",
+  "adjacentTo": "Condominio Mar Azul",
+  
+  "facilities": {
+    "cabins": {
+      "count": "50-70",
+      "size": "75 m² each",
+      "features": ["Private hot tub", "Outdoor shower", "Terrace", "Mini-kitchen"],
+      "style": "Mini Coyol Restaurant structures"
+    },
+    "mainBuilding": {
+      "size": "800 m²",
+      "includes": ["Reception", "Restaurant", "Café", "Retail"],
+      "style": "Barn-like, Soho Farmhouse inspired"
+    },
+    "ranchoHouse": {
+      "size": "Existing structure",
+      "use": "Events, large family rentals",
+      "notes": "Original family home, back of property"
+    },
+    "spa": {
+      "facilities": ["Treatment rooms", "Gym", "Yoga decks"],
+      "locations": 2
+    },
+    "recreation": {
+      "tennis": "2 courts",
+      "pickleball": "TBD",
+      "pool": "Main pool near lobby",
+      "trails": "3km along Quebrada La Yegua"
+    }
+  },
+  
+  "infrastructure": {
+    "water": "1 paja from ASADA (need more capacity)",
+    "wastewater": "Decentralized: 8 cluster mini-plants + 1 main plant",
+    "electricity": "ICE connection needed (~370 kW estimated)",
+    "roads": "3km × 4m paths (golf carts & e-bikes only)",
+    "transport": "Car-free property — electric golf carts & bikes"
+  },
+  
+  "zoning": {
+    "currentZone": "NO PLAN REGULADOR YET",
+    "planReguladorStatus": "In development - Milagro sits on committee",
+    "requiredZone": "Zona Turística (ZT)",
+    "quebradaSetback": "15m minimum from La Yegua"
+  },
+  
+  "water": {
+    "currentAllocation": "1 paja designated for this farm",
+    "source": "ASADA",
+    "status": "Need to calculate hotel consumption vs paja capacity",
+    "nextStep": "Meet with ASADA + calculate total water needs"
+  },
+  
+  "permitsInProgress": {
+    "SETENA": "D1 in process",
+    "survey": "Complete"
+  },
+  
+  "inspirations": [
+    "Soho Farmhouse (UK)",
+    "Coyol Restaurant (architectural style)",
+    "Discovery Land Company"
+  ],
+  
+  "team": [
+    {"role": "Developer", "name": "Marion Peri", "company": "Coyol Family"},
+    {"role": "Architect", "name": "TBD", "company": ""},
+    {"role": "Environmental Consultant", "name": "TBD", "company": ""},
+    {"role": "Legal", "name": "TBD", "company": ""}
+  ]
+}

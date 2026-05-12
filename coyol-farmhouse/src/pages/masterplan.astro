@@ -1,0 +1,102 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Masterplan — Coyol Farmhouse">
+  <div class="min-h-screen bg-lr-santorini">
+    
+    <!-- Header -->
+    <header class="border-b border-lr-moss/30 bg-lr-santorini/80 backdrop-blur sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div>
+          <a href="/" class="text-2xl font-serif text-lr-sand hover:text-lr-terracotta transition">COYOL FARMHOUSE</a>
+          <p class="text-sm text-lr-limestone/70">Masterplan</p>
+        </div>
+        <a href="/" class="text-sm text-lr-limestone hover:text-lr-sand transition">← Back to Dashboard</a>
+      </div>
+    </header>
+
+    <main class="p-4">
+      
+      <!-- Full Masterplan -->
+      <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 overflow-hidden">
+        <img src="/images/masterplan.png" alt="Coyol Farmhouse Masterplan" class="w-full" />
+      </div>
+
+      <!-- Legend -->
+      <div class="mt-6 bg-lr-moss/10 rounded-xl border border-lr-moss/30 p-6">
+        <h2 class="text-lg font-serif text-lr-sand mb-4">Legend</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded bg-yellow-400"></div>
+            <span class="text-lr-limestone">Cabins (50-70)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded bg-orange-500"></div>
+            <span class="text-lr-limestone">Lobby / Restaurant / Pool</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded bg-pink-400"></div>
+            <span class="text-lr-limestone">Spa & Gym</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded bg-teal-400"></div>
+            <span class="text-lr-limestone">Tennis Courts</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded bg-purple-400"></div>
+            <span class="text-lr-limestone">Yoga Decks</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded bg-green-600"></div>
+            <span class="text-lr-limestone">Green Areas</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded bg-blue-400"></div>
+            <span class="text-lr-limestone">Quebrada La Yegua</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded bg-slate-400"></div>
+            <span class="text-lr-limestone">Roads / Paths</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Metrics -->
+      <div class="mt-6 grid md:grid-cols-4 gap-4">
+        <div class="bg-lr-moss/20 rounded-xl p-4 border border-lr-moss/30">
+          <div class="text-2xl font-serif text-lr-sand">55 ha</div>
+          <div class="text-sm text-lr-limestone/70">Total Property</div>
+        </div>
+        <div class="bg-lr-moss/20 rounded-xl p-4 border border-lr-moss/30">
+          <div class="text-2xl font-serif text-lr-sand">~4,500 m²</div>
+          <div class="text-sm text-lr-limestone/70">Cabin Footprint</div>
+          <div class="text-xs text-slate-500">50 × 75m² + outdoor</div>
+        </div>
+        <div class="bg-lr-moss/20 rounded-xl p-4 border border-lr-moss/30">
+          <div class="text-2xl font-serif text-lr-sand">~2,000 m²</div>
+          <div class="text-sm text-lr-limestone/70">Common Buildings</div>
+          <div class="text-xs text-slate-500">Restaurant, spa, rancho</div>
+        </div>
+        <div class="bg-lr-moss/20 rounded-xl p-4 border border-lr-moss/30">
+          <div class="text-2xl font-serif text-lr-sand">&lt;2%</div>
+          <div class="text-sm text-lr-limestone/70">Built Coverage</div>
+          <div class="text-xs text-slate-500">Very low density</div>
+        </div>
+      </div>
+
+      <!-- Zoning Notes -->
+      <div class="mt-6 bg-yellow-900/20 border border-yellow-600/50 rounded-xl p-6">
+        <h2 class="text-lg font-serif text-yellow-400 mb-3"> Zoning Considerations</h2>
+        <ul class="space-y-2 text-sm text-lr-limestone">
+          <li><strong>Quebrada La Yegua:</strong> 15m minimum setback required. All structures appear to respect this.</li>
+          <li><strong>Access:</strong> Direct frontage to Las Flores public road — no servidumbre needed.</li>
+          <li><strong>Density:</strong> At &lt;2% coverage, density requirements easily met.</li>
+          <li><strong>River Crossings:</strong> Any bridges/trails crossing quebrada need SINAC approval.</li>
+        </ul>
+      </div>
+
+    </main>
+
+  </div>
+</Layout>

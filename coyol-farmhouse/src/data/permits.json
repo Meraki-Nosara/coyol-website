@@ -1,0 +1,185 @@
+{
+  "permits": [
+    {
+      "id": "setena-d1",
+      "institution": "SETENA",
+      "name": "D1 Environmental Viability",
+      "status": "in-progress",
+      "priority": "critical",
+      "estimatedCost": "$5,000 - $10,000",
+      "estimatedTime": "3-6 months",
+      "dependencies": ["topographic-survey", "master-plan"],
+      "notes": "IN PROCESS - D1 application submitted. May need upgrade to D2 depending on final built area.",
+      "documents": []
+    },
+    {
+      "id": "sinac-anuencia",
+      "institution": "SINAC/MINAE",
+      "name": "Anuencia Quebrada La Yegua",
+      "status": "pending",
+      "priority": "critical",
+      "estimatedCost": "$500 - $1,500",
+      "estimatedTime": "2-4 months",
+      "dependencies": ["topographic-survey"],
+      "notes": "15m minimum setback from quebrada. Need for trails and any river crossings.",
+      "documents": []
+    },
+    {
+      "id": "water-concession",
+      "institution": "MINAE/AyA",
+      "name": "Water Concession or Connection",
+      "status": "pending",
+      "priority": "critical",
+      "estimatedCost": "$2,000 - $5,000",
+      "estimatedTime": "3-6 months",
+      "dependencies": [],
+      "notes": "Option: extend Mar Azul CJ-135 concession or drill new well. Need hydrogeological study.",
+      "documents": []
+    },
+    {
+      "id": "invu-tourism",
+      "institution": "INVU",
+      "name": "Tourism Development Plan Approval",
+      "status": "pending",
+      "priority": "high",
+      "estimatedCost": "$3,000 - $5,000",
+      "estimatedTime": "3-6 months",
+      "dependencies": ["master-plan", "setena-d2"],
+      "notes": "Submits after SETENA viability. Reviews density, infrastructure, access.",
+      "documents": []
+    },
+    {
+      "id": "ict-license",
+      "institution": "ICT",
+      "name": "Tourism License (Declaratoria Turística)",
+      "status": "pending",
+      "priority": "high",
+      "estimatedCost": "$1,000 - $2,000",
+      "estimatedTime": "2-3 months",
+      "dependencies": ["invu-tourism"],
+      "notes": "Hotel classification. Enables tax benefits.",
+      "documents": []
+    },
+    {
+      "id": "salud-restaurant",
+      "institution": "Ministerio de Salud",
+      "name": "Restaurant & Kitchen Permit",
+      "status": "pending",
+      "priority": "high",
+      "estimatedCost": "$500 - $1,000",
+      "estimatedTime": "1-2 months",
+      "dependencies": ["construction-permit"],
+      "notes": "For main restaurant/café. Separate from cabins.",
+      "documents": []
+    },
+    {
+      "id": "salud-pool",
+      "institution": "Ministerio de Salud",
+      "name": "Pool Sanitary Permit",
+      "status": "pending",
+      "priority": "medium",
+      "estimatedCost": "$300 - $500",
+      "estimatedTime": "1-2 months",
+      "dependencies": ["construction-permit"],
+      "notes": "Main pool. Hot tubs in cabins may need separate.",
+      "documents": []
+    },
+    {
+      "id": "salud-spa",
+      "institution": "Ministerio de Salud",
+      "name": "Spa & Gym Permit",
+      "status": "pending",
+      "priority": "medium",
+      "estimatedCost": "$500 - $1,000",
+      "estimatedTime": "1-2 months",
+      "dependencies": ["construction-permit"],
+      "notes": "For spa facilities and gym.",
+      "documents": []
+    },
+    {
+      "id": "bomberos",
+      "institution": "Bomberos",
+      "name": "Fire Safety Approval",
+      "status": "pending",
+      "priority": "high",
+      "estimatedCost": "$500 - $1,500",
+      "estimatedTime": "1-2 months",
+      "dependencies": ["architectural-plans"],
+      "notes": "Required for commercial kitchen, 50+ rooms, event spaces.",
+      "documents": []
+    },
+    {
+      "id": "cfia",
+      "institution": "CFIA",
+      "name": "Engineering & Architecture Stamps",
+      "status": "pending",
+      "priority": "high",
+      "estimatedCost": "Included in professional fees",
+      "estimatedTime": "Concurrent with design",
+      "dependencies": ["architectural-plans"],
+      "notes": "All plans must be CFIA stamped.",
+      "documents": []
+    },
+    {
+      "id": "municipal-permit",
+      "institution": "Municipalidad Nicoya",
+      "name": "Construction Permit",
+      "status": "pending",
+      "priority": "critical",
+      "estimatedCost": "Based on construction value (~1%)",
+      "estimatedTime": "2-4 months",
+      "dependencies": ["setena-d2", "bomberos", "cfia", "invu-tourism"],
+      "notes": "Final permit to build. Requires all other approvals.",
+      "documents": []
+    },
+    {
+      "id": "municipal-patente",
+      "institution": "Municipalidad Nicoya",
+      "name": "Business License (Patente)",
+      "status": "pending",
+      "priority": "medium",
+      "estimatedCost": "Annual fee based on revenue",
+      "estimatedTime": "1-2 months",
+      "dependencies": ["municipal-permit"],
+      "notes": "For hotel, restaurant, spa operations.",
+      "documents": []
+    }
+  ],
+  "prerequisites": [
+    {
+      "id": "topographic-survey",
+      "name": "Topographic Survey",
+      "status": "complete",
+      "estimatedCost": "$3,000 - $5,000",
+      "notes": "DONE - Survey completed."
+    },
+    {
+      "id": "master-plan",
+      "name": "Architectural Master Plan",
+      "status": "in-progress",
+      "estimatedCost": "$10,000 - $20,000",
+      "notes": "Site plan with all 50 cabins, infrastructure, roads. DONE: Initial concept."
+    },
+    {
+      "id": "architectural-plans",
+      "name": "Detailed Architectural Plans",
+      "status": "pending",
+      "estimatedCost": "$20,000 - $40,000",
+      "notes": "Full construction drawings for all buildings."
+    },
+    {
+      "id": "wastewater-study",
+      "name": "Wastewater Treatment Design",
+      "status": "pending",
+      "estimatedCost": "$5,000 - $10,000",
+      "notes": "50+ cabins = industrial-scale treatment plant required."
+    },
+    {
+      "id": "hydrogeological-study",
+      "name": "Hydrogeological Study",
+      "status": "pending",
+      "estimatedCost": "$3,000 - $5,000",
+      "notes": "For water concession. May leverage existing Mar Azul data."
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "team": [
+    {
+      "id": "marion",
+      "name": "Marion Peri",
+      "role": "Project Lead / Developer",
+      "email": "marionnosara@gmail.com",
+      "phone": "",
+      "responsibilities": [
+        "Overall project direction",
+        "Investor relations",
+        "Strategic decisions",
+        "Final approvals"
+      ],
+      "permits": ["invu-tourism", "ict-license"],
+      "tasks": [
+        {"task": "Finalize masterplan with architect", "status": "in-progress"},
+        {"task": "Water strategy decision (new well vs Mar Azul)", "status": "pending"},
+        {"task": "Select environmental consultant for D2", "status": "pending"}
+      ]
+    },
+    {
+      "id": "milagro",
+      "name": "Milagro Castro",
+      "role": "Architecture & Design",
+      "email": "",
+      "phone": "",
+      "responsibilities": [
+        "Architectural coordination",
+        "Design review",
+        "CFIA stamp coordination",
+        "Interior concepts"
+      ],
+      "permits": ["cfia"],
+      "tasks": [
+        {"task": "Design 1BR Coyol Cabin (65m²) — pitched roof, organic", "status": "pending"},
+        {"task": "Design 2BR Family Pavilion (75m²) — flat roof, I-beam black", "status": "pending"},
+        {"task": "Floor plans with furniture layout", "status": "pending"},
+        {"task": "Main building (restaurant/lobby) design", "status": "pending"}
+      ]
+    },
+    {
+      "id": "anlly",
+      "name": "Anlly Villegas",
+      "role": "Administration & Permits",
+      "email": "avillegaschinchilla@gmail.com",
+      "phone": "",
+      "responsibilities": [
+        "Permit applications",
+        "Document management",
+        "Municipal coordination",
+        "Fee payments"
+      ],
+      "permits": ["municipal-permit", "municipal-patente", "salud-restaurant", "salud-pool", "salud-spa"],
+      "tasks": [
+        {"task": "Gather property documents (plano, escritura)", "status": "pending"},
+        {"task": "Verify Plan Regulador zoning", "status": "pending"},
+        {"task": "Coordinate Ministerio de Salud permits", "status": "pending"}
+      ]
+    },
+    {
+      "id": "jorge",
+      "name": "Jorge",
+      "role": "Construction & Infrastructure",
+      "email": "",
+      "phone": "",
+      "responsibilities": [
+        "Construction planning",
+        "Infrastructure design",
+        "Contractor coordination",
+        "Site preparation"
+      ],
+      "permits": ["bomberos"],
+      "tasks": [
+        {"task": "Wastewater treatment plant design", "status": "pending"},
+        {"task": "Road network planning", "status": "pending"},
+        {"task": "Electrical load calculation for ICE", "status": "pending"},
+        {"task": "Bomberos fire safety plan", "status": "pending"}
+      ]
+    },
+    {
+      "id": "alessia",
+      "name": "Alessia Aguirre",
+      "role": "Legal & Environmental",
+      "email": "alessia.aguirre@gmail.com",
+      "phone": "",
+      "responsibilities": [
+        "Environmental permits",
+        "SETENA coordination",
+        "SINAC/MINAE liaison",
+        "Legal compliance"
+      ],
+      "permits": ["setena-d2", "sinac-anuencia", "water-concession"],
+      "tasks": [
+        {"task": "SETENA D2 consultant selection", "status": "pending"},
+        {"task": "SINAC anuencia for quebrada trails", "status": "pending"},
+        {"task": "Water concession strategy", "status": "pending"}
+      ]
+    },
+    {
+      "id": "olger",
+      "name": "Olger",
+      "role": "Surveying & Land",
+      "email": "fijoteolab@gmail.com",
+      "phone": "",
+      "responsibilities": [
+        "Topographic survey",
+        "Property boundaries",
+        "Quebrada setback mapping",
+        "Site measurements"
+      ],
+      "permits": [],
+      "tasks": [
+        {"task": "Complete topographic survey (55ha)", "status": "pending"},
+        {"task": "Map quebrada La Yegua with 15m buffer", "status": "pending"},
+        {"task": "Identify existing structures for permits", "status": "pending"},
+        {"task": "Road alignment survey", "status": "pending"}
+      ]
+    }
+  ],
+  "workstreams": [
+    {
+      "name": "Phase 1: Studies & Surveys",
+      "owner": "olger",
+      "members": ["olger", "alessia"],
+      "tasks": ["Topographic survey", "Quebrada mapping", "Hydrogeological study"],
+      "deadline": "TBD",
+      "status": "pending"
+    },
+    {
+      "name": "Phase 2: Design & Planning",
+      "owner": "milagro",
+      "members": ["milagro", "marion", "jorge"],
+      "tasks": ["Detailed architectural plans", "Infrastructure design", "Wastewater design"],
+      "deadline": "TBD",
+      "status": "pending"
+    },
+    {
+      "name": "Phase 3: Environmental (D2)",
+      "owner": "alessia",
+      "members": ["alessia", "marion"],
+      "tasks": ["SETENA D2 submission", "SINAC anuencia", "Water concession"],
+      "deadline": "TBD",
+      "status": "pending"
+    },
+    {
+      "name": "Phase 4: Permits & Approvals",
+      "owner": "anlly",
+      "members": ["anlly", "jorge", "alessia"],
+      "tasks": ["INVU approval", "Municipal permits", "Salud permits", "Bomberos", "ICT"],
+      "deadline": "TBD",
+      "status": "pending"
+    }
+  ]
+}

@@ -1,0 +1,361 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Road calculations
+const roads = {
+  totalLength: 1500, // meters - Phase 1
+  width: 4, // meters (golf carts / e-bikes only)
+  surfaceArea: 1500 * 4, // 6,000 m²
+  materialOptions: [
+    { name: 'Dirt (maintained)', cost: 5, durability: 'Low', maintenance: 'Regular grading', selected: true },
+    { name: 'Compacted gravel', cost: 15, durability: 'Medium', maintenance: 'Annual grading' },
+    { name: 'Permeable pavers', cost: 45, durability: 'High', maintenance: 'Low' },
+    { name: 'Stamped concrete', cost: 60, durability: 'High', maintenance: 'Minimal' },
+  ]
+};
+
+// Wastewater calculations
+const cabinClusters = 8; // ~6 cabins per cluster = 48 cabins
+const cabinsPerCluster = 6;
+const wastewaterPerCabin = 400; // L/day average
+const clusterCapacity = cabinsPerCluster * wastewaterPerCabin * 1.5; // 3,600 L/day with buffer
+
+const wastewater = {
+  clusters: cabinClusters,
+  cabinsPerCluster: cabinsPerCluster,
+  clusterPlantCapacity: clusterCapacity,
+  clusterPlantCost: { min: 8000, max: 15000 },
+  mainPlantCapacity: 15000, // L/day for restaurant/spa/staff
+  mainPlantCost: { min: 25000, max: 45000 },
+};
+
+// Calculate totals
+const totalClusterCost = {
+  min: wastewater.clusters * wastewater.clusterPlantCost.min,
+  max: wastewater.clusters * wastewater.clusterPlantCost.max
+};
+
+const totalWastewaterCost = {
+  min: totalClusterCost.min + wastewater.mainPlantCost.min,
+  max: totalClusterCost.max + wastewater.mainPlantCost.max
+};
+---
+
+<Layout title="Infrastructure — Coyol Farmhouse">
+  <div class="min-h-screen bg-lr-santorini">
+    
+    <!-- Header -->
+    <header class="border-b border-lr-moss/30 bg-lr-santorini/80 backdrop-blur sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div>
+          <a href="/" class="text-2xl font-serif text-lr-sand hover:text-lr-terracotta transition">COYOL FARMHOUSE</a>
+          <p class="text-sm text-lr-limestone/70">Infrastructure Planning</p>
+        </div>
+        <a href="/" class="text-sm text-lr-limestone hover:text-lr-sand transition">← Back to Dashboard</a>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8">
+
+      <!-- Transport Section -->
+      <section class="mb-10">
+        <h2 class="text-xl font-serif text-lr-sand mb-4 flex items-center gap-2">
+           Roads & Transport
+        </h2>
+        
+        <div class="bg-green-900/20 border border-green-600/50 rounded-xl p-4 mb-6">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl"></span>
+            <div>
+              <div class="text-green-400 font-medium">Car-Free Property</div>
+              <div class="text-sm text-slate-300">Electric bikes & golf carts only — 4m wide paths</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-4 mb-6">
+          <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 p-4 text-center">
+            <div class="text-3xl font-serif text-lr-sand">{(roads.totalLength / 1000).toFixed(1)} km</div>
+            <div class="text-sm text-lr-limestone/70">Total Path Length</div>
+          </div>
+          <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 p-4 text-center">
+            <div class="text-3xl font-serif text-lr-sand">{roads.width}m</div>
+            <div class="text-sm text-lr-limestone/70">Path Width</div>
+          </div>
+          <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 p-4 text-center">
+            <div class="text-3xl font-serif text-lr-sand">{(roads.surfaceArea / 1000).toFixed(1)}k</div>
+            <div class="text-sm text-lr-limestone/70">m² Surface Area</div>
+          </div>
+        </div>
+
+        <!-- Material Options -->
+        <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 overflow-hidden">
+          <div class="p-4 border-b border-lr-moss/30">
+            <h3 class="font-medium text-lr-alaska">Surface Material Options</h3>
+          </div>
+          <table class="w-full text-sm">
+            <thead class="bg-lr-moss/20">
+              <tr class="text-left text-lr-limestone">
+                <th class="p-3">Material</th>
+                <th class="p-3">$/m²</th>
+                <th class="p-3">Total Cost</th>
+                <th class="p-3">Durability</th>
+                <th class="p-3">Maintenance</th>
+              </tr>
+            </thead>
+            <tbody class="text-lr-limestone/80">
+              {roads.materialOptions.map(mat => (
+                <tr class="border-t border-lr-moss/20">
+                  <td class="p-3">{mat.name}</td>
+                  <td class="p-3">${mat.cost}</td>
+                  <td class="p-3 font-mono">${(mat.cost * roads.surfaceArea).toLocaleString()}</td>
+                  <td class="p-3">{mat.durability}</td>
+                  <td class="p-3 text-xs">{mat.maintenance}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-4 p-4 bg-lr-sand/10 rounded-lg border border-lr-sand/30">
+          <h4 class="text-lr-sand font-medium mb-2"> Guest Arrival Flow</h4>
+          <div class="flex items-center gap-2 text-sm text-lr-limestone">
+            <span class="px-2 py-1 bg-lr-moss/30 rounded">Las Flores Road</span>
+            <span>→</span>
+            <span class="px-2 py-1 bg-lr-moss/30 rounded">Main Parking</span>
+            <span>→</span>
+            <span class="px-2 py-1 bg-lr-moss/30 rounded">Check-in</span>
+            <span>→</span>
+            <span class="px-2 py-1 bg-green-900/50 rounded text-green-300">Golf Cart to Cabin </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Wastewater Section -->
+      <section class="mb-10">
+        <h2 class="text-xl font-serif text-lr-sand mb-4 flex items-center gap-2">
+           Wastewater Treatment
+        </h2>
+
+        <div class="bg-lr-moss/20 border border-lr-moss/50 rounded-xl p-4 mb-6">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl"></span>
+            <div>
+              <div class="text-lr-moss font-medium">Decentralized Treatment</div>
+              <div class="text-sm text-slate-300">Mini plants per cabin cluster + main plant for restaurant/spa</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          
+          <!-- Cluster Plants -->
+          <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 p-4">
+            <h3 class="text-lr-terracotta font-medium mb-4">Cabin Cluster Mini-Plants</h3>
+            
+            <div class="grid grid-cols-2 gap-4 mb-4">
+              <div class="text-center">
+                <div class="text-2xl font-serif text-lr-sand">{wastewater.clusters}</div>
+                <div class="text-xs text-slate-400">Clusters</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-serif text-lr-sand">{wastewater.cabinsPerCluster}</div>
+                <div class="text-xs text-slate-400">Cabins each</div>
+              </div>
+            </div>
+
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-slate-400">Capacity per plant:</span>
+                <span class="text-lr-limestone">{wastewater.clusterPlantCapacity.toLocaleString()} L/day</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Cost per plant:</span>
+                <span class="text-lr-limestone">${wastewater.clusterPlantCost.min.toLocaleString()} - ${wastewater.clusterPlantCost.max.toLocaleString()}</span>
+              </div>
+              <div class="flex justify-between pt-2 border-t border-lr-moss/30">
+                <span class="text-slate-400">Total ({wastewater.clusters} plants):</span>
+                <span class="text-lr-sand font-medium">${totalClusterCost.min.toLocaleString()} - ${totalClusterCost.max.toLocaleString()}</span>
+              </div>
+            </div>
+
+            <div class="mt-4 p-3 bg-green-900/20 rounded-lg text-xs text-green-300">
+               Output: Treated water for local garden irrigation
+            </div>
+          </div>
+
+          <!-- Main Plant -->
+          <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 p-4">
+            <h3 class="text-lr-terracotta font-medium mb-4">Main Treatment Plant</h3>
+            
+            <div class="text-center mb-4">
+              <div class="text-2xl font-serif text-lr-sand">1</div>
+              <div class="text-xs text-slate-400">Central Plant</div>
+            </div>
+
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-slate-400">Serves:</span>
+                <span class="text-lr-limestone">Restaurant, Spa, Pool, Staff</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Capacity:</span>
+                <span class="text-lr-limestone">{wastewater.mainPlantCapacity.toLocaleString()} L/day</span>
+              </div>
+              <div class="flex justify-between pt-2 border-t border-lr-moss/30">
+                <span class="text-slate-400">Cost:</span>
+                <span class="text-lr-sand font-medium">${wastewater.mainPlantCost.min.toLocaleString()} - ${wastewater.mainPlantCost.max.toLocaleString()}</span>
+              </div>
+            </div>
+
+            <div class="mt-4 p-3 bg-green-900/20 rounded-lg text-xs text-green-300">
+               Output: UV/chlorine treated for common area irrigation
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Total Cost -->
+        <div class="mt-6 bg-lr-sand/10 rounded-xl border border-lr-sand/30 p-6">
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="text-lr-sand font-medium">Total Wastewater Infrastructure</h3>
+              <p class="text-sm text-slate-400">8 cluster plants + 1 main plant</p>
+            </div>
+            <div class="text-right">
+              <div class="text-2xl font-serif text-lr-sand">
+                ${totalWastewaterCost.min.toLocaleString()} - ${totalWastewaterCost.max.toLocaleString()}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Advantages -->
+        <div class="mt-6 grid md:grid-cols-2 gap-4">
+          <div class="bg-lr-moss/10 rounded-lg p-4 border border-lr-moss/30">
+            <h4 class="text-lr-terracotta font-medium mb-2">vs Centralized System</h4>
+            <ul class="text-sm text-lr-limestone/80 space-y-1">
+              <li> No 3km+ sewer lines across property</li>
+              <li> No pumping stations needed</li>
+              <li> Gravity-fed to local plant</li>
+              <li> Redundancy — one failure doesn't affect all</li>
+              <li> Phased installation with construction</li>
+            </ul>
+          </div>
+          <div class="bg-lr-moss/10 rounded-lg p-4 border border-lr-moss/30">
+            <h4 class="text-lr-terracotta font-medium mb-2">Permit Benefits</h4>
+            <ul class="text-sm text-lr-limestone/80 space-y-1">
+              <li> SETENA loves distributed treatment</li>
+              <li> Min. Salud approves biodigesters easily</li>
+              <li> Lower environmental impact score</li>
+              <li> Can permit in phases</li>
+              <li> Treated water = irrigation asset</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Recommended Systems -->
+        <div class="mt-6 bg-lr-moss/10 rounded-xl border border-lr-moss/30 p-4">
+          <h4 class="text-lr-terracotta font-medium mb-3">Recommended Systems (Costa Rica)</h4>
+          <div class="grid md:grid-cols-3 gap-4 text-sm">
+            <div class="p-3 bg-lr-santorini/50 rounded-lg">
+              <div class="font-medium text-lr-alaska">Rotoplas Biodigestor</div>
+              <div class="text-xs text-slate-400 mt-1">Most common in CR. Reliable, affordable. Good for clusters.</div>
+            </div>
+            <div class="p-3 bg-lr-santorini/50 rounded-lg">
+              <div class="font-medium text-lr-alaska">BIOLARGO Systems</div>
+              <div class="text-xs text-slate-400 mt-1">Compact, high-efficiency. Good for main plant.</div>
+            </div>
+            <div class="p-3 bg-lr-santorini/50 rounded-lg">
+              <div class="font-medium text-lr-alaska">Clearstream</div>
+              <div class="text-xs text-slate-400 mt-1">Premium option. NSF certified, minimal maintenance.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Electrical Section -->
+      <section class="mb-10">
+        <h2 class="text-xl font-serif text-lr-sand mb-4 flex items-center gap-2">
+           Electrical Infrastructure
+        </h2>
+        
+        <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 p-4">
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="text-lr-terracotta font-medium mb-3">Estimated Load</h3>
+              <ul class="space-y-2 text-sm text-lr-limestone/80">
+                <li class="flex justify-between">
+                  <span>50 cabins (A/C, hot tub, lights)</span>
+                  <span>~200 kW</span>
+                </li>
+                <li class="flex justify-between">
+                  <span>Restaurant + Kitchen</span>
+                  <span>~80 kW</span>
+                </li>
+                <li class="flex justify-between">
+                  <span>Spa + Gym</span>
+                  <span>~40 kW</span>
+                </li>
+                <li class="flex justify-between">
+                  <span>Pool pumps + treatment plants</span>
+                  <span>~30 kW</span>
+                </li>
+                <li class="flex justify-between">
+                  <span>Lighting + common areas</span>
+                  <span>~20 kW</span>
+                </li>
+                <li class="flex justify-between pt-2 border-t border-lr-moss/30 font-medium text-lr-sand">
+                  <span>TOTAL ESTIMATED</span>
+                  <span>~370 kW</span>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-lr-terracotta font-medium mb-3">Next Steps</h3>
+              <ul class="space-y-2 text-sm text-lr-limestone/80">
+                <li>• Request ICE capacity assessment</li>
+                <li>• Determine transformer requirements</li>
+                <li>• Plan underground distribution to clusters</li>
+                <li>• Consider solar + battery backup</li>
+                <li>• EV charging stations for golf carts</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Summary -->
+      <section class="bg-lr-sand/10 rounded-xl border border-lr-sand/30 p-6">
+        <h2 class="text-lg font-serif text-lr-sand mb-4"> Infrastructure Cost Summary</h2>
+        <div class="space-y-3 text-sm">
+          <div class="flex justify-between">
+            <span class="text-slate-400">Roads (3km × 4m, gravel):</span>
+            <span class="text-lr-limestone">$180,000</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Roads (permeable pavers):</span>
+            <span class="text-lr-limestone">$540,000</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Wastewater (all plants):</span>
+            <span class="text-lr-limestone">${totalWastewaterCost.min.toLocaleString()} - ${totalWastewaterCost.max.toLocaleString()}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Electrical (estimate):</span>
+            <span class="text-lr-limestone">$150,000 - $250,000</span>
+          </div>
+          <div class="flex justify-between pt-3 border-t border-lr-sand/30 text-lg font-medium">
+            <span class="text-lr-sand">TOTAL INFRASTRUCTURE:</span>
+            <span class="text-lr-sand">$420,000 - $950,000</span>
+          </div>
+        </div>
+        <p class="text-xs text-slate-500 mt-4">
+          * Excludes water supply (see Water page), buildings, landscaping
+        </p>
+      </section>
+
+    </main>
+
+  </div>
+</Layout>

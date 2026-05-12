@@ -1,0 +1,69 @@
+{
+  "models": [
+    {
+      "id": "coyol-1br",
+      "name": "Coyol Cabin",
+      "bedrooms": 1,
+      "size": 65,
+      "sizeUnit": "m²",
+      "style": "Coyol Restaurant shape — pitched roof, organic form",
+      "roof": "Pitched / organic",
+      "structure": "Wood frame with natural finishes",
+      "features": [
+        "Private hot tub",
+        "Outdoor shower",
+        "Terrace with jungle view",
+        "Mini kitchen",
+        "King bed",
+        "A/C",
+        "Rain shower"
+      ],
+      "target": "Couples, solo travelers",
+      "quantity": "20 (Phase 1)",
+      "priceRange": "$350-500/night",
+      "designStatus": "pending",
+      "assignedTo": "milagro"
+    },
+    {
+      "id": "family-2br",
+      "name": "Family Pavilion",
+      "bedrooms": 2,
+      "size": 75,
+      "sizeUnit": "m²",
+      "style": "Flat roof, I-beam black structure — modern/industrial",
+      "roof": "Flat",
+      "structure": "Steel I-beam with black finish",
+      "features": [
+        "Private hot tub",
+        "Outdoor shower",
+        "Large terrace",
+        "Full kitchen",
+        "Master suite + second bedroom",
+        "Living area",
+        "A/C",
+        "Family bathroom + ensuite"
+      ],
+      "target": "Families, groups",
+      "quantity": "10 (Phase 1)",
+      "priceRange": "$550-800/night",
+      "designStatus": "pending",
+      "assignedTo": "milagro"
+    }
+  ],
+  "commonFeatures": [
+    "Private hot tub (all units)",
+    "Outdoor shower",
+    "Terrace / deck",
+    "Mini or full kitchen",
+    "A/C throughout",
+    "High-speed WiFi",
+    "Smart room controls",
+    "Sustainable materials",
+    "Natural ventilation design"
+  ],
+  "designNotes": {
+    "coyolStyle": "Inspired by Coyol Restaurant architecture — curved lines, natural materials, integrated with landscape",
+    "familyStyle": "Modern contrast — clean lines, steel structure visible, black I-beams, floor-to-ceiling glass",
+    "consistency": "Both models share: hot tub, outdoor shower, premium finishes, jungle integration"
+  }
+}

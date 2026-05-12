@@ -1,0 +1,164 @@
+---
+import Layout from '../layouts/Layout.astro';
+import permits from '../data/permits.json';
+
+const allPermits = permits.permits;
+const prerequisites = permits.prerequisites;
+
+const statusColors: Record<string, string> = {
+  'pending': 'bg-slate-700 text-slate-300',
+  'in-progress': 'bg-yellow-900/50 text-yellow-300',
+  'submitted': 'bg-blue-900/50 text-blue-300',
+  'approved': 'bg-green-900/50 text-green-300',
+  'blocked': 'bg-red-900/50 text-red-300'
+};
+
+const priorityLabels: Record<string, string> = {
+  'critical': ' CRITICAL',
+  'high': ' HIGH',
+  'medium': ' MEDIUM',
+  'low': ' LOW'
+};
+---
+
+<Layout title="Permits — Coyol Farmhouse">
+  <div class="min-h-screen bg-lr-santorini">
+    
+    <!-- Header -->
+    <header class="border-b border-lr-moss/30 bg-lr-santorini/80 backdrop-blur sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div>
+          <a href="/" class="text-2xl font-serif text-lr-sand hover:text-lr-terracotta transition">COYOL FARMHOUSE</a>
+          <p class="text-sm text-lr-limestone/70">Permits & Approvals</p>
+        </div>
+        <a href="/" class="text-sm text-lr-limestone hover:text-lr-sand transition">← Back to Dashboard</a>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8">
+
+      <!-- Summary -->
+      <div class="grid grid-cols-4 gap-4 mb-8">
+        <div class="bg-slate-800/50 rounded-xl p-4 text-center">
+          <div class="text-3xl font-serif text-slate-300">{allPermits.filter(p => p.status === 'pending').length}</div>
+          <div class="text-sm text-slate-500">Pending</div>
+        </div>
+        <div class="bg-yellow-900/30 rounded-xl p-4 text-center">
+          <div class="text-3xl font-serif text-yellow-300">{allPermits.filter(p => p.status === 'in-progress').length}</div>
+          <div class="text-sm text-yellow-600">In Progress</div>
+        </div>
+        <div class="bg-blue-900/30 rounded-xl p-4 text-center">
+          <div class="text-3xl font-serif text-blue-300">{allPermits.filter(p => p.status === 'submitted').length}</div>
+          <div class="text-sm text-blue-600">Submitted</div>
+        </div>
+        <div class="bg-green-900/30 rounded-xl p-4 text-center">
+          <div class="text-3xl font-serif text-green-300">{allPermits.filter(p => p.status === 'approved').length}</div>
+          <div class="text-sm text-green-600">Approved</div>
+        </div>
+      </div>
+
+      <!-- Prerequisites Section -->
+      <section class="mb-8">
+        <h2 class="text-xl font-serif text-lr-sand mb-4 flex items-center gap-2">
+          <span></span> Prerequisites (Complete First)
+        </h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {prerequisites.map(prereq => (
+            <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 p-4">
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="font-medium text-lr-alaska">{prereq.name}</h3>
+                <span class={`text-xs px-2 py-0.5 rounded ${statusColors[prereq.status]}`}>
+                  {prereq.status.replace('-', ' ').toUpperCase()}
+                </span>
+              </div>
+              <div class="text-sm text-lr-terracotta mb-2">{prereq.estimatedCost}</div>
+              <p class="text-xs text-slate-400">{prereq.notes}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- All Permits -->
+      <section>
+        <h2 class="text-xl font-serif text-lr-sand mb-4">All Permits</h2>
+        <div class="space-y-4">
+          {allPermits.map(permit => (
+            <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 p-4">
+              <div class="flex flex-wrap justify-between items-start gap-2 mb-3">
+                <div>
+                  <h3 class="font-medium text-lr-alaska">{permit.name}</h3>
+                  <div class="text-sm text-lr-terracotta">{permit.institution}</div>
+                </div>
+                <div class="flex gap-2">
+                  <span class="text-xs">{priorityLabels[permit.priority]}</span>
+                  <span class={`text-xs px-2 py-0.5 rounded ${statusColors[permit.status]}`}>
+                    {permit.status.toUpperCase()}
+                  </span>
+                </div>
+              </div>
+              
+              <div class="grid md:grid-cols-3 gap-4 text-sm mb-3">
+                <div>
+                  <span class="text-slate-500">Est. Cost:</span>
+                  <span class="text-lr-limestone ml-2">{permit.estimatedCost}</span>
+                </div>
+                <div>
+                  <span class="text-slate-500">Timeline:</span>
+                  <span class="text-lr-limestone ml-2">{permit.estimatedTime}</span>
+                </div>
+                <div>
+                  <span class="text-slate-500">Dependencies:</span>
+                  <span class="text-lr-limestone ml-2">
+                    {permit.dependencies.length > 0 ? permit.dependencies.join(', ') : 'None'}
+                  </span>
+                </div>
+              </div>
+              
+              <p class="text-xs text-slate-400">{permit.notes}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Estimated Totals -->
+      <section class="mt-8 bg-lr-sand/10 rounded-xl border border-lr-sand/30 p-6">
+        <h2 class="text-lg font-serif text-lr-sand mb-4"> Estimated Permit Costs</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="text-sm text-lr-terracotta mb-2">Prerequisites</h3>
+            <ul class="space-y-1 text-sm text-lr-limestone/80">
+              <li>• Topographic Survey: $3,000 - $5,000</li>
+              <li>• Master Plan: $10,000 - $20,000</li>
+              <li>• Detailed Plans: $20,000 - $40,000</li>
+              <li>• Wastewater Study: $5,000 - $10,000</li>
+              <li>• Hydrogeological Study: $3,000 - $5,000</li>
+            </ul>
+            <div class="mt-2 pt-2 border-t border-lr-moss/30 font-medium text-lr-sand">
+              Subtotal: $41,000 - $80,000
+            </div>
+          </div>
+          <div>
+            <h3 class="text-sm text-lr-terracotta mb-2">Permits & Fees</h3>
+            <ul class="space-y-1 text-sm text-lr-limestone/80">
+              <li>• SETENA D2: $15,000 - $25,000</li>
+              <li>• INVU: $3,000 - $5,000</li>
+              <li>• ICT: $1,000 - $2,000</li>
+              <li>• Salud (all): $1,500 - $2,500</li>
+              <li>• Bomberos: $500 - $1,500</li>
+              <li>• Municipal: ~1% of construction</li>
+            </ul>
+            <div class="mt-2 pt-2 border-t border-lr-moss/30 font-medium text-lr-sand">
+              Subtotal: $21,000 - $36,000 + municipal
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-lr-sand/30 text-center">
+          <span class="text-lg font-serif text-lr-sand">Total Pre-Construction: $62,000 - $116,000</span>
+          <span class="text-sm text-slate-400 block">+ municipal fees based on construction value</span>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+</Layout>

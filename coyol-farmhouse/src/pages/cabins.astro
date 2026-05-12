@@ -1,0 +1,251 @@
+---
+import Layout from '../layouts/Layout.astro';
+import cabinData from '../data/cabins.json';
+
+const models = cabinData.models;
+const commonFeatures = cabinData.commonFeatures;
+const designNotes = cabinData.designNotes;
+---
+
+<Layout title="Cabin Models — Coyol Farmhouse">
+  <div class="min-h-screen bg-lr-santorini">
+    
+    <!-- Header -->
+    <header class="border-b border-lr-moss/30 bg-lr-santorini/80 backdrop-blur sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div>
+          <a href="/" class="text-2xl font-serif text-lr-sand hover:text-lr-terracotta transition">COYOL FARMHOUSE</a>
+          <p class="text-sm text-lr-limestone/70">Cabin Models</p>
+        </div>
+        <a href="/" class="text-sm text-lr-limestone hover:text-lr-sand transition">← Back to Dashboard</a>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8">
+
+      <!-- Summary -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-lr-moss/20 rounded-xl p-4 border border-lr-moss/30 text-center">
+          <div class="text-3xl font-serif text-lr-sand">2</div>
+          <div class="text-sm text-lr-limestone/70">Cabin Models</div>
+        </div>
+        <div class="bg-lr-moss/20 rounded-xl p-4 border border-lr-moss/30 text-center">
+          <div class="text-3xl font-serif text-lr-sand">~50</div>
+          <div class="text-sm text-lr-limestone/70">Total Units</div>
+        </div>
+        <div class="bg-lr-moss/20 rounded-xl p-4 border border-lr-moss/30 text-center">
+          <div class="text-3xl font-serif text-lr-sand">65-75</div>
+          <div class="text-sm text-lr-limestone/70">m² per unit</div>
+        </div>
+        <div class="bg-pink-900/30 rounded-xl p-4 border border-pink-600/30 text-center">
+          <div class="text-lg font-serif text-pink-300">Milagro</div>
+          <div class="text-sm text-pink-400/70">Design Lead</div>
+        </div>
+      </div>
+
+      <!-- Cabin Models -->
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+        
+        {models.map(model => (
+          <div class={`bg-lr-moss/10 rounded-xl border overflow-hidden ${model.id === 'coyol-1br' ? 'border-lr-sand/50' : 'border-slate-600/50'}`}>
+            
+            <!-- Header -->
+            <div class={`p-4 ${model.id === 'coyol-1br' ? 'bg-lr-sand/20' : 'bg-slate-800/50'}`}>
+              <div class="flex justify-between items-start">
+                <div>
+                  <h2 class="text-xl font-serif text-lr-alaska">{model.name}</h2>
+                  <p class="text-sm text-lr-terracotta">{model.bedrooms}BR • {model.size}m²</p>
+                </div>
+                <span class={`text-xs px-2 py-1 rounded ${model.designStatus === 'pending' ? 'bg-yellow-900/50 text-yellow-300' : 'bg-green-900/50 text-green-300'}`}>
+                  {model.designStatus.toUpperCase()}
+                </span>
+              </div>
+            </div>
+
+            <!-- Visual Placeholder -->
+            <div class={`h-48 flex items-center justify-center ${model.id === 'coyol-1br' ? 'bg-lr-sand/10' : 'bg-slate-900/50'}`}>
+              <div class="text-center">
+                {model.id === 'coyol-1br' ? (
+                  <div>
+                    <div class="text-6xl mb-2"></div>
+                    <div class="text-sm text-lr-limestone/50">Coyol Restaurant Style</div>
+                    <div class="text-xs text-slate-500">Pitched roof, organic form</div>
+                  </div>
+                ) : (
+                  <div>
+                    <div class="text-6xl mb-2"></div>
+                    <div class="text-sm text-lr-limestone/50">Modern I-Beam</div>
+                    <div class="text-xs text-slate-500">Flat roof, black steel</div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <!-- Details -->
+            <div class="p-4 space-y-4">
+              
+              <div>
+                <div class="text-xs text-slate-500 mb-1">Style</div>
+                <p class="text-sm text-lr-limestone">{model.style}</p>
+              </div>
+
+              <div>
+                <div class="text-xs text-slate-500 mb-1">Structure</div>
+                <p class="text-sm text-lr-limestone">{model.structure}</p>
+              </div>
+
+              <div>
+                <div class="text-xs text-slate-500 mb-1">Features</div>
+                <div class="flex flex-wrap gap-1">
+                  {model.features.map(f => (
+                    <span class="text-xs px-2 py-0.5 bg-lr-moss/30 rounded text-lr-limestone/80">{f}</span>
+                  ))}
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4 pt-3 border-t border-lr-moss/30">
+                <div>
+                  <div class="text-xs text-slate-500">Target</div>
+                  <div class="text-sm text-lr-limestone">{model.target}</div>
+                </div>
+                <div>
+                  <div class="text-xs text-slate-500">Quantity</div>
+                  <div class="text-sm text-lr-limestone">{model.quantity}</div>
+                </div>
+              </div>
+
+              <div class="pt-3 border-t border-lr-moss/30">
+                <div class="text-xs text-slate-500">Est. Rate</div>
+                <div class="text-lg font-serif text-lr-sand">{model.priceRange}</div>
+              </div>
+
+            </div>
+          </div>
+        ))}
+
+      </div>
+
+      <!-- Common Features -->
+      <section class="mb-8">
+        <h2 class="text-xl font-serif text-lr-sand mb-4"> All Cabins Include</h2>
+        <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 p-4">
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {commonFeatures.map(feature => (
+              <div class="flex items-center gap-2 text-sm text-lr-limestone">
+                <span class="text-green-400">•</span>
+                {feature}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- Design Notes -->
+      <section class="mb-8">
+        <h2 class="text-xl font-serif text-lr-sand mb-4"> Design Philosophy</h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          
+          <div class="bg-lr-sand/10 rounded-xl border border-lr-sand/30 p-4">
+            <h3 class="text-lr-sand font-medium mb-2">Coyol Cabin (1BR)</h3>
+            <p class="text-sm text-lr-limestone/80">{designNotes.coyolStyle}</p>
+          </div>
+          
+          <div class="bg-slate-800/50 rounded-xl border border-slate-600/30 p-4">
+            <h3 class="text-slate-300 font-medium mb-2">Family Pavilion (2BR)</h3>
+            <p class="text-sm text-lr-limestone/80">{designNotes.familyStyle}</p>
+          </div>
+
+        </div>
+        
+        <div class="mt-4 p-4 bg-lr-moss/10 rounded-lg border border-lr-moss/30">
+          <h4 class="text-lr-terracotta font-medium mb-2">Design Consistency</h4>
+          <p class="text-sm text-lr-limestone/80">{designNotes.consistency}</p>
+        </div>
+      </section>
+
+      <!-- Milagro Assignment -->
+      <section class="bg-pink-900/20 border border-pink-600/50 rounded-xl p-6">
+        <div class="flex items-start gap-4">
+          <div class="text-4xl"></div>
+          <div>
+            <h2 class="text-lg font-serif text-pink-300 mb-2">Milagro — Design Assignment</h2>
+            <div class="space-y-2 text-sm text-lr-limestone">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+                <span>Design 1BR Coyol Cabin (65m²) — pitched roof, organic</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+                <span>Design 2BR Family Pavilion (75m²) — flat roof, I-beam black</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-slate-500"></span>
+                <span>Floor plans with furniture layout</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-slate-500"></span>
+                <span>Elevations and sections</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-slate-500"></span>
+                <span>Material specifications</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-slate-500"></span>
+                <span>Hot tub and outdoor shower integration</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Revenue Projection -->
+      <section class="mt-8 bg-lr-sand/10 rounded-xl border border-lr-sand/30 p-6">
+        <h2 class="text-lg font-serif text-lr-sand mb-4"> Revenue Projection (70% Occupancy)</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="text-left text-slate-400 border-b border-lr-moss/30">
+              <tr>
+                <th class="pb-2">Model</th>
+                <th class="pb-2">Units</th>
+                <th class="pb-2">Avg Rate</th>
+                <th class="pb-2">Daily (70%)</th>
+                <th class="pb-2">Monthly</th>
+                <th class="pb-2">Annual</th>
+              </tr>
+            </thead>
+            <tbody class="text-lr-limestone">
+              <tr class="border-b border-lr-moss/20">
+                <td class="py-2">Coyol 1BR</td>
+                <td>35</td>
+                <td>$425</td>
+                <td>$10,413</td>
+                <td>$312,375</td>
+                <td>$3.7M</td>
+              </tr>
+              <tr class="border-b border-lr-moss/20">
+                <td class="py-2">Family 2BR</td>
+                <td>15</td>
+                <td>$675</td>
+                <td>$7,088</td>
+                <td>$212,625</td>
+                <td>$2.6M</td>
+              </tr>
+              <tr class="font-medium text-lr-sand">
+                <td class="py-2">TOTAL</td>
+                <td>50</td>
+                <td>—</td>
+                <td>$17,500</td>
+                <td>$525,000</td>
+                <td>$6.3M</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-xs text-slate-500 mt-3">* Room revenue only. Excludes restaurant, spa, events.</p>
+      </section>
+
+    </main>
+
+  </div>
+</Layout>
