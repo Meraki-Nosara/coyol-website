@@ -168,10 +168,10 @@ def generate_html(date_str, sales_data):
         html += f"""
         <div class="restaurant {rest_id}">
             <div class="name">{RESTAURANT_NAMES[rest_id]}</div>
-            <div class="amount">{format_colones(total)}</div>
+            <div class="amount">{format_colones(total, abbreviate=False)}</div>
             <div class="breakdown">
-                <div><span>Cash</span><span>{format_colones(cash)}</span></div>
-                <div><span>Card</span><span>{format_colones(card)}</span></div>
+                <div><span>Cash</span><span>{format_colones(cash, abbreviate=False)}</span></div>
+                <div><span>Card</span><span>{format_colones(card, abbreviate=False)}</span></div>
             </div>
         </div>
 """
