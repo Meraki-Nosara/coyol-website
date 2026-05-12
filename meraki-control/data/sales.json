@@ -1668,6 +1668,42 @@
       "iva13": 55917,
       "source": "ingrid_email",
       "cashier": "Juan Castillo"
+    },
+    {
+      "date": "2026-05-10",
+      "restaurant": "laluna",
+      "cash": 497800,
+      "card": 4302650,
+      "total": 4800450,
+      "netSales": 3912945,
+      "service10": 378822,
+      "iva13": 508683,
+      "source": "ingrid_email",
+      "cashier": "Julia Arrieta"
+    },
+    {
+      "date": "2026-05-10",
+      "restaurant": "coyol",
+      "cash": 160650,
+      "card": 2152759,
+      "total": 2313409,
+      "netSales": 1880820,
+      "service10": 188082,
+      "iva13": 244507,
+      "source": "ingrid_email",
+      "cashier": "George Lopez"
+    },
+    {
+      "date": "2026-05-10",
+      "restaurant": "esh",
+      "cash": 50000,
+      "card": 210073,
+      "total": 260073,
+      "netSales": 217319,
+      "service10": 14502,
+      "iva13": 28252,
+      "source": "ingrid_email",
+      "cashier": "Juan Castillo"
     }
   ],
   "lastUpdated": "2026-04-13T07:30:00.000Z",
@@ -2212,3 +2248,28 @@
     }
   ]
 }
+,
+    {
+      "date": "2026-05-10",
+      "restaurant": "coyol",
+      "total": 1880820,
+      "cash": 143080,
+      "card": 2370646,
+      "source": "ingrid-cierre"
+    },
+    {
+      "date": "2026-05-10",
+      "restaurant": "laluna",
+      "total": 3912945,
+      "cash": 545000,
+      "card": 994936,
+      "source": "ingrid-cierre"
+    },
+    {
+      "date": "2026-05-10",
+      "restaurant": "esh",
+      "total": 217319,
+      "cash": 0,
+      "card": 263073,
+      "source": "ingrid-cierre"
+    }
