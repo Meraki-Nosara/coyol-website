@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Meraki Financial Analysis - April 2026</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #fff;
+      color: #1a1f16;
+      padding: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #3D4F3D;
+    }
+    .header h1 { font-size: 28px; color: #3D4F3D; margin-bottom: 5px; }
+    .header h2 { font-size: 20px; color: #666; font-weight: normal; }
+    .summary-box {
+      background: #3D4F3D;
+      color: white;
+      padding: 25px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+    .summary-box h3 { font-size: 16px; opacity: 0.8; margin-bottom: 15px; }
+    .summary-stats { display: flex; justify-content: space-around; text-align: center; flex-wrap: wrap; gap: 20px; }
+    .stat { min-width: 100px; }
+    .stat-value { font-size: 28px; font-weight: bold; }
+    .stat-label { font-size: 12px; opacity: 0.7; }
+    h3 { color: #3D4F3D; font-size: 18px; margin: 30px 0 15px 0; padding-bottom: 5px; border-bottom: 1px solid #ddd; }
+    table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
+    th { background: #f5f5f5; padding: 12px 10px; text-align: left; font-weight: 600; border-bottom: 2px solid #3D4F3D; }
+    th:not(:first-child) { text-align: right; }
+    td { padding: 10px; border-bottom: 1px solid #eee; }
+    td:not(:first-child) { text-align: right; }
+    tr:hover { background: #fafafa; }
+    .good { color: #2d7a2d; font-weight: bold; }
+    .restaurant-row td:first-child { display: flex; align-items: center; gap: 10px; }
+    .color-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 12px; color: #888; text-align: center; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Meraki Financial Analysis</h1>
+  <h2>April 2026</h2>
+</div>
+
+<div class="summary-box">
+  <h3>Monthly Results</h3>
+  <div class="summary-stats">
+    <div class="stat">
+      <div class="stat-value">$573K</div>
+      <div class="stat-label">TOTAL SALES</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">₡289M</div>
+      <div class="stat-label">IN COLONES</div>
+    </div>
+  </div>
+</div>
+
+<h3>Restaurant Performance</h3>
+<table>
+  <tr>
+    <th>Restaurant</th>
+    <th>Sales</th>
+    <th>% of Total</th>
+  </tr>
+  <tr class="restaurant-row">
+    <td><span class="color-dot" style="background: #A65D3F"></span> La Luna</td>
+    <td>₡184,368,882</td>
+    <td>64%</td>
+  </tr>
+  <tr class="restaurant-row">
+    <td><span class="color-dot" style="background: #3D4F3D"></span> Coyol</td>
+    <td>₡88,637,403</td>
+    <td>31%</td>
+  </tr>
+  <tr class="restaurant-row">
+    <td><span class="color-dot" style="background: #C4A67C"></span> Esh</td>
+    <td>₡16,341,316</td>
+    <td>5%</td>
+  </tr>
+  <tr style="background: #f5f5f5; font-weight: bold;">
+    <td>Total</td>
+    <td>₡289,347,601</td>
+    <td>100%</td>
+  </tr>
+</table>
+
+<h3>Key Observations</h3>
+<ul style="margin: 15px 0; padding-left: 20px;">
+  <li style="margin-bottom: 10px;"><strong>La Luna</strong> continues to dominate with 64% of total sales</li>
+  <li style="margin-bottom: 10px;"><strong>Coyol</strong> maintains strong performance at ₡88.6M</li>
+  <li style="margin-bottom: 10px;"><strong>Esh</strong> bakery steady at ₡16.3M (5% share)</li>
+  <li style="margin-bottom: 10px;">April marks transition from high season — sales expected to decrease in coming months</li>
+</ul>
+
+<h3>Year-to-Date Summary (Jan-Apr 2026)</h3>
+<table>
+  <tr>
+    <th>Metric</th>
+    <th>Value</th>
+  </tr>
+  <tr>
+    <td>Total YTD Sales</td>
+    <td>₡1,288M ($2.55M)</td>
+  </tr>
+  <tr>
+    <td>Monthly Average</td>
+    <td>₡322M ($638K)</td>
+  </tr>
+  <tr>
+    <td>April vs March</td>
+    <td class="good">↓ 17% (seasonal decline expected)</td>
+  </tr>
+</table>
+
+<div class="footer">
+  Report generated: May 12, 2026<br>
+  Exchange rate: $1 = ₡505<br>
+  Data source: Daily closing reports (Ingrid)
+</div>
+
+</body>
+</html>
