@@ -512,7 +512,8 @@
       "perPerson": 41218,
       "source": "pos_report",
       "gastos": 26803268,
-      "mdo": 5576655
+      "mdo": 5576655,
+      "sales": 109956573
     },
     {
       "month": "2026-01",
@@ -532,7 +533,8 @@
       "perPerson": 10068,
       "source": "pos_report",
       "gastos": 10260546,
-      "mdo": 3643629
+      "mdo": 3643629,
+      "sales": 15988603
     },
     {
       "month": "2026-01",
@@ -553,7 +555,8 @@
       "source": "pos_report",
       "note": "File labeled Abril dias actual but contains January data",
       "gastos": 73461437,
-      "mdo": 18186509
+      "mdo": 18186509,
+      "sales": 220540818
     },
     {
       "month": "2026-02",
@@ -573,7 +576,8 @@
       "perPerson": 40242,
       "source": "pos_report",
       "gastos": 25096979,
-      "mdo": 5759655
+      "mdo": 5759655,
+      "sales": 96823651
     },
     {
       "month": "2026-02",
@@ -593,7 +597,8 @@
       "perPerson": 9522,
       "source": "pos_report",
       "gastos": 10796061,
-      "mdo": 3830175
+      "mdo": 3830175,
+      "sales": 15207459
     },
     {
       "month": "2026-02",
@@ -614,7 +619,8 @@
       "source": "pos_report",
       "note": "File labeled Marzo but contains February data",
       "gastos": 78139230,
-      "mdo": 13551721
+      "mdo": 13551721,
+      "sales": 182515403
     },
     {
       "month": "2026-03",
@@ -634,7 +640,8 @@
       "perPerson": 40940,
       "source": "pos_report",
       "gastos": 30008401,
-      "mdo": 2964303
+      "mdo": 2964303,
+      "sales": 112527433
     },
     {
       "month": "2026-03",
@@ -654,7 +661,8 @@
       "perPerson": 7986,
       "source": "pos_report",
       "gastos": 10691011,
-      "mdo": 3757513
+      "mdo": 3757513,
+      "sales": 15148903
     },
     {
       "month": "2026-03",
@@ -675,7 +683,8 @@
       "source": "pos_report",
       "note": "File labeled Febrero but contains March data",
       "gastos": 95182068,
-      "mdo": 16363367
+      "mdo": 16363367,
+      "sales": 227937562
     },
     {
       "month": "2026-04",
@@ -696,7 +705,8 @@
       "source": "daily_aggregate",
       "note": "Aggregated from daily cierres",
       "mdo": 5964509,
-      "gastos": 8631029
+      "gastos": 8631029,
+      "sales": 11700073
     },
     {
       "month": "2026-04",
@@ -717,7 +727,8 @@
       "source": "daily_aggregate",
       "note": "Aggregated from daily cierres",
       "mdo": 19586237,
-      "gastos": 16782757
+      "gastos": 16782757,
+      "sales": 79459269
     },
     {
       "month": "2026-04",
@@ -738,10 +749,11 @@
       "source": "daily_aggregate",
       "note": "Aggregated from daily cierres",
       "mdo": 44546624,
-      "gastos": 51212752
+      "gastos": 51212752,
+      "sales": 162956574
     }
   ],
-  "lastUpdated": "2026-05-12T18:20:00.000Z",
+  "lastUpdated": "2026-05-12T18:25:00.000Z",
   "gastosTotals2025": {
     "esh": 93678771,
     "coyol": 254933429,
