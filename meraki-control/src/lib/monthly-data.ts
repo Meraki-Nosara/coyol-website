@@ -198,3 +198,67 @@ export function getLastUpdated(): string | null {
     return null;
   }
 }
+
+// Payroll data interfaces
+export interface PayrollWeek {
+  period: string;
+  type: 'variable' | 'fixed';
+  total: number;
+  employees: number;
+}
+
+export interface PayrollMonth {
+  month: string;
+  currency: string;
+  summary: {
+    weekly_variable: number;
+    fixed_salaries: number;
+    total: number;
+    total_usd: number;
+  };
+  weekly: PayrollWeek[];
+}
+
+// Load payroll data for a specific month
+export function loadPayrollMonth(month: string): PayrollMonth | null {
+  const PAYROLL_PATH = path.join(process.cwd(), 'data', 'payroll', `${month}.json`);
+  try {
+    const raw = fs.readFileSync(PAYROLL_PATH, 'utf-8');
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+// Get all available payroll months
+export function getAvailablePayrollMonths(): string[] {
+  const PAYROLL_DIR = path.join(process.cwd(), 'data', 'payroll');
+  try {
+    const files = fs.readdirSync(PAYROLL_DIR);
+    return files
+      .filter(f => f.endsWith('.json'))
+      .map(f => f.replace('.json', ''))
+      .sort();
+  } catch {
+    return [];
+  }
+}
+
+// Load all payroll data for YTD calculations
+export function loadAllPayroll(): PayrollMonth[] {
+  const months = getAvailablePayrollMonths();
+  return months
+    .map(m => loadPayrollMonth(m))
+    .filter((p): p is PayrollMonth => p !== null);
+}
+
+// Get total payroll for a year
+export function getYearPayroll(year: string): { total: number; variable: number; fixed: number; months: number } {
+  const payrolls = loadAllPayroll().filter(p => p.month.startsWith(year));
+  return {
+    total: payrolls.reduce((sum, p) => sum + p.summary.total, 0),
+    variable: payrolls.reduce((sum, p) => sum + p.summary.weekly_variable, 0),
+    fixed: payrolls.reduce((sum, p) => sum + p.summary.fixed_salaries, 0),
+    months: payrolls.length
+  };
+}

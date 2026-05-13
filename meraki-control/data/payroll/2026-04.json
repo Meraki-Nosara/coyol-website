@@ -1,0 +1,73 @@
+{
+  "month": "2026-04",
+  "currency": "CRC",
+  "summary": {
+    "weekly_variable": 19414941,
+    "fixed_salaries": 8466511,
+    "total": 27881452,
+    "total_usd": 55210
+  },
+  "weekly": [
+    {
+      "period": "2026-04-03/2026-04-09",
+      "type": "variable",
+      "total": 5757909,
+      "employees": 49
+    },
+    {
+      "period": "2026-04-10/2026-04-16",
+      "type": "variable",
+      "total": 5204376,
+      "employees": 50
+    },
+    {
+      "period": "2026-04-17/2026-04-23",
+      "type": "variable",
+      "total": 4366840,
+      "employees": 52
+    },
+    {
+      "period": "2026-04-24/2026-04-30",
+      "type": "variable",
+      "total": 4085816,
+      "employees": 52
+    }
+  ],
+  "fixed": [
+    {
+      "period": "2026-04-01/2026-04-15",
+      "total": 4588518,
+      "employees": [
+        {"name": "ALVARO LUIS PIÑAR JIMENEZ", "amount": 428016},
+        {"name": "ABNER CARRILLO RANGEL", "amount": 468969},
+        {"name": "DANIEL ARTURO BLANCO PALACIOS", "amount": 585621},
+        {"name": "GEORGE DANIEL LOPEZ GOMEZ", "amount": 374514},
+        {"name": "INGRID MEJIAS ANGULO", "amount": 214008},
+        {"name": "INGRID MEJIAS ANGULO (outsourced)", "amount": 222000},
+        {"name": "JOHN FREISER LOPEZ JIMENEZ", "amount": 454767},
+        {"name": "MARYON PERI", "amount": 642024},
+        {"name": "PABLO ALEJANDRO ROMERO MONTIEL", "amount": 369319},
+        {"name": "SILVIA ELENA DUARTE VEGA", "amount": 454767},
+        {"name": "SOFIA NATALIA CAMPOS BRENEZ", "amount": 374513}
+      ]
+    },
+    {
+      "period": "2026-04-16/2026-04-30",
+      "total": 3877993,
+      "employees": [
+        {"name": "ALVARO LUIS PIÑAR JIMENEZ", "amount": 356680},
+        {"name": "ABNER CARRILLO RANGEL", "amount": 417975},
+        {"name": "DANIEL ARTURO BLANCO PALACIOS", "amount": 549020},
+        {"name": "GEORGE DANIEL LOPEZ GOMEZ", "amount": 312095},
+        {"name": "INGRID MEJIAS ANGULO", "amount": 178340},
+        {"name": "INGRID MEJIAS ANGULO (outsourced)", "amount": 182000},
+        {"name": "JOHN FREISER LOPEZ JIMENEZ", "amount": 397465},
+        {"name": "MARYON PERI", "amount": 495220},
+        {"name": "PABLO ALEJANDRO ROMERO MONTIEL", "amount": 299432},
+        {"name": "SILVIA ELENA DUARTE VEGA", "amount": 377673},
+        {"name": "SOFIA NATALIA CAMPOS BRENEZ", "amount": 312094}
+      ]
+    }
+  ],
+  "notes": "Source: PLANILLA_MERAKI_ABRIL_2026.xlsx from Abner. Variable employees not yet assigned to specific restaurants."
+}

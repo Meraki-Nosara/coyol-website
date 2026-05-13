@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { loadMonthlyData, formatCurrency, formatMonth, USD_RATE, loadDailySales, getDailyTotals, getLastUpdated } from '../lib/monthly-data';
+import { loadMonthlyData, formatCurrency, formatMonth, USD_RATE, loadDailySales, getDailyTotals, getLastUpdated, getYearPayroll, loadAllPayroll } from '../lib/monthly-data';
 import fs from 'fs';
 import path from 'path';
 
@@ -179,6 +179,14 @@ const year2025SamePeriodTotal = year2025SamePeriod.reduce((sum, m) => sum + m.to
 
 // Grand total
 const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
+
+// Payroll data (2026)
+const payroll2026 = getYearPayroll('2026');
+const allPayroll = loadAllPayroll().filter(p => p.month.startsWith('2026'));
+const laborCostPercent = grandTotal > 0 ? (payroll2026.total / grandTotal * 100) : 0;
+// With cargas sociales (~47%)
+const totalLaborWithCargas = payroll2026.total * 1.47;
+const laborCostWithCargasPercent = grandTotal > 0 ? (totalLaborWithCargas / grandTotal * 100) : 0;
 ---
 
 <Layout title="Control Dashboard">
@@ -658,6 +666,85 @@ const grandTotal = restaurantTotals.reduce((sum, r) => sum + r.totalSales, 0);
                 Cargas sociales: CCSS 26.5% + Aguinaldo 8.33% + Vacaciones 4.17% + Cesantía 5.33% + INS ~3%
               </p>
             </div>
+          </div>
+        )}
+
+        <!-- Payroll Section - NEW! -->
+        {payroll2026.total > 0 && (
+          <div class="card p-5 lg:p-8">
+            <div class="flex items-center justify-between mb-6">
+              <div>
+                <h3 class="text-lg lg:text-xl font-semibold text-landrover-santorini">💰 Payroll - April 2026</h3>
+                <p class="text-sm text-landrover-marine/60">Real payroll data from planilla</p>
+              </div>
+              <div class="text-right">
+                <p class="text-2xl lg:text-3xl font-bold text-landrover-keswick">{fmt(payroll2026.total)}</p>
+                <p class="text-xs text-landrover-marine/60">~${(payroll2026.total / USD_RATE).toLocaleString(undefined, { maximumFractionDigits: 0 })} USD</p>
+              </div>
+            </div>
+            
+            <!-- Variable vs Fixed breakdown -->
+            <div class="grid grid-cols-2 gap-4 mb-6">
+              <div class="bg-amber-50 rounded-lg p-4 text-center">
+                <p class="text-2xl font-bold text-amber-600">{fmt(payroll2026.variable)}</p>
+                <p class="text-xs text-landrover-marine/60 mt-1">Variable (Weekly)</p>
+                <p class="text-xs text-amber-600/70">~50 employees</p>
+              </div>
+              <div class="bg-blue-50 rounded-lg p-4 text-center">
+                <p class="text-2xl font-bold text-blue-600">{fmt(payroll2026.fixed)}</p>
+                <p class="text-xs text-landrover-marine/60 mt-1">Fixed (Salaried)</p>
+                <p class="text-xs text-blue-600/70">12 employees</p>
+              </div>
+            </div>
+            
+            <!-- Weekly breakdown bar chart -->
+            <div class="mb-6">
+              <p class="text-sm font-medium text-landrover-santorini mb-3">Weekly Variable Payroll</p>
+              <div class="space-y-2">
+                {allPayroll.filter(p => p.month === '2026-04').flatMap(p => p.weekly).map((week, i) => {
+                  const maxWeekly = Math.max(...allPayroll.filter(p => p.month === '2026-04').flatMap(p => p.weekly).map(w => w.total));
+                  const pct = maxWeekly > 0 ? (week.total / maxWeekly * 100) : 0;
+                  const weekLabel = week.period.split('/')[0].split('-').slice(1).join('/');
+                  return (
+                    <div class="flex items-center gap-3">
+                      <span class="text-xs text-landrover-marine/60 w-16">{weekLabel}</span>
+                      <div class="flex-1 h-6 bg-gray-100 rounded-full overflow-hidden">
+                        <div 
+                          class="h-full bg-gradient-to-r from-amber-400 to-amber-500 rounded-full flex items-center justify-end pr-2"
+                          style={`width: ${pct}%`}
+                        >
+                          <span class="text-xs font-medium text-white">{fmt(week.total)}</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            
+            <!-- Labor cost as % of sales -->
+            <div class="bg-landrover-limestone/30 rounded-lg p-4">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium">Base Payroll vs Sales</span>
+                <span class={`text-lg font-bold ${laborCostPercent < 20 ? 'text-green-600' : laborCostPercent < 30 ? 'text-amber-600' : 'text-red-600'}`}>
+                  {laborCostPercent.toFixed(1)}%
+                </span>
+              </div>
+              <div class="h-3 bg-gray-200 rounded-full overflow-hidden mb-2">
+                <div 
+                  class={`h-full rounded-full ${laborCostPercent < 20 ? 'bg-green-500' : laborCostPercent < 30 ? 'bg-amber-500' : 'bg-red-500'}`}
+                  style={`width: ${Math.min(laborCostPercent, 100)}%`}
+                ></div>
+              </div>
+              <div class="flex justify-between text-xs text-landrover-marine/60">
+                <span>With cargas sociales (+47%): <strong class="text-landrover-santorini">{laborCostWithCargasPercent.toFixed(1)}%</strong></span>
+                <span>Target: 25-35%</span>
+              </div>
+            </div>
+            
+            <p class="text-xs text-landrover-marine/40 mt-4 text-center">
+              Source: PLANILLA_MERAKI_ABRIL_2026.xlsx • Data includes all 3 restaurants combined
+            </p>
           </div>
         )}
 
