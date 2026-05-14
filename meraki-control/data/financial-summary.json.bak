@@ -1,0 +1,83 @@
+{
+  "lastUpdated": "2026-05-14",
+  "period": "2026-01 to 2026-04",
+  "exchangeRate": 505,
+  
+  "revenue": {
+    "totalCRC": 1288536524,
+    "totalUSD": 2551557,
+    "byRestaurant": {
+      "laluna": {"crc": 794000000, "usd": 1572277, "share": 63},
+      "coyol": {"crc": 399000000, "usd": 790099, "share": 32},
+      "esh": {"crc": 58000000, "usd": 114851, "share": 5}
+    }
+  },
+  
+  "operatingExpenses": {
+    "gastos": {"crc": 437065539, "usd": 865476, "label": "Suppliers & Costs"},
+    "mdo": {"crc": 143730897, "usd": 284616, "label": "Payroll"},
+    "taxes": {"crc": 70000000, "usd": 138614, "label": "CCSS, INS, Renta"},
+    "other": {"crc": 80841251, "usd": 160082, "label": "Bank fees, misc"},
+    "totalCRC": 731637687,
+    "totalUSD": 1448788
+  },
+  
+  "operatingProfit": {
+    "crc": 556898837,
+    "usd": 1102769,
+    "margin": 43.2
+  },
+  
+  "nonOperating": {
+    "angelinaEquipment": {
+      "crc": 88390317,
+      "usd": 175030,
+      "label": "Equipment repayment to Angelina",
+      "note": "Payback for equipment purchased before Meraki"
+    },
+    "ranchoLoan": {
+      "crc": 49843500,
+      "usd": 98700,
+      "label": "Loan to Rancho Mar Azul",
+      "note": "Intercompany loan - development company"
+    },
+    "totalCRC": 138233817,
+    "totalUSD": 273730
+  },
+  
+  "netCashGenerated": {
+    "crc": 418665020,
+    "usd": 829039
+  },
+  
+  "cashPosition": {
+    "asOf": "2026-05-14",
+    "accounts": {
+      "lafiseCRC": {"crc": 327000000, "usd": 647525},
+      "lafiseUSD": {"usd": 34000},
+      "bcrCRC": {"crc": 30000000, "usd": 59406},
+      "bcrUSD": {"usd": 1000}
+    },
+    "totalCash": {
+      "crc": 357000000,
+      "usd": 741931
+    },
+    "loansReceivable": {
+      "ranchoMarAzul": {"usd": 98700, "note": "Owed by development company"}
+    },
+    "totalAssets": {
+      "usd": 840631
+    }
+  },
+  
+  "whereMoneyWent": [
+    {"category": "Suppliers & Operating Costs", "usd": 865476, "pct": 34},
+    {"category": "Payroll (MDO)", "usd": 284616, "pct": 11},
+    {"category": "Taxes (CCSS/INS/Renta)", "usd": 138614, "pct": 5},
+    {"category": "Equipment Repayment (Angelina)", "usd": 175030, "pct": 7},
+    {"category": "Loan to Rancho Mar Azul", "usd": 98700, "pct": 4},
+    {"category": "Other Operations", "usd": 160082, "pct": 6},
+    {"category": "Retained in Bank", "usd": 741931, "pct": 29},
+    {"category": "Receivable (Rancho)", "usd": 98700, "pct": 4}
+  ]
+}

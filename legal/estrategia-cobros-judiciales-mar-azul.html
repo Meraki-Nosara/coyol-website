@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estrategia Cobros Judiciales — Condominio Mar Azul</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Georgia', serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #fafafa;
+      color: #1a1a1a;
+      line-height: 1.7;
+    }
+    h1 { 
+      color: #1a1f16; 
+      font-size: 2em; 
+      border-bottom: 3px solid #3D4F3D; 
+      padding-bottom: 15px;
+      text-align: center;
+    }
+    h2 { 
+      color: #3D4F3D; 
+      margin-top: 40px; 
+      border-left: 4px solid #3D4F3D;
+      padding-left: 15px;
+    }
+    h3 { color: #4A5D4A; margin-top: 25px; }
+    .header-meta {
+      text-align: center;
+      color: #666;
+      font-style: italic;
+      margin-bottom: 30px;
+    }
+    .executive-summary {
+      background: #3D4F3D;
+      color: white;
+      padding: 25px;
+      border-radius: 8px;
+      margin: 30px 0;
+    }
+    .executive-summary h2 { color: #C4A67C; border: none; padding: 0; margin-top: 0; }
+    .total-box {
+      background: #C4A67C;
+      color: #1a1f16;
+      padding: 15px 25px;
+      border-radius: 5px;
+      font-size: 1.3em;
+      font-weight: bold;
+      display: inline-block;
+      margin-top: 15px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.95em;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px;
+      text-align: left;
+    }
+    th { background: #3D4F3D; color: white; }
+    tr:nth-child(even) { background: #f5f5f5; }
+    tr:hover { background: #e8f0e8; }
+    .include { color: #2d6a2d; font-weight: bold; }
+    .exclude { color: #a63d3d; font-weight: bold; }
+    .caution { color: #b58a00; font-weight: bold; }
+    .risk-low { background: #d4edda; color: #155724; padding: 3px 8px; border-radius: 3px; font-size: 0.85em; }
+    .risk-medium { background: #fff3cd; color: #856404; padding: 3px 8px; border-radius: 3px; font-size: 0.85em; }
+    .risk-high { background: #f8d7da; color: #721c24; padding: 3px 8px; border-radius: 3px; font-size: 0.85em; }
+    blockquote {
+      background: #f0f4f0;
+      border-left: 4px solid #3D4F3D;
+      padding: 15px 20px;
+      margin: 20px 0;
+      font-style: italic;
+      color: #444;
+    }
+    .error-box {
+      background: #fff3f3;
+      border: 2px solid #a63d3d;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .error-box h3 { color: #a63d3d; margin-top: 0; }
+    .action-box {
+      background: #fff8e6;
+      border: 2px solid #C4A67C;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .action-box h3 { color: #8B6914; margin-top: 0; }
+    .lot-card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .lot-card h3 { 
+      margin-top: 0; 
+      color: #3D4F3D;
+      border-bottom: 2px solid #C4A67C;
+      padding-bottom: 10px;
+    }
+    .lot-total {
+      font-size: 1.4em;
+      font-weight: bold;
+      color: #3D4F3D;
+      text-align: right;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 2px solid #eee;
+    }
+    .checklist { list-style: none; padding: 0; }
+    .checklist li { 
+      padding: 8px 0; 
+      border-bottom: 1px solid #eee;
+    }
+    .checklist li:before { content: "☐ "; color: #3D4F3D; }
+    .footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 2px solid #ddd;
+      color: #666;
+      font-size: 0.9em;
+      text-align: center;
+    }
+    .timeline-table td:first-child { width: 80px; text-align: center; font-weight: bold; }
+    @media print {
+      body { background: white; }
+      .lot-card { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>ESTRATEGIA JURÍDICA PARA COBROS JUDICIALES</h1>
+<div class="header-meta">
+  Condominio Mar Azul — Mayo 2026<br>
+  Documento preparado para revisión del equipo legal
+</div>
+
+<div class="executive-summary">
+  <h2>I. RESUMEN EJECUTIVO</h2>
+  <p>El presente documento establece la estrategia legal recomendada para iniciar procesos de cobro judicial contra cuatro propietarios morosos del Condominio Mar Azul.</p>
+  <p><strong>Objetivos del enfoque:</strong></p>
+  <ol>
+    <li><strong>Jurídicamente sólido</strong> — fundamentado en ley y reglamento</li>
+    <li><strong>Procesalmente limpio</strong> — sin elementos fácilmente impugnables</li>
+    <li><strong>Estratégicamente prudente</strong> — minimizando superficies de ataque</li>
+  </ol>
+  <div class="total-box">Monto total cobro judicial: US$59,230.00</div>
+  <p style="margin-top:10px; font-size:0.9em;"><em>Agua/Electricidad ($11,050) se cobrará por vía separada</em></p>
+</div>
+
+<h2>II. FUNDAMENTO LEGAL</h2>
+
+<h3>A. Ley Reguladora de la Propiedad en Condominio (Ley 7933)</h3>
+
+<p><strong>Artículo 20 — Obligación de Pago:</strong></p>
+<blockquote>"Los propietarios están obligados a contribuir al pago de los gastos comunes, en proporción al porcentaje de su derecho de copropiedad."</blockquote>
+
+<p><strong>Artículo 21 — Cobro Ejecutivo:</strong></p>
+<blockquote>"Las cuotas de administración y mantenimiento constituyen título ejecutivo para su cobro judicial."</blockquote>
+
+<h3>B. Código Procesal Civil — Proceso Monitorio</h3>
+<p>El cobro de cuotas condominales puede tramitarse mediante <strong>proceso monitorio</strong> (Art. 502 y siguientes) cuando existe documento que pruebe la deuda, la obligación es líquida y exigible, y el deudor está debidamente identificado.</p>
+<p><strong>Ventaja:</strong> Proceso expedito con inversión de carga probatoria.</p>
+
+<h3>C. Reglamento del Condominio Mar Azul</h3>
+
+<p><strong>Sección 6.5 — Intereses y Multas:</strong></p>
+<blockquote>"Delay in payment by Condominium Owners... shall generate the payment of <strong>a fine of 10% per month</strong> on the amount owed, with current and default interest of 10%."</blockquote>
+
+<p><strong>Secciones 9.1 y 9.2 — Servicios:</strong></p>
+<blockquote>"The Condominium will provide the potable water service and the monthly consumption of each of the units; it will be charged according to the monthly readings..."</blockquote>
+
+<h2>III. ANÁLISIS DE RUBROS A COBRAR</h2>
+
+<table>
+  <tr>
+    <th>Rubro</th>
+    <th>Decisión</th>
+    <th>Fundamento</th>
+    <th>Riesgo</th>
+  </tr>
+  <tr>
+    <td><strong>Cuotas Ordinarias</strong></td>
+    <td class="include">✅ INCLUIR</td>
+    <td>Ley 7933, Art. 20; Reglamento 6.1-6.3</td>
+    <td><span class="risk-low">BAJO</span></td>
+  </tr>
+  <tr>
+    <td><strong>Multas 10% mensual</strong></td>
+    <td class="include">✅ INCLUIR</td>
+    <td>Reglamento Sección 6.5 — expresamente autorizado</td>
+    <td><span class="risk-low">BAJO</span></td>
+  </tr>
+  <tr>
+    <td><strong>Intereses 2.54% mensual</strong></td>
+    <td class="include">✅ INCLUIR</td>
+    <td>Menor que 10% autorizado — más defensible</td>
+    <td><span class="risk-low">BAJO</span></td>
+  </tr>
+  <tr>
+    <td><strong>Agua y Electricidad</strong></td>
+    <td class="exclude">❌ EXCLUIR</td>
+    <td>NO es cuota condominal (Ley 7933 Art.21) — cobrar por vía separada</td>
+    <td><span class="risk-high">ALTO si se incluye</span></td>
+  </tr>
+  <tr>
+    <td><strong>Multa conducción temeraria (FF20)</strong></td>
+    <td class="exclude">❌ EXCLUIR</td>
+    <td>Sin evidencia de debido proceso (Sección 8.1)</td>
+    <td><span class="risk-high">ALTO</span></td>
+  </tr>
+</table>
+
+<h2>IV. ERRORES DETECTADOS EN CERTIFICACIONES CPA</h2>
+
+<div class="error-box">
+  <h3>🚨 Error en FF20 — Rancho Verde Riabov S.R.L.</h3>
+  <p><strong>Error 1:</strong> Nombre incorrecto en cuadro de detalle</p>
+  <ul>
+    <li>Certificación indica: "Rancho Verde Riabov S.R.L."</li>
+    <li>Cuadro titula: "GRATUM NOSARA SOCIEDAD DE RESPONSABILIDAD LIMITADA"</li>
+  </ul>
+  <p><strong>Error 2:</strong> Discrepancia en número de matrícula</p>
+  <ul>
+    <li>Párrafo introductorio: 231613-F-000</li>
+    <li>Párrafo de procedimientos: 231598-F-000</li>
+  </ul>
+  <p><strong>ACCIÓN:</strong> Solicitar certificación corregida antes de presentar demanda.</p>
+</div>
+
+<div class="error-box">
+  <h3>⚠️ Referencias a ABI Solutions en todas las certificaciones</h3>
+  <p>Las certificaciones mencionan: <em>"contratado por GRUPO ABI SOLUCIONES SOCIEDAD ANONIMA... administrador operativo"</em></p>
+  <p><strong>Problema estratégico:</strong> Los demandados han cuestionado la legitimidad de ABI Solutions. Mencionar a ABI provee argumento de defensa innecesario.</p>
+  <p><strong>ACCIÓN:</strong> Solicitar nuevas certificaciones que solo referencien:</p>
+  <ul>
+    <li><strong>Admin Mar Azul Nosara SRL</strong> (cédula 3-102-892782) — representante legal</li>
+    <li><strong>Condominio Mar Azul</strong> (cédula 3-109-895251) — demandante</li>
+  </ul>
+</div>
+
+<h2>V. DESGLOSE POR FINCA FILIAL</h2>
+
+<div class="lot-card">
+  <h3>FF1 — Propiedades y Terrenos Terrazas del Arco Iris Limitada</h3>
+  <p><strong>Cédula:</strong> 3-102-427405 | <strong>Matrícula:</strong> 231595-F-000</p>
+  <table>
+    <tr><td>Cuotas Ordinarias</td><td style="text-align:right">$11,692.00</td><td>✅</td></tr>
+    <tr><td>Multas 10%</td><td style="text-align:right">$4,979.00</td><td>✅</td></tr>
+    <tr><td>Intereses 2.54%</td><td style="text-align:right">$755.00</td><td>✅</td></tr>
+    <tr style="color:#999; text-decoration:line-through;"><td>Servicios (Agua/Luz)</td><td style="text-align:right">$931.00</td><td>❌ Separado</td></tr>
+  </table>
+  <div class="lot-total">COBRO JUDICIAL: US$17,426.00</div>
+</div>
+
+<div class="lot-card">
+  <h3>FF4 — Gratum Nosara Sociedad de Responsabilidad Limitada</h3>
+  <p><strong>Cédula:</strong> 3-102-757656 | <strong>Matrícula:</strong> 231598-F-000</p>
+  <table>
+    <tr><td>Cuotas Ordinarias</td><td style="text-align:right">$7,809.00</td><td>✅</td></tr>
+    <tr><td>Multas 10%</td><td style="text-align:right">$1,734.00</td><td>✅</td></tr>
+    <tr><td>Intereses 2.54%</td><td style="text-align:right">$588.00</td><td>✅</td></tr>
+    <tr style="color:#999; text-decoration:line-through;"><td>Servicios (Agua/Luz)</td><td style="text-align:right">$1,171.00</td><td>❌ Separado</td></tr>
+  </table>
+  <div class="lot-total">COBRO JUDICIAL: US$10,131.00</div>
+</div>
+
+<div class="lot-card" style="border-color: #a63d3d;">
+  <h3>FF20 — Rancho Verde Riabov S.R.L. <span style="color:#a63d3d">⚠️ REQUIERE CORRECCIÓN CPA</span></h3>
+  <p><strong>Cédula:</strong> 3-102-839355 | <strong>Matrícula:</strong> 231613-F-000 <em>(verificar)</em></p>
+  <table>
+    <tr><td>Cuotas Ordinarias</td><td style="text-align:right">$5,399.00</td><td>✅</td></tr>
+    <tr><td>Multas 10%</td><td style="text-align:right">$2,140.00</td><td>✅</td></tr>
+    <tr><td>Intereses 2.54%</td><td style="text-align:right">$871.00</td><td>✅</td></tr>
+    <tr style="color:#999; text-decoration:line-through;"><td>Servicios (Agua/Luz)</td><td style="text-align:right">$1,685.00</td><td>❌ Separado</td></tr>
+    <tr style="color:#a63d3d; text-decoration:line-through;"><td>Multa conducción temeraria</td><td style="text-align:right">$500.00</td><td>❌ Sin debido proceso</td></tr>
+  </table>
+  <div class="lot-total">COBRO JUDICIAL: US$8,410.00</div>
+</div>
+
+<div class="lot-card">
+  <h3>FF32 — Rancho Azul Guzeman Limitada</h3>
+  <p><strong>Cédula:</strong> 3-102-847228 | <strong>Matrícula:</strong> 231625-F-000</p>
+  <table>
+    <tr><td>Cuotas Ordinarias</td><td style="text-align:right">$17,284.00</td><td>✅</td></tr>
+    <tr><td>Multas 10%</td><td style="text-align:right">$4,210.00</td><td>✅</td></tr>
+    <tr><td>Intereses 2.54%</td><td style="text-align:right">$1,769.00</td><td>✅</td></tr>
+    <tr style="color:#999; text-decoration:line-through;"><td>Servicios (Agua/Luz)</td><td style="text-align:right">$7,263.00</td><td>❌ Separado</td></tr>
+  </table>
+  <div class="lot-total">COBRO JUDICIAL: US$23,263.00</div>
+</div>
+
+<h2>VI. RESUMEN CONSOLIDADO</h2>
+
+<h3>A. COBRO JUDICIAL (Cuotas + Multas + Intereses)</h3>
+<table>
+  <tr>
+    <th>Finca</th>
+    <th>Propietario</th>
+    <th style="text-align:right">Total</th>
+  </tr>
+  <tr>
+    <td>FF1</td>
+    <td>Terrazas del Arco Iris Ltda</td>
+    <td style="text-align:right">$17,426.00</td>
+  </tr>
+  <tr>
+    <td>FF4</td>
+    <td>Gratum Nosara SRL</td>
+    <td style="text-align:right">$10,131.00</td>
+  </tr>
+  <tr>
+    <td>FF20</td>
+    <td>Rancho Verde Riabov SRL</td>
+    <td style="text-align:right">$8,410.00</td>
+  </tr>
+  <tr>
+    <td>FF32</td>
+    <td>Rancho Azul Guzeman Ltda</td>
+    <td style="text-align:right">$23,263.00</td>
+  </tr>
+  <tr style="background: #3D4F3D; color: white; font-weight: bold;">
+    <td colspan="2">TOTAL COBRO JUDICIAL</td>
+    <td style="text-align:right">US$59,230.00</td>
+  </tr>
+</table>
+
+<h3>B. COBRO SEPARADO (Agua/Electricidad)</h3>
+<table>
+  <tr>
+    <th>Finca</th>
+    <th>Propietario</th>
+    <th style="text-align:right">Servicios</th>
+  </tr>
+  <tr>
+    <td>FF1</td>
+    <td>Terrazas del Arco Iris Ltda</td>
+    <td style="text-align:right">$931.00</td>
+  </tr>
+  <tr>
+    <td>FF4</td>
+    <td>Gratum Nosara SRL</td>
+    <td style="text-align:right">$1,171.00</td>
+  </tr>
+  <tr>
+    <td>FF20</td>
+    <td>Rancho Verde Riabov SRL</td>
+    <td style="text-align:right">$1,685.00</td>
+  </tr>
+  <tr>
+    <td>FF32</td>
+    <td>Rancho Azul Guzeman Ltda</td>
+    <td style="text-align:right">$7,263.00</td>
+  </tr>
+  <tr style="background: #C4A67C; font-weight: bold;">
+    <td colspan="2">TOTAL SERVICIOS (vía separada)</td>
+    <td style="text-align:right">US$11,050.00</td>
+  </tr>
+</table>
+
+<div class="action-box">
+  <h3>RESUMEN DEUDA TOTAL</h3>
+  <table>
+    <tr><td><strong>Cobro Judicial</strong> (Cuotas + Multas + Intereses)</td><td style="text-align:right"><strong>$59,230.00</strong></td></tr>
+    <tr><td>Cobro Separado (Servicios)</td><td style="text-align:right">$11,050.00</td></tr>
+    <tr><td style="color:#999">Excluido (sin debido proceso)</td><td style="text-align:right; color:#999">$500.00</td></tr>
+    <tr style="border-top: 2px solid #333;"><td><strong>DEUDA TOTAL PENDIENTE</strong></td><td style="text-align:right"><strong>$70,780.00</strong></td></tr>
+  </table>
+</div>
+
+<h2>VII. DOCUMENTACIÓN REQUERIDA</h2>
+
+<h3>Documentos Indispensables:</h3>
+<ul class="checklist">
+  <li>Certificación CPA corregida (sin ABI, errores subsanados)</li>
+  <li>Certificación de personería jurídica del Condominio</li>
+  <li>Certificación de personería jurídica de Admin Mar Azul Nosara SRL</li>
+  <li>Poder especial judicial (si aplica)</li>
+  <li>Copia certificada de escritura constitutiva del condominio</li>
+  <li>Reglamento del Condominio inscrito en Registro Nacional</li>
+  <li>Actas de asamblea aprobando presupuestos y cuotas</li>
+</ul>
+
+<h3>Documentos de Respaldo:</h3>
+<ul class="checklist">
+  <li>Estados de cuenta detallados por propietario</li>
+  <li>Historial de pagos parciales</li>
+  <li>Registros de lecturas de medidores (agua/electricidad)</li>
+  <li>Notificaciones de mora enviadas a deudores</li>
+  <li>Certificación registral de cada finca filial demandada</li>
+</ul>
+
+<h2>VIII. ESTRATEGIA PROCESAL</h2>
+
+<div class="action-box">
+  <h3>Vía Procesal Recomendada: PROCESO MONITORIO</h3>
+  <p><strong>Fundamento:</strong> Código Procesal Civil, Artículos 502-508</p>
+  <p><strong>Ventajas:</strong></p>
+  <ul>
+    <li>Trámite expedito (15-30 días para sentencia si no hay oposición)</li>
+    <li>Inversión de carga de la prueba</li>
+    <li>Certificación CPA constituye título ejecutivo suficiente</li>
+  </ul>
+  <p><strong>Jurisdicción:</strong> Juzgado de Cobro de Nicoya, Guanacaste</p>
+</div>
+
+<h3>Petitoria Sugerida:</h3>
+<ol>
+  <li>Cobro del principal adeudado</li>
+  <li>Intereses legales desde fecha de mora hasta efectivo pago</li>
+  <li>Multas según reglamento condominial</li>
+  <li>Costas personales y procesales</li>
+  <li>Ambas costas a cargo del demandado</li>
+</ol>
+
+<h3>Medida Cautelar:</h3>
+<p>Solicitar <strong>anotación de demanda</strong> sobre las fincas filiales para evitar transferencias fraudulentas y asegurar el resultado del proceso.</p>
+
+<h2>IX. CRONOGRAMA DE ACCIONES</h2>
+
+<table class="timeline-table">
+  <tr>
+    <th>Prioridad</th>
+    <th>Acción</th>
+    <th>Responsable</th>
+    <th>Plazo</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>Solicitar certificaciones CPA corregidas</td>
+    <td>Administración</td>
+    <td>5 días</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>Verificar matrícula correcta de FF20</td>
+    <td>Administración</td>
+    <td>3 días</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>Recopilar actas de asamblea</td>
+    <td>Administración</td>
+    <td>5 días</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>Obtener personerías jurídicas actualizadas</td>
+    <td>Abogado</td>
+    <td>5 días</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>Preparar demandas (4)</td>
+    <td>Abogado</td>
+    <td>10 días</td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>Presentar demandas</td>
+    <td>Abogado</td>
+    <td>1 día</td>
+  </tr>
+</table>
+
+<h2>X. CONCLUSIÓN</h2>
+
+<table>
+  <tr>
+    <th colspan="2">Evaluación del Caso</th>
+  </tr>
+  <tr>
+    <td><strong>Fortalezas</strong></td>
+    <td>
+      • Deuda documentada y certificada por CPA<br>
+      • Fundamento claro en Ley 7933 y Reglamento<br>
+      • Montos calculados conservadoramente<br>
+      • Historial de pagos parciales demuestra reconocimiento de deuda
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Riesgos Mitigados</strong></td>
+    <td>
+      • <s>Referencias a ABI Solutions</s> → Eliminar de certificaciones<br>
+      • <s>Errores en FF20</s> → Corregir antes de presentar<br>
+      • <s>Multa sin debido proceso</s> → Excluir conducción temeraria
+    </td>
+  </tr>
+  <tr style="background: #d4edda;">
+    <td><strong>Probabilidad de Éxito</strong></td>
+    <td><strong style="font-size: 1.2em;">ALTA</strong> — Con las correcciones indicadas</td>
+  </tr>
+</table>
+
+<div class="footer">
+  <p><strong>Documento preparado por:</strong> Asistente Legal — Coyol Family Office</p>
+  <p><strong>Fecha:</strong> 14 de mayo de 2026</p>
+  <p><strong>Para revisión de:</strong> Equipo Legal (Edwin, Catalina, Federico)</p>
+  <hr>
+  <p><em>Este documento es de carácter orientativo y no constituye asesoría legal formal.<br>
+  Debe ser revisado y validado por abogado colegiado antes de su implementación.</em></p>
+</div>
+
+</body>
+</html>

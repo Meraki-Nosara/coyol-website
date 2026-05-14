@@ -262,3 +262,58 @@ export function getYearPayroll(year: string): { total: number; variable: number;
     months: payrolls.length
   };
 }
+
+// Financial Summary - Cash Position & Where Money Went
+export interface FinancialSummary {
+  lastUpdated: string;
+  period: string;
+  exchangeRate: number;
+  revenue: {
+    totalCRC: number;
+    totalUSD: number;
+  };
+  operatingExpenses: {
+    gastos: { crc: number; usd: number; label: string };
+    mdo: { crc: number; usd: number; label: string };
+    taxes: { crc: number; usd: number; label: string };
+    other: { crc: number; usd: number; label: string };
+    totalCRC: number;
+    totalUSD: number;
+  };
+  operatingProfit: {
+    crc: number;
+    usd: number;
+    margin: number;
+  };
+  nonOperating: {
+    angelinaEquipment: { crc: number; usd: number; label: string; note: string };
+    ranchoLoan: { crc: number; usd: number; label: string; note: string };
+    totalCRC: number;
+    totalUSD: number;
+  };
+  cashPosition: {
+    asOf: string;
+    accounts: {
+      lafiseCRC: { crc: number; usd: number };
+      lafiseUSD: { usd: number };
+      bcrCRC: { crc: number; usd: number };
+      bcrUSD: { usd: number };
+    };
+    totalCash: { crc: number; usd: number };
+    loansReceivable: {
+      ranchoMarAzul: { usd: number; note: string };
+    };
+    totalAssets: { usd: number };
+  };
+  whereMoneyWent: Array<{ category: string; usd: number; pct: number }>;
+}
+
+export function loadFinancialSummary(): FinancialSummary | null {
+  const summaryPath = path.join(process.cwd(), 'data', 'financial-summary.json');
+  try {
+    const raw = fs.readFileSync(summaryPath, 'utf-8');
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}

@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { loadMonthlyData, formatCurrency, formatMonth, USD_RATE, loadDailySales, getDailyTotals, getLastUpdated, getYearPayroll, loadAllPayroll } from '../lib/monthly-data';
+import { loadMonthlyData, formatCurrency, formatMonth, USD_RATE, loadDailySales, getDailyTotals, getLastUpdated, getYearPayroll, loadAllPayroll, loadFinancialSummary } from '../lib/monthly-data';
 import fs from 'fs';
 import path from 'path';
 
@@ -187,6 +187,9 @@ const laborCostPercent = grandTotal > 0 ? (payroll2026.total / grandTotal * 100)
 // With cargas sociales (~47%)
 const totalLaborWithCargas = payroll2026.total * 1.47;
 const laborCostWithCargasPercent = grandTotal > 0 ? (totalLaborWithCargas / grandTotal * 100) : 0;
+
+// Financial Summary (Cash Position & Where Money Went)
+const financialSummary = loadFinancialSummary();
 ---
 
 <Layout title="Control Dashboard">
@@ -745,6 +748,102 @@ const laborCostWithCargasPercent = grandTotal > 0 ? (totalLaborWithCargas / gran
             <p class="text-xs text-landrover-marine/40 mt-4 text-center">
               Source: PLANILLA_MERAKI_ABRIL_2026.xlsx • Data includes all 3 restaurants combined
             </p>
+          </div>
+        )}
+
+        <!-- Cash Position & Where Money Went - NEW! -->
+        {financialSummary && (
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <!-- Cash Position -->
+            <div class="card p-5 lg:p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-landrover-santorini">💰 Cash Position</h3>
+                <span class="text-xs text-landrover-marine/50">as of {financialSummary.cashPosition.asOf}</span>
+              </div>
+              
+              <div class="space-y-3 mb-4">
+                <div class="flex justify-between items-center p-3 bg-landrover-limestone/30 rounded-lg">
+                  <span class="text-sm">LAFISE (Colones)</span>
+                  <span class="font-bold text-landrover-keswick">${financialSummary.cashPosition.accounts.lafiseCRC.usd.toLocaleString()}</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-landrover-limestone/30 rounded-lg">
+                  <span class="text-sm">LAFISE (USD)</span>
+                  <span class="font-bold text-landrover-keswick">${financialSummary.cashPosition.accounts.lafiseUSD.usd.toLocaleString()}</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-landrover-limestone/30 rounded-lg">
+                  <span class="text-sm">BCR (Colones)</span>
+                  <span class="font-bold text-landrover-keswick">${financialSummary.cashPosition.accounts.bcrCRC.usd.toLocaleString()}</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-landrover-limestone/30 rounded-lg">
+                  <span class="text-sm">BCR (USD)</span>
+                  <span class="font-bold text-landrover-keswick">${financialSummary.cashPosition.accounts.bcrUSD.usd.toLocaleString()}</span>
+                </div>
+              </div>
+              
+              <div class="border-t border-landrover-arles/30 pt-3">
+                <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg mb-2">
+                  <span class="font-medium">Total Cash</span>
+                  <span class="text-xl font-bold text-green-600">${financialSummary.cashPosition.totalCash.usd.toLocaleString()}</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                  <div>
+                    <span class="font-medium">Rancho Owes Us</span>
+                    <p class="text-xs text-blue-600/70">Intercompany loan</p>
+                  </div>
+                  <span class="text-lg font-bold text-blue-600">${financialSummary.cashPosition.loansReceivable.ranchoMarAzul.usd.toLocaleString()}</span>
+                </div>
+              </div>
+              
+              <div class="mt-4 p-3 bg-landrover-keswick/10 rounded-lg">
+                <div class="flex justify-between items-center">
+                  <span class="font-semibold text-landrover-keswick">Total Assets</span>
+                  <span class="text-2xl font-bold text-landrover-keswick">${financialSummary.cashPosition.totalAssets.usd.toLocaleString()}</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Where Money Went -->
+            <div class="card p-5 lg:p-6">
+              <h3 class="text-lg font-semibold text-landrover-santorini mb-4">📊 Where Money Went</h3>
+              <p class="text-xs text-landrover-marine/50 mb-4">{financialSummary.period}</p>
+              
+              <div class="space-y-2">
+                {financialSummary.whereMoneyWent.map((item, i) => {
+                  const colors = ['bg-red-400', 'bg-amber-400', 'bg-orange-400', 'bg-gray-400', 'bg-purple-400', 'bg-pink-400', 'bg-green-500', 'bg-blue-400'];
+                  const bgColor = colors[i % colors.length];
+                  const isRetained = item.category.includes('Bank') || item.category.includes('Receivable');
+                  
+                  return (
+                    <div>
+                      <div class="flex justify-between text-sm mb-1">
+                        <span class={isRetained ? 'font-medium text-green-700' : ''}>{item.category}</span>
+                        <span class="font-medium">${item.usd.toLocaleString()} <span class="text-landrover-marine/50">({item.pct}%)</span></span>
+                      </div>
+                      <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                        <div 
+                          class={`h-full rounded-full ${isRetained ? 'bg-green-500' : bgColor}`}
+                          style={`width: ${item.pct}%`}
+                        ></div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              
+              <div class="mt-6 p-4 bg-green-50 rounded-lg">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-sm font-medium text-green-800">Operating Margin</span>
+                  <span class="text-2xl font-bold text-green-600">{financialSummary.operatingProfit.margin.toFixed(0)}%</span>
+                </div>
+                <p class="text-xs text-green-700">For every $100 in sales, ${financialSummary.operatingProfit.margin.toFixed(0)} is operating profit</p>
+              </div>
+              
+              <div class="mt-4 p-3 bg-amber-50 rounded-lg">
+                <p class="text-xs text-amber-800">
+                  <strong>Note:</strong> Equipment repayment (${financialSummary.nonOperating.angelinaEquipment.usd.toLocaleString()}) went to Angelina for equipment purchased before Meraki.
+                </p>
+              </div>
+            </div>
           </div>
         )}
 

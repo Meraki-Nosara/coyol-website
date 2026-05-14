@@ -1,0 +1,43 @@
+{
+  "lastUpdated": "2026-05-14",
+  "asOf": "2026-05-14",
+  "accounts": {
+    "lafise_crc": {
+      "bank": "LAFISE",
+      "account": "CR02011400007355505097",
+      "currency": "CRC",
+      "balance": 327000000,
+      "balanceUSD": 647525
+    },
+    "lafise_usd": {
+      "bank": "LAFISE", 
+      "account": "CR52011400007455511003",
+      "currency": "USD",
+      "balance": 34000
+    },
+    "bcr_crc": {
+      "bank": "BCR",
+      "currency": "CRC",
+      "balance": 30000000,
+      "balanceUSD": 59406
+    },
+    "bcr_usd": {
+      "bank": "BCR",
+      "currency": "USD",
+      "balance": 1000
+    }
+  },
+  "loansReceivable": {
+    "ranchoMarAzul": {
+      "amount": 98700,
+      "currency": "USD"
+    }
+  },
+  "summary": {
+    "totalCRC": 357000000,
+    "totalUSD": 35000,
+    "loansReceivableUSD": 98700,
+    "grandTotalUSD": 840842,
+    "exchangeRate": 505
+  }
+}
