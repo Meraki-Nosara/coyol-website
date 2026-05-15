@@ -725,28 +725,8 @@ const financialSummary = loadFinancialSummary();
               </div>
             </div>
             
-            <!-- Labor cost as % of sales -->
-            <div class="bg-landrover-limestone/30 rounded-lg p-4">
-              <div class="flex justify-between items-center mb-2">
-                <span class="text-sm font-medium">Base Payroll vs Sales</span>
-                <span class={`text-lg font-bold ${laborCostPercent < 20 ? 'text-green-600' : laborCostPercent < 30 ? 'text-amber-600' : 'text-red-600'}`}>
-                  {laborCostPercent.toFixed(1)}%
-                </span>
-              </div>
-              <div class="h-3 bg-gray-200 rounded-full overflow-hidden mb-2">
-                <div 
-                  class={`h-full rounded-full ${laborCostPercent < 20 ? 'bg-green-500' : laborCostPercent < 30 ? 'bg-amber-500' : 'bg-red-500'}`}
-                  style={`width: ${Math.min(laborCostPercent, 100)}%`}
-                ></div>
-              </div>
-              <div class="flex justify-between text-xs text-landrover-marine/60">
-                <span>With cargas sociales (+47%): <strong class="text-landrover-santorini">{laborCostWithCargasPercent.toFixed(1)}%</strong></span>
-                <span>Target: 25-35%</span>
-              </div>
-            </div>
-            
-            <p class="text-xs text-landrover-marine/40 mt-4 text-center">
-              Source: PLANILLA_MERAKI_ABRIL_2026.xlsx • Data includes all 3 restaurants combined
+<p class="text-xs text-landrover-marine/40 mt-4 text-center">
+              Source: PLANILLA_MERAKI_ABRIL_2026.xlsx
             </p>
           </div>
         )}
