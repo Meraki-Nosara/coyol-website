@@ -791,19 +791,29 @@ const financialSummary = loadFinancialSummary();
               
               <div class="space-y-2">
                 {financialSummary.whereMoneyWent.map((item, i) => {
-                  const colors = ['bg-red-400', 'bg-amber-400', 'bg-orange-400', 'bg-gray-400', 'bg-purple-400', 'bg-pink-400', 'bg-green-500', 'bg-blue-400'];
-                  const bgColor = colors[i % colors.length];
+                  // Land Rover Heritage palette
+                  const lrColors = [
+                    'bg-landrover-terracotta',  // Suppliers - terracotta
+                    'bg-landrover-sand',         // Payroll - sand
+                    'bg-landrover-marine',       // Taxes - marine
+                    'bg-landrover-coniston',     // Equipment - coniston
+                    'bg-landrover-limestone',    // Loan - limestone
+                    'bg-landrover-arles',        // Other - arles
+                    'bg-landrover-keswick',      // Retained - keswick
+                    'bg-landrover-keswick/70'    // Receivable - keswick light
+                  ];
+                  const bgColor = lrColors[i % lrColors.length];
                   const isRetained = item.category.includes('Bank') || item.category.includes('Receivable');
                   
                   return (
                     <div>
                       <div class="flex justify-between text-sm mb-1">
-                        <span class={isRetained ? 'font-medium text-green-700' : ''}>{item.category}</span>
+                        <span class={isRetained ? 'font-medium text-landrover-keswick' : ''}>{item.category}</span>
                         <span class="font-medium">${item.usd.toLocaleString()} <span class="text-landrover-marine/50">({item.pct}%)</span></span>
                       </div>
-                      <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div class="h-2 bg-landrover-limestone/50 rounded-full overflow-hidden">
                         <div 
-                          class={`h-full rounded-full ${isRetained ? 'bg-green-500' : bgColor}`}
+                          class={`h-full rounded-full ${bgColor}`}
                           style={`width: ${item.pct}%`}
                         ></div>
                       </div>
@@ -812,16 +822,16 @@ const financialSummary = loadFinancialSummary();
                 })}
               </div>
               
-              <div class="mt-6 p-4 bg-green-50 rounded-lg">
+              <div class="mt-6 p-4 bg-landrover-keswick/10 rounded-lg">
                 <div class="flex justify-between items-center mb-2">
-                  <span class="text-sm font-medium text-green-800">Operating Margin</span>
-                  <span class="text-2xl font-bold text-green-600">{financialSummary.operatingProfit.margin.toFixed(0)}%</span>
+                  <span class="text-sm font-medium text-landrover-santorini">Operating Margin</span>
+                  <span class="text-2xl font-bold text-landrover-keswick">{financialSummary.operatingProfit.margin.toFixed(0)}%</span>
                 </div>
-                <p class="text-xs text-green-700">For every $100 in sales, ${financialSummary.operatingProfit.margin.toFixed(0)} is operating profit</p>
+                <p class="text-xs text-landrover-marine/70">For every $100 in sales, ${financialSummary.operatingProfit.margin.toFixed(0)} is operating profit</p>
               </div>
               
-              <div class="mt-4 p-3 bg-amber-50 rounded-lg">
-                <p class="text-xs text-amber-800">
+              <div class="mt-4 p-3 bg-landrover-sand/20 rounded-lg">
+                <p class="text-xs text-landrover-santorini">
                   <strong>Note:</strong> Equipment repayment (${financialSummary.nonOperating.angelinaEquipment.usd.toLocaleString()}) went to Angelina for equipment purchased before Meraki.
                 </p>
               </div>
