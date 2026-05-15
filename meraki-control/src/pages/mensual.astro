@@ -472,7 +472,7 @@ const financialSummary = loadFinancialSummary();
                       <div class="text-center mb-2 flex-shrink-0">
                         <p class="text-xs lg:text-sm font-bold text-landrover-santorini">{fmt(m.totalSales)}</p>
                         {sales2025 > 0 && (
-                          <p class={`text-xs font-medium ${yoyChange >= 0 ? 'text-green-600' : 'text-red-500'}`}>
+                          <p class={`text-xs font-medium ${yoyChange >= 0 ? 'text-landrover-keswick' : 'text-landrover-terracotta'}`}>
                             {yoyChange >= 0 ? '↑' : '↓'}{Math.abs(yoyChange)}% vs 2025
                           </p>
                         )}
@@ -511,7 +511,7 @@ const financialSummary = loadFinancialSummary();
           <div class="card p-5 lg:p-6">
             <div class="flex items-center justify-between">
               <h3 class="font-semibold text-landrover-santorini">YTD vs Last Year</h3>
-              <div class={`text-2xl lg:text-3xl font-bold ${ytd_yoy_change >= 0 ? 'text-green-600' : 'text-red-500'}`}>
+              <div class={`text-2xl lg:text-3xl font-bold ${ytd_yoy_change >= 0 ? 'text-landrover-keswick' : 'text-landrover-terracotta'}`}>
                 {ytd_yoy_change >= 0 ? '↑' : '↓'}{Math.abs(ytd_yoy_change).toFixed(0)}%
               </div>
             </div>
@@ -532,16 +532,16 @@ const financialSummary = loadFinancialSummary();
                 <p class="text-2xl lg:text-3xl font-bold text-landrover-keswick">{fmt(totalSales2026YTD)}</p>
                 <p class="text-xs text-landrover-marine/60 mt-1">Sales</p>
               </div>
-              <div class="text-center p-4 bg-red-50 rounded-lg">
-                <p class="text-2xl lg:text-3xl font-bold text-red-500">{fmt(totalGastos2026YTD)}</p>
+              <div class="text-center p-4 bg-landrover-terracotta/10 rounded-lg">
+                <p class="text-2xl lg:text-3xl font-bold text-landrover-terracotta">{fmt(totalGastos2026YTD)}</p>
                 <p class="text-xs text-landrover-marine/60 mt-1">Purchases</p>
               </div>
-              <div class="text-center p-4 bg-amber-50 rounded-lg">
-                <p class="text-2xl lg:text-3xl font-bold text-amber-600">{fmt(totalMdo2026YTD)}</p>
+              <div class="text-center p-4 bg-landrover-sand/20 rounded-lg">
+                <p class="text-2xl lg:text-3xl font-bold text-landrover-sand">{fmt(totalMdo2026YTD)}</p>
                 <p class="text-xs text-landrover-marine/60 mt-1">Payroll (MDO)</p>
               </div>
-              <div class="text-center p-4 bg-green-50 rounded-lg">
-                <p class="text-2xl lg:text-3xl font-bold text-green-600">{fmt(totalNetProfit2026YTD > 0 ? totalNetProfit2026YTD : totalGrossProfit2026YTD)}</p>
+              <div class="text-center p-4 bg-landrover-keswick/10 rounded-lg">
+                <p class="text-2xl lg:text-3xl font-bold text-landrover-keswick">{fmt(totalNetProfit2026YTD > 0 ? totalNetProfit2026YTD : totalGrossProfit2026YTD)}</p>
                 <p class="text-xs text-landrover-marine/60 mt-1">{totalMdo2026YTD > 0 ? 'Net Profit' : 'Gross Profit'}</p>
               </div>
             </div>
@@ -550,23 +550,23 @@ const financialSummary = loadFinancialSummary();
             <div class="mb-8">
               <div class="flex justify-between text-sm mb-2">
                 <span class="text-landrover-marine/60">{totalMdo2026YTD > 0 ? 'Net Margin' : 'Gross Margin'}</span>
-                <span class="font-bold text-green-600 text-lg">{totalMdo2026YTD > 0 ? totalNetMargin2026YTD.toFixed(0) : totalMargin2026YTD.toFixed(0)}%</span>
+                <span class="font-bold text-landrover-keswick text-lg">{totalMdo2026YTD > 0 ? totalNetMargin2026YTD.toFixed(0) : totalMargin2026YTD.toFixed(0)}%</span>
               </div>
               <div class="h-4 lg:h-6 bg-gray-100 rounded-full overflow-hidden flex">
                 <div 
-                  class="h-full bg-red-400"
+                  class="h-full bg-landrover-terracotta"
                   style={`width: ${(totalGastos2026YTD / totalSales2026YTD * 100).toFixed(0)}%`}
                   title="Purchases"
                 ></div>
                 {totalMdo2026YTD > 0 && (
                   <div 
-                    class="h-full bg-amber-400"
+                    class="h-full bg-landrover-sand"
                     style={`width: ${(totalMdo2026YTD / totalSales2026YTD * 100).toFixed(0)}%`}
                     title="Payroll"
                   ></div>
                 )}
                 <div 
-                  class="h-full bg-green-500 flex-1"
+                  class="h-full bg-landrover-keswick/100 flex-1"
                   title="Profit"
                 ></div>
               </div>
@@ -592,11 +592,11 @@ const financialSummary = loadFinancialSummary();
                       <div class="flex items-center gap-2">
                         <div class="w-3 h-3 rounded" style={`background-color: ${color}`}></div>
                         <span class="font-medium">{name}</span>
-                        {r.mdo > 0 && <span class="text-xs text-amber-600">(MDO: {fmt(r.mdo)})</span>}
+                        {r.mdo > 0 && <span class="text-xs text-landrover-sand">(MDO: {fmt(r.mdo)})</span>}
                       </div>
                       <div class="flex items-center gap-4">
-                        <span class="text-green-600 font-bold">{fmt(profit)}</span>
-                        <span class={`text-sm font-bold px-2 py-0.5 rounded ${margin >= 50 ? 'bg-green-100 text-green-700' : margin >= 30 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
+                        <span class="text-landrover-keswick font-bold">{fmt(profit)}</span>
+                        <span class={`text-sm font-bold px-2 py-0.5 rounded ${margin >= 50 ? 'bg-landrover-keswick/20 text-landrover-keswick' : margin >= 30 ? 'bg-landrover-sand/30 text-landrover-santorini' : 'bg-landrover-terracotta/20 text-landrover-terracotta'}`}>
                           {margin.toFixed(0)}%
                         </span>
                       </div>
@@ -640,8 +640,8 @@ const financialSummary = loadFinancialSummary();
                 
                 // Status color based on labor %
                 const laborPct = parseFloat(laborPercent) || 0;
-                const statusColor = laborPct < 25 ? 'text-green-600' : laborPct < 35 ? 'text-amber-600' : 'text-red-600';
-                const statusBg = laborPct < 25 ? 'bg-green-50' : laborPct < 35 ? 'bg-amber-50' : 'bg-red-50';
+                const statusColor = laborPct < 25 ? 'text-landrover-keswick' : laborPct < 35 ? 'text-landrover-sand' : 'text-landrover-terracotta';
+                const statusBg = laborPct < 25 ? 'bg-landrover-keswick/10' : laborPct < 35 ? 'bg-landrover-sand/20' : 'bg-landrover-terracotta/10';
                 
                 return (
                   <div class={`text-center p-4 rounded-lg ${statusBg}`}>
@@ -661,9 +661,9 @@ const financialSummary = loadFinancialSummary();
             <div class="bg-landrover-limestone/30 rounded-lg p-3">
               <p class="text-xs text-landrover-marine/60">
                 <strong>Benchmark:</strong> Restaurant industry target is 25-35% of sales for total labor.
-                <span class="text-green-600">✓ Under 25%</span> = excellent | 
-                <span class="text-amber-600">25-35%</span> = normal | 
-                <span class="text-red-600">Over 35%</span> = review needed
+                <span class="text-landrover-keswick">✓ Under 25%</span> = excellent | 
+                <span class="text-landrover-sand">25-35%</span> = normal | 
+                <span class="text-landrover-terracotta">Over 35%</span> = review needed
               </p>
               <p class="text-xs text-landrover-marine/40 mt-1">
                 Cargas sociales: CCSS 26.5% + Aguinaldo 8.33% + Vacaciones 4.17% + Cesantía 5.33% + INS ~3%
@@ -688,15 +688,15 @@ const financialSummary = loadFinancialSummary();
             
             <!-- Variable vs Fixed breakdown -->
             <div class="grid grid-cols-2 gap-4 mb-6">
-              <div class="bg-amber-50 rounded-lg p-4 text-center">
-                <p class="text-2xl font-bold text-amber-600">{fmt(payroll2026.variable)}</p>
+              <div class="bg-landrover-sand/20 rounded-lg p-4 text-center">
+                <p class="text-2xl font-bold text-landrover-sand">{fmt(payroll2026.variable)}</p>
                 <p class="text-xs text-landrover-marine/60 mt-1">Variable (Weekly)</p>
-                <p class="text-xs text-amber-600/70">~50 employees</p>
+                <p class="text-xs text-landrover-sand/70">~50 employees</p>
               </div>
-              <div class="bg-blue-50 rounded-lg p-4 text-center">
-                <p class="text-2xl font-bold text-blue-600">{fmt(payroll2026.fixed)}</p>
+              <div class="bg-landrover-marine/10 rounded-lg p-4 text-center">
+                <p class="text-2xl font-bold text-landrover-marine">{fmt(payroll2026.fixed)}</p>
                 <p class="text-xs text-landrover-marine/60 mt-1">Fixed (Salaried)</p>
-                <p class="text-xs text-blue-600/70">12 employees</p>
+                <p class="text-xs text-landrover-marine/70">12 employees</p>
               </div>
             </div>
             
@@ -761,16 +761,16 @@ const financialSummary = loadFinancialSummary();
               </div>
               
               <div class="border-t border-landrover-arles/30 pt-3">
-                <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg mb-2">
+                <div class="flex justify-between items-center p-3 bg-landrover-keswick/10 rounded-lg mb-2">
                   <span class="font-medium">Total Cash</span>
-                  <span class="text-xl font-bold text-green-600">${financialSummary.cashPosition.totalCash.usd.toLocaleString()}</span>
+                  <span class="text-xl font-bold text-landrover-keswick">${financialSummary.cashPosition.totalCash.usd.toLocaleString()}</span>
                 </div>
-                <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                <div class="flex justify-between items-center p-3 bg-landrover-marine/10 rounded-lg">
                   <div>
                     <span class="font-medium">Rancho Owes Us</span>
-                    <p class="text-xs text-blue-600/70">Intercompany loan</p>
+                    <p class="text-xs text-landrover-marine/70">Intercompany loan</p>
                   </div>
-                  <span class="text-lg font-bold text-blue-600">${financialSummary.cashPosition.loansReceivable.ranchoMarAzul.usd.toLocaleString()}</span>
+                  <span class="text-lg font-bold text-landrover-marine">${financialSummary.cashPosition.loansReceivable.ranchoMarAzul.usd.toLocaleString()}</span>
                 </div>
               </div>
               
