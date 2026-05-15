@@ -1,4 +1,6 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
+
 interface Props {
   title: string;
   description?: string;
@@ -70,6 +72,44 @@ const { title, description = "Luxury homes and jungle homesites in Nosara, Costa
   </head>
   <body class="bg-landrover-alaska text-landrover-santorini antialiased">
     <slot />
+    
+    <!-- Vercel Analytics -->
+    <script>
+      import { inject } from '@vercel/analytics';
+      inject();
+    </script>
+    
+    <!-- Custom Event Tracking -->
+    <script>
+      // Track clicks on important elements
+      document.addEventListener('DOMContentLoaded', () => {
+        // Track CTA clicks
+        document.querySelectorAll('a[href*="whatsapp"], a[href*="tel:"], a[href*="mailto:"]').forEach(el => {
+          el.addEventListener('click', () => {
+            if (window.va) window.va('event', { name: 'contact_click', data: { type: el.getAttribute('href')?.split(':')[0] } });
+          });
+        });
+        
+        // Track property/development clicks
+        document.querySelectorAll('a[href*="/homesites"]').forEach(el => {
+          el.addEventListener('click', () => {
+            if (window.va) window.va('event', { name: 'property_click', data: { page: el.getAttribute('href') } });
+          });
+        });
+        
+        // Track scroll depth
+        let maxScroll = 0;
+        window.addEventListener('scroll', () => {
+          const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+          if (scrollPercent > maxScroll) {
+            maxScroll = scrollPercent;
+            if ([25, 50, 75, 100].includes(scrollPercent)) {
+              if (window.va) window.va('event', { name: 'scroll_depth', data: { percent: scrollPercent } });
+            }
+          }
+        });
+      });
+    </script>
   </body>
 </html>
 
