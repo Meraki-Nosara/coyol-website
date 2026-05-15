@@ -2198,6 +2198,42 @@
       "iva13": 52277,
       "source": "ingrid_email",
       "cashier": "Juan Castillo"
+    },
+    {
+      "date": "2026-05-14",
+      "restaurant": "laluna",
+      "cash": 351130,
+      "card": 2271094,
+      "total": 2622224,
+      "netSales": 2133292,
+      "service10": 201604,
+      "iva13": 277328,
+      "source": "ingrid_email",
+      "cashier": "Diego Lopez"
+    },
+    {
+      "date": "2026-05-14",
+      "restaurant": "coyol",
+      "cash": 98000,
+      "card": 1551799,
+      "total": 1649799,
+      "netSales": 1341300,
+      "service10": 134130,
+      "iva13": 174369,
+      "source": "ingrid_email",
+      "cashier": "John Freiser"
+    },
+    {
+      "date": "2026-05-14",
+      "restaurant": "esh",
+      "cash": 28955,
+      "card": 436485,
+      "total": 465440,
+      "netSales": 380898,
+      "service10": 29261,
+      "iva13": 49491,
+      "source": "ingrid_email",
+      "cashier": "Raul Rodriguez"
     }
   ]
 }

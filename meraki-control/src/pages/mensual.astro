@@ -757,8 +757,8 @@ const financialSummary = loadFinancialSummary();
             <!-- Cash Position -->
             <div class="card p-5 lg:p-6">
               <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-landrover-santorini">💰 Cash Position</h3>
-                <span class="text-xs text-landrover-marine/50">as of {financialSummary.cashPosition.asOf}</span>
+                <h3 class="text-lg font-bold text-landrover-santorini">Cash Position</h3>
+                <span class="text-sm text-landrover-marine/60">as of {financialSummary.cashPosition.asOf.split('-').slice(1).reverse().join('/') + '/' + financialSummary.cashPosition.asOf.split('-')[0]}</span>
               </div>
               
               <div class="space-y-3 mb-4">
@@ -804,8 +804,10 @@ const financialSummary = loadFinancialSummary();
             
             <!-- Where Money Went -->
             <div class="card p-5 lg:p-6">
-              <h3 class="text-lg font-semibold text-landrover-santorini mb-4">📊 Where Money Went</h3>
-              <p class="text-xs text-landrover-marine/50 mb-4">{financialSummary.period}</p>
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-landrover-santorini">Where Money Went</h3>
+                <span class="text-sm text-landrover-marine/60">{financialSummary.period.replace(/(\d{4})-(\d{2}) to (\d{4})-(\d{2})/, '$2/$1 to $4/$3')}</span>
+              </div>
               
               <div class="space-y-2">
                 {financialSummary.whereMoneyWent.map((item, i) => {
