@@ -22,13 +22,16 @@ async function fetchPlausible(endpoint: string, params: Record<string, string> =
 }
 
 // Fetch all data in parallel
-const [todayStats, weekStats, monthStats, timeseries, topPages, topSources] = await Promise.all([
+const [todayStats, weekStats, monthStats, timeseries, topPages, topSources, devices, browsers, countries] = await Promise.all([
   fetchPlausible('aggregate', { period: 'day', metrics: 'visitors,pageviews,bounce_rate,visit_duration' }),
   fetchPlausible('aggregate', { period: '7d', metrics: 'visitors,pageviews,bounce_rate,visit_duration' }),
   fetchPlausible('aggregate', { period: '30d', metrics: 'visitors,pageviews,bounce_rate,visit_duration' }),
   fetchPlausible('timeseries', { period: '30d', metrics: 'visitors' }),
   fetchPlausible('breakdown', { period: '30d', property: 'event:page', metrics: 'visitors,pageviews', limit: '5' }),
-  fetchPlausible('breakdown', { period: '30d', property: 'visit:source', metrics: 'visitors', limit: '5' })
+  fetchPlausible('breakdown', { period: '30d', property: 'visit:source', metrics: 'visitors', limit: '5' }),
+  fetchPlausible('breakdown', { period: '30d', property: 'visit:device', metrics: 'visitors', limit: '5' }),
+  fetchPlausible('breakdown', { period: '30d', property: 'visit:browser', metrics: 'visitors', limit: '5' }),
+  fetchPlausible('breakdown', { period: '30d', property: 'visit:country', metrics: 'visitors', limit: '10' })
 ]);
 
 // Extract values with fallbacks
@@ -38,6 +41,30 @@ const month = monthStats?.results || { visitors: { value: 0 }, pageviews: { valu
 const dailyData = timeseries?.results || [];
 const pages = topPages?.results || [];
 const sources = topSources?.results || [];
+const deviceData = devices?.results || [];
+const browserData = browsers?.results || [];
+const countryData = countries?.results || [];
+
+// Device icons
+const deviceIcons: Record<string, string> = {
+  'Desktop': '🖥️',
+  'Mobile': '📱',
+  'Tablet': '📟',
+};
+
+// Country flags (common ones)
+const countryFlags: Record<string, string> = {
+  'United States': '🇺🇸',
+  'Costa Rica': '🇨🇷',
+  'Canada': '🇨🇦',
+  'Mexico': '🇲🇽',
+  'United Kingdom': '🇬🇧',
+  'Germany': '🇩🇪',
+  'France': '🇫🇷',
+  'Spain': '🇪🇸',
+  'Brazil': '🇧🇷',
+  'Australia': '🇦🇺',
+};
 
 // Calculate total source visitors for percentages
 const totalSourceVisitors = sources.reduce((sum: number, s: any) => sum + s.visitors, 0) || 1;
@@ -577,6 +604,68 @@ const sourceIcons: Record<string, string> = {
       )}
     </div>
     
+    <!-- Devices, Browsers, Countries Row -->
+    <div class="charts-grid" style="margin-top: 24px;">
+      <!-- Devices -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Devices</div>
+        </div>
+        {deviceData.length > 0 ? (
+          <div class="sources-grid" style="grid-template-columns: repeat(3, 1fr);">
+            {deviceData.map((d: any) => {
+              const icon = deviceIcons[d.device] || '💻';
+              const percent = Math.round((d.visitors / month.visitors.value) * 100) || 0;
+              return (
+                <div class="source-card">
+                  <div class="source-icon">{icon}</div>
+                  <div class="source-percent">{percent}%</div>
+                  <div class="source-name">{d.device}</div>
+                  <div class="source-count">{d.visitors} visitors</div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div class="no-data">
+            <div class="no-data-icon">📱</div>
+            <p>No device data yet</p>
+          </div>
+        )}
+      </div>
+      
+      <!-- Countries -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Countries</div>
+        </div>
+        {countryData.length > 0 ? (
+          <div class="page-list">
+            {countryData.slice(0, 5).map((c: any, i: number) => {
+              const maxVisitors = countryData[0]?.visitors || 1;
+              const width = (c.visitors / maxVisitors) * 100;
+              const flag = countryFlags[c.country] || '🌍';
+              return (
+                <div class="page-item">
+                  <div class="page-rank" style="font-size: 1.2em;">{flag}</div>
+                  <div class="page-info">
+                    <div class="page-name">{c.country}</div>
+                    <div class="page-bar"><div class="page-bar-fill" style={`width: ${width}%`}></div></div>
+                  </div>
+                  <div class="page-views">{c.visitors}</div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div class="no-data">
+            <div class="no-data-icon">🌍</div>
+            <p>No country data yet</p>
+          </div>
+        )}
+      </div>
+    </div>
+
     <!-- Today's Stats (Mini) -->
     <div class="card" style="margin-top: 24px;">
       <div class="card-header">
@@ -596,6 +685,13 @@ const sourceIcons: Record<string, string> = {
           <div style="font-size: 0.8em; color: rgba(255,255,255,0.5);">Avg Duration</div>
         </div>
       </div>
+    </div>
+    
+    <!-- Note about hourly data -->
+    <div style="text-align: center; margin-top: 24px; padding: 16px; background: rgba(196, 166, 124, 0.1); border-radius: 8px;">
+      <p style="color: rgba(255,255,255,0.5); font-size: 0.8em;">
+        💡 For hourly "time of day" data, visit <a href="https://plausible.io/coyolnosara.com" target="_blank" style="color: var(--sand);">Plausible Dashboard</a>
+      </p>
     </div>
   </div>
 </body>
