@@ -22,7 +22,7 @@ async function fetchPlausible(endpoint: string, params: Record<string, string> =
 }
 
 // Fetch all data in parallel
-const [todayStats, weekStats, monthStats, timeseries, topPages, topSources, devices, browsers, countries] = await Promise.all([
+const [todayStats, weekStats, monthStats, timeseries, topPages, topSources, devices, browsers, countries, propertyPages, reservationClicks] = await Promise.all([
   fetchPlausible('aggregate', { period: 'day', metrics: 'visitors,pageviews,bounce_rate,visit_duration' }),
   fetchPlausible('aggregate', { period: '7d', metrics: 'visitors,pageviews,bounce_rate,visit_duration' }),
   fetchPlausible('aggregate', { period: '30d', metrics: 'visitors,pageviews,bounce_rate,visit_duration' }),
@@ -31,7 +31,11 @@ const [todayStats, weekStats, monthStats, timeseries, topPages, topSources, devi
   fetchPlausible('breakdown', { period: '30d', property: 'visit:source', metrics: 'visitors', limit: '5' }),
   fetchPlausible('breakdown', { period: '30d', property: 'visit:device', metrics: 'visitors', limit: '5' }),
   fetchPlausible('breakdown', { period: '30d', property: 'visit:browser', metrics: 'visitors', limit: '5' }),
-  fetchPlausible('breakdown', { period: '30d', property: 'visit:country', metrics: 'visitors', limit: '10' })
+  fetchPlausible('breakdown', { period: '30d', property: 'visit:country', metrics: 'visitors', limit: '10' }),
+  // Property-specific pages
+  fetchPlausible('breakdown', { period: '30d', property: 'event:page', metrics: 'visitors,pageviews,visit_duration', limit: '10' }),
+  // Custom events (will work once goals are set up in Plausible)
+  fetchPlausible('breakdown', { period: '30d', property: 'event:name', metrics: 'visitors', limit: '10' })
 ]);
 
 // Extract values with fallbacks
@@ -44,6 +48,11 @@ const sources = topSources?.results || [];
 const deviceData = devices?.results || [];
 const browserData = browsers?.results || [];
 const countryData = countries?.results || [];
+
+// Filter property pages (homesites)
+const allPages = propertyPages?.results || [];
+const propertyPagesData = allPages.filter((p: any) => p.page?.includes('/homesites/'));
+const eventData = reservationClicks?.results || [];
 
 // Device icons
 const deviceIcons: Record<string, string> = {
@@ -663,6 +672,97 @@ const sourceIcons: Record<string, string> = {
             <p>No country data yet</p>
           </div>
         )}
+      </div>
+    </div>
+
+    <!-- Property Interest -->
+    <div class="card" style="margin-top: 24px;">
+      <div class="card-header">
+        <div class="card-title">🏠 Property Interest</div>
+      </div>
+      {propertyPagesData.length > 0 ? (
+        <div class="page-list">
+          {propertyPagesData.slice(0, 5).map((p: any, i: number) => {
+            const maxViews = propertyPagesData[0]?.pageviews || 1;
+            const width = (p.pageviews / maxViews) * 100;
+            const name = p.page.replace('/homesites/', '').replace(/-/g, ' ');
+            const avgTime = p.visit_duration || 0;
+            return (
+              <div class="page-item">
+                <div class="page-rank">{i + 1}</div>
+                <div class="page-info">
+                  <div class="page-name" style="text-transform: capitalize;">{name}</div>
+                  <div class="page-bar"><div class="page-bar-fill" style={`width: ${width}%`}></div></div>
+                </div>
+                <div style="text-align: right; min-width: 80px;">
+                  <div class="page-views">{p.pageviews} views</div>
+                  <div style="font-size: 0.7em; color: rgba(255,255,255,0.4);">{formatDuration(avgTime)} avg</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div class="no-data">
+          <div class="no-data-icon">🏡</div>
+          <p>No property views yet</p>
+        </div>
+      )}
+    </div>
+
+    <!-- Conversion Events -->
+    <div class="charts-grid" style="margin-top: 24px;">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🎯 Conversions</div>
+        </div>
+        {eventData.length > 0 ? (
+          <div class="sources-grid" style="grid-template-columns: repeat(2, 1fr);">
+            {eventData.filter((e: any) => ['Reservation Click', 'Contact Click', 'Property Click'].includes(e.name)).map((e: any) => {
+              const icons: Record<string, string> = {
+                'Reservation Click': '🍽️',
+                'Contact Click': '💬',
+                'Property Click': '🏠',
+                'Scroll Depth': '📜'
+              };
+              return (
+                <div class="source-card">
+                  <div class="source-icon">{icons[e.name] || '✅'}</div>
+                  <div class="source-percent">{e.visitors}</div>
+                  <div class="source-name">{e.name}</div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div class="no-data">
+            <div class="no-data-icon">🎯</div>
+            <p>No conversion events yet</p>
+            <p style="font-size: 0.7em; margin-top: 8px; color: rgba(255,255,255,0.3);">Events will appear as visitors interact</p>
+          </div>
+        )}
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🍽️ Restaurant Reservations</div>
+        </div>
+        <div style="display: flex; gap: 20px; justify-content: center; padding: 30px 0;">
+          <div style="text-align: center;">
+            <div style="font-size: 2.5em; margin-bottom: 8px;">🌙</div>
+            <div style="font-size: 1.5em; font-weight: 700; color: var(--sand);">
+              {eventData.find((e: any) => e.name === 'Reservation Click' && e.props?.restaurant === 'La Luna')?.visitors || '-'}
+            </div>
+            <div style="font-size: 0.8em; color: rgba(255,255,255,0.5);">La Luna</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-size: 2.5em; margin-bottom: 8px;">🔥</div>
+            <div style="font-size: 1.5em; font-weight: 700; color: var(--sand);">
+              {eventData.find((e: any) => e.name === 'Reservation Click' && e.props?.restaurant === 'Coyol')?.visitors || '-'}
+            </div>
+            <div style="font-size: 0.8em; color: rgba(255,255,255,0.5);">Coyol</div>
+          </div>
+        </div>
       </div>
     </div>
 
