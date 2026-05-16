@@ -719,15 +719,13 @@ const sourceIcons: Record<string, string> = {
         {eventData.length > 0 ? (
           <div class="sources-grid" style="grid-template-columns: repeat(2, 1fr);">
             {eventData.filter((e: any) => ['Reservation Click', 'Contact Click', 'Property Click'].includes(e.name)).map((e: any) => {
-              const icons: Record<string, string> = {
-                'Reservation Click': '🍽️',
-                'Contact Click': '💬',
-                'Property Click': '🏠',
-                'Scroll Depth': '📜'
-              };
+              let icon = '✅';
+              if (e.name === 'Reservation Click') icon = '🍽️';
+              if (e.name === 'Contact Click') icon = '💬';
+              if (e.name === 'Property Click') icon = '🏠';
               return (
                 <div class="source-card">
-                  <div class="source-icon">{icons[e.name] || '✅'}</div>
+                  <div class="source-icon">{icon}</div>
                   <div class="source-percent">{e.visitors}</div>
                   <div class="source-name">{e.name}</div>
                 </div>
