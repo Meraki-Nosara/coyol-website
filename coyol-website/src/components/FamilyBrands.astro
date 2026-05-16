@@ -8,8 +8,8 @@ const restaurants = [
     alt: 'Coyol Restaurant - Farm to table dining in Nosara',
     tagline: 'Fire & Flavor',
     description: 'Farm-to-table dining with panoramic views. Open-fire cooking, premium cuts, and the art of slow living.',
-    menuUrl: 'https://coyolrestaurant.com/menu',
-    reserveUrl: 'https://coyolrestaurant.com/#contact',
+    reserveUrl: 'https://eatapp.co/reserve/coyol-mar-azul',
+    hasReservation: true,
     delay: '0'
   },
   {
@@ -19,8 +19,8 @@ const restaurants = [
     alt: 'Esh - Artisan bakery and bistro in Nosara',
     tagline: 'Baked with Heart',
     description: 'Artisan bakery and bistro. Fresh-baked breads, buttery pastries, and the aroma of home.',
-    menuUrl: 'https://eshnosara.com/menu',
-    reserveUrl: 'https://eshnosara.com/#contact',
+    reserveUrl: null,
+    hasReservation: false,
     delay: '150'
   },
   {
@@ -30,8 +30,8 @@ const restaurants = [
     alt: 'La Luna - Beachside restaurant and bar in Nosara',
     tagline: 'Where the Moon Meets the Sea',
     description: 'Iconic beachside dining. Mediterranean flavors, craft cocktails, and unforgettable sunsets at Playa Pelada.',
-    menuUrl: 'https://lalunanosara.com/#menu',
-    reserveUrl: 'https://lalunanosara.com/#contact',
+    reserveUrl: 'https://eatapp.co/reserve/la-luna-nosara-restaurante-la-luna-plaja-pelda',
+    hasReservation: true,
     delay: '300'
   }
 ];
@@ -87,20 +87,19 @@ const restaurants = [
             
             <!-- Buttons -->
             <div class={`flex gap-4 ${index % 2 === 1 ? 'lg:justify-end' : ''}`}>
-              <a 
-                href={r.menuUrl}
-                target="_blank"
-                class="inline-flex items-center gap-2 px-6 py-3 bg-landrover-sand text-landrover-santorini text-xs font-semibold tracking-wider uppercase hover:bg-white transition-colors"
-              >
-                View Menu
-              </a>
-              <a 
-                href={r.reserveUrl}
-                target="_blank"
-                class="inline-flex items-center gap-2 px-6 py-3 border border-landrover-limestone/40 text-landrover-limestone text-xs font-medium tracking-wider uppercase hover:bg-landrover-limestone/10 transition-colors"
-              >
-                Reserve a Table
-              </a>
+              {r.hasReservation ? (
+                <a 
+                  href={r.reserveUrl}
+                  target="_blank"
+                  class="inline-flex items-center gap-2 px-8 py-4 bg-landrover-sand text-landrover-santorini text-xs font-semibold tracking-wider uppercase hover:bg-white transition-colors"
+                >
+                  Reserve a Table
+                </a>
+              ) : (
+                <span class="inline-flex items-center gap-2 px-6 py-3 text-landrover-limestone/60 text-xs tracking-wider uppercase">
+                  Walk-ins Welcome
+                </span>
+              )}
             </div>
           </div>
         </article>
