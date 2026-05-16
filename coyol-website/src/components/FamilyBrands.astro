@@ -6,7 +6,8 @@ const restaurants = [
     logo: '/images/logos/coyol-restaurant-logo-black.png',
     image: '/images/coyol-restaurant-sunset.jpg',
     alt: 'Coyol Restaurant - Farm to table dining in Nosara',
-    description: 'Farm-to-table dining with panoramic views. Where local ingredients meet international flavors in an atmosphere of casual elegance.',
+    tagline: 'Fire & Flavor',
+    description: 'Farm-to-table dining with panoramic views. Open-fire cooking, premium cuts, and the art of slow living.',
     menuUrl: 'https://coyolrestaurant.com/menu',
     reserveUrl: 'https://coyolrestaurant.com/#contact',
     delay: '0'
@@ -16,7 +17,8 @@ const restaurants = [
     logo: '/images/logos/esh-logo-black.png',
     image: '/images/esh-terrace.jpg',
     alt: 'Esh - Artisan bakery and bistro in Nosara',
-    description: 'Artisan bakery and bistro serving fresh-baked breads, pastries, and Mediterranean-inspired dishes in a warm, inviting space.',
+    tagline: 'Baked with Heart',
+    description: 'Artisan bakery and bistro. Fresh-baked breads, buttery pastries, and the aroma of home.',
     menuUrl: 'https://eshnosara.com/menu',
     reserveUrl: 'https://eshnosara.com/#contact',
     delay: '150'
@@ -26,7 +28,8 @@ const restaurants = [
     logo: '/images/logos/laluna-logo-black.png',
     image: '/images/laluna-garden.jpg',
     alt: 'La Luna - Beachside restaurant and bar in Nosara',
-    description: 'Iconic beachside dining under the stars. Fresh seafood, craft cocktails, and unforgettable sunsets at Playa Pelada.',
+    tagline: 'Where the Moon Meets the Sea',
+    description: 'Iconic beachside dining. Mediterranean flavors, craft cocktails, and unforgettable sunsets at Playa Pelada.',
     menuUrl: 'https://lalunanosara.com/#menu',
     reserveUrl: 'https://lalunanosara.com/#contact',
     delay: '300'
@@ -35,63 +38,65 @@ const restaurants = [
 ---
 
 <!-- Family Brands Section -->
-<section id="family" class="py-32 lg:py-48 bg-landrover-pangea">
-  <div class="max-w-7xl mx-auto px-8">
+<section id="family" class="py-24 lg:py-32 bg-landrover-santorini">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
     
     <!-- Header -->
-    <div class="text-center mb-20">
-      <h2 class="scroll-fade font-serif text-4xl md:text-5xl lg:text-6xl text-landrover-santorini" data-delay="0">
-        Dining
+    <div class="text-center mb-16 lg:mb-24">
+      <p class="scroll-fade text-landrover-sand text-xs tracking-[0.3em] uppercase mb-4" data-delay="0">Our Restaurants</p>
+      <h2 class="scroll-fade font-serif text-4xl md:text-5xl lg:text-6xl text-white" data-delay="100">
+        The Family Table
       </h2>
     </div>
 
-    <!-- Brand Cards - New Layout -->
-    <div class="grid md:grid-cols-3 gap-12 lg:gap-16">
+    <!-- Restaurant Cards - Larger, More Impactful -->
+    <div class="space-y-20 lg:space-y-32">
       
-      {restaurants.map((r) => (
-        <article class="scroll-fade group text-center" data-delay={r.delay}>
-          
-          <!-- Large Logo First -->
-          <div class="h-20 md:h-24 mb-6 flex items-center justify-center">
-            <img src={r.logo} alt={r.name} class="h-full w-auto object-contain max-w-[200px]" />
+      {restaurants.map((r, index) => (
+        <article 
+          class={`scroll-fade grid lg:grid-cols-2 gap-8 lg:gap-16 items-center ${index % 2 === 1 ? 'lg:grid-flow-dense' : ''}`}
+          data-delay={r.delay}
+        >
+          <!-- Image Side -->
+          <div class={`relative ${index % 2 === 1 ? 'lg:col-start-2' : ''}`}>
+            <div class="img-zoom aspect-[4/3] lg:aspect-[3/2] overflow-hidden">
+              <img 
+                src={r.image}
+                alt={r.alt}
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <!-- Floating logo badge -->
+            <div class="absolute -bottom-6 left-8 bg-landrover-limestone p-4 shadow-xl">
+              <img src={r.logo} alt={r.name} class="h-12 lg:h-16 w-auto" />
+            </div>
           </div>
           
-          <!-- Description -->
-          <p class="text-landrover-marine/70 leading-relaxed mb-8 text-sm md:text-base">
-            {r.description}
-          </p>
-          
-          <!-- Image -->
-          <div class="img-zoom aspect-[4/3] overflow-hidden mb-8 rounded-sm">
-            <img 
-              src={r.image}
-              alt={r.alt}
-              class="w-full h-full object-cover object-center"
-            />
-          </div>
-          
-          <!-- Action Buttons -->
-          <div class="flex gap-3 justify-center">
-            <a 
-              href={r.menuUrl}
-              target="_blank"
-              class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-landrover-keswick text-white text-xs font-medium tracking-wider uppercase hover:bg-landrover-santorini transition-colors rounded"
-            >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              Menu
-            </a>
-            <a 
-              href={r.reserveUrl}
-              target="_blank"
-              class="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-landrover-keswick text-landrover-keswick text-xs font-medium tracking-wider uppercase hover:bg-landrover-keswick hover:text-white transition-colors rounded"
-            >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              Reserve
-            </a>
+          <!-- Content Side -->
+          <div class={`pt-8 lg:pt-0 ${index % 2 === 1 ? 'lg:col-start-1 lg:text-right' : ''}`}>
+            <p class="text-landrover-sand text-xs tracking-[0.25em] uppercase mb-3">{r.tagline}</p>
+            <h3 class="font-serif text-3xl lg:text-4xl text-white mb-6">{r.name}</h3>
+            <p class="text-landrover-limestone/80 text-lg leading-relaxed mb-8 max-w-md">
+              {r.description}
+            </p>
+            
+            <!-- Buttons -->
+            <div class={`flex gap-4 ${index % 2 === 1 ? 'lg:justify-end' : ''}`}>
+              <a 
+                href={r.menuUrl}
+                target="_blank"
+                class="inline-flex items-center gap-2 px-6 py-3 bg-landrover-sand text-landrover-santorini text-xs font-semibold tracking-wider uppercase hover:bg-white transition-colors"
+              >
+                View Menu
+              </a>
+              <a 
+                href={r.reserveUrl}
+                target="_blank"
+                class="inline-flex items-center gap-2 px-6 py-3 border border-landrover-limestone/40 text-landrover-limestone text-xs font-medium tracking-wider uppercase hover:bg-landrover-limestone/10 transition-colors"
+              >
+                Reserve a Table
+              </a>
+            </div>
           </div>
         </article>
       ))}
@@ -99,9 +104,9 @@ const restaurants = [
     </div>
 
     <!-- Legacy Quote -->
-    <div class="scroll-fade mt-24 text-center" data-delay="200">
-      <blockquote class="font-serif text-2xl lg:text-3xl text-landrover-santorini/80 italic max-w-4xl mx-auto">
-        "What once gathered people around tables now gathers them around homes, designed with the same intention and care."
+    <div class="scroll-fade mt-24 lg:mt-32 text-center border-t border-landrover-limestone/20 pt-16" data-delay="200">
+      <blockquote class="font-serif text-xl lg:text-2xl text-landrover-limestone/70 italic max-w-3xl mx-auto leading-relaxed">
+        "What once gathered people around tables now gathers them around homes — designed with the same intention and care."
       </blockquote>
     </div>
 
