@@ -1,6 +1,85 @@
 ---
-// Analytics Dashboard - Speedometer Style
+// Analytics Dashboard - Real Plausible Data
+const PLAUSIBLE_API_KEY = import.meta.env.PLAUSIBLE_API_KEY || process.env.PLAUSIBLE_API_KEY || '3MSdVsFOPR-5oFxyGxSuv5P4EU4HvVtp1HxXzjYOeuhsGRuGntpr8CaNGttl9jhk';
+const SITE_ID = 'coyolnosara.com';
+
+// Fetch data from Plausible
+async function fetchPlausible(endpoint: string, params: Record<string, string> = {}) {
+  const url = new URL(`https://plausible.io/api/v1/stats/${endpoint}`);
+  url.searchParams.set('site_id', SITE_ID);
+  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+  
+  try {
+    const res = await fetch(url.toString(), {
+      headers: { 'Authorization': `Bearer ${PLAUSIBLE_API_KEY}` }
+    });
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    return await res.json();
+  } catch (e) {
+    console.error('Plausible API error:', e);
+    return null;
+  }
+}
+
+// Fetch all data in parallel
+const [todayStats, weekStats, monthStats, timeseries, topPages, topSources] = await Promise.all([
+  fetchPlausible('aggregate', { period: 'day', metrics: 'visitors,pageviews,bounce_rate,visit_duration' }),
+  fetchPlausible('aggregate', { period: '7d', metrics: 'visitors,pageviews,bounce_rate,visit_duration' }),
+  fetchPlausible('aggregate', { period: '30d', metrics: 'visitors,pageviews,bounce_rate,visit_duration' }),
+  fetchPlausible('timeseries', { period: '30d', metrics: 'visitors' }),
+  fetchPlausible('breakdown', { period: '30d', property: 'event:page', metrics: 'visitors,pageviews', limit: '5' }),
+  fetchPlausible('breakdown', { period: '30d', property: 'visit:source', metrics: 'visitors', limit: '5' })
+]);
+
+// Extract values with fallbacks
+const today = todayStats?.results || { visitors: { value: 0 }, pageviews: { value: 0 }, bounce_rate: { value: 0 }, visit_duration: { value: 0 } };
+const week = weekStats?.results || { visitors: { value: 0 }, pageviews: { value: 0 }, bounce_rate: { value: 0 }, visit_duration: { value: 0 } };
+const month = monthStats?.results || { visitors: { value: 0 }, pageviews: { value: 0 }, bounce_rate: { value: 0 }, visit_duration: { value: 0 } };
+const dailyData = timeseries?.results || [];
+const pages = topPages?.results || [];
+const sources = topSources?.results || [];
+
+// Calculate total source visitors for percentages
+const totalSourceVisitors = sources.reduce((sum: number, s: any) => sum + s.visitors, 0) || 1;
+
+// Format duration
+function formatDuration(seconds: number): string {
+  if (seconds < 60) return `${seconds}s`;
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}m ${secs}s`;
+}
+
+// Determine status based on metrics
+function getStatus(metric: string, value: number): { class: string; text: string } {
+  if (metric === 'bounce_rate') {
+    if (value <= 40) return { class: 'status-good', text: '✓ Excellent' };
+    if (value <= 60) return { class: 'status-warn', text: '○ Average' };
+    return { class: 'status-bad', text: '⚠ High' };
+  }
+  if (metric === 'duration') {
+    if (value >= 120) return { class: 'status-good', text: '✓ Engaging' };
+    if (value >= 30) return { class: 'status-warn', text: '○ Brief' };
+    return { class: 'status-bad', text: '⚠ Too short' };
+  }
+  return { class: 'status-good', text: '' };
+}
+
+const bounceStatus = getStatus('bounce_rate', month.bounce_rate.value);
+const durationStatus = getStatus('duration', month.visit_duration.value);
+
+// Source icons
+const sourceIcons: Record<string, string> = {
+  'Google': '🔍',
+  'Direct / None': '🔗',
+  'Instagram': '📸',
+  'Facebook': '📘',
+  'Twitter': '🐦',
+  'WhatsApp': '💬',
+  'LinkedIn': '💼',
+};
 ---
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,25 +133,31 @@
       text-transform: uppercase;
     }
     
-    /* Speedometer Grid */
-    .speedo-grid {
+    .refresh-note {
+      color: rgba(255,255,255,0.4);
+      font-size: 0.75em;
+      margin-top: 8px;
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 24px;
       margin-bottom: 40px;
     }
     
-    .speedo-card {
+    .stat-card {
       background: radial-gradient(ellipse at center bottom, rgba(61, 79, 61, 0.4) 0%, rgba(15, 20, 16, 0.9) 70%);
       border: 1px solid rgba(196, 166, 124, 0.2);
       border-radius: 20px;
-      padding: 30px 20px;
+      padding: 30px 24px;
       text-align: center;
       position: relative;
       overflow: hidden;
     }
     
-    .speedo-card::before {
+    .stat-card::before {
       content: '';
       position: absolute;
       top: 0;
@@ -83,95 +168,36 @@
       background: linear-gradient(90deg, transparent, var(--sand), transparent);
     }
     
-    .speedo-label {
+    .stat-label {
       font-size: 0.7em;
       text-transform: uppercase;
       letter-spacing: 3px;
       color: var(--sand);
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       font-weight: 600;
     }
     
-    /* SVG Speedometer */
-    .speedometer {
-      position: relative;
-      width: 180px;
-      height: 110px;
-      margin: 0 auto;
-    }
-    
-    .speedometer svg {
-      width: 100%;
-      height: 100%;
-      overflow: visible;
-    }
-    
-    .speedo-bg {
-      fill: none;
-      stroke: rgba(255,255,255,0.1);
-      stroke-width: 16;
-      stroke-linecap: round;
-    }
-    
-    .speedo-fill {
-      fill: none;
-      stroke-width: 16;
-      stroke-linecap: round;
-      filter: drop-shadow(0 0 8px currentColor);
-      transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .speedo-ticks {
-      fill: none;
-      stroke: rgba(255,255,255,0.3);
-      stroke-width: 2;
-    }
-    
-    /* Needle */
-    .needle {
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      width: 4px;
-      height: 60px;
-      background: linear-gradient(to top, var(--sand), #fff);
-      transform-origin: bottom center;
-      transform: translateX(-50%) rotate(-90deg);
-      border-radius: 2px;
-      transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 0 10px rgba(196, 166, 124, 0.5);
-    }
-    
-    .needle::after {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 16px;
-      height: 16px;
-      background: var(--sand);
-      border-radius: 50%;
-      box-shadow: 0 0 15px rgba(196, 166, 124, 0.8);
-    }
-    
-    .speedo-value {
-      font-family: 'Inter', sans-serif;
-      font-size: 2.8em;
+    .stat-value {
+      font-size: 3em;
       font-weight: 700;
       color: #fff;
-      margin-top: 15px;
-      text-shadow: 0 0 20px rgba(255,255,255,0.3);
+      text-shadow: 0 0 20px rgba(255,255,255,0.2);
     }
     
-    .speedo-unit {
+    .stat-unit {
       font-size: 0.35em;
       color: var(--sand);
       font-weight: 400;
       margin-left: 4px;
     }
     
-    .speedo-status {
+    .stat-period {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.8em;
+      margin-top: 8px;
+    }
+    
+    .stat-status {
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -201,37 +227,29 @@
       border: 1px solid rgba(239, 68, 68, 0.3);
     }
     
-    /* Alert Banner */
-    .alert-banner {
-      background: linear-gradient(90deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05));
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      border-radius: 12px;
-      padding: 20px 28px;
-      margin-bottom: 32px;
+    /* Period Tabs */
+    .period-tabs {
       display: flex;
-      align-items: center;
-      gap: 16px;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
     }
     
-    .alert-icon {
-      font-size: 2em;
-      animation: pulse 2s infinite;
+    .period-tab {
+      padding: 8px 20px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(196, 166, 124, 0.2);
+      border-radius: 20px;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.85em;
+      cursor: pointer;
+      transition: all 0.2s;
     }
     
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-    
-    .alert-content h4 {
-      color: var(--red);
-      font-size: 1.1em;
-      margin-bottom: 4px;
-    }
-    
-    .alert-content p {
-      color: rgba(255,255,255,0.7);
-      font-size: 0.9em;
+    .period-tab.active, .period-tab:hover {
+      background: rgba(196, 166, 124, 0.2);
+      border-color: var(--sand);
+      color: var(--sand);
     }
     
     /* Charts Section */
@@ -257,9 +275,10 @@
     }
     
     .card-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3em;
+      font-size: 1em;
+      font-weight: 600;
       color: var(--sand);
+      letter-spacing: 1px;
     }
     
     /* Bar Chart */
@@ -268,126 +287,119 @@
       align-items: flex-end;
       justify-content: space-between;
       height: 200px;
-      padding: 20px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 0 10px;
+      gap: 8px;
     }
     
     .bar-col {
+      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      flex: 1;
+      height: 100%;
+      justify-content: flex-end;
     }
     
     .bar {
-      width: 70%;
+      width: 100%;
+      max-width: 40px;
       background: linear-gradient(to top, var(--keswick), var(--sand));
-      border-radius: 6px 6px 0 0;
+      border-radius: 4px 4px 0 0;
+      transition: height 0.5s ease;
+      cursor: pointer;
       position: relative;
-      transition: all 0.3s;
-      min-height: 4px;
     }
     
     .bar:hover {
-      filter: brightness(1.2);
-      transform: scaleY(1.02);
+      background: linear-gradient(to top, var(--sand), #fff);
     }
     
-    .bar::before {
+    .bar::after {
       content: attr(data-value);
       position: absolute;
-      top: -28px;
+      top: -24px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 0.8em;
-      font-weight: 600;
+      font-size: 0.7em;
       color: var(--sand);
       opacity: 0;
       transition: opacity 0.2s;
     }
     
-    .bar:hover::before {
-      opacity: 1;
-    }
+    .bar:hover::after { opacity: 1; }
     
     .bar-label {
-      margin-top: 12px;
-      font-size: 0.75em;
+      font-size: 0.7em;
       color: rgba(255,255,255,0.5);
+      margin-top: 8px;
     }
     
     /* Page List */
     .page-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 16px;
     }
     
     .page-item {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 14px 16px;
-      background: rgba(255,255,255,0.03);
-      border-radius: 10px;
-      transition: background 0.2s;
-    }
-    
-    .page-item:hover {
-      background: rgba(255,255,255,0.06);
     }
     
     .page-rank {
       width: 28px;
       height: 28px;
-      background: var(--keswick);
-      border-radius: 8px;
+      background: rgba(196, 166, 124, 0.2);
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 0.8em;
-      font-weight: 700;
+      font-weight: 600;
       color: var(--sand);
     }
     
-    .page-info {
-      flex: 1;
-    }
+    .page-info { flex: 1; }
     
     .page-name {
-      font-weight: 500;
-      color: #fff;
-      margin-bottom: 4px;
+      font-size: 0.9em;
+      margin-bottom: 6px;
+      color: rgba(255,255,255,0.9);
     }
     
     .page-bar {
-      height: 4px;
+      height: 6px;
       background: rgba(255,255,255,0.1);
-      border-radius: 2px;
+      border-radius: 3px;
       overflow: hidden;
     }
     
     .page-bar-fill {
       height: 100%;
       background: linear-gradient(90deg, var(--keswick), var(--sand));
-      border-radius: 2px;
+      border-radius: 3px;
     }
     
     .page-views {
-      font-size: 1.2em;
-      font-weight: 700;
+      font-size: 0.9em;
+      font-weight: 600;
       color: var(--sand);
+      min-width: 50px;
+      text-align: right;
     }
     
     /* Sources */
     .sources-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
     }
     
     .source-card {
-      background: rgba(255,255,255,0.03);
+      background: rgba(61, 79, 61, 0.3);
+      border: 1px solid rgba(196, 166, 124, 0.1);
       border-radius: 12px;
       padding: 20px;
       text-align: center;
@@ -395,11 +407,11 @@
     
     .source-icon {
       font-size: 2em;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
     
     .source-percent {
-      font-size: 2em;
+      font-size: 1.8em;
       font-weight: 700;
       color: var(--sand);
     }
@@ -410,14 +422,32 @@
       margin-top: 4px;
     }
     
+    .source-count {
+      font-size: 0.7em;
+      color: rgba(255,255,255,0.4);
+      margin-top: 2px;
+    }
+    
+    /* No Data State */
+    .no-data {
+      text-align: center;
+      padding: 60px 20px;
+      color: rgba(255,255,255,0.5);
+    }
+    
+    .no-data-icon {
+      font-size: 3em;
+      margin-bottom: 16px;
+    }
+    
     @media (max-width: 1100px) {
-      .speedo-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .charts-grid { grid-template-columns: 1fr; }
     }
     
     @media (max-width: 600px) {
-      .speedo-grid { grid-template-columns: 1fr; }
-      .sources-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .sources-grid { grid-template-columns: 1fr 1fr; }
       .logo { font-size: 1.8em; letter-spacing: 4px; }
     }
   </style>
@@ -426,77 +456,36 @@
   <div class="container">
     <header>
       <div class="logo">COYOL</div>
-      <div class="subtitle">Website Performance Dashboard</div>
+      <div class="subtitle">Website Analytics</div>
+      <div class="refresh-note">Last updated: {new Date().toLocaleString('en-US', { timeZone: 'America/Costa_Rica' })}</div>
     </header>
     
-    <!-- Alert Banner -->
-    <div class="alert-banner">
-      <div class="alert-icon">🚨</div>
-      <div class="alert-content">
-        <h4>Critical: 23 Second Average Visit</h4>
-        <p>Visitors are leaving almost immediately. Recommend adding clear CTAs and floating WhatsApp button before email campaign.</p>
-      </div>
-    </div>
-    
-    <!-- Speedometer Cards -->
-    <div class="speedo-grid">
-      <div class="speedo-card">
-        <div class="speedo-label">Visitors</div>
-        <div class="speedometer" data-value="75" data-color="#22c55e">
-          <svg viewBox="0 0 180 100">
-            <defs>
-              <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:#22c55e"/>
-                <stop offset="50%" style="stop-color:#eab308"/>
-                <stop offset="100%" style="stop-color:#ef4444"/>
-              </linearGradient>
-            </defs>
-            <path class="speedo-bg" d="M 20 90 A 70 70 0 0 1 160 90"/>
-            <path class="speedo-fill" stroke="url(#grad1)" d="M 20 90 A 70 70 0 0 1 160 90"/>
-          </svg>
-          <div class="needle" data-rotation="45"></div>
-        </div>
-        <div class="speedo-value">1,124</div>
-        <div class="speedo-status status-good">↑ 12% this week</div>
+    <!-- Main Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Visitors</div>
+        <div class="stat-value">{month.visitors.value.toLocaleString()}</div>
+        <div class="stat-period">Last 30 days</div>
       </div>
       
-      <div class="speedo-card">
-        <div class="speedo-label">Page Views</div>
-        <div class="speedometer" data-value="68">
-          <svg viewBox="0 0 180 100">
-            <path class="speedo-bg" d="M 20 90 A 70 70 0 0 1 160 90"/>
-            <path class="speedo-fill" stroke="url(#grad1)" d="M 20 90 A 70 70 0 0 1 160 90"/>
-          </svg>
-          <div class="needle" data-rotation="30"></div>
-        </div>
-        <div class="speedo-value">2,634</div>
-        <div class="speedo-status status-good">↑ 8% this week</div>
+      <div class="stat-card">
+        <div class="stat-label">Page Views</div>
+        <div class="stat-value">{month.pageviews.value.toLocaleString()}</div>
+        <div class="stat-period">Last 30 days</div>
       </div>
       
-      <div class="speedo-card">
-        <div class="speedo-label">Avg. Duration</div>
-        <div class="speedometer" data-value="15">
-          <svg viewBox="0 0 180 100">
-            <path class="speedo-bg" d="M 20 90 A 70 70 0 0 1 160 90"/>
-            <path class="speedo-fill" stroke="url(#grad1)" d="M 20 90 A 70 70 0 0 1 160 90"/>
-          </svg>
-          <div class="needle" data-rotation="-70"></div>
-        </div>
-        <div class="speedo-value">0:23<span class="speedo-unit">sec</span></div>
-        <div class="speedo-status status-bad">⚠️ Critical - Fix Now</div>
+      <div class="stat-card">
+        <div class="stat-label">Avg. Duration</div>
+        <div class="stat-value">{formatDuration(month.visit_duration.value)}</div>
+        <div class="stat-period">Last 30 days</div>
+        {durationStatus.text && <div class={`stat-status ${durationStatus.class}`}>{durationStatus.text}</div>}
       </div>
       
-      <div class="speedo-card">
-        <div class="speedo-label">Bounce Rate</div>
-        <div class="speedometer" data-value="65">
-          <svg viewBox="0 0 180 100">
-            <path class="speedo-bg" d="M 20 90 A 70 70 0 0 1 160 90"/>
-            <path class="speedo-fill" stroke="url(#grad1)" d="M 20 90 A 70 70 0 0 1 160 90"/>
-          </svg>
-          <div class="needle" data-rotation="25"></div>
-        </div>
-        <div class="speedo-value">65<span class="speedo-unit">%</span></div>
-        <div class="speedo-status status-warn">High - Needs Work</div>
+      <div class="stat-card">
+        <div class="stat-label">Bounce Rate</div>
+        <div class="stat-value">{month.bounce_rate.value}<span class="stat-unit">%</span></div>
+        <div class="stat-period">Last 30 days</div>
+        {bounceStatus.text && <div class={`stat-status ${bounceStatus.class}`}>{bounceStatus.text}</div>}
       </div>
     </div>
     
@@ -504,49 +493,58 @@
     <div class="charts-grid">
       <div class="card">
         <div class="card-header">
-          <div class="card-title">Visitors — Last 14 Days</div>
+          <div class="card-title">Visitors — Last 30 Days</div>
         </div>
-        <div class="bar-chart" id="chart"></div>
+        {dailyData.length > 0 ? (
+          <div class="bar-chart" id="chart">
+            {dailyData.map((d: any) => {
+              const max = Math.max(...dailyData.map((x: any) => x.visitors), 1);
+              const height = Math.max((d.visitors / max) * 100, 2);
+              const day = new Date(d.date).toLocaleDateString('en-US', { weekday: 'short' }).charAt(0);
+              return (
+                <div class="bar-col">
+                  <div class="bar" style={`height: ${height}%`} data-value={d.visitors}></div>
+                  <div class="bar-label">{day}</div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div class="no-data">
+            <div class="no-data-icon">📊</div>
+            <p>Collecting data...</p>
+          </div>
+        )}
       </div>
       
       <div class="card">
         <div class="card-header">
           <div class="card-title">Top Pages</div>
         </div>
-        <div class="page-list">
-          <div class="page-item">
-            <div class="page-rank">1</div>
-            <div class="page-info">
-              <div class="page-name">Home</div>
-              <div class="page-bar"><div class="page-bar-fill" style="width: 100%"></div></div>
-            </div>
-            <div class="page-views">892</div>
+        {pages.length > 0 ? (
+          <div class="page-list">
+            {pages.slice(0, 5).map((p: any, i: number) => {
+              const maxViews = pages[0]?.pageviews || 1;
+              const width = (p.pageviews / maxViews) * 100;
+              const name = p.page === '/' ? 'Home' : p.page.replace(/^\//, '').replace(/-/g, ' ');
+              return (
+                <div class="page-item">
+                  <div class="page-rank">{i + 1}</div>
+                  <div class="page-info">
+                    <div class="page-name" style="text-transform: capitalize">{name}</div>
+                    <div class="page-bar"><div class="page-bar-fill" style={`width: ${width}%`}></div></div>
+                  </div>
+                  <div class="page-views">{p.pageviews}</div>
+                </div>
+              );
+            })}
           </div>
-          <div class="page-item">
-            <div class="page-rank">2</div>
-            <div class="page-info">
-              <div class="page-name">Homesites</div>
-              <div class="page-bar"><div class="page-bar-fill" style="width: 51%"></div></div>
-            </div>
-            <div class="page-views">456</div>
+        ) : (
+          <div class="no-data">
+            <div class="no-data-icon">📄</div>
+            <p>No page data yet</p>
           </div>
-          <div class="page-item">
-            <div class="page-rank">3</div>
-            <div class="page-info">
-              <div class="page-name">Gallery</div>
-              <div class="page-bar"><div class="page-bar-fill" style="width: 35%"></div></div>
-            </div>
-            <div class="page-views">312</div>
-          </div>
-          <div class="page-item">
-            <div class="page-rank">4</div>
-            <div class="page-info">
-              <div class="page-name">Mar Azul</div>
-              <div class="page-bar"><div class="page-bar-fill" style="width: 26%"></div></div>
-            </div>
-            <div class="page-views">234</div>
-          </div>
-        </div>
+        )}
       </div>
     </div>
     
@@ -555,77 +553,50 @@
       <div class="card-header">
         <div class="card-title">Traffic Sources</div>
       </div>
-      <div class="sources-grid">
-        <div class="source-card">
-          <div class="source-icon">🔍</div>
-          <div class="source-percent">49%</div>
-          <div class="source-name">Google Search</div>
+      {sources.length > 0 ? (
+        <div class="sources-grid">
+          {sources.map((s: any) => {
+            const name = s.source || 'Direct / None';
+            const icon = sourceIcons[name] || '🌐';
+            const percent = Math.round((s.visitors / totalSourceVisitors) * 100);
+            return (
+              <div class="source-card">
+                <div class="source-icon">{icon}</div>
+                <div class="source-percent">{percent}%</div>
+                <div class="source-name">{name}</div>
+                <div class="source-count">{s.visitors} visitors</div>
+              </div>
+            );
+          })}
         </div>
-        <div class="source-card">
-          <div class="source-icon">🔗</div>
-          <div class="source-percent">23%</div>
-          <div class="source-name">Direct Link</div>
+      ) : (
+        <div class="no-data">
+          <div class="no-data-icon">🔍</div>
+          <p>No source data yet</p>
         </div>
-        <div class="source-card">
-          <div class="source-icon">📸</div>
-          <div class="source-percent">15%</div>
-          <div class="source-name">Instagram</div>
+      )}
+    </div>
+    
+    <!-- Today's Stats (Mini) -->
+    <div class="card" style="margin-top: 24px;">
+      <div class="card-header">
+        <div class="card-title">Today</div>
+      </div>
+      <div style="display: flex; gap: 40px; justify-content: center; padding: 20px 0;">
+        <div style="text-align: center;">
+          <div style="font-size: 2em; font-weight: 700; color: var(--sand);">{today.visitors.value}</div>
+          <div style="font-size: 0.8em; color: rgba(255,255,255,0.5);">Visitors</div>
         </div>
-        <div class="source-card">
-          <div class="source-icon">💬</div>
-          <div class="source-percent">8%</div>
-          <div class="source-name">WhatsApp</div>
+        <div style="text-align: center;">
+          <div style="font-size: 2em; font-weight: 700; color: var(--sand);">{today.pageviews.value}</div>
+          <div style="font-size: 0.8em; color: rgba(255,255,255,0.5);">Page Views</div>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size: 2em; font-weight: 700; color: var(--sand);">{formatDuration(today.visit_duration.value)}</div>
+          <div style="font-size: 0.8em; color: rgba(255,255,255,0.5);">Avg Duration</div>
         </div>
       </div>
     </div>
   </div>
-
-  <script>
-    // Animate needles
-    document.querySelectorAll('.needle').forEach(needle => {
-      const rotation = parseInt(needle.dataset.rotation);
-      setTimeout(() => {
-        needle.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
-      }, 300);
-    });
-    
-    // Animate gauge fills
-    document.querySelectorAll('.speedo-fill').forEach(fill => {
-      const length = fill.getTotalLength();
-      fill.style.strokeDasharray = length;
-      fill.style.strokeDashoffset = length;
-      
-      setTimeout(() => {
-        fill.style.strokeDashoffset = length * 0.25;
-      }, 300);
-    });
-    
-    // Bar chart
-    const data = [
-      { day: 'M', value: 45 },
-      { day: 'T', value: 52 },
-      { day: 'W', value: 48 },
-      { day: 'T', value: 67 },
-      { day: 'F', value: 89 },
-      { day: 'S', value: 72 },
-      { day: 'S', value: 58 },
-      { day: 'M', value: 61 },
-      { day: 'T', value: 94 },
-      { day: 'W', value: 112 },
-      { day: 'T', value: 87 },
-      { day: 'F', value: 76 },
-      { day: 'S', value: 93 },
-      { day: 'S', value: 102 },
-    ];
-    
-    const max = Math.max(...data.map(d => d.value));
-    
-    document.getElementById('chart').innerHTML = data.map(d => `
-      <div class="bar-col">
-        <div class="bar" style="height: ${(d.value / max) * 100}%" data-value="${d.value}"></div>
-        <div class="bar-label">${d.day}</div>
-      </div>
-    `).join('');
-  </script>
 </body>
 </html>
