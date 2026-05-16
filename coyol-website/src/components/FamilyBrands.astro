@@ -66,14 +66,16 @@ const restaurants = [
                 class="w-full h-full object-cover"
               />
             </div>
-            <!-- Floating logo badge -->
-            <div class="absolute -bottom-6 left-8 bg-landrover-limestone p-4 shadow-xl">
-              <img src={r.logo} alt={r.name} class="h-12 lg:h-16 w-auto" />
+            <!-- Logo below image, aligned right -->
+            <div class="flex justify-end mt-6">
+              <div class="bg-landrover-limestone p-4">
+                <img src={r.logo} alt={r.name} class="h-12 lg:h-14 w-auto" />
+              </div>
             </div>
           </div>
           
           <!-- Content Side -->
-          <div class={`pt-8 lg:pt-0 ${index % 2 === 1 ? 'lg:col-start-1 lg:text-right' : ''}`}>
+          <div class={`${index % 2 === 1 ? 'lg:col-start-1 lg:text-right' : ''}`}>
             <p class="text-landrover-sand text-xs tracking-[0.25em] uppercase mb-3">{r.tagline}</p>
             <h3 class="font-serif text-3xl lg:text-4xl text-white mb-6">{r.name}</h3>
             <p class="text-landrover-limestone/80 text-lg leading-relaxed mb-8 max-w-md">
