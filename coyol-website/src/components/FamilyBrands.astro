@@ -3,7 +3,7 @@
 const restaurants = [
   {
     name: 'Coyol',
-    logo: '/images/logos/coyol-restaurant-logo-black.png',
+    logoWhite: '/images/logos/coyol-restaurant-logo-white.png',
     image: '/images/coyol-restaurant-sunset.jpg',
     alt: 'Coyol Restaurant - Farm to table dining in Nosara',
     tagline: 'Fire & Flavor',
@@ -14,7 +14,7 @@ const restaurants = [
   },
   {
     name: 'Esh',
-    logo: '/images/logos/esh-logo-black.png',
+    logoWhite: '/images/logos/esh-logo-white.png',
     image: '/images/esh-terrace.jpg',
     alt: 'Esh - Artisan bakery and bistro in Nosara',
     tagline: 'Baked with Heart',
@@ -25,7 +25,7 @@ const restaurants = [
   },
   {
     name: 'La Luna',
-    logo: '/images/logos/laluna-logo-black.png',
+    logoWhite: '/images/logos/laluna-logo-white.png',
     image: '/images/laluna-garden.jpg',
     alt: 'La Luna - Beachside restaurant and bar in Nosara',
     tagline: 'Where the Moon Meets the Sea',
@@ -49,7 +49,7 @@ const restaurants = [
       </h2>
     </div>
 
-    <!-- Restaurant Cards - Larger, More Impactful -->
+    <!-- Restaurant Cards -->
     <div class="space-y-20 lg:space-y-32">
       
       {restaurants.map((r, index) => (
@@ -66,18 +66,21 @@ const restaurants = [
                 class="w-full h-full object-cover"
               />
             </div>
-            <!-- Logo below image, aligned right -->
-            <div class="flex justify-end mt-6">
-              <div class="bg-landrover-limestone p-4">
-                <img src={r.logo} alt={r.name} class="h-12 lg:h-14 w-auto" />
-              </div>
-            </div>
           </div>
           
           <!-- Content Side -->
           <div class={`${index % 2 === 1 ? 'lg:col-start-1 lg:text-right' : ''}`}>
-            <p class="text-landrover-sand text-xs tracking-[0.25em] uppercase mb-3">{r.tagline}</p>
-            <h3 class="font-serif text-3xl lg:text-4xl text-white mb-6">{r.name}</h3>
+            <p class="text-landrover-sand text-xs tracking-[0.25em] uppercase mb-4">{r.tagline}</p>
+            
+            <!-- Logo instead of text name -->
+            <div class={`mb-6 ${index % 2 === 1 ? 'lg:flex lg:justify-end' : ''}`}>
+              <img 
+                src={r.logoWhite} 
+                alt={r.name} 
+                class="h-14 lg:h-16 w-auto object-contain"
+              />
+            </div>
+            
             <p class="text-landrover-limestone/80 text-lg leading-relaxed mb-8 max-w-md">
               {r.description}
             </p>
