@@ -125,34 +125,63 @@ const { title, description = "Luxury homes and jungle homesites in Nosara, Costa
     <script defer data-domain="coyolnosara.com" src="https://plausible.io/js/script.js"></script>
     <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
     
-    <!-- Custom Event Tracking -->
+    <!-- Custom Event Tracking with Plausible -->
     <script>
-      // Track clicks on important elements
       document.addEventListener('DOMContentLoaded', () => {
-        // Track CTA clicks
-        document.querySelectorAll('a[href*="whatsapp"], a[href*="tel:"], a[href*="mailto:"]').forEach(el => {
+        const path = window.location.pathname;
+        
+        // Track property page views with time spent
+        if (path.includes('/homesites/')) {
+          const propertyName = path.split('/').pop() || 'unknown';
+          const startTime = Date.now();
+          
+          // Track initial view
+          window.plausible('Property View', { props: { property: propertyName } });
+          
+          // Track time spent when leaving
+          window.addEventListener('beforeunload', () => {
+            const timeSpent = Math.round((Date.now() - startTime) / 1000);
+            if (timeSpent > 5) { // Only track if > 5 seconds
+              window.plausible('Property Time', { props: { property: propertyName, seconds: timeSpent } });
+            }
+          });
+        }
+        
+        // Track WhatsApp/contact clicks
+        document.querySelectorAll('a[href*="wa.me"], a[href*="tel:"], a[href*="mailto:"]').forEach(el => {
           el.addEventListener('click', () => {
-            if (window.va) window.va('event', { name: 'contact_click', data: { type: el.getAttribute('href')?.split(':')[0] } });
+            const type = el.href.includes('wa.me') ? 'whatsapp' : el.href.split(':')[0];
+            window.plausible('Contact Click', { props: { type: type } });
           });
         });
         
-        // Track property/development clicks
+        // Track reservation clicks
+        document.querySelectorAll('a[href*="eatapp.co"]').forEach(el => {
+          el.addEventListener('click', () => {
+            const restaurant = el.href.includes('la-luna') ? 'La Luna' : 'Coyol';
+            window.plausible('Reservation Click', { props: { restaurant: restaurant } });
+          });
+        });
+        
+        // Track property/homesite link clicks
         document.querySelectorAll('a[href*="/homesites"]').forEach(el => {
           el.addEventListener('click', () => {
-            if (window.va) window.va('event', { name: 'property_click', data: { page: el.getAttribute('href') } });
+            const property = el.getAttribute('href')?.split('/').pop() || 'unknown';
+            window.plausible('Property Click', { props: { property: property } });
           });
         });
         
         // Track scroll depth
         let maxScroll = 0;
+        let scrollTracked = { 25: false, 50: false, 75: false, 100: false };
         window.addEventListener('scroll', () => {
           const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
-          if (scrollPercent > maxScroll) {
-            maxScroll = scrollPercent;
-            if ([25, 50, 75, 100].includes(scrollPercent)) {
-              if (window.va) window.va('event', { name: 'scroll_depth', data: { percent: scrollPercent } });
+          [25, 50, 75, 100].forEach(milestone => {
+            if (scrollPercent >= milestone && !scrollTracked[milestone]) {
+              scrollTracked[milestone] = true;
+              window.plausible('Scroll Depth', { props: { percent: milestone } });
             }
-          }
+          });
         });
       });
     </script>
