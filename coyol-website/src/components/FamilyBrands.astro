@@ -1,8 +1,8 @@
 ---
-// Restaurant data with menu and reservation links
+// Restaurant data
 const restaurants = [
   {
-    name: 'Coyol Restaurant',
+    name: 'Coyol',
     logo: '/images/logos/coyol-restaurant-logo-black.png',
     image: '/images/coyol-restaurant-sunset.jpg',
     alt: 'Coyol Restaurant - Farm to table dining in Nosara',
@@ -45,31 +45,37 @@ const restaurants = [
       </h2>
     </div>
 
-    <!-- Brand Cards -->
-    <div class="grid md:grid-cols-3 gap-8 lg:gap-12">
+    <!-- Brand Cards - New Layout -->
+    <div class="grid md:grid-cols-3 gap-12 lg:gap-16">
       
       {restaurants.map((r) => (
-        <article class="scroll-fade group" data-delay={r.delay}>
-          <div class="img-zoom aspect-[4/3] overflow-hidden mb-6 relative">
+        <article class="scroll-fade group text-center" data-delay={r.delay}>
+          
+          <!-- Large Logo First -->
+          <div class="h-20 md:h-24 mb-6 flex items-center justify-center">
+            <img src={r.logo} alt={r.name} class="h-full w-auto object-contain max-w-[200px]" />
+          </div>
+          
+          <!-- Description -->
+          <p class="text-landrover-marine/70 leading-relaxed mb-8 text-sm md:text-base">
+            {r.description}
+          </p>
+          
+          <!-- Image -->
+          <div class="img-zoom aspect-[4/3] overflow-hidden mb-8 rounded-sm">
             <img 
               src={r.image}
               alt={r.alt}
               class="w-full h-full object-cover object-center"
             />
           </div>
-          <div class="h-12 mb-4">
-            <img src={r.logo} alt={r.name} class="h-full object-contain" />
-          </div>
-          <p class="text-landrover-marine/70 leading-relaxed mb-6">
-            {r.description}
-          </p>
           
           <!-- Action Buttons -->
-          <div class="flex gap-3">
+          <div class="flex gap-3 justify-center">
             <a 
               href={r.menuUrl}
               target="_blank"
-              class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-landrover-keswick text-white text-xs font-medium tracking-wider uppercase hover:bg-landrover-santorini transition-colors rounded"
+              class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-landrover-keswick text-white text-xs font-medium tracking-wider uppercase hover:bg-landrover-santorini transition-colors rounded"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -79,7 +85,7 @@ const restaurants = [
             <a 
               href={r.reserveUrl}
               target="_blank"
-              class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-landrover-sand text-landrover-santorini text-xs font-medium tracking-wider uppercase hover:bg-landrover-terracotta hover:text-white transition-colors rounded"
+              class="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-landrover-keswick text-landrover-keswick text-xs font-medium tracking-wider uppercase hover:bg-landrover-keswick hover:text-white transition-colors rounded"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -93,7 +99,7 @@ const restaurants = [
     </div>
 
     <!-- Legacy Quote -->
-    <div class="scroll-fade mt-20 text-center" data-delay="200">
+    <div class="scroll-fade mt-24 text-center" data-delay="200">
       <blockquote class="font-serif text-2xl lg:text-3xl text-landrover-santorini/80 italic max-w-4xl mx-auto">
         "What once gathered people around tables now gathers them around homes, designed with the same intention and care."
       </blockquote>
