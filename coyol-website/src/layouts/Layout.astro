@@ -1,6 +1,6 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
-import Analytics from '@vercel/analytics/astro';
+// Plausible analytics loaded via script tag
 
 interface Props {
   title: string;
@@ -90,8 +90,9 @@ const { title, description = "Luxury homes and jungle homesites in Nosara, Costa
       </span>
     </a>
     
-    <!-- Vercel Analytics -->
-    <Analytics />
+    <!-- Plausible Analytics -->
+    <script defer data-domain="coyolnosara.com" src="https://plausible.io/js/script.js"></script>
+    <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
     
     <!-- Custom Event Tracking -->
     <script>
