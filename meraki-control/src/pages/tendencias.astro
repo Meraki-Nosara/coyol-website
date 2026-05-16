@@ -1,0 +1,628 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { loadMonthlyData, formatCurrency, formatMonth, USD_RATE, loadDailySales, getDailyTotals, getLastUpdated } from '../lib/monthly-data';
+
+const data = loadMonthlyData();
+const allMonths = [...new Set(data.monthly.map(m => m.month))].sort();
+const restaurants = ['esh', 'coyol', 'laluna'] as const;
+
+// Get currency from URL param (default CRC)
+const url = new URL(Astro.request.url);
+const currency = (url.searchParams.get('currency') as 'CRC' | 'USD') || 'USD';
+
+const fmt = (amount: number) => formatCurrency(amount, currency, true);
+const fmtFull = (amount: number) => formatCurrency(amount, currency, false);
+
+// Logo paths
+const logos: Record<string, string> = {
+  esh: '/images/logos/esh-black.png',
+  coyol: '/images/logos/coyol-black.png',
+  laluna: '/images/logos/laluna-black.png'
+};
+
+// Restaurant colors
+const colors: Record<string, string> = {
+  esh: '#C4A67C',
+  coyol: '#3D4F3D',
+  laluna: '#A65D3F'
+};
+
+const colorNames: Record<string, string> = {
+  esh: 'landrover-sand',
+  coyol: 'landrover-keswick',
+  laluna: 'landrover-terracotta'
+};
+
+// Daily data
+const dailySales = loadDailySales();
+const lastUpdated = getLastUpdated();
+
+// ===== YOY COMPARISON =====
+// Build monthly totals for 2025 and 2026 (combined across restaurants)
+const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+// Get monthly data by year
+function getMonthlyTotalsByYear(year: string) {
+  const yearData = data.monthly.filter(m => m.month.startsWith(year) && !m.partial);
+  const byMonth: Record<string, number> = {};
+  
+  yearData.forEach(m => {
+    const monthNum = m.month.split('-')[1];
+    byMonth[monthNum] = (byMonth[monthNum] || 0) + m.totalSales;
+  });
+  
+  return byMonth;
+}
+
+const totals2025 = getMonthlyTotalsByYear('2025');
+const totals2026 = getMonthlyTotalsByYear('2026');
+
+// Add daily sales to 2026 months
+dailySales.forEach(d => {
+  const monthNum = d.date.slice(5, 7);
+  totals2026[monthNum] = (totals2026[monthNum] || 0) + d.total;
+});
+
+// YoY data for Chart.js
+const yoyChartData = {
+  labels: monthNames,
+  data2025: monthNames.map((_, i) => totals2025[String(i + 1).padStart(2, '0')] || 0),
+  data2026: monthNames.map((_, i) => totals2026[String(i + 1).padStart(2, '0')] || 0)
+};
+
+// Calculate YoY growth per month (where both years have data)
+const yoyGrowth = monthNames.map((name, i) => {
+  const monthKey = String(i + 1).padStart(2, '0');
+  const v2025 = totals2025[monthKey] || 0;
+  const v2026 = totals2026[monthKey] || 0;
+  const growth = v2025 > 0 ? ((v2026 - v2025) / v2025 * 100) : null;
+  return { month: name, v2025, v2026, growth };
+}).filter(m => m.v2025 > 0 && m.v2026 > 0);
+
+// Overall YTD comparison (same months in both years)
+const ytd2025 = yoyGrowth.reduce((sum, m) => sum + m.v2025, 0);
+const ytd2026 = yoyGrowth.reduce((sum, m) => sum + m.v2026, 0);
+const ytdGrowth = ytd2025 > 0 ? ((ytd2026 - ytd2025) / ytd2025 * 100) : 0;
+
+// ===== RESTAURANT GROWTH =====
+const restaurantGrowth = restaurants.map(code => {
+  // Q1 comparison (Jan-Mar)
+  const q1_2025 = data.monthly
+    .filter(m => m.restaurant === code && m.month.startsWith('2025') && ['01', '02', '03'].includes(m.month.slice(5)) && !m.partial)
+    .reduce((sum, m) => sum + m.totalSales, 0);
+  
+  const q1_2026 = data.monthly
+    .filter(m => m.restaurant === code && m.month.startsWith('2026') && ['01', '02', '03'].includes(m.month.slice(5)) && !m.partial)
+    .reduce((sum, m) => sum + m.totalSales, 0);
+  
+  const growth = q1_2025 > 0 ? ((q1_2026 - q1_2025) / q1_2025 * 100) : 0;
+  
+  // YTD 2026 (monthly + daily)
+  const monthly2026 = data.monthly
+    .filter(m => m.restaurant === code && m.month.startsWith('2026') && !m.partial)
+    .reduce((sum, m) => sum + m.totalSales, 0);
+  const daily2026 = dailySales
+    .filter(d => d.restaurant === code)
+    .reduce((sum, d) => sum + d.total, 0);
+  const ytd = monthly2026 + daily2026;
+  
+  return {
+    code,
+    name: data.restaurants[code]?.name || code,
+    color: colors[code],
+    logo: logos[code],
+    q1_2025,
+    q1_2026,
+    growth,
+    ytd
+  };
+}).sort((a, b) => b.growth - a.growth);
+
+// ===== MARGIN TRENDS =====
+// Calculate margin by month for 2026
+const marginTrends = [...new Set(data.monthly.filter(m => m.month.startsWith('2026') && !m.partial).map(m => m.month))].sort().map(month => {
+  const monthData = data.monthly.filter(m => m.month === month && !m.partial);
+  const sales = monthData.reduce((sum, m) => sum + m.totalSales, 0);
+  const gastos = monthData.reduce((sum, m) => sum + (m.gastos || 0), 0);
+  const mdo = monthData.reduce((sum, m) => sum + (m.mdo || 0), 0);
+  const grossMargin = sales > 0 ? ((sales - gastos) / sales * 100) : 0;
+  const netMargin = sales > 0 ? ((sales - gastos - mdo) / sales * 100) : 0;
+  
+  return { month, sales, gastos, mdo, grossMargin, netMargin };
+});
+
+// ===== DAILY PERFORMANCE =====
+// Best/worst days of the week
+const dayOfWeekStats: Record<string, { total: number; count: number; days: string[] }> = {};
+const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+dailySales.forEach(d => {
+  const date = new Date(d.date + 'T12:00:00');
+  const dow = dayNames[date.getDay()];
+  
+  if (!dayOfWeekStats[dow]) {
+    dayOfWeekStats[dow] = { total: 0, count: 0, days: [] };
+  }
+  dayOfWeekStats[dow].total += d.total;
+  dayOfWeekStats[dow].count++;
+  if (!dayOfWeekStats[dow].days.includes(d.date)) {
+    dayOfWeekStats[dow].days.push(d.date);
+  }
+});
+
+// Calculate actual unique day counts per day of week
+const dayPerformance = dayNames.map(day => {
+  const stats = dayOfWeekStats[day] || { total: 0, count: 0, days: [] };
+  const uniqueDays = stats.days.length;
+  const avgDaily = uniqueDays > 0 ? stats.total / uniqueDays : 0;
+  return { day, total: stats.total, count: uniqueDays, avgDaily };
+}).filter(d => d.count > 0);
+
+const bestDay = dayPerformance.length > 0 ? dayPerformance.reduce((best, d) => d.avgDaily > best.avgDaily ? d : best, dayPerformance[0]) : null;
+const worstDay = dayPerformance.length > 0 ? dayPerformance.reduce((worst, d) => d.avgDaily < worst.avgDaily ? d : worst, dayPerformance[0]) : null;
+
+// ===== TOP PERFORMING DAYS =====
+// Aggregate daily sales by date
+const dailyTotals: Record<string, number> = {};
+dailySales.forEach(d => {
+  dailyTotals[d.date] = (dailyTotals[d.date] || 0) + d.total;
+});
+
+const sortedDays = Object.entries(dailyTotals)
+  .map(([date, total]) => ({ date, total }))
+  .sort((a, b) => b.total - a.total);
+
+const top5Days = sortedDays.slice(0, 5);
+const bottom5Days = sortedDays.slice(-5).reverse();
+
+// ===== SEASONALITY =====
+// Average daily sales by month (2026)
+const seasonalityData = [...new Set(dailySales.map(d => d.date.slice(0, 7)))].sort().map(month => {
+  const monthDays = dailySales.filter(d => d.date.startsWith(month));
+  const totalByDate: Record<string, number> = {};
+  monthDays.forEach(d => {
+    totalByDate[d.date] = (totalByDate[d.date] || 0) + d.total;
+  });
+  const uniqueDays = Object.keys(totalByDate).length;
+  const totalSales = Object.values(totalByDate).reduce((sum, v) => sum + v, 0);
+  const avgDaily = uniqueDays > 0 ? totalSales / uniqueDays : 0;
+  
+  return { month, totalSales, days: uniqueDays, avgDaily };
+});
+---
+
+<Layout title="Trends & Analysis">
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-landrover-keswick text-white flex-shrink-0 hidden lg:flex lg:flex-col">
+      <div class="p-6">
+        <h1 class="font-serif text-2xl font-semibold tracking-wide">Meraki</h1>
+        <p class="text-landrover-limestone/60 text-xs mt-1">Financial Control</p>
+      </div>
+      
+      <nav class="mt-4 flex-1">
+        <a href="/mensual" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          <span class="text-sm font-medium">Dashboard</span>
+        </a>
+        
+        <a href="/reportes" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span class="text-sm">Reports</span>
+        </a>
+        
+        <a href="/informes" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+          </svg>
+          <span class="text-sm">PDF Reports</span>
+        </a>
+        
+        <a href="/facturas" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span class="text-sm">Facturas</span>
+        </a>
+        
+        <a href="/tendencias" class="flex items-center gap-3 px-6 py-3 bg-white/10 text-white border-l-4 border-landrover-sand">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
+          <span class="text-sm">Trends</span>
+        </a>
+        
+        <a href="/obligaciones" class="flex items-center gap-3 px-6 py-3 text-landrover-limestone/80 hover:bg-white/5 hover:text-white transition-colors border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span class="text-sm">Obligaciones</span>
+        </a>
+      </nav>
+      
+      <!-- User & Logout -->
+      <div class="p-6 border-t border-white/10">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-landrover-sand rounded-full flex items-center justify-center text-landrover-keswick font-semibold">
+              AP
+            </div>
+            <div>
+              <p class="text-sm font-medium">Angelina</p>
+              <p class="text-xs text-landrover-limestone/60">Admin</p>
+            </div>
+          </div>
+          <a href="/logout" class="text-landrover-limestone/60 hover:text-white transition-colors" title="Log out">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-auto">
+      <!-- Mobile Header -->
+      <header class="lg:hidden bg-landrover-keswick text-white p-4 flex items-center justify-between">
+        <h1 class="font-serif text-xl font-semibold">Meraki</h1>
+        <a href="/logout" class="text-landrover-limestone/80">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+        </a>
+      </header>
+      
+      <!-- Header -->
+      <header class="bg-white border-b border-landrover-arles/30 sticky top-0 z-40">
+        <div class="px-4 lg:px-8 py-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-semibold text-landrover-santorini">Trends & Analysis</h2>
+            <p class="text-sm text-landrover-marine/60">Year-over-year comparisons and growth patterns</p>
+          </div>
+          
+          <!-- Currency Toggle -->
+          <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-landrover-marine/60 hidden sm:inline">Currency:</span>
+              <div class="flex bg-landrover-limestone/50 rounded overflow-hidden">
+                <a 
+                  href="?currency=CRC" 
+                  class={`px-3 py-2 text-sm font-medium transition-colors ${currency === 'CRC' ? 'bg-landrover-keswick text-white' : 'text-landrover-marine hover:bg-landrover-limestone'}`}
+                >
+                  ₡
+                </a>
+                <a 
+                  href="?currency=USD" 
+                  class={`px-3 py-2 text-sm font-medium transition-colors ${currency === 'USD' ? 'bg-landrover-keswick text-white' : 'text-landrover-marine hover:bg-landrover-limestone'}`}
+                >
+                  $
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <div class="p-4 lg:p-8 space-y-6">
+        
+        <!-- YTD Summary -->
+        <div class="bg-gradient-to-r from-landrover-keswick to-landrover-coniston rounded-xl p-6 text-white">
+          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div>
+              <h3 class="text-sm font-medium text-landrover-limestone/80">Year-over-Year Growth (Same Period)</h3>
+              <div class="flex items-baseline gap-3 mt-1">
+                <span class="text-4xl font-bold">{ytdGrowth >= 0 ? '+' : ''}{ytdGrowth.toFixed(1)}%</span>
+                <span class="text-landrover-limestone/60 text-sm">vs 2025</span>
+              </div>
+            </div>
+            <div class="flex gap-8">
+              <div>
+                <p class="text-sm text-landrover-limestone/60">2025 YTD</p>
+                <p class="text-xl font-semibold">{fmt(ytd2025)}</p>
+              </div>
+              <div>
+                <p class="text-sm text-landrover-limestone/60">2026 YTD</p>
+                <p class="text-xl font-semibold">{fmt(ytd2026)}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- YoY Chart -->
+        <div class="bg-white rounded-xl border border-landrover-arles/30 p-6">
+          <h3 class="text-lg font-semibold text-landrover-santorini mb-4">Monthly Sales: 2025 vs 2026</h3>
+          <div class="h-80">
+            <canvas id="yoyChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Restaurant Growth Cards -->
+        <div>
+          <h3 class="text-lg font-semibold text-landrover-santorini mb-4">Restaurant Performance (Q1 YoY)</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {restaurantGrowth.map(r => (
+              <div class="bg-white rounded-xl border border-landrover-arles/30 p-5 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full" style={`background-color: ${r.color}`}></div>
+                <div class="flex items-start justify-between">
+                  <div class="flex items-center gap-3">
+                    <img src={r.logo} alt={r.name} class="w-10 h-10 object-contain" />
+                    <div>
+                      <h4 class="font-semibold text-landrover-santorini">{r.name}</h4>
+                      <p class="text-sm text-landrover-marine/60">Q1 Growth</p>
+                    </div>
+                  </div>
+                  <div class={`px-3 py-1 rounded-full text-sm font-bold ${r.growth >= 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                    {r.growth >= 0 ? '+' : ''}{r.growth.toFixed(1)}%
+                  </div>
+                </div>
+                <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p class="text-landrover-marine/60">Q1 2025</p>
+                    <p class="font-semibold text-landrover-santorini">{fmt(r.q1_2025)}</p>
+                  </div>
+                  <div>
+                    <p class="text-landrover-marine/60">Q1 2026</p>
+                    <p class="font-semibold text-landrover-santorini">{fmt(r.q1_2026)}</p>
+                  </div>
+                </div>
+                <div class="mt-3 pt-3 border-t border-landrover-arles/20">
+                  <p class="text-xs text-landrover-marine/60">2026 YTD Total</p>
+                  <p class="text-lg font-bold" style={`color: ${r.color}`}>{fmt(r.ytd)}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Day of Week Performance -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Best/Worst Days -->
+          <div class="bg-white rounded-xl border border-landrover-arles/30 p-6">
+            <h3 class="text-lg font-semibold text-landrover-santorini mb-4">Day of Week Performance</h3>
+            <div class="space-y-3">
+              {dayPerformance.sort((a, b) => b.avgDaily - a.avgDaily).map((d, i) => {
+                const maxAvg = Math.max(...dayPerformance.map(p => p.avgDaily));
+                const width = (d.avgDaily / maxAvg * 100).toFixed(0);
+                const isTop = i === 0;
+                const isBottom = i === dayPerformance.length - 1;
+                
+                return (
+                  <div class="flex items-center gap-3">
+                    <span class="w-20 text-sm text-landrover-marine/80">{d.day.slice(0, 3)}</span>
+                    <div class="flex-1 bg-landrover-limestone/30 rounded-full h-6 overflow-hidden">
+                      <div 
+                        class={`h-full rounded-full flex items-center justify-end pr-2 ${isTop ? 'bg-landrover-keswick' : isBottom ? 'bg-landrover-terracotta/60' : 'bg-landrover-sand'}`}
+                        style={`width: ${width}%`}
+                      >
+                        <span class="text-xs font-medium text-white">{fmt(d.avgDaily)}</span>
+                      </div>
+                    </div>
+                    <span class="text-xs text-landrover-marine/50 w-16 text-right">{d.count} days</span>
+                  </div>
+                );
+              })}
+            </div>
+            {bestDay && worstDay && (
+              <div class="mt-4 pt-4 border-t border-landrover-arles/20 flex justify-between text-sm">
+                <div>
+                  <span class="text-landrover-marine/60">Best:</span>
+                  <span class="ml-1 font-semibold text-landrover-keswick">{bestDay.day}s</span>
+                </div>
+                <div>
+                  <span class="text-landrover-marine/60">Slowest:</span>
+                  <span class="ml-1 font-semibold text-landrover-terracotta">{worstDay.day}s</span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <!-- Top/Bottom Days -->
+          <div class="bg-white rounded-xl border border-landrover-arles/30 p-6">
+            <h3 class="text-lg font-semibold text-landrover-santorini mb-4">Best & Worst Days</h3>
+            <div class="grid grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-sm font-medium text-landrover-keswick mb-2 flex items-center gap-2">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" />
+                  </svg>
+                  Top 5 Days
+                </h4>
+                <div class="space-y-2">
+                  {top5Days.map(d => (
+                    <div class="flex justify-between text-sm">
+                      <span class="text-landrover-marine/70">{new Date(d.date + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+                      <span class="font-semibold text-landrover-keswick">{fmt(d.total)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <h4 class="text-sm font-medium text-landrover-terracotta mb-2 flex items-center gap-2">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M12 13a1 1 0 100 2h5a1 1 0 001-1V9a1 1 0 10-2 0v2.586l-4.293-4.293a1 1 0 00-1.414 0L8 9.586 3.707 5.293a1 1 0 00-1.414 1.414l5 5a1 1 0 001.414 0L11 9.414 14.586 13H12z" />
+                  </svg>
+                  Bottom 5 Days
+                </h4>
+                <div class="space-y-2">
+                  {bottom5Days.map(d => (
+                    <div class="flex justify-between text-sm">
+                      <span class="text-landrover-marine/70">{new Date(d.date + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+                      <span class="font-semibold text-landrover-terracotta">{fmt(d.total)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Margin Trends -->
+        {marginTrends.length > 0 && (
+          <div class="bg-white rounded-xl border border-landrover-arles/30 p-6">
+            <h3 class="text-lg font-semibold text-landrover-santorini mb-4">Margin Trends (2026)</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-landrover-arles/20">
+                    <th class="text-left py-3 px-2 text-landrover-marine/60 font-medium">Month</th>
+                    <th class="text-right py-3 px-2 text-landrover-marine/60 font-medium">Sales</th>
+                    <th class="text-right py-3 px-2 text-landrover-marine/60 font-medium">COGS</th>
+                    <th class="text-right py-3 px-2 text-landrover-marine/60 font-medium">Labor</th>
+                    <th class="text-right py-3 px-2 text-landrover-marine/60 font-medium">Gross Margin</th>
+                    <th class="text-right py-3 px-2 text-landrover-marine/60 font-medium">Net Margin</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {marginTrends.map(m => (
+                    <tr class="border-b border-landrover-arles/10 hover:bg-landrover-limestone/20">
+                      <td class="py-3 px-2 font-medium text-landrover-santorini">{formatMonth(m.month)}</td>
+                      <td class="py-3 px-2 text-right">{fmt(m.sales)}</td>
+                      <td class="py-3 px-2 text-right text-landrover-terracotta">{fmt(m.gastos)}</td>
+                      <td class="py-3 px-2 text-right text-landrover-sand">{fmt(m.mdo)}</td>
+                      <td class="py-3 px-2 text-right">
+                        <span class={`px-2 py-0.5 rounded text-xs font-medium ${m.grossMargin >= 60 ? 'bg-green-100 text-green-700' : m.grossMargin >= 50 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
+                          {m.grossMargin.toFixed(1)}%
+                        </span>
+                      </td>
+                      <td class="py-3 px-2 text-right">
+                        <span class={`px-2 py-0.5 rounded text-xs font-medium ${m.netMargin >= 40 ? 'bg-green-100 text-green-700' : m.netMargin >= 30 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
+                          {m.netMargin.toFixed(1)}%
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        <!-- Monthly Avg Daily Sales -->
+        {seasonalityData.length > 0 && (
+          <div class="bg-white rounded-xl border border-landrover-arles/30 p-6">
+            <h3 class="text-lg font-semibold text-landrover-santorini mb-4">Average Daily Sales by Month</h3>
+            <div class="h-64">
+              <canvas id="seasonalityChart"></canvas>
+            </div>
+          </div>
+        )}
+
+      </div>
+    </main>
+  </div>
+
+  <script define:vars={{ yoyChartData, seasonalityData, currency, USD_RATE }}>
+    // Load Chart.js from CDN
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+    script.onload = () => {
+      // YoY Chart
+      const yoyCtx = document.getElementById('yoyChart');
+      if (yoyCtx) {
+        const convert = (val) => currency === 'USD' ? val / USD_RATE : val;
+        const prefix = currency === 'USD' ? '$' : '₡';
+        
+        new Chart(yoyCtx, {
+          type: 'bar',
+          data: {
+            labels: yoyChartData.labels,
+            datasets: [
+              {
+                label: '2025',
+                data: yoyChartData.data2025.map(convert),
+                backgroundColor: 'rgba(164, 93, 63, 0.6)',
+                borderColor: '#A65D3F',
+                borderWidth: 1
+              },
+              {
+                label: '2026',
+                data: yoyChartData.data2026.map(convert),
+                backgroundColor: 'rgba(61, 79, 61, 0.8)',
+                borderColor: '#3D4F3D',
+                borderWidth: 1
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'top',
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  callback: function(value) {
+                    if (value >= 1000000) return prefix + (value / 1000000).toFixed(1) + 'M';
+                    if (value >= 1000) return prefix + (value / 1000).toFixed(0) + 'K';
+                    return prefix + value;
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+
+      // Seasonality Chart
+      const seasonCtx = document.getElementById('seasonalityChart');
+      if (seasonCtx && seasonalityData.length > 0) {
+        const convert = (val) => currency === 'USD' ? val / USD_RATE : val;
+        const prefix = currency === 'USD' ? '$' : '₡';
+        const monthLabels = seasonalityData.map(d => {
+          const [year, month] = d.month.split('-');
+          const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+          return months[parseInt(month) - 1];
+        });
+
+        new Chart(seasonCtx, {
+          type: 'line',
+          data: {
+            labels: monthLabels,
+            datasets: [{
+              label: 'Avg Daily Sales',
+              data: seasonalityData.map(d => convert(d.avgDaily)),
+              borderColor: '#3D4F3D',
+              backgroundColor: 'rgba(61, 79, 61, 0.1)',
+              fill: true,
+              tension: 0.3,
+              pointRadius: 6,
+              pointBackgroundColor: '#3D4F3D'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: false,
+                ticks: {
+                  callback: function(value) {
+                    if (value >= 1000000) return prefix + (value / 1000000).toFixed(1) + 'M';
+                    if (value >= 1000) return prefix + (value / 1000).toFixed(0) + 'K';
+                    return prefix + value;
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+    };
+    document.head.appendChild(script);
+  </script>
+</Layout>
