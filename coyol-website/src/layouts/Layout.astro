@@ -1,5 +1,6 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
+import Analytics from '@vercel/analytics/astro';
 
 interface Props {
   title: string;
@@ -90,10 +91,7 @@ const { title, description = "Luxury homes and jungle homesites in Nosara, Costa
     </a>
     
     <!-- Vercel Analytics -->
-    <script>
-      import { inject } from '@vercel/analytics';
-      inject();
-    </script>
+    <Analytics />
     
     <!-- Custom Event Tracking -->
     <script>
