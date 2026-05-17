@@ -1,0 +1,1591 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Dashboard | Coyol Admin">
+  <div class="admin">
+    <!-- Sidebar Icons -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="/images/logos/coyol-restaurant-logo-black.png" alt="Coyol" />
+      </div>
+      <nav class="sidebar-nav">
+        <a href="/admin-coyol" class="nav-icon active" title="Dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </a>
+        <a href="/admin-coyol/floor" class="nav-icon" title="Floor Plan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+        </a>
+        <a href="/admin-coyol/guests" class="nav-icon" title="Guests">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </a>
+        <a href="/admin-coyol/settings" class="nav-icon" title="Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="/" class="nav-icon" title="View Site">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Left Panel: Reservations -->
+    <div class="left-panel">
+      <!-- Header -->
+      <div class="panel-header">
+        <button class="btn-new" onclick="openNewReservation()">+</button>
+        <div class="res-tabs">
+          <span class="res-count" id="resCount">RESERVATIONS <strong>0</strong></span>
+          <span class="waitlist-count">WAITLIST <strong>0</strong></span>
+        </div>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search" />
+      </div>
+
+      <!-- Filters -->
+      <div class="filters-bar">
+        <div class="status-tabs">
+          <button class="status-tab" data-status="seated">Seated</button>
+          <button class="status-tab active" data-status="coming">Coming</button>
+        </div>
+        <select class="shift-select" id="shiftSelect">
+          <option value="all">✓ All Shifts</option>
+          <option value="upcoming">Upcoming</option>
+          <!-- Shifts loaded from Supabase -->
+        </select>
+        <div class="stats-mini">
+          <span>👥 <span id="totalCovers">0</span></span>
+          <span>🪑 <span id="totalRes">0</span></span>
+        </div>
+      </div>
+
+      <!-- Reservations List -->
+      <div class="res-list" id="resList">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Right Panel: Floor Plan -->
+    <div class="right-panel">
+      <!-- Top Bar -->
+      <div class="topbar">
+        <div class="date-nav">
+          <button id="prevDay">←</button>
+          <span id="currentDate">Mon, 4 May</span>
+          <button id="nextDay">→</button>
+        </div>
+        <div class="zone-tabs">
+          <button class="zone-tab" data-zone="indoor">INDOOR</button>
+          <button class="zone-tab active" data-zone="garden">GARDEN</button>
+          <button class="zone-tab" data-zone="patio">PATIO</button>
+        </div>
+        <div class="time-filter-dropdown">
+          <button class="time-btn" id="timeBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span id="currentTimeLabel">Current time</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="time-dropdown" id="timeDropdown">
+            <div class="time-section">
+              <div class="time-section-label">LUNCH</div>
+              <button class="time-option" data-time="12:00">12:00 PM</button>
+              <button class="time-option" data-time="12:15">12:15 PM</button>
+              <button class="time-option" data-time="12:30">12:30 PM</button>
+              <button class="time-option" data-time="12:45">12:45 PM</button>
+              <button class="time-option" data-time="13:00">1:00 PM</button>
+              <button class="time-option" data-time="13:15">1:15 PM</button>
+              <button class="time-option" data-time="13:30">1:30 PM</button>
+              <button class="time-option" data-time="13:45">1:45 PM</button>
+              <button class="time-option" data-time="14:00">2:00 PM</button>
+              <button class="time-option" data-time="14:15">2:15 PM</button>
+              <button class="time-option" data-time="14:30">2:30 PM</button>
+              <button class="time-option out-of-shift">OUT OF SHIFT</button>
+            </div>
+            <div class="time-section">
+              <div class="time-section-label">DINNER 1</div>
+              <button class="time-option" data-time="16:45">4:45 PM</button>
+              <button class="time-option" data-time="17:00">5:00 PM</button>
+              <button class="time-option" data-time="17:15">5:15 PM</button>
+              <button class="time-option" data-time="17:30">5:30 PM</button>
+              <button class="time-option" data-time="17:45">5:45 PM</button>
+              <button class="time-option" data-time="18:00">6:00 PM</button>
+              <button class="time-option" data-time="18:15">6:15 PM</button>
+              <button class="time-option out-of-shift">OUT OF SHIFT</button>
+            </div>
+            <div class="time-section">
+              <div class="time-section-label">DINNER 2</div>
+              <button class="time-option" data-time="18:30">6:30 PM</button>
+              <button class="time-option" data-time="18:45">6:45 PM</button>
+              <button class="time-option" data-time="19:00">7:00 PM</button>
+              <button class="time-option" data-time="19:15">7:15 PM</button>
+              <button class="time-option" data-time="19:30">7:30 PM</button>
+              <button class="time-option" data-time="19:45">7:45 PM</button>
+              <button class="time-option" data-time="20:00">8:00 PM</button>
+              <button class="time-option" data-time="20:15">8:15 PM</button>
+              <button class="time-option" data-time="20:30">8:30 PM</button>
+              <button class="time-option" data-time="20:45">8:45 PM</button>
+              <button class="time-option" data-time="21:00">9:00 PM</button>
+              <button class="time-option" data-time="21:30">9:30 PM</button>
+            </div>
+            <div class="time-section-footer">
+              <button class="time-option current" id="currentTimeBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><circle cx="12" cy="12" r="5"/></svg>
+                Current time
+              </button>
+            </div>
+          </div>
+        </div>
+        <a href="/admin-coyol/floor" class="config-btn">Floor configuration</a>
+      </div>
+
+      <!-- Floor Plan -->
+      <div class="floor-area" id="floorArea">
+        <div class="floor-grid" id="floorGrid"></div>
+      </div>
+    </div>
+
+    <!-- New Reservation Modal -->
+    <div class="modal" id="newResModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>New Reservation</h2>
+          <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" id="newDate" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>Time</label>
+              <select id="newTime" class="form-input">
+                <option value="08:00">8:00 AM</option>
+                <option value="08:30">8:30 AM</option>
+                <option value="09:00">9:00 AM</option>
+                <option value="09:30">9:30 AM</option>
+                <option value="10:00">10:00 AM</option>
+                <option value="10:30">10:30 AM</option>
+                <option value="12:00">12:00 PM</option>
+                <option value="12:30">12:30 PM</option>
+                <option value="13:00">1:00 PM</option>
+                <option value="17:00">5:00 PM</option>
+                <option value="17:30">5:30 PM</option>
+                <option value="18:00">6:00 PM</option>
+                <option value="18:30" selected>6:30 PM</option>
+                <option value="19:00">7:00 PM</option>
+                <option value="19:30">7:30 PM</option>
+                <option value="20:00">8:00 PM</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Guests</label>
+              <input type="number" id="newGuests" class="form-input" value="2" min="1" max="20" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group flex-2">
+              <label>Guest Name *</label>
+              <input type="text" id="newName" class="form-input" placeholder="Name" />
+            </div>
+            <div class="form-group">
+              <label>Table</label>
+              <select id="newTable" class="form-input">
+                <option value="">Auto-assign</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Phone</label>
+              <input type="tel" id="newPhone" class="form-input" placeholder="+506" />
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="newEmail" class="form-input" placeholder="Email" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Notes</label>
+            <textarea id="newNotes" class="form-input" rows="2" placeholder="Birthday, anniversary, allergies..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn-primary" onclick="saveNewReservation()">Save</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    /* Land Rover Heritage Palette */
+    :root {
+      --keswick: #3D4F3D;
+      --coniston: #4A5D4A;
+      --limestone: #D4C9B5;
+      --sand: #C4A67C;
+      --terracotta: #A65D3F;
+      --santorini: #1A1F16;
+      --cream: #F5F3EF;
+      --parchment: #EAE5DA;
+    }
+
+    .admin {
+      display: grid;
+      grid-template-columns: 60px 380px 1fr;
+      min-height: 100vh;
+      background: var(--parchment);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: var(--santorini);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .sidebar-logo {
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--keswick);
+      margin-bottom: 1rem;
+    }
+
+    .sidebar-logo img {
+      height: 2.5rem; width: 2.5rem;
+      filter: brightness(0) invert(1);
+      opacity: 0.9;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .nav-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--limestone);
+      border-radius: 8px;
+      transition: all 0.15s;
+    }
+
+    .nav-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .nav-icon:hover {
+      color: var(--cream);
+      background: var(--keswick);
+    }
+
+    .nav-icon.active {
+      color: var(--cream);
+      background: var(--terracotta);
+    }
+
+    .sidebar-footer {
+      border-top: 1px solid var(--keswick);
+      padding-top: 1rem;
+    }
+
+    /* Left Panel */
+    .left-panel {
+      background: var(--cream);
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--limestone);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--limestone);
+      background: var(--cream);
+    }
+
+    .btn-new {
+      width: 36px;
+      height: 36px;
+      background: var(--terracotta);
+      color: var(--cream);
+      border: none;
+      border-radius: 8px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-new:hover { background: #8B4D33; }
+
+    .res-tabs {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .res-count, .waitlist-count {
+      font-size: 0.6875rem;
+      color: var(--keswick);
+      letter-spacing: 0.05em;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .res-count strong, .waitlist-count strong {
+      background: var(--keswick);
+      color: var(--cream);
+      padding: 0.125rem 0.375rem;
+      border-radius: 4px;
+      margin-left: 0.25rem;
+    }
+
+    .waitlist-count strong {
+      background: var(--limestone);
+      color: var(--santorini);
+    }
+
+    .search-input {
+      margin-left: auto;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--limestone);
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      width: 100px;
+      background: var(--parchment);
+    }
+
+    .filters-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--limestone);
+      background: var(--parchment);
+    }
+
+    .status-tabs {
+      display: flex;
+      background: var(--limestone);
+      border-radius: 6px;
+      padding: 2px;
+    }
+
+    .status-tab {
+      padding: 0.375rem 0.75rem;
+      border: none;
+      background: none;
+      font-size: 0.75rem;
+      color: var(--keswick);
+      cursor: pointer;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .status-tab.active {
+      background: var(--cream);
+      color: var(--santorini);
+      font-weight: 500;
+    }
+
+    .shift-select {
+      padding: 0.375rem 0.5rem;
+      border: 1px solid var(--limestone);
+      border-radius: 6px;
+      font-size: 0.75rem;
+      background: var(--cream);
+      color: var(--santorini);
+    }
+
+    .stats-mini {
+      margin-left: auto;
+      display: flex;
+      gap: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--keswick);
+    }
+
+    .stats-mini span {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    /* Reservations List */
+    .res-list {
+      flex: 1;
+      overflow-y: auto;
+      background: var(--cream);
+    }
+
+    .shift-group {
+      border-bottom: 1px solid var(--limestone);
+    }
+
+    .shift-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0.75rem;
+      background: var(--parchment);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--santorini);
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .shift-header .stats {
+      display: flex;
+      gap: 0.75rem;
+      font-weight: normal;
+      color: var(--keswick);
+    }
+
+    /* Reservation Rows - Compact EatApp Style */
+    :global(.res-row) {
+      display: grid;
+      grid-template-columns: 65px 1fr 40px;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--parchment);
+      cursor: pointer;
+      align-items: start;
+      transition: background 0.1s;
+    }
+
+    :global(.res-row:hover) {
+      background: var(--parchment);
+    }
+
+    :global(.res-row.seated) {
+      background: rgba(61, 79, 61, 0.08);
+    }
+
+    :global(.res-time) {
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 0.8125rem;
+      color: var(--santorini);
+      padding-top: 2px;
+    }
+
+    :global(.res-main) {
+      min-width: 0;
+    }
+
+    :global(.res-top-line) {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    :global(.res-name) {
+      font-weight: 600;
+      font-size: 0.9375rem;
+      color: var(--santorini);
+      font-family: 'Inter', sans-serif;
+    }
+
+    :global(.res-meta-inline) {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+    }
+
+    :global(.meta-item) {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.8125rem;
+      color: var(--keswick);
+      font-family: 'Inter', sans-serif;
+    }
+
+    :global(.meta-item svg) {
+      opacity: 0.7;
+    }
+
+    :global(.res-note) {
+      font-size: 0.75rem;
+      color: var(--santorini);
+      background: #fef3c7;
+      padding: 0.375rem 0.5rem;
+      border-radius: 4px;
+      margin-top: 0.375rem;
+      border-left: 3px solid #f59e0b;
+    }
+
+    :global(.res-actions-mini) {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    :global(.action-icon) {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--limestone);
+      background: var(--cream);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--keswick);
+      transition: all 0.1s;
+    }
+
+    :global(.action-icon:hover) {
+      background: var(--parchment);
+      border-color: var(--sand);
+    }
+
+    /* Right Panel */
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      background: var(--limestone);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.5rem 1rem;
+      background: var(--cream);
+      border-bottom: 1px solid var(--limestone);
+    }
+
+    .date-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .date-nav button {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--limestone);
+      background: var(--cream);
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--santorini);
+    }
+
+    .date-nav button:hover { background: var(--parchment); }
+
+    .date-nav span {
+      font-size: 0.875rem;
+      font-weight: 500;
+      min-width: 100px;
+      text-align: center;
+      color: var(--santorini);
+      font-family: 'Playfair Display', serif;
+    }
+
+    .zone-tabs {
+      display: flex;
+      gap: 0.25rem;
+      margin-left: 1rem;
+    }
+
+    .zone-tab {
+      padding: 0.375rem 0.75rem;
+      border: none;
+      background: none;
+      font-size: 0.6875rem;
+      letter-spacing: 0.05em;
+      color: var(--keswick);
+      cursor: pointer;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .zone-tab:hover { background: var(--parchment); }
+    .zone-tab.active { background: var(--keswick); color: var(--cream); }
+
+    /* Time Filter Dropdown */
+    .time-filter-dropdown {
+      margin-left: auto;
+      position: relative;
+    }
+
+    .time-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--limestone);
+      background: var(--cream);
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      color: var(--santorini);
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.15s;
+    }
+
+    .time-btn:hover {
+      background: var(--parchment);
+      border-color: var(--sand);
+    }
+
+    .time-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 0.5rem;
+      background: white;
+      border: 1px solid var(--limestone);
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      z-index: 100;
+      min-width: 180px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .time-dropdown.open {
+      display: block;
+    }
+
+    .time-section {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--limestone);
+    }
+
+    .time-section:last-of-type {
+      border-bottom: none;
+    }
+
+    .time-section-label {
+      padding: 0.375rem 1rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      color: var(--keswick);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .time-option {
+      display: block;
+      width: 100%;
+      padding: 0.5rem 1rem;
+      border: none;
+      background: none;
+      text-align: left;
+      font-size: 0.8125rem;
+      color: var(--santorini);
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.1s;
+    }
+
+    .time-option:hover {
+      background: var(--parchment);
+    }
+
+    .time-option.active {
+      background: var(--keswick);
+      color: white;
+    }
+
+    .time-option.out-of-shift {
+      color: var(--limestone);
+      font-style: italic;
+      cursor: default;
+      background: #f5f5f5;
+    }
+
+    .time-option.current {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--keswick);
+      font-weight: 500;
+    }
+
+    .time-section-footer {
+      padding: 0.5rem;
+      border-top: 1px solid var(--limestone);
+      background: var(--parchment);
+    }
+
+    .time-section-footer .time-option {
+      border-radius: 4px;
+    }
+
+    .time-section-footer .time-option:hover {
+      background: var(--limestone);
+    }
+
+    .config-btn {
+      font-size: 0.75rem;
+      color: var(--terracotta);
+      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .config-btn:hover { color: #8B4D33; }
+
+    /* Floor Area */
+    .floor-area {
+      flex: 1;
+      padding: 1rem;
+      overflow: auto;
+    }
+
+    .floor-grid {
+      background: var(--cream);
+      border-radius: 8px;
+      min-height: 500px;
+      position: relative;
+      border: 1px solid var(--limestone);
+    }
+
+    /* Tables on floor - 3D realistic style */
+    :global(.floor-grid .table) {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.625rem;
+      text-align: center;
+    }
+
+    :global(.floor-grid .table:hover) {
+      transform: scale(1.05);
+      z-index: 10;
+      cursor: grab;
+    }
+
+    :global(.floor-grid .table:active) {
+      cursor: grabbing;
+    }
+
+    :global(.floor-grid .table-label) {
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      z-index: 2;
+    }
+
+    :global(.floor-grid .table-time) {
+      font-size: 0.5625rem;
+      color: var(--cream);
+      background: var(--terracotta);
+      padding: 2px 6px;
+      border-radius: 3px;
+      margin-top: 2px;
+      font-weight: 500;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      z-index: 2;
+    }
+
+    /* === SQUARE TABLE (wooden top with legs shadow) === */
+    :global(.floor-grid .table.square) {
+      width: 60px;
+      height: 60px;
+      border-radius: 6px;
+      background: linear-gradient(145deg, #d4a574 0%, #b8956a 50%, #a68558 100%);
+      border: 3px solid #8b6914;
+      box-shadow: 
+        0 4px 8px rgba(0,0,0,0.3),
+        inset 0 2px 4px rgba(255,255,255,0.2),
+        inset 0 -2px 4px rgba(0,0,0,0.1);
+    }
+    :global(.floor-grid .table.square::before) {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 8px;
+      background: rgba(0,0,0,0.15);
+      border-radius: 50%;
+      filter: blur(3px);
+    }
+    :global(.floor-grid .table.square .table-label) { color: #3d2914; }
+
+    /* === ROUND TABLE (elegant with rim) === */
+    :global(.floor-grid .table.round) {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #e8dcc8 0%, #d4c9b5 40%, #c4b8a0 100%);
+      border: 4px solid #a69880;
+      box-shadow: 
+        0 5px 10px rgba(0,0,0,0.25),
+        inset 0 3px 6px rgba(255,255,255,0.4),
+        inset 0 -3px 6px rgba(0,0,0,0.1);
+    }
+    :global(.floor-grid .table.round::before) {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 10px;
+      background: rgba(0,0,0,0.12);
+      border-radius: 50%;
+      filter: blur(4px);
+    }
+    :global(.floor-grid .table.round .table-label) { color: #4a4035; }
+
+    :global(.floor-grid .table.round-lg) {
+      width: 75px;
+      height: 75px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #e8dcc8 0%, #d4c9b5 40%, #c4b8a0 100%);
+      border: 4px solid #a69880;
+      box-shadow: 
+        0 6px 12px rgba(0,0,0,0.25),
+        inset 0 4px 8px rgba(255,255,255,0.4),
+        inset 0 -4px 8px rgba(0,0,0,0.1);
+    }
+    :global(.floor-grid .table.round-lg::before) {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 55px;
+      height: 12px;
+      background: rgba(0,0,0,0.12);
+      border-radius: 50%;
+      filter: blur(5px);
+    }
+    :global(.floor-grid .table.round-lg .table-label) { color: #4a4035; font-size: 0.75rem; }
+
+    :global(.floor-grid .table.round-xl) {
+      width: 95px;
+      height: 95px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #e8dcc8 0%, #d4c9b5 40%, #c4b8a0 100%);
+      border: 5px solid #a69880;
+      box-shadow: 
+        0 8px 16px rgba(0,0,0,0.25),
+        inset 0 5px 10px rgba(255,255,255,0.4),
+        inset 0 -5px 10px rgba(0,0,0,0.1);
+    }
+    :global(.floor-grid .table.round-xl::before) {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70px;
+      height: 14px;
+      background: rgba(0,0,0,0.12);
+      border-radius: 50%;
+      filter: blur(6px);
+    }
+    :global(.floor-grid .table.round-xl .table-label) { color: #4a4035; font-size: 0.875rem; }
+
+    /* === SOFA (cushioned with tufting) === */
+    :global(.floor-grid .table.sofa) {
+      width: 85px;
+      height: 50px;
+      border-radius: 25px;
+      background: linear-gradient(180deg, #6b5b4f 0%, #5a4a3f 50%, #4a3a2f 100%);
+      border: 3px solid #3d2d22;
+      box-shadow: 
+        0 6px 12px rgba(0,0,0,0.35),
+        inset 0 3px 6px rgba(255,255,255,0.15),
+        inset 0 -4px 8px rgba(0,0,0,0.2);
+    }
+    /* Cushion details */
+    :global(.floor-grid .table.sofa::before) {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 10px;
+      right: 10px;
+      height: 20px;
+      background: linear-gradient(180deg, #7d6d5f 0%, #6b5b4f 100%);
+      border-radius: 10px;
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.2);
+    }
+    :global(.floor-grid .table.sofa::after) {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70px;
+      height: 10px;
+      background: rgba(0,0,0,0.15);
+      border-radius: 50%;
+      filter: blur(4px);
+    }
+    :global(.floor-grid .table.sofa .table-label) { color: #e8dcc8; font-size: 0.5625rem; z-index: 3; margin-top: 12px; }
+
+    /* === DIAMOND TABLE (rotated elegant) === */
+    :global(.floor-grid .table.diamond) {
+      width: 55px;
+      height: 55px;
+      border-radius: 6px;
+      transform: rotate(45deg);
+      background: linear-gradient(145deg, #c4a67c 0%, #b8956a 50%, #a68558 100%);
+      border: 3px solid #8b7040;
+      box-shadow: 
+        0 5px 10px rgba(0,0,0,0.3),
+        inset 0 2px 4px rgba(255,255,255,0.25);
+    }
+    :global(.floor-grid .table.diamond .table-label),
+    :global(.floor-grid .table.diamond .table-time) { transform: rotate(-45deg); }
+    :global(.floor-grid .table.diamond .table-label) { color: #3d2914; }
+
+    /* === COMMUNAL/LONG TABLE === */
+    :global(.floor-grid .table.communal) {
+      width: 170px;
+      height: 55px;
+      border-radius: 8px;
+      background: linear-gradient(145deg, #d4a574 0%, #b8956a 50%, #a68558 100%);
+      border: 4px solid #8b6914;
+      box-shadow: 
+        0 5px 10px rgba(0,0,0,0.3),
+        inset 0 3px 6px rgba(255,255,255,0.2),
+        inset 0 -3px 6px rgba(0,0,0,0.1);
+    }
+    :global(.floor-grid .table.communal .table-label) { color: #3d2914; font-size: 0.75rem; }
+
+    /* === TACOY/RECTANGULAR TABLE === */
+    :global(.floor-grid .table.square-xl) {
+      width: 55px;
+      height: 90px;
+      border-radius: 6px;
+      background: linear-gradient(145deg, #d4a574 0%, #b8956a 50%, #a68558 100%);
+      border: 3px solid #8b6914;
+      box-shadow: 
+        0 5px 10px rgba(0,0,0,0.3),
+        inset 0 2px 4px rgba(255,255,255,0.2);
+    }
+    :global(.floor-grid .table.square-xl .table-label) { color: #3d2914; }
+
+    /* === BAR (dark wood counter) === */
+    :global(.floor-grid .table.bar) {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      background: linear-gradient(145deg, #4a3a2f 0%, #3d2d22 50%, #2d1d14 100%);
+      border: 4px solid #1a1008;
+      box-shadow: 
+        0 6px 12px rgba(0,0,0,0.4),
+        inset 0 3px 6px rgba(255,255,255,0.1),
+        inset 0 -4px 8px rgba(0,0,0,0.2);
+    }
+    /* Bar top shine */
+    :global(.floor-grid .table.bar::before) {
+      content: '';
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      right: 6px;
+      bottom: 6px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+      border-radius: 4px;
+    }
+    :global(.floor-grid .table.bar .table-label) { color: #c4a67c; font-size: 0.75rem; font-weight: 700; }
+
+    /* Rectangular / Long Wood Table */
+    :global(.floor-grid .table.rect) {
+      width: 140px; height: 55px; border-radius: 6px;
+      background: linear-gradient(145deg, #d4a574 0%, #b8956a 50%, #a68558 100%);
+      border: 3px solid #8b6914;
+      box-shadow: 
+        0 5px 10px rgba(0,0,0,0.3),
+        inset 0 3px 6px rgba(255,255,255,0.2),
+        inset 0 -3px 6px rgba(0,0,0,0.1);
+    }
+    :global(.floor-grid .table.rect .table-label) { color: #3d2914; font-size: 0.75rem; }
+
+    /* === STATUS OVERLAYS === */
+    :global(.floor-grid .table[data-status="confirmed"]) {
+      outline: 3px solid var(--terracotta);
+      outline-offset: 2px;
+    }
+    :global(.floor-grid .table[data-status="seated"]) {
+      outline: 3px solid var(--keswick);
+      outline-offset: 2px;
+    }
+    :global(.floor-grid .table[data-status="seated"]::after) {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(61, 79, 61, 0.3);
+      border-radius: inherit;
+      z-index: 1;
+    }
+
+    /* Decorations - Trees & Plants */
+    :global(.floor-grid .table.tree) {
+      width: 65px; height: 65px; border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #5a8f5a 0%, #3d6b3d 40%, #2d4f2d 70%, #1f3d1f 100%);
+      border: 3px solid #2d4f2d;
+      box-shadow: 
+        0 6px 12px rgba(0,0,0,0.3),
+        inset 0 -8px 16px rgba(0,0,0,0.2),
+        inset 0 4px 12px rgba(150,200,150,0.3);
+    }
+    :global(.floor-grid .table.tree .table-label) { display: none; }
+
+    :global(.floor-grid .table.palm) {
+      width: 60px; height: 70px; border-radius: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      font-size: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    :global(.floor-grid .table.palm::before) {
+      content: '🌴';
+      font-size: 3rem;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+    }
+    :global(.floor-grid .table.palm .table-label) { display: none; }
+
+    :global(.floor-grid .table.plant) {
+      width: 45px; height: 45px; border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #7cb87c 0%, #5a9f5a 50%, #3d7d3d 100%);
+      border: 3px solid #4a6b4a;
+      box-shadow: 
+        0 4px 8px rgba(0,0,0,0.25),
+        inset 0 3px 8px rgba(180,220,180,0.4);
+    }
+    :global(.floor-grid .table.plant .table-label) { display: none; }
+
+    :global(.floor-grid .table.flower) {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #f0a0a0 0%, #e07070 50%, #c05050 100%);
+      border: 3px solid #a04040;
+      box-shadow: 
+        0 4px 8px rgba(0,0,0,0.25),
+        inset 0 3px 8px rgba(255,200,200,0.5);
+    }
+    :global(.floor-grid .table.flower .table-label) { display: none; }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 31, 22, 0.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.open { display: flex; }
+
+    .modal-content {
+      background: var(--cream);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 480px;
+      border: 1px solid var(--limestone);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      border-bottom: 1px solid var(--limestone);
+      background: var(--parchment);
+    }
+
+    .modal-header h2 { font-size: 1rem; font-weight: 500; font-family: 'Playfair Display', serif; color: var(--santorini); }
+    .modal-close { background: none; border: none; font-size: 1.5rem; color: var(--keswick); cursor: pointer; }
+
+    .modal-body { padding: 1rem; }
+    .modal-footer { display: flex; gap: 0.5rem; padding: 1rem; border-top: 1px solid var(--limestone); justify-content: flex-end; }
+
+    .form-row { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; }
+    .form-group { flex: 1; }
+    .form-group.flex-2 { flex: 2; }
+    .form-group label { display: block; font-size: 0.6875rem; color: var(--keswick); margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Inter', sans-serif; }
+    .form-input { width: 100%; padding: 0.5rem; border: 1px solid var(--limestone); border-radius: 4px; font-size: 0.875rem; background: var(--cream); color: var(--santorini); }
+    .form-input:focus { outline: none; border-color: var(--keswick); }
+
+    .btn-primary { padding: 0.5rem 1rem; background: var(--terracotta); color: var(--cream); border: none; border-radius: 4px; font-size: 0.8125rem; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .btn-primary:hover { background: #8B4D33; }
+    .btn-secondary { padding: 0.5rem 1rem; background: var(--cream); color: var(--santorini); border: 1px solid var(--limestone); border-radius: 4px; font-size: 0.8125rem; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .btn-secondary:hover { background: var(--parchment); }
+  </style>
+
+  <script is:inline>
+    const STORAGE_KEY = 'coyol_reservations';
+    const LAYOUT_KEY = 'coyol_floor_layout';
+    let currentDate = new Date();
+    let currentZone = 'garden';
+    let currentStatusFilter = 'coming';
+
+    function generateId() {
+      return 'COY' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substr(2, 4).toUpperCase();
+    }
+
+    function getReservations() {
+      const data = localStorage.getItem(STORAGE_KEY);
+      return data ? JSON.parse(data) : [];
+    }
+
+    function saveReservations(reservations) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(reservations));
+    }
+
+    function getLayout() {
+      const saved = localStorage.getItem(LAYOUT_KEY);
+      if (saved) return JSON.parse(saved);
+      
+      // Default layouts
+      return {
+        indoor: [
+          { id: 'high-1', name: 'high table', type: 'square', x: 80, y: 60, minCovers: 2, maxCovers: 4 },
+          { id: 'high-2', name: 'high table', type: 'square', x: 180, y: 60, minCovers: 2, maxCovers: 4 },
+          { id: 'bar', name: 'bar', type: 'bar', x: 170, y: 160, minCovers: 1, maxCovers: 8 },
+          { id: 'sofa-1', name: 'indoor sofa', type: 'sofa', x: 320, y: 50, minCovers: 2, maxCovers: 4 },
+          { id: 'sofa-2', name: 'indoor sofa', type: 'sofa', x: 320, y: 130, minCovers: 2, maxCovers: 4 },
+          { id: 'sofa-3', name: 'indoor sofa', type: 'sofa', x: 50, y: 130, minCovers: 2, maxCovers: 4 },
+        ],
+        patio: [
+          { id: 't12', name: '12', type: 'square', x: 80, y: 60, minCovers: 2, maxCovers: 4 },
+          { id: 't11', name: '11', type: 'square', x: 160, y: 60, minCovers: 2, maxCovers: 4 },
+          { id: 't10', name: '10', type: 'square', x: 240, y: 60, minCovers: 2, maxCovers: 4 },
+          { id: 't1', name: '1', type: 'round-lg', x: 80, y: 200, minCovers: 4, maxCovers: 6 },
+          { id: 't2', name: '2', type: 'round-lg', x: 180, y: 200, minCovers: 4, maxCovers: 6 },
+          { id: 't3', name: '3', type: 'round-lg', x: 280, y: 200, minCovers: 4, maxCovers: 6 },
+        ],
+        garden: [
+          { id: 't17', name: '17', type: 'diamond', x: 130, y: 30, minCovers: 2, maxCovers: 4 },
+          { id: 't18-1', name: '18-1', type: 'square', x: 200, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 't18-2', name: '18-2', type: 'square', x: 270, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 't18-3', name: '18-3', type: 'square', x: 340, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 't18-4', name: '18-4', type: 'square', x: 410, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 't20', name: '20', type: 'diamond', x: 520, y: 50, minCovers: 2, maxCovers: 4 },
+          { id: 'sofa-21', name: 'sofa 21', type: 'sofa', x: 620, y: 60, minCovers: 2, maxCovers: 4 },
+          { id: 'sofa-16', name: 'sofa 16', type: 'diamond', x: 40, y: 90, minCovers: 2, maxCovers: 4 },
+          { id: 'sofa-15', name: 'sofa 15', type: 'diamond', x: 40, y: 190, minCovers: 2, maxCovers: 4 },
+          { id: 't26', name: '26', type: 'round-xl', x: 200, y: 200, minCovers: 6, maxCovers: 10 },
+          { id: 't25', name: '25', type: 'round-lg', x: 380, y: 240, minCovers: 4, maxCovers: 8 },
+          { id: 'sofa-14', name: 'sofa 14', type: 'diamond', x: 40, y: 290, minCovers: 2, maxCovers: 4 },
+          { id: 'sofa-13', name: 'sofa 13', type: 'sofa', x: 340, y: 380, minCovers: 2, maxCovers: 4 },
+          { id: 'sofa-23', name: 'sofa 23', type: 'sofa', x: 500, y: 380, minCovers: 2, maxCovers: 4 },
+        ]
+      };
+    }
+
+    function formatDate(date) {
+      return date.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' });
+    }
+
+    function getDateString(date) {
+      return date.toISOString().split('T')[0];
+    }
+
+    function getShiftForTime(time) {
+      const [hours] = time.split(':').map(Number);
+      if (hours >= 7 && hours < 10) return 'Breakfast';
+      if (hours >= 10 && hours < 12) return 'Brunch';
+      if (hours >= 12 && hours < 15) return 'Lunch';
+      if (hours >= 16 && hours < 19) return 'Dinner 1';
+      return 'Dinner 2';
+    }
+
+    function formatTime12(time) {
+      const [h, m] = time.split(':');
+      const hour = parseInt(h);
+      const ampm = hour >= 12 ? 'PM' : 'AM';
+      const h12 = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
+      return `${h12}:${m} ${ampm}`;
+    }
+
+    function quickSeat(id) {
+      const reservations = getReservations();
+      const idx = reservations.findIndex(r => r.id === id);
+      if (idx !== -1) {
+        reservations[idx].status = reservations[idx].status === 'seated' ? 'confirmed' : 'seated';
+        saveReservations(reservations);
+        loadReservations();
+        renderFloor();
+      }
+    }
+
+    function loadReservations() {
+      const dateStr = getDateString(currentDate);
+      const reservations = getReservations().filter(r => r.date === dateStr);
+      
+      // Filter by status
+      let filtered = reservations;
+      if (currentStatusFilter === 'seated') {
+        filtered = reservations.filter(r => r.status === 'seated');
+      } else {
+        filtered = reservations.filter(r => r.status !== 'seated');
+      }
+      
+      // Sort by time
+      filtered.sort((a, b) => a.time.localeCompare(b.time));
+      
+      // Group by shift
+      const byShift = {};
+      filtered.forEach(res => {
+        const shift = getShiftForTime(res.time);
+        if (!byShift[shift]) byShift[shift] = [];
+        byShift[shift].push(res);
+      });
+      
+      // Update counts
+      document.getElementById('resCount').innerHTML = `RESERVATIONS <strong>${reservations.length}</strong>`;
+      document.getElementById('totalCovers').textContent = reservations.reduce((sum, r) => sum + (parseInt(r.guests) || 2), 0);
+      document.getElementById('totalRes').textContent = reservations.length;
+      document.getElementById('currentDate').textContent = formatDate(currentDate);
+      
+      // Render list
+      const list = document.getElementById('resList');
+      if (filtered.length === 0) {
+        list.innerHTML = '<div style="padding: 2rem; text-align: center; color: #999;">No reservations</div>';
+        return;
+      }
+      
+      list.innerHTML = Object.entries(byShift).map(([shift, items]) => `
+        <div class="shift-group">
+          <div class="shift-header">
+            <span>${shift}</span>
+            <div class="stats">
+              <span>👥 ${items.reduce((s, r) => s + (parseInt(r.guests) || 2), 0)}</span>
+              <span>🪑 ${items.length}</span>
+            </div>
+          </div>
+          ${items.map(res => `
+            <div class="res-row ${res.status}" onclick="selectReservation('${res.id}')">
+              <div class="res-time">${formatTime12(res.time)}</div>
+              <div class="res-main">
+                <div class="res-top-line">
+                  <span class="res-name">${res.guestName}</span>
+                  <span class="res-meta-inline">
+                    <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> ${res.guests}</span>
+                    <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg> ${res.tableId || 'TBA'}</span>
+                  </span>
+                </div>
+                ${res.specialRequests ? `<div class="res-note">📄 ${res.specialRequests}</div>` : ''}
+              </div>
+              <div class="res-actions-mini">
+                <button class="action-icon" onclick="event.stopPropagation();" title="Message">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                </button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+    }
+
+    // Drag state
+    let draggedTable = null;
+    let dragOffset = { x: 0, y: 0 };
+    let isDragging = false;
+
+    function saveLayout(layouts) {
+      localStorage.setItem(LAYOUT_KEY, JSON.stringify(layouts));
+    }
+
+    function renderFloor() {
+      const layouts = getLayout();
+      const tables = layouts[currentZone] || [];
+      const dateStr = getDateString(currentDate);
+      const reservations = getReservations().filter(r => r.date === dateStr);
+      
+      const grid = document.getElementById('floorGrid');
+      grid.innerHTML = '';
+      
+      tables.forEach(table => {
+        const res = reservations.find(r => r.tableId === table.id);
+        const status = res ? res.status : 'available';
+        
+        const el = document.createElement('div');
+        el.className = `table ${table.type}`;
+        el.dataset.table = table.id;
+        el.dataset.status = status;
+        el.style.left = table.x + 'px';
+        el.style.top = table.y + 'px';
+        
+        if (table.rotation && table.type !== 'diamond') {
+          el.style.transform = `rotate(${table.rotation}deg)`;
+        } else if (table.type === 'diamond' && table.rotation) {
+          el.style.transform = `rotate(${45 + table.rotation}deg)`;
+        }
+        
+        el.innerHTML = `
+          <span class="table-label">${table.name}</span>
+          ${res ? `<span class="table-time">${res.time}</span>` : ''}
+        `;
+        
+        // Enable dragging
+        el.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          isDragging = true;
+          draggedTable = el;
+          const rect = el.getBoundingClientRect();
+          dragOffset.x = e.clientX - rect.left;
+          dragOffset.y = e.clientY - rect.top;
+          el.style.zIndex = '100';
+          el.style.cursor = 'grabbing';
+          el.style.opacity = '0.9';
+        });
+        
+        grid.appendChild(el);
+      });
+    }
+
+    // Mouse move for dragging
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging || !draggedTable) return;
+      
+      const grid = document.getElementById('floorGrid');
+      const rect = grid.getBoundingClientRect();
+      
+      let x = e.clientX - rect.left - dragOffset.x;
+      let y = e.clientY - rect.top - dragOffset.y;
+      
+      // Snap to grid (10px)
+      x = Math.round(x / 10) * 10;
+      y = Math.round(y / 10) * 10;
+      
+      // Keep in bounds
+      x = Math.max(0, Math.min(x, rect.width - 60));
+      y = Math.max(0, Math.min(y, rect.height - 60));
+      
+      draggedTable.style.left = x + 'px';
+      draggedTable.style.top = y + 'px';
+    });
+
+    // Mouse up - save position
+    document.addEventListener('mouseup', () => {
+      if (!isDragging || !draggedTable) return;
+      
+      const tableId = draggedTable.dataset.table;
+      const x = parseInt(draggedTable.style.left);
+      const y = parseInt(draggedTable.style.top);
+      
+      // Save to layout
+      const layouts = getLayout();
+      const table = layouts[currentZone].find(t => t.id === tableId);
+      if (table) {
+        table.x = x;
+        table.y = y;
+        saveLayout(layouts);
+      }
+      
+      draggedTable.style.zIndex = '';
+      draggedTable.style.cursor = 'pointer';
+      draggedTable.style.opacity = '';
+      
+      isDragging = false;
+      draggedTable = null;
+    });
+
+    function selectReservation(id) {
+      console.log('Selected reservation:', id);
+      // Could highlight on floor plan, open edit modal, etc.
+    }
+
+    // Date navigation
+    document.getElementById('prevDay').addEventListener('click', () => {
+      currentDate.setDate(currentDate.getDate() - 1);
+      loadReservations();
+      renderFloor();
+    });
+
+    document.getElementById('nextDay').addEventListener('click', () => {
+      currentDate.setDate(currentDate.getDate() + 1);
+      loadReservations();
+      renderFloor();
+    });
+
+    // Zone tabs
+    document.querySelectorAll('.zone-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.zone-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentZone = tab.dataset.zone;
+        renderFloor();
+      });
+    });
+
+    // Status tabs
+    document.querySelectorAll('.status-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.status-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentStatusFilter = tab.dataset.status;
+        loadReservations();
+      });
+    });
+
+    // Search
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      document.querySelectorAll('.res-item').forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(query) ? 'grid' : 'none';
+      });
+    });
+
+    // New reservation modal
+    function openNewReservation() {
+      document.getElementById('newDate').value = getDateString(currentDate);
+      document.getElementById('newResModal').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('newResModal').classList.remove('open');
+    }
+
+    function saveNewReservation() {
+      const name = document.getElementById('newName').value.trim();
+      if (!name) { alert('Name required'); return; }
+      
+      const reservation = {
+        id: generateId(),
+        date: document.getElementById('newDate').value,
+        time: document.getElementById('newTime').value,
+        guests: parseInt(document.getElementById('newGuests').value) || 2,
+        guestName: name,
+        guestPhone: document.getElementById('newPhone').value.trim(),
+        guestEmail: document.getElementById('newEmail').value.trim(),
+        tableId: document.getElementById('newTable').value || null,
+        specialRequests: document.getElementById('newNotes').value.trim(),
+        status: 'confirmed',
+        createdAt: new Date().toISOString()
+      };
+      
+      const reservations = getReservations();
+      reservations.push(reservation);
+      saveReservations(reservations);
+      
+      closeModal();
+      loadReservations();
+      renderFloor();
+    }
+
+    // Time dropdown
+    let selectedTime = null; // null = current time
+    const timeBtn = document.getElementById('timeBtn');
+    const timeDropdown = document.getElementById('timeDropdown');
+    const timeLabel = document.getElementById('currentTimeLabel');
+    const currentTimeBtn = document.getElementById('currentTimeBtn');
+
+    timeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      timeDropdown.classList.toggle('open');
+    });
+
+    document.addEventListener('click', () => {
+      timeDropdown.classList.remove('open');
+    });
+
+    timeDropdown.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    // Handle time selection
+    document.querySelectorAll('.time-option[data-time]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const time = btn.dataset.time;
+        selectedTime = time;
+        timeLabel.textContent = formatTime12(time);
+        timeDropdown.classList.remove('open');
+        
+        // Remove active from all, add to selected
+        document.querySelectorAll('.time-option').forEach(o => o.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // Filter/highlight based on selected time
+        highlightTimeSlot(time);
+      });
+    });
+
+    currentTimeBtn.addEventListener('click', () => {
+      selectedTime = null;
+      updateCurrentTimeDisplay();
+      timeDropdown.classList.remove('open');
+      document.querySelectorAll('.time-option').forEach(o => o.classList.remove('active'));
+    });
+
+    function updateCurrentTimeDisplay() {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+      if (selectedTime === null) {
+        timeLabel.textContent = 'Current time';
+      }
+    }
+
+    function highlightTimeSlot(time) {
+      // Could be used to scroll reservation list to that time, etc.
+      console.log('Selected time:', time);
+    }
+
+    // Update current time display every minute
+    setInterval(updateCurrentTimeDisplay, 60000);
+    updateCurrentTimeDisplay();
+
+    // Load shifts from Supabase
+    const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+
+    async function loadShifts() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/coyol_shifts?active=eq.true&order=start_time.asc`, {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          }
+        });
+        const shifts = await res.json();
+        
+        const select = document.getElementById('shiftSelect');
+        // Keep first two options (All Shifts, Upcoming)
+        const keepOptions = select.innerHTML;
+        
+        shifts.forEach(shift => {
+          const opt = document.createElement('option');
+          opt.value = shift.id;
+          opt.textContent = shift.name;
+          select.appendChild(opt);
+        });
+      } catch (err) {
+        console.error('Failed to load shifts:', err);
+      }
+    }
+
+    // Initial load
+    loadShifts();
+    loadReservations();
+    renderFloor();
+  </script>
+</Layout>
