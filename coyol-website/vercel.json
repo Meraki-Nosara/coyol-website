@@ -2,5 +2,22 @@
   "framework": "astro",
   "installCommand": "npm install",
   "buildCommand": "npm run build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/restaurant/reserve",
+      "has": [{ "type": "host", "value": "reserve.coyolrestaurant.com" }]
+    },
+    {
+      "source": "/admin",
+      "destination": "/restaurant/admin",
+      "has": [{ "type": "host", "value": "reserve.coyolrestaurant.com" }]
+    },
+    {
+      "source": "/cancel",
+      "destination": "/restaurant/cancel",
+      "has": [{ "type": "host", "value": "reserve.coyolrestaurant.com" }]
+    }
+  ]
 }
