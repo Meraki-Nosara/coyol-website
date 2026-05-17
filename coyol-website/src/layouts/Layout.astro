@@ -6,9 +6,17 @@ interface Props {
   title: string;
   description?: string;
   hideFloatingButtons?: boolean;
+  ogImage?: string;
+  ogUrl?: string;
 }
 
-const { title, description = "Luxury homes and jungle homesites in Nosara, Costa Rica — the world's only Blue Zone beach town. Private developments with ocean views, world-class amenities, and a lifestyle rooted in nature.", hideFloatingButtons = false } = Astro.props;
+const { 
+  title, 
+  description = "Luxury homes and jungle homesites in Nosara, Costa Rica — the world's only Blue Zone beach town. Private developments with ocean views, world-class amenities, and a lifestyle rooted in nature.", 
+  hideFloatingButtons = false,
+  ogImage = "https://coyolnosara.com/images/og-image.jpg",
+  ogUrl = "https://coyolnosara.com"
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -26,8 +34,8 @@ const { title, description = "Luxury homes and jungle homesites in Nosara, Costa
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://coyolnosara.com/images/og-image.jpg" />
-    <meta property="og:url" content="https://coyolnosara.com" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={ogUrl} />
     <meta property="og:site_name" content="Coyol Nosara" />
     <meta property="og:locale" content="en_US" />
     
@@ -35,7 +43,7 @@ const { title, description = "Luxury homes and jungle homesites in Nosara, Costa
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="https://coyolnosara.com/images/og-image.jpg" />
+    <meta name="twitter:image" content={ogImage} />
     
     <!-- SEO -->
     <meta name="keywords" content="Nosara real estate, Costa Rica luxury homes, Blue Zone property, Guiones beach homes, Nosara homesites, Mar Azul development, Nosara Hills, Los Coyoles, jungle homes Costa Rica, ocean view lots Nosara, Nicoya Peninsula real estate, expat homes Costa Rica, surf town property" />
