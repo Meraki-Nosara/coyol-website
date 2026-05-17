@@ -7,8 +7,45 @@ These tasks MUST be completed before any project work:
 1. **Ingrid cierres** — Check marionnosara@gmail.com for closing photos, OCR immediately
 2. **Facturas** — Parse any new electronic invoices, update invoices.json
 3. **8pm Daily Report** — Generate and send to Angelina (vailas78@yahoo.com)
+4. **Restaurant Reservations** — Check for new bookings, send confirmation emails
 
 **NO EXCUSES. If you get distracted by other work, STOP and do these first.**
+
+---
+
+## 🍽️ Restaurant Reservations — CHECK EVERY HEARTBEAT!
+
+### Coyol Restaurant
+**Supabase table:** `coyol_reservations`
+**Email account:** `coyol-restaurant` (reservations@coyolrestaurant.com)
+**Confirmation script:** `~/.openclaw/workspace/coyol-website/scripts/send-confirmation.cjs`
+
+**Check for new reservations:**
+```bash
+curl -s "https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/coyol_reservations?select=*&order=created_at.desc&limit=10" \
+  -H "apikey: sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD" \
+  -H "Authorization: Bearer sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD"
+```
+
+**For each new reservation (created in last 30 min, status=confirmed):**
+1. Check if confirmation email was sent (track in `memory/reservations-sent.json`)
+2. If not sent, run: `node ~/.openclaw/workspace/coyol-website/scripts/send-confirmation.cjs <reservation-id>`
+3. Log the sent confirmation
+4. If same-day booking, alert Marion
+
+### La Luna Restaurant
+**Supabase table:** `laluna_reservations`
+**Email account:** `laluna-restaurant` (reservations@lalunanosara.com)
+**Status:** Needs confirmation script (copy from Coyol)
+
+### Track sent confirmations:
+File: `~/.openclaw/workspace/memory/reservations-sent.json`
+```json
+{
+  "coyol": ["uuid1", "uuid2"],
+  "laluna": ["uuid3"]
+}
+```
 
 ---
 
