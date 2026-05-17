@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reservation Confirmed - Coyol Restaurant</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Georgia, 'Times New Roman', serif; background-color: #f5f3ef;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f3ef; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+          
+          <!-- Header -->
+          <tr>
+            <td style="background-color: #3D4F3D; padding: 40px; text-align: center;">
+              <img src="https://coyolrealestate.com/images/logos/coyol-white.png" alt="Coyol" style="height: 60px; margin-bottom: 16px;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: normal; letter-spacing: 2px;">RESERVATION CONFIRMED</h1>
+            </td>
+          </tr>
+
+          <!-- Confirmation Code -->
+          <tr>
+            <td style="padding: 40px 40px 20px; text-align: center; border-bottom: 1px solid #eee;">
+              <p style="color: #888; margin: 0 0 8px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Confirmation Code</p>
+              <p style="color: #3D4F3D; margin: 0; font-size: 32px; font-weight: bold; letter-spacing: 3px;">{{CONFIRMATION_CODE}}</p>
+            </td>
+          </tr>
+
+          <!-- Reservation Details -->
+          <tr>
+            <td style="padding: 30px 40px;">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="50%" style="padding: 15px 0; border-bottom: 1px solid #eee;">
+                    <p style="color: #888; margin: 0 0 4px; font-size: 12px; text-transform: uppercase;">Date</p>
+                    <p style="color: #333; margin: 0; font-size: 18px;">{{DATE}}</p>
+                  </td>
+                  <td width="50%" style="padding: 15px 0; border-bottom: 1px solid #eee; text-align: right;">
+                    <p style="color: #888; margin: 0 0 4px; font-size: 12px; text-transform: uppercase;">Time</p>
+                    <p style="color: #333; margin: 0; font-size: 18px;">{{TIME}}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="50%" style="padding: 15px 0;">
+                    <p style="color: #888; margin: 0 0 4px; font-size: 12px; text-transform: uppercase;">Party Size</p>
+                    <p style="color: #333; margin: 0; font-size: 18px;">{{GUESTS}} guests</p>
+                  </td>
+                  <td width="50%" style="padding: 15px 0; text-align: right;">
+                    <p style="color: #888; margin: 0 0 4px; font-size: 12px; text-transform: uppercase;">Seating</p>
+                    <p style="color: #333; margin: 0; font-size: 18px;">{{SEATING}}</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Guest Name -->
+          <tr>
+            <td style="padding: 0 40px 30px; text-align: center;">
+              <p style="color: #888; margin: 0 0 4px; font-size: 12px; text-transform: uppercase;">Reserved for</p>
+              <p style="color: #3D4F3D; margin: 0; font-size: 22px; font-weight: bold;">{{GUEST_NAME}}</p>
+            </td>
+          </tr>
+
+          <!-- Divider -->
+          <tr>
+            <td style="padding: 0 40px;">
+              <div style="height: 1px; background: linear-gradient(to right, transparent, #3D4F3D, transparent);"></div>
+            </td>
+          </tr>
+
+          <!-- Restaurant Info -->
+          <tr>
+            <td style="padding: 30px 40px; text-align: center;">
+              <p style="color: #333; margin: 0 0 8px; font-size: 16px; font-weight: bold;">Coyol Restaurant</p>
+              <p style="color: #666; margin: 0 0 4px; font-size: 14px;">Nosara, Guanacaste, Costa Rica</p>
+              <p style="color: #666; margin: 0; font-size: 14px;">+506 2682-1280</p>
+              <a href="https://maps.google.com/?q=Coyol+Restaurant+Nosara" style="color: #3D4F3D; font-size: 14px; text-decoration: none; display: inline-block; margin-top: 12px;">View on Map</a>
+            </td>
+          </tr>
+
+          <!-- Action Buttons -->
+          <tr>
+            <td style="padding: 20px 40px 40px;">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="48%" style="text-align: center;">
+                    <a href="{{CANCEL_URL}}" style="display: inline-block; padding: 14px 28px; background-color: #ffffff; color: #3D4F3D; text-decoration: none; border-radius: 4px; font-size: 14px; border: 2px solid #3D4F3D; font-weight: bold;">Cancel Reservation</a>
+                  </td>
+                  <td width="4%"></td>
+                  <td width="48%" style="text-align: center;">
+                    <a href="https://coyolrealestate.com/restaurant/gift" style="display: inline-block; padding: 14px 28px; background-color: #C4A67C; color: #ffffff; text-decoration: none; border-radius: 4px; font-size: 14px; font-weight: bold;">Gift a Friend</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #3D4F3D; padding: 30px 40px; text-align: center;">
+              <p style="color: #ffffff; margin: 0 0 8px; font-size: 14px; opacity: 0.9;">We look forward to welcoming you</p>
+              <p style="color: #ffffff; margin: 0; font-size: 12px; opacity: 0.7;">Questions? Reply to this email or call +506 2682-1280</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

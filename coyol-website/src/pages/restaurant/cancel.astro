@@ -1,0 +1,364 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Cancel Reservation - Coyol Restaurant" hideFloatingButtons={true}>
+  <main class="cancel-page">
+    <div class="cancel-container">
+      <!-- Logo -->
+      <div class="logo">
+        <img src="/images/logos/coyol-logo-dark.png" alt="Coyol" />
+      </div>
+
+      <!-- Loading State -->
+      <div id="loading" class="state">
+        <div class="spinner"></div>
+        <p>Loading reservation...</p>
+      </div>
+
+      <!-- Confirm Cancel State -->
+      <div id="confirm" class="state hidden">
+        <h1>Cancel Your Reservation?</h1>
+        <div class="reservation-details">
+          <p class="detail"><span>Date:</span> <strong id="res-date">-</strong></p>
+          <p class="detail"><span>Time:</span> <strong id="res-time">-</strong></p>
+          <p class="detail"><span>Party:</span> <strong id="res-guests">-</strong></p>
+          <p class="detail"><span>Name:</span> <strong id="res-name">-</strong></p>
+        </div>
+        <p class="warning">This action cannot be undone.</p>
+        <div class="buttons">
+          <a href="/restaurant/reserve" class="btn secondary">Keep Reservation</a>
+          <button id="cancelBtn" class="btn danger">Yes, Cancel</button>
+        </div>
+      </div>
+
+      <!-- Success State -->
+      <div id="success" class="state hidden">
+        <div class="icon success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 6L9 17l-5-5"/>
+          </svg>
+        </div>
+        <h1>Reservation Cancelled</h1>
+        <p>Your reservation has been cancelled successfully.</p>
+        <p class="subtext">We hope to see you another time.</p>
+        <a href="/restaurant/reserve" class="btn primary">Make New Reservation</a>
+      </div>
+
+      <!-- Error State -->
+      <div id="error" class="state hidden">
+        <div class="icon error-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M15 9l-6 6M9 9l6 6"/>
+          </svg>
+        </div>
+        <h1>Something Went Wrong</h1>
+        <p id="error-message">We couldn't find this reservation.</p>
+        <a href="/restaurant/reserve" class="btn primary">Make New Reservation</a>
+      </div>
+
+      <!-- Not Found State -->
+      <div id="notfound" class="state hidden">
+        <div class="icon error-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 8v4M12 16h.01"/>
+          </svg>
+        </div>
+        <h1>Reservation Not Found</h1>
+        <p>This reservation may have already been cancelled or the link is invalid.</p>
+        <a href="/restaurant/reserve" class="btn primary">Make New Reservation</a>
+      </div>
+    </div>
+  </main>
+
+  <style>
+    .cancel-page {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f5f3ef 0%, #e8e4dc 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .cancel-container {
+      background: white;
+      border-radius: 16px;
+      padding: 48px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .logo img {
+      height: 48px;
+      margin-bottom: 32px;
+    }
+
+    .state {
+      display: block;
+    }
+
+    .state.hidden {
+      display: none;
+    }
+
+    h1 {
+      font-family: Georgia, serif;
+      font-size: 28px;
+      color: #3D4F3D;
+      margin: 0 0 24px;
+      font-weight: normal;
+    }
+
+    p {
+      color: #666;
+      line-height: 1.6;
+      margin: 0 0 16px;
+    }
+
+    .subtext {
+      color: #999;
+      font-size: 14px;
+    }
+
+    .reservation-details {
+      background: #f9f8f6;
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+      text-align: left;
+    }
+
+    .detail {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .detail:last-child {
+      border-bottom: none;
+    }
+
+    .detail span {
+      color: #888;
+    }
+
+    .detail strong {
+      color: #333;
+    }
+
+    .warning {
+      color: #A65D3F;
+      font-size: 14px;
+      margin-top: 16px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 14px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn.primary {
+      background: #3D4F3D;
+      color: white;
+      margin-top: 24px;
+      display: inline-block;
+    }
+
+    .btn.primary:hover {
+      background: #2d3b2d;
+    }
+
+    .btn.secondary {
+      background: white;
+      color: #3D4F3D;
+      border: 2px solid #3D4F3D;
+    }
+
+    .btn.secondary:hover {
+      background: #f5f3ef;
+    }
+
+    .btn.danger {
+      background: #A65D3F;
+      color: white;
+    }
+
+    .btn.danger:hover {
+      background: #8a4d34;
+    }
+
+    .icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+    }
+
+    .icon svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .success-icon {
+      background: #e8f5e9;
+      color: #3D4F3D;
+    }
+
+    .error-icon {
+      background: #fbe9e7;
+      color: #A65D3F;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #eee;
+      border-top-color: #3D4F3D;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 480px) {
+      .cancel-container {
+        padding: 32px 24px;
+      }
+
+      .buttons {
+        flex-direction: column;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+
+  <script is:inline>
+    const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+
+    // Get token from URL
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    const id = params.get('id');
+
+    let currentReservation = null;
+
+    function showState(state) {
+      ['loading', 'confirm', 'success', 'error', 'notfound'].forEach(s => {
+        document.getElementById(s).classList.toggle('hidden', s !== state);
+      });
+    }
+
+    async function loadReservation() {
+      if (!token && !id) {
+        showState('notfound');
+        return;
+      }
+
+      try {
+        let url = `${SUPABASE_URL}/rest/v1/coyol_reservations?select=*`;
+        if (token) {
+          url += `&cancel_token=eq.${token}`;
+        } else if (id) {
+          url += `&id=eq.${id}`;
+        }
+
+        const res = await fetch(url, {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          }
+        });
+
+        const data = await res.json();
+
+        if (!data || data.length === 0) {
+          showState('notfound');
+          return;
+        }
+
+        currentReservation = data[0];
+
+        if (currentReservation.status === 'cancelled') {
+          showState('success');
+          return;
+        }
+
+        // Populate details
+        const date = new Date(currentReservation.date + 'T12:00:00');
+        document.getElementById('res-date').textContent = date.toLocaleDateString('en-US', {
+          weekday: 'long', month: 'long', day: 'numeric'
+        });
+        document.getElementById('res-time').textContent = currentReservation.time;
+        document.getElementById('res-guests').textContent = currentReservation.guests + ' guests';
+        document.getElementById('res-name').textContent = currentReservation.guest_name;
+
+        showState('confirm');
+
+      } catch (e) {
+        console.error(e);
+        showState('error');
+      }
+    }
+
+    async function cancelReservation() {
+      if (!currentReservation) return;
+
+      const btn = document.getElementById('cancelBtn');
+      btn.disabled = true;
+      btn.textContent = 'Cancelling...';
+
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?id=eq.${currentReservation.id}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ status: 'cancelled' })
+        });
+
+        showState('success');
+
+      } catch (e) {
+        console.error(e);
+        document.getElementById('error-message').textContent = 'Failed to cancel. Please try again.';
+        showState('error');
+      }
+    }
+
+    document.getElementById('cancelBtn').addEventListener('click', cancelReservation);
+
+    // Load on page init
+    loadReservation();
+  </script>
+</Layout>
