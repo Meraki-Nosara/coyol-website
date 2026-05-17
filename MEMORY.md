@@ -87,6 +87,70 @@ Luxury real estate development company:
 - Top sources: Google (54%), Direct (32%)
 - Top countries: US, CR, CA
 
+### 📊 Analytics Report & Recommendations
+
+**Current Performance (30-day snapshot, May 17 2026):**
+| Metric | Value | Status |
+|--------|-------|--------|
+| Visitors | 38 | Building |
+| Pageviews | 87 | 2.3 pages/visit — good engagement |
+| Bounce Rate | 33% | Excellent (under 40%) |
+| Avg Duration | 1m 16s | Brief — could improve |
+| Mobile | 87% | Optimize for mobile first |
+| Desktop | 13% | Secondary priority |
+
+**Traffic Sources:**
+- Google: 54% — SEO working
+- Direct: 32% — brand awareness or bookmarks
+- Bing: 5%
+- Instagram: 5% — social driving some traffic
+
+**Top Countries:**
+1. 🇺🇸 US — 16 visitors (target market ✅)
+2. 🇨🇷 CR — 13 visitors (local interest)
+3. 🇨🇦 CA — 6 visitors (secondary market)
+
+**Most Viewed Properties:**
+1. Casa Elle — 4 views
+2. Casa Lefki — 2 views
+3. Casa Cacao, Casa Perch, Casa Umi — 1 view each
+
+**Recommendations:**
+
+1. **Increase session duration** (currently 1m 16s)
+   - Add video content (drone tours, lifestyle)
+   - Add neighborhood/amenities section
+   - Consider virtual tour integration
+
+2. **Boost property page engagement**
+   - 0s avg time on property pages = people bouncing fast
+   - Add more photos, floor plans, pricing info
+   - Add inquiry form directly on property pages
+
+3. **Capitalize on mobile traffic (87%)**
+   - Ensure all CTAs are thumb-friendly
+   - Test WhatsApp button placement
+   - Consider sticky "Contact" bar on mobile
+
+4. **Grow Instagram channel**
+   - Already driving 5% traffic
+   - Post property highlights, sunset shots, lifestyle content
+   - Link in bio to specific properties
+
+5. **Track conversions better**
+   - Set up Plausible goals for: WhatsApp clicks, form submissions, email clicks
+   - Restaurant reservation clicks already tracked (8 clicks)
+
+6. **SEO opportunities**
+   - Ranking on Google (54% traffic) — keep building
+   - Add blog content: "Living in Nosara", "Blue Zone lifestyle"
+   - Target keywords: "Nosara real estate", "Costa Rica luxury homes"
+
+**Review Schedule:**
+- Weekly: Check top pages, traffic sources
+- Monthly: Full report with trends, property interest changes
+- Quarterly: Strategic review, compare to goals
+
 ### Meraki Data Status (Updated April 8, 2026)
 
 **Sales Data Complete:**
