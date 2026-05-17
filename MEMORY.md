@@ -1,6 +1,6 @@
 # MEMORY.md — Long-Term Memory
 
-*Last updated: April 7, 2026*
+*Last updated: May 17, 2026*
 
 ---
 
@@ -74,9 +74,18 @@ Luxury real estate development company:
 | **Mar Azul** | Active | ✅ 2,856 features |
 | **Los Coyoles** | Coming Soon | ✅ KML loaded |
 
-- **Website:** coyolrealestate.com (rebuilding)
+- **Website:** https://coyolrealestate.com
+- **Analytics:** https://coyolrealestate.com/admin/analytics
+- **Plausible:** https://plausible.io/coyolnosara.com (domain: coyolnosara.com)
 - **Style:** Discovery Land Company / Zapotal-inspired
 - **Colors:** Land Rover Heritage palette
+- **Email:** info@coyolrealestate.com (GoDaddy webmail — 57 unread emails discovered May 2026!)
+
+**Analytics Notes (May 17, 2026):**
+- Dashboard: no emojis, country flags only
+- 87% mobile traffic
+- Top sources: Google (54%), Direct (32%)
+- Top countries: US, CR, CA
 
 ### Meraki Data Status (Updated April 8, 2026)
 
@@ -229,6 +238,16 @@ himalaya flag add <ID> seen               # Mark as read after processing
 - Ask before sending external communications
 - `trash` > `rm` for file operations
 - Commit changes to workspace after edits
+
+---
+
+## 📬 Coyol Email (Discovered May 17, 2026)
+
+- **Email:** info@coyolrealestate.com
+- **Provider:** GoDaddy Workspace Email
+- **Status:** 57 unread emails found! Marion didn't know it was active.
+- **TODO:** Connect via Himalaya, triage spam vs leads, forward real leads to Ruth
+- **Potential lead:** Emmy Tremblay (Jan 2026) — interested in properties
 
 ---
 
