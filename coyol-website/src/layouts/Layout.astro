@@ -5,9 +5,10 @@ import { ViewTransitions } from 'astro:transitions';
 interface Props {
   title: string;
   description?: string;
+  hideFloatingButtons?: boolean;
 }
 
-const { title, description = "Luxury homes and jungle homesites in Nosara, Costa Rica — the world's only Blue Zone beach town. Private developments with ocean views, world-class amenities, and a lifestyle rooted in nature." } = Astro.props;
+const { title, description = "Luxury homes and jungle homesites in Nosara, Costa Rica — the world's only Blue Zone beach town. Private developments with ocean views, world-class amenities, and a lifestyle rooted in nature.", hideFloatingButtons = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -75,6 +76,8 @@ const { title, description = "Luxury homes and jungle homesites in Nosara, Costa
     <slot />
     
     <!-- Floating Action Buttons -->
+    {!hideFloatingButtons && (
+    <>
     <style>
       @keyframes pulse-glow {
         0%, 100% { box-shadow: 0 4px 15px rgba(196, 166, 124, 0.4); }
@@ -132,6 +135,8 @@ const { title, description = "Luxury homes and jungle homesites in Nosara, Costa
         </span>
       </a>
     </div>
+    </>
+    )}
     
     <!-- Plausible Analytics -->
     <script defer data-domain="coyolnosara.com" src="https://plausible.io/js/script.js"></script>
