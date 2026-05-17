@@ -720,18 +720,18 @@ const sourceIcons: Record<string, string> = {};
       
       <div class="card">
         <div class="card-header">
-          <div class="card-title">🍽️ Restaurant Reservations</div>
+          <div class="card-title">Restaurant Reservations</div>
         </div>
         <div style="display: flex; gap: 20px; justify-content: center; padding: 30px 0;">
           <div style="text-align: center;">
-            <div style="font-size: 2.5em; margin-bottom: 8px;">🌙</div>
+            <div style="font-size: 2.5em; margin-bottom: 8px;"></div>
             <div style="font-size: 1.5em; font-weight: 700; color: var(--sand);">
               {eventData.find((e: any) => e.name === 'Reservation Click' && e.props?.restaurant === 'La Luna')?.visitors || '-'}
             </div>
             <div style="font-size: 0.8em; color: rgba(255,255,255,0.5);">La Luna</div>
           </div>
           <div style="text-align: center;">
-            <div style="font-size: 2.5em; margin-bottom: 8px;">🔥</div>
+            <div style="font-size: 2.5em; margin-bottom: 8px;"></div>
             <div style="font-size: 1.5em; font-weight: 700; color: var(--sand);">
               {eventData.find((e: any) => e.name === 'Reservation Click' && e.props?.restaurant === 'Coyol')?.visitors || '-'}
             </div>
@@ -765,7 +765,7 @@ const sourceIcons: Record<string, string> = {};
     <!-- Note about hourly data -->
     <div style="text-align: center; margin-top: 24px; padding: 16px; background: rgba(196, 166, 124, 0.1); border-radius: 8px;">
       <p style="color: rgba(255,255,255,0.5); font-size: 0.8em;">
-        💡 For hourly "time of day" data, visit <a href="https://plausible.io/coyolnosara.com" target="_blank" style="color: var(--sand);">Plausible Dashboard</a>
+        For hourly "time of day" data, visit <a href="https://plausible.io/coyolnosara.com" target="_blank" style="color: var(--sand);">Plausible Dashboard</a>
       </p>
     </div>
   </div>
