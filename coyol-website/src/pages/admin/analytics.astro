@@ -54,26 +54,11 @@ const allPages = propertyPages?.results || [];
 const propertyPagesData = allPages.filter((p: any) => p.page?.includes('/homesites/'));
 const eventData = reservationClicks?.results || [];
 
-// Device icons
-const deviceIcons: Record<string, string> = {
-  'Desktop': '🖥️',
-  'Mobile': '📱',
-  'Tablet': '📟',
-};
+// Device icons (disabled)
+const deviceIcons: Record<string, string> = {};
 
-// Country flags (common ones)
-const countryFlags: Record<string, string> = {
-  'United States': '🇺🇸',
-  'Costa Rica': '🇨🇷',
-  'Canada': '🇨🇦',
-  'Mexico': '🇲🇽',
-  'United Kingdom': '🇬🇧',
-  'Germany': '🇩🇪',
-  'France': '🇫🇷',
-  'Spain': '🇪🇸',
-  'Brazil': '🇧🇷',
-  'Australia': '🇦🇺',
-};
+// Country flags (disabled)
+const countryFlags: Record<string, string> = {};
 
 // Calculate total source visitors for percentages
 const totalSourceVisitors = sources.reduce((sum: number, s: any) => sum + s.visitors, 0) || 1;
@@ -89,14 +74,14 @@ function formatDuration(seconds: number): string {
 // Determine status based on metrics
 function getStatus(metric: string, value: number): { class: string; text: string } {
   if (metric === 'bounce_rate') {
-    if (value <= 40) return { class: 'status-good', text: '✓ Excellent' };
-    if (value <= 60) return { class: 'status-warn', text: '○ Average' };
-    return { class: 'status-bad', text: '⚠ High' };
+    if (value <= 40) return { class: 'status-good', text: 'Excellent' };
+    if (value <= 60) return { class: 'status-warn', text: 'Average' };
+    return { class: 'status-bad', text: 'High' };
   }
   if (metric === 'duration') {
-    if (value >= 120) return { class: 'status-good', text: '✓ Engaging' };
-    if (value >= 30) return { class: 'status-warn', text: '○ Brief' };
-    return { class: 'status-bad', text: '⚠ Too short' };
+    if (value >= 120) return { class: 'status-good', text: 'Engaging' };
+    if (value >= 30) return { class: 'status-warn', text: 'Brief' };
+    return { class: 'status-bad', text: 'Too short' };
   }
   return { class: 'status-good', text: '' };
 }
@@ -104,16 +89,8 @@ function getStatus(metric: string, value: number): { class: string; text: string
 const bounceStatus = getStatus('bounce_rate', month.bounce_rate.value);
 const durationStatus = getStatus('duration', month.visit_duration.value);
 
-// Source icons
-const sourceIcons: Record<string, string> = {
-  'Google': '🔍',
-  'Direct / None': '🔗',
-  'Instagram': '📸',
-  'Facebook': '📘',
-  'Twitter': '🐦',
-  'WhatsApp': '💬',
-  'LinkedIn': '💼',
-};
+// Source icons (disabled)
+const sourceIcons: Record<string, string> = {};
 ---
 
 <!DOCTYPE html>
@@ -593,7 +570,7 @@ const sourceIcons: Record<string, string> = {
         <div class="sources-grid">
           {sources.map((s: any) => {
             const name = s.source || 'Direct / None';
-            const icon = sourceIcons[name] || '🌐';
+            const icon = sourceIcons[name] || '';
             const percent = Math.round((s.visitors / totalSourceVisitors) * 100);
             return (
               <div class="source-card">
@@ -623,7 +600,7 @@ const sourceIcons: Record<string, string> = {
         {deviceData.length > 0 ? (
           <div class="sources-grid" style="grid-template-columns: repeat(3, 1fr);">
             {deviceData.map((d: any) => {
-              const icon = deviceIcons[d.device] || '💻';
+              const icon = deviceIcons[d.device] || '';
               const percent = Math.round((d.visitors / month.visitors.value) * 100) || 0;
               return (
                 <div class="source-card">
@@ -653,7 +630,7 @@ const sourceIcons: Record<string, string> = {
             {countryData.slice(0, 5).map((c: any, i: number) => {
               const maxVisitors = countryData[0]?.visitors || 1;
               const width = (c.visitors / maxVisitors) * 100;
-              const flag = countryFlags[c.country] || '🌍';
+              const flag = countryFlags[c.country] || '';
               return (
                 <div class="page-item">
                   <div class="page-rank" style="font-size: 1.2em;">{flag}</div>
@@ -719,10 +696,10 @@ const sourceIcons: Record<string, string> = {
         {eventData.length > 0 ? (
           <div class="sources-grid" style="grid-template-columns: repeat(2, 1fr);">
             {eventData.filter((e: any) => ['Reservation Click', 'Contact Click', 'Property Click'].includes(e.name)).map((e: any) => {
-              let icon = '✅';
-              if (e.name === 'Reservation Click') icon = '🍽️';
-              if (e.name === 'Contact Click') icon = '💬';
-              if (e.name === 'Property Click') icon = '🏠';
+              let icon = '';
+              if (e.name === 'Reservation Click') icon = '';
+              if (e.name === 'Contact Click') icon = '';
+              if (e.name === 'Property Click') icon = '';
               return (
                 <div class="source-card">
                   <div class="source-icon">{icon}</div>
