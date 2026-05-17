@@ -1140,23 +1140,98 @@ import Layout from '../../layouts/Layout.astro';
   </style>
 
   <script is:inline>
-    const STORAGE_KEY = 'coyol_reservations';
+    // Supabase config
+    const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
     const LAYOUT_KEY = 'coyol_floor_layout';
     let currentDate = new Date();
     let currentZone = 'garden';
     let currentStatusFilter = 'coming';
+    let cachedReservations = [];
 
-    function generateId() {
-      return 'COY' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substr(2, 4).toUpperCase();
+    // Get reservations from Supabase
+    async function fetchReservations(date) {
+      try {
+        const dateStr = date || getDateString(currentDate);
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?date=eq.${dateStr}&select=*&order=time.asc`, {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          }
+        });
+        const data = await res.json();
+        // Map snake_case to camelCase for compatibility
+        cachedReservations = data.map(r => ({
+          id: r.id,
+          date: r.date,
+          time: r.time,
+          guests: r.guests,
+          guestName: r.guest_name,
+          guestPhone: r.guest_phone,
+          guestEmail: r.guest_email,
+          tableId: r.table_id,
+          zonePreference: r.zone_preference,
+          specialRequests: r.special_requests,
+          status: r.status,
+          cancelToken: r.cancel_token
+        }));
+        return cachedReservations;
+      } catch (e) {
+        console.error('Failed to fetch reservations:', e);
+        return [];
+      }
     }
 
     function getReservations() {
-      const data = localStorage.getItem(STORAGE_KEY);
-      return data ? JSON.parse(data) : [];
+      return cachedReservations;
     }
 
-    function saveReservations(reservations) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(reservations));
+    // Save new reservation to Supabase
+    async function saveReservation(reservation) {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=representation'
+          },
+          body: JSON.stringify({
+            date: reservation.date,
+            time: reservation.time,
+            guests: reservation.guests,
+            guest_name: reservation.guestName,
+            guest_phone: reservation.guestPhone,
+            guest_email: reservation.guestEmail,
+            table_id: reservation.tableId,
+            zone_preference: reservation.zonePreference,
+            special_requests: reservation.specialRequests,
+            status: reservation.status || 'confirmed'
+          })
+        });
+        return await res.json();
+      } catch (e) {
+        console.error('Failed to save reservation:', e);
+        throw e;
+      }
+    }
+
+    // Update reservation status in Supabase
+    async function updateReservationStatus(id, status) {
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?id=eq.${id}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ status })
+        });
+      } catch (e) {
+        console.error('Failed to update reservation:', e);
+      }
     }
 
     function getLayout() {
@@ -1225,20 +1300,21 @@ import Layout from '../../layouts/Layout.astro';
       return `${h12}:${m} ${ampm}`;
     }
 
-    function quickSeat(id) {
+    async function quickSeat(id) {
       const reservations = getReservations();
-      const idx = reservations.findIndex(r => r.id === id);
-      if (idx !== -1) {
-        reservations[idx].status = reservations[idx].status === 'seated' ? 'confirmed' : 'seated';
-        saveReservations(reservations);
-        loadReservations();
+      const res = reservations.find(r => r.id === id);
+      if (res) {
+        const newStatus = res.status === 'seated' ? 'confirmed' : 'seated';
+        await updateReservationStatus(id, newStatus);
+        await loadReservations();
         renderFloor();
       }
     }
 
-    function loadReservations() {
+    async function loadReservations() {
       const dateStr = getDateString(currentDate);
-      const reservations = getReservations().filter(r => r.date === dateStr);
+      await fetchReservations(dateStr);
+      const reservations = getReservations();
       
       // Filter by status
       let filtered = reservations;
@@ -1415,15 +1491,15 @@ import Layout from '../../layouts/Layout.astro';
     }
 
     // Date navigation
-    document.getElementById('prevDay').addEventListener('click', () => {
+    document.getElementById('prevDay').addEventListener('click', async () => {
       currentDate.setDate(currentDate.getDate() - 1);
-      loadReservations();
+      await loadReservations();
       renderFloor();
     });
 
-    document.getElementById('nextDay').addEventListener('click', () => {
+    document.getElementById('nextDay').addEventListener('click', async () => {
       currentDate.setDate(currentDate.getDate() + 1);
-      loadReservations();
+      await loadReservations();
       renderFloor();
     });
 
@@ -1466,12 +1542,11 @@ import Layout from '../../layouts/Layout.astro';
       document.getElementById('newResModal').classList.remove('open');
     }
 
-    function saveNewReservation() {
+    async function saveNewReservation() {
       const name = document.getElementById('newName').value.trim();
       if (!name) { alert('Name required'); return; }
       
       const reservation = {
-        id: generateId(),
         date: document.getElementById('newDate').value,
         time: document.getElementById('newTime').value,
         guests: parseInt(document.getElementById('newGuests').value) || 2,
@@ -1480,17 +1555,17 @@ import Layout from '../../layouts/Layout.astro';
         guestEmail: document.getElementById('newEmail').value.trim(),
         tableId: document.getElementById('newTable').value || null,
         specialRequests: document.getElementById('newNotes').value.trim(),
-        status: 'confirmed',
-        createdAt: new Date().toISOString()
+        status: 'confirmed'
       };
       
-      const reservations = getReservations();
-      reservations.push(reservation);
-      saveReservations(reservations);
-      
-      closeModal();
-      loadReservations();
-      renderFloor();
+      try {
+        await saveReservation(reservation);
+        closeModal();
+        await loadReservations();
+        renderFloor();
+      } catch (e) {
+        alert('Failed to save reservation');
+      }
     }
 
     // Time dropdown
@@ -1585,7 +1660,6 @@ import Layout from '../../layouts/Layout.astro';
 
     // Initial load
     loadShifts();
-    loadReservations();
-    renderFloor();
+    loadReservations().then(() => renderFloor());
   </script>
 </Layout>
