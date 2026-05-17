@@ -3,21 +3,24 @@
   "installCommand": "npm install",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "rewrites": [
+  "redirects": [
     {
       "source": "/",
       "destination": "/restaurant/reserve",
-      "has": [{ "type": "host", "value": "reserve.coyolrestaurant.com" }]
+      "has": [{ "type": "host", "value": "reserve.coyolrestaurant.com" }],
+      "permanent": false
     },
     {
       "source": "/admin",
       "destination": "/restaurant/admin",
-      "has": [{ "type": "host", "value": "reserve.coyolrestaurant.com" }]
+      "has": [{ "type": "host", "value": "reserve.coyolrestaurant.com" }],
+      "permanent": false
     },
     {
       "source": "/cancel",
       "destination": "/restaurant/cancel",
-      "has": [{ "type": "host", "value": "reserve.coyolrestaurant.com" }]
+      "has": [{ "type": "host", "value": "reserve.coyolrestaurant.com" }],
+      "permanent": false
     }
   ]
 }
