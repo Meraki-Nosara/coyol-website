@@ -57,8 +57,47 @@ const eventData = reservationClicks?.results || [];
 // Device icons (disabled)
 const deviceIcons: Record<string, string> = {};
 
-// Country flags (disabled)
-const countryFlags: Record<string, string> = {};
+// Country flags
+const countryFlags: Record<string, string> = {
+  'US': '🇺🇸',
+  'United States': '🇺🇸',
+  'CR': '🇨🇷',
+  'Costa Rica': '🇨🇷',
+  'CA': '🇨🇦',
+  'Canada': '🇨🇦',
+  'MX': '🇲🇽',
+  'Mexico': '🇲🇽',
+  'GB': '🇬🇧',
+  'United Kingdom': '🇬🇧',
+  'DE': '🇩🇪',
+  'Germany': '🇩🇪',
+  'FR': '🇫🇷',
+  'France': '🇫🇷',
+  'ES': '🇪🇸',
+  'Spain': '🇪🇸',
+  'BR': '🇧🇷',
+  'Brazil': '🇧🇷',
+  'AU': '🇦🇺',
+  'Australia': '🇦🇺',
+  'JP': '🇯🇵',
+  'Japan': '🇯🇵',
+  'IT': '🇮🇹',
+  'Italy': '🇮🇹',
+  'NL': '🇳🇱',
+  'Netherlands': '🇳🇱',
+  'CH': '🇨🇭',
+  'Switzerland': '🇨🇭',
+  'AR': '🇦🇷',
+  'Argentina': '🇦🇷',
+  'CO': '🇨🇴',
+  'Colombia': '🇨🇴',
+  'CL': '🇨🇱',
+  'Chile': '🇨🇱',
+  'PA': '🇵🇦',
+  'Panama': '🇵🇦',
+  'NI': '🇳🇮',
+  'Nicaragua': '🇳🇮',
+};
 
 // Calculate total source visitors for percentages
 const totalSourceVisitors = sources.reduce((sum: number, s: any) => sum + s.visitors, 0) || 1;
