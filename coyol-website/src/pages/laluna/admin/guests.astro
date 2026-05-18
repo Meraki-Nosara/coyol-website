@@ -1,0 +1,769 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+---
+
+<Layout title="Guests | La Luna Admin">
+  <div class="admin">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="/images/logos/coyol-restaurant-logo-black.png" alt="La Luna" />
+      </div>
+      <nav class="sidebar-nav">
+        <a href="/restaurant/admin" class="nav-icon" title="Dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </a>
+        <a href="/restaurant/admin/floor" class="nav-icon" title="Floor Plan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+        </a>
+        <a href="/restaurant/admin/guests" class="nav-icon active" title="Guests">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </a>
+        <a href="/restaurant/admin/settings" class="nav-icon" title="Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="/" class="nav-icon" title="View Site">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <header class="header">
+        <div class="header-left">
+          <h1>Guests</h1>
+          <span class="guest-count" id="guestCount">0 guests</span>
+        </div>
+        <div class="header-right">
+          <div class="search-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+            <input type="text" id="searchInput" placeholder="Search by name, phone, email..." />
+          </div>
+          <button class="btn-primary" onclick="openGuestModal()">+ Add Guest</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <!-- Stats -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-value" id="totalGuests">0</div>
+            <div class="stat-label">Total Guests</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="vipCount">0</div>
+            <div class="stat-label">VIP Guests</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="newThisMonth">0</div>
+            <div class="stat-label">New This Month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="repeatGuests">0</div>
+            <div class="stat-label">Repeat Visitors</div>
+          </div>
+        </div>
+
+        <!-- Guests Table -->
+        <div class="table-card">
+          <table class="guests-table">
+            <thead>
+              <tr>
+                <th>Guest</th>
+                <th>Contact</th>
+                <th>Visits</th>
+                <th>Last Visit</th>
+                <th>Tags</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="guestsTableBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+          <div class="empty-state" id="emptyState" style="display: none;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <h3>No guests yet</h3>
+            <p>Guests will appear here when they make reservations</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Guest Modal -->
+    <div class="modal" id="guestModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modalTitle">Add Guest</h2>
+          <button class="modal-close" onclick="closeGuestModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Name *</label>
+            <input type="text" id="guestName" class="form-input" placeholder="Full name" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Phone</label>
+              <input type="tel" id="guestPhone" class="form-input" placeholder="+506 8888-8888" />
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="guestEmail" class="form-input" placeholder="guest@email.com" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Tags</label>
+            <div class="tags-input">
+              <div class="tag-options">
+                <button type="button" class="tag-btn" data-tag="VIP">VIP</button>
+                <button type="button" class="tag-btn" data-tag="Regular">Regular</button>
+                <button type="button" class="tag-btn" data-tag="Birthday">Birthday</button>
+                <button type="button" class="tag-btn" data-tag="Anniversary">Anniversary</button>
+                <button type="button" class="tag-btn" data-tag="Allergies">Allergies</button>
+                <button type="button" class="tag-btn" data-tag="Vegetarian">Vegetarian</button>
+                <button type="button" class="tag-btn" data-tag="Vegan">Vegan</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Notes</label>
+            <textarea id="guestNotes" class="form-input" rows="3" placeholder="Special requests, preferences, allergies..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeGuestModal()">Cancel</button>
+          <button class="btn-primary" onclick="saveGuest()">Save Guest</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --keswick: #A65D3F;
+      --coniston: #B86B4A;
+      --limestone: #D4C9B5;
+      --sand: #C4A67C;
+      --terracotta: #A65D3F;
+      --santorini: #1A1F16;
+      --cream: #F5F3EF;
+      --parchment: #EAE5DA;
+    }
+
+    .admin {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      min-height: 100vh;
+      background: var(--parchment);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: var(--santorini);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .sidebar-logo {
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--keswick);
+      margin-bottom: 1rem;
+    }
+
+    .sidebar-logo img {
+      height: 2.5rem; width: 2.5rem;
+      filter: brightness(0) invert(1);
+      opacity: 0.9;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .nav-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--limestone);
+      border-radius: 8px;
+      transition: all 0.15s;
+    }
+
+    .nav-icon svg { width: 20px; height: 20px; }
+    .nav-icon:hover { color: var(--cream); background: var(--keswick); }
+    .nav-icon.active { color: var(--cream); background: var(--terracotta); }
+
+    .sidebar-footer {
+      border-top: 1px solid var(--keswick);
+      padding-top: 1rem;
+    }
+
+    /* Main */
+    .main {
+      padding: 2rem 2.5rem;
+      overflow-y: auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .header-left h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--santorini);
+    }
+
+    .guest-count {
+      font-size: 0.875rem;
+      color: var(--keswick);
+      margin-left: 1rem;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--cream);
+      border: 1px solid var(--limestone);
+      border-radius: 8px;
+      color: var(--keswick);
+    }
+
+    .search-box input {
+      border: none;
+      background: none;
+      font-size: 0.875rem;
+      width: 220px;
+      color: var(--santorini);
+    }
+
+    .search-box input:focus { outline: none; }
+    .search-box input::placeholder { color: var(--limestone); }
+
+    .btn-primary {
+      padding: 0.625rem 1.25rem;
+      background: var(--terracotta);
+      color: var(--cream);
+      border: none;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-primary:hover { background: #8B4D33; }
+
+    .btn-secondary {
+      padding: 0.625rem 1.25rem;
+      background: var(--cream);
+      color: var(--santorini);
+      border: 1px solid var(--limestone);
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover { background: var(--parchment); }
+
+    /* Stats */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--cream);
+      border: 1px solid var(--limestone);
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 500;
+      color: var(--santorini);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--keswick);
+      margin-top: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Table */
+    .table-card {
+      background: var(--cream);
+      border: 1px solid var(--limestone);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .guests-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .guests-table th {
+      text-align: left;
+      padding: 1rem 1.25rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--keswick);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--parchment);
+      border-bottom: 1px solid var(--limestone);
+    }
+
+    :global(.guests-table td) {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--parchment);
+      font-size: 0.9375rem;
+      color: var(--santorini);
+    }
+
+    :global(.guests-table tr:hover) {
+      background: var(--parchment);
+    }
+
+    :global(.guest-name) {
+      font-weight: 500;
+    }
+
+    :global(.guest-contact) {
+      font-size: 0.8125rem;
+      color: var(--keswick);
+    }
+
+    :global(.visit-count) {
+      font-weight: 600;
+      color: var(--keswick);
+    }
+
+    :global(.tag) {
+      display: inline-block;
+      padding: 0.25rem 0.625rem;
+      background: var(--parchment);
+      color: var(--keswick);
+      border-radius: 12px;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      margin-right: 0.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    :global(.tag.vip) {
+      background: rgba(196, 166, 124, 0.3);
+      color: #8b7355;
+    }
+
+    :global(.action-btn) {
+      padding: 0.375rem 0.75rem;
+      background: none;
+      border: 1px solid var(--limestone);
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: var(--keswick);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    :global(.action-btn:hover) {
+      background: var(--limestone);
+    }
+
+    /* Empty State */
+    .empty-state {
+      padding: 4rem 2rem;
+      text-align: center;
+      color: var(--keswick);
+    }
+
+    .empty-state svg {
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .empty-state h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--santorini);
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-state p {
+      font-size: 0.875rem;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.open { display: flex; }
+
+    .modal-content {
+      background: var(--cream);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 500px;
+      border: 1px solid var(--limestone);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--limestone);
+    }
+
+    .modal-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--santorini);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--keswick);
+      cursor: pointer;
+    }
+
+    .modal-body { padding: 1.5rem; }
+
+    .modal-footer {
+      display: flex;
+      gap: 0.75rem;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--limestone);
+      justify-content: flex-end;
+    }
+
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group:last-child { margin-bottom: 0; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--keswick);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--limestone);
+      border-radius: 8px;
+      font-size: 0.9375rem;
+      background: white;
+      color: var(--santorini);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--keswick);
+    }
+
+    textarea.form-input {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .tag-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag-btn {
+      padding: 0.375rem 0.75rem;
+      background: var(--parchment);
+      border: 1px solid var(--limestone);
+      border-radius: 16px;
+      font-size: 0.75rem;
+      color: var(--keswick);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .tag-btn:hover {
+      border-color: var(--sand);
+    }
+
+    .tag-btn.active {
+      background: var(--keswick);
+      border-color: var(--keswick);
+      color: var(--cream);
+    }
+  </style>
+
+  <script is:inline>
+    const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+    
+    let guests = [];
+    let editingGuestId = null;
+    let selectedTags = [];
+
+    async function loadGuests() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/coyol_guests?select=*&order=last_visit.desc.nullslast`, {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          }
+        });
+        guests = await res.json();
+        renderGuests();
+        updateStats();
+      } catch (err) {
+        console.error('Failed to load guests:', err);
+      }
+    }
+
+    function updateStats() {
+      document.getElementById('totalGuests').textContent = guests.length;
+      document.getElementById('guestCount').textContent = `${guests.length} guest${guests.length !== 1 ? 's' : ''}`;
+      
+      const vips = guests.filter(g => g.tags && g.tags.includes('VIP')).length;
+      document.getElementById('vipCount').textContent = vips;
+      
+      const thisMonth = new Date();
+      thisMonth.setDate(1);
+      const newGuests = guests.filter(g => new Date(g.created_at) >= thisMonth).length;
+      document.getElementById('newThisMonth').textContent = newGuests;
+      
+      const repeats = guests.filter(g => g.visit_count > 1).length;
+      document.getElementById('repeatGuests').textContent = repeats;
+    }
+
+    function renderGuests() {
+      const tbody = document.getElementById('guestsTableBody');
+      const empty = document.getElementById('emptyState');
+      
+      if (guests.length === 0) {
+        tbody.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+      }
+      
+      empty.style.display = 'none';
+      
+      tbody.innerHTML = guests.map(g => `
+        <tr onclick="editGuest('${g.id}')">
+          <td>
+            <div class="guest-name">${g.name}</div>
+          </td>
+          <td>
+            <div class="guest-contact">
+              ${g.phone ? `📱 ${g.phone}` : ''}
+              ${g.phone && g.email ? '<br>' : ''}
+              ${g.email ? `✉️ ${g.email}` : ''}
+              ${!g.phone && !g.email ? '—' : ''}
+            </div>
+          </td>
+          <td>
+            <span class="visit-count">${g.visit_count || 0}</span>
+          </td>
+          <td>
+            ${g.last_visit ? formatDate(g.last_visit) : '—'}
+          </td>
+          <td>
+            ${(g.tags || []).map(t => `<span class="tag ${t.toLowerCase()}">${t}</span>`).join('')}
+          </td>
+          <td>
+            <button class="action-btn" onclick="event.stopPropagation(); editGuest('${g.id}')">Edit</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function formatDate(dateStr) {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function openGuestModal(guest = null) {
+      editingGuestId = guest ? guest.id : null;
+      
+      document.getElementById('modalTitle').textContent = guest ? 'Edit Guest' : 'Add Guest';
+      document.getElementById('guestName').value = guest ? guest.name : '';
+      document.getElementById('guestPhone').value = guest ? (guest.phone || '') : '';
+      document.getElementById('guestEmail').value = guest ? (guest.email || '') : '';
+      document.getElementById('guestNotes').value = guest ? (guest.notes || '') : '';
+      
+      selectedTags = guest ? (guest.tags || []) : [];
+      document.querySelectorAll('.tag-btn').forEach(btn => {
+        btn.classList.toggle('active', selectedTags.includes(btn.dataset.tag));
+      });
+      
+      document.getElementById('guestModal').classList.add('open');
+    }
+    window.openGuestModal = openGuestModal;
+
+    function closeGuestModal() {
+      document.getElementById('guestModal').classList.remove('open');
+      editingGuestId = null;
+      selectedTags = [];
+    }
+    window.closeGuestModal = closeGuestModal;
+
+    function editGuest(id) {
+      const guest = guests.find(g => g.id === id);
+      if (guest) openGuestModal(guest);
+    }
+    window.editGuest = editGuest;
+
+    async function saveGuest() {
+      const name = document.getElementById('guestName').value.trim();
+      if (!name) {
+        alert('Please enter a name');
+        return;
+      }
+
+      const guestData = {
+        name,
+        phone: document.getElementById('guestPhone').value.trim() || null,
+        email: document.getElementById('guestEmail').value.trim() || null,
+        notes: document.getElementById('guestNotes').value.trim() || null,
+        tags: selectedTags
+      };
+
+      try {
+        if (editingGuestId) {
+          await fetch(`${SUPABASE_URL}/rest/v1/coyol_guests?id=eq.${editingGuestId}`, {
+            method: 'PATCH',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify(guestData)
+          });
+        } else {
+          await fetch(`${SUPABASE_URL}/rest/v1/coyol_guests`, {
+            method: 'POST',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify(guestData)
+          });
+        }
+        
+        closeGuestModal();
+        loadGuests();
+      } catch (err) {
+        console.error('Failed to save guest:', err);
+        alert('Failed to save guest');
+      }
+    }
+    window.saveGuest = saveGuest;
+
+    // Tag selection
+    document.querySelectorAll('.tag-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tag = btn.dataset.tag;
+        if (selectedTags.includes(tag)) {
+          selectedTags = selectedTags.filter(t => t !== tag);
+          btn.classList.remove('active');
+        } else {
+          selectedTags.push(tag);
+          btn.classList.add('active');
+        }
+      });
+    });
+
+    // Search
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      const filtered = guests.filter(g => 
+        g.name.toLowerCase().includes(query) ||
+        (g.phone && g.phone.includes(query)) ||
+        (g.email && g.email.toLowerCase().includes(query))
+      );
+      
+      const tbody = document.getElementById('guestsTableBody');
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--keswick);">No guests found</td></tr>';
+      } else {
+        // Re-render with filtered
+        tbody.innerHTML = filtered.map(g => `
+          <tr onclick="editGuest('${g.id}')">
+            <td><div class="guest-name">${g.name}</div></td>
+            <td><div class="guest-contact">${g.phone ? `📱 ${g.phone}` : ''}${g.phone && g.email ? '<br>' : ''}${g.email ? `✉️ ${g.email}` : ''}${!g.phone && !g.email ? '—' : ''}</div></td>
+            <td><span class="visit-count">${g.visit_count || 0}</span></td>
+            <td>${g.last_visit ? formatDate(g.last_visit) : '—'}</td>
+            <td>${(g.tags || []).map(t => `<span class="tag ${t.toLowerCase()}">${t}</span>`).join('')}</td>
+            <td><button class="action-btn" onclick="event.stopPropagation(); editGuest('${g.id}')">Edit</button></td>
+          </tr>
+        `).join('');
+      }
+    });
+
+    // Close modal on backdrop
+    document.getElementById('guestModal').addEventListener('click', (e) => {
+      if (e.target.id === 'guestModal') closeGuestModal();
+    });
+
+    // Initial load
+    loadGuests();
+  </script>
+</Layout>

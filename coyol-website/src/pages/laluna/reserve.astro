@@ -1,0 +1,804 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout 
+  title="Reserve a Table | La Luna Restaurant" 
+  description="Book your table at La Luna Restaurant in Nosara, Costa Rica. Farm-to-table dining in a stunning jungle setting with handcrafted cocktails and local ingredients."
+  ogImage="https://reserve.lalunanosara.com/images/laluna-reserve-og.jpg"
+  ogUrl="https://reserve.lalunanosara.com"
+  hideFloatingButtons={true}
+>
+  <div class="reservation-page">
+    <!-- Left: Form -->
+    <div class="form-side">
+      <header class="form-header">
+        <a href="/" class="back-link">← Back</a>
+        <img src="/images/laluna-logo-black.png" alt="La Luna" class="logo" />
+        <div class="spacer"></div>
+      </header>
+
+      <div class="form-container">
+        <h1>Reserve a Table</h1>
+        <p class="subtitle">Guiones · Nosara</p>
+
+        <!-- Step 1: Date & Party -->
+        <div class="step active" id="step-1">
+          <div class="input-group">
+            <label>Date</label>
+            <input type="date" id="date" class="date-input" />
+          </div>
+          
+          <div class="input-group">
+            <label>Party Size</label>
+            <div class="party-selector">
+              <button type="button" class="party-btn" data-guests="1">1</button>
+              <button type="button" class="party-btn selected" data-guests="2">2</button>
+              <button type="button" class="party-btn" data-guests="3">3</button>
+              <button type="button" class="party-btn" data-guests="4">4</button>
+              <button type="button" class="party-btn" data-guests="5">5</button>
+              <button type="button" class="party-btn" data-guests="6">6</button>
+              <button type="button" class="party-btn" data-guests="7+">7+</button>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>Time</label>
+            <div class="time-grid">
+              <div class="time-section">
+                <span class="time-label">Lunch</span>
+                <div class="time-slots" id="lunch-slots">
+                  <button type="button" class="time-btn" data-time="12:00">12:00</button>
+                  <button type="button" class="time-btn" data-time="12:30">12:30</button>
+                  <button type="button" class="time-btn" data-time="13:00">13:00</button>
+                  <button type="button" class="time-btn" data-time="13:30">13:30</button>
+                  <button type="button" class="time-btn" data-time="14:00">14:00</button>
+                  <button type="button" class="time-btn" data-time="14:30">14:30</button>
+                </div>
+              </div>
+              <div class="time-section">
+                <span class="time-label">Dinner</span>
+                <div class="time-slots" id="dinner-slots">
+                  <button type="button" class="time-btn" data-time="17:00">17:00</button>
+                  <button type="button" class="time-btn" data-time="17:30">17:30</button>
+                  <button type="button" class="time-btn" data-time="18:00">18:00</button>
+                  <button type="button" class="time-btn selected" data-time="18:30">18:30</button>
+                  <button type="button" class="time-btn" data-time="19:00">19:00</button>
+                  <button type="button" class="time-btn" data-time="19:30">19:30</button>
+                  <button type="button" class="time-btn" data-time="20:00">20:00</button>
+                  <button type="button" class="time-btn" data-time="20:30">20:30</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="continue-btn" onclick="showStep(2)">Continue</button>
+        </div>
+
+        <!-- Step 2: Details -->
+        <div class="step" id="step-2">
+          <button type="button" class="back-step" onclick="showStep(1)">← Change time</button>
+          
+          <div class="selected-summary">
+            <span class="summary-item" id="summary-date">Tonight</span>
+            <span class="summary-divider">·</span>
+            <span class="summary-item" id="summary-time">18:30</span>
+            <span class="summary-divider">·</span>
+            <span class="summary-item" id="summary-guests">2 guests</span>
+          </div>
+
+          <div class="input-group">
+            <label>Seating Preference</label>
+            <div class="seating-options">
+              <button type="button" class="seating-btn selected" data-zone="any">No Preference</button>
+              <button type="button" class="seating-btn" data-zone="indoor">Indoor</button>
+              <button type="button" class="seating-btn" data-zone="terrace">Terrace</button>
+              <button type="button" class="seating-btn" data-zone="bar">Bar</button>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>Name *</label>
+            <input type="text" id="name" placeholder="Your name" class="text-input" required />
+          </div>
+
+          <div class="input-row">
+            <div class="input-group">
+              <label>Phone *</label>
+              <input type="tel" id="phone" placeholder="+506" class="text-input" required />
+            </div>
+            <div class="input-group">
+              <label>Email</label>
+              <input type="email" id="email" placeholder="you@email.com" class="text-input" />
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>Special Requests <span class="optional">(optional)</span></label>
+            <textarea id="notes" placeholder="Allergies, celebrations, accessibility..." class="text-input textarea"></textarea>
+          </div>
+
+          <button type="button" class="confirm-btn" id="confirmBtn" onclick="submitReservation()">
+            Confirm Reservation
+          </button>
+
+          <p class="terms">
+            By booking, you agree to our cancellation policy. 
+            Please arrive within 15 minutes of your reservation time.
+          </p>
+        </div>
+
+        <!-- Step 3: Confirmation -->
+        <div class="step" id="step-3">
+          <div class="confirmation">
+            <div class="check-icon">✓</div>
+            <h2>Reservation Confirmed</h2>
+            <p class="conf-details">
+              We'll see you <strong id="conf-date">tonight</strong> at <strong id="conf-time">18:30</strong>
+            </p>
+            <p class="conf-ref">Confirmation #<span id="conf-id">---</span></p>
+            <div class="conf-info">
+              <p><strong>La Luna Restaurant</strong></p>
+              <p>Mar Azul, Nosara</p>
+              <p>+506 8855-9146</p>
+            </div>
+            <p class="conf-note">
+              Need to change or cancel? Call us or reply to your confirmation email.
+            </p>
+            <div class="conf-actions">
+              <a href="https://coyolrealestate.com" class="btn-outline">Back to Coyol</a>
+              <button onclick="addToCalendar()" class="btn-primary">Add to Calendar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Image -->
+    <div class="image-side">
+      <div class="image-overlay"></div>
+    </div>
+  </div>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .reservation-page {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+
+    .form-side {
+      background: #F5F3EF;
+      padding: 2rem 3rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+    }
+
+    .back-link {
+      font-size: 0.875rem;
+      color: #78716c;
+      text-decoration: none;
+      width: 60px;
+    }
+
+    .logo {
+      height: 3rem;
+    }
+
+    .spacer {
+      width: 60px;
+    }
+
+    .form-container {
+      max-width: 420px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: #A65D3F;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      color: #78716c;
+      font-size: 0.875rem;
+      margin-bottom: 2rem;
+    }
+
+    .step {
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #78716c;
+      margin-bottom: 0.5rem;
+    }
+
+    .date-input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 1px solid #d6d3d1;
+      font-size: 1rem;
+      background: white;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .party-selector {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .party-btn {
+      flex: 1;
+      padding: 0.875rem;
+      border: 1px solid #d6d3d1;
+      background: white;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-radius: 4px;
+    }
+
+    .party-btn:hover {
+      border-color: #A65D3F;
+    }
+
+    .party-btn.selected {
+      background: #A65D3F;
+      color: white;
+      border-color: #A65D3F;
+    }
+
+    .time-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .time-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .time-label {
+      font-size: 0.75rem;
+      color: #a8a29e;
+    }
+
+    .time-slots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .time-btn {
+      padding: 0.625rem 1rem;
+      border: 1px solid #d6d3d1;
+      background: white;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-radius: 4px;
+    }
+
+    .time-btn:hover {
+      border-color: #A65D3F;
+    }
+
+    .time-btn.selected {
+      background: #A65D3F;
+      color: white;
+      border-color: #A65D3F;
+    }
+
+    .time-btn.unavailable {
+      opacity: 0.4;
+      cursor: not-allowed;
+      text-decoration: line-through;
+    }
+
+    .continue-btn, .confirm-btn {
+      width: 100%;
+      padding: 1rem;
+      background: #A65D3F;
+      color: white;
+      border: none;
+      font-size: 0.875rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 1rem;
+      border-radius: 4px;
+    }
+
+    .continue-btn:hover, .confirm-btn:hover {
+      background: #B86B4A;
+    }
+
+    .confirm-btn:disabled {
+      background: #a8a29e;
+      cursor: not-allowed;
+    }
+
+    .back-step {
+      background: none;
+      border: none;
+      font-size: 0.875rem;
+      color: #78716c;
+      cursor: pointer;
+      margin-bottom: 1.5rem;
+      padding: 0;
+    }
+
+    .selected-summary {
+      background: #e7e5e4;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      font-size: 0.875rem;
+      border-radius: 4px;
+    }
+
+    .summary-item {
+      color: #A65D3F;
+      font-weight: 500;
+    }
+
+    .summary-divider {
+      color: #a8a29e;
+    }
+
+    .seating-options {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+
+    .seating-btn {
+      padding: 0.75rem 0.5rem;
+      border: 1px solid #d6d3d1;
+      background: white;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-radius: 4px;
+    }
+
+    .seating-btn:hover {
+      border-color: #A65D3F;
+    }
+
+    .seating-btn.selected {
+      background: #A65D3F;
+      color: white;
+      border-color: #A65D3F;
+    }
+
+    .text-input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 1px solid #d6d3d1;
+      font-size: 0.9375rem;
+      background: white;
+      outline: none;
+      transition: border-color 0.2s;
+      border-radius: 4px;
+    }
+
+    .text-input:focus {
+      border-color: #A65D3F;
+    }
+
+    .text-input.error {
+      border-color: #dc2626;
+    }
+
+    .textarea {
+      resize: none;
+      min-height: 80px;
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .optional {
+      font-weight: normal;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    .terms {
+      font-size: 0.75rem;
+      color: #a8a29e;
+      text-align: center;
+      margin-top: 1rem;
+      line-height: 1.5;
+    }
+
+    .confirmation {
+      text-align: center;
+      padding: 2rem 0;
+    }
+
+    .check-icon {
+      width: 60px;
+      height: 60px;
+      background: #A65D3F;
+      color: white;
+      font-size: 1.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+
+    .confirmation h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      font-weight: 400;
+      color: #A65D3F;
+      margin-bottom: 0.5rem;
+    }
+
+    .conf-details {
+      color: #57534e;
+      margin-bottom: 0.5rem;
+    }
+
+    .conf-ref {
+      font-size: 0.875rem;
+      color: #a8a29e;
+      margin-bottom: 1.5rem;
+    }
+
+    .conf-info {
+      background: #e7e5e4;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 4px;
+    }
+
+    .conf-info p {
+      color: #57534e;
+      margin: 0.25rem 0;
+    }
+
+    .conf-note {
+      font-size: 0.875rem;
+      color: #a8a29e;
+      margin-bottom: 2rem;
+    }
+
+    .conf-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .btn-outline {
+      padding: 0.75rem 1.5rem;
+      border: 1px solid #A65D3F;
+      color: #A65D3F;
+      text-decoration: none;
+      font-size: 0.8125rem;
+      transition: all 0.2s;
+      border-radius: 4px;
+    }
+
+    .btn-outline:hover {
+      background: #A65D3F;
+      color: white;
+    }
+
+    .btn-primary {
+      padding: 0.75rem 1.5rem;
+      background: #A65D3F;
+      color: white;
+      border: none;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .btn-primary:hover {
+      background: #B86B4A;
+    }
+
+    .image-side {
+      background: linear-gradient(135deg, #A65D3F 0%, #1A1F16 100%);
+      position: relative;
+    }
+
+    .image-overlay {
+      position: absolute;
+      inset: 0;
+      background: url('/images/laluna-restaurant-sunset.jpg') center/cover;
+      opacity: 0.5;
+    }
+
+    @media (max-width: 768px) {
+      .reservation-page {
+        grid-template-columns: 1fr;
+      }
+      
+      .image-side {
+        display: none;
+      }
+      
+      .form-side {
+        padding: 1.5rem;
+      }
+      
+      .seating-options {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .conf-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+
+  <script is:inline>
+    // Supabase config
+    const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+
+    // Get reservations from Supabase
+    async function getReservations(date) {
+      try {
+        const url = date 
+          ? `${SUPABASE_URL}/rest/v1/laluna_reservations?date=eq.${date}&select=*`
+          : `${SUPABASE_URL}/rest/v1/laluna_reservations?select=*`;
+        const res = await fetch(url, {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          }
+        });
+        return await res.json();
+      } catch (e) {
+        console.error('Failed to fetch reservations:', e);
+        return [];
+      }
+    }
+
+    // Save reservation to Supabase
+    async function saveReservation(reservation) {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=representation'
+          },
+          body: JSON.stringify(reservation)
+        });
+        const data = await res.json();
+        return data[0] || data;
+      } catch (e) {
+        console.error('Failed to save reservation:', e);
+        throw e;
+      }
+    }
+
+    // Set default date to today
+    const today = new Date();
+    const dateInput = document.getElementById('date');
+    dateInput.valueAsDate = today;
+    dateInput.min = today.toISOString().split('T')[0];
+
+    // Set max date to 30 days out
+    const maxDate = new Date();
+    maxDate.setDate(maxDate.getDate() + 30);
+    dateInput.max = maxDate.toISOString().split('T')[0];
+
+    // Party size selection
+    document.querySelectorAll('.party-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.party-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      });
+    });
+
+    // Time selection
+    document.querySelectorAll('.time-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('unavailable')) return;
+        document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      });
+    });
+
+    // Seating selection
+    document.querySelectorAll('.seating-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.seating-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      });
+    });
+
+    // Check availability when date changes
+    dateInput.addEventListener('change', () => {
+      checkAvailability();
+    });
+
+    async function checkAvailability() {
+      const selectedDate = dateInput.value;
+      const reservations = await getReservations(selectedDate);
+      
+      // Reset all buttons
+      document.querySelectorAll('.time-btn').forEach(btn => {
+        btn.classList.remove('unavailable');
+      });
+
+      // Mark booked times (simplified - in real system would check table capacity)
+      const bookedTimes = reservations.reduce((acc, r) => {
+        acc[r.time] = (acc[r.time] || 0) + 1;
+        return acc;
+      }, {});
+
+      // If 8+ reservations at same time, mark as unavailable
+      Object.entries(bookedTimes).forEach(([time, count]) => {
+        if (count >= 8) {
+          const btn = document.querySelector(`.time-btn[data-time="${time}"]`);
+          if (btn) btn.classList.add('unavailable');
+        }
+      });
+    }
+
+    function showStep(step) {
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      document.getElementById('step-' + step).classList.add('active');
+      
+      if (step === 2) {
+        // Update summary
+        const date = dateInput.value;
+        const time = document.querySelector('.time-btn.selected')?.dataset.time || '18:30';
+        const guests = document.querySelector('.party-btn.selected')?.dataset.guests || '2';
+        
+        const dateObj = new Date(date + 'T12:00:00');
+        const todayDate = new Date();
+        const tomorrow = new Date(todayDate);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        
+        let dateStr = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+        if (dateObj.toDateString() === todayDate.toDateString()) dateStr = 'Today';
+        if (dateObj.toDateString() === tomorrow.toDateString()) dateStr = 'Tomorrow';
+        
+        document.getElementById('summary-date').textContent = dateStr;
+        document.getElementById('summary-time').textContent = time;
+        document.getElementById('summary-guests').textContent = guests + (guests === '1' ? ' guest' : ' guests');
+      }
+    }
+
+    async function submitReservation() {
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const notes = document.getElementById('notes').value.trim();
+      
+      // Validation
+      let valid = true;
+      if (!name) {
+        document.getElementById('name').classList.add('error');
+        valid = false;
+      } else {
+        document.getElementById('name').classList.remove('error');
+      }
+      
+      if (!phone) {
+        document.getElementById('phone').classList.add('error');
+        valid = false;
+      } else {
+        document.getElementById('phone').classList.remove('error');
+      }
+      
+      if (!valid) return;
+
+      const date = dateInput.value;
+      const time = document.querySelector('.time-btn.selected')?.dataset.time || '18:30';
+      const guests = document.querySelector('.party-btn.selected')?.dataset.guests || '2';
+      const zone = document.querySelector('.seating-btn.selected')?.dataset.zone || 'any';
+
+      const reservation = {
+        date: date,
+        time: time,
+        guests: parseInt(guests) || 2,
+        guest_name: name,
+        guest_phone: phone,
+        guest_email: email,
+        zone_preference: zone,
+        special_requests: notes,
+        status: 'confirmed'
+      };
+
+      // Disable button while saving
+      const btn = document.getElementById('confirmBtn');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+
+      try {
+        // Save to Supabase
+        const saved = await saveReservation(reservation);
+
+        // Update confirmation
+        const dateObj = new Date(date + 'T12:00:00');
+        document.getElementById('conf-date').textContent = dateObj.toLocaleDateString('en-US', { 
+          weekday: 'long', month: 'long', day: 'numeric' 
+        });
+        document.getElementById('conf-time').textContent = time;
+        document.getElementById('conf-id').textContent = saved.id?.slice(0, 8).toUpperCase() || 'COY-' + Date.now().toString(36).toUpperCase();
+
+        // Show confirmation
+        showStep(3);
+      } catch (e) {
+        alert('Failed to save reservation. Please try again.');
+        btn.disabled = false;
+        btn.textContent = 'Confirm Reservation';
+      }
+    }
+
+    function addToCalendar() {
+      const date = dateInput.value;
+      const time = document.querySelector('.time-btn.selected')?.dataset.time || '18:30';
+      const [hours, minutes] = time.split(':');
+      
+      const startDate = new Date(date + 'T' + time + ':00');
+      const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000); // 2 hours
+      
+      const formatDate = (d) => d.toISOString().replace(/-|:|\.\d{3}/g, '');
+      
+      const calUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Dinner at Coyol')}&dates=${formatDate(startDate)}/${formatDate(endDate)}&location=${encodeURIComponent('La Luna Restaurant, Mar Azul, Nosara, Costa Rica')}&details=${encodeURIComponent('Reservation at La Luna Restaurant\\n+506 8855-9146')}`;
+      
+      window.open(calUrl, '_blank');
+    }
+
+    // Initial availability check
+    checkAvailability();
+  </script>
+</Layout>
