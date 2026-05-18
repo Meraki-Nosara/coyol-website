@@ -15,23 +15,22 @@ These tasks MUST be completed before any project work:
 
 ## 🍽️ Restaurant Reservations — CHECK EVERY HEARTBEAT!
 
-### Coyol Restaurant
+### Coyol Restaurant — AUTOMATED!
 **Supabase table:** `coyol_reservations`
 **Email account:** `coyol-restaurant` (reservations@coyolrestaurant.com)
-**Confirmation script:** `~/.openclaw/workspace/coyol-website/scripts/send-confirmation.cjs`
 
-**Check for new reservations:**
+**Run the automated check script:**
 ```bash
-curl -s "https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/coyol_reservations?select=*&order=created_at.desc&limit=10" \
-  -H "apikey: sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD" \
-  -H "Authorization: Bearer sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD"
+node ~/.openclaw/workspace/coyol-website/scripts/check-reservations.cjs
 ```
 
-**For each new reservation (created in last 30 min, status=confirmed):**
-1. Check if confirmation email was sent (track in `memory/reservations-sent.json`)
-2. If not sent, run: `node ~/.openclaw/workspace/coyol-website/scripts/send-confirmation.cjs <reservation-id>`
-3. Log the sent confirmation
-4. If same-day booking, alert Marion
+This script automatically:
+1. Fetches confirmed reservations from last 24 hours
+2. Checks against `memory/reservations-sent.json`
+3. Sends confirmation emails for any unsent reservations
+4. Updates the tracking file
+
+**If same-day booking, alert Marion!**
 
 ### La Luna Restaurant
 **Supabase table:** `laluna_reservations`
