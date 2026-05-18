@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Casa Nispero — Solar Backup Options</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #1a1f16;
+      color: #f5f3ef;
+      padding: 40px;
+      min-height: 100vh;
+    }
+    
+    .page {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, #1a1f16 0%, #252b20 100%);
+      border: 1px solid #3d4f3d;
+      border-radius: 12px;
+      padding: 50px;
+    }
+    
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+      border-bottom: 2px solid #3d4f3d;
+    }
+    
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 42px;
+      font-weight: 600;
+      color: #f5f3ef;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+    
+    .header .subtitle {
+      font-size: 16px;
+      color: #c4a67c;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+    
+    .header .location {
+      font-size: 14px;
+      color: #8a9a8a;
+      margin-top: 8px;
+    }
+    
+    /* System Specs */
+    .system-specs {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-bottom: 40px;
+      padding: 25px;
+      background: rgba(61, 79, 61, 0.2);
+      border-radius: 8px;
+      border: 1px solid #3d4f3d;
+    }
+    
+    .spec {
+      text-align: center;
+    }
+    
+    .spec-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: #c4a67c;
+    }
+    
+    .spec-label {
+      font-size: 12px;
+      color: #8a9a8a;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+    
+    /* Options Grid */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    
+    .option-card {
+      background: rgba(26, 31, 22, 0.8);
+      border: 2px solid #3d4f3d;
+      border-radius: 12px;
+      padding: 25px;
+      transition: all 0.3s ease;
+    }
+    
+    .option-card.light {
+      border-color: #5b8a5b;
+    }
+    
+    .option-card.moderate {
+      border-color: #c4a67c;
+    }
+    
+    .option-card.heavy {
+      border-color: #a65d3f;
+    }
+    
+    .option-header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #3d4f3d;
+    }
+    
+    .option-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+    
+    .option-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    .option-card.light .option-title { color: #5b8a5b; }
+    .option-card.moderate .option-title { color: #c4a67c; }
+    .option-card.heavy .option-title { color: #a65d3f; }
+    
+    .option-load {
+      font-size: 14px;
+      color: #8a9a8a;
+      margin-top: 5px;
+    }
+    
+    .option-section {
+      margin-bottom: 18px;
+    }
+    
+    .option-section-title {
+      font-size: 11px;
+      color: #8a9a8a;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    
+    .option-list {
+      list-style: none;
+      font-size: 13px;
+      color: #d4c9b5;
+    }
+    
+    .option-list li {
+      padding: 4px 0;
+      padding-left: 18px;
+      position: relative;
+    }
+    
+    .option-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #5b8a5b;
+    }
+    
+    .time-badges {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .time-badge {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+    
+    .time-badge.day {
+      background: rgba(91, 138, 91, 0.2);
+      border: 1px solid #5b8a5b;
+    }
+    
+    .time-badge.night {
+      background: rgba(61, 79, 61, 0.2);
+      border: 1px solid #3d4f3d;
+    }
+    
+    .time-badge .label {
+      color: #8a9a8a;
+    }
+    
+    .time-badge .value {
+      font-weight: 600;
+    }
+    
+    .time-badge.day .value { color: #5b8a5b; }
+    
+    .option-card.light .time-badge.night .value { color: #5b8a5b; }
+    .option-card.moderate .time-badge.night .value { color: #c4a67c; }
+    .option-card.heavy .time-badge.night .value { color: #a65d3f; }
+    
+    .best-for {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #3d4f3d;
+      font-size: 12px;
+      color: #8a9a8a;
+      text-align: center;
+      font-style: italic;
+    }
+    
+    /* Never Backup Section */
+    .never-backup {
+      background: rgba(166, 93, 63, 0.1);
+      border: 1px solid #a65d3f;
+      border-radius: 8px;
+      padding: 25px;
+      margin-bottom: 30px;
+    }
+    
+    .never-backup h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      color: #a65d3f;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .never-backup-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 15px;
+    }
+    
+    .never-backup-item {
+      text-align: center;
+      padding: 15px 10px;
+      background: rgba(26, 31, 22, 0.5);
+      border-radius: 6px;
+    }
+    
+    .never-backup-item .name {
+      font-size: 12px;
+      color: #d4c9b5;
+      margin-bottom: 5px;
+    }
+    
+    .never-backup-item .watts {
+      font-size: 14px;
+      font-weight: 600;
+      color: #a65d3f;
+    }
+    
+    /* Recommendation */
+    .recommendation {
+      background: linear-gradient(135deg, rgba(196, 167, 124, 0.15) 0%, rgba(61, 79, 61, 0.15) 100%);
+      border: 2px solid #c4a67c;
+      border-radius: 8px;
+      padding: 25px;
+      text-align: center;
+    }
+    
+    .recommendation h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: #c4a67c;
+      margin-bottom: 10px;
+    }
+    
+    .recommendation p {
+      font-size: 14px;
+      color: #d4c9b5;
+      line-height: 1.6;
+    }
+    
+    /* Footer */
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #3d4f3d;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #6a7a6a;
+    }
+    
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+      
+      .page {
+        border: none;
+        box-shadow: none;
+        padding: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- Header -->
+    <div class="header">
+      <h1>CASA NISPERO</h1>
+      <div class="subtitle">Solar Backup System</div>
+      <div class="location">Lot 2, Mar Azul · Nosara, Costa Rica</div>
+    </div>
+    
+    <!-- System Specs -->
+    <div class="system-specs">
+      <div class="spec">
+        <div class="spec-value">25 kW</div>
+        <div class="spec-label">Inverter Capacity</div>
+      </div>
+      <div class="spec">
+        <div class="spec-value">20 kWh</div>
+        <div class="spec-label">Battery Storage</div>
+      </div>
+      <div class="spec">
+        <div class="spec-value">10</div>
+        <div class="spec-label">Solar Panels</div>
+      </div>
+      <div class="spec">
+        <div class="spec-value">~20 kWh</div>
+        <div class="spec-label">Daily Production</div>
+      </div>
+    </div>
+    
+    <!-- Options Grid -->
+    <div class="options-grid">
+      <!-- Option 1: Light -->
+      <div class="option-card light">
+        <div class="option-header">
+          <div class="option-icon">💡</div>
+          <div class="option-title">LIGHT</div>
+          <div class="option-load">~1.1 kW</div>
+        </div>
+        
+        <div class="option-section">
+          <div class="option-section-title">What's Powered</div>
+          <ul class="option-list">
+            <li>Refrigerator</li>
+            <li>Wine cooler</li>
+            <li>All LED lights</li>
+            <li>6 Ceiling fans</li>
+            <li>WiFi + 9 APs</li>
+            <li>Device charging</li>
+          </ul>
+        </div>
+        
+        <div class="option-section">
+          <div class="option-section-title">Backup Duration</div>
+          <div class="time-badges">
+            <div class="time-badge day">
+              <span class="label">☀️ Daytime</span>
+              <span class="value">Indefinite</span>
+            </div>
+            <div class="time-badge night">
+              <span class="label">🌙 Night</span>
+              <span class="value">15 hours</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="best-for">
+          Best for: Extended outages, sleeping with breeze
+        </div>
+      </div>
+      
+      <!-- Option 2: Moderate -->
+      <div class="option-card moderate">
+        <div class="option-header">
+          <div class="option-icon">❄️</div>
+          <div class="option-title">MODERATE</div>
+          <div class="option-load">~3.5 kW</div>
+        </div>
+        
+        <div class="option-section">
+          <div class="option-section-title">What's Powered</div>
+          <ul class="option-list">
+            <li>Everything in Light</li>
+            <li>1× A/C (Master)</li>
+            <li>Kitchen outlets</li>
+            <li>Microwave / blender</li>
+          </ul>
+        </div>
+        
+        <div class="option-section">
+          <div class="option-section-title">Backup Duration</div>
+          <div class="time-badges">
+            <div class="time-badge day">
+              <span class="label">☀️ Daytime</span>
+              <span class="value">Indefinite</span>
+            </div>
+            <div class="time-badge night">
+              <span class="label">🌙 Night</span>
+              <span class="value">5 hours</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="best-for">
+          Best for: Daily comfort, cool sleep in Master
+        </div>
+      </div>
+      
+      <!-- Option 3: Heavy -->
+      <div class="option-card heavy">
+        <div class="option-header">
+          <div class="option-icon">❄️❄️</div>
+          <div class="option-title">HEAVY</div>
+          <div class="option-load">~7 kW</div>
+        </div>
+        
+        <div class="option-section">
+          <div class="option-section-title">What's Powered</div>
+          <ul class="option-list">
+            <li>Everything in Moderate</li>
+            <li>+2 more A/C units</li>
+            <li>Office outlets</li>
+            <li>Full house comfort</li>
+          </ul>
+        </div>
+        
+        <div class="option-section">
+          <div class="option-section-title">Backup Duration</div>
+          <div class="time-badges">
+            <div class="time-badge day">
+              <span class="label">☀️ Daytime</span>
+              <span class="value">Indefinite</span>
+            </div>
+            <div class="time-badge night">
+              <span class="label">🌙 Night</span>
+              <span class="value">2.5 hours</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="best-for">
+          Best for: Guests, short outages only
+        </div>
+      </div>
+    </div>
+    
+    <!-- Never on Backup -->
+    <div class="never-backup">
+      <h3>⛔ Never on Backup — Grid Only</h3>
+      <div class="never-backup-grid">
+        <div class="never-backup-item">
+          <div class="name">Calentador Paso</div>
+          <div class="watts">8.5 kW</div>
+        </div>
+        <div class="never-backup-item">
+          <div class="name">Tanque Agua</div>
+          <div class="watts">8.5 kW</div>
+        </div>
+        <div class="never-backup-item">
+          <div class="name">Horno</div>
+          <div class="watts">5 kW</div>
+        </div>
+        <div class="never-backup-item">
+          <div class="name">Secadora</div>
+          <div class="watts">5 kW</div>
+        </div>
+        <div class="never-backup-item">
+          <div class="name">EV Charger</div>
+          <div class="watts">4.5 kW</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Recommendation -->
+    <div class="recommendation">
+      <h3>✨ Recommendation</h3>
+      <p>
+        Wire the system for <strong>MODERATE</strong> capacity. Run on <strong>LIGHT</strong> most nights 
+        (fans + breeze are comfortable in Nosara). Turn on Master A/C only when needed. 
+        This gives you maximum flexibility and multi-day outage protection.
+      </p>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+      <span>Prepared for Marion Peri · Coyol Group</span>
+      <span>May 2026</span>
+    </div>
+  </div>
+</body>
+</html>
