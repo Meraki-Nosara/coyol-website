@@ -1241,33 +1241,47 @@ import Layout from '../../../layouts/Layout.astro';
       // Default layouts - Coyol Restaurant
       return {
         inside: [
-          { id: 'bar', name: 'Bar', type: 'bar', x: 150, y: 80, minCovers: 1, maxCovers: 8 },
+          // Left side
+          { id: 't32', name: '32', type: 'round-lg', x: 60, y: 60, minCovers: 4, maxCovers: 6 },
+          { id: 't1', name: '1', type: 'square', x: 150, y: 60, minCovers: 2, maxCovers: 4 },
+          { id: 't34', name: '34', type: 'round-lg', x: 250, y: 60, minCovers: 4, maxCovers: 6 },
+          // Center-right
+          { id: 't3', name: '3', type: 'square', x: 200, y: 140, minCovers: 2, maxCovers: 4 },
+          { id: 't2', name: '2', type: 'square', x: 300, y: 140, minCovers: 2, maxCovers: 4 },
+          { id: 't4', name: '4', type: 'square', x: 350, y: 60, minCovers: 2, maxCovers: 4 },
+          // Bottom
+          { id: 'sofa-adent', name: 'Sofa', type: 'sofa', x: 60, y: 220, minCovers: 2, maxCovers: 4 },
+          { id: 'bar-1', name: 'Bar', type: 'square', x: 180, y: 250, minCovers: 2, maxCovers: 2 },
+          { id: 'bar-2', name: 'Bar', type: 'square', x: 230, y: 250, minCovers: 2, maxCovers: 2 },
+          { id: 'bar-3', name: 'Bar', type: 'square', x: 280, y: 250, minCovers: 2, maxCovers: 2 },
         ],
         terraza: [
-          { id: 't11', name: '11', type: 'square', x: 80, y: 60, minCovers: 2, maxCovers: 4 },
-          { id: 't12', name: '12', type: 'square', x: 160, y: 60, minCovers: 2, maxCovers: 4 },
-          { id: 't13', name: '13', type: 'square', x: 240, y: 60, minCovers: 2, maxCovers: 4 },
+          // Top row
+          { id: 't21', name: '21', type: 'square', x: 60, y: 50, minCovers: 2, maxCovers: 4 },
+          { id: 't23', name: '23', type: 'square', x: 140, y: 50, minCovers: 2, maxCovers: 4 },
+          { id: 't24', name: '24', type: 'square', x: 220, y: 50, minCovers: 2, maxCovers: 4 },
+          { id: 't26', name: '26', type: 'square', x: 300, y: 50, minCovers: 2, maxCovers: 4 },
+          { id: 't28', name: '28', type: 'square', x: 380, y: 50, minCovers: 2, maxCovers: 4 },
+          // Bottom row
+          { id: 't20', name: '20', type: 'square', x: 100, y: 150, minCovers: 2, maxCovers: 4 },
+          { id: 't22', name: '22', type: 'square', x: 180, y: 150, minCovers: 2, maxCovers: 4 },
+          { id: 't25', name: '25', type: 'square', x: 260, y: 150, minCovers: 2, maxCovers: 4 },
+          { id: 't27', name: '27', type: 'square', x: 340, y: 150, minCovers: 2, maxCovers: 4 },
         ],
         jardin: [
-          // Top row (horizontal) - tables 5-10
-          { id: 't5', name: '5', type: 'square', x: 120, y: 40, minCovers: 2, maxCovers: 4 },
-          { id: 't6', name: '6', type: 'square', x: 190, y: 40, minCovers: 2, maxCovers: 4 },
-          { id: 't7', name: '7', type: 'square', x: 260, y: 40, minCovers: 2, maxCovers: 4 },
-          { id: 't8', name: '8', type: 'square', x: 330, y: 40, minCovers: 2, maxCovers: 4 },
-          { id: 't9', name: '9', type: 'square', x: 400, y: 40, minCovers: 2, maxCovers: 4 },
-          { id: 't10', name: '10', type: 'square', x: 470, y: 40, minCovers: 2, maxCovers: 4 },
-          // Left column (vertical) - tables 1-4
-          { id: 't1', name: '1', type: 'square', x: 50, y: 120, minCovers: 2, maxCovers: 4 },
-          { id: 't2', name: '2', type: 'square', x: 50, y: 190, minCovers: 2, maxCovers: 4 },
-          { id: 't3', name: '3', type: 'square', x: 50, y: 260, minCovers: 2, maxCovers: 4 },
-          { id: 't4', name: '4', type: 'square', x: 50, y: 330, minCovers: 2, maxCovers: 4 },
-          // Sofas on far left
-          { id: 'sofa-a', name: 'Sofa A', type: 'sofa', x: 10, y: 80, minCovers: 2, maxCovers: 4 },
-          { id: 'sofa-b', name: 'Sofa B', type: 'sofa', x: 10, y: 160, minCovers: 2, maxCovers: 4 },
-          // Center area - larger tables
-          { id: 't20', name: '20', type: 'round-lg', x: 200, y: 180, minCovers: 4, maxCovers: 6 },
-          { id: 't21', name: '21', type: 'round-lg', x: 300, y: 180, minCovers: 4, maxCovers: 6 },
-          { id: 't26', name: '26', type: 'round-xl', x: 250, y: 280, minCovers: 6, maxCovers: 10 },
+          // Top row - tables 5-9
+          { id: 't5', name: '5', type: 'square', x: 100, y: 80, minCovers: 2, maxCovers: 4 },
+          { id: 't6', name: '6', type: 'square', x: 170, y: 80, minCovers: 2, maxCovers: 4 },
+          { id: 't7', name: '7', type: 'square', x: 240, y: 80, minCovers: 2, maxCovers: 4 },
+          { id: 't8', name: '8', type: 'square', x: 310, y: 80, minCovers: 2, maxCovers: 4 },
+          { id: 't9', name: '9', type: 'square', x: 380, y: 80, minCovers: 2, maxCovers: 4 },
+          // Sofa afuer (top left)
+          { id: 'sofa-afuer', name: 'Sofa', type: 'sofa', x: 40, y: 40, minCovers: 2, maxCovers: 4 },
+          // Left column - tables 4, 3, 2, 1 (top to bottom)
+          { id: 't4', name: '4', type: 'sofa', x: 40, y: 140, minCovers: 2, maxCovers: 4 },
+          { id: 't3', name: '3', type: 'square', x: 40, y: 210, minCovers: 2, maxCovers: 4 },
+          { id: 't2', name: '2', type: 'square', x: 40, y: 280, minCovers: 2, maxCovers: 4 },
+          { id: 't1', name: '1', type: 'square', x: 40, y: 350, minCovers: 2, maxCovers: 4 },
         ]
       };
     }
