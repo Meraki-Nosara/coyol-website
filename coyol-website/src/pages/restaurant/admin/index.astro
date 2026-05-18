@@ -217,6 +217,49 @@ import Layout from '../../../layouts/Layout.astro';
       </div>
     </div>
 
+    <!-- Reservation Detail Modal -->
+    <div class="modal" id="resDetailModal">
+      <div class="modal-content detail-modal">
+        <div class="modal-header">
+          <h3 id="detailName">Guest Name</h3>
+          <span id="detailStatus" class="status-badge">confirmed</span>
+          <button class="modal-close" onclick="closeDetailModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label">Party Size</span>
+              <span class="detail-value" id="detailGuests">2 guests</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Time</span>
+              <span class="detail-value" id="detailTime">7:00 PM</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Phone</span>
+              <span class="detail-value" id="detailPhone">+506 8888-8888</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Email</span>
+              <span class="detail-value" id="detailEmail">guest@email.com</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Seating</span>
+              <span class="detail-value" id="detailZone">Any</span>
+            </div>
+            <div class="detail-item full-width">
+              <span class="detail-label">Notes</span>
+              <span class="detail-value" id="detailNotes">None</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer detail-actions">
+          <button class="btn-seat" id="seatBtn" onclick="toggleSeatStatus()">Seat</button>
+          <button class="btn-cancel" onclick="cancelReservation()">Cancel Reservation</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <style>
@@ -1126,6 +1169,30 @@ import Layout from '../../../layouts/Layout.astro';
     .modal-body { padding: 1rem; }
     .modal-footer { display: flex; gap: 0.5rem; padding: 1rem; border-top: 1px solid var(--limestone); justify-content: flex-end; }
 
+    /* Detail Modal */
+    .detail-modal { max-width: 400px; }
+    .detail-modal .modal-header { display: flex; align-items: center; gap: 1rem; }
+    .detail-modal .modal-header h3 { flex: 1; }
+    .status-badge { padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.75rem; text-transform: uppercase; font-weight: 600; }
+    .status-badge.confirmed { background: #d4edda; color: #155724; }
+    .status-badge.seated { background: #cce5ff; color: #004085; }
+    .status-badge.cancelled { background: #f8d7da; color: #721c24; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .detail-item { display: flex; flex-direction: column; gap: 0.25rem; }
+    .detail-item.full-width { grid-column: 1 / -1; }
+    .detail-label { font-size: 0.6875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
+    .detail-value { font-size: 0.9375rem; color: var(--santorini); }
+    .detail-actions { justify-content: space-between; }
+    .btn-seat { background: var(--keswick); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
+    .btn-seat:hover { background: var(--coniston); }
+    .btn-seat.active { background: #0066cc; }
+    .btn-cancel { background: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; }
+    .btn-cancel:hover { background: #dc3545; color: white; }
+    
+    /* Selected states */
+    .res-row.selected { background: rgba(61, 79, 61, 0.15); border-left: 3px solid var(--keswick); }
+    .table.selected { box-shadow: 0 0 0 3px var(--keswick), 0 0 10px rgba(61, 79, 61, 0.4); }
+
     .form-row { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; }
     .form-group { flex: 1; }
     .form-group.flex-2 { flex: 2; }
@@ -1504,9 +1571,83 @@ import Layout from '../../../layouts/Layout.astro';
       draggedTable = null;
     });
 
+    let selectedReservationId = null;
+    
     function selectReservation(id) {
-      console.log('Selected reservation:', id);
-      // Could highlight on floor plan, open edit modal, etc.
+      selectedReservationId = id;
+      const res = cachedReservations.find(r => r.id === id);
+      if (!res) return;
+      
+      // Highlight the reservation row
+      document.querySelectorAll('.res-row').forEach(row => row.classList.remove('selected'));
+      document.querySelector(`.res-row[onclick*="${id}"]`)?.classList.add('selected');
+      
+      // Highlight the table on floor plan if assigned
+      document.querySelectorAll('.table').forEach(t => t.classList.remove('selected'));
+      if (res.tableId) {
+        document.querySelector(`.table[data-table="${res.tableId}"]`)?.classList.add('selected');
+      }
+      
+      // Open detail modal
+      openReservationDetail(res);
+    }
+    
+    function openReservationDetail(res) {
+      const modal = document.getElementById('resDetailModal');
+      if (!modal) return;
+      
+      document.getElementById('detailName').textContent = res.guestName;
+      document.getElementById('detailGuests').textContent = res.guests + ' guests';
+      document.getElementById('detailTime').textContent = formatTime12(res.time);
+      document.getElementById('detailPhone').textContent = res.guestPhone || 'No phone';
+      document.getElementById('detailEmail').textContent = res.guestEmail || 'No email';
+      document.getElementById('detailZone').textContent = res.zonePreference || 'Any';
+      document.getElementById('detailNotes').textContent = res.specialRequests || 'None';
+      document.getElementById('detailStatus').textContent = res.status;
+      document.getElementById('detailStatus').className = 'status-badge ' + res.status;
+      
+      // Update button states
+      const seatBtn = document.getElementById('seatBtn');
+      const confirmBtn = document.getElementById('confirmStatusBtn');
+      if (res.status === 'seated') {
+        seatBtn.textContent = 'Unseat';
+        seatBtn.classList.add('active');
+      } else {
+        seatBtn.textContent = 'Seat';
+        seatBtn.classList.remove('active');
+      }
+      
+      modal.classList.add('open');
+    }
+    
+    function closeDetailModal() {
+      document.getElementById('resDetailModal')?.classList.remove('open');
+      selectedReservationId = null;
+    }
+    
+    async function toggleSeatStatus() {
+      if (!selectedReservationId) return;
+      const res = cachedReservations.find(r => r.id === selectedReservationId);
+      if (!res) return;
+      
+      const newStatus = res.status === 'seated' ? 'confirmed' : 'seated';
+      await updateReservationStatus(selectedReservationId, newStatus);
+      await loadReservations();
+      renderFloor();
+      
+      // Refresh modal
+      const updatedRes = cachedReservations.find(r => r.id === selectedReservationId);
+      if (updatedRes) openReservationDetail(updatedRes);
+    }
+    
+    async function cancelReservation() {
+      if (!selectedReservationId) return;
+      if (!confirm('Cancel this reservation?')) return;
+      
+      await updateReservationStatus(selectedReservationId, 'cancelled');
+      closeDetailModal();
+      await loadReservations();
+      renderFloor();
     }
 
     // Date navigation
