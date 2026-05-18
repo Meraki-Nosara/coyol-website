@@ -75,9 +75,9 @@ import Layout from '../../../layouts/Layout.astro';
           <button id="nextDay">→</button>
         </div>
         <div class="zone-tabs">
-          <button class="zone-tab" data-zone="indoor">INDOOR</button>
-          <button class="zone-tab active" data-zone="garden">GARDEN</button>
-          <button class="zone-tab" data-zone="patio">PATIO</button>
+          <button class="zone-tab" data-zone="inside">INSIDE</button>
+          <button class="zone-tab active" data-zone="jardin">JARDIN</button>
+          <button class="zone-tab" data-zone="terraza">TERRAZA</button>
         </div>
         <div class="time-filter-dropdown">
           <button class="time-btn" id="timeBtn">
@@ -1145,7 +1145,7 @@ import Layout from '../../../layouts/Layout.astro';
     const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
     const LAYOUT_KEY = 'coyol_floor_layout';
     let currentDate = new Date();
-    let currentZone = 'garden';
+    let currentZone = 'jardin';
     let currentStatusFilter = 'coming';
     let cachedReservations = [];
 
@@ -1238,39 +1238,36 @@ import Layout from '../../../layouts/Layout.astro';
       const saved = localStorage.getItem(LAYOUT_KEY);
       if (saved) return JSON.parse(saved);
       
-      // Default layouts
+      // Default layouts - Coyol Restaurant
       return {
-        indoor: [
-          { id: 'high-1', name: 'high table', type: 'square', x: 80, y: 60, minCovers: 2, maxCovers: 4 },
-          { id: 'high-2', name: 'high table', type: 'square', x: 180, y: 60, minCovers: 2, maxCovers: 4 },
-          { id: 'bar', name: 'bar', type: 'bar', x: 170, y: 160, minCovers: 1, maxCovers: 8 },
-          { id: 'sofa-1', name: 'indoor sofa', type: 'sofa', x: 320, y: 50, minCovers: 2, maxCovers: 4 },
-          { id: 'sofa-2', name: 'indoor sofa', type: 'sofa', x: 320, y: 130, minCovers: 2, maxCovers: 4 },
-          { id: 'sofa-3', name: 'indoor sofa', type: 'sofa', x: 50, y: 130, minCovers: 2, maxCovers: 4 },
+        inside: [
+          { id: 'bar', name: 'Bar', type: 'bar', x: 150, y: 80, minCovers: 1, maxCovers: 8 },
         ],
-        patio: [
-          { id: 't12', name: '12', type: 'square', x: 80, y: 60, minCovers: 2, maxCovers: 4 },
-          { id: 't11', name: '11', type: 'square', x: 160, y: 60, minCovers: 2, maxCovers: 4 },
-          { id: 't10', name: '10', type: 'square', x: 240, y: 60, minCovers: 2, maxCovers: 4 },
-          { id: 't1', name: '1', type: 'round-lg', x: 80, y: 200, minCovers: 4, maxCovers: 6 },
-          { id: 't2', name: '2', type: 'round-lg', x: 180, y: 200, minCovers: 4, maxCovers: 6 },
-          { id: 't3', name: '3', type: 'round-lg', x: 280, y: 200, minCovers: 4, maxCovers: 6 },
+        terraza: [
+          { id: 't11', name: '11', type: 'square', x: 80, y: 60, minCovers: 2, maxCovers: 4 },
+          { id: 't12', name: '12', type: 'square', x: 160, y: 60, minCovers: 2, maxCovers: 4 },
+          { id: 't13', name: '13', type: 'square', x: 240, y: 60, minCovers: 2, maxCovers: 4 },
         ],
-        garden: [
-          { id: 't17', name: '17', type: 'diamond', x: 130, y: 30, minCovers: 2, maxCovers: 4 },
-          { id: 't18-1', name: '18-1', type: 'square', x: 200, y: 40, minCovers: 2, maxCovers: 4 },
-          { id: 't18-2', name: '18-2', type: 'square', x: 270, y: 40, minCovers: 2, maxCovers: 4 },
-          { id: 't18-3', name: '18-3', type: 'square', x: 340, y: 40, minCovers: 2, maxCovers: 4 },
-          { id: 't18-4', name: '18-4', type: 'square', x: 410, y: 40, minCovers: 2, maxCovers: 4 },
-          { id: 't20', name: '20', type: 'diamond', x: 520, y: 50, minCovers: 2, maxCovers: 4 },
-          { id: 'sofa-21', name: 'sofa 21', type: 'sofa', x: 620, y: 60, minCovers: 2, maxCovers: 4 },
-          { id: 'sofa-16', name: 'sofa 16', type: 'diamond', x: 40, y: 90, minCovers: 2, maxCovers: 4 },
-          { id: 'sofa-15', name: 'sofa 15', type: 'diamond', x: 40, y: 190, minCovers: 2, maxCovers: 4 },
-          { id: 't26', name: '26', type: 'round-xl', x: 200, y: 200, minCovers: 6, maxCovers: 10 },
-          { id: 't25', name: '25', type: 'round-lg', x: 380, y: 240, minCovers: 4, maxCovers: 8 },
-          { id: 'sofa-14', name: 'sofa 14', type: 'diamond', x: 40, y: 290, minCovers: 2, maxCovers: 4 },
-          { id: 'sofa-13', name: 'sofa 13', type: 'sofa', x: 340, y: 380, minCovers: 2, maxCovers: 4 },
-          { id: 'sofa-23', name: 'sofa 23', type: 'sofa', x: 500, y: 380, minCovers: 2, maxCovers: 4 },
+        jardin: [
+          // Top row (horizontal) - tables 5-10
+          { id: 't5', name: '5', type: 'square', x: 120, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 't6', name: '6', type: 'square', x: 190, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 't7', name: '7', type: 'square', x: 260, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 't8', name: '8', type: 'square', x: 330, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 't9', name: '9', type: 'square', x: 400, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 't10', name: '10', type: 'square', x: 470, y: 40, minCovers: 2, maxCovers: 4 },
+          // Left column (vertical) - tables 1-4
+          { id: 't1', name: '1', type: 'square', x: 50, y: 120, minCovers: 2, maxCovers: 4 },
+          { id: 't2', name: '2', type: 'square', x: 50, y: 190, minCovers: 2, maxCovers: 4 },
+          { id: 't3', name: '3', type: 'square', x: 50, y: 260, minCovers: 2, maxCovers: 4 },
+          { id: 't4', name: '4', type: 'square', x: 50, y: 330, minCovers: 2, maxCovers: 4 },
+          // Sofas on far left
+          { id: 'sofa-a', name: 'Sofa A', type: 'sofa', x: 10, y: 80, minCovers: 2, maxCovers: 4 },
+          { id: 'sofa-b', name: 'Sofa B', type: 'sofa', x: 10, y: 160, minCovers: 2, maxCovers: 4 },
+          // Center area - larger tables
+          { id: 't20', name: '20', type: 'round-lg', x: 200, y: 180, minCovers: 4, maxCovers: 6 },
+          { id: 't21', name: '21', type: 'round-lg', x: 300, y: 180, minCovers: 4, maxCovers: 6 },
+          { id: 't26', name: '26', type: 'round-xl', x: 250, y: 280, minCovers: 6, maxCovers: 10 },
         ]
       };
     }
