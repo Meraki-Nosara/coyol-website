@@ -1632,9 +1632,7 @@ import Layout from '../../../layouts/Layout.astro';
     setInterval(updateCurrentTimeDisplay, 60000);
     updateCurrentTimeDisplay();
 
-    // Load shifts from Supabase
-    const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+    // Load shifts from Supabase (uses SUPABASE_URL and SUPABASE_KEY from above)
 
     async function loadShifts() {
       try {
