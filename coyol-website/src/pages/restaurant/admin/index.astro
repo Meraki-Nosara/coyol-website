@@ -1144,6 +1144,14 @@ import Layout from '../../../layouts/Layout.astro';
     const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
     const LAYOUT_KEY = 'coyol_floor_layout';
+    const LAYOUT_VERSION = 'v2-coyol'; // Change this to force layout reset
+    
+    // Force reset if version mismatch
+    if (localStorage.getItem('coyol_layout_version') !== LAYOUT_VERSION) {
+      localStorage.removeItem(LAYOUT_KEY);
+      localStorage.setItem('coyol_layout_version', LAYOUT_VERSION);
+      console.log('Layout reset to new version:', LAYOUT_VERSION);
+    }
     let currentDate = new Date();
     let currentZone = 'jardin';
     let currentStatusFilter = 'coming';
