@@ -38,9 +38,9 @@ import Layout from '../../../layouts/Layout.astro';
           <span class="subtitle" id="tableCount">0 tables</span>
         </div>
         <div class="zone-tabs">
-          <button class="zone-tab" data-zone="indoor">Indoor</button>
-          <button class="zone-tab" data-zone="patio">Patio</button>
-          <button class="zone-tab active" data-zone="garden">Garden</button>
+          <button class="zone-tab" data-zone="inside">Inside</button>
+          <button class="zone-tab" data-zone="terraza">Terraza</button>
+          <button class="zone-tab active" data-zone="jardin">Jardin</button>
         </div>
         <div class="header-actions">
           <button class="btn-secondary" id="resetBtn">Reset Layout</button>
@@ -669,60 +669,56 @@ import Layout from '../../../layouts/Layout.astro';
 
   <script is:inline>
     const LAYOUT_KEY = 'coyol_floor_layout';
-    let currentZone = 'garden';
+    const LAYOUT_VERSION = 'v3-coyol-floor';
+    
+    // Force reset if version mismatch
+    if (localStorage.getItem('coyol_floor_version') !== LAYOUT_VERSION) {
+      localStorage.removeItem(LAYOUT_KEY);
+      localStorage.setItem('coyol_floor_version', LAYOUT_VERSION);
+      console.log('Floor layout reset to:', LAYOUT_VERSION);
+    }
+    
+    let currentZone = 'jardin';
     let selectedTable = null;
     let draggedTable = null;
     let dragOffset = { x: 0, y: 0 };
 
+    // Coyol Restaurant Default Layouts
     const defaultLayouts = {
-      indoor: [
-        { id: 'high-1', name: 'High 1', type: 'square', x: 200, y: 80, minCovers: 2, maxCovers: 4 },
-        { id: 'high-2', name: 'High 2', type: 'square', x: 300, y: 80, minCovers: 2, maxCovers: 4 },
-        { id: 'bar', name: 'Bar', type: 'bar', x: 400, y: 180, minCovers: 1, maxCovers: 8 },
-        { id: 'sofa-1', name: 'Sofa 1', type: 'sofa', x: 550, y: 80, minCovers: 2, maxCovers: 4 },
-        { id: 'sofa-2', name: 'Sofa 2', type: 'sofa', x: 550, y: 160, minCovers: 2, maxCovers: 4 },
-        { id: 'sofa-3', name: 'Sofa 3', type: 'sofa', x: 550, y: 240, minCovers: 2, maxCovers: 4 },
-        { id: 'sofa-4', name: 'Sofa 4', type: 'sofa', x: 200, y: 160, minCovers: 2, maxCovers: 4 },
-        { id: 'sofa-5', name: 'Sofa 5', type: 'sofa', x: 200, y: 240, minCovers: 2, maxCovers: 4 },
+      inside: [
+        { id: 't32', name: '32', type: 'round-lg', x: 100, y: 80, minCovers: 4, maxCovers: 6 },
+        { id: 't1', name: '1', type: 'square', x: 220, y: 80, minCovers: 2, maxCovers: 4 },
+        { id: 't34', name: '34', type: 'round-lg', x: 350, y: 80, minCovers: 4, maxCovers: 6 },
+        { id: 't3', name: '3', type: 'square', x: 280, y: 180, minCovers: 2, maxCovers: 4 },
+        { id: 't2', name: '2', type: 'square', x: 400, y: 180, minCovers: 2, maxCovers: 4 },
+        { id: 't4', name: '4', type: 'square', x: 480, y: 80, minCovers: 2, maxCovers: 4 },
+        { id: 'sofa-adent', name: 'Sofa', type: 'sofa', x: 100, y: 280, minCovers: 2, maxCovers: 4 },
+        { id: 'bar-1', name: 'Bar', type: 'square', x: 260, y: 320, minCovers: 2, maxCovers: 2 },
+        { id: 'bar-2', name: 'Bar', type: 'square', x: 330, y: 320, minCovers: 2, maxCovers: 2 },
+        { id: 'bar-3', name: 'Bar', type: 'square', x: 400, y: 320, minCovers: 2, maxCovers: 2 },
       ],
-      patio: [
-        // Top row
-        { id: 't12', name: '12', type: 'square', x: 150, y: 60, minCovers: 2, maxCovers: 4 },
-        { id: 't11', name: '11', type: 'square', x: 240, y: 60, minCovers: 2, maxCovers: 4 },
-        { id: 't10', name: '10', type: 'square', x: 330, y: 60, minCovers: 2, maxCovers: 4 },
-        { id: 't9', name: '9', type: 'round', x: 450, y: 60, minCovers: 2, maxCovers: 4 },
-        { id: 't8', name: '8', type: 'square', x: 560, y: 60, minCovers: 2, maxCovers: 4 },
-        { id: 't7', name: '7', type: 'square', x: 650, y: 60, minCovers: 2, maxCovers: 4 },
-        // Bottom row - larger tables
-        { id: 't1', name: '1', type: 'round-lg', x: 150, y: 200, minCovers: 4, maxCovers: 6 },
-        { id: 't2', name: '2', type: 'round-lg', x: 280, y: 200, minCovers: 4, maxCovers: 6 },
-        { id: 't3', name: '3', type: 'round-lg', x: 410, y: 200, minCovers: 4, maxCovers: 6 },
-        { id: 't4', name: '4', type: 'square', x: 560, y: 200, minCovers: 2, maxCovers: 4 },
-        { id: 't5', name: '5', type: 'square', x: 650, y: 200, minCovers: 2, maxCovers: 4 },
-        { id: 't6', name: '6', type: 'square', x: 740, y: 180, minCovers: 4, maxCovers: 6 },
+      terraza: [
+        { id: 't21', name: '21', type: 'square', x: 100, y: 60, minCovers: 2, maxCovers: 4 },
+        { id: 't23', name: '23', type: 'square', x: 200, y: 60, minCovers: 2, maxCovers: 4 },
+        { id: 't24', name: '24', type: 'square', x: 300, y: 60, minCovers: 2, maxCovers: 4 },
+        { id: 't26', name: '26', type: 'square', x: 400, y: 60, minCovers: 2, maxCovers: 4 },
+        { id: 't28', name: '28', type: 'square', x: 500, y: 60, minCovers: 2, maxCovers: 4 },
+        { id: 't20', name: '20', type: 'square', x: 150, y: 180, minCovers: 2, maxCovers: 4 },
+        { id: 't22', name: '22', type: 'square', x: 250, y: 180, minCovers: 2, maxCovers: 4 },
+        { id: 't25', name: '25', type: 'square', x: 350, y: 180, minCovers: 2, maxCovers: 4 },
+        { id: 't27', name: '27', type: 'square', x: 450, y: 180, minCovers: 2, maxCovers: 4 },
       ],
-      garden: [
-        // Top row - long communal table area
-        { id: 't17', name: '17', type: 'diamond', x: 150, y: 60, minCovers: 2, maxCovers: 4 },
-        { id: 't18-1', name: '18-1', type: 'square', x: 250, y: 60, minCovers: 2, maxCovers: 4 },
-        { id: 't18-2', name: '18-2', type: 'square', x: 330, y: 60, minCovers: 2, maxCovers: 4 },
-        { id: 't18-3', name: '18-3', type: 'square', x: 410, y: 60, minCovers: 2, maxCovers: 4 },
-        { id: 't18-4', name: '18-4', type: 'square', x: 490, y: 60, minCovers: 2, maxCovers: 4 },
-        { id: 't20', name: '20', type: 'diamond', x: 590, y: 60, minCovers: 2, maxCovers: 4 },
-        { id: 'sofa-21', name: 'Sofa 21', type: 'sofa', x: 700, y: 70, minCovers: 2, maxCovers: 4 },
-        // Left side sofas
-        { id: 'sofa-16', name: 'Sofa 16', type: 'diamond', x: 60, y: 120, minCovers: 2, maxCovers: 4 },
-        { id: 'sofa-15', name: 'Sofa 15', type: 'diamond', x: 60, y: 220, minCovers: 2, maxCovers: 4 },
-        { id: 'sofa-14', name: 'Sofa 14', type: 'diamond', x: 60, y: 320, minCovers: 2, maxCovers: 4 },
-        // Center - big round tables
-        { id: 't26', name: '26', type: 'round-xl', x: 280, y: 200, minCovers: 6, maxCovers: 10 },
-        { id: 't25', name: '25', type: 'round-lg', x: 480, y: 220, minCovers: 4, maxCovers: 8 },
-        { id: 't19', name: '19', type: 'square', x: 620, y: 180, minCovers: 2, maxCovers: 4 },
-        { id: 't24', name: '24', type: 'square', x: 720, y: 180, minCovers: 2, maxCovers: 4 },
-        // Bottom row
-        { id: 'sofa-13', name: 'Sofa 13', type: 'sofa', x: 350, y: 380, minCovers: 2, maxCovers: 4 },
-        { id: 'sofa-23', name: 'Sofa 23', type: 'sofa', x: 550, y: 380, minCovers: 2, maxCovers: 4 },
-        { id: 't22', name: '22', type: 'square', x: 720, y: 320, minCovers: 2, maxCovers: 4 },
+      jardin: [
+        { id: 't5', name: '5', type: 'square', x: 150, y: 80, minCovers: 2, maxCovers: 4 },
+        { id: 't6', name: '6', type: 'square', x: 240, y: 80, minCovers: 2, maxCovers: 4 },
+        { id: 't7', name: '7', type: 'square', x: 330, y: 80, minCovers: 2, maxCovers: 4 },
+        { id: 't8', name: '8', type: 'square', x: 420, y: 80, minCovers: 2, maxCovers: 4 },
+        { id: 't9', name: '9', type: 'square', x: 510, y: 80, minCovers: 2, maxCovers: 4 },
+        { id: 'sofa-afuer', name: 'Sofa', type: 'sofa', x: 60, y: 60, minCovers: 2, maxCovers: 4 },
+        { id: 't4j', name: '4', type: 'sofa', x: 60, y: 160, minCovers: 2, maxCovers: 4 },
+        { id: 't3j', name: '3', type: 'square', x: 60, y: 240, minCovers: 2, maxCovers: 4 },
+        { id: 't2j', name: '2', type: 'square', x: 60, y: 320, minCovers: 2, maxCovers: 4 },
+        { id: 't1j', name: '1', type: 'square', x: 60, y: 400, minCovers: 2, maxCovers: 4 },
       ]
     };
 
