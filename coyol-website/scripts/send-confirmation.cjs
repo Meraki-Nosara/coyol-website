@@ -88,22 +88,22 @@ function generateEmailHtml(reservation) {
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td width="50%" style="padding: 15px 0; border-bottom: 1px solid #eee;">
-                    <p style="color: #888; margin: 0 0 4px; font-size: 12px; text-transform: uppercase;">Date</p>
-                    <p style="color: #333; margin: 0; font-size: 18px;">${formatDate(reservation.date)}</p>
+                    <p style="color: #888; margin: 0 0 4px; font-size: 14px; text-transform: uppercase;">Date</p>
+                    <p style="color: #333; margin: 0; font-size: 22px;">${formatDate(reservation.date)}</p>
                   </td>
                   <td width="50%" style="padding: 15px 0; border-bottom: 1px solid #eee; text-align: right;">
-                    <p style="color: #888; margin: 0 0 4px; font-size: 12px; text-transform: uppercase;">Time</p>
-                    <p style="color: #333; margin: 0; font-size: 18px;">${formatTime(reservation.time)}</p>
+                    <p style="color: #888; margin: 0 0 4px; font-size: 14px; text-transform: uppercase;">Time</p>
+                    <p style="color: #333; margin: 0; font-size: 22px;">${formatTime(reservation.time)}</p>
                   </td>
                 </tr>
                 <tr>
                   <td width="50%" style="padding: 15px 0;">
-                    <p style="color: #888; margin: 0 0 4px; font-size: 12px; text-transform: uppercase;">Party Size</p>
-                    <p style="color: #333; margin: 0; font-size: 18px;">${reservation.guests} guests</p>
+                    <p style="color: #888; margin: 0 0 4px; font-size: 14px; text-transform: uppercase;">Party Size</p>
+                    <p style="color: #333; margin: 0; font-size: 22px;">${reservation.guests} guests</p>
                   </td>
                   <td width="50%" style="padding: 15px 0; text-align: right;">
-                    <p style="color: #888; margin: 0 0 4px; font-size: 12px; text-transform: uppercase;">Seating</p>
-                    <p style="color: #333; margin: 0; font-size: 18px;">${formatSeating(reservation.zone_preference)}</p>
+                    <p style="color: #888; margin: 0 0 4px; font-size: 14px; text-transform: uppercase;">Seating</p>
+                    <p style="color: #333; margin: 0; font-size: 22px;">${formatSeating(reservation.zone_preference)}</p>
                   </td>
                 </tr>
               </table>
@@ -113,8 +113,8 @@ function generateEmailHtml(reservation) {
           <!-- Guest Name -->
           <tr>
             <td style="padding: 0 40px 30px; text-align: center;">
-              <p style="color: #888; margin: 0 0 4px; font-size: 12px; text-transform: uppercase;">Reserved for</p>
-              <p style="color: #3D4F3D; margin: 0; font-size: 22px; font-weight: bold;">${reservation.guest_name}</p>
+              <p style="color: #888; margin: 0 0 4px; font-size: 14px; text-transform: uppercase;">Reserved for</p>
+              <p style="color: #3D4F3D; margin: 0; font-size: 26px; font-weight: bold;">${reservation.guest_name}</p>
             </td>
           </tr>
 
@@ -145,7 +145,7 @@ function generateEmailHtml(reservation) {
                   </td>
                   <td width="4%"></td>
                   <td width="48%" style="text-align: center;">
-                    <a href="https://coyolrealestate.com/restaurant/gift" style="display: inline-block; padding: 14px 28px; background-color: #C4A67C; color: #ffffff; text-decoration: none; border-radius: 4px; font-size: 14px; font-weight: bold;">Gift a Friend</a>
+                    <a href="https://coyolrealestate.com/restaurant/gift" style="display: inline-block; padding: 14px 28px; background-color: #C4A67C; color: #ffffff; text-decoration: none; border-radius: 4px; font-size: 16px; font-weight: bold;">Gift a Friend</a>
                   </td>
                 </tr>
               </table>
