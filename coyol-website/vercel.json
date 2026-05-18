@@ -21,6 +21,18 @@
       "destination": "/restaurant/cancel",
       "has": [{ "type": "host", "value": "reserve.coyolrestaurant.com" }],
       "permanent": false
+    },
+    {
+      "source": "/",
+      "destination": "/laluna/reserve",
+      "has": [{ "type": "host", "value": "reserve.lalunanosara.com" }],
+      "permanent": false
+    },
+    {
+      "source": "/admin",
+      "destination": "/laluna/admin",
+      "has": [{ "type": "host", "value": "reserve.lalunanosara.com" }],
+      "permanent": false
     }
   ]
 }
