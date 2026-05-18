@@ -32,10 +32,22 @@ This script automatically:
 
 **If same-day booking, alert Marion!**
 
-### La Luna Restaurant
+### La Luna Restaurant — AUTOMATED!
 **Supabase table:** `laluna_reservations`
 **Email account:** `laluna-restaurant` (reservations@lalunanosara.com)
-**Status:** Needs confirmation script (copy from Coyol)
+
+**Run the automated check script:**
+```bash
+node ~/.openclaw/workspace/coyol-website/scripts/check-laluna-reservations.cjs
+```
+
+This script automatically:
+1. Fetches confirmed reservations from last 24 hours
+2. Checks against `memory/reservations-sent.json`
+3. Sends confirmation emails for any unsent reservations
+4. Updates the tracking file
+
+**If same-day booking, alert Marion!**
 
 ### Track sent confirmations:
 File: `~/.openclaw/workspace/memory/reservations-sent.json`
