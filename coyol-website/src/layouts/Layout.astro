@@ -17,6 +17,10 @@ const {
   ogImage = "https://coyolnosara.com/images/og-image.jpg",
   ogUrl = "https://coyolnosara.com"
 } = Astro.props;
+
+// Convert relative OG image paths to absolute URLs
+const siteUrl = Astro.url.origin || 'https://coyolnosara.com';
+const absoluteOgImage = ogImage.startsWith('/') ? `${siteUrl}${ogImage}` : ogImage;
 ---
 
 <!doctype html>
@@ -34,7 +38,7 @@ const {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={absoluteOgImage} />
     <meta property="og:url" content={ogUrl} />
     <meta property="og:site_name" content="Coyol Nosara" />
     <meta property="og:locale" content="en_US" />
@@ -43,7 +47,7 @@ const {
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image" content={absoluteOgImage} />
     
     <!-- SEO -->
     <meta name="keywords" content="Nosara real estate, Costa Rica luxury homes, Blue Zone property, Guiones beach homes, Nosara homesites, Mar Azul development, Nosara Hills, Los Coyoles, jungle homes Costa Rica, ocean view lots Nosara, Nicoya Peninsula real estate, expat homes Costa Rica, surf town property" />
