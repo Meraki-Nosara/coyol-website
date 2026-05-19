@@ -3,6 +3,12 @@ import Layout from '../../../layouts/Layout.astro';
 ---
 
 <Layout hideFloatingButtons={true} title="Dashboard | La Luna Admin">
+  <!-- Assignment Banner -->
+  <div class="assign-banner" id="assignBanner">
+    <span>Click a table to assign the reservation</span>
+    <button onclick="cancelAssignment()">Cancel</button>
+  </div>
+
   <div class="admin">
     <!-- Sidebar Icons -->
     <aside class="sidebar">
@@ -254,6 +260,7 @@ import Layout from '../../../layouts/Layout.astro';
           </div>
         </div>
         <div class="modal-footer detail-actions">
+          <button class="btn-assign" id="assignBtn" onclick="startTableAssignment()">Assign Table</button>
           <button class="btn-seat" id="seatBtn" onclick="toggleSeatStatus()">Seat</button>
           <button class="btn-cancel" onclick="cancelReservation()">Cancel Reservation</button>
         </div>
@@ -845,6 +852,33 @@ import Layout from '../../../layouts/Layout.astro';
       box-shadow: 0 1px 3px rgba(0,0,0,0.2);
       z-index: 2;
     }
+    
+    :global(.floor-grid .table-guest) {
+      font-size: 0.625rem;
+      font-weight: 600;
+      color: #333;
+      max-width: 50px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    :global(.floor-grid .table-multi) {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #0066cc;
+      color: white;
+      font-size: 0.625rem;
+      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
 
     /* === SQUARE TABLE (wooden top with legs shadow) === */
     :global(.floor-grid .table.square) {
@@ -1183,11 +1217,33 @@ import Layout from '../../../layouts/Layout.astro';
     .detail-label { font-size: 0.6875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
     .detail-value { font-size: 0.9375rem; color: var(--santorini); }
     .detail-actions { justify-content: space-between; }
+    .btn-assign { background: #0066cc; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
+    .btn-assign:hover { background: #0052a3; }
     .btn-seat { background: var(--terracotta); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
     .btn-seat:hover { opacity: 0.9; }
     .btn-seat.active { background: #0066cc; }
     .btn-cancel { background: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; }
     .btn-cancel:hover { background: #dc3545; color: white; }
+    
+    /* Assignment mode */
+    .floor-grid.assigning .table.available { animation: pulse-available 1s ease-in-out infinite; cursor: pointer !important; }
+    @keyframes pulse-available { 0%, 100% { box-shadow: 0 0 0 0 rgba(0, 102, 204, 0.4); } 50% { box-shadow: 0 0 0 10px rgba(0, 102, 204, 0); } }
+    .assign-banner { position: fixed; top: 0; left: 0; right: 0; background: #0066cc; color: white; padding: 1rem; text-align: center; z-index: 1000; display: none; }
+    .assign-banner.show { display: flex; justify-content: center; align-items: center; gap: 1rem; }
+    .assign-banner button { background: white; color: #0066cc; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-weight: 600; }
+    .table.just-assigned { animation: flash-green 0.5s ease-out 3; }
+    @keyframes flash-green { 0%, 100% { background: inherit; } 50% { background: #28a745 !important; } }
+    
+    /* Table popup */
+    #tablePopup { font-size: 0.875rem; }
+    #tablePopup .popup-header { background: var(--santorini); color: white; padding: 0.5rem 0.75rem; font-weight: 600; }
+    #tablePopup .popup-list { padding: 0.5rem; }
+    #tablePopup .popup-res { display: flex; gap: 0.5rem; padding: 0.4rem; border-radius: 4px; margin-bottom: 0.25rem; }
+    #tablePopup .popup-res.confirmed { background: #d4edda; }
+    #tablePopup .popup-res.seated { background: #cce5ff; }
+    #tablePopup .popup-time { font-weight: 600; min-width: 70px; }
+    #tablePopup .popup-name { flex: 1; }
+    #tablePopup .popup-guests { color: #666; }
     
     /* Selected states */
     .res-row.selected { background: rgba(166, 93, 63, 0.15); border-left: 3px solid var(--terracotta); }
@@ -1470,7 +1526,8 @@ import Layout from '../../../layouts/Layout.astro';
       grid.innerHTML = '';
       
       tables.forEach(table => {
-        const res = reservations.find(r => r.tableId === table.id);
+        const tableReservations = reservations.filter(r => r.tableId === table.id);
+        const res = tableReservations[0]; // Primary reservation
         const status = res ? res.status : 'available';
         
         const el = document.createElement('div');
@@ -1486,13 +1543,33 @@ import Layout from '../../../layouts/Layout.astro';
           el.style.transform = `rotate(${45 + table.rotation}deg)`;
         }
         
+        // Show name and time if reserved
         el.innerHTML = `
           <span class="table-label">${table.name}</span>
-          ${res ? `<span class="table-time">${res.time}</span>` : ''}
+          ${res ? `<span class="table-guest">${res.guestName.split(' ')[0]}</span>` : ''}
+          ${res ? `<span class="table-time">${formatTime12(res.time)}</span>` : ''}
+          ${tableReservations.length > 1 ? `<span class="table-multi">+${tableReservations.length - 1}</span>` : ''}
         `;
         
-        // Enable dragging
+        // Click handler - assignment mode or select
+        el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (isAssigningTable && el.classList.contains('available')) {
+            assignTableToReservation(table.id);
+          } else if (res) {
+            selectReservation(res.id);
+          }
+        });
+        
+        // Hover for multi-reservation popup
+        if (tableReservations.length > 1) {
+          el.addEventListener('mouseenter', () => showTablePopup(el, tableReservations));
+          el.addEventListener('mouseleave', () => hideTablePopup());
+        }
+        
+        // Enable dragging (only when not assigning)
         el.addEventListener('mousedown', (e) => {
+          if (isAssigningTable) return;
           e.preventDefault();
           isDragging = true;
           draggedTable = el;
@@ -1556,6 +1633,8 @@ import Layout from '../../../layouts/Layout.astro';
     });
 
     let selectedReservationId = null;
+    let isAssigningTable = false;
+    let assigningReservationId = null;
     
     function selectReservation(id) {
       selectedReservationId = id;
@@ -1631,6 +1710,136 @@ import Layout from '../../../layouts/Layout.astro';
       closeDetailModal();
       await loadReservations();
       renderFloor();
+    }
+    
+    // Table assignment
+    function startTableAssignment() {
+      if (!selectedReservationId) return;
+      
+      isAssigningTable = true;
+      assigningReservationId = selectedReservationId;
+      
+      // Close the modal
+      closeDetailModal();
+      
+      // Show assignment banner
+      document.getElementById('assignBanner').classList.add('show');
+      
+      // Add assigning class to floor grid
+      document.getElementById('floorGrid').classList.add('assigning');
+      
+      // Mark available tables
+      const layouts = getLayout();
+      const tables = layouts[currentZone] || [];
+      tables.forEach(table => {
+        const el = document.querySelector(`.table[data-table="${table.id}"]`);
+        if (el) {
+          // Check if table has conflicting reservation in same shift
+          const tableRes = cachedReservations.filter(r => r.tableId === table.id);
+          const assigningRes = cachedReservations.find(r => r.id === assigningReservationId);
+          const hasConflict = tableRes.some(r => {
+            // Same shift = conflict
+            return getShiftForTime(r.time) === getShiftForTime(assigningRes?.time);
+          });
+          
+          if (!hasConflict) {
+            el.classList.add('available');
+          }
+        }
+      });
+    }
+    
+    function getShiftForTime(time) {
+      if (!time) return 'dinner1';
+      const hour = parseInt(time.split(':')[0]);
+      if (hour < 15) return 'lunch';
+      if (hour < 19) return 'dinner1';
+      return 'dinner2';
+    }
+    
+    function cancelAssignment() {
+      isAssigningTable = false;
+      assigningReservationId = null;
+      document.getElementById('floorGrid').classList.remove('assigning');
+      document.getElementById('assignBanner').classList.remove('show');
+      document.querySelectorAll('.table').forEach(t => t.classList.remove('available'));
+    }
+    
+    async function assignTableToReservation(tableId) {
+      if (!assigningReservationId || !isAssigningTable) return;
+      
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${assigningReservationId}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({ table_id: tableId })
+        });
+        
+        if (!response.ok) throw new Error('Failed to save');
+        
+        // Reset assignment mode
+        cancelAssignment();
+        
+        // Reload and render
+        await loadReservations();
+        renderFloor();
+        
+        // Show success flash on the table
+        const table = document.querySelector(`.table[data-table="${tableId}"]`);
+        if (table) {
+          table.classList.add('just-assigned');
+          setTimeout(() => table.classList.remove('just-assigned'), 2000);
+        }
+      } catch (e) {
+        console.error('Failed to assign table:', e);
+        alert('Failed to assign table. Please try again.');
+      }
+    }
+    
+    // Table popup for multiple reservations
+    function showTablePopup(tableEl, reservations) {
+      hideTablePopup();
+      
+      const popup = document.createElement('div');
+      popup.id = 'tablePopup';
+      popup.innerHTML = `
+        <div class="popup-header">Table ${tableEl.querySelector('.table-label').textContent}</div>
+        <div class="popup-list">
+          ${reservations.map(r => `
+            <div class="popup-res ${r.status}">
+              <span class="popup-time">${formatTime12(r.time)}</span>
+              <span class="popup-name">${r.guestName}</span>
+              <span class="popup-guests">${r.guests}p</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      
+      // Position popup near the table
+      popup.style.cssText = `
+        position: absolute;
+        left: ${tableEl.offsetLeft + 70}px;
+        top: ${tableEl.offsetTop}px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        z-index: 1000;
+        min-width: 180px;
+        overflow: hidden;
+        pointer-events: none;
+      `;
+      
+      document.getElementById('floorGrid').appendChild(popup);
+    }
+    
+    function hideTablePopup() {
+      const popup = document.getElementById('tablePopup');
+      if (popup) popup.remove();
     }
 
     // Date navigation
