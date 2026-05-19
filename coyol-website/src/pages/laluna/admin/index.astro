@@ -1226,7 +1226,7 @@ import Layout from '../../../layouts/Layout.astro';
     .btn-cancel:hover { background: #dc3545; color: white; }
     
     /* Assignment mode */
-    .floor-grid.assigning .table.available { 
+    :global(.floor-grid.assigning .table.available) { 
       animation: pulse-available 0.4s ease-in-out infinite; 
       cursor: pointer !important; 
       border: 4px solid #00ff00 !important;
