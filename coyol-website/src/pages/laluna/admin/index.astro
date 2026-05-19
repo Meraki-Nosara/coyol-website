@@ -1226,23 +1226,42 @@ import Layout from '../../../layouts/Layout.astro';
     .btn-cancel:hover { background: #dc3545; color: white; }
     
     /* Assignment mode */
-    :global(.floor-grid.assigning .table.available) { 
-      animation: pulse-available 0.4s ease-in-out infinite; 
-      cursor: pointer !important; 
-      border: 4px solid #00ff00 !important;
-      z-index: 100;
+    :global(.floor-grid.assigning .table) {
+      cursor: pointer !important;
+      animation: pulse-assign 0.5s infinite;
+      outline: 4px solid #00ff00;
+      outline-offset: 4px;
     }
-    @keyframes pulse-available { 
+    
+    :global(.floor-grid.assigning .table:hover) {
+      transform: scale(1.2) !important;
+      box-shadow: 0 0 30px rgba(0, 255, 0, 0.9) !important;
+      outline: 4px solid #00ff00;
+      background: rgba(0, 255, 0, 0.5) !important;
+    }
+    
+    @keyframes pulse-assign {
       0%, 100% { 
-        box-shadow: 0 0 20px 10px #00ff00, 0 0 40px 20px rgba(0, 255, 0, 0.7), 0 0 60px 30px rgba(0, 255, 0, 0.4); 
-        background: rgba(0, 255, 0, 0.5) !important;
-        transform: scale(1.05);
-      } 
+        box-shadow: 0 0 15px rgba(0, 255, 0, 0.6); 
+        outline-color: #00ff00; 
+      }
       50% { 
-        box-shadow: 0 0 30px 15px #00ff00, 0 0 60px 30px rgba(0, 255, 0, 0.9), 0 0 80px 40px rgba(0, 255, 0, 0.6); 
-        background: rgba(0, 255, 0, 0.8) !important;
-        transform: scale(1.1);
-      } 
+        box-shadow: 0 0 40px rgba(0, 255, 0, 1); 
+        outline-color: #80ff80; 
+      }
+    }
+    
+    :global(.floor-grid .table.just-assigned) {
+      animation: assigned-flash 1s ease !important;
+      outline: 4px solid #00ff00 !important;
+      outline-offset: 4px;
+    }
+    
+    @keyframes assigned-flash {
+      0% { transform: scale(1); background: inherit; }
+      25% { transform: scale(1.3); background: #00ff00; }
+      50% { transform: scale(1.15); background: #80ff80; }
+      100% { transform: scale(1); background: inherit; }
     }
     .assign-banner { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #0066cc; color: white; padding: 1rem 2rem; text-align: center; z-index: 1000; display: none; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
     .assign-banner.show { display: flex; justify-content: center; align-items: center; gap: 1rem; }
@@ -1787,10 +1806,7 @@ import Layout from '../../../layouts/Layout.astro';
       // Add assigning class to floor grid
       document.getElementById('floorGrid').classList.add('assigning');
       
-      // Mark ALL tables as available (flash them all)
-      document.querySelectorAll('.floor-grid .table').forEach(el => {
-        el.classList.add('available');
-      });
+      // All tables will flash via CSS when .assigning is on grid
     }
     
     function getShiftForTime(time) {
