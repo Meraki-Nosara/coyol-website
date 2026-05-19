@@ -222,6 +222,7 @@ import Layout from '../../../layouts/Layout.astro';
       <div class="modal-content detail-modal">
         <div class="modal-header">
           <h3 id="detailName">Guest Name</h3>
+          <span id="detailTable" class="table-badge"></span>
           <span id="detailStatus" class="status-badge">confirmed</span>
           <button class="modal-close" onclick="closeDetailModal()">×</button>
         </div>
@@ -1296,6 +1297,10 @@ import Layout from '../../../layouts/Layout.astro';
     .status-badge.confirmed { background: #d4edda; color: #155724; }
     .status-badge.seated { background: #cce5ff; color: #004085; }
     .status-badge.cancelled { background: #f8d7da; color: #721c24; }
+    .status-badge.assigned { background: #22c55e; color: white; }
+    .table-badge { padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 600; }
+    .table-badge.assigned { background: #22c55e; color: white; }
+    .table-badge.unassigned { background: #f3f4f6; color: #666; }
     .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .detail-item { display: flex; flex-direction: column; gap: 0.25rem; }
     .detail-item.full-width { grid-column: 1 / -1; }
@@ -1761,8 +1766,28 @@ import Layout from '../../../layouts/Layout.astro';
       document.getElementById('detailEmail').textContent = res.guestEmail || 'No email';
       document.getElementById('detailZone').textContent = res.zonePreference || 'Any';
       document.getElementById('detailNotes').textContent = res.specialRequests || 'None';
-      document.getElementById('detailStatus').textContent = res.status;
-      document.getElementById('detailStatus').className = 'status-badge ' + res.status;
+      // Show table assignment status
+      const tableInfo = document.getElementById('detailTable');
+      if (res.tableId) {
+        // Find table name from layout
+        const layouts = getLayout();
+        let tableName = res.tableId;
+        for (const zone of Object.values(layouts)) {
+          const table = zone.find(t => t.id === res.tableId);
+          if (table) { tableName = table.name; break; }
+        }
+        tableInfo.textContent = `Table ${tableName}`;
+        tableInfo.className = 'table-badge assigned';
+        tableInfo.style.display = 'inline-block';
+        document.getElementById('detailStatus').textContent = 'assigned';
+        document.getElementById('detailStatus').className = 'status-badge assigned';
+      } else {
+        tableInfo.textContent = 'Not assigned';
+        tableInfo.className = 'table-badge unassigned';
+        tableInfo.style.display = 'inline-block';
+        document.getElementById('detailStatus').textContent = res.status;
+        document.getElementById('detailStatus').className = 'status-badge ' + res.status;
+      }
       
       // Update button states
       const seatBtn = document.getElementById('seatBtn');
