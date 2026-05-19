@@ -576,26 +576,45 @@ import Layout from '../layouts/Layout.astro';
   </style>
 
   <script is:inline>
-    // Storage key
-    const STORAGE_KEY = 'laluna_reservations';
+    // Supabase config
+    const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
 
-    // Generate unique ID
-    function generateId() {
-      return 'LL' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substr(2, 4).toUpperCase();
+    // Save reservation to Supabase
+    async function saveReservation(reservation) {
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify(reservation)
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to save reservation');
+      }
+      
+      const data = await response.json();
+      return data[0];
     }
 
-    // Get reservations from storage
-    function getReservations() {
-      const data = localStorage.getItem(STORAGE_KEY);
-      return data ? JSON.parse(data) : [];
-    }
-
-    // Save reservation
-    function saveReservation(reservation) {
-      const reservations = getReservations();
-      reservations.push(reservation);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(reservations));
-      return reservation;
+    // Get reservations from Supabase for availability check
+    async function getReservationsForDate(date) {
+      const response = await fetch(
+        `${SUPABASE_URL}/rest/v1/laluna_reservations?date=eq.${date}&status=eq.confirmed&select=time`,
+        {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          }
+        }
+      );
+      
+      if (!response.ok) return [];
+      return await response.json();
     }
 
     // Set default date to today
@@ -639,9 +658,9 @@ import Layout from '../layouts/Layout.astro';
       checkAvailability();
     });
 
-    function checkAvailability() {
+    async function checkAvailability() {
       const selectedDate = dateInput.value;
-      const reservations = getReservations().filter(r => r.date === selectedDate);
+      const reservations = await getReservationsForDate(selectedDate);
       
       // Reset all buttons
       document.querySelectorAll('.time-btn').forEach(btn => {
@@ -688,7 +707,7 @@ import Layout from '../layouts/Layout.astro';
       }
     }
 
-    function submitReservation() {
+    async function submitReservation() {
       const name = document.getElementById('name').value.trim();
       const phone = document.getElementById('phone').value.trim();
       const email = document.getElementById('email').value.trim();
@@ -712,38 +731,48 @@ import Layout from '../layouts/Layout.astro';
       
       if (!valid) return;
 
+      // Disable button while submitting
+      const submitBtn = document.getElementById('confirmBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Confirming...';
+
       const date = dateInput.value;
       const time = document.querySelector('.time-btn.selected')?.dataset.time || '18:30';
       const guests = document.querySelector('.party-btn.selected')?.dataset.guests || '2';
       const zone = document.querySelector('.seating-btn.selected')?.dataset.zone || 'any';
 
       const reservation = {
-        id: generateId(),
         date: date,
         time: time,
-        guests: parseInt(guests) || guests,
-        guestName: name,
-        guestPhone: phone,
-        guestEmail: email,
-        zonePreference: zone,
-        specialRequests: notes,
-        status: 'confirmed',
-        createdAt: new Date().toISOString()
+        guests: parseInt(guests) || 7,
+        guest_name: name,
+        guest_phone: phone,
+        guest_email: email || null,
+        zone_preference: zone,
+        special_requests: notes || null,
+        status: 'confirmed'
       };
 
-      // Save
-      saveReservation(reservation);
+      try {
+        // Save to Supabase
+        const saved = await saveReservation(reservation);
 
-      // Update confirmation
-      const dateObj = new Date(date + 'T12:00:00');
-      document.getElementById('conf-date').textContent = dateObj.toLocaleDateString('en-US', { 
-        weekday: 'long', month: 'long', day: 'numeric' 
-      });
-      document.getElementById('conf-time').textContent = time;
-      document.getElementById('conf-id').textContent = reservation.id;
+        // Update confirmation
+        const dateObj = new Date(date + 'T12:00:00');
+        document.getElementById('conf-date').textContent = dateObj.toLocaleDateString('en-US', { 
+          weekday: 'long', month: 'long', day: 'numeric' 
+        });
+        document.getElementById('conf-time').textContent = time;
+        document.getElementById('conf-id').textContent = saved.id.slice(0, 8).toUpperCase();
 
-      // Show confirmation
-      showStep(3);
+        // Show confirmation
+        showStep(3);
+      } catch (error) {
+        console.error('Failed to save reservation:', error);
+        alert('Sorry, there was a problem saving your reservation. Please try again or call us at +506 2682-0122.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Confirm Reservation';
+      }
     }
 
     function addToCalendar() {

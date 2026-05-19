@@ -7,7 +7,7 @@ import Layout from '../../layouts/Layout.astro';
     <!-- Sidebar Icons -->
     <aside class="sidebar">
       <div class="sidebar-logo">
-        <img src="/images/luna-logo.png" alt="La Luna" />
+        <img src="/images/luna-moon-black.png" alt="La Luna" />
       </div>
       <nav class="sidebar-nav">
         <a href="/admin" class="nav-icon active" title="Dashboard">
@@ -1163,39 +1163,77 @@ import Layout from '../../layouts/Layout.astro';
       const saved = localStorage.getItem(LAYOUT_KEY);
       if (saved) return JSON.parse(saved);
       
-      // Default layouts
+      // La Luna EatApp Layout - Exact Match
       return {
         indoor: [
-          { id: 'high-1', name: 'high table', type: 'square', x: 80, y: 60, minCovers: 2, maxCovers: 4 },
-          { id: 'high-2', name: 'high table', type: 'square', x: 180, y: 60, minCovers: 2, maxCovers: 4 },
-          { id: 'bar', name: 'bar', type: 'bar', x: 170, y: 160, minCovers: 1, maxCovers: 8 },
-          { id: 'sofa-1', name: 'indoor sofa', type: 'sofa', x: 320, y: 50, minCovers: 2, maxCovers: 4 },
-          { id: 'sofa-2', name: 'indoor sofa', type: 'sofa', x: 320, y: 130, minCovers: 2, maxCovers: 4 },
-          { id: 'sofa-3', name: 'indoor sofa', type: 'sofa', x: 50, y: 130, minCovers: 2, maxCovers: 4 },
+          // High tables (top)
+          { id: 'high-1', name: '2 high', type: 'square', x: 60, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 'high-2', name: '2 high', type: 'square', x: 140, y: 40, minCovers: 2, maxCovers: 4 },
+          // Indoor sofa (top right)
+          { id: 'indoor-sofa-1', name: '1 indoor sofa', type: 'sofa', x: 280, y: 40, minCovers: 2, maxCovers: 4 },
+          // Bar area (center)
+          { id: 'bar', name: 'bar', type: 'bar', x: 180, y: 140, minCovers: 1, maxCovers: 8 },
+          // 2 indoor sofas (middle right)
+          { id: 'indoor-sofa-2', name: '2 indoor sofas', type: 'sofa', x: 320, y: 120, minCovers: 4, maxCovers: 6 },
+          { id: 'indoor-sofa-3', name: '2 indoor sofas', type: 'sofa', x: 320, y: 180, minCovers: 4, maxCovers: 6 },
+          // 1 indoor sofa (bottom left)
+          { id: 'indoor-sof', name: '1 indoor sof', type: 'sofa', x: 60, y: 280, minCovers: 2, maxCovers: 4 },
+          // 3 indoor sofas (bottom right)
+          { id: 'indoor-sofa-4', name: '3 indoor sofas', type: 'sofa', x: 280, y: 260, minCovers: 2, maxCovers: 4 },
+          { id: 'indoor-sofa-5', name: '3 indoor sofas', type: 'sofa', x: 340, y: 260, minCovers: 2, maxCovers: 4 },
+          { id: 'indoor-sofa-6', name: '3 indoor sofas', type: 'sofa', x: 400, y: 260, minCovers: 2, maxCovers: 4 },
         ],
         patio: [
-          { id: 't12', name: '12', type: 'square', x: 80, y: 60, minCovers: 2, maxCovers: 4 },
-          { id: 't11', name: '11', type: 'square', x: 160, y: 60, minCovers: 2, maxCovers: 4 },
-          { id: 't10', name: '10', type: 'square', x: 240, y: 60, minCovers: 2, maxCovers: 4 },
-          { id: 't1', name: '1', type: 'round-lg', x: 80, y: 200, minCovers: 4, maxCovers: 6 },
-          { id: 't2', name: '2', type: 'round-lg', x: 180, y: 200, minCovers: 4, maxCovers: 6 },
-          { id: 't3', name: '3', type: 'round-lg', x: 280, y: 200, minCovers: 4, maxCovers: 6 },
+          // Top row: Tables 7-12 (rectangular)
+          { id: 't7', name: '7', type: 'square', x: 40, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 't8', name: '8', type: 'square', x: 110, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 't9', name: '9', type: 'square', x: 180, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 't10', name: '10', type: 'square', x: 250, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 't11', name: '11', type: 'square', x: 320, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 't12', name: '12', type: 'square', x: 390, y: 40, minCovers: 2, maxCovers: 4 },
+          // Bottom row: Tables 1-3 (round), 4-6 (rectangular)
+          { id: 't1', name: '1', type: 'round-lg', x: 40, y: 160, minCovers: 4, maxCovers: 6 },
+          { id: 't2', name: '2', type: 'round-lg', x: 130, y: 160, minCovers: 4, maxCovers: 6 },
+          { id: 't3', name: '3', type: 'round-lg', x: 220, y: 160, minCovers: 4, maxCovers: 6 },
+          { id: 't4', name: '4', type: 'square', x: 310, y: 160, minCovers: 2, maxCovers: 4 },
+          { id: 't5', name: '5', type: 'square', x: 380, y: 160, minCovers: 2, maxCovers: 4 },
+          { id: 't6', name: '6', type: 'square', x: 450, y: 160, minCovers: 2, maxCovers: 4 },
         ],
         garden: [
-          { id: 't17', name: '17', type: 'diamond', x: 130, y: 30, minCovers: 2, maxCovers: 4 },
-          { id: 't18-1', name: '18-1', type: 'square', x: 200, y: 40, minCovers: 2, maxCovers: 4 },
-          { id: 't18-2', name: '18-2', type: 'square', x: 270, y: 40, minCovers: 2, maxCovers: 4 },
-          { id: 't18-3', name: '18-3', type: 'square', x: 340, y: 40, minCovers: 2, maxCovers: 4 },
-          { id: 't18-4', name: '18-4', type: 'square', x: 410, y: 40, minCovers: 2, maxCovers: 4 },
-          { id: 't20', name: '20', type: 'diamond', x: 520, y: 50, minCovers: 2, maxCovers: 4 },
-          { id: 'sofa-21', name: 'sofa 21', type: 'sofa', x: 620, y: 60, minCovers: 2, maxCovers: 4 },
-          { id: 'sofa-16', name: 'sofa 16', type: 'diamond', x: 40, y: 90, minCovers: 2, maxCovers: 4 },
-          { id: 'sofa-15', name: 'sofa 15', type: 'diamond', x: 40, y: 190, minCovers: 2, maxCovers: 4 },
-          { id: 't26', name: '26', type: 'round-xl', x: 200, y: 200, minCovers: 6, maxCovers: 10 },
-          { id: 't25', name: '25', type: 'round-lg', x: 380, y: 240, minCovers: 4, maxCovers: 8 },
-          { id: 'sofa-14', name: 'sofa 14', type: 'diamond', x: 40, y: 290, minCovers: 2, maxCovers: 4 },
-          { id: 'sofa-13', name: 'sofa 13', type: 'sofa', x: 340, y: 380, minCovers: 2, maxCovers: 4 },
-          { id: 'sofa-23', name: 'sofa 23', type: 'sofa', x: 500, y: 380, minCovers: 2, maxCovers: 4 },
+          // Top row
+          { id: 't17', name: '17', type: 'square', x: 40, y: 30, minCovers: 2, maxCovers: 4 },
+          { id: 't18-1', name: '18-1', type: 'square', x: 120, y: 30, minCovers: 2, maxCovers: 4 },
+          { id: 't18-2', name: '18-2', type: 'square', x: 190, y: 30, minCovers: 2, maxCovers: 4 },
+          { id: 't18-3', name: '18-3', type: 'square', x: 260, y: 30, minCovers: 2, maxCovers: 4 },
+          { id: 't18-4', name: '18-4', type: 'square', x: 330, y: 30, minCovers: 2, maxCovers: 4 },
+          { id: 't20', name: '20', type: 'square', x: 410, y: 30, minCovers: 2, maxCovers: 4 },
+          { id: 'f6', name: 'F6', type: 'square', x: 490, y: 30, minCovers: 2, maxCovers: 4 },
+          // Second row (left side - sofas)
+          { id: 'sofa-16', name: 'sofa 16', type: 'sofa', x: 40, y: 100, minCovers: 2, maxCovers: 4 },
+          // Second row (middle)
+          { id: 'fant-2-izq', name: 'FANT 2 Izqu', type: 'diamond', x: 140, y: 100, minCovers: 2, maxCovers: 4 },
+          { id: 'fan-2', name: 'FAN 2', type: 'diamond', x: 220, y: 100, minCovers: 2, maxCovers: 4 },
+          { id: 't19', name: '19', type: 'square', x: 300, y: 100, minCovers: 2, maxCovers: 4 },
+          { id: 'fan-19', name: 'FAN 19', type: 'diamond', x: 370, y: 100, minCovers: 2, maxCovers: 4 },
+          { id: 't24', name: '24', type: 'round-lg', x: 450, y: 100, minCovers: 4, maxCovers: 6 },
+          { id: 'f5', name: 'F5', type: 'square', x: 530, y: 100, minCovers: 2, maxCovers: 4 },
+          { id: 'sofa-21', name: 'sofa 21', type: 'sofa', x: 600, y: 100, minCovers: 2, maxCovers: 4 },
+          // Third row (left side - sofas)
+          { id: 'sofa-15', name: 'sofa 15', type: 'sofa', x: 40, y: 180, minCovers: 2, maxCovers: 4 },
+          // Third row (middle)
+          { id: 't26', name: '26', type: 'round-xl', x: 160, y: 180, minCovers: 6, maxCovers: 10 },
+          { id: 't25', name: '25', type: 'round-lg', x: 280, y: 180, minCovers: 4, maxCovers: 8 },
+          { id: 'fan-25', name: 'Fan 25', type: 'diamond', x: 370, y: 180, minCovers: 2, maxCovers: 4 },
+          { id: 'fant-4', name: 'Fant 4', type: 'diamond', x: 450, y: 180, minCovers: 2, maxCovers: 4 },
+          { id: 't22', name: '22', type: 'square', x: 530, y: 180, minCovers: 2, maxCovers: 4 },
+          // Bottom row (left side - sofas)
+          { id: 'sofa-14', name: 'sofa14', type: 'sofa', x: 40, y: 260, minCovers: 2, maxCovers: 4 },
+          // Bottom row (middle)
+          { id: 'fant-1', name: 'FANTASMA 1', type: 'diamond', x: 140, y: 260, minCovers: 2, maxCovers: 4 },
+          { id: 'sofa-13', name: 'sofa 13', type: 'sofa', x: 240, y: 260, minCovers: 2, maxCovers: 4 },
+          { id: 'fant-3', name: 'FANTASMA 3', type: 'diamond', x: 340, y: 260, minCovers: 2, maxCovers: 4 },
+          { id: 'sofa-23', name: 'sofa 23', type: 'sofa', x: 440, y: 260, minCovers: 2, maxCovers: 4 },
+          { id: 'f3p', name: 'F3P', type: 'square', x: 540, y: 260, minCovers: 2, maxCovers: 4 },
         ]
       };
     }
