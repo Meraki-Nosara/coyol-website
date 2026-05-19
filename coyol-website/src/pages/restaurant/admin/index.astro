@@ -1310,6 +1310,8 @@ import Layout from '../../../layouts/Layout.astro';
     .btn-assign { background: #2563eb; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
     .btn-assign:hover { background: #1d4ed8; }
     .btn-assign.active { background: #dc2626; }
+    .btn-assign.reassign { background: #f59e0b; }
+    .btn-assign.reassign:hover { background: #d97706; }
     .btn-seat { background: var(--keswick); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
     .btn-seat:hover { background: var(--coniston); }
     .btn-seat.active { background: #0066cc; }
@@ -1791,13 +1793,23 @@ import Layout from '../../../layouts/Layout.astro';
       
       // Update button states
       const seatBtn = document.getElementById('seatBtn');
-      const confirmBtn = document.getElementById('confirmStatusBtn');
+      const assignBtn = document.getElementById('assignBtn');
+      
       if (res.status === 'seated') {
         seatBtn.textContent = 'Unseat';
         seatBtn.classList.add('active');
       } else {
         seatBtn.textContent = 'Seat';
         seatBtn.classList.remove('active');
+      }
+      
+      // Update assign button based on table assignment
+      if (res.tableId) {
+        assignBtn.textContent = 'Change Table';
+        assignBtn.classList.add('reassign');
+      } else {
+        assignBtn.textContent = 'Assign Table';
+        assignBtn.classList.remove('reassign');
       }
       
       modal.classList.add('open');
