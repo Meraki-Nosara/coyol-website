@@ -254,6 +254,7 @@ import Layout from '../../../layouts/Layout.astro';
           </div>
         </div>
         <div class="modal-footer detail-actions">
+          <button class="btn-assign" id="assignBtn" onclick="startTableAssignment()">Assign Table</button>
           <button class="btn-seat" id="seatBtn" onclick="toggleSeatStatus()">Seat</button>
           <button class="btn-cancel" onclick="cancelReservation()">Cancel Reservation</button>
         </div>
@@ -845,6 +846,46 @@ import Layout from '../../../layouts/Layout.astro';
       box-shadow: 0 1px 3px rgba(0,0,0,0.2);
       z-index: 2;
     }
+    
+    :global(.floor-grid .table-guest) {
+      font-size: 0.5rem;
+      color: #333;
+      background: rgba(255,255,255,0.9);
+      padding: 1px 4px;
+      border-radius: 2px;
+      margin-top: 1px;
+      font-weight: 500;
+      max-width: 60px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      z-index: 2;
+    }
+    
+    :global(.floor-grid.assigning .table) {
+      cursor: pointer !important;
+      animation: pulse-assign 1s infinite;
+    }
+    
+    :global(.floor-grid.assigning .table:hover) {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px rgba(37, 99, 235, 0.6);
+    }
+    
+    :global(.floor-grid .table.just-assigned) {
+      animation: assigned-flash 0.5s ease;
+    }
+    
+    @keyframes pulse-assign {
+      0%, 100% { box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+      50% { box-shadow: 0 0 15px rgba(37, 99, 235, 0.4); }
+    }
+    
+    @keyframes assigned-flash {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); background: #22c55e; }
+      100% { transform: scale(1); }
+    }
 
     /* === SQUARE TABLE (wooden top with legs shadow) === */
     :global(.floor-grid .table.square) {
@@ -1182,7 +1223,10 @@ import Layout from '../../../layouts/Layout.astro';
     .detail-item.full-width { grid-column: 1 / -1; }
     .detail-label { font-size: 0.6875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
     .detail-value { font-size: 0.9375rem; color: var(--santorini); }
-    .detail-actions { justify-content: space-between; }
+    .detail-actions { justify-content: flex-start; gap: 0.5rem; flex-wrap: wrap; }
+    .btn-assign { background: #2563eb; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
+    .btn-assign:hover { background: #1d4ed8; }
+    .btn-assign.active { background: #dc2626; }
     .btn-seat { background: var(--keswick); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
     .btn-seat:hover { background: var(--coniston); }
     .btn-seat.active { background: #0066cc; }
@@ -1504,11 +1548,21 @@ import Layout from '../../../layouts/Layout.astro';
         
         el.innerHTML = `
           <span class="table-label">${table.name}</span>
-          ${res ? `<span class="table-time">${res.time}</span>` : ''}
+          ${res ? `<span class="table-time">${formatTime12(res.time)}</span>` : ''}
+          ${res ? `<span class="table-guest">${res.guestName}</span>` : ''}
         `;
+        
+        // Click to assign table
+        el.addEventListener('click', (e) => {
+          if (isAssigningTable) {
+            e.stopPropagation();
+            assignTableToReservation(table.id);
+          }
+        });
         
         // Enable dragging
         el.addEventListener('mousedown', (e) => {
+          if (isAssigningTable) return; // Don't drag while assigning
           e.preventDefault();
           isDragging = true;
           draggedTable = el;
@@ -1648,6 +1702,61 @@ import Layout from '../../../layouts/Layout.astro';
       closeDetailModal();
       await loadReservations();
       renderFloor();
+    }
+    
+    // Table assignment mode
+    let isAssigningTable = false;
+    
+    function startTableAssignment() {
+      if (!selectedReservationId) return;
+      
+      isAssigningTable = !isAssigningTable;
+      const btn = document.getElementById('assignBtn');
+      
+      if (isAssigningTable) {
+        btn.textContent = 'Click a Table...';
+        btn.classList.add('active');
+        document.getElementById('floorGrid').classList.add('assigning');
+        closeDetailModal();
+      } else {
+        btn.textContent = 'Assign Table';
+        btn.classList.remove('active');
+        document.getElementById('floorGrid').classList.remove('assigning');
+      }
+    }
+    
+    async function assignTableToReservation(tableId) {
+      if (!selectedReservationId || !isAssigningTable) return;
+      
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?id=eq.${selectedReservationId}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ table_id: tableId })
+        });
+        
+        isAssigningTable = false;
+        document.getElementById('floorGrid').classList.remove('assigning');
+        
+        await loadReservations();
+        renderFloor();
+        
+        // Show success
+        const table = document.querySelector(`.table[data-table="${tableId}"]`);
+        if (table) {
+          table.classList.add('just-assigned');
+          setTimeout(() => table.classList.remove('just-assigned'), 1500);
+        }
+        
+        selectedReservationId = null;
+      } catch (e) {
+        console.error('Failed to assign table:', e);
+        alert('Failed to assign table');
+      }
     }
 
     // Date navigation
