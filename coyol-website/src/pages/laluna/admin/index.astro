@@ -1244,7 +1244,7 @@ import Layout from '../../../layouts/Layout.astro';
         transform: scale(1.1);
       } 
     }
-    .assign-banner { position: fixed; top: 60px; left: 440px; right: 0; background: #0066cc; color: white; padding: 0.75rem 1rem; text-align: center; z-index: 999; display: none; border-radius: 0 0 8px 8px; }
+    .assign-banner { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #0066cc; color: white; padding: 1rem 2rem; text-align: center; z-index: 1000; display: none; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
     .assign-banner.show { display: flex; justify-content: center; align-items: center; gap: 1rem; }
     .assign-banner button { background: white; color: #0066cc; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-weight: 600; }
     .table.just-assigned { animation: flash-green 0.5s ease-out 3; }
@@ -1787,24 +1787,9 @@ import Layout from '../../../layouts/Layout.astro';
       // Add assigning class to floor grid
       document.getElementById('floorGrid').classList.add('assigning');
       
-      // Mark available tables
-      const layouts = getLayout();
-      const tables = layouts[currentZone] || [];
-      tables.forEach(table => {
-        const el = document.querySelector(`.table[data-table="${table.id}"]`);
-        if (el) {
-          // Check if table has conflicting reservation in same shift
-          const tableRes = cachedReservations.filter(r => r.tableId === table.id);
-          const assigningRes = cachedReservations.find(r => r.id === assigningReservationId);
-          const hasConflict = tableRes.some(r => {
-            // Same shift = conflict
-            return getShiftForTime(r.time) === getShiftForTime(assigningRes?.time);
-          });
-          
-          if (!hasConflict) {
-            el.classList.add('available');
-          }
-        }
+      // Mark ALL tables as available (flash them all)
+      document.querySelectorAll('.floor-grid .table').forEach(el => {
+        el.classList.add('available');
       });
     }
     
