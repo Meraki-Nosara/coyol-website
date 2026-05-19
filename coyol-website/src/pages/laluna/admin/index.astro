@@ -1226,18 +1226,23 @@ import Layout from '../../../layouts/Layout.astro';
     .btn-cancel:hover { background: #dc3545; color: white; }
     
     /* Assignment mode */
-    :global(.floor-grid.assigning .table) {
+    :global(.floor-grid.assigning .table:not(.occupied)) {
       cursor: pointer !important;
       animation: pulse-assign 0.5s infinite;
       outline: 4px solid #00ff00;
       outline-offset: 4px;
     }
     
-    :global(.floor-grid.assigning .table:hover) {
+    :global(.floor-grid.assigning .table:not(.occupied):hover) {
       transform: scale(1.2) !important;
       box-shadow: 0 0 30px rgba(0, 255, 0, 0.9) !important;
       outline: 4px solid #00ff00;
       background: rgba(0, 255, 0, 0.5) !important;
+    }
+    
+    :global(.floor-grid.assigning .table.occupied) {
+      opacity: 0.4;
+      cursor: not-allowed !important;
     }
     
     @keyframes pulse-assign {
@@ -1806,7 +1811,21 @@ import Layout from '../../../layouts/Layout.astro';
       // Add assigning class to floor grid
       document.getElementById('floorGrid').classList.add('assigning');
       
-      // All tables will flash via CSS when .assigning is on grid
+      // Mark tables occupied in same shift
+      const assigningRes = cachedReservations.find(r => r.id === assigningReservationId);
+      const assigningShift = getShiftForTime(assigningRes?.time);
+      
+      document.querySelectorAll('.floor-grid .table').forEach(el => {
+        const tableId = el.dataset.table;
+        const tableRes = cachedReservations.filter(r => r.tableId === tableId);
+        const hasConflict = tableRes.some(r => getShiftForTime(r.time) === assigningShift);
+        
+        if (hasConflict) {
+          el.classList.add('occupied');
+        } else {
+          el.classList.remove('occupied');
+        }
+      });
     }
     
     function getShiftForTime(time) {
@@ -1822,7 +1841,10 @@ import Layout from '../../../layouts/Layout.astro';
       assigningReservationId = null;
       document.getElementById('floorGrid').classList.remove('assigning');
       document.getElementById('assignBanner').classList.remove('show');
-      document.querySelectorAll('.table').forEach(t => t.classList.remove('available'));
+      document.querySelectorAll('.table').forEach(t => {
+        t.classList.remove('available');
+        t.classList.remove('occupied');
+      });
     }
     
     async function assignTableToReservation(tableId) {
