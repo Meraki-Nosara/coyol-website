@@ -862,6 +862,72 @@ import Layout from '../../../layouts/Layout.astro';
       z-index: 2;
     }
     
+    :global(.floor-grid .table-more) {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #2563eb;
+      color: white;
+      font-size: 0.625rem;
+      font-weight: 700;
+      padding: 2px 5px;
+      border-radius: 10px;
+      z-index: 10;
+    }
+    
+    :global(#tablePopup) {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    :global(#tablePopup .popup-header) {
+      background: var(--keswick);
+      color: white;
+      padding: 8px 12px;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+    
+    :global(#tablePopup .popup-list) {
+      padding: 8px 0;
+    }
+    
+    :global(#tablePopup .popup-res) {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    :global(#tablePopup .popup-res:last-child) {
+      border-bottom: none;
+    }
+    
+    :global(#tablePopup .popup-res.seated) {
+      background: #dbeafe;
+    }
+    
+    :global(#tablePopup .popup-time) {
+      font-weight: 600;
+      color: var(--terracotta);
+      font-size: 0.8125rem;
+      min-width: 60px;
+    }
+    
+    :global(#tablePopup .popup-name) {
+      flex: 1;
+      font-size: 0.8125rem;
+      color: #333;
+    }
+    
+    :global(#tablePopup .popup-guests) {
+      font-size: 0.75rem;
+      color: #666;
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    
     :global(.floor-grid.assigning .table) {
       cursor: pointer !important;
       animation: pulse-assign 0.8s infinite;
@@ -1558,11 +1624,37 @@ import Layout from '../../../layouts/Layout.astro';
           el.style.transform = `rotate(${45 + table.rotation}deg)`;
         }
         
+        // Find ALL reservations for this table today
+        const tableReservations = reservations.filter(r => r.tableId === table.id);
+        const resCount = tableReservations.length;
+        const nextRes = tableReservations[0]; // First upcoming
+        
         el.innerHTML = `
           <span class="table-label">${table.name}</span>
-          ${res ? `<span class="table-time">${formatTime12(res.time)}</span>` : ''}
-          ${res ? `<span class="table-guest">${res.guestName}</span>` : ''}
+          ${nextRes ? `<span class="table-time">${formatTime12(nextRes.time)}</span>` : ''}
+          ${nextRes ? `<span class="table-guest">${nextRes.guestName}</span>` : ''}
+          ${resCount > 1 ? `<span class="table-more">+${resCount - 1}</span>` : ''}
         `;
+        
+        // Store reservations for hover popup
+        el.dataset.reservations = JSON.stringify(tableReservations.map(r => ({
+          time: r.time,
+          name: r.guestName,
+          guests: r.guests,
+          status: r.status
+        })));
+        
+        // Hover to show all reservations
+        el.addEventListener('mouseenter', (e) => {
+          if (isAssigningTable) return;
+          if (tableReservations.length > 0) {
+            showTablePopup(el, tableReservations);
+          }
+        });
+        
+        el.addEventListener('mouseleave', () => {
+          hideTablePopup();
+        });
         
         // Click to assign table
         el.addEventListener('click', (e) => {
@@ -1757,6 +1849,48 @@ import Layout from '../../../layouts/Layout.astro';
     function hideAssignBanner() {
       const banner = document.getElementById('assignBanner');
       if (banner) banner.style.display = 'none';
+    }
+    
+    function showTablePopup(tableEl, reservations) {
+      hideTablePopup();
+      
+      const popup = document.createElement('div');
+      popup.id = 'tablePopup';
+      popup.innerHTML = `
+        <div class="popup-header">Table ${tableEl.querySelector('.table-label').textContent}</div>
+        <div class="popup-list">
+          ${reservations.map(r => `
+            <div class="popup-res ${r.status}">
+              <span class="popup-time">${formatTime12(r.time)}</span>
+              <span class="popup-name">${r.guestName}</span>
+              <span class="popup-guests">${r.guests}p</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      
+      // Position popup near the table
+      const rect = tableEl.getBoundingClientRect();
+      const gridRect = document.getElementById('floorGrid').getBoundingClientRect();
+      popup.style.cssText = `
+        position: absolute;
+        left: ${tableEl.offsetLeft + 70}px;
+        top: ${tableEl.offsetTop}px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        z-index: 1000;
+        min-width: 180px;
+        overflow: hidden;
+        pointer-events: none;
+      `;
+      
+      document.getElementById('floorGrid').appendChild(popup);
+    }
+    
+    function hideTablePopup() {
+      const popup = document.getElementById('tablePopup');
+      if (popup) popup.remove();
     }
     
     function cancelAssignment() {
