@@ -8,6 +8,7 @@ interface Props {
   hideFloatingButtons?: boolean;
   ogImage?: string;
   ogUrl?: string;
+  appleTouchIcon?: string;
 }
 
 const { 
@@ -15,7 +16,8 @@ const {
   description = "Luxury homes and jungle homesites in Nosara, Costa Rica — the world's only Blue Zone beach town. Private developments with ocean views, world-class amenities, and a lifestyle rooted in nature.", 
   hideFloatingButtons = false,
   ogImage = "https://coyolnosara.com/images/og-image.jpg",
-  ogUrl = "https://coyolnosara.com"
+  ogUrl = "https://coyolnosara.com",
+  appleTouchIcon = "/apple-touch-icon.png"
 } = Astro.props;
 
 // Convert relative OG image paths to absolute URLs
@@ -31,7 +33,7 @@ const absoluteOgImage = ogImage.startsWith('/') ? `${siteUrl}${ogImage}` : ogIma
     <meta name="description" content={description} />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-large.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href={appleTouchIcon} />
     <meta name="generator" content={Astro.generator} />
     
     <!-- Open Graph -->
