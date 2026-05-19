@@ -864,27 +864,39 @@ import Layout from '../../../layouts/Layout.astro';
     
     :global(.floor-grid.assigning .table) {
       cursor: pointer !important;
-      animation: pulse-assign 1s infinite;
+      animation: pulse-assign 0.8s infinite;
+      outline: 3px dashed #2563eb;
+      outline-offset: 4px;
     }
     
     :global(.floor-grid.assigning .table:hover) {
-      transform: scale(1.1);
-      box-shadow: 0 0 15px rgba(37, 99, 235, 0.6);
+      transform: scale(1.15) !important;
+      box-shadow: 0 0 20px rgba(37, 99, 235, 0.8) !important;
+      outline: 3px solid #2563eb;
     }
     
     :global(.floor-grid .table.just-assigned) {
-      animation: assigned-flash 0.5s ease;
+      animation: assigned-flash 1.5s ease !important;
+      outline: 4px solid #22c55e !important;
+      outline-offset: 4px;
+    }
+    
+    :global(.floor-grid .table[data-status="confirmed"]),
+    :global(.floor-grid .table[data-status="seated"]) {
+      outline: 3px solid var(--terracotta);
+      outline-offset: 2px;
     }
     
     @keyframes pulse-assign {
-      0%, 100% { box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-      50% { box-shadow: 0 0 15px rgba(37, 99, 235, 0.4); }
+      0%, 100% { box-shadow: 0 2px 8px rgba(0,0,0,0.15); outline-color: #2563eb; }
+      50% { box-shadow: 0 0 25px rgba(37, 99, 235, 0.6); outline-color: #60a5fa; }
     }
     
     @keyframes assigned-flash {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.15); background: #22c55e; }
-      100% { transform: scale(1); }
+      0% { transform: scale(1); background: inherit; }
+      25% { transform: scale(1.2); background: #22c55e; }
+      50% { transform: scale(1.1); background: #4ade80; }
+      100% { transform: scale(1); background: inherit; }
     }
 
     /* === SQUARE TABLE (wooden top with legs shadow) === */
@@ -1707,55 +1719,89 @@ import Layout from '../../../layouts/Layout.astro';
     // Table assignment mode
     let isAssigningTable = false;
     
+    let assigningReservationId = null;
+    
     function startTableAssignment() {
       if (!selectedReservationId) return;
       
-      isAssigningTable = !isAssigningTable;
-      const btn = document.getElementById('assignBtn');
+      // Store the ID before closing modal
+      assigningReservationId = selectedReservationId;
+      isAssigningTable = true;
       
-      if (isAssigningTable) {
-        btn.textContent = 'Click a Table...';
-        btn.classList.add('active');
-        document.getElementById('floorGrid').classList.add('assigning');
-        closeDetailModal();
-      } else {
-        btn.textContent = 'Assign Table';
-        btn.classList.remove('active');
-        document.getElementById('floorGrid').classList.remove('assigning');
+      // Close modal but keep assigningReservationId
+      document.getElementById('resDetailModal')?.classList.remove('open');
+      
+      // Visual feedback
+      document.getElementById('floorGrid').classList.add('assigning');
+      
+      // Show instruction banner
+      showAssignBanner();
+    }
+    
+    function showAssignBanner() {
+      let banner = document.getElementById('assignBanner');
+      if (!banner) {
+        banner = document.createElement('div');
+        banner.id = 'assignBanner';
+        banner.innerHTML = `
+          <span>👆 Click a table to assign the reservation</span>
+          <button onclick="cancelAssignment()">Cancel</button>
+        `;
+        banner.style.cssText = 'position:fixed;top:0;left:50%;transform:translateX(-50%);background:#2563eb;color:white;padding:12px 24px;border-radius:0 0 8px 8px;display:flex;gap:16px;align-items:center;z-index:9999;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,0.3);';
+        banner.querySelector('button').style.cssText = 'background:white;color:#2563eb;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-weight:600;';
+        document.body.appendChild(banner);
       }
+      banner.style.display = 'flex';
+    }
+    
+    function hideAssignBanner() {
+      const banner = document.getElementById('assignBanner');
+      if (banner) banner.style.display = 'none';
+    }
+    
+    function cancelAssignment() {
+      isAssigningTable = false;
+      assigningReservationId = null;
+      document.getElementById('floorGrid').classList.remove('assigning');
+      hideAssignBanner();
     }
     
     async function assignTableToReservation(tableId) {
-      if (!selectedReservationId || !isAssigningTable) return;
+      if (!assigningReservationId || !isAssigningTable) return;
       
       try {
-        await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?id=eq.${selectedReservationId}`, {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?id=eq.${assigningReservationId}`, {
           method: 'PATCH',
           headers: {
             'apikey': SUPABASE_KEY,
             'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
           },
           body: JSON.stringify({ table_id: tableId })
         });
         
-        isAssigningTable = false;
-        document.getElementById('floorGrid').classList.remove('assigning');
+        if (!response.ok) throw new Error('Failed to save');
         
+        // Reset assignment mode
+        isAssigningTable = false;
+        assigningReservationId = null;
+        document.getElementById('floorGrid').classList.remove('assigning');
+        hideAssignBanner();
+        
+        // Reload and render
         await loadReservations();
         renderFloor();
         
-        // Show success
+        // Show success flash on the table
         const table = document.querySelector(`.table[data-table="${tableId}"]`);
         if (table) {
           table.classList.add('just-assigned');
-          setTimeout(() => table.classList.remove('just-assigned'), 1500);
+          setTimeout(() => table.classList.remove('just-assigned'), 2000);
         }
-        
-        selectedReservationId = null;
       } catch (e) {
         console.error('Failed to assign table:', e);
-        alert('Failed to assign table');
+        alert('Failed to assign table. Please try again.');
       }
     }
 
