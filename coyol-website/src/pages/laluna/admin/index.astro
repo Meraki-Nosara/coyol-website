@@ -1637,9 +1637,9 @@ import Layout from '../../../layouts/Layout.astro';
         // Click handler - assignment mode or select
         el.addEventListener('click', (e) => {
           e.stopPropagation();
-          if (isAssigningTable && el.classList.contains('available')) {
+          if (isAssigningTable && !el.classList.contains('occupied')) {
             assignTableToReservation(table.id);
-          } else if (res) {
+          } else if (!isAssigningTable && res) {
             selectReservation(res.id);
           }
         });
