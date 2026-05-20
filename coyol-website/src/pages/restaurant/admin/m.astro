@@ -569,12 +569,18 @@ import Layout from '../../../layouts/Layout.astro';
     }
   }
 
+  function getStatus(r) {
+    // Map database status to display status
+    if (r.status === 'confirmed') return 'coming';
+    return r.status;
+  }
+
   function renderReservations() {
     const list = document.getElementById('resList');
     const search = document.getElementById('searchInput').value.toLowerCase();
 
     const filtered = reservations.filter(r => 
-      !search || r.name.toLowerCase().includes(search)
+      !search || (r.guest_name && r.guest_name.toLowerCase().includes(search))
     );
 
     if (filtered.length === 0) {
@@ -593,11 +599,11 @@ import Layout from '../../../layouts/Layout.astro';
     }
 
     list.innerHTML = filtered.map(r => `
-      <div class="res-card ${r.status}" onclick="openActionModal('${r.id}')">
+      <div class="res-card ${getStatus(r)}" onclick="openActionModal('${r.id}')">
         <div class="res-time">${formatTime(r.time)}</div>
         <div class="res-info">
-          <div class="res-name">${r.name}</div>
-          <div class="res-meta">${r.table_id ? `Mesa ${r.table_id}` : 'Sin mesa'} ${r.notes ? '• ' + r.notes : ''}</div>
+          <div class="res-name">${r.guest_name || 'Sin nombre'}</div>
+          <div class="res-meta">${r.table_id ? `Mesa ${r.table_id}` : 'Sin mesa'} ${r.special_requests ? '• ' + r.special_requests : ''}</div>
         </div>
         <div class="res-guests">${r.guests}</div>
       </div>
@@ -639,14 +645,14 @@ import Layout from '../../../layouts/Layout.astro';
     e.preventDefault();
     
     const data = {
-      name: document.getElementById('guestName').value,
-      phone: document.getElementById('guestPhone').value || null,
-      email: document.getElementById('guestEmail').value || null,
+      guest_name: document.getElementById('guestName').value,
+      guest_phone: document.getElementById('guestPhone').value || null,
+      guest_email: document.getElementById('guestEmail').value || null,
       guests: parseInt(document.getElementById('guestCount').value),
       time: document.getElementById('guestTime').value,
-      notes: document.getElementById('guestNotes').value || null,
+      special_requests: document.getElementById('guestNotes').value || null,
       date: formatDate(currentDate),
-      status: 'coming'
+      status: 'confirmed'
     };
 
     try {
@@ -672,18 +678,18 @@ import Layout from '../../../layouts/Layout.astro';
     selectedRes = reservations.find(r => r.id === id);
     if (!selectedRes) return;
 
-    document.getElementById('actionModalTitle').textContent = selectedRes.name;
+    document.getElementById('actionModalTitle').textContent = selectedRes.guest_name || 'Reservación';
     document.getElementById('actionDetails').innerHTML = `
       <p><strong>Hora:</strong> ${formatTime(selectedRes.time)}</p>
       <p><strong>Personas:</strong> ${selectedRes.guests}</p>
-      <p><strong>Teléfono:</strong> ${selectedRes.phone || '—'}</p>
+      <p><strong>Teléfono:</strong> ${selectedRes.guest_phone || '—'}</p>
       <p><strong>Mesa:</strong> ${selectedRes.table_id || 'Sin asignar'}</p>
-      ${selectedRes.notes ? `<p><strong>Notas:</strong> ${selectedRes.notes}</p>` : ''}
-      <p><strong>Estado:</strong> ${selectedRes.status === 'coming' ? 'Por llegar' : selectedRes.status === 'seated' ? 'Sentado' : selectedRes.status}</p>
+      ${selectedRes.special_requests ? `<p><strong>Notas:</strong> ${selectedRes.special_requests}</p>` : ''}
+      <p><strong>Estado:</strong> ${selectedRes.status === 'confirmed' ? 'Por llegar' : selectedRes.status === 'seated' ? 'Sentado' : selectedRes.status}</p>
     `;
 
     let buttons = '';
-    if (selectedRes.status === 'coming') {
+    if (selectedRes.status === 'confirmed' || selectedRes.status === 'coming') {
       buttons = `
         <button class="action-btn primary" onclick="updateStatus('seated')">✓ Marcar Sentado</button>
         <button class="action-btn danger" onclick="updateStatus('cancelled')">Cancelar Reservación</button>
