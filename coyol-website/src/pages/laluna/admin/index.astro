@@ -1850,11 +1850,14 @@ import Layout from '../../../layouts/Layout.astro';
     async function assignTableToReservation(tableId) {
       if (!assigningReservationId || !isAssigningTable) return;
       
+      // Save the ID before clearing
+      const resId = assigningReservationId;
+      
       // Stop glow immediately
       cancelAssignment();
       
       try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${assigningReservationId}`, {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${resId}`, {
           method: 'PATCH',
           headers: {
             'apikey': SUPABASE_KEY,
