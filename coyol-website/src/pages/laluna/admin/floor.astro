@@ -796,7 +796,7 @@ import Layout from '../../../layouts/Layout.astro';
           selectTable(table.id);
         });
 
-        // Drag
+        // Drag - mouse
         el.addEventListener('mousedown', (e) => {
           e.preventDefault();
           draggedTable = el;
@@ -806,6 +806,17 @@ import Layout from '../../../layouts/Layout.astro';
           el.style.zIndex = '100';
           el.style.cursor = 'grabbing';
         });
+        
+        // Drag - touch (iPad)
+        el.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          const touch = e.touches[0];
+          draggedTable = el;
+          const rect = el.getBoundingClientRect();
+          dragOffset.x = touch.clientX - rect.left;
+          dragOffset.y = touch.clientY - rect.top;
+          el.style.zIndex = '100';
+        }, { passive: false });
 
         grid.appendChild(el);
       });
@@ -880,6 +891,23 @@ import Layout from '../../../layouts/Layout.astro';
       draggedTable.style.left = x + 'px';
       draggedTable.style.top = y + 'px';
     });
+    
+    // Touch move (iPad)
+    document.addEventListener('touchmove', (e) => {
+      if (!draggedTable) return;
+      e.preventDefault();
+      const touch = e.touches[0];
+      const grid = document.getElementById('floorGrid');
+      const rect = grid.getBoundingClientRect();
+      let x = touch.clientX - rect.left - dragOffset.x;
+      let y = touch.clientY - rect.top - dragOffset.y;
+      x = Math.round(x / 10) * 10;
+      y = Math.round(y / 10) * 10;
+      x = Math.max(0, x);
+      y = Math.max(0, y);
+      draggedTable.style.left = x + 'px';
+      draggedTable.style.top = y + 'px';
+    }, { passive: false });
 
     // Mouse up
     document.addEventListener('mouseup', () => {
@@ -896,6 +924,23 @@ import Layout from '../../../layouts/Layout.astro';
       }
       draggedTable.style.zIndex = '';
       draggedTable.style.cursor = 'grab';
+      draggedTable = null;
+    });
+    
+    // Touch end (iPad)
+    document.addEventListener('touchend', () => {
+      if (!draggedTable) return;
+      const id = draggedTable.dataset.id;
+      const x = parseInt(draggedTable.style.left);
+      const y = parseInt(draggedTable.style.top);
+      const layouts = getLayout();
+      const t = layouts[currentZone].find(t => t.id === id);
+      if (t) {
+        t.x = x;
+        t.y = y;
+        saveLayout(layouts);
+      }
+      draggedTable.style.zIndex = '';
       draggedTable = null;
     });
 
