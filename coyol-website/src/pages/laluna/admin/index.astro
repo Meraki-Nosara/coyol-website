@@ -1635,10 +1635,55 @@ import Layout from '../../../layouts/Layout.astro';
         `;
         
         // Click handler - assignment mode or select
-        el.addEventListener('click', (e) => {
+        el.addEventListener('click', async (e) => {
           e.stopPropagation();
+          e.preventDefault();
+          
           if (isAssigningTable && !el.classList.contains('occupied')) {
-            assignTableToReservation(table.id);
+            // Capture values immediately
+            const resIdToAssign = assigningReservationId;
+            const tableToAssign = table.id;
+            
+            if (!resIdToAssign) {
+              console.error('No reservation ID to assign');
+              return;
+            }
+            
+            // Stop glow first
+            isAssigningTable = false;
+            assigningReservationId = null;
+            document.getElementById('floorGrid').classList.remove('assigning');
+            document.getElementById('assignBanner').classList.remove('show');
+            document.querySelectorAll('.table').forEach(t => t.classList.remove('occupied'));
+            
+            // Now do the API call
+            try {
+              const response = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${resIdToAssign}`, {
+                method: 'PATCH',
+                headers: {
+                  'apikey': SUPABASE_KEY,
+                  'Authorization': `Bearer ${SUPABASE_KEY}`,
+                  'Content-Type': 'application/json',
+                  'Prefer': 'return=minimal'
+                },
+                body: JSON.stringify({ table_id: tableToAssign })
+              });
+              
+              if (!response.ok) throw new Error('API error: ' + response.status);
+              
+              await loadReservations();
+              renderFloor();
+              
+              // Flash success
+              const assignedTable = document.querySelector(`.table[data-table="${tableToAssign}"]`);
+              if (assignedTable) {
+                assignedTable.classList.add('just-assigned');
+                setTimeout(() => assignedTable.classList.remove('just-assigned'), 2000);
+              }
+            } catch (err) {
+              console.error('Assignment failed:', err);
+              alert('Failed to assign table: ' + err.message);
+            }
           } else if (!isAssigningTable && res) {
             selectReservation(res.id);
           }
