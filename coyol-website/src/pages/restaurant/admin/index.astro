@@ -2142,6 +2142,18 @@ import Layout from '../../../layouts/Layout.astro';
       }
     }
 
+    // Auth check
+    if (localStorage.getItem('coyol_admin_auth') !== 'true') {
+      window.location.href = '/restaurant/admin/login';
+    }
+    
+    // Logout function
+    window.logoutAdmin = () => {
+      localStorage.removeItem('coyol_admin_auth');
+      localStorage.removeItem('coyol_admin_user');
+      window.location.href = '/restaurant/admin/login';
+    };
+
     // Initial load
     loadShifts();
     loadReservations().then(() => renderFloor());
