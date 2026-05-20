@@ -522,6 +522,20 @@ import Layout from '../../../layouts/Layout.astro';
       background: rgba(61, 79, 61, 0.08);
     }
 
+    :global(.res-row.cancelled) {
+      opacity: 0.4;
+      background: #f5f5f5;
+    }
+
+    :global(.res-row.cancelled .res-name) {
+      text-decoration: line-through;
+      color: #999;
+    }
+
+    :global(.res-row.cancelled .res-time) {
+      color: #999;
+    }
+
     :global(.res-time) {
       font-family: 'Inter', sans-serif;
       font-weight: 500;
@@ -1536,7 +1550,8 @@ import Layout from '../../../layouts/Layout.astro';
       if (currentStatusFilter === 'seated') {
         filtered = reservations.filter(r => r.status === 'seated');
       } else {
-        filtered = reservations.filter(r => r.status !== 'seated');
+        // Coming: show confirmed but also show cancelled (greyed out) for accountability
+        filtered = reservations.filter(r => r.status !== 'seated' && r.status !== 'completed');
       }
       
       // Sort by time
