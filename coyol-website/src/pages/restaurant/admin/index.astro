@@ -2147,6 +2147,11 @@ import Layout from '../../../layouts/Layout.astro';
       window.location.href = '/restaurant/admin/login';
     }
     
+    // Mobile redirect
+    if (window.innerWidth <= 768) {
+      window.location.href = '/restaurant/admin/m';
+    }
+    
     // Logout function
     window.logoutAdmin = () => {
       localStorage.removeItem('coyol_admin_auth');

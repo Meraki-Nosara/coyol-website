@@ -1353,6 +1353,16 @@ import Layout from '../../../layouts/Layout.astro';
   </style>
 
   <script is:inline>
+    // Auth check
+    if (localStorage.getItem('laluna_admin_auth') !== 'true') {
+      window.location.href = '/laluna/admin/login';
+    }
+    
+    // Mobile redirect
+    if (window.innerWidth <= 768) {
+      window.location.href = '/laluna/admin/m';
+    }
+
     // Supabase config
     const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
