@@ -104,11 +104,12 @@ const absoluteOgImage = ogImage.startsWith('/') ? `${siteUrl}${ogImage}` : ogIma
         animation: none;
       }
     </style>
-    <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 items-end">
+    <!-- Mobile: bottom safe area + larger touch targets -->
+    <div class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col gap-2 sm:gap-3 items-end pb-safe">
       <!-- La Luna Reservation -->
       <a 
         href="/laluna/reserve"
-        class="reservation-btn flex items-center gap-2 bg-[#C4A67C] text-[#1A1F16] pl-3 pr-4 py-2.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+        class="reservation-btn flex items-center gap-2 bg-[#C4A67C] text-[#1A1F16] pl-3 pr-4 py-3 sm:py-2.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 active:scale-95 sm:hover:scale-105 min-h-[48px] sm:min-h-0"
         aria-label="Reserve at La Luna"
       >
         <img src="/images/logos/laluna-icon-transparent.png" alt="La Luna" class="w-7 h-7 object-contain" />
@@ -118,7 +119,7 @@ const absoluteOgImage = ogImage.startsWith('/') ? `${siteUrl}${ogImage}` : ogIma
       <!-- Coyol Reservation -->
       <a 
         href="/restaurant/reserve"
-        class="reservation-btn flex items-center gap-2 bg-[#C4A67C] text-[#1A1F16] pl-3 pr-4 py-2.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+        class="reservation-btn flex items-center gap-2 bg-[#C4A67C] text-[#1A1F16] pl-3 pr-4 py-3 sm:py-2.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 active:scale-95 sm:hover:scale-105 min-h-[48px] sm:min-h-0"
         aria-label="Reserve at Coyol"
       >
         <img src="/images/logos/coyol-restaurant-logo-black.png" alt="Coyol" class="w-8 h-8 object-contain" />
@@ -130,7 +131,7 @@ const absoluteOgImage = ogImage.startsWith('/') ? `${siteUrl}${ogImage}` : ogIma
         href="https://wa.me/18184018068?text=Hi%2C%20I'm%20interested%20in%20Coyol%20properties%20in%20Nosara"
         target="_blank"
         rel="noopener noreferrer"
-        class="flex items-center gap-2 bg-[#3D4F3D] text-white pl-3 pr-4 py-2.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+        class="flex items-center gap-2 bg-[#3D4F3D] text-white pl-3 pr-4 py-3 sm:py-2.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 active:scale-95 sm:hover:scale-105 min-h-[48px] sm:min-h-0"
         aria-label="Chat on WhatsApp"
       >
         <svg class="w-6 h-6 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
