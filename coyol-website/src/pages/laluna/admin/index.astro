@@ -1857,6 +1857,7 @@ import Layout from '../../../layouts/Layout.astro';
       cancelAssignment();
       
       try {
+        console.log('Assigning table', tableId, 'to reservation', resId);
         const response = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${resId}`, {
           method: 'PATCH',
           headers: {
@@ -1868,7 +1869,8 @@ import Layout from '../../../layouts/Layout.astro';
           body: JSON.stringify({ table_id: tableId })
         });
         
-        if (!response.ok) throw new Error('Failed to save');
+        console.log('Response status:', response.status, response.ok);
+        if (!response.ok) throw new Error('Failed to save: ' + response.status);
         
         // Reload and render
         await loadReservations();
