@@ -1,0 +1,257 @@
+---
+import CommandLayout from '../../layouts/CommandLayout.astro';
+---
+
+<CommandLayout title="Analytics" active="analytics">
+  
+  <div class="page">
+    <header class="page-header">
+      <h1>Website Analytics</h1>
+      <span class="source">Live from Plausible · coyolnosara.com</span>
+    </header>
+
+    <!-- Stats -->
+    <section class="stats" id="stats">
+      <div class="stat loading">
+        <div class="stat-value" id="visitors">—</div>
+        <div class="stat-label">Visitors</div>
+        <div class="stat-change" id="visitors-change"></div>
+      </div>
+      <div class="stat loading">
+        <div class="stat-value" id="pageviews">—</div>
+        <div class="stat-label">Pageviews</div>
+        <div class="stat-change" id="pageviews-change"></div>
+      </div>
+      <div class="stat loading">
+        <div class="stat-value" id="bounce">—</div>
+        <div class="stat-label">Bounce Rate</div>
+      </div>
+      <div class="stat loading">
+        <div class="stat-value" id="duration">—</div>
+        <div class="stat-label">Avg Duration</div>
+      </div>
+    </section>
+
+    <div class="grid">
+      
+      <!-- Traffic Sources -->
+      <section class="card">
+        <h2>Traffic Sources</h2>
+        <div id="sources" class="list-loading">
+          <div class="skeleton-row"></div>
+          <div class="skeleton-row"></div>
+          <div class="skeleton-row"></div>
+        </div>
+      </section>
+
+      <!-- Top Pages -->
+      <section class="card">
+        <h2>Top Pages</h2>
+        <div id="pages" class="list-loading">
+          <div class="skeleton-row"></div>
+          <div class="skeleton-row"></div>
+          <div class="skeleton-row"></div>
+        </div>
+      </section>
+
+      <!-- Countries -->
+      <section class="card">
+        <h2>Countries</h2>
+        <div id="countries" class="list-loading">
+          <div class="skeleton-row"></div>
+          <div class="skeleton-row"></div>
+          <div class="skeleton-row"></div>
+        </div>
+      </section>
+
+      <!-- Devices -->
+      <section class="card">
+        <h2>Devices</h2>
+        <div id="devices" class="list-loading">
+          <div class="skeleton-row"></div>
+          <div class="skeleton-row"></div>
+        </div>
+      </section>
+      
+    </div>
+
+    <!-- Note -->
+    <div class="note">
+      <p>To see full analytics, add your Plausible API key.</p>
+      <p>For now, visit: <a href="https://plausible.io/coyolnosara.com" target="_blank">plausible.io/coyolnosara.com</a></p>
+    </div>
+  </div>
+
+</CommandLayout>
+
+<script>
+  // Plausible Stats API - requires API key for full data
+  // For now we'll show placeholder that links to Plausible
+  
+  async function fetchStats() {
+    // Simulated - replace with real API call when key is available
+    setTimeout(() => {
+      document.querySelectorAll('.loading').forEach(el => el.classList.remove('loading'));
+      document.querySelectorAll('.list-loading').forEach(el => el.classList.remove('list-loading'));
+      
+      // Show sample data or "Connect API" message
+      document.getElementById('visitors').textContent = '—';
+      document.getElementById('pageviews').textContent = '—';
+      document.getElementById('bounce').textContent = '—';
+      document.getElementById('duration').textContent = '—';
+      
+      document.getElementById('sources').innerHTML = `
+        <div class="connect-msg">Connect Plausible API for live data</div>
+      `;
+      document.getElementById('pages').innerHTML = `
+        <div class="connect-msg">Connect Plausible API for live data</div>
+      `;
+      document.getElementById('countries').innerHTML = `
+        <div class="connect-msg">Connect Plausible API for live data</div>
+      `;
+      document.getElementById('devices').innerHTML = `
+        <div class="connect-msg">Connect Plausible API for live data</div>
+      `;
+    }, 500);
+  }
+  
+  fetchStats();
+</script>
+
+<style>
+  .page {
+    padding: 32px 40px;
+    max-width: 1000px;
+  }
+  
+  .page-header {
+    margin-bottom: 32px;
+  }
+  
+  .page-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #C4A67C;
+  }
+  
+  .source {
+    font-size: 12px;
+    color: #555;
+  }
+  
+  /* Stats */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  
+  .stat {
+    background: #0f1210;
+    border: 1px solid #1a1d17;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .stat.loading {
+    opacity: 0.5;
+  }
+  
+  .stat-value {
+    font-size: 32px;
+    font-weight: 300;
+    color: #C4A67C;
+  }
+  
+  .stat-label {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+  }
+  
+  .stat-change {
+    font-size: 11px;
+    margin-top: 4px;
+  }
+  
+  .stat-change.positive { color: #22c55e; }
+  .stat-change.negative { color: #ef4444; }
+  
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+  
+  .card {
+    background: #0f1210;
+    border: 1px solid #1a1d17;
+    border-radius: 12px;
+    padding: 20px;
+  }
+  
+  .card h2 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  
+  .list-loading {
+    opacity: 0.5;
+  }
+  
+  .skeleton-row {
+    height: 32px;
+    background: linear-gradient(90deg, #1a1d17 25%, #252b20 50%, #1a1d17 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  
+  .connect-msg {
+    padding: 24px;
+    text-align: center;
+    color: #555;
+    font-size: 13px;
+  }
+  
+  /* Note */
+  .note {
+    background: #0f1210;
+    border: 1px solid #1a1d17;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .note p {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 8px;
+  }
+  
+  .note p:last-child { margin-bottom: 0; }
+  
+  .note a {
+    color: #C4A67C;
+  }
+  
+  @media (max-width: 768px) {
+    .page { padding: 20px; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
