@@ -969,10 +969,15 @@ import Layout from '../../../layouts/Layout.astro';
       outline-offset: 4px;
     }
     
-    :global(.floor-grid .table[data-status="confirmed"]),
-    :global(.floor-grid .table[data-status="seated"]) {
+    :global(.floor-grid .table[data-status="confirmed"]) {
       outline: 3px solid var(--terracotta);
       outline-offset: 2px;
+    }
+    
+    :global(.floor-grid .table[data-status="seated"]) {
+      outline: 3px solid var(--keswick) !important;
+      outline-offset: 2px;
+      background: rgba(61, 79, 61, 0.15) !important;
     }
     
     @keyframes pulse-assign {
