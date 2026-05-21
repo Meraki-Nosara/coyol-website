@@ -8,7 +8,7 @@ const summary = guestData.summary || {};
 // Real segments
 const hot = guests.filter(g => g.segment === 'hot');
 const warm = guests.filter(g => g.segment === 'warm');
-const usCanada = guests.filter(g => ['US-East', 'US-West', 'US-Central', 'Canada'].includes(g.region));
+const usCanada = guests.filter(g => ['US-East', 'US-West', 'US-Central', 'Canada', 'Europe'].includes(g.region));
 const corporate = guests.filter(g => g.is_corporate_email);
 
 // Top 10 hot leads
@@ -56,8 +56,8 @@ const topSources = Object.entries(sourceMap)
       </div>
       <div class="big-stat">
         <div class="big-number">{usCanada.length.toLocaleString()}</div>
-        <div class="big-label">US & Canada</div>
-        <div class="big-sub">Primary target market</div>
+        <div class="big-label">Target Markets</div>
+        <div class="big-sub">US, Canada & Europe</div>
       </div>
       <div class="big-stat">
         <div class="big-number">{corporate.length.toLocaleString()}</div>
