@@ -2016,6 +2016,77 @@ import Layout from '../../../layouts/Layout.astro';
       selectedReservationId = null;
     }
     
+    function openEditModal() {
+      if (!selectedReservationId) return;
+      const res = cachedReservations.find(r => r.id === selectedReservationId);
+      if (!res) return;
+      
+      // Populate edit form with current values
+      document.getElementById('editDate').value = res.date;
+      document.getElementById('editTime').value = res.time;
+      document.getElementById('editGuests').value = res.guests;
+      document.getElementById('editZone').value = res.zonePreference || 'any';
+      document.getElementById('editNotes').value = res.specialRequests || '';
+      
+      // Close detail modal and open edit modal
+      document.getElementById('resDetailModal')?.classList.remove('open');
+      document.getElementById('editResModal')?.classList.add('open');
+    }
+    
+    function closeEditModal() {
+      document.getElementById('editResModal')?.classList.remove('open');
+      // Reopen detail modal
+      if (selectedReservationId) {
+        const res = cachedReservations.find(r => r.id === selectedReservationId);
+        if (res) openReservationDetail(res);
+      }
+    }
+    
+    async function saveEditedReservation() {
+      if (!selectedReservationId) return;
+      
+      const newDate = document.getElementById('editDate').value;
+      const newTime = document.getElementById('editTime').value;
+      const newGuests = parseInt(document.getElementById('editGuests').value);
+      const newZone = document.getElementById('editZone').value;
+      const newNotes = document.getElementById('editNotes').value;
+      
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${selectedReservationId}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({
+            date: newDate,
+            time: newTime,
+            guests: newGuests,
+            zone_preference: newZone,
+            special_requests: newNotes
+          })
+        });
+        
+        if (!response.ok) throw new Error('Failed to update');
+        
+        // Close edit modal and refresh
+        document.getElementById('editResModal')?.classList.remove('open');
+        await loadReservations();
+        renderReservations();
+        renderFloor();
+        
+        // Show success and reopen detail
+        const updatedRes = cachedReservations.find(r => r.id === selectedReservationId);
+        if (updatedRes) openReservationDetail(updatedRes);
+        
+      } catch (err) {
+        console.error('Failed to save:', err);
+        alert('Failed to save changes. Please try again.');
+      }
+    }
+    
     async function toggleSeatStatus() {
       if (!selectedReservationId) return;
       const res = cachedReservations.find(r => r.id === selectedReservationId);
