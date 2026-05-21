@@ -1,22 +1,46 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+// Coyol Command - Real Data Only
+// "Dining to Living"
 
-// Load CRM data
 import guestData from '../../data/guests-enriched.json';
 
-const summary = guestData.summary || {};
 const guests = guestData.guests || [];
+const summary = guestData.summary || {};
 
-// Get hot leads
-const hotLeads = guests
-  .filter(g => g.segment === 'hot' || g.lead_score >= 45)
-  .filter(g => g.region !== 'LatAm')
+// Real segments
+const hot = guests.filter(g => g.segment === 'hot');
+const warm = guests.filter(g => g.segment === 'warm');
+const usCanada = guests.filter(g => ['US-East', 'US-West', 'US-Central', 'Canada'].includes(g.region));
+
+// Top 10 hot leads (real)
+const topHot = guests
+  .filter(g => g.segment === 'hot' && g.region !== 'LatAm')
   .sort((a, b) => b.lead_score - a.lead_score)
-  .slice(0, 30);
+  .slice(0, 10);
 
-const segmentCounts = summary.by_segment || {};
-const regionCounts = summary.by_region || {};
-const cityCounts = summary.top_cities || {};
+// Top cities (real)
+const cityMap = {};
+guests.forEach(g => {
+  if (g.city && g.city !== 'Costa Rica' && g.region !== 'LatAm') {
+    cityMap[g.city] = (cityMap[g.city] || 0) + 1;
+  }
+});
+const topCities = Object.entries(cityMap)
+  .sort((a, b) => Number(b[1]) - Number(a[1]))
+  .slice(0, 8);
+
+// Source breakdown (real)
+const sourceMap = {};
+guests.forEach(g => {
+  const src = g.source || 'Unknown';
+  sourceMap[src] = (sourceMap[src] || 0) + 1;
+});
+const topSources = Object.entries(sourceMap)
+  .sort((a, b) => Number(b[1]) - Number(a[1]))
+  .slice(0, 4);
+
+// Corporate emails (real)
+const corporate = guests.filter(g => g.is_corporate_email);
 ---
 
 <!DOCTYPE html>
@@ -25,710 +49,469 @@ const cityCounts = summary.top_cities || {};
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>Coyol Command — Dining to Living</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+  <title>Coyol Command</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="app">
-    
-    <!-- Header -->
-    <header class="header">
-      <div class="header-brand">
-        <h1>Coyol Command</h1>
-        <span class="tagline">Dining to Living</span>
-      </div>
-      <nav class="header-nav">
-        <a href="/command" class="nav-link active">Dashboard</a>
-        <a href="/command/leads" class="nav-link">Leads</a>
-        <a href="/command/pipeline" class="nav-link">Pipeline</a>
-        <a href="/command/campaigns" class="nav-link">Campaigns</a>
-      </nav>
-      <div class="header-actions">
-        <select id="dateRange" class="date-select">
-          <option value="7d">Last 7 days</option>
-          <option value="30d" selected>Last 30 days</option>
-          <option value="12mo">Last 12 months</option>
-        </select>
-      </div>
-    </header>
 
-    <!-- Main Content -->
-    <main class="main">
+  <header>
+    <div class="brand">
+      <h1>Coyol Command</h1>
+      <span>Dining to Living</span>
+    </div>
+  </header>
+
+  <main>
+    
+    <!-- The Numbers That Matter -->
+    <section class="hero-stats">
+      <div class="big-stat">
+        <div class="big-number">{hot.length.toLocaleString()}</div>
+        <div class="big-label">Hot Leads</div>
+        <div class="big-sub">Score 40+ · Ready to nurture</div>
+      </div>
+      <div class="big-stat">
+        <div class="big-number">{usCanada.length.toLocaleString()}</div>
+        <div class="big-label">US & Canada</div>
+        <div class="big-sub">Primary target market</div>
+      </div>
+      <div class="big-stat">
+        <div class="big-number">{corporate.length.toLocaleString()}</div>
+        <div class="big-label">Corporate</div>
+        <div class="big-sub">Business emails = serious</div>
+      </div>
+    </section>
+
+    <!-- Two Column -->
+    <div class="grid">
       
-      <!-- Top Stats Row -->
-      <section class="stats-row">
-        <div class="stat-card">
-          <div class="stat-label">Website Visitors</div>
-          <div class="stat-value" id="visitors">—</div>
-          <div class="stat-change positive" id="visitors-change"></div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Property Views</div>
-          <div class="stat-value" id="property-views">—</div>
-          <div class="stat-change" id="property-change"></div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Contact Clicks</div>
-          <div class="stat-value" id="contact-clicks">—</div>
-          <div class="stat-change" id="contact-change"></div>
-        </div>
-        <div class="stat-card highlight">
-          <div class="stat-label">CRM Leads</div>
-          <div class="stat-value">{(summary.total_guests || 0).toLocaleString()}</div>
-          <div class="stat-sub">+{(segmentCounts.hot || 0).toLocaleString()} hot</div>
+      <!-- Left: Who They Are -->
+      <section class="card">
+        <h2>Top Markets</h2>
+        <p class="card-sub">Where your best leads come from</p>
+        
+        <div class="bars">
+          {topCities.map(([city, count], i) => {
+            const max = Number(topCities[0][1]);
+            const pct = (Number(count) / max) * 100;
+            const isTop = i < 3;
+            return (
+              <div class="bar-row">
+                <span class="bar-rank">{i + 1}</span>
+                <span class="bar-city">{city}</span>
+                <div class="bar-track">
+                  <div class={`bar-fill ${isTop ? 'top' : ''}`} style={`width: ${pct}%`}></div>
+                </div>
+                <span class="bar-count">{Number(count).toLocaleString()}</span>
+              </div>
+            );
+          })}
         </div>
       </section>
 
-      <!-- Two Column Layout -->
-      <div class="content-grid">
+      <!-- Right: Top Leads -->
+      <section class="card">
+        <h2>Top 10 Hot Leads</h2>
+        <p class="card-sub">Highest scored prospects</p>
         
-        <!-- Left Column: Analytics -->
-        <div class="col-left">
-          
-          <!-- Traffic Chart -->
-          <div class="card">
-            <div class="card-header">
-              <h3>Website Traffic</h3>
-              <span class="card-badge">Live from Plausible</span>
+        <div class="leads">
+          {topHot.map((lead, i) => (
+            <div class="lead">
+              <span class="lead-rank">{i + 1}</span>
+              <div class="lead-info">
+                <div class="lead-name">{lead.name || '—'}</div>
+                <div class="lead-where">{lead.city || lead.region}</div>
+              </div>
+              <div class="lead-score">{lead.lead_score}</div>
             </div>
-            <div class="chart-container">
-              <canvas id="trafficChart" height="200"></canvas>
-            </div>
-          </div>
-
-          <!-- Traffic Sources -->
-          <div class="card">
-            <h3>Traffic Sources</h3>
-            <div id="sources-list" class="sources-list">
-              <div class="source-row skeleton"></div>
-              <div class="source-row skeleton"></div>
-              <div class="source-row skeleton"></div>
-            </div>
-          </div>
-
-          <!-- Top Properties -->
-          <div class="card">
-            <h3>Top Properties Viewed</h3>
-            <div id="properties-list" class="properties-list">
-              <div class="property-row skeleton"></div>
-              <div class="property-row skeleton"></div>
-              <div class="property-row skeleton"></div>
-            </div>
-          </div>
-          
+          ))}
         </div>
-
-        <!-- Middle Column: CRM Funnel -->
-        <div class="col-middle">
-          
-          <!-- Lead Funnel -->
-          <div class="card">
-            <h3>Lead Funnel</h3>
-            <div class="funnel">
-              <div class="funnel-stage" style="--pct: 100%">
-                <span class="funnel-label">All Contacts</span>
-                <span class="funnel-value">{(summary.total_guests || 0).toLocaleString()}</span>
-              </div>
-              <div class="funnel-stage" style="--pct: 70%">
-                <span class="funnel-label">US & Canada</span>
-                <span class="funnel-value">{((regionCounts['US-East'] || 0) + (regionCounts['US-West'] || 0) + (regionCounts['Canada'] || 0) + (regionCounts['US-Central'] || 0)).toLocaleString()}</span>
-              </div>
-              <div class="funnel-stage warm" style="--pct: 45%">
-                <span class="funnel-label">Warm+</span>
-                <span class="funnel-value">{((segmentCounts.hot || 0) + (segmentCounts.warm || 0)).toLocaleString()}</span>
-              </div>
-              <div class="funnel-stage hot" style="--pct: 20%">
-                <span class="funnel-label">Hot Leads</span>
-                <span class="funnel-value">{(segmentCounts.hot || 0).toLocaleString()}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Top Markets -->
-          <div class="card">
-            <h3>Top Markets</h3>
-            <div class="markets-chart">
-              {Object.entries(cityCounts)
-                .filter(([city]) => city && city !== 'Costa Rica' && city !== 'null')
-                .sort((a, b) => Number(b[1]) - Number(a[1]))
-                .slice(0, 6)
-                .map(([city, count]) => {
-                  const max = Math.max(...Object.values(cityCounts).filter(v => typeof v === 'number') as number[]);
-                  const pct = (Number(count) / max) * 100;
-                  return (
-                    <div class="market-row">
-                      <span class="market-city">{city}</span>
-                      <div class="market-bar">
-                        <div class="market-fill" style={`width: ${pct}%`}></div>
-                      </div>
-                      <span class="market-count">{Number(count).toLocaleString()}</span>
-                    </div>
-                  );
-                })}
-            </div>
-          </div>
-
-          <!-- Quick Actions -->
-          <div class="card actions-card">
-            <a href="/command/leads?segment=hot" class="action-btn hot">
-              <span class="action-icon">🔥</span>
-              <span>Hot Leads</span>
-              <span class="action-count">{segmentCounts.hot || 0}</span>
-            </a>
-            <a href="/command/export" class="action-btn">
-              <span class="action-icon">📤</span>
-              <span>Export</span>
-            </a>
-            <a href="/command/campaigns/new" class="action-btn">
-              <span class="action-icon">📧</span>
-              <span>Campaign</span>
-            </a>
-          </div>
-          
-        </div>
-
-        <!-- Right Column: Hot Leads -->
-        <div class="col-right">
-          <div class="card leads-card">
-            <div class="card-header">
-              <h3>Hot Leads</h3>
-              <a href="/command/leads?segment=hot" class="view-all">View All →</a>
-            </div>
-            <div class="leads-list">
-              {hotLeads.map(lead => (
-                <div class="lead-row">
-                  <div class="lead-info">
-                    <div class="lead-name">{lead.name || '—'}</div>
-                    <div class="lead-meta">{lead.city} · {lead.source}</div>
-                  </div>
-                  <div class="lead-score">{lead.lead_score}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        
-      </div>
-    </main>
-
-  </div>
-
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
-  <script>
-    // Plausible API config
-    const SITE_ID = 'coyolnosara.com';
-    
-    // We'll fetch from Plausible public stats (no API key needed for basic stats)
-    async function fetchAnalytics() {
-      try {
-        // For now, show sample data (Plausible API requires key for detailed stats)
-        // In production, this would call your backend that has the API key
-        
-        document.getElementById('visitors').textContent = '156';
-        document.getElementById('visitors-change').textContent = '+12%';
-        document.getElementById('visitors-change').classList.add('positive');
-        
-        document.getElementById('property-views').textContent = '89';
-        document.getElementById('property-change').textContent = '+8%';
-        document.getElementById('property-change').classList.add('positive');
-        
-        document.getElementById('contact-clicks').textContent = '23';
-        document.getElementById('contact-change').textContent = '+15%';
-        document.getElementById('contact-change').classList.add('positive');
-        
-        // Sources
-        const sources = [
-          { name: 'Google', value: 67, pct: 43 },
-          { name: 'Direct', value: 45, pct: 29 },
-          { name: 'Instagram', value: 28, pct: 18 },
-          { name: 'Referral', value: 16, pct: 10 },
-        ];
-        
-        document.getElementById('sources-list').innerHTML = sources.map(s => `
-          <div class="source-row">
-            <span class="source-name">${s.name}</span>
-            <div class="source-bar"><div class="source-fill" style="width: ${s.pct}%"></div></div>
-            <span class="source-value">${s.value}</span>
-          </div>
-        `).join('');
-        
-        // Properties
-        const properties = [
-          { name: 'Mar Azul Lot 12', views: 34 },
-          { name: 'Casa Elle', views: 28 },
-          { name: 'Nosara Hills', views: 19 },
-          { name: 'Mar Azul Lot 8', views: 15 },
-        ];
-        
-        document.getElementById('properties-list').innerHTML = properties.map(p => `
-          <div class="property-row">
-            <span class="property-name">${p.name}</span>
-            <span class="property-views">${p.views} views</span>
-          </div>
-        `).join('');
-        
-        // Traffic chart
-        renderTrafficChart();
-        
-      } catch (err) {
-        console.error('Analytics error:', err);
-      }
-    }
-    
-    function renderTrafficChart() {
-      const ctx = document.getElementById('trafficChart').getContext('2d');
+      </section>
       
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          datasets: [{
-            label: 'Visitors',
-            data: [18, 24, 22, 31, 28, 35, 29],
-            borderColor: '#C4A67C',
-            backgroundColor: 'rgba(196, 166, 124, 0.1)',
-            fill: true,
-            tension: 0.4,
-            pointRadius: 4,
-            pointBackgroundColor: '#C4A67C',
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false }
-          },
-          scales: {
-            x: {
-              grid: { color: 'rgba(255,255,255,0.05)' },
-              ticks: { color: '#666' }
-            },
-            y: {
-              grid: { color: 'rgba(255,255,255,0.05)' },
-              ticks: { color: '#666' }
-            }
-          }
-        }
-      });
-    }
-    
-    // Init
-    fetchAnalytics();
-  </script>
+    </div>
+
+    <!-- Bottom: Source + Funnel -->
+    <div class="grid">
+      
+      <section class="card">
+        <h2>Lead Sources</h2>
+        <p class="card-sub">Which restaurant brings the best leads</p>
+        
+        <div class="sources">
+          {topSources.map(([source, count]) => {
+            const total = guests.length;
+            const pct = Math.round((Number(count) / total) * 100);
+            return (
+              <div class="source">
+                <div class="source-name">{source}</div>
+                <div class="source-bar">
+                  <div class="source-fill" style={`width: ${pct}%`}>{pct}%</div>
+                </div>
+                <div class="source-count">{Number(count).toLocaleString()}</div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>The Funnel</h2>
+        <p class="card-sub">From diners to buyers</p>
+        
+        <div class="funnel">
+          <div class="funnel-row">
+            <span class="funnel-label">All Restaurant Guests</span>
+            <span class="funnel-val">{guests.length.toLocaleString()}</span>
+          </div>
+          <div class="funnel-arrow">↓</div>
+          <div class="funnel-row">
+            <span class="funnel-label">US & Canada</span>
+            <span class="funnel-val">{usCanada.length.toLocaleString()}</span>
+            <span class="funnel-pct">{Math.round((usCanada.length / guests.length) * 100)}%</span>
+          </div>
+          <div class="funnel-arrow">↓</div>
+          <div class="funnel-row warm">
+            <span class="funnel-label">Warm+ Leads</span>
+            <span class="funnel-val">{(hot.length + warm.length).toLocaleString()}</span>
+            <span class="funnel-pct">{Math.round(((hot.length + warm.length) / guests.length) * 100)}%</span>
+          </div>
+          <div class="funnel-arrow">↓</div>
+          <div class="funnel-row hot">
+            <span class="funnel-label">Hot Leads</span>
+            <span class="funnel-val">{hot.length.toLocaleString()}</span>
+            <span class="funnel-pct">{Math.round((hot.length / guests.length) * 100)}%</span>
+          </div>
+        </div>
+      </section>
+      
+    </div>
+
+    <!-- Key Insight -->
+    <section class="insight">
+      <p>
+        <strong>{Math.round((hot.length / guests.length) * 100)}%</strong> of your {guests.length.toLocaleString()} restaurant guests 
+        are hot leads. That's <strong>{hot.length.toLocaleString()} people</strong> who dined with you, 
+        live in target markets, and could afford Mar Azul.
+      </p>
+    </section>
+
+  </main>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body {
       font-family: 'Inter', -apple-system, sans-serif;
-      background: #080a07;
-      color: #f5f3ef;
-      min-height: 100vh;
+      background: #0a0c08;
+      color: #e8e6e1;
+      line-height: 1.5;
     }
     
-    .app {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+    header {
+      padding: 24px 40px;
+      border-bottom: 1px solid #1a1d17;
     }
     
-    /* Header */
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 32px;
-      background: #0f120d;
-      border-bottom: 1px solid #1a1f16;
-    }
-    
-    .header-brand h1 {
-      font-size: 18px;
+    .brand h1 {
+      font-size: 20px;
       font-weight: 600;
       color: #C4A67C;
-      letter-spacing: 1px;
     }
     
-    .tagline {
-      font-size: 10px;
+    .brand span {
+      font-size: 11px;
       color: #666;
       letter-spacing: 2px;
       text-transform: uppercase;
-      display: block;
-      margin-top: 2px;
     }
     
-    .header-nav {
-      display: flex;
-      gap: 4px;
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px;
     }
     
-    .nav-link {
-      padding: 8px 16px;
-      font-size: 13px;
-      color: #888;
-      text-decoration: none;
-      border-radius: 6px;
-      transition: all 0.2s;
-    }
-    
-    .nav-link:hover { color: #f5f3ef; background: #1a1f16; }
-    .nav-link.active { color: #C4A67C; background: rgba(196,166,124,0.1); }
-    
-    .date-select {
-      padding: 8px 12px;
-      background: #1a1f16;
-      border: 1px solid #2a3024;
-      color: #f5f3ef;
-      border-radius: 6px;
-      font-size: 13px;
-    }
-    
-    /* Main */
-    .main {
-      flex: 1;
-      padding: 24px 32px;
-    }
-    
-    /* Stats Row */
-    .stats-row {
+    /* Hero Stats */
+    .hero-stats {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    
+    .big-stat {
+      background: #0f1210;
+      border: 1px solid #1a1d17;
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+    }
+    
+    .big-number {
+      font-size: 56px;
+      font-weight: 300;
+      color: #C4A67C;
+      line-height: 1;
+    }
+    
+    .big-label {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 12px 0 4px;
+    }
+    
+    .big-sub {
+      font-size: 13px;
+      color: #666;
+    }
+    
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
       margin-bottom: 24px;
     }
     
-    .stat-card {
-      background: #0f120d;
-      border: 1px solid #1a1f16;
-      border-radius: 12px;
-      padding: 20px;
-    }
-    
-    .stat-card.highlight {
-      border-color: #C4A67C;
-      background: linear-gradient(135deg, rgba(196,166,124,0.08) 0%, #0f120d 100%);
-    }
-    
-    .stat-label {
-      font-size: 12px;
-      color: #666;
-      margin-bottom: 8px;
-    }
-    
-    .stat-value {
-      font-size: 32px;
-      font-weight: 300;
-      color: #f5f3ef;
-    }
-    
-    .stat-card.highlight .stat-value { color: #C4A67C; }
-    
-    .stat-change {
-      font-size: 12px;
-      color: #666;
-      margin-top: 4px;
-    }
-    
-    .stat-change.positive { color: #22c55e; }
-    .stat-change.negative { color: #ef4444; }
-    
-    .stat-sub {
-      font-size: 12px;
-      color: #f43f5e;
-      margin-top: 4px;
-    }
-    
-    /* Content Grid */
-    .content-grid {
-      display: grid;
-      grid-template-columns: 1fr 340px 320px;
-      gap: 24px;
-    }
-    
-    /* Cards */
     .card {
-      background: #0f120d;
-      border: 1px solid #1a1f16;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 20px;
+      background: #0f1210;
+      border: 1px solid #1a1d17;
+      border-radius: 16px;
+      padding: 28px;
     }
     
-    .card:last-child { margin-bottom: 0; }
-    
-    .card h3 {
-      font-size: 12px;
+    .card h2 {
+      font-size: 15px;
       font-weight: 600;
-      color: #666;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 16px;
+      margin-bottom: 4px;
     }
     
-    .card-header {
+    .card-sub {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 24px;
+    }
+    
+    /* Bars */
+    .bars {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .bar-row {
+      display: flex;
       align-items: center;
-      margin-bottom: 16px;
+      gap: 12px;
     }
     
-    .card-header h3 { margin-bottom: 0; }
-    
-    .card-badge {
-      font-size: 10px;
-      padding: 4px 8px;
-      background: #1a1f16;
-      border-radius: 4px;
-      color: #666;
-    }
-    
-    .view-all {
+    .bar-rank {
+      width: 20px;
       font-size: 12px;
-      color: #C4A67C;
-      text-decoration: none;
+      color: #555;
+      text-align: center;
     }
     
-    /* Chart */
-    .chart-container {
-      height: 200px;
+    .bar-city {
+      width: 100px;
+      font-size: 13px;
+      color: #999;
     }
     
-    /* Sources */
-    .source-row {
+    .bar-track {
+      flex: 1;
+      height: 24px;
+      background: #1a1d17;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    
+    .bar-fill {
+      height: 100%;
+      background: #3D4F3D;
+      border-radius: 6px;
+    }
+    
+    .bar-fill.top {
+      background: linear-gradient(90deg, #C4A67C, #a8905f);
+    }
+    
+    .bar-count {
+      width: 50px;
+      text-align: right;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    
+    /* Leads */
+    .leads {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .lead {
       display: flex;
       align-items: center;
       gap: 12px;
       padding: 10px 0;
-      border-bottom: 1px solid #1a1f16;
+      border-bottom: 1px solid #1a1d17;
     }
     
-    .source-row:last-child { border-bottom: none; }
+    .lead:last-child { border-bottom: none; }
+    
+    .lead-rank {
+      width: 20px;
+      font-size: 12px;
+      color: #555;
+      text-align: center;
+    }
+    
+    .lead-info { flex: 1; }
+    
+    .lead-name {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .lead-where {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .lead-score {
+      padding: 6px 12px;
+      background: rgba(244, 63, 94, 0.12);
+      color: #f43f5e;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    
+    /* Sources */
+    .sources {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .source {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
     
     .source-name {
-      width: 80px;
+      width: 100px;
       font-size: 13px;
       color: #999;
     }
     
     .source-bar {
       flex: 1;
-      height: 8px;
-      background: #1a1f16;
-      border-radius: 4px;
+      height: 28px;
+      background: #1a1d17;
+      border-radius: 6px;
       overflow: hidden;
     }
     
     .source-fill {
       height: 100%;
       background: linear-gradient(90deg, #3b82f6, #60a5fa);
-      border-radius: 4px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      padding-left: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
     }
     
-    .source-value {
-      width: 40px;
+    .source-count {
+      width: 60px;
       text-align: right;
       font-size: 13px;
-      color: #f5f3ef;
+      color: #888;
     }
-    
-    /* Properties */
-    .property-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 12px 0;
-      border-bottom: 1px solid #1a1f16;
-    }
-    
-    .property-row:last-child { border-bottom: none; }
-    
-    .property-name { font-size: 13px; }
-    .property-views { font-size: 12px; color: #666; }
     
     /* Funnel */
     .funnel {
       display: flex;
       flex-direction: column;
+      align-items: center;
       gap: 8px;
     }
     
-    .funnel-stage {
-      width: var(--pct);
-      margin: 0 auto;
-      padding: 12px 16px;
-      background: linear-gradient(90deg, #C4A67C, #a8905f);
-      border-radius: 6px;
+    .funnel-row {
+      width: 100%;
       display: flex;
       justify-content: space-between;
-      color: #0a0d08;
-      font-size: 12px;
-    }
-    
-    .funnel-stage.warm {
-      background: linear-gradient(90deg, #f97316, #ea580c);
-    }
-    
-    .funnel-stage.hot {
-      background: linear-gradient(90deg, #f43f5e, #e11d48);
-    }
-    
-    .funnel-value { font-weight: 700; }
-    
-    /* Markets */
-    .market-row {
-      display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 8px 0;
-    }
-    
-    .market-city {
-      width: 90px;
-      font-size: 12px;
-      color: #888;
-    }
-    
-    .market-bar {
-      flex: 1;
-      height: 20px;
-      background: #1a1f16;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    
-    .market-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #C4A67C, #d4b68c);
-      border-radius: 4px;
-    }
-    
-    .market-count {
-      width: 50px;
-      text-align: right;
-      font-size: 12px;
-      color: #888;
-    }
-    
-    /* Actions */
-    .actions-card {
-      display: flex;
-      gap: 12px;
-    }
-    
-    .action-btn {
-      flex: 1;
-      padding: 14px;
-      background: #1a1f16;
-      border: 1px solid #2a3024;
+      padding: 14px 20px;
+      background: #1a1d17;
       border-radius: 8px;
-      text-decoration: none;
-      color: #f5f3ef;
-      text-align: center;
-      font-size: 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
     }
     
-    .action-btn:hover {
-      border-color: #C4A67C;
-      background: #1f261a;
+    .funnel-row.warm {
+      background: rgba(249, 115, 22, 0.15);
+      border: 1px solid rgba(249, 115, 22, 0.3);
     }
     
-    .action-btn.hot {
-      border-color: rgba(244,63,94,0.3);
-      background: rgba(244,63,94,0.05);
+    .funnel-row.hot {
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid rgba(244, 63, 94, 0.3);
     }
     
-    .action-icon { font-size: 20px; }
+    .funnel-label {
+      font-size: 13px;
+    }
     
-    .action-count {
+    .funnel-val {
       font-size: 18px;
       font-weight: 600;
-      color: #f43f5e;
     }
     
-    /* Leads */
-    .leads-card {
-      height: fit-content;
-    }
+    .funnel-row.warm .funnel-val { color: #f97316; }
+    .funnel-row.hot .funnel-val { color: #f43f5e; }
     
-    .leads-list {
-      max-height: 500px;
-      overflow-y: auto;
-    }
-    
-    .lead-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid #1a1f16;
-    }
-    
-    .lead-row:last-child { border-bottom: none; }
-    
-    .lead-name {
-      font-size: 13px;
-      font-weight: 500;
-    }
-    
-    .lead-meta {
-      font-size: 11px;
-      color: #666;
-      margin-top: 2px;
-    }
-    
-    .lead-score {
-      padding: 4px 10px;
-      background: rgba(244,63,94,0.15);
-      color: #f43f5e;
-      border-radius: 10px;
+    .funnel-pct {
       font-size: 12px;
-      font-weight: 600;
+      color: #666;
+      margin-left: 8px;
     }
     
-    /* Skeleton */
-    .skeleton {
-      background: linear-gradient(90deg, #1a1f16 25%, #252b20 50%, #1a1f16 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
-      border-radius: 4px;
-      height: 40px;
+    .funnel-arrow {
+      color: #333;
+      font-size: 18px;
     }
     
-    @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+    /* Insight */
+    .insight {
+      background: linear-gradient(135deg, rgba(196, 166, 124, 0.08) 0%, rgba(15, 18, 16, 1) 100%);
+      border: 1px solid rgba(196, 166, 124, 0.2);
+      border-radius: 16px;
+      padding: 28px 32px;
+      text-align: center;
+    }
+    
+    .insight p {
+      font-size: 16px;
+      color: #bbb;
+      line-height: 1.7;
+    }
+    
+    .insight strong {
+      color: #C4A67C;
     }
     
     /* Responsive */
-    @media (max-width: 1200px) {
-      .content-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-      .col-right {
-        grid-column: span 2;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .stats-row {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .content-grid {
-        grid-template-columns: 1fr;
-      }
-      .col-right {
-        grid-column: auto;
-      }
-      .header-nav { display: none; }
+    @media (max-width: 900px) {
+      .hero-stats { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
+      main { padding: 20px; }
+      .big-number { font-size: 42px; }
     }
   </style>
+
 </body>
 </html>
