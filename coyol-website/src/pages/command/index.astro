@@ -1,0 +1,558 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+// This is a protected page - will add auth later
+const isAuthenticated = true; // TODO: Add real auth
+
+// Load CRM data
+import guestData from '../../data/guests-enriched.json';
+
+const summary = guestData.summary || {};
+const guests = guestData.guests || [];
+
+// Get hot leads
+const hotLeads = guests
+  .filter(g => g.segment === 'hot' || g.lead_score >= 45)
+  .filter(g => g.region !== 'LatAm')
+  .sort((a, b) => b.lead_score - a.lead_score)
+  .slice(0, 50);
+
+const segmentCounts = summary.by_segment || {};
+const regionCounts = summary.by_region || {};
+const cityCounts = summary.top_cities || {};
+---
+
+<Layout title="Coyol Command">
+  <main class="command-page">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <h1>Coyol Command</h1>
+        <span class="header-tag">CRM & Analytics</span>
+      </div>
+      <nav class="header-nav">
+        <a href="/command" class="nav-link active">Dashboard</a>
+        <a href="/command/leads" class="nav-link">All Leads</a>
+        <a href="/command/pipeline" class="nav-link">Pipeline</a>
+        <a href="/command/campaigns" class="nav-link">Campaigns</a>
+        <a href="/admin/analytics" class="nav-link">Analytics</a>
+      </nav>
+      <div class="header-right">
+        <span class="user-badge">Marion</span>
+      </div>
+    </header>
+
+    <!-- Stats Row -->
+    <section class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-content">
+          <div class="stat-value">{(summary.total_guests || 0).toLocaleString()}</div>
+          <div class="stat-label">Total Contacts</div>
+        </div>
+      </div>
+      <div class="stat-card hot">
+        <div class="stat-icon">🔥</div>
+        <div class="stat-content">
+          <div class="stat-value">{(segmentCounts.hot || 0).toLocaleString()}</div>
+          <div class="stat-label">Hot Leads</div>
+        </div>
+      </div>
+      <div class="stat-card warm">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-content">
+          <div class="stat-value">{(segmentCounts.warm || 0).toLocaleString()}</div>
+          <div class="stat-label">Warm Leads</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🏢</div>
+        <div class="stat-content">
+          <div class="stat-value">{(summary.corporate_emails || 0).toLocaleString()}</div>
+          <div class="stat-label">Corporate</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Grid -->
+    <div class="main-grid">
+      
+      <!-- Left Column: Charts -->
+      <div class="charts-col">
+        
+        <!-- Pipeline Funnel -->
+        <div class="card">
+          <h3 class="card-title">Lead Funnel</h3>
+          <div class="funnel">
+            <div class="funnel-stage" style="--pct: 100%">
+              <span>All Contacts</span>
+              <span class="funnel-val">{(summary.total_guests || 0).toLocaleString()}</span>
+            </div>
+            <div class="funnel-stage" style="--pct: 65%">
+              <span>US & Canada</span>
+              <span class="funnel-val">{((regionCounts['US-East'] || 0) + (regionCounts['US-West'] || 0) + (regionCounts['Canada'] || 0) + (regionCounts['US-Central'] || 0)).toLocaleString()}</span>
+            </div>
+            <div class="funnel-stage" style="--pct: 40%">
+              <span>Warm+</span>
+              <span class="funnel-val">{((segmentCounts.hot || 0) + (segmentCounts.warm || 0)).toLocaleString()}</span>
+            </div>
+            <div class="funnel-stage hot" style="--pct: 15%">
+              <span>Hot Leads</span>
+              <span class="funnel-val">{(segmentCounts.hot || 0).toLocaleString()}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Markets -->
+        <div class="card">
+          <h3 class="card-title">Top Markets</h3>
+          <div class="bar-chart">
+            {Object.entries(cityCounts)
+              .filter(([city]) => city && city !== 'Costa Rica' && city !== 'null')
+              .sort((a, b) => Number(b[1]) - Number(a[1]))
+              .slice(0, 6)
+              .map(([city, count]) => {
+                const max = Math.max(...Object.values(cityCounts).filter(v => typeof v === 'number') as number[]);
+                const pct = (Number(count) / max) * 100;
+                return (
+                  <div class="bar-row">
+                    <span class="bar-label">{city}</span>
+                    <div class="bar-track">
+                      <div class="bar-fill" style={`width: ${pct}%`}>{Number(count).toLocaleString()}</div>
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+          <h3 class="card-title">Quick Actions</h3>
+          <div class="actions-grid">
+            <a href="/command/leads?segment=hot" class="action-btn">
+              <span>🔥</span> View Hot Leads
+            </a>
+            <a href="/command/export" class="action-btn">
+              <span>📤</span> Export CSV
+            </a>
+            <a href="/command/campaigns/new" class="action-btn">
+              <span>📧</span> New Campaign
+            </a>
+            <a href="/admin/analytics" class="action-btn">
+              <span>📊</span> Site Analytics
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Hot Leads -->
+      <div class="leads-col">
+        <div class="card leads-card">
+          <div class="card-header">
+            <h3 class="card-title">Top 50 Hot Leads</h3>
+            <a href="/command/leads?segment=hot" class="view-all">View All →</a>
+          </div>
+          
+          <div class="leads-table-wrap">
+            <table class="leads-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Location</th>
+                  <th>Score</th>
+                  <th>Source</th>
+                </tr>
+              </thead>
+              <tbody>
+                {hotLeads.map(lead => (
+                  <tr>
+                    <td>
+                      <div class="lead-name">{lead.name || '—'}</div>
+                      <div class="lead-email">{lead.email}</div>
+                    </td>
+                    <td>
+                      <div class="lead-city">{lead.city || '—'}</div>
+                      <div class="lead-region">{lead.region}</div>
+                    </td>
+                    <td>
+                      <span class="score">{lead.lead_score}</span>
+                    </td>
+                    <td class="lead-source">{lead.source}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span>Coyol Real Estate · CRM</span>
+      <span>34,565 contacts · Last sync: Today</span>
+    </footer>
+  </main>
+</Layout>
+
+<style>
+  .command-page {
+    min-height: 100vh;
+    background: #0a0d08;
+    color: #f5f3ef;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    background: #12160f;
+    border-bottom: 1px solid #1f261a;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .header h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #C4A67C;
+  }
+
+  .header-tag {
+    font-size: 11px;
+    padding: 4px 10px;
+    background: #1f261a;
+    border-radius: 4px;
+    color: #888;
+  }
+
+  .header-nav {
+    display: flex;
+    gap: 8px;
+  }
+
+  .nav-link {
+    padding: 8px 16px;
+    font-size: 13px;
+    color: #888;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+
+  .nav-link:hover {
+    color: #f5f3ef;
+    background: #1f261a;
+  }
+
+  .nav-link.active {
+    color: #C4A67C;
+    background: rgba(196, 166, 124, 0.1);
+  }
+
+  .user-badge {
+    padding: 8px 16px;
+    background: #C4A67C;
+    color: #0a0d08;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 24px 32px;
+  }
+
+  .stat-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    background: #12160f;
+    border: 1px solid #1f261a;
+    border-radius: 12px;
+  }
+
+  .stat-card.hot {
+    border-color: rgba(244, 63, 94, 0.3);
+    background: linear-gradient(135deg, rgba(244, 63, 94, 0.05) 0%, #12160f 100%);
+  }
+
+  .stat-card.warm {
+    border-color: rgba(249, 115, 22, 0.3);
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.05) 0%, #12160f 100%);
+  }
+
+  .stat-icon {
+    font-size: 28px;
+  }
+
+  .stat-value {
+    font-size: 28px;
+    font-weight: 300;
+    color: #C4A67C;
+  }
+
+  .stat-card.hot .stat-value { color: #f43f5e; }
+  .stat-card.warm .stat-value { color: #f97316; }
+
+  .stat-label {
+    font-size: 12px;
+    color: #666;
+  }
+
+  .main-grid {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 24px;
+    padding: 0 32px 32px;
+  }
+
+  .card {
+    background: #12160f;
+    border: 1px solid #1f261a;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .card-header .card-title {
+    margin-bottom: 0;
+  }
+
+  .view-all {
+    font-size: 13px;
+    color: #C4A67C;
+    text-decoration: none;
+  }
+
+  .funnel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .funnel-stage {
+    width: var(--pct);
+    margin: 0 auto;
+    padding: 14px 20px;
+    background: linear-gradient(90deg, #C4A67C, #a8905f);
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    color: #0a0d08;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .funnel-stage.hot {
+    background: linear-gradient(90deg, #f43f5e, #e11d48);
+  }
+
+  .funnel-val {
+    font-weight: 700;
+  }
+
+  .bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .bar-label {
+    width: 90px;
+    font-size: 12px;
+    color: #888;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: #1f261a;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+    min-width: 50px;
+  }
+
+  .actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .action-btn {
+    padding: 14px 16px;
+    background: #1f261a;
+    border: 1px solid #2a3324;
+    border-radius: 8px;
+    color: #f5f3ef;
+    text-decoration: none;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s;
+  }
+
+  .action-btn:hover {
+    background: #2a3324;
+    border-color: #C4A67C;
+  }
+
+  .leads-card {
+    height: fit-content;
+    max-height: calc(100vh - 280px);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .leads-table-wrap {
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .leads-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .leads-table th {
+    text-align: left;
+    padding: 12px;
+    font-size: 11px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #1f261a;
+    position: sticky;
+    top: 0;
+    background: #12160f;
+  }
+
+  .leads-table td {
+    padding: 12px;
+    border-bottom: 1px solid #1f261a;
+    font-size: 13px;
+  }
+
+  .leads-table tr:hover {
+    background: rgba(196, 166, 124, 0.03);
+  }
+
+  .lead-name {
+    font-weight: 500;
+  }
+
+  .lead-email {
+    font-size: 11px;
+    color: #666;
+  }
+
+  .lead-city {
+    font-weight: 500;
+  }
+
+  .lead-region {
+    font-size: 11px;
+    color: #666;
+  }
+
+  .lead-source {
+    color: #888;
+    font-size: 12px;
+  }
+
+  .score {
+    display: inline-block;
+    padding: 4px 10px;
+    background: rgba(244, 63, 94, 0.15);
+    color: #f43f5e;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .footer {
+    padding: 16px 32px;
+    border-top: 1px solid #1f261a;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #555;
+  }
+
+  @media (max-width: 1200px) {
+    .main-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .charts-col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    
+    .charts-col .card {
+      margin-bottom: 0;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .stats-row {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .charts-col {
+      grid-template-columns: 1fr;
+    }
+    
+    .header-nav {
+      display: none;
+    }
+  }
+</style>
