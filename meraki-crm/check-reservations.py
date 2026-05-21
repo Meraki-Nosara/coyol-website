@@ -114,7 +114,8 @@ def guest_exists(email):
 
 def add_guest_to_crm(reservation, source):
     """Add new guest to CRM with scoring."""
-    email = reservation.get('email', '').lower().strip()
+    # Handle both column naming conventions
+    email = reservation.get('guest_email', reservation.get('email', '')).lower().strip()
     if not email:
         return None
     
@@ -122,8 +123,8 @@ def add_guest_to_crm(reservation, source):
     if guest_exists(email):
         return 'exists'
     
-    name = reservation.get('name', reservation.get('guest_name', ''))
-    phone = reservation.get('phone', '')
+    name = reservation.get('guest_name', reservation.get('name', ''))
+    phone = reservation.get('guest_phone', reservation.get('phone', ''))
     
     score, segment, city, tier = score_guest(email, phone, source)
     

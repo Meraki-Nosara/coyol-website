@@ -257,6 +257,7 @@ import Layout from '../../../layouts/Layout.astro';
         <div class="modal-footer detail-actions" id="modalActions">
           <!-- Active reservation buttons -->
           <div id="activeActions">
+            <button class="btn-edit" onclick="openEditModal()">✏️ Edit</button>
             <button class="btn-assign" id="assignBtn" onclick="startTableAssignment()">Assign Table</button>
             <button class="btn-seat" id="seatBtn" onclick="toggleSeatStatus()">Seat</button>
             <button class="btn-cancel" onclick="cancelReservation()">Cancel Reservation</button>
@@ -265,6 +266,99 @@ import Layout from '../../../layouts/Layout.astro';
           <div id="cancelledActions" style="display:none;">
             <button class="btn-reactivate" onclick="reactivateReservation()">Reactivar Reservación</button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Reservation Modal -->
+    <div class="modal" id="editResModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Edit Reservation</h2>
+          <button class="modal-close" onclick="closeEditModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" id="editDate" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>Time</label>
+              <select id="editTime" class="form-input">
+                <optgroup label="Lunch">
+                  <option value="12:00">12:00 PM</option>
+                  <option value="12:15">12:15 PM</option>
+                  <option value="12:30">12:30 PM</option>
+                  <option value="12:45">12:45 PM</option>
+                  <option value="13:00">1:00 PM</option>
+                  <option value="13:15">1:15 PM</option>
+                  <option value="13:30">1:30 PM</option>
+                  <option value="13:45">1:45 PM</option>
+                  <option value="14:00">2:00 PM</option>
+                  <option value="14:15">2:15 PM</option>
+                  <option value="14:30">2:30 PM</option>
+                </optgroup>
+                <optgroup label="Dinner">
+                  <option value="16:45">4:45 PM</option>
+                  <option value="17:00">5:00 PM</option>
+                  <option value="17:15">5:15 PM</option>
+                  <option value="17:30">5:30 PM</option>
+                  <option value="17:45">5:45 PM</option>
+                  <option value="18:00">6:00 PM</option>
+                  <option value="18:15">6:15 PM</option>
+                  <option value="18:30">6:30 PM</option>
+                  <option value="18:45">6:45 PM</option>
+                  <option value="19:00">7:00 PM</option>
+                  <option value="19:15">7:15 PM</option>
+                  <option value="19:30">7:30 PM</option>
+                  <option value="19:45">7:45 PM</option>
+                  <option value="20:00">8:00 PM</option>
+                  <option value="20:15">8:15 PM</option>
+                  <option value="20:30">8:30 PM</option>
+                  <option value="20:45">8:45 PM</option>
+                  <option value="21:00">9:00 PM</option>
+                  <option value="21:30">9:30 PM</option>
+                </optgroup>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Party Size</label>
+              <select id="editGuests" class="form-input">
+                <option value="1">1 guest</option>
+                <option value="2">2 guests</option>
+                <option value="3">3 guests</option>
+                <option value="4">4 guests</option>
+                <option value="5">5 guests</option>
+                <option value="6">6 guests</option>
+                <option value="7">7 guests</option>
+                <option value="8">8 guests</option>
+                <option value="9">9 guests</option>
+                <option value="10">10 guests</option>
+                <option value="11">11 guests</option>
+                <option value="12">12 guests</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Seating Preference</label>
+              <select id="editZone" class="form-input">
+                <option value="any">Any</option>
+                <option value="terrace">Terrace</option>
+                <option value="garden">Garden</option>
+                <option value="indoor">Indoor</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Notes</label>
+            <textarea id="editNotes" class="form-input" rows="2"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeEditModal()">Cancel</button>
+          <button class="btn-primary" onclick="saveEditedReservation()">Save Changes</button>
         </div>
       </div>
     </div>
@@ -1333,6 +1427,8 @@ import Layout from '../../../layouts/Layout.astro';
     .detail-label { font-size: 0.6875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
     .detail-value { font-size: 0.9375rem; color: var(--santorini); }
     .detail-actions { justify-content: flex-start; gap: 0.5rem; flex-wrap: wrap; }
+    .btn-edit { background: var(--sand); color: var(--santorini); border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
+    .btn-edit:hover { background: #d4b68c; }
     .btn-assign { background: #2563eb; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
     .btn-assign:hover { background: #1d4ed8; }
     .btn-assign.active { background: #dc2626; }
@@ -1862,6 +1958,77 @@ import Layout from '../../../layouts/Layout.astro';
     function closeDetailModal() {
       document.getElementById('resDetailModal')?.classList.remove('open');
       selectedReservationId = null;
+    }
+    
+    function openEditModal() {
+      if (!selectedReservationId) return;
+      const res = cachedReservations.find(r => r.id === selectedReservationId);
+      if (!res) return;
+      
+      // Populate edit form with current values
+      document.getElementById('editDate').value = res.date;
+      document.getElementById('editTime').value = res.time;
+      document.getElementById('editGuests').value = res.guests;
+      document.getElementById('editZone').value = res.zonePreference || 'any';
+      document.getElementById('editNotes').value = res.specialRequests || '';
+      
+      // Close detail modal and open edit modal
+      document.getElementById('resDetailModal')?.classList.remove('open');
+      document.getElementById('editResModal')?.classList.add('open');
+    }
+    
+    function closeEditModal() {
+      document.getElementById('editResModal')?.classList.remove('open');
+      // Reopen detail modal
+      if (selectedReservationId) {
+        const res = cachedReservations.find(r => r.id === selectedReservationId);
+        if (res) openReservationDetail(res);
+      }
+    }
+    
+    async function saveEditedReservation() {
+      if (!selectedReservationId) return;
+      
+      const newDate = document.getElementById('editDate').value;
+      const newTime = document.getElementById('editTime').value;
+      const newGuests = parseInt(document.getElementById('editGuests').value);
+      const newZone = document.getElementById('editZone').value;
+      const newNotes = document.getElementById('editNotes').value;
+      
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?id=eq.${selectedReservationId}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({
+            date: newDate,
+            time: newTime,
+            guests: newGuests,
+            zone_preference: newZone,
+            special_requests: newNotes
+          })
+        });
+        
+        if (!response.ok) throw new Error('Failed to update');
+        
+        // Close edit modal and refresh
+        document.getElementById('editResModal')?.classList.remove('open');
+        await loadReservations();
+        renderReservations();
+        renderFloor();
+        
+        // Show success and reopen detail
+        const updatedRes = cachedReservations.find(r => r.id === selectedReservationId);
+        if (updatedRes) openReservationDetail(updatedRes);
+        
+      } catch (err) {
+        console.error('Failed to save:', err);
+        alert('Failed to save changes. Please try again.');
+      }
     }
     
     async function toggleSeatStatus() {
