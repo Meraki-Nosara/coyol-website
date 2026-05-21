@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meraki CRM — Lead Pipeline</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f1419;
+      color: #e7e9ea;
+      min-height: 100vh;
+    }
+    
+    .header {
+      background: #16202a;
+      padding: 20px 32px;
+      border-bottom: 1px solid #2f3336;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .header h1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #C4A67C;
+    }
+    
+    .header-stats {
+      display: flex;
+      gap: 32px;
+    }
+    
+    .stat {
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 28px;
+      font-weight: 300;
+      color: #C4A67C;
+    }
+    
+    .stat-label {
+      font-size: 11px;
+      color: #71767b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .main {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: calc(100vh - 80px);
+    }
+    
+    .sidebar {
+      background: #16202a;
+      padding: 24px;
+      border-right: 1px solid #2f3336;
+    }
+    
+    .filter-section {
+      margin-bottom: 24px;
+    }
+    
+    .filter-title {
+      font-size: 12px;
+      color: #71767b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    
+    .filter-btn {
+      display: block;
+      width: 100%;
+      padding: 10px 14px;
+      background: transparent;
+      border: none;
+      color: #e7e9ea;
+      text-align: left;
+      cursor: pointer;
+      border-radius: 6px;
+      font-size: 14px;
+      margin-bottom: 4px;
+      transition: background 0.2s;
+    }
+    
+    .filter-btn:hover {
+      background: #2f3336;
+    }
+    
+    .filter-btn.active {
+      background: #C4A67C;
+      color: #0f1419;
+    }
+    
+    .filter-btn .count {
+      float: right;
+      color: #71767b;
+      font-size: 12px;
+    }
+    
+    .filter-btn.active .count {
+      color: #0f1419;
+    }
+    
+    .content {
+      padding: 24px 32px;
+      overflow-y: auto;
+    }
+    
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .search-input {
+      padding: 10px 16px;
+      background: #16202a;
+      border: 1px solid #2f3336;
+      border-radius: 6px;
+      color: #e7e9ea;
+      font-size: 14px;
+      width: 300px;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: #C4A67C;
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      background: #C4A67C;
+      color: #0f1419;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .btn:hover {
+      background: #d4b68c;
+    }
+    
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #C4A67C;
+      color: #C4A67C;
+    }
+    
+    .btn-outline:hover {
+      background: #C4A67C;
+      color: #0f1419;
+    }
+    
+    .leads-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .leads-table th {
+      text-align: left;
+      padding: 12px 16px;
+      background: #16202a;
+      font-size: 11px;
+      color: #71767b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid #2f3336;
+      position: sticky;
+      top: 0;
+    }
+    
+    .leads-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #2f3336;
+      font-size: 14px;
+    }
+    
+    .leads-table tr:hover {
+      background: #16202a;
+    }
+    
+    .lead-name {
+      font-weight: 500;
+    }
+    
+    .lead-email {
+      color: #71767b;
+      font-size: 13px;
+    }
+    
+    .lead-phone {
+      font-family: monospace;
+      font-size: 13px;
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .badge-hot {
+      background: #f43f5e20;
+      color: #f43f5e;
+    }
+    
+    .badge-warm {
+      background: #f9731620;
+      color: #f97316;
+    }
+    
+    .badge-nurture {
+      background: #3b82f620;
+      color: #3b82f6;
+    }
+    
+    .badge-local {
+      background: #22c55e20;
+      color: #22c55e;
+    }
+    
+    .score {
+      font-weight: 600;
+      color: #C4A67C;
+    }
+    
+    .region-tag {
+      font-size: 12px;
+      color: #71767b;
+    }
+    
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .action-btn {
+      padding: 6px 12px;
+      background: #2f3336;
+      border: none;
+      border-radius: 4px;
+      color: #e7e9ea;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .action-btn:hover {
+      background: #3f4448;
+    }
+    
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 24px;
+    }
+    
+    .page-btn {
+      padding: 8px 14px;
+      background: #16202a;
+      border: 1px solid #2f3336;
+      border-radius: 4px;
+      color: #e7e9ea;
+      cursor: pointer;
+    }
+    
+    .page-btn.active {
+      background: #C4A67C;
+      color: #0f1419;
+      border-color: #C4A67C;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px;
+      color: #71767b;
+    }
+    
+    .chart-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    
+    .chart-card {
+      background: #16202a;
+      border-radius: 8px;
+      padding: 20px;
+      border: 1px solid #2f3336;
+    }
+    
+    .chart-title {
+      font-size: 14px;
+      color: #71767b;
+      margin-bottom: 16px;
+    }
+    
+    .bar-chart {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .bar-label {
+      width: 80px;
+      font-size: 12px;
+      color: #71767b;
+    }
+    
+    .bar-track {
+      flex: 1;
+      height: 24px;
+      background: #2f3336;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #C4A67C, #d4b68c);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #0f1419;
+      min-width: 40px;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>Meraki CRM</h1>
+    <div class="header-stats">
+      <div class="stat">
+        <div class="stat-value" id="total-leads">34,566</div>
+        <div class="stat-label">Total Guests</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="hot-leads">1,676</div>
+        <div class="stat-label">Hot Leads</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="warm-leads">7,883</div>
+        <div class="stat-label">Warm Leads</div>
+      </div>
+    </div>
+  </header>
+  
+  <div class="main">
+    <aside class="sidebar">
+      <div class="filter-section">
+        <div class="filter-title">Segment</div>
+        <button class="filter-btn active" data-filter="all">All Leads <span class="count">34,566</span></button>
+        <button class="filter-btn" data-filter="hot">Hot <span class="count">1,676</span></button>
+        <button class="filter-btn" data-filter="warm">Warm <span class="count">7,883</span></button>
+        <button class="filter-btn" data-filter="nurture">Nurture <span class="count">20,122</span></button>
+        <button class="filter-btn" data-filter="local">Local <span class="count">4,885</span></button>
+      </div>
+      
+      <div class="filter-section">
+        <div class="filter-title">Region</div>
+        <button class="filter-btn" data-region="US-East">US East <span class="count">3,870</span></button>
+        <button class="filter-btn" data-region="US-West">US West <span class="count">3,556</span></button>
+        <button class="filter-btn" data-region="Canada">Canada <span class="count">3,584</span></button>
+        <button class="filter-btn" data-region="US-Central">US Central <span class="count">624</span></button>
+      </div>
+      
+      <div class="filter-section">
+        <div class="filter-title">Top Cities</div>
+        <button class="filter-btn" data-city="New York">New York <span class="count">1,768</span></button>
+        <button class="filter-btn" data-city="Toronto">Toronto <span class="count">2,213</span></button>
+        <button class="filter-btn" data-city="Los Angeles">Los Angeles <span class="count">941</span></button>
+        <button class="filter-btn" data-city="San Francisco">San Francisco <span class="count">699</span></button>
+        <button class="filter-btn" data-city="Miami">Miami <span class="count">451</span></button>
+      </div>
+      
+      <div class="filter-section">
+        <div class="filter-title">Source</div>
+        <button class="filter-btn" data-source="laluna">La Luna <span class="count">22,322</span></button>
+        <button class="filter-btn" data-source="coyol">Coyol <span class="count">12,244</span></button>
+      </div>
+    </aside>
+    
+    <main class="content">
+      <div class="chart-row">
+        <div class="chart-card">
+          <div class="chart-title">Leads by Region</div>
+          <div class="bar-chart">
+            <div class="bar-row">
+              <span class="bar-label">US East</span>
+              <div class="bar-track"><div class="bar-fill" style="width: 100%">3,870</div></div>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Canada</span>
+              <div class="bar-track"><div class="bar-fill" style="width: 93%">3,584</div></div>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">US West</span>
+              <div class="bar-track"><div class="bar-fill" style="width: 92%">3,556</div></div>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">US Central</span>
+              <div class="bar-track"><div class="bar-fill" style="width: 16%">624</div></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="chart-card">
+          <div class="chart-title">Top Cities</div>
+          <div class="bar-chart">
+            <div class="bar-row">
+              <span class="bar-label">Toronto</span>
+              <div class="bar-track"><div class="bar-fill" style="width: 100%">2,213</div></div>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">New York</span>
+              <div class="bar-track"><div class="bar-fill" style="width: 80%">1,768</div></div>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Los Angeles</span>
+              <div class="bar-track"><div class="bar-fill" style="width: 43%">941</div></div>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">San Francisco</span>
+              <div class="bar-track"><div class="bar-fill" style="width: 32%">699</div></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="chart-card">
+          <div class="chart-title">Lead Score Distribution</div>
+          <div class="bar-chart">
+            <div class="bar-row">
+              <span class="bar-label">50+</span>
+              <div class="bar-track"><div class="bar-fill" style="width: 8%; background: #f43f5e">749</div></div>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">25-49</span>
+              <div class="bar-track"><div class="bar-fill" style="width: 35%; background: #f97316">8,810</div></div>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">0-24</span>
+              <div class="bar-track"><div class="bar-fill" style="width: 100%; background: #3b82f6">25,007</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="toolbar">
+        <div class="search-box">
+          <input type="text" class="search-input" placeholder="Search by name, email, or phone..." id="search">
+        </div>
+        <div>
+          <button class="btn btn-outline" onclick="exportCSV()">Export CSV</button>
+          <button class="btn" onclick="window.location.href='ruth-hot-leads.csv'">Download Ruth's List</button>
+        </div>
+      </div>
+      
+      <table class="leads-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Contact</th>
+            <th>Location</th>
+            <th>Score</th>
+            <th>Segment</th>
+            <th>Source</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="leads-body">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+      
+      <div class="pagination" id="pagination">
+        <!-- Populated by JS -->
+      </div>
+    </main>
+  </div>
+  
+  <script>
+    let allLeads = [];
+    let filteredLeads = [];
+    let currentPage = 1;
+    const perPage = 50;
+    
+    // Load data
+    fetch('guests-enriched.json')
+      .then(r => r.json())
+      .then(data => {
+        allLeads = data.guests;
+        filteredLeads = [...allLeads];
+        renderTable();
+      });
+    
+    function renderTable() {
+      const start = (currentPage - 1) * perPage;
+      const end = start + perPage;
+      const pageLeads = filteredLeads.slice(start, end);
+      
+      const tbody = document.getElementById('leads-body');
+      tbody.innerHTML = pageLeads.map(lead => `
+        <tr>
+          <td>
+            <div class="lead-name">${lead.name || '—'}</div>
+          </td>
+          <td>
+            <div class="lead-email">${lead.email || '—'}</div>
+            <div class="lead-phone">${lead.phone || '—'}</div>
+          </td>
+          <td>
+            <div>${lead.city || '—'}</div>
+            <div class="region-tag">${lead.region || '—'}</div>
+          </td>
+          <td><span class="score">${lead.lead_score}</span></td>
+          <td><span class="badge badge-${lead.segment}">${lead.segment}</span></td>
+          <td>${lead.source}</td>
+          <td class="actions">
+            <button class="action-btn" onclick="emailLead('${lead.email}')">Email</button>
+            <button class="action-btn" onclick="viewLead('${lead.email}')">View</button>
+          </td>
+        </tr>
+      `).join('');
+      
+      renderPagination();
+    }
+    
+    function renderPagination() {
+      const totalPages = Math.ceil(filteredLeads.length / perPage);
+      const pagination = document.getElementById('pagination');
+      
+      let html = '';
+      for (let i = 1; i <= Math.min(totalPages, 10); i++) {
+        html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+      }
+      if (totalPages > 10) {
+        html += `<span style="padding: 8px">... ${totalPages} pages</span>`;
+      }
+      pagination.innerHTML = html;
+    }
+    
+    function goToPage(page) {
+      currentPage = page;
+      renderTable();
+    }
+    
+    // Filters
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter;
+        const region = btn.dataset.region;
+        const city = btn.dataset.city;
+        const source = btn.dataset.source;
+        
+        if (filter === 'all') {
+          filteredLeads = [...allLeads];
+        } else if (filter) {
+          filteredLeads = allLeads.filter(l => l.segment === filter);
+        } else if (region) {
+          filteredLeads = allLeads.filter(l => l.region === region);
+        } else if (city) {
+          filteredLeads = allLeads.filter(l => l.city && l.city.includes(city));
+        } else if (source) {
+          filteredLeads = allLeads.filter(l => l.source === source);
+        }
+        
+        currentPage = 1;
+        renderTable();
+        
+        // Update active state
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+    
+    // Search
+    document.getElementById('search').addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      if (query.length < 2) {
+        filteredLeads = [...allLeads];
+      } else {
+        filteredLeads = allLeads.filter(l => 
+          (l.name && l.name.toLowerCase().includes(query)) ||
+          (l.email && l.email.toLowerCase().includes(query)) ||
+          (l.phone && l.phone.includes(query))
+        );
+      }
+      currentPage = 1;
+      renderTable();
+    });
+    
+    function emailLead(email) {
+      window.location.href = `mailto:${email}?subject=Mar%20Azul%20-%20Exclusive%20Opportunity`;
+    }
+    
+    function viewLead(email) {
+      const lead = allLeads.find(l => l.email === email);
+      alert(JSON.stringify(lead, null, 2));
+    }
+    
+    function exportCSV() {
+      const headers = ['Name', 'Email', 'Phone', 'City', 'Region', 'Score', 'Segment', 'Source'];
+      const rows = filteredLeads.map(l => [
+        l.name, l.email, l.phone, l.city, l.region, l.lead_score, l.segment, l.source
+      ]);
+      
+      const csv = [headers, ...rows].map(r => r.map(c => `"${c || ''}"`).join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'meraki-leads-export.csv';
+      a.click();
+    }
+  </script>
+</body>
+</html>
