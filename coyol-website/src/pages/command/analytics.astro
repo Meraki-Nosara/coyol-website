@@ -24,14 +24,14 @@ import CommandLayout from '../../layouts/CommandLayout.astro';
   const API_KEY = '3MSdVsFOPR-5oFxyGxSuv5P4EU4HvVtp1HxXzjYOeuhsGRuGntpr8CaNGttl9jhk';
   const SITE_ID = 'coyolnosara.com';
   
-  const countryFlags = {
-    'US': '🇺🇸', 'United States': '🇺🇸',
-    'CR': '🇨🇷', 'Costa Rica': '🇨🇷',
-    'CA': '🇨🇦', 'Canada': '🇨🇦',
-    'MX': '🇲🇽', 'Mexico': '🇲🇽',
-    'GB': '🇬🇧', 'United Kingdom': '🇬🇧',
-    'DE': '🇩🇪', 'Germany': '🇩🇪',
-    'FR': '🇫🇷', 'France': '🇫🇷',
+  const countryNames = {
+    'US': 'US', 'United States': 'US',
+    'CR': 'CR', 'Costa Rica': 'CR',
+    'CA': 'CA', 'Canada': 'CA',
+    'MX': 'MX', 'Mexico': 'MX',
+    'GB': 'UK', 'United Kingdom': 'UK',
+    'DE': 'DE', 'Germany': 'DE',
+    'FR': 'FR', 'France': 'FR',
   };
 
   function formatDuration(seconds) {
@@ -141,8 +141,8 @@ import CommandLayout from '../../layouts/CommandLayout.astro';
             <h2>Countries</h2>
             <div class="list">
               ${countryData.map((c, i) => {
-                const flag = countryFlags[c.country] || '🌍';
-                return `<div class="list-row"><span class="rank">${flag}</span><span class="name">${c.country}</span><span class="value">${c.visitors}</span></div>`;
+                const code = countryNames[c.country] || c.country.slice(0,2).toUpperCase();
+                return `<div class="list-row"><span class="rank">${code}</span><span class="name">${c.country}</span><span class="value">${c.visitors}</span></div>`;
               }).join('')}
             </div>
           </div>
