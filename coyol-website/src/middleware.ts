@@ -1,9 +1,9 @@
 import { defineMiddleware } from 'astro:middleware';
 
 // Simple auth for /command routes
-const USERS = {
-  'marion': 'coyol2026',
-  'ruth': 'marazul2026',
+const USERS: Record<string, string> = {
+  'marion': 'c527Q1Nq3AJff8',
+  'ruth': 'zKYSHmOKroQ5w6',
 };
 
 export const onRequest = defineMiddleware(async (context, next) => {
