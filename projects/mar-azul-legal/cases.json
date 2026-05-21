@@ -1,0 +1,48 @@
+{
+  "cases": [
+    {
+      "id": "26-000076-1632-CI",
+      "court": "Tribunal Colegiado de Primera Instancia Civil del II Circuito Judicial de Guanacaste (Nicoya)",
+      "judge": "MSc. José Carlos Aguilar Bonilla",
+      "type": "Suspensión Provisional de Acuerdos",
+      "status": "active",
+      "filed": "2026-05-04",
+      "resolution_date": "2026-05-06",
+      "served_date": "2026-05-21",
+      "served_location": "La Luna Restaurant",
+      "response_deadline": "3 business days from service",
+      "plaintiffs": [
+        "Rancho Verde Riabov Limitada",
+        "Gratum Nosara SRL",
+        "Propiedades y Terrenos Terrazas del Arco Iris Limitada",
+        "Rancho Azul Guzmán Limitada"
+      ],
+      "plaintiff_lawyer": {
+        "name": "Luis Guillermo Alfaro Vargas",
+        "firm": "SFERA Legal",
+        "website": "sferalegal.com"
+      },
+      "defendant": "Condominio Mar Azul (Admin Mar Azul Nosara SRL)",
+      "defendant_rep": "Angela Vaila Fraser Russel (5-0304-0654)",
+      "subject": "Challenge to March 9, 2026 condo assembly decisions",
+      "claims": [
+        "Provisional suspension of assembly agreements",
+        "Stop execution of assembly decisions",
+        "Suspend retroactive collections"
+      ],
+      "court_ruling": "Denied emergency measure without hearing - requires 3-day response period",
+      "documents": [
+        {
+          "filename": "2026-05-21-sfera-suspension-request.pdf",
+          "type": "Court notification / Service of process",
+          "date": "2026-05-21",
+          "pages": 8
+        }
+      ],
+      "notes": "SFERA Legal representing multiple shell companies challenging HOA decisions. Court denied their request for emergency injunction without hearing.",
+      "forwarded_to": "Lawyers",
+      "forwarded_date": "2026-05-21"
+    }
+  ],
+  "last_updated": "2026-05-21"
+}
