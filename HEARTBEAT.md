@@ -8,6 +8,7 @@ These tasks MUST be completed before any project work:
 2. **Facturas** — Parse any new electronic invoices, update invoices.json
 3. **8pm Daily Report** — Generate and send to Angelina (vailas78@yahoo.com)
 4. **Restaurant Reservations** — Check for new bookings, send confirmation emails
+5. **CRM Lead Sync** — Run reservation → CRM pipeline, alert Marion on hot leads
 
 **NO EXCUSES. If you get distracted by other work, STOP and do these first.**
 
@@ -56,6 +57,35 @@ File: `~/.openclaw/workspace/memory/reservations-sent.json`
   "coyol": ["uuid1", "uuid2"],
   "laluna": ["uuid3"]
 }
+```
+
+---
+
+## 🔥 CRM Lead Sync — EVERY HEARTBEAT!
+
+**Sync new reservations to CRM and score them:**
+```bash
+python3 ~/.openclaw/workspace/meraki-crm/check-reservations.py
+```
+
+This script:
+1. Checks Coyol + La Luna reservation tables
+2. Scores new guests (area code → city → tier)
+3. Adds to `crm_guests` table in Supabase
+4. Identifies HOT leads (score 40+)
+
+**If HOT lead detected → Alert Marion immediately!**
+
+Hot lead alert format:
+```
+🔥 NEW HOT LEAD!
+Name: [NAME]
+Email: [EMAIL]
+City: [CITY]
+Score: [SCORE]
+Source: [RESTAURANT]
+
+Booked a table — potential Mar Azul buyer.
 ```
 
 ---
