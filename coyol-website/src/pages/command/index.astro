@@ -2,45 +2,14 @@
 // Coyol Command - Real Data Only
 // "Dining to Living"
 
-import guestData from '../../data/guests-enriched.json';
+import crm from '../../data/crm-summary.json';
 
-const guests = guestData.guests || [];
-const summary = guestData.summary || {};
-
-// Real segments
-const hot = guests.filter(g => g.segment === 'hot');
-const warm = guests.filter(g => g.segment === 'warm');
-const usCanada = guests.filter(g => ['US-East', 'US-West', 'US-Central', 'Canada'].includes(g.region));
-
-// Top 10 hot leads (real)
-const topHot = guests
-  .filter(g => g.segment === 'hot' && g.region !== 'LatAm')
-  .sort((a, b) => b.lead_score - a.lead_score)
-  .slice(0, 10);
-
-// Top cities (real)
-const cityMap = {};
-guests.forEach(g => {
-  if (g.city && g.city !== 'Costa Rica' && g.region !== 'LatAm') {
-    cityMap[g.city] = (cityMap[g.city] || 0) + 1;
-  }
-});
-const topCities = Object.entries(cityMap)
-  .sort((a, b) => Number(b[1]) - Number(a[1]))
-  .slice(0, 8);
-
-// Source breakdown (real)
-const sourceMap = {};
-guests.forEach(g => {
-  const src = g.source || 'Unknown';
-  sourceMap[src] = (sourceMap[src] || 0) + 1;
-});
-const topSources = Object.entries(sourceMap)
+// Pre-computed data from summary
+const topHot = crm.top_hot_leads.slice(0, 10);
+const topCities = Object.entries(crm.top_cities).slice(0, 8);
+const topSources = Object.entries(crm.sources)
   .sort((a, b) => Number(b[1]) - Number(a[1]))
   .slice(0, 4);
-
-// Corporate emails (real)
-const corporate = guests.filter(g => g.is_corporate_email);
 ---
 
 <!DOCTYPE html>
@@ -66,17 +35,17 @@ const corporate = guests.filter(g => g.is_corporate_email);
     <!-- The Numbers That Matter -->
     <section class="hero-stats">
       <div class="big-stat">
-        <div class="big-number">{hot.length.toLocaleString()}</div>
+        <div class="big-number">{crm.hot.toLocaleString()}</div>
         <div class="big-label">Hot Leads</div>
         <div class="big-sub">Score 40+ · Ready to nurture</div>
       </div>
       <div class="big-stat">
-        <div class="big-number">{usCanada.length.toLocaleString()}</div>
+        <div class="big-number">{crm.us_canada.toLocaleString()}</div>
         <div class="big-label">US & Canada</div>
         <div class="big-sub">Primary target market</div>
       </div>
       <div class="big-stat">
-        <div class="big-number">{corporate.length.toLocaleString()}</div>
+        <div class="big-number">{crm.corporate.toLocaleString()}</div>
         <div class="big-label">Corporate</div>
         <div class="big-sub">Business emails = serious</div>
       </div>
@@ -122,7 +91,7 @@ const corporate = guests.filter(g => g.is_corporate_email);
                 <div class="lead-name">{lead.name || '—'}</div>
                 <div class="lead-where">{lead.city || lead.region}</div>
               </div>
-              <div class="lead-score">{lead.lead_score}</div>
+              <div class="lead-score">{lead.score}</div>
             </div>
           ))}
         </div>
@@ -139,7 +108,7 @@ const corporate = guests.filter(g => g.is_corporate_email);
         
         <div class="sources">
           {topSources.map(([source, count]) => {
-            const total = guests.length;
+            const total = crm.total;
             const pct = Math.round((Number(count) / total) * 100);
             return (
               <div class="source">
@@ -161,25 +130,25 @@ const corporate = guests.filter(g => g.is_corporate_email);
         <div class="funnel">
           <div class="funnel-row">
             <span class="funnel-label">All Restaurant Guests</span>
-            <span class="funnel-val">{guests.length.toLocaleString()}</span>
+            <span class="funnel-val">{crm.total.toLocaleString()}</span>
           </div>
           <div class="funnel-arrow">↓</div>
           <div class="funnel-row">
             <span class="funnel-label">US & Canada</span>
-            <span class="funnel-val">{usCanada.length.toLocaleString()}</span>
-            <span class="funnel-pct">{Math.round((usCanada.length / guests.length) * 100)}%</span>
+            <span class="funnel-val">{crm.us_canada.toLocaleString()}</span>
+            <span class="funnel-pct">{Math.round((crm.us_canada / crm.total) * 100)}%</span>
           </div>
           <div class="funnel-arrow">↓</div>
           <div class="funnel-row warm">
             <span class="funnel-label">Warm+ Leads</span>
-            <span class="funnel-val">{(hot.length + warm.length).toLocaleString()}</span>
-            <span class="funnel-pct">{Math.round(((hot.length + warm.length) / guests.length) * 100)}%</span>
+            <span class="funnel-val">{(crm.hot + crm.warm).toLocaleString()}</span>
+            <span class="funnel-pct">{Math.round(((crm.hot + crm.warm) / crm.total) * 100)}%</span>
           </div>
           <div class="funnel-arrow">↓</div>
           <div class="funnel-row hot">
             <span class="funnel-label">Hot Leads</span>
-            <span class="funnel-val">{hot.length.toLocaleString()}</span>
-            <span class="funnel-pct">{Math.round((hot.length / guests.length) * 100)}%</span>
+            <span class="funnel-val">{crm.hot.toLocaleString()}</span>
+            <span class="funnel-pct">{Math.round((crm.hot / crm.total) * 100)}%</span>
           </div>
         </div>
       </section>
@@ -189,8 +158,8 @@ const corporate = guests.filter(g => g.is_corporate_email);
     <!-- Key Insight -->
     <section class="insight">
       <p>
-        <strong>{Math.round((hot.length / guests.length) * 100)}%</strong> of your {guests.length.toLocaleString()} restaurant guests 
-        are hot leads. That's <strong>{hot.length.toLocaleString()} people</strong> who dined with you, 
+        <strong>{Math.round((crm.hot / crm.total) * 100)}%</strong> of your {crm.total.toLocaleString()} restaurant guests 
+        are hot leads. That's <strong>{crm.hot.toLocaleString()} people</strong> who dined with you, 
         live in target markets, and could afford Mar Azul.
       </p>
     </section>

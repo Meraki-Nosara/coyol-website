@@ -2,14 +2,10 @@
 // Campaign Workflow - "Warm Before Contact"
 // Pierre's 7-touch Instagram strategy
 
-import guestData from '../../data/guests-enriched.json';
+import crm from '../../data/crm-summary.json';
 
-const guests = guestData.guests || [];
-
-// Hot leads for campaign
-const hotLeads = guests
-  .filter(g => g.segment === 'hot' && g.region !== 'LatAm')
-  .sort((a, b) => b.lead_score - a.lead_score);
+// Hot leads from summary
+const hotLeads = crm.top_hot_leads;
 
 // Workflow stages
 const workflow = [
@@ -84,7 +80,7 @@ const contentPlan = [
       <h1>Campaign: Warm Before Contact</h1>
     </div>
     <div class="meta">
-      <span class="target-count">{hotLeads.length.toLocaleString()} hot leads</span>
+      <span class="target-count">{crm.hot.toLocaleString()} hot leads</span>
       <span class="strategy">Pierre's 7-Touch Strategy</span>
     </div>
   </header>
@@ -165,7 +161,7 @@ const contentPlan = [
               <td class="lead-name">{lead.name || '—'}</td>
               <td class="lead-email">{lead.email}</td>
               <td>{lead.city || lead.region}</td>
-              <td class="lead-score">{lead.lead_score}</td>
+              <td class="lead-score">{lead.score}</td>
               <td class="ig-cell">
                 <span class="ig-pending">To find</span>
               </td>
