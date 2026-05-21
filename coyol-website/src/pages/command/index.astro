@@ -8,7 +8,7 @@ const summary = guestData.summary || {};
 // Real segments
 const hot = guests.filter(g => g.segment === 'hot');
 const warm = guests.filter(g => g.segment === 'warm');
-const usCanada = guests.filter(g => ['US-East', 'US-West', 'US-Central', 'Canada', 'Europe'].includes(g.region));
+const targetMarkets = guests.filter(g => ['US-East', 'US-West', 'US-Central', 'Canada', 'Europe', 'Corporate'].includes(g.region));
 const corporate = guests.filter(g => g.is_corporate_email);
 
 // Top 10 hot leads
@@ -55,9 +55,9 @@ const topSources = Object.entries(sourceMap)
         <div class="big-sub">Score 40+ · Ready to nurture</div>
       </div>
       <div class="big-stat">
-        <div class="big-number">{usCanada.length.toLocaleString()}</div>
+        <div class="big-number">{targetMarkets.length.toLocaleString()}</div>
         <div class="big-label">Target Markets</div>
-        <div class="big-sub">US, Canada & Europe</div>
+        <div class="big-sub">US, Canada, Europe & Corporate</div>
       </div>
       <div class="big-stat">
         <div class="big-number">{corporate.length.toLocaleString()}</div>
@@ -151,9 +151,9 @@ const topSources = Object.entries(sourceMap)
           </div>
           <div class="funnel-arrow">↓</div>
           <div class="funnel-row">
-            <span class="funnel-label">US & Canada</span>
-            <span class="funnel-val">{usCanada.length.toLocaleString()}</span>
-            <span class="funnel-pct">{Math.round((usCanada.length / guests.length) * 100)}%</span>
+            <span class="funnel-label">Target Markets</span>
+            <span class="funnel-val">{targetMarkets.length.toLocaleString()}</span>
+            <span class="funnel-pct">{Math.round((targetMarkets.length / guests.length) * 100)}%</span>
           </div>
           <div class="funnel-arrow">↓</div>
           <div class="funnel-row warm">
