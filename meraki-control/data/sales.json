@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-16T07:14:11.792842",
+  "lastUpdated": "2026-05-21T07:58:22.236954",
   "source": "Anlly QuickBooks Ventas files (converted to NET)",
   "daily": [
     {
@@ -2417,15 +2417,21 @@
     },
     {
       "date": "2026-05-20",
-      "restaurant": "laluna",
-      "cash": 299625,
-      "card": 2673304,
-      "total": 2972929,
-      "netSales": 2432441,
-      "service10": 224270,
-      "iva13": 316218,
-      "source": "ingrid_email",
-      "cashier": "Julia Arrieta"
+      "laluna": {
+        "cash": 388575,
+        "card": 2684420.44,
+        "total": 2972928.77
+      },
+      "coyol": {
+        "cash": 50000,
+        "card": 1350171,
+        "total": 1350171
+      },
+      "esh": {
+        "cash": 86150,
+        "card": 486115.79,
+        "total": 502265.78
+      }
     },
     {
       "date": "2026-05-20",
