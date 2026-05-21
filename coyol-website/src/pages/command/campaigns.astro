@@ -1,11 +1,15 @@
 ---
 // Campaign Workflow - "Warm Before Contact"
-// Pierre's 7-touch Instagram strategy
+// Meta Ads Custom Audience Strategy
 
-import crm from '../../data/crm-summary.json';
+import guestData from '../../data/guests-enriched.json';
 
-// Hot leads from summary
-const hotLeads = crm.top_hot_leads;
+const guests = guestData.guests || [];
+
+// Hot leads for campaign (non-LatAm)
+const hotLeads = guests
+  .filter(g => g.segment === 'hot' && g.region !== 'LatAm')
+  .sort((a, b) => b.lead_score - a.lead_score);
 
 // Workflow stages
 const workflow = [
@@ -13,53 +17,57 @@ const workflow = [
     stage: 1,
     name: 'Content Production',
     status: 'active',
+    owner: 'Marion + Editor',
     tasks: [
-      { task: 'Shoot 7 video clips (30-60 sec each)', owner: 'Marion', done: false },
-      { task: 'Edit clips for Instagram Reels format', owner: 'Editor', done: false },
-      { task: 'Write captions (lifestyle, no hard sell)', owner: 'Ruth', done: false },
+      { task: 'Shoot 7 video clips (30-60 sec each)', done: false },
+      { task: 'Edit for Instagram Reels format (9:16)', done: false },
+      { task: 'Add subtle Coyol branding', done: false },
     ]
   },
   {
     stage: 2,
-    name: 'Find Instagram Handles',
+    name: 'Meta Ads Setup',
     status: 'pending',
+    owner: 'Marion + Ruth',
     tasks: [
-      { task: 'Match hot leads email → Instagram', owner: 'AI', done: false },
-      { task: 'Verify accounts are active', owner: 'AI', done: false },
-      { task: 'Create target list with IG handles', owner: 'AI', done: false },
+      { task: 'Upload Custom Audience CSV to Meta', done: false },
+      { task: 'Create ad campaign (Awareness)', done: false },
+      { task: 'Set budget (~$150 for 7 touches)', done: false },
     ]
   },
   {
     stage: 3,
-    name: 'Warm-Up Sequence',
+    name: 'Run Ad Sequence',
     status: 'pending',
+    owner: 'Auto (Meta)',
     tasks: [
-      { task: 'Week 1: Send clips 1-3 (lifestyle)', owner: 'Ruth', done: false },
-      { task: 'Week 2: Send clips 4-6 (property)', owner: 'Ruth', done: false },
-      { task: 'Week 3: Send clip 7 + soft CTA', owner: 'Ruth', done: false },
+      { task: 'Week 1-2: Lifestyle clips in their feed', done: false },
+      { task: 'Week 2-3: Property clips in their feed', done: false },
+      { task: 'Track frequency (goal: 6-7 views each)', done: false },
     ]
   },
   {
     stage: 4,
     name: 'Email Introduction',
     status: 'pending',
+    owner: 'Ruth',
     tasks: [
-      { task: 'Send personalized intro email', owner: 'Ruth', done: false },
-      { task: 'Track opens and clicks', owner: 'AI', done: false },
-      { task: 'Follow up warm responses', owner: 'Ruth', done: false },
+      { task: 'Send personalized intro email', done: false },
+      { task: 'They recognize you from ads', done: false },
+      { task: 'Follow up warm responses', done: false },
     ]
   },
 ];
 
-// Content ideas
-const contentPlan = [
-  { clip: 1, type: 'Lifestyle', idea: 'Sunrise yoga on the beach', vibe: 'Peace, wellness' },
-  { clip: 2, type: 'Lifestyle', idea: 'Drone over jungle canopy', vibe: 'Nature, escape' },
-  { clip: 3, type: 'Lifestyle', idea: 'Dinner service at La Luna', vibe: 'Sophistication' },
-  { clip: 4, type: 'Property', idea: 'Walking through Mar Azul lot', vibe: 'Possibility' },
-  { clip: 5, type: 'Property', idea: 'Architect render flythrough', vibe: 'Vision' },
-  { clip: 6, type: 'Property', idea: 'Nosara Hills community', vibe: 'Belonging' },
-  { clip: 7, type: 'CTA', idea: '"Your life in the Blue Zone"', vibe: 'Invitation' },
+// 7 clips content plan
+const clips = [
+  { n: 1, type: 'Lifestyle', idea: 'Sunrise at Guiones beach', notes: 'Peaceful, no text overlay' },
+  { n: 2, type: 'Lifestyle', idea: 'Drone over jungle canopy', notes: 'Show the green, the escape' },
+  { n: 3, type: 'Lifestyle', idea: 'Dinner service at La Luna', notes: 'Sophistication, good life' },
+  { n: 4, type: 'Property', idea: 'Walking through a Mar Azul lot', notes: 'Ocean glimpse, possibility' },
+  { n: 5, type: 'Property', idea: 'Architect render flythrough', notes: 'The vision, the dream home' },
+  { n: 6, type: 'Property', idea: 'Nosara Hills aerial + homes', notes: 'Community, established' },
+  { n: 7, type: 'CTA', idea: '"Live in the Blue Zone"', notes: 'Soft invitation, website link' },
 ];
 ---
 
@@ -69,46 +77,101 @@ const contentPlan = [
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>Campaign Workflow — Coyol Command</title>
+  <title>Campaign — Coyol Command</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <header>
-    <div class="brand">
-      <a href="/command">← Command</a>
+    <a href="/command" class="back">← Command</a>
+    <div class="title-row">
       <h1>Campaign: Warm Before Contact</h1>
-    </div>
-    <div class="meta">
-      <span class="target-count">{crm.hot.toLocaleString()} hot leads</span>
-      <span class="strategy">Pierre's 7-Touch Strategy</span>
+      <span class="badge">Meta Ads</span>
     </div>
   </header>
 
   <main>
     
-    <!-- Workflow Timeline -->
+    <!-- Key Numbers -->
+    <section class="key-numbers">
+      <div class="num-card">
+        <div class="num">{hotLeads.length.toLocaleString()}</div>
+        <div class="num-label">Hot Leads</div>
+      </div>
+      <div class="num-card">
+        <div class="num">7</div>
+        <div class="num-label">Video Clips</div>
+      </div>
+      <div class="num-card">
+        <div class="num">~$150</div>
+        <div class="num-label">Ad Budget</div>
+      </div>
+      <div class="num-card">
+        <div class="num">3 wks</div>
+        <div class="num-label">Timeline</div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+      <h2>How It Works</h2>
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-icon">📋</div>
+          <div class="flow-text">
+            <strong>Custom Audience</strong>
+            <p>Upload 1,676 emails to Meta</p>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-icon">🎬</div>
+          <div class="flow-text">
+            <strong>Video Ads</strong>
+            <p>Your clips appear in their feed</p>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-icon">👁️</div>
+          <div class="flow-text">
+            <strong>6-7 Views</strong>
+            <p>They see Coyol repeatedly</p>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-icon">📧</div>
+          <div class="flow-text">
+            <strong>Warm Email</strong>
+            <p>"Oh, I've seen them before"</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Workflow -->
     <section class="workflow">
       <h2>Workflow</h2>
-      
       <div class="stages">
         {workflow.map((stage) => (
           <div class={`stage ${stage.status}`}>
-            <div class="stage-header">
-              <span class="stage-num">{stage.stage}</span>
-              <h3>{stage.name}</h3>
-              <span class={`stage-status ${stage.status}`}>
-                {stage.status === 'active' ? '● In Progress' : stage.status === 'done' ? '✓ Done' : '○ Pending'}
-              </span>
+            <div class="stage-left">
+              <div class="stage-num">{stage.stage}</div>
             </div>
-            <div class="tasks">
-              {stage.tasks.map((t) => (
-                <div class={`task ${t.done ? 'done' : ''}`}>
-                  <span class="checkbox">{t.done ? '✓' : '○'}</span>
-                  <span class="task-text">{t.task}</span>
-                  <span class="task-owner">{t.owner}</span>
-                </div>
-              ))}
+            <div class="stage-content">
+              <div class="stage-header">
+                <h3>{stage.name}</h3>
+                <span class="stage-owner">{stage.owner}</span>
+              </div>
+              <ul class="tasks">
+                {stage.tasks.map(t => (
+                  <li class={t.done ? 'done' : ''}>{t.task}</li>
+                ))}
+              </ul>
+            </div>
+            <div class="stage-status-badge">
+              {stage.status === 'active' ? 'In Progress' : 'Pending'}
             </div>
           </div>
         ))}
@@ -116,107 +179,66 @@ const contentPlan = [
     </section>
 
     <!-- Content Plan -->
-    <section class="content-section">
-      <h2>7 Video Clips Needed</h2>
-      <p class="section-sub">Short clips (30-60 sec) for Instagram DM sequence</p>
-      
-      <div class="content-grid">
-        {contentPlan.map((clip) => (
-          <div class={`clip-card ${clip.type.toLowerCase()}`}>
-            <div class="clip-num">Clip {clip.clip}</div>
-            <div class="clip-type">{clip.type}</div>
-            <div class="clip-idea">{clip.idea}</div>
-            <div class="clip-vibe">Vibe: {clip.vibe}</div>
-            <div class="clip-status">
-              <select>
-                <option>Not started</option>
-                <option>Filming</option>
-                <option>Editing</option>
-                <option>Ready</option>
-              </select>
+    <section class="content">
+      <h2>7 Video Clips</h2>
+      <div class="clips-grid">
+        {clips.map(clip => (
+          <div class={`clip ${clip.type.toLowerCase()}`}>
+            <div class="clip-header">
+              <span class="clip-num">{clip.n}</span>
+              <span class="clip-type">{clip.type}</span>
             </div>
+            <div class="clip-idea">{clip.idea}</div>
+            <div class="clip-notes">{clip.notes}</div>
           </div>
         ))}
       </div>
     </section>
 
-    <!-- Target Preview -->
-    <section class="targets-section">
-      <h2>Target List Preview</h2>
-      <p class="section-sub">Top 20 hot leads — need to find their Instagram</p>
-      
-      <table class="targets-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>City</th>
-            <th>Score</th>
-            <th>Instagram</th>
-          </tr>
-        </thead>
-        <tbody>
-          {hotLeads.slice(0, 20).map((lead) => (
-            <tr>
-              <td class="lead-name">{lead.name || '—'}</td>
-              <td class="lead-email">{lead.email}</td>
-              <td>{lead.city || lead.region}</td>
-              <td class="lead-score">{lead.score}</td>
-              <td class="ig-cell">
-                <span class="ig-pending">To find</span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      
-      <div class="ig-action">
-        <p>When ready, I'll search for Instagram handles using email + name matching.</p>
-        <button class="btn-find" disabled>Find Instagram Handles (Start Stage 2)</button>
+    <!-- Custom Audience Ready -->
+    <section class="audience-ready">
+      <div class="ready-content">
+        <h2>Custom Audience File Ready</h2>
+        <p>1,676 hot leads formatted for Meta Ads Manager</p>
+        <div class="file-info">
+          <code>meta-custom-audience.csv</code>
+          <span>email, phone, name, city, country</span>
+        </div>
       </div>
+      <a href="/downloads/meta-custom-audience.csv" class="btn-download" download>
+        Download CSV
+      </a>
     </section>
 
-    <!-- Timeline -->
-    <section class="timeline-section">
-      <h2>Campaign Timeline</h2>
-      
-      <div class="timeline">
-        <div class="timeline-row">
-          <div class="timeline-week">Week 0</div>
-          <div class="timeline-content">
-            <strong>Content Production</strong>
-            <p>Shoot & edit 7 clips. Find Instagram handles.</p>
-          </div>
-        </div>
-        <div class="timeline-row">
-          <div class="timeline-week">Week 1</div>
-          <div class="timeline-content">
-            <strong>Clips 1-3: Lifestyle</strong>
-            <p>Sunrise, jungle, dining. Pure lifestyle, no pitch.</p>
-          </div>
-        </div>
-        <div class="timeline-row">
-          <div class="timeline-week">Week 2</div>
-          <div class="timeline-content">
-            <strong>Clips 4-6: Property</strong>
-            <p>Mar Azul, renders, community. Show the possibility.</p>
-          </div>
-        </div>
-        <div class="timeline-row highlight">
-          <div class="timeline-week">Week 3</div>
-          <div class="timeline-content">
-            <strong>Clip 7 + Email</strong>
-            <p>"Your life in the Blue Zone" → Personal intro email.</p>
-          </div>
-        </div>
-        <div class="timeline-row">
-          <div class="timeline-week">Week 4+</div>
-          <div class="timeline-content">
-            <strong>Follow Up</strong>
-            <p>Track responses. Ruth follows up warm leads.</p>
-          </div>
-        </div>
-      </div>
+    <!-- Next Steps -->
+    <section class="next-steps">
+      <h2>Next Steps</h2>
+      <ol>
+        <li>
+          <strong>You:</strong> Shoot the 7 video clips
+          <span class="step-note">30-60 sec each, vertical format</span>
+        </li>
+        <li>
+          <strong>Editor:</strong> Format for Instagram Reels
+          <span class="step-note">9:16 ratio, subtle branding</span>
+        </li>
+        <li>
+          <strong>Ruth:</strong> Upload CSV to Meta Ads Manager
+          <span class="step-note">Audiences → Create → Customer List</span>
+        </li>
+        <li>
+          <strong>Ruth:</strong> Create campaign, upload clips
+          <span class="step-note">Objective: Awareness, ~$150 budget</span>
+        </li>
+        <li>
+          <strong>Wait 3 weeks:</strong> Let ads run
+          <span class="step-note">Goal: 6-7 impressions per person</span>
+        </li>
+        <li>
+          <strong>Ruth:</strong> Send email intro
+          <span class="step-note">Now they recognize you</span>
+        </li>
+      </ol>
     </section>
 
   </main>
@@ -228,49 +250,44 @@ const contentPlan = [
       font-family: 'Inter', -apple-system, sans-serif;
       background: #0a0c08;
       color: #e8e6e1;
-      line-height: 1.5;
+      line-height: 1.6;
     }
     
     header {
       padding: 24px 40px;
       border-bottom: 1px solid #1a1d17;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
     
-    .brand a {
+    .back {
       font-size: 12px;
       color: #666;
       text-decoration: none;
       display: block;
-      margin-bottom: 4px;
+      margin-bottom: 8px;
     }
     
-    .brand h1 {
-      font-size: 20px;
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    h1 {
+      font-size: 22px;
       font-weight: 600;
       color: #C4A67C;
     }
     
-    .meta {
-      text-align: right;
-    }
-    
-    .target-count {
-      display: block;
-      font-size: 18px;
-      font-weight: 600;
-      color: #f43f5e;
-    }
-    
-    .strategy {
-      font-size: 12px;
-      color: #666;
+    .badge {
+      font-size: 11px;
+      padding: 4px 10px;
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border-radius: 4px;
     }
     
     main {
-      max-width: 1200px;
+      max-width: 1000px;
       margin: 0 auto;
       padding: 40px;
     }
@@ -280,25 +297,88 @@ const contentPlan = [
     }
     
     h2 {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 600;
-      margin-bottom: 8px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
     }
     
-    .section-sub {
-      font-size: 13px;
+    /* Key Numbers */
+    .key-numbers {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    
+    .num-card {
+      background: #0f1210;
+      border: 1px solid #1a1d17;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+    
+    .num {
+      font-size: 36px;
+      font-weight: 300;
+      color: #C4A67C;
+    }
+    
+    .num-label {
+      font-size: 12px;
       color: #666;
-      margin-bottom: 24px;
+      margin-top: 4px;
+    }
+    
+    /* How It Works */
+    .flow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0f1210;
+      border: 1px solid #1a1d17;
+      border-radius: 12px;
+      padding: 24px;
+    }
+    
+    .flow-step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .flow-icon {
+      font-size: 24px;
+    }
+    
+    .flow-text strong {
+      display: block;
+      font-size: 13px;
+    }
+    
+    .flow-text p {
+      font-size: 11px;
+      color: #666;
+    }
+    
+    .flow-arrow {
+      color: #333;
+      font-size: 20px;
     }
     
     /* Workflow */
     .stages {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
     }
     
     .stage {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
       background: #0f1210;
       border: 1px solid #1a1d17;
       border-radius: 12px;
@@ -309,23 +389,16 @@ const contentPlan = [
       border-color: #C4A67C;
     }
     
-    .stage-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-    
     .stage-num {
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       background: #1a1d17;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
       font-weight: 600;
+      font-size: 14px;
     }
     
     .stage.active .stage-num {
@@ -333,44 +406,23 @@ const contentPlan = [
       color: #0a0c08;
     }
     
-    .stage-header h3 {
+    .stage-content {
       flex: 1;
+    }
+    
+    .stage-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    
+    .stage-header h3 {
       font-size: 15px;
       font-weight: 600;
     }
     
-    .stage-status {
-      font-size: 12px;
-      color: #666;
-    }
-    
-    .stage-status.active { color: #C4A67C; }
-    .stage-status.done { color: #22c55e; }
-    
-    .tasks {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding-left: 40px;
-    }
-    
-    .task {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 14px;
-    }
-    
-    .task.done { color: #666; text-decoration: line-through; }
-    
-    .checkbox {
-      color: #444;
-    }
-    
-    .task.done .checkbox { color: #22c55e; }
-    
-    .task-owner {
-      margin-left: auto;
+    .stage-owner {
       font-size: 11px;
       padding: 2px 8px;
       background: #1a1d17;
@@ -378,178 +430,195 @@ const contentPlan = [
       color: #888;
     }
     
-    /* Content Grid */
-    .content-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 16px;
+    .tasks {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
     
-    .clip-card {
+    .tasks li {
+      font-size: 13px;
+      color: #999;
+      padding-left: 20px;
+      position: relative;
+    }
+    
+    .tasks li::before {
+      content: '○';
+      position: absolute;
+      left: 0;
+      color: #444;
+    }
+    
+    .tasks li.done {
+      color: #666;
+      text-decoration: line-through;
+    }
+    
+    .tasks li.done::before {
+      content: '✓';
+      color: #22c55e;
+    }
+    
+    .stage-status-badge {
+      font-size: 11px;
+      padding: 4px 10px;
+      background: #1a1d17;
+      border-radius: 4px;
+      color: #666;
+    }
+    
+    .stage.active .stage-status-badge {
+      background: rgba(196, 166, 124, 0.15);
+      color: #C4A67C;
+    }
+    
+    /* Content Grid */
+    .clips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    
+    .clip {
       background: #0f1210;
       border: 1px solid #1a1d17;
-      border-radius: 12px;
-      padding: 20px;
+      border-radius: 10px;
+      padding: 16px;
     }
     
-    .clip-card.lifestyle { border-left: 3px solid #3b82f6; }
-    .clip-card.property { border-left: 3px solid #C4A67C; }
-    .clip-card.cta { border-left: 3px solid #f43f5e; }
+    .clip.lifestyle { border-left: 3px solid #3b82f6; }
+    .clip.property { border-left: 3px solid #C4A67C; }
+    .clip.cta { border-left: 3px solid #f43f5e; }
+    
+    .clip-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
     
     .clip-num {
-      font-size: 11px;
-      color: #666;
-      margin-bottom: 4px;
+      font-size: 20px;
+      font-weight: 300;
+      color: #555;
     }
     
     .clip-type {
       font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: #888;
-      margin-bottom: 8px;
+      color: #666;
     }
     
     .clip-idea {
       font-size: 14px;
       font-weight: 500;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
     
-    .clip-vibe {
+    .clip-notes {
       font-size: 12px;
       color: #666;
-      margin-bottom: 12px;
     }
     
-    .clip-status select {
-      width: 100%;
-      padding: 6px 8px;
-      background: #1a1d17;
-      border: 1px solid #252a20;
-      border-radius: 6px;
-      color: #e8e6e1;
-      font-size: 12px;
-    }
-    
-    /* Targets Table */
-    .targets-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
-    }
-    
-    .targets-table th {
-      text-align: left;
-      padding: 12px;
-      font-size: 11px;
-      color: #666;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      border-bottom: 1px solid #1a1d17;
-    }
-    
-    .targets-table td {
-      padding: 12px;
-      font-size: 13px;
-      border-bottom: 1px solid #1a1d17;
-    }
-    
-    .lead-email {
-      color: #888;
-      font-size: 12px;
-    }
-    
-    .lead-score {
-      color: #f43f5e;
-      font-weight: 600;
-    }
-    
-    .ig-pending {
-      font-size: 11px;
-      padding: 3px 8px;
-      background: rgba(196, 166, 124, 0.15);
-      color: #C4A67C;
-      border-radius: 4px;
-    }
-    
-    .ig-action {
-      background: #0f1210;
-      border: 1px solid #1a1d17;
-      border-radius: 12px;
-      padding: 20px;
+    /* Audience Ready */
+    .audience-ready {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, #0f1210 100%);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      border-radius: 12px;
+      padding: 24px;
     }
     
-    .ig-action p {
-      font-size: 14px;
-      color: #888;
-    }
-    
-    .btn-find {
-      padding: 12px 24px;
-      background: #1a1d17;
-      border: 1px solid #252a20;
-      border-radius: 8px;
-      color: #666;
-      font-size: 14px;
-      cursor: not-allowed;
-    }
-    
-    /* Timeline */
-    .timeline {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-    
-    .timeline-row {
-      display: flex;
-      gap: 24px;
-      padding: 20px 0;
-      border-bottom: 1px solid #1a1d17;
-    }
-    
-    .timeline-row:last-child { border-bottom: none; }
-    
-    .timeline-row.highlight {
-      background: rgba(244, 63, 94, 0.05);
-      margin: 0 -20px;
-      padding: 20px;
-      border-radius: 8px;
-    }
-    
-    .timeline-week {
-      width: 80px;
-      font-size: 12px;
-      color: #666;
-      flex-shrink: 0;
-    }
-    
-    .timeline-row.highlight .timeline-week {
-      color: #f43f5e;
-      font-weight: 600;
-    }
-    
-    .timeline-content strong {
-      display: block;
-      font-size: 14px;
+    .ready-content h2 {
+      color: #22c55e;
       margin-bottom: 4px;
     }
     
-    .timeline-content p {
-      font-size: 13px;
+    .ready-content p {
+      font-size: 14px;
       color: #888;
+      margin-bottom: 12px;
+    }
+    
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .file-info code {
+      font-size: 13px;
+      padding: 6px 12px;
+      background: #1a1d17;
+      border-radius: 6px;
+      color: #e8e6e1;
+    }
+    
+    .file-info span {
+      font-size: 11px;
+      color: #555;
+    }
+    
+    .btn-download {
+      padding: 14px 28px;
+      background: #22c55e;
+      color: #0a0c08;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    /* Next Steps */
+    .next-steps ol {
+      list-style: none;
+      counter-reset: steps;
+    }
+    
+    .next-steps li {
+      counter-increment: steps;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 8px;
+      padding: 16px 0;
+      border-bottom: 1px solid #1a1d17;
+      font-size: 15px;
+    }
+    
+    .next-steps li::before {
+      content: counter(steps);
+      width: 24px;
+      height: 24px;
+      background: #1a1d17;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #888;
+      margin-right: 8px;
+    }
+    
+    .step-note {
+      width: 100%;
+      padding-left: 40px;
+      font-size: 12px;
+      color: #555;
     }
     
     @media (max-width: 768px) {
       main { padding: 20px; }
-      header { flex-direction: column; align-items: flex-start; gap: 12px; }
-      .meta { text-align: left; }
-      .content-grid { grid-template-columns: 1fr 1fr; }
-      .targets-table { font-size: 11px; }
+      .key-numbers { grid-template-columns: repeat(2, 1fr); }
+      .flow { flex-direction: column; gap: 16px; }
+      .flow-arrow { transform: rotate(90deg); }
+      .clips-grid { grid-template-columns: 1fr 1fr; }
+      .audience-ready { flex-direction: column; gap: 20px; text-align: center; }
     }
   </style>
 
