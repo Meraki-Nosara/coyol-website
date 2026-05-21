@@ -1,0 +1,561 @@
+---
+// Campaign Workflow - "Warm Before Contact"
+// Pierre's 7-touch Instagram strategy
+
+import guestData from '../../data/guests-enriched.json';
+
+const guests = guestData.guests || [];
+
+// Hot leads for campaign
+const hotLeads = guests
+  .filter(g => g.segment === 'hot' && g.region !== 'LatAm')
+  .sort((a, b) => b.lead_score - a.lead_score);
+
+// Workflow stages
+const workflow = [
+  {
+    stage: 1,
+    name: 'Content Production',
+    status: 'active',
+    tasks: [
+      { task: 'Shoot 7 video clips (30-60 sec each)', owner: 'Marion', done: false },
+      { task: 'Edit clips for Instagram Reels format', owner: 'Editor', done: false },
+      { task: 'Write captions (lifestyle, no hard sell)', owner: 'Ruth', done: false },
+    ]
+  },
+  {
+    stage: 2,
+    name: 'Find Instagram Handles',
+    status: 'pending',
+    tasks: [
+      { task: 'Match hot leads email → Instagram', owner: 'AI', done: false },
+      { task: 'Verify accounts are active', owner: 'AI', done: false },
+      { task: 'Create target list with IG handles', owner: 'AI', done: false },
+    ]
+  },
+  {
+    stage: 3,
+    name: 'Warm-Up Sequence',
+    status: 'pending',
+    tasks: [
+      { task: 'Week 1: Send clips 1-3 (lifestyle)', owner: 'Ruth', done: false },
+      { task: 'Week 2: Send clips 4-6 (property)', owner: 'Ruth', done: false },
+      { task: 'Week 3: Send clip 7 + soft CTA', owner: 'Ruth', done: false },
+    ]
+  },
+  {
+    stage: 4,
+    name: 'Email Introduction',
+    status: 'pending',
+    tasks: [
+      { task: 'Send personalized intro email', owner: 'Ruth', done: false },
+      { task: 'Track opens and clicks', owner: 'AI', done: false },
+      { task: 'Follow up warm responses', owner: 'Ruth', done: false },
+    ]
+  },
+];
+
+// Content ideas
+const contentPlan = [
+  { clip: 1, type: 'Lifestyle', idea: 'Sunrise yoga on the beach', vibe: 'Peace, wellness' },
+  { clip: 2, type: 'Lifestyle', idea: 'Drone over jungle canopy', vibe: 'Nature, escape' },
+  { clip: 3, type: 'Lifestyle', idea: 'Dinner service at La Luna', vibe: 'Sophistication' },
+  { clip: 4, type: 'Property', idea: 'Walking through Mar Azul lot', vibe: 'Possibility' },
+  { clip: 5, type: 'Property', idea: 'Architect render flythrough', vibe: 'Vision' },
+  { clip: 6, type: 'Property', idea: 'Nosara Hills community', vibe: 'Belonging' },
+  { clip: 7, type: 'CTA', idea: '"Your life in the Blue Zone"', vibe: 'Invitation' },
+];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Campaign Workflow — Coyol Command</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <a href="/command">← Command</a>
+      <h1>Campaign: Warm Before Contact</h1>
+    </div>
+    <div class="meta">
+      <span class="target-count">{hotLeads.length.toLocaleString()} hot leads</span>
+      <span class="strategy">Pierre's 7-Touch Strategy</span>
+    </div>
+  </header>
+
+  <main>
+    
+    <!-- Workflow Timeline -->
+    <section class="workflow">
+      <h2>Workflow</h2>
+      
+      <div class="stages">
+        {workflow.map((stage) => (
+          <div class={`stage ${stage.status}`}>
+            <div class="stage-header">
+              <span class="stage-num">{stage.stage}</span>
+              <h3>{stage.name}</h3>
+              <span class={`stage-status ${stage.status}`}>
+                {stage.status === 'active' ? '● In Progress' : stage.status === 'done' ? '✓ Done' : '○ Pending'}
+              </span>
+            </div>
+            <div class="tasks">
+              {stage.tasks.map((t) => (
+                <div class={`task ${t.done ? 'done' : ''}`}>
+                  <span class="checkbox">{t.done ? '✓' : '○'}</span>
+                  <span class="task-text">{t.task}</span>
+                  <span class="task-owner">{t.owner}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Content Plan -->
+    <section class="content-section">
+      <h2>7 Video Clips Needed</h2>
+      <p class="section-sub">Short clips (30-60 sec) for Instagram DM sequence</p>
+      
+      <div class="content-grid">
+        {contentPlan.map((clip) => (
+          <div class={`clip-card ${clip.type.toLowerCase()}`}>
+            <div class="clip-num">Clip {clip.clip}</div>
+            <div class="clip-type">{clip.type}</div>
+            <div class="clip-idea">{clip.idea}</div>
+            <div class="clip-vibe">Vibe: {clip.vibe}</div>
+            <div class="clip-status">
+              <select>
+                <option>Not started</option>
+                <option>Filming</option>
+                <option>Editing</option>
+                <option>Ready</option>
+              </select>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Target Preview -->
+    <section class="targets-section">
+      <h2>Target List Preview</h2>
+      <p class="section-sub">Top 20 hot leads — need to find their Instagram</p>
+      
+      <table class="targets-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>City</th>
+            <th>Score</th>
+            <th>Instagram</th>
+          </tr>
+        </thead>
+        <tbody>
+          {hotLeads.slice(0, 20).map((lead) => (
+            <tr>
+              <td class="lead-name">{lead.name || '—'}</td>
+              <td class="lead-email">{lead.email}</td>
+              <td>{lead.city || lead.region}</td>
+              <td class="lead-score">{lead.lead_score}</td>
+              <td class="ig-cell">
+                <span class="ig-pending">To find</span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      
+      <div class="ig-action">
+        <p>When ready, I'll search for Instagram handles using email + name matching.</p>
+        <button class="btn-find" disabled>Find Instagram Handles (Start Stage 2)</button>
+      </div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="timeline-section">
+      <h2>Campaign Timeline</h2>
+      
+      <div class="timeline">
+        <div class="timeline-row">
+          <div class="timeline-week">Week 0</div>
+          <div class="timeline-content">
+            <strong>Content Production</strong>
+            <p>Shoot & edit 7 clips. Find Instagram handles.</p>
+          </div>
+        </div>
+        <div class="timeline-row">
+          <div class="timeline-week">Week 1</div>
+          <div class="timeline-content">
+            <strong>Clips 1-3: Lifestyle</strong>
+            <p>Sunrise, jungle, dining. Pure lifestyle, no pitch.</p>
+          </div>
+        </div>
+        <div class="timeline-row">
+          <div class="timeline-week">Week 2</div>
+          <div class="timeline-content">
+            <strong>Clips 4-6: Property</strong>
+            <p>Mar Azul, renders, community. Show the possibility.</p>
+          </div>
+        </div>
+        <div class="timeline-row highlight">
+          <div class="timeline-week">Week 3</div>
+          <div class="timeline-content">
+            <strong>Clip 7 + Email</strong>
+            <p>"Your life in the Blue Zone" → Personal intro email.</p>
+          </div>
+        </div>
+        <div class="timeline-row">
+          <div class="timeline-week">Week 4+</div>
+          <div class="timeline-content">
+            <strong>Follow Up</strong>
+            <p>Track responses. Ruth follows up warm leads.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #0a0c08;
+      color: #e8e6e1;
+      line-height: 1.5;
+    }
+    
+    header {
+      padding: 24px 40px;
+      border-bottom: 1px solid #1a1d17;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .brand a {
+      font-size: 12px;
+      color: #666;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 4px;
+    }
+    
+    .brand h1 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #C4A67C;
+    }
+    
+    .meta {
+      text-align: right;
+    }
+    
+    .target-count {
+      display: block;
+      font-size: 18px;
+      font-weight: 600;
+      color: #f43f5e;
+    }
+    
+    .strategy {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px;
+    }
+    
+    section {
+      margin-bottom: 48px;
+    }
+    
+    h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .section-sub {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 24px;
+    }
+    
+    /* Workflow */
+    .stages {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .stage {
+      background: #0f1210;
+      border: 1px solid #1a1d17;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    
+    .stage.active {
+      border-color: #C4A67C;
+    }
+    
+    .stage-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .stage-num {
+      width: 28px;
+      height: 28px;
+      background: #1a1d17;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    
+    .stage.active .stage-num {
+      background: #C4A67C;
+      color: #0a0c08;
+    }
+    
+    .stage-header h3 {
+      flex: 1;
+      font-size: 15px;
+      font-weight: 600;
+    }
+    
+    .stage-status {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .stage-status.active { color: #C4A67C; }
+    .stage-status.done { color: #22c55e; }
+    
+    .tasks {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-left: 40px;
+    }
+    
+    .task {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+    }
+    
+    .task.done { color: #666; text-decoration: line-through; }
+    
+    .checkbox {
+      color: #444;
+    }
+    
+    .task.done .checkbox { color: #22c55e; }
+    
+    .task-owner {
+      margin-left: auto;
+      font-size: 11px;
+      padding: 2px 8px;
+      background: #1a1d17;
+      border-radius: 4px;
+      color: #888;
+    }
+    
+    /* Content Grid */
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    
+    .clip-card {
+      background: #0f1210;
+      border: 1px solid #1a1d17;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    
+    .clip-card.lifestyle { border-left: 3px solid #3b82f6; }
+    .clip-card.property { border-left: 3px solid #C4A67C; }
+    .clip-card.cta { border-left: 3px solid #f43f5e; }
+    
+    .clip-num {
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+    
+    .clip-type {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+    
+    .clip-idea {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    
+    .clip-vibe {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 12px;
+    }
+    
+    .clip-status select {
+      width: 100%;
+      padding: 6px 8px;
+      background: #1a1d17;
+      border: 1px solid #252a20;
+      border-radius: 6px;
+      color: #e8e6e1;
+      font-size: 12px;
+    }
+    
+    /* Targets Table */
+    .targets-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    
+    .targets-table th {
+      text-align: left;
+      padding: 12px;
+      font-size: 11px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid #1a1d17;
+    }
+    
+    .targets-table td {
+      padding: 12px;
+      font-size: 13px;
+      border-bottom: 1px solid #1a1d17;
+    }
+    
+    .lead-email {
+      color: #888;
+      font-size: 12px;
+    }
+    
+    .lead-score {
+      color: #f43f5e;
+      font-weight: 600;
+    }
+    
+    .ig-pending {
+      font-size: 11px;
+      padding: 3px 8px;
+      background: rgba(196, 166, 124, 0.15);
+      color: #C4A67C;
+      border-radius: 4px;
+    }
+    
+    .ig-action {
+      background: #0f1210;
+      border: 1px solid #1a1d17;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .ig-action p {
+      font-size: 14px;
+      color: #888;
+    }
+    
+    .btn-find {
+      padding: 12px 24px;
+      background: #1a1d17;
+      border: 1px solid #252a20;
+      border-radius: 8px;
+      color: #666;
+      font-size: 14px;
+      cursor: not-allowed;
+    }
+    
+    /* Timeline */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    
+    .timeline-row {
+      display: flex;
+      gap: 24px;
+      padding: 20px 0;
+      border-bottom: 1px solid #1a1d17;
+    }
+    
+    .timeline-row:last-child { border-bottom: none; }
+    
+    .timeline-row.highlight {
+      background: rgba(244, 63, 94, 0.05);
+      margin: 0 -20px;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    
+    .timeline-week {
+      width: 80px;
+      font-size: 12px;
+      color: #666;
+      flex-shrink: 0;
+    }
+    
+    .timeline-row.highlight .timeline-week {
+      color: #f43f5e;
+      font-weight: 600;
+    }
+    
+    .timeline-content strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    
+    .timeline-content p {
+      font-size: 13px;
+      color: #888;
+    }
+    
+    @media (max-width: 768px) {
+      main { padding: 20px; }
+      header { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .meta { text-align: left; }
+      .content-grid { grid-template-columns: 1fr 1fr; }
+      .targets-table { font-size: 11px; }
+    }
+  </style>
+
+</body>
+</html>
