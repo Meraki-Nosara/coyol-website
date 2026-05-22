@@ -35,6 +35,7 @@ import Layout from '../../../layouts/Layout.astro';
       <!-- Header -->
       <div class="panel-header">
         <button class="btn-new" onclick="openNewReservation()">+</button>
+        <button class="btn-walkin" onclick="openWalkin()">Walk-in</button>
         <div class="res-tabs">
           <span class="res-count" id="resCount">RESERVATIONS <strong>0</strong></span>
           <span class="waitlist-count">WAITLIST <strong>0</strong></span>
@@ -213,6 +214,40 @@ import Layout from '../../../layouts/Layout.astro';
         <div class="modal-footer">
           <button class="btn-secondary" onclick="closeModal()">Cancel</button>
           <button class="btn-primary" onclick="saveNewReservation()">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Walk-in Modal -->
+    <div class="modal" id="walkinModal">
+      <div class="modal-content walkin-modal">
+        <div class="modal-header">
+          <h2>Quick Walk-in</h2>
+          <button class="modal-close" onclick="closeWalkinModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="walkin-guests">
+            <label>How many guests?</label>
+            <div class="guest-buttons">
+              <button class="guest-btn" data-guests="1">1</button>
+              <button class="guest-btn" data-guests="2">2</button>
+              <button class="guest-btn" data-guests="3">3</button>
+              <button class="guest-btn active" data-guests="4">4</button>
+              <button class="guest-btn" data-guests="5">5</button>
+              <button class="guest-btn" data-guests="6">6+</button>
+            </div>
+            <input type="number" id="walkinGuestCount" value="4" min="1" max="20" class="form-input" style="display:none;" />
+          </div>
+          <div class="walkin-table">
+            <label>Table (optional)</label>
+            <select id="walkinTable" class="form-input">
+              <option value="">Auto-assign</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeWalkinModal()">Cancel</button>
+          <button class="btn-primary btn-seat" onclick="seatWalkin()">Seat Now</button>
         </div>
       </div>
     </div>
@@ -478,6 +513,66 @@ import Layout from '../../../layouts/Layout.astro';
     }
 
     .btn-new:hover { background: #8B4D33; }
+
+    .btn-walkin {
+      height: 36px;
+      padding: 0 12px;
+      background: var(--keswick);
+      color: var(--cream);
+      border: none;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-walkin:hover { background: #4a5d4a; }
+
+    .walkin-modal {
+      max-width: 360px;
+    }
+
+    .walkin-guests label, .walkin-table label {
+      display: block;
+      font-size: 0.8rem;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .guest-buttons {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .guest-btn {
+      flex: 1;
+      padding: 16px 0;
+      background: #f5f3ef;
+      border: 2px solid #e0ddd5;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .guest-btn:hover {
+      border-color: var(--keswick);
+    }
+    .guest-btn.active {
+      background: var(--keswick);
+      border-color: var(--keswick);
+      color: white;
+    }
+
+    .btn-seat {
+      background: var(--keswick);
+      font-size: 1rem;
+      padding: 12px 24px;
+    }
+    .btn-seat:hover {
+      background: #4a5d4a;
+    }
 
     .res-tabs {
       display: flex;
@@ -2278,6 +2373,72 @@ import Layout from '../../../layouts/Layout.astro';
 
     function closeModal() {
       document.getElementById('newResModal').classList.remove('open');
+    }
+
+    // Walk-in functions
+    let walkinGuests = 4;
+
+    function openWalkin() {
+      walkinGuests = 4;
+      document.querySelectorAll('.guest-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.guests === '4');
+      });
+      document.getElementById('walkinGuestCount').value = 4;
+      // Populate tables
+      const tableSelect = document.getElementById('walkinTable');
+      tableSelect.innerHTML = '<option value="">Auto-assign</option>';
+      tables.forEach(t => {
+        if (t.capacity >= walkinGuests) {
+          tableSelect.innerHTML += `<option value="${t.id}">${t.name} (${t.capacity})</option>`;
+        }
+      });
+      document.getElementById('walkinModal').classList.add('open');
+    }
+
+    function closeWalkinModal() {
+      document.getElementById('walkinModal').classList.remove('open');
+    }
+
+    // Guest button clicks
+    document.querySelectorAll('.guest-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.guest-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const g = btn.dataset.guests;
+        if (g === '6+') {
+          const custom = prompt('How many guests?', '6');
+          walkinGuests = parseInt(custom) || 6;
+        } else {
+          walkinGuests = parseInt(g);
+        }
+        document.getElementById('walkinGuestCount').value = walkinGuests;
+      });
+    });
+
+    async function seatWalkin() {
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+      
+      const reservation = {
+        date: getDateString(currentDate),
+        time: timeStr,
+        guests: walkinGuests,
+        guestName: `Walk-in (${walkinGuests})`,
+        guestPhone: '',
+        guestEmail: '',
+        tableId: document.getElementById('walkinTable').value || null,
+        specialRequests: 'Walk-in',
+        status: 'seated'
+      };
+      
+      try {
+        await saveReservation(reservation);
+        closeWalkinModal();
+        await loadReservations();
+        renderFloor();
+      } catch (e) {
+        alert('Failed to save walk-in');
+      }
     }
 
     async function saveNewReservation() {
