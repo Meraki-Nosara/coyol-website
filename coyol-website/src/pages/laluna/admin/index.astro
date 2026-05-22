@@ -180,6 +180,8 @@ import Layout from '../../../layouts/Layout.astro';
                 <option value="12:00">12:00 PM</option>
                 <option value="12:30">12:30 PM</option>
                 <option value="13:00">1:00 PM</option>
+                <option value="16:00">4:00 PM</option>
+                <option value="16:30">4:30 PM</option>
                 <option value="17:00">5:00 PM</option>
                 <option value="17:30">5:30 PM</option>
                 <option value="18:00">6:00 PM</option>
@@ -336,6 +338,10 @@ import Layout from '../../../layouts/Layout.astro';
               <label>Time</label>
               <select id="editTime" class="form-input">
                 <optgroup label="Dinner">
+                  <option value="16:00">4:00 PM</option>
+                  <option value="16:15">4:15 PM</option>
+                  <option value="16:30">4:30 PM</option>
+                  <option value="16:45">4:45 PM</option>
                   <option value="17:00">5:00 PM</option>
                   <option value="17:30">5:30 PM</option>
                   <option value="18:00">6:00 PM</option>
@@ -2118,7 +2124,9 @@ import Layout from '../../../layouts/Layout.astro';
       
       // Populate edit form with current values
       document.getElementById('editDate').value = res.date;
-      document.getElementById('editTime').value = res.time;
+      // Strip seconds from time (DB stores HH:MM:SS, dropdown uses HH:MM)
+      const timeForDropdown = res.time ? res.time.slice(0, 5) : '';
+      document.getElementById('editTime').value = timeForDropdown;
       document.getElementById('editGuests').value = res.guests;
       document.getElementById('editZone').value = res.zonePreference || 'any';
       document.getElementById('editNotes').value = res.specialRequests || '';
