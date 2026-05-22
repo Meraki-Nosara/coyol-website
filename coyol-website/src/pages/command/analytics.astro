@@ -3,189 +3,25 @@ import CommandLayout from '../../layouts/CommandLayout.astro';
 ---
 
 <CommandLayout title="Analytics" active="analytics">
-  
   <div class="page">
     <header class="page-header">
       <h1>Website Analytics</h1>
-      <span class="source" id="lastUpdate">Loading from Plausible...</span>
+      <p class="source" id="lastUpdate">Loading...</p>
     </header>
 
     <div id="content">
       <div class="loading">
         <div class="spinner"></div>
-        <p>Fetching analytics data...</p>
+        <p>Fetching data from Plausible...</p>
       </div>
     </div>
   </div>
-
 </CommandLayout>
-
-<script is:inline>
-  const API_KEY = '3MSdVsFOPR-5oFxyGxSuv5P4EU4HvVtp1HxXzjYOeuhsGRuGntpr8CaNGttl9jhk';
-  const SITE_ID = 'coyolnosara.com';
-  
-  const countryNames = {
-    'US': 'US', 'United States': 'US',
-    'CR': 'CR', 'Costa Rica': 'CR',
-    'CA': 'CA', 'Canada': 'CA',
-    'MX': 'MX', 'Mexico': 'MX',
-    'GB': 'UK', 'United Kingdom': 'UK',
-    'DE': 'DE', 'Germany': 'DE',
-    'FR': 'FR', 'France': 'FR',
-  };
-
-  function formatDuration(seconds) {
-    if (!seconds) return '0s';
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return m > 0 ? `${m}m ${s}s` : `${s}s`;
-  }
-
-  async function fetchPlausible(endpoint, params = {}) {
-    const url = new URL(`https://plausible.io/api/v1/stats/${endpoint}`);
-    url.searchParams.set('site_id', SITE_ID);
-    Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
-    
-    const res = await fetch(url, {
-      headers: { 'Authorization': `Bearer ${API_KEY}` }
-    });
-    return res.json();
-  }
-
-  async function loadAnalytics() {
-    try {
-      const [monthStats, timeseries, topPages, topSources, devices, countries] = await Promise.all([
-        fetchPlausible('aggregate', { period: '30d', metrics: 'visitors,pageviews,bounce_rate,visit_duration' }),
-        fetchPlausible('timeseries', { period: '30d', metrics: 'visitors' }),
-        fetchPlausible('breakdown', { period: '30d', property: 'event:page', metrics: 'pageviews', limit: '10' }),
-        fetchPlausible('breakdown', { period: '30d', property: 'visit:source', metrics: 'visitors', limit: '5' }),
-        fetchPlausible('breakdown', { period: '30d', property: 'visit:device', metrics: 'visitors' }),
-        fetchPlausible('breakdown', { period: '30d', property: 'visit:country', metrics: 'visitors', limit: '6' }),
-      ]);
-
-      const month = monthStats?.results || { visitors: { value: 0 }, pageviews: { value: 0 }, bounce_rate: { value: 0 }, visit_duration: { value: 0 } };
-      const dailyData = timeseries?.results || [];
-      const pages = topPages?.results || [];
-      const sources = topSources?.results || [];
-      const deviceData = devices?.results || [];
-      const countryData = countries?.results || [];
-      const totalSourceVisitors = sources.reduce((sum, s) => sum + s.visitors, 0) || 1;
-
-      document.getElementById('lastUpdate').textContent = `Live data — ${new Date().toLocaleString()}`;
-
-      let html = `
-        <!-- Stats -->
-        <div class="stats-row">
-          <div class="stat-card">
-            <div class="stat-value">${month.visitors.value.toLocaleString()}</div>
-            <div class="stat-label">Visitors</div>
-            <div class="stat-period">Last 30 days</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">${month.pageviews.value.toLocaleString()}</div>
-            <div class="stat-label">Pageviews</div>
-            <div class="stat-period">Last 30 days</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">${formatDuration(month.visit_duration.value)}</div>
-            <div class="stat-label">Avg Duration</div>
-            <div class="stat-period">Last 30 days</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">${month.bounce_rate.value}%</div>
-            <div class="stat-label">Bounce Rate</div>
-            <div class="stat-period">Last 30 days</div>
-          </div>
-        </div>
-
-        <div class="grid">
-          <!-- Visitors Chart -->
-          <div class="card chart-card">
-            <h2>Visitors — Last 30 Days</h2>
-            <div class="bar-chart">
-              ${dailyData.map(d => {
-                const max = Math.max(...dailyData.map(x => x.visitors), 1);
-                const height = Math.max((d.visitors / max) * 100, 3);
-                const day = new Date(d.date).getDate();
-                return `<div class="bar-col"><div class="bar" style="height:${height}%"></div><span>${day}</span></div>`;
-              }).join('')}
-            </div>
-          </div>
-
-          <!-- Top Pages -->
-          <div class="card">
-            <h2>Top Pages</h2>
-            <div class="list">
-              ${pages.slice(0, 6).map((p, i) => {
-                const name = p.page === '/' ? 'Home' : p.page.replace(/^\//, '').replace(/-/g, ' ');
-                return `<div class="list-row"><span class="rank">${i+1}</span><span class="name">${name}</span><span class="value">${p.pageviews}</span></div>`;
-              }).join('')}
-            </div>
-          </div>
-        </div>
-
-        <div class="grid">
-          <!-- Sources -->
-          <div class="card">
-            <h2>Traffic Sources</h2>
-            <div class="sources">
-              ${sources.map(s => {
-                const pct = Math.round((s.visitors / totalSourceVisitors) * 100);
-                return `<div class="source"><div class="source-pct">${pct}%</div><div class="source-name">${s.source || 'Direct'}</div></div>`;
-              }).join('')}
-            </div>
-          </div>
-
-          <!-- Countries -->
-          <div class="card">
-            <h2>Countries</h2>
-            <div class="list">
-              ${countryData.map((c, i) => {
-                const code = countryNames[c.country] || c.country.slice(0,2).toUpperCase();
-                return `<div class="list-row"><span class="rank">${code}</span><span class="name">${c.country}</span><span class="value">${c.visitors}</span></div>`;
-              }).join('')}
-            </div>
-          </div>
-        </div>
-
-        <div class="grid">
-          <!-- Devices -->
-          <div class="card">
-            <h2>Devices</h2>
-            <div class="sources">
-              ${deviceData.map(d => {
-                const pct = Math.round((d.visitors / month.visitors.value) * 100);
-                return `<div class="source"><div class="source-pct">${pct}%</div><div class="source-name">${d.device}</div></div>`;
-              }).join('')}
-            </div>
-          </div>
-
-          <div class="card">
-            <h2>Quick Stats</h2>
-            <div class="list">
-              <div class="list-row"><span class="name">Pages per visit</span><span class="value">${(month.pageviews.value / (month.visitors.value || 1)).toFixed(1)}</span></div>
-              <div class="list-row"><span class="name">Mobile traffic</span><span class="value">${deviceData.find(d => d.device === 'Mobile')?.visitors || 0}</span></div>
-              <div class="list-row"><span class="name">Desktop traffic</span><span class="value">${deviceData.find(d => d.device === 'Desktop')?.visitors || 0}</span></div>
-            </div>
-          </div>
-        </div>
-      `;
-
-      document.getElementById('content').innerHTML = html;
-
-    } catch (err) {
-      console.error(err);
-      document.getElementById('content').innerHTML = `<div class="error">Failed to load analytics: ${err.message}</div>`;
-    }
-  }
-
-  loadAnalytics();
-</script>
 
 <style>
   .page {
     padding: 32px 40px;
-    max-width: 1100px;
+    max-width: 1200px;
   }
   
   .page-header {
@@ -196,17 +32,18 @@ import CommandLayout from '../../layouts/CommandLayout.astro';
     font-size: 24px;
     font-weight: 600;
     color: #C4A67C;
+    margin-bottom: 4px;
   }
   
   .source {
     font-size: 12px;
-    color: #555;
+    color: #666;
   }
   
   .loading {
     text-align: center;
     padding: 80px 20px;
-    color: #666;
+    color: #888;
   }
   
   .spinner {
@@ -221,23 +58,16 @@ import CommandLayout from '../../layouts/CommandLayout.astro';
   
   @keyframes spin { to { transform: rotate(360deg); } }
   
-  .error {
-    text-align: center;
-    padding: 40px;
-    color: #f43f5e;
-    background: rgba(244, 63, 94, 0.1);
-    border-radius: 12px;
-  }
-  
+  /* Stats Grid */
   .stats-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
-    margin-bottom: 24px;
+    margin-bottom: 28px;
   }
   
   .stat-card {
-    background: #0f1210;
+    background: #0a0c09;
     border: 1px solid #1a1d17;
     border-radius: 12px;
     padding: 20px;
@@ -245,23 +75,26 @@ import CommandLayout from '../../layouts/CommandLayout.astro';
   }
   
   .stat-value {
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 300;
     color: #C4A67C;
   }
   
   .stat-label {
-    font-size: 12px;
+    font-size: 11px;
     color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 6px;
+  }
+  
+  .stat-sub {
+    font-size: 10px;
+    color: #555;
     margin-top: 4px;
   }
   
-  .stat-period {
-    font-size: 10px;
-    color: #555;
-    margin-top: 2px;
-  }
-  
+  /* Grid */
   .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -270,14 +103,14 @@ import CommandLayout from '../../layouts/CommandLayout.astro';
   }
   
   .card {
-    background: #0f1210;
+    background: #0a0c09;
     border: 1px solid #1a1d17;
     border-radius: 12px;
     padding: 20px;
   }
   
   .card h2 {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     color: #888;
     text-transform: uppercase;
@@ -285,15 +118,12 @@ import CommandLayout from '../../layouts/CommandLayout.astro';
     margin-bottom: 16px;
   }
   
-  .chart-card {
-    grid-column: span 1;
-  }
-  
+  /* Bar Chart */
   .bar-chart {
     display: flex;
     align-items: flex-end;
-    gap: 3px;
-    height: 120px;
+    gap: 2px;
+    height: 100px;
   }
   
   .bar-col {
@@ -309,26 +139,21 @@ import CommandLayout from '../../layouts/CommandLayout.astro';
     width: 100%;
     background: linear-gradient(180deg, #C4A67C, #8a7656);
     border-radius: 2px 2px 0 0;
-    min-height: 3px;
+    min-height: 2px;
   }
   
-  .bar-col span {
-    font-size: 8px;
+  .bar-label {
+    font-size: 7px;
     color: #555;
     margin-top: 4px;
   }
   
-  .list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  
+  /* List */
   .list-row {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 0;
+    gap: 12px;
+    padding: 10px 0;
     border-bottom: 1px solid #1a1d17;
   }
   
@@ -336,16 +161,16 @@ import CommandLayout from '../../layouts/CommandLayout.astro';
   
   .rank {
     width: 24px;
-    font-size: 12px;
-    color: #555;
+    font-size: 11px;
+    color: #666;
     text-align: center;
   }
   
   .name {
     flex: 1;
     font-size: 13px;
+    color: #aaa;
     text-transform: capitalize;
-    color: #999;
   }
   
   .value {
@@ -354,30 +179,40 @@ import CommandLayout from '../../layouts/CommandLayout.astro';
     color: #C4A67C;
   }
   
+  /* Sources */
   .sources {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
     gap: 12px;
   }
   
-  .source {
-    background: rgba(61, 79, 61, 0.2);
+  .source-card {
+    background: rgba(61, 79, 61, 0.15);
     border: 1px solid #1a1d17;
     border-radius: 8px;
-    padding: 12px;
+    padding: 14px;
     text-align: center;
   }
   
   .source-pct {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 22px;
+    font-weight: 500;
     color: #C4A67C;
   }
   
   .source-name {
-    font-size: 11px;
+    font-size: 10px;
     color: #888;
     margin-top: 4px;
+  }
+  
+  .error {
+    text-align: center;
+    padding: 40px;
+    color: #f43f5e;
+    background: rgba(244, 63, 94, 0.1);
+    border: 1px solid rgba(244, 63, 94, 0.2);
+    border-radius: 12px;
   }
   
   @media (max-width: 900px) {
@@ -386,3 +221,139 @@ import CommandLayout from '../../layouts/CommandLayout.astro';
     .grid { grid-template-columns: 1fr; }
   }
 </style>
+
+<script is:inline>
+  async function fetchPlausible(endpoint, params = {}) {
+    const url = new URL('/api/plausible', window.location.origin);
+    url.searchParams.set('endpoint', endpoint);
+    Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+    
+    const res = await fetch(url.toString());
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    return res.json();
+  }
+
+  function formatDuration(seconds) {
+    if (!seconds || seconds < 1) return '0s';
+    if (seconds < 60) return `${Math.round(seconds)}s`;
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.round(seconds % 60);
+    return `${mins}m ${secs}s`;
+  }
+
+  async function loadData() {
+    try {
+      const [monthStats, timeseries, topPages, topSources, devices, countries] = await Promise.all([
+        fetchPlausible('aggregate', { period: '30d', metrics: 'visitors,pageviews,bounce_rate,visit_duration' }),
+        fetchPlausible('timeseries', { period: '30d', metrics: 'visitors' }),
+        fetchPlausible('breakdown', { period: '30d', property: 'event:page', metrics: 'pageviews', limit: '8' }),
+        fetchPlausible('breakdown', { period: '30d', property: 'visit:source', metrics: 'visitors', limit: '5' }),
+        fetchPlausible('breakdown', { period: '30d', property: 'visit:device', metrics: 'visitors' }),
+        fetchPlausible('breakdown', { period: '30d', property: 'visit:country', metrics: 'visitors', limit: '6' }),
+      ]);
+
+      const month = monthStats?.results || { visitors: { value: 0 }, pageviews: { value: 0 }, bounce_rate: { value: 0 }, visit_duration: { value: 0 } };
+      const dailyData = timeseries?.results || [];
+      const pages = topPages?.results || [];
+      const sources = topSources?.results || [];
+      const deviceData = devices?.results || [];
+      const countryData = countries?.results || [];
+      const totalSourceVisitors = sources.reduce((sum, s) => sum + s.visitors, 0) || 1;
+
+      document.getElementById('lastUpdate').textContent = `Live from Plausible — ${new Date().toLocaleTimeString()}`;
+
+      let html = `
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-value">${month.visitors.value.toLocaleString()}</div>
+            <div class="stat-label">Visitors</div>
+            <div class="stat-sub">Last 30 days</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${month.pageviews.value.toLocaleString()}</div>
+            <div class="stat-label">Pageviews</div>
+            <div class="stat-sub">Last 30 days</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${formatDuration(month.visit_duration.value)}</div>
+            <div class="stat-label">Avg Duration</div>
+            <div class="stat-sub">Last 30 days</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${month.bounce_rate.value}%</div>
+            <div class="stat-label">Bounce Rate</div>
+            <div class="stat-sub">Last 30 days</div>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <h2>Visitors — 30 Days</h2>
+            <div class="bar-chart">
+              ${dailyData.map(d => {
+                const max = Math.max(...dailyData.map(x => x.visitors), 1);
+                const height = Math.max((d.visitors / max) * 100, 3);
+                const day = new Date(d.date).getDate();
+                return `<div class="bar-col"><div class="bar" style="height:${height}%"></div><div class="bar-label">${day}</div></div>`;
+              }).join('')}
+            </div>
+          </div>
+          
+          <div class="card">
+            <h2>Top Pages</h2>
+            ${pages.slice(0, 6).map((p, i) => {
+              const name = p.page === '/' ? 'Home' : p.page.replace(/^\//, '').replace(/-/g, ' ').slice(0, 25);
+              return `<div class="list-row"><span class="rank">${i+1}</span><span class="name">${name}</span><span class="value">${p.pageviews}</span></div>`;
+            }).join('')}
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <h2>Traffic Sources</h2>
+            <div class="sources">
+              ${sources.map(s => {
+                const pct = Math.round((s.visitors / totalSourceVisitors) * 100);
+                return `<div class="source-card"><div class="source-pct">${pct}%</div><div class="source-name">${s.source || 'Direct'}</div></div>`;
+              }).join('')}
+            </div>
+          </div>
+          
+          <div class="card">
+            <h2>Countries</h2>
+            ${countryData.slice(0, 5).map((c, i) => {
+              return `<div class="list-row"><span class="rank">${i+1}</span><span class="name">${c.country}</span><span class="value">${c.visitors}</span></div>`;
+            }).join('')}
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <h2>Devices</h2>
+            <div class="sources">
+              ${deviceData.map(d => {
+                const pct = Math.round((d.visitors / month.visitors.value) * 100) || 0;
+                return `<div class="source-card"><div class="source-pct">${pct}%</div><div class="source-name">${d.device}</div></div>`;
+              }).join('')}
+            </div>
+          </div>
+          
+          <div class="card">
+            <h2>Quick Stats</h2>
+            <div class="list-row"><span class="name">Pages per visit</span><span class="value">${(month.pageviews.value / (month.visitors.value || 1)).toFixed(1)}</span></div>
+            <div class="list-row"><span class="name">Mobile</span><span class="value">${deviceData.find(d => d.device === 'Mobile')?.visitors || 0}</span></div>
+            <div class="list-row"><span class="name">Desktop</span><span class="value">${deviceData.find(d => d.device === 'Desktop')?.visitors || 0}</span></div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('content').innerHTML = html;
+
+    } catch (err) {
+      console.error(err);
+      document.getElementById('content').innerHTML = `<div class="error">Failed to load analytics: ${err.message}</div>`;
+    }
+  }
+
+  loadData();
+</script>
