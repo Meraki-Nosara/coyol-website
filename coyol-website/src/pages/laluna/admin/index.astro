@@ -1616,6 +1616,91 @@ import Layout from '../../../layouts/Layout.astro';
       return cachedReservations;
     }
 
+    // Table priority for auto-assignment
+    // Lower number = better table (assigned first to early reservations)
+    // Priority: Garden close to beach > Garden far > Terraza > Inside
+    function getTablePriority(tableId, zone) {
+      const layout = getLayout();
+      
+      // Zone priority (lower = better)
+      const zonePriority = {
+        'jardin': 0,    // Garden = best
+        'terraza': 100, // Balcony = less preferred
+        'inside': 200   // Indoor = least preferred
+      };
+      
+      const basePriority = zonePriority[zone] || 300;
+      
+      // Find table in layout
+      const tables = layout[zone] || [];
+      const table = tables.find(t => t.id === tableId);
+      if (!table) return basePriority + 50;
+      
+      // For garden: lower y = closer to beach = better
+      // y ranges roughly 30-260, normalize to 0-50 priority bonus
+      if (zone === 'jardin') {
+        const yPriority = Math.floor(table.y / 5); // 30->6, 260->52
+        return basePriority + yPriority;
+      }
+      
+      // For other zones, use position as tiebreaker
+      return basePriority + Math.floor(table.y / 5);
+    }
+
+    // Find best available table for a reservation
+    function findBestAvailableTable(date, time, guests, zonePreference) {
+      const layout = getLayout();
+      const reservations = getReservations().filter(r => 
+        r.date === date && 
+        r.status !== 'cancelled' &&
+        r.tableId // has a table assigned
+      );
+      
+      // Get all tables with priorities
+      const allTables = [];
+      for (const zone of ['jardin', 'terraza', 'inside']) {
+        const tables = layout[zone] || [];
+        for (const table of tables) {
+          allTables.push({
+            id: table.id,
+            zone,
+            name: table.name,
+            minCovers: table.minCovers,
+            maxCovers: table.maxCovers,
+            priority: getTablePriority(table.id, zone)
+          });
+        }
+      }
+      
+      // Sort by priority (best first)
+      allTables.sort((a, b) => a.priority - b.priority);
+      
+      // Parse reservation time to check for conflicts (2-hour window)
+      const [resHour, resMin] = time.split(':').map(Number);
+      const resMinutes = resHour * 60 + resMin;
+      
+      // Check each table for availability
+      for (const table of allTables) {
+        // Check capacity
+        if (guests < table.minCovers || guests > table.maxCovers) continue;
+        
+        // Check if table is occupied during this time window
+        const conflicting = reservations.some(r => {
+          if (r.tableId !== table.id) return false;
+          const [h, m] = r.time.split(':').map(Number);
+          const rMinutes = h * 60 + m;
+          // Assume 2-hour dining window
+          return Math.abs(rMinutes - resMinutes) < 120;
+        });
+        
+        if (!conflicting) {
+          return table.id;
+        }
+      }
+      
+      return null; // No table available
+    }
+
     // Save new reservation to Supabase
     async function saveReservation(reservation) {
       try {
@@ -1754,6 +1839,53 @@ import Layout from '../../../layouts/Layout.astro';
       return `${year}-${month}-${day}`;
     }
 
+    // Auto-assign tables to unassigned reservations
+    // First-come (by created_at) gets best tables
+    async function autoAssignTables() {
+      const reservations = getReservations();
+      
+      // Find unassigned confirmed reservations, sorted by creation time (first booked = first served)
+      const unassigned = reservations
+        .filter(r => !r.tableId && r.status === 'confirmed')
+        .sort((a, b) => (a.id || '').localeCompare(b.id || '')); // UUID v4 is roughly time-ordered
+      
+      if (unassigned.length === 0) return;
+      
+      console.log(`Auto-assigning ${unassigned.length} reservations...`);
+      
+      for (const res of unassigned) {
+        // Find best available table for this reservation
+        const bestTable = findBestAvailableTable(res.date, res.time, res.guests, res.zonePreference);
+        
+        if (bestTable) {
+          // Update in Supabase
+          try {
+            await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${res.id}`, {
+              method: 'PATCH',
+              headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+              },
+              body: JSON.stringify({ table_id: bestTable })
+            });
+            
+            // Update local cache
+            res.tableId = bestTable;
+            console.log(`Auto-assigned table ${bestTable} to ${res.guestName}`);
+          } catch (e) {
+            console.error('Failed to auto-assign:', e);
+          }
+        }
+      }
+      
+      // Refresh cache after assignments
+      if (unassigned.length > 0) {
+        await fetchReservations(getDateString(currentDate));
+      }
+    }
+
     function getShiftForTime(time) {
       const [hours] = time.split(':').map(Number);
       if (hours >= 7 && hours < 10) return 'Breakfast';
@@ -1785,6 +1917,10 @@ import Layout from '../../../layouts/Layout.astro';
     async function loadReservations() {
       const dateStr = getDateString(currentDate);
       await fetchReservations(dateStr);
+      
+      // Auto-assign tables to unassigned reservations (first-come-first-served)
+      await autoAssignTables();
+      
       const reservations = getReservations();
       
       // Filter by status
@@ -2540,14 +2676,24 @@ import Layout from '../../../layouts/Layout.astro';
       const name = document.getElementById('newName').value.trim();
       if (!name) { alert('Name required'); return; }
       
+      const date = document.getElementById('newDate').value;
+      const time = document.getElementById('newTime').value;
+      const guests = parseInt(document.getElementById('newGuests').value) || 2;
+      let tableId = document.getElementById('newTable').value || null;
+      
+      // Auto-assign best available table if none selected
+      if (!tableId) {
+        tableId = findBestAvailableTable(date, time, guests, null);
+      }
+      
       const reservation = {
-        date: document.getElementById('newDate').value,
-        time: document.getElementById('newTime').value,
-        guests: parseInt(document.getElementById('newGuests').value) || 2,
+        date,
+        time,
+        guests,
         guestName: name,
         guestPhone: document.getElementById('newPhone').value.trim(),
         guestEmail: document.getElementById('newEmail').value.trim(),
-        tableId: document.getElementById('newTable').value || null,
+        tableId,
         specialRequests: document.getElementById('newNotes').value.trim(),
         status: 'confirmed'
       };
