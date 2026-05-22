@@ -25,6 +25,7 @@ const properties: Record<string, any> = {
     tagline: 'Classic hacienda architecture with clay tile roof',
     location: 'Lot 14, Mar Azul',
     status: 'Completed',
+    price: 4800000,
     image: '/images/properties/casa-elle.jpg',
     features: ['Hacienda Style', 'Clay Tile Roof', 'Completed', 'Covered Terraces']
   },
@@ -33,6 +34,7 @@ const properties: Record<string, any> = {
     tagline: 'A dramatic cantilevered design floating above the landscape',
     location: 'Lot 28, Mar Azul',
     status: 'Design',
+    price: 920000,
     image: '/images/properties/casa-nest.jpg',
     features: ['Cantilevered Design', 'Infinity Pool', 'Ocean Views', 'Fire Pit Deck']
   },
@@ -49,6 +51,7 @@ const properties: Record<string, any> = {
     tagline: 'Bold contemporary design in harmony with the forest',
     location: 'Lot 34, Mar Azul',
     status: 'Design',
+    price: 5500000,
     image: '/images/properties/casa-umi.jpg',
     features: ['Black Charred Wood', 'Gabion Stone Walls', 'Forest Setting', 'Contemporary Design']
   },
@@ -57,6 +60,7 @@ const properties: Record<string, any> = {
     tagline: 'Modern farmhouse with sweeping mountain views',
     location: 'Lot 18, Mar Azul',
     status: 'Design',
+    price: 2300000,
     image: '/images/properties/casa-cacao.jpg',
     features: ['Stone & Wood', 'Mountain Views', 'Modern Farmhouse', 'Open Floor Plan']
   },
@@ -65,14 +69,16 @@ const properties: Record<string, any> = {
     tagline: 'Connected pavilions with jungle courtyards',
     location: 'Lot 21, Mar Azul',
     status: 'Design',
+    price: 2400000,
     image: '/images/properties/casa-luz.jpg',
     features: ['Pavilion Style', 'Stone Details', 'Jungle Compound', 'Indoor-Outdoor Living']
   },
   'casa-perch': {
     name: 'Casa Perch',
     tagline: 'Compact modern living with panoramic views',
-    location: 'Lot 27, Mar Azul',
+    location: 'Lot 26, Mar Azul',
     status: 'Design',
+    price: 960000,
     image: '/images/properties/casa-perch.jpg',
     features: ['Modern Design', 'Compact Living', 'Ocean Views', 'Efficient Layout']
   },
@@ -97,6 +103,7 @@ const properties: Record<string, any> = {
     tagline: 'Stone walls and black metal roofing create a striking farmhouse',
     location: 'Lot 2, Mar Azul',
     status: 'Under Construction',
+    price: 3900000,
     image: '/images/properties/casa-nispero.jpg',
     features: ['Stone Walls', 'Fire Pit', 'Reflecting Pool', 'Mountain Views']
   },
@@ -144,6 +151,44 @@ const property = properties[id as string];
       </div>
     </div>
   </section>
+
+  {property.price && (
+    <section class="financing-section">
+      <div class="container">
+        <h2>Investment Overview</h2>
+        <div class="price-display">
+          <span class="price-label">Price</span>
+          <span class="price-value">${property.price.toLocaleString()}</span>
+        </div>
+        
+        <div class="financing-card">
+          <h3>Developer Financing Available</h3>
+          <p class="financing-subtitle">No bank required • Close in 30 days • 8% interest</p>
+          
+          <div class="financing-breakdown">
+            <div class="financing-row">
+              <span>Down Payment (50%)</span>
+              <span class="amount">${(property.price * 0.5).toLocaleString()}</span>
+            </div>
+            <div class="financing-row">
+              <span>Financed Amount</span>
+              <span class="amount">${(property.price * 0.5).toLocaleString()}</span>
+            </div>
+            <div class="financing-row highlight">
+              <span>Monthly Payment (48 mo)</span>
+              <span class="amount monthly">${Math.round((property.price * 0.5) * (0.08/12) * Math.pow(1 + 0.08/12, 48) / (Math.pow(1 + 0.08/12, 48) - 1)).toLocaleString()}/mo</span>
+            </div>
+          </div>
+          
+          <div class="financing-note">
+            <p>Better than bank rates • No CR residency required • Property as collateral</p>
+          </div>
+          
+          <a href="/financing" class="financing-link">View All Financing Options →</a>
+        </div>
+      </div>
+    </section>
+  )}
 
   {property.floorplan && (
     <section class="floorplan-section">
@@ -325,10 +370,138 @@ const property = properties[id as string];
     text-decoration: underline;
   }
 
+  /* Financing Section */
+  .financing-section {
+    padding: 80px 24px;
+    background: #1A1F16;
+  }
+
+  .financing-section h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: #F5F3EF;
+    text-align: center;
+    margin: 0 0 40px 0;
+  }
+
+  .price-display {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .price-label {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #C4A67C;
+    margin-bottom: 8px;
+  }
+
+  .price-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 48px;
+    font-weight: 400;
+    color: #F5F3EF;
+  }
+
+  .financing-card {
+    background: rgba(61, 79, 61, 0.3);
+    border: 1px solid rgba(196, 166, 124, 0.2);
+    border-radius: 12px;
+    padding: 40px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .financing-card h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: #C4A67C;
+    margin: 0 0 8px 0;
+    text-align: center;
+  }
+
+  .financing-subtitle {
+    font-size: 13px;
+    color: rgba(245, 243, 239, 0.6);
+    text-align: center;
+    margin: 0 0 32px 0;
+  }
+
+  .financing-breakdown {
+    border-top: 1px solid rgba(196, 166, 124, 0.2);
+    padding-top: 24px;
+  }
+
+  .financing-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(196, 166, 124, 0.1);
+    color: #F5F3EF;
+    font-size: 15px;
+  }
+
+  .financing-row.highlight {
+    background: rgba(196, 166, 124, 0.1);
+    margin: 16px -20px 0;
+    padding: 20px;
+    border-radius: 8px;
+    border-bottom: none;
+  }
+
+  .financing-row .amount {
+    font-weight: 500;
+    color: #C4A67C;
+  }
+
+  .financing-row .amount.monthly {
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  .financing-note {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(196, 166, 124, 0.2);
+  }
+
+  .financing-note p {
+    font-size: 12px;
+    color: rgba(245, 243, 239, 0.5);
+    text-align: center;
+    margin: 0;
+  }
+
+  .financing-link {
+    display: block;
+    text-align: center;
+    margin-top: 24px;
+    font-size: 14px;
+    color: #C4A67C;
+    text-decoration: none;
+  }
+
+  .financing-link:hover {
+    text-decoration: underline;
+  }
+
   @media (max-width: 700px) {
     .features-grid {
       grid-template-columns: 1fr;
       gap: 40px;
+    }
+    
+    .price-value {
+      font-size: 36px;
+    }
+    
+    .financing-card {
+      padding: 24px;
     }
   }
 </style>
