@@ -138,7 +138,10 @@ const properties = [
               </p>
               {property.price && (
                 <span class="text-landrover-sand font-medium">
-                  ${(property.price / 1000000).toFixed(1)}M
+                  {property.price >= 1000000 
+                    ? `$${(property.price / 1000000).toFixed(1)}M`
+                    : `$${(property.price / 1000).toFixed(0)}K`
+                  }
                 </span>
               )}
             </div>

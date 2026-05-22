@@ -73,6 +73,11 @@
       transition: transform 0.5s ease;
     }
     
+    .grid-item img.contain {
+      object-fit: contain;
+      background: #f9f8f6;
+    }
+    
     .grid-item:hover img {
       transform: scale(1.03);
     }
@@ -90,41 +95,51 @@
       text-transform: uppercase;
     }
     
-    /* Hero - Teal Zellige */
-    .item-hero {
-      grid-column: span 6;
-      grid-row: span 2;
-      aspect-ratio: 1;
+    .grid-item .label.light {
+      background: linear-gradient(transparent, rgba(255,255,255,0.95));
+      color: #333;
     }
     
-    /* Right column stack */
+    /* Hero - Teal Zellige */
+    .item-hero {
+      grid-column: span 5;
+      grid-row: span 2;
+    }
+    
+    /* Shower fixture - tall, no crop */
+    .item-shower-fixture {
+      grid-column: span 3;
+      grid-row: span 2;
+    }
+    
+    /* Right column */
     .item-sink {
-      grid-column: span 6;
-      aspect-ratio: 16/10;
+      grid-column: span 4;
+      aspect-ratio: 16/11;
     }
     
     .item-marble {
-      grid-column: span 6;
-      aspect-ratio: 16/10;
+      grid-column: span 4;
+      aspect-ratio: 16/11;
     }
     
-    /* Second row */
+    /* Fixtures Row */
     .item-tub-filler {
-      grid-column: span 4;
-      aspect-ratio: 3/4;
-    }
-    
-    .item-shower-fixture {
-      grid-column: span 4;
+      grid-column: span 3;
       aspect-ratio: 3/4;
     }
     
     .item-pendant {
-      grid-column: span 4;
-      aspect-ratio: 3/4;
+      grid-column: span 5;
+      aspect-ratio: 4/3;
     }
     
-    /* Third row */
+    .item-faucet {
+      grid-column: span 4;
+      aspect-ratio: 1;
+    }
+    
+    /* Outdoor Section */
     .item-stone-tub {
       grid-column: span 5;
       aspect-ratio: 4/3;
@@ -135,19 +150,14 @@
       aspect-ratio: 16/9;
     }
     
-    /* Fourth row */
+    /* Details Row */
     .item-shower-floor {
       grid-column: span 4;
       aspect-ratio: 1;
     }
     
-    .item-faucet {
-      grid-column: span 4;
-      aspect-ratio: 1;
-    }
-    
     .color-palette {
-      grid-column: span 4;
+      grid-column: span 8;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -156,7 +166,7 @@
     /* Color Palette */
     .palette-container {
       background: #FAFAF8;
-      padding: 25px;
+      padding: 30px;
       border: 1px solid #E8E4DE;
     }
     
@@ -172,7 +182,7 @@
     
     .palette-colors {
       display: flex;
-      gap: 10px;
+      gap: 25px;
       flex-wrap: wrap;
     }
     
@@ -181,15 +191,15 @@
     }
     
     .swatch {
-      width: 50px;
-      height: 50px;
+      width: 55px;
+      height: 55px;
       border-radius: 50%;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       border: 1px solid rgba(0,0,0,0.1);
     }
     
     .color-swatch span {
-      font-size: 0.6rem;
+      font-size: 0.65rem;
       letter-spacing: 0.05em;
       text-transform: uppercase;
       color: #666;
@@ -287,10 +297,15 @@
     </div>
     
     <div class="grid">
-      <!-- Hero Section -->
+      <!-- Hero Row -->
       <div class="grid-item item-hero">
         <img src="images/04-teal-zellige.jpg" alt="Teal Zellige Tiles">
         <div class="label">Teal Zellige — Shower & Backsplash</div>
+      </div>
+      
+      <div class="grid-item item-shower-fixture">
+        <img src="images/01-shower-fixture.jpg" alt="Exposed Shower Fixture" class="contain">
+        <div class="label light">Exposed Brass Shower</div>
       </div>
       
       <div class="grid-item item-sink">
@@ -313,14 +328,14 @@
         <div class="label">Polished Brass Tub Filler</div>
       </div>
       
-      <div class="grid-item item-shower-fixture">
-        <img src="images/01-shower-fixture.jpg" alt="Exposed Shower Fixture">
-        <div class="label">Exposed Brass Shower</div>
-      </div>
-      
       <div class="grid-item item-pendant">
         <img src="images/09-pendant-lights.jpg" alt="Beaded Pendant Lights">
         <div class="label">Beaded Pendant Lights</div>
+      </div>
+      
+      <div class="grid-item item-faucet">
+        <img src="images/03-vanity-faucet.jpg" alt="Modern Brass Faucet">
+        <div class="label">Brushed Brass Faucet</div>
       </div>
       
       <!-- Outdoor Section -->
@@ -340,17 +355,12 @@
       
       <!-- Details Row -->
       <div class="section-label">
-        <h2>Details & Textures</h2>
+        <h2>Details & Palette</h2>
       </div>
       
       <div class="grid-item item-shower-floor">
         <img src="images/10-shower-floor.jpg" alt="Limestone Finger Mosaic">
         <div class="label">Limestone Finger Mosaic — Shower Floor</div>
-      </div>
-      
-      <div class="grid-item item-faucet">
-        <img src="images/03-vanity-faucet.jpg" alt="Modern Brass Faucet">
-        <div class="label">Brushed Brass Faucet</div>
       </div>
       
       <div class="color-palette">
@@ -376,6 +386,10 @@
             <div class="color-swatch">
               <div class="swatch" style="background: #F5F3EF;"></div>
               <span>Cream</span>
+            </div>
+            <div class="color-swatch">
+              <div class="swatch" style="background: #6B4423;"></div>
+              <span>Wood</span>
             </div>
           </div>
         </div>
