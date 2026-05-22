@@ -5,6 +5,9 @@ import Layout from '../layouts/Layout.astro';
 <Layout title="Financing | Coyol Real Estate">
   <main class="financing-page">
     
+    <!-- Back to Home -->
+    <a href="/" class="back-home">← Back to Home</a>
+
     <!-- Hero Section -->
     <section class="hero">
       <div class="hero-content">
@@ -818,6 +821,27 @@ import Layout from '../layouts/Layout.astro';
       gap: 8px;
       text-align: center;
     }
+  }
+
+  .back-home {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    z-index: 100;
+    color: #C4A67C;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 10px 16px;
+    background: rgba(26, 31, 22, 0.8);
+    border: 1px solid rgba(196, 166, 124, 0.3);
+    border-radius: 6px;
+    backdrop-filter: blur(8px);
+    transition: all 0.3s;
+  }
+
+  .back-home:hover {
+    background: rgba(196, 166, 124, 0.2);
+    border-color: #C4A67C;
   }
 </style>
 </Layout>
