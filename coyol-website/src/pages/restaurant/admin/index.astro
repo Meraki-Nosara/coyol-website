@@ -2062,7 +2062,9 @@ import Layout from '../../../layouts/Layout.astro';
       
       // Populate edit form with current values
       document.getElementById('editDate').value = res.date;
-      document.getElementById('editTime').value = res.time;
+      // Strip seconds from time (DB stores HH:MM:SS, dropdown uses HH:MM)
+      const timeForDropdown = res.time ? res.time.slice(0, 5) : '';
+      document.getElementById('editTime').value = timeForDropdown;
       document.getElementById('editGuests').value = res.guests;
       document.getElementById('editZone').value = res.zonePreference || 'any';
       document.getElementById('editNotes').value = res.specialRequests || '';
