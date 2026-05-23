@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-21T07:58:22.236954",
+  "lastUpdated": "2026-05-23T07:15:49.674304",
   "source": "Anlly QuickBooks Ventas files (converted to NET)",
   "daily": [
     {
@@ -2129,18 +2129,6 @@
     },
     {
       "date": "2026-05-12",
-      "restaurant": "laluna",
-      "cash": 342750,
-      "card": 2235722,
-      "total": 2578472,
-      "netSales": 2097892,
-      "service10": 207854,
-      "iva13": 272726,
-      "source": "ingrid_email",
-      "cashier": "Kelsy Ruiz"
-    },
-    {
-      "date": "2026-05-12",
       "restaurant": "coyol",
       "cash": 179275,
       "card": 1768455,
@@ -2164,16 +2152,16 @@
       "cashier": "Juan Castillo"
     },
     {
-      "date": "2026-05-13",
+      "date": "2026-05-12",
       "restaurant": "laluna",
-      "cash": 61450,
-      "card": 1990214,
-      "total": 2051664,
-      "netSales": 1681402,
-      "service10": 151379,
-      "iva13": 218583,
+      "cash": 342750,
+      "card": 2235722,
+      "total": 2578472,
+      "netSales": 2097892,
+      "service10": 207854,
+      "iva13": 272726,
       "source": "ingrid_email",
-      "cashier": "Julia Arrieta"
+      "cashier": "Kelsy Ruiz"
     },
     {
       "date": "2026-05-13",
@@ -2200,16 +2188,16 @@
       "cashier": "Juan Castillo"
     },
     {
-      "date": "2026-05-14",
+      "date": "2026-05-13",
       "restaurant": "laluna",
-      "cash": 351130,
-      "card": 2271094,
-      "total": 2622224,
-      "netSales": 2133292,
-      "service10": 201604,
-      "iva13": 277328,
+      "cash": 61450,
+      "card": 1990214,
+      "total": 2051664,
+      "netSales": 1681402,
+      "service10": 151379,
+      "iva13": 218583,
       "source": "ingrid_email",
-      "cashier": "Diego Lopez"
+      "cashier": "Julia Arrieta"
     },
     {
       "date": "2026-05-14",
@@ -2236,16 +2224,16 @@
       "cashier": "Raul Rodriguez"
     },
     {
-      "date": "2026-05-15",
+      "date": "2026-05-14",
       "restaurant": "laluna",
-      "cash": 303055,
-      "card": 2947075,
-      "total": 3250130,
-      "netSales": 2652256,
-      "service10": 253080,
-      "iva13": 344794,
+      "cash": 351130,
+      "card": 2271094,
+      "total": 2622224,
+      "netSales": 2133292,
+      "service10": 201604,
+      "iva13": 277328,
       "source": "ingrid_email",
-      "cashier": "Julia Arrieta"
+      "cashier": "Diego Lopez"
     },
     {
       "date": "2026-05-15",
@@ -2272,14 +2260,14 @@
       "cashier": "Raul Rodriguez"
     },
     {
-      "date": "2026-05-16",
+      "date": "2026-05-15",
       "restaurant": "laluna",
-      "cash": 71300,
-      "card": 2604037,
-      "total": 2675337,
-      "netSales": 2180371,
-      "service10": 211517,
-      "iva13": 283449,
+      "cash": 303055,
+      "card": 2947075,
+      "total": 3250130,
+      "netSales": 2652256,
+      "service10": 253080,
+      "iva13": 344794,
       "source": "ingrid_email",
       "cashier": "Julia Arrieta"
     },
@@ -2308,14 +2296,14 @@
       "cashier": "Raul Rodriguez"
     },
     {
-      "date": "2026-05-17",
+      "date": "2026-05-16",
       "restaurant": "laluna",
-      "cash": 239350,
-      "card": 2593453,
-      "total": 2832803,
-      "netSales": 2310690,
-      "service10": 221722,
-      "iva13": 300390,
+      "cash": 71300,
+      "card": 2604037,
+      "total": 2675337,
+      "netSales": 2180371,
+      "service10": 211517,
+      "iva13": 283449,
       "source": "ingrid_email",
       "cashier": "Julia Arrieta"
     },
@@ -2344,16 +2332,16 @@
       "cashier": "Carlos Cabrera"
     },
     {
-      "date": "2026-05-18",
+      "date": "2026-05-17",
       "restaurant": "laluna",
-      "cash": 326940,
-      "card": 3132191,
-      "total": 3459131,
-      "netSales": 2814992,
-      "service10": 278190,
-      "iva13": 365949,
+      "cash": 239350,
+      "card": 2593453,
+      "total": 2832803,
+      "netSales": 2310690,
+      "service10": 221722,
+      "iva13": 300390,
       "source": "ingrid_email",
-      "cashier": "Isa Prendas"
+      "cashier": "Julia Arrieta"
     },
     {
       "date": "2026-05-18",
@@ -2380,16 +2368,16 @@
       "cashier": "Juan Castillo"
     },
     {
-      "date": "2026-05-19",
+      "date": "2026-05-18",
       "restaurant": "laluna",
-      "cash": 56500,
-      "card": 1913393,
-      "total": 1969893,
-      "netSales": 1605675,
-      "service10": 155460,
-      "iva13": 208738,
+      "cash": 326940,
+      "card": 3132191,
+      "total": 3459131,
+      "netSales": 2814992,
+      "service10": 278190,
+      "iva13": 365949,
       "source": "ingrid_email",
-      "cashier": "Carmen Mu\u00f1oz"
+      "cashier": "Isa Prendas"
     },
     {
       "date": "2026-05-19",
@@ -2416,22 +2404,16 @@
       "cashier": "Juan Castillo"
     },
     {
-      "date": "2026-05-20",
-      "laluna": {
-        "cash": 388575,
-        "card": 2684420.44,
-        "total": 2972928.77
-      },
-      "coyol": {
-        "cash": 50000,
-        "card": 1350171,
-        "total": 1350171
-      },
-      "esh": {
-        "cash": 86150,
-        "card": 486115.79,
-        "total": 502265.78
-      }
+      "date": "2026-05-19",
+      "restaurant": "laluna",
+      "cash": 56500,
+      "card": 1913393,
+      "total": 1969893,
+      "netSales": 1605675,
+      "service10": 155460,
+      "iva13": 208738,
+      "source": "ingrid_email",
+      "cashier": "Carmen Mu\u00f1oz"
     },
     {
       "date": "2026-05-20",
@@ -2458,14 +2440,14 @@
       "cashier": "Juan Castillo"
     },
     {
-      "date": "2026-05-21",
+      "date": "2026-05-20",
       "restaurant": "laluna",
-      "cash": 246356,
-      "card": 3367044,
-      "total": 3613400,
-      "netSales": 2940434,
-      "service10": 290707,
-      "iva13": 382257,
+      "cash": 388575,
+      "card": 2684420,
+      "total": 2972928,
+      "netSales": 2432441,
+      "service10": 224270,
+      "iva13": 316218,
       "source": "ingrid_email",
       "cashier": "Julia Arrieta"
     },
@@ -2492,6 +2474,18 @@
       "iva13": 52489,
       "source": "ingrid_email",
       "cashier": "Raul Rodriguez"
+    },
+    {
+      "date": "2026-05-21",
+      "restaurant": "laluna",
+      "cash": 246356,
+      "card": 3367044,
+      "total": 3613400,
+      "netSales": 2940434,
+      "service10": 290707,
+      "iva13": 382257,
+      "source": "ingrid_email",
+      "cashier": "Julia Arrieta"
     }
   ]
 }
