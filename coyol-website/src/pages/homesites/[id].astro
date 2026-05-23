@@ -135,18 +135,27 @@ const property = properties[id as string];
 
   <section class="content">
     <div class="container">
-      <div class="features-grid">
-        <div class="features">
-          <h2>Design Features</h2>
-          <ul>
-            {property.features.map((f: string) => <li>{f}</li>)}
-          </ul>
+      <div class="features-showcase">
+        <div class="features-header">
+          <span class="section-label">The Vision</span>
+          <h2>{property.name}</h2>
+          <p class="features-intro">{property.tagline}</p>
         </div>
-        <div class="inquiry">
-          <h2>Interested?</h2>
-          <p>This home is currently in the design phase. Contact us to learn more about customization options and availability.</p>
-          <a href={`https://wa.me/18184018068?text=Hello%2C%20I'm%20interested%20in%20${encodeURIComponent(property.name)}`} target="_blank" class="cta-button">
-            Inquire Now
+        <div class="features-list">
+          {property.features.map((f: string, i: number) => (
+            <div class="feature-item" style={`animation-delay: ${i * 0.1}s`}>
+              <span class="feature-number">0{i + 1}</span>
+              <span class="feature-text">{f}</span>
+            </div>
+          ))}
+        </div>
+        <div class="inquiry-minimal">
+          <p>Currently in design phase. Customization available.</p>
+          <a href={`https://wa.me/18184018068?text=Hello%2C%20I'm%20interested%20in%20${encodeURIComponent(property.name)}`} target="_blank" class="cta-button-dark">
+            <span>Schedule a Consultation</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
           </a>
         </div>
       </div>
@@ -267,8 +276,8 @@ const property = properties[id as string];
   }
 
   .content {
-    padding: 80px 24px;
-    background: #F5F3EF;
+    padding: 100px 24px;
+    background: #1A1F16;
   }
 
   .container {
@@ -276,43 +285,116 @@ const property = properties[id as string];
     margin: 0 auto;
   }
 
-  .features-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
+  .features-showcase {
+    text-align: center;
   }
 
-  .features h2, .inquiry h2 {
+  .section-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #C4A67C;
+    margin-bottom: 16px;
+  }
+
+  .features-header h2 {
     font-family: 'Playfair Display', Georgia, serif;
-    font-size: 28px;
+    font-size: clamp(32px, 5vw, 48px);
     font-weight: 400;
-    color: #1A1F16;
+    color: #F5F3EF;
+    margin: 0 0 16px 0;
+  }
+
+  .features-intro {
+    font-size: 18px;
+    color: rgba(245, 243, 239, 0.7);
+    max-width: 600px;
+    margin: 0 auto 60px auto;
+    line-height: 1.6;
+  }
+
+  .features-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-bottom: 60px;
+    text-align: left;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 20px 24px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(196, 166, 124, 0.15);
+    transition: all 0.3s ease;
+  }
+
+  .feature-item:hover {
+    background: rgba(196, 166, 124, 0.08);
+    border-color: rgba(196, 166, 124, 0.3);
+  }
+
+  .feature-number {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 14px;
+    color: #C4A67C;
+    opacity: 0.6;
+  }
+
+  .feature-text {
+    font-size: 15px;
+    color: #F5F3EF;
+    letter-spacing: 0.5px;
+  }
+
+  .inquiry-minimal {
+    padding-top: 40px;
+    border-top: 1px solid rgba(196, 166, 124, 0.15);
+  }
+
+  .inquiry-minimal p {
+    font-size: 14px;
+    color: rgba(245, 243, 239, 0.5);
+    letter-spacing: 1px;
+    text-transform: uppercase;
     margin: 0 0 24px 0;
   }
 
-  .features ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  .cta-button-dark {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: transparent;
+    border: 1px solid #C4A67C;
+    color: #C4A67C;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    text-decoration: none;
+    transition: all 0.3s ease;
   }
 
-  .features li {
-    font-size: 16px;
-    color: #444;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(61,79,61,0.15);
-    padding-left: 24px;
-    position: relative;
+  .cta-button-dark:hover {
+    background: #C4A67C;
+    color: #1A1F16;
   }
 
-  .features li::before {
-    content: '✓';
-    position: absolute;
-    left: 0;
-    color: #3D4F3D;
+  .cta-button-dark svg {
+    transition: transform 0.3s ease;
   }
 
-  .inquiry p {
+  .cta-button-dark:hover svg {
+    transform: translateX(4px);
+  }
+
+  /* Legacy styles kept for compatibility */
+  .inquiry p.legacy {
     font-size: 16px;
     color: #666;
     line-height: 1.7;
@@ -492,9 +574,13 @@ const property = properties[id as string];
   }
 
   @media (max-width: 700px) {
-    .features-grid {
+    .features-list {
       grid-template-columns: 1fr;
-      gap: 40px;
+      gap: 16px;
+    }
+    
+    .feature-item {
+      padding: 16px 20px;
     }
     
     .price-value {
@@ -503,6 +589,11 @@ const property = properties[id as string];
     
     .financing-card {
       padding: 24px;
+    }
+    
+    .cta-button-dark {
+      width: 100%;
+      justify-content: center;
     }
   }
 </style>
