@@ -12,6 +12,9 @@ const allLeads = guests
 
 const hot = allLeads.filter(g => g.segment === 'hot');
 const warm = allLeads.filter(g => g.segment === 'warm');
+const score50 = allLeads.filter(g => g.lead_score >= 50);
+const score45 = allLeads.filter(g => g.lead_score >= 45 && g.lead_score < 50);
+const score40 = allLeads.filter(g => g.lead_score >= 40 && g.lead_score < 45);
 ---
 
 <CommandLayout title="Leads" active="leads">
@@ -22,10 +25,16 @@ const warm = allLeads.filter(g => g.segment === 'warm');
         <h1>All Leads</h1>
         <span class="subtitle">Top 200 by score · US & Canada</span>
       </div>
-      <div class="filters">
-        <button class="filter active" data-filter="all">All ({allLeads.length})</button>
-        <button class="filter" data-filter="hot">Hot ({hot.length})</button>
-        <button class="filter" data-filter="warm">Warm ({warm.length})</button>
+      <div class="header-controls">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search by name..." />
+        </div>
+        <div class="filters">
+          <button class="filter active" data-filter="all">All ({allLeads.length})</button>
+          <button class="filter" data-filter="50">50+ ({score50.length})</button>
+          <button class="filter" data-filter="45">45+ ({score45.length})</button>
+          <button class="filter" data-filter="40">40+ ({score40.length})</button>
+        </div>
       </div>
     </header>
 
@@ -44,7 +53,7 @@ const warm = allLeads.filter(g => g.segment === 'warm');
         </thead>
         <tbody>
           {allLeads.map((lead, i) => (
-            <tr data-segment={lead.segment}>
+            <tr data-segment={lead.segment} data-score={lead.lead_score} data-name={lead.name?.toLowerCase() || ''}>
               <td class="col-rank">{i + 1}</td>
               <td class="col-name">{lead.name || '—'}</td>
               <td class="col-email">{lead.email}</td>
@@ -72,23 +81,41 @@ const warm = allLeads.filter(g => g.segment === 'warm');
 </CommandLayout>
 
 <script>
+  const rows = document.querySelectorAll('#leadsTable tbody tr');
+  const searchInput = document.getElementById('searchInput');
+  let currentFilter = 'all';
+  let currentSearch = '';
+
+  function filterRows() {
+    rows.forEach(row => {
+      const score = parseInt(row.dataset.score);
+      const name = row.dataset.name || '';
+      
+      // Score filter
+      let showByScore = true;
+      if (currentFilter === '50') showByScore = score >= 50;
+      else if (currentFilter === '45') showByScore = score >= 45;
+      else if (currentFilter === '40') showByScore = score >= 40;
+      
+      // Name search
+      const showBySearch = !currentSearch || name.includes(currentSearch.toLowerCase());
+      
+      row.style.display = (showByScore && showBySearch) ? '' : 'none';
+    });
+  }
+
   document.querySelectorAll('.filter').forEach(btn => {
     btn.addEventListener('click', () => {
-      // Update active state
       document.querySelectorAll('.filter').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      
-      const filter = btn.dataset.filter;
-      const rows = document.querySelectorAll('#leadsTable tbody tr');
-      
-      rows.forEach(row => {
-        if (filter === 'all') {
-          row.style.display = '';
-        } else {
-          row.style.display = row.dataset.segment === filter ? '' : 'none';
-        }
-      });
+      currentFilter = btn.dataset.filter;
+      filterRows();
     });
+  });
+
+  searchInput.addEventListener('input', (e) => {
+    currentSearch = e.target.value;
+    filterRows();
   });
 </script>
 
@@ -115,6 +142,32 @@ const warm = allLeads.filter(g => g.segment === 'warm');
     color: #555;
   }
   
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .search-box input {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(196, 166, 124, 0.3);
+    border-radius: 6px;
+    padding: 8px 14px;
+    color: #F5F3EF;
+    font-size: 13px;
+    width: 200px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-box input::placeholder {
+    color: #666;
+  }
+
+  .search-box input:focus {
+    border-color: #C4A67C;
+  }
+
   .filters {
     display: flex;
     gap: 8px;
