@@ -193,7 +193,7 @@ import Layout from '../../../layouts/Layout.astro';
             </div>
             <div class="form-group">
               <label>Guests</label>
-              <input type="number" id="newGuests" class="form-input" value="2" min="1" max="20" />
+              <input type="number" id="newGuests" class="form-input" value="2" min="1" max="50" />
             </div>
           </div>
           <div class="form-row">
@@ -248,7 +248,7 @@ import Layout from '../../../layouts/Layout.astro';
               <button class="guest-btn" data-guests="5">5</button>
               <button class="guest-btn" data-guests="6">6+</button>
             </div>
-            <input type="number" id="walkinGuestCount" value="4" min="1" max="20" class="form-input" style="display:none;" />
+            <input type="number" id="walkinGuestCount" value="4" min="1" max="50" class="form-input" style="display:none;" />
           </div>
           <div class="walkin-table">
             <label>Table (optional)</label>
@@ -359,20 +359,7 @@ import Layout from '../../../layouts/Layout.astro';
           <div class="form-row">
             <div class="form-group">
               <label>Party Size</label>
-              <select id="editGuests" class="form-input">
-                <option value="1">1 guest</option>
-                <option value="2">2 guests</option>
-                <option value="3">3 guests</option>
-                <option value="4">4 guests</option>
-                <option value="5">5 guests</option>
-                <option value="6">6 guests</option>
-                <option value="7">7 guests</option>
-                <option value="8">8 guests</option>
-                <option value="9">9 guests</option>
-                <option value="10">10 guests</option>
-                <option value="11">11 guests</option>
-                <option value="12">12 guests</option>
-              </select>
+              <input type="number" id="editGuests" class="form-input" min="1" max="50" value="2" />
             </div>
             <div class="form-group">
               <label>Seating Preference</label>
@@ -2615,13 +2602,14 @@ import Layout from '../../../layouts/Layout.astro';
         btn.classList.toggle('active', btn.dataset.guests === '4');
       });
       document.getElementById('walkinGuestCount').value = 4;
-      // Populate tables
+      // Populate tables from current zone layout
       const tableSelect = document.getElementById('walkinTable');
       tableSelect.innerHTML = '<option value="">Auto-assign</option>';
-      tables.forEach(t => {
-        if (t.capacity >= walkinGuests) {
-          tableSelect.innerHTML += `<option value="${t.id}">${t.name} (${t.capacity})</option>`;
-        }
+      const layouts = getLayout();
+      const allTables = [...(layouts.terraza || []), ...(layouts.lounge || []), ...(layouts.jardin || [])];
+      allTables.forEach(t => {
+        const capacity = t.maxCovers || 4;
+        tableSelect.innerHTML += `<option value="${t.id}">${t.name} (${capacity}p)</option>`;
       });
       document.getElementById('walkinModal').classList.add('open');
     }
