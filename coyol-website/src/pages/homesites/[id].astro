@@ -133,34 +133,11 @@ const property = properties[id as string];
     </div>
   </section>
 
+  {/* Features section hidden - keeping hero + investment only
   <section class="content">
-    <div class="container">
-      <div class="features-showcase">
-        <div class="features-header">
-          <span class="section-label">The Vision</span>
-          <h2>{property.name}</h2>
-          <p class="features-intro">{property.tagline}</p>
-        </div>
-        <div class="features-list">
-          {property.features.map((f: string, i: number) => (
-            <div class="feature-item" style={`animation-delay: ${i * 0.1}s`}>
-              <span class="feature-number">0{i + 1}</span>
-              <span class="feature-text">{f}</span>
-            </div>
-          ))}
-        </div>
-        <div class="inquiry-minimal">
-          <p>Currently in design phase. Customization available.</p>
-          <a href={`https://wa.me/18184018068?text=Hello%2C%20I'm%20interested%20in%20${encodeURIComponent(property.name)}`} target="_blank" class="cta-button-dark">
-            <span>Schedule a Consultation</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-      </div>
-    </div>
+    ...
   </section>
+  */}
 
   {property.price && (
     <section class="financing-section">
