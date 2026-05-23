@@ -4,17 +4,15 @@ import guestData from '../../data/guests-enriched.json';
 
 const guests = guestData.guests || [];
 
-// Filter and sort
+// Filter and sort - ALL leads with score 40+
 const allLeads = guests
-  .filter(g => g.region !== 'LatAm' && g.segment !== 'local')
-  .sort((a, b) => b.lead_score - a.lead_score)
-  .slice(0, 200); // Top 200 for now
+  .filter(g => g.region !== 'LatAm' && g.segment !== 'local' && g.lead_score >= 40)
+  .sort((a, b) => b.lead_score - a.lead_score);
 
-const hot = allLeads.filter(g => g.segment === 'hot');
-const warm = allLeads.filter(g => g.segment === 'warm');
+// Counts for filters (cumulative - 50+ means 50 and above)
 const score50 = allLeads.filter(g => g.lead_score >= 50);
-const score45 = allLeads.filter(g => g.lead_score >= 45 && g.lead_score < 50);
-const score40 = allLeads.filter(g => g.lead_score >= 40 && g.lead_score < 45);
+const score45 = allLeads.filter(g => g.lead_score >= 45);
+const score40 = allLeads.filter(g => g.lead_score >= 40);
 ---
 
 <CommandLayout title="Leads" active="leads">
@@ -23,7 +21,7 @@ const score40 = allLeads.filter(g => g.lead_score >= 40 && g.lead_score < 45);
     <header class="page-header">
       <div>
         <h1>All Leads</h1>
-        <span class="subtitle">Top 200 by score · US & Canada</span>
+        <span class="subtitle">{allLeads.length} leads with score 40+ · US & Canada</span>
       </div>
       <div class="header-controls">
         <div class="search-box">
