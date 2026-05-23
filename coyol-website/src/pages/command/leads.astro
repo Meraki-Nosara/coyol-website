@@ -28,11 +28,11 @@ const staticGuests = (guestData.guests || [])
   .filter((g: any) => g.region !== 'LatAm' && g.segment !== 'local' && g.lead_score >= 40);
 
 // Merge: CRM guests take priority (by email), then add static guests
-const crmEmails = new Set(crmGuests.map((g: any) => g.guest_email?.toLowerCase()));
+const crmEmails = new Set(crmGuests.map((g: any) => g.email?.toLowerCase()));
 const mergedGuests = [
   ...crmGuests.map((g: any) => ({
-    name: g.guest_name,
-    email: g.guest_email,
+    name: g.name,
+    email: g.email,
     city: g.city,
     region: g.region,
     source: g.source || 'reservation',
