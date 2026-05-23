@@ -2,14 +2,49 @@
 import CommandLayout from '../../layouts/CommandLayout.astro';
 import guestData from '../../data/guests-enriched.json';
 
-const guests = guestData.guests || [];
+const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ueGp6dnFncnJvZGFsY210bnRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQzMjk5NTUsImV4cCI6MjA1OTkwNTk1NX0.aBcMjkXJpVLxjn20bLwNWPqsqlBkjAlP_wKn1MRu2qA';
 
-// Filter and sort - ALL leads with score 40+
-const allLeads = guests
-  .filter(g => g.region !== 'LatAm' && g.segment !== 'local' && g.lead_score >= 40)
-  .sort((a, b) => b.lead_score - a.lead_score);
+// Fetch live CRM guests from Supabase
+let crmGuests: any[] = [];
+try {
+  const response = await fetch(`${SUPABASE_URL}/rest/v1/crm_guests?lead_score=gte.40&select=*`, {
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+    }
+  });
+  if (response.ok) {
+    crmGuests = await response.json();
+  }
+} catch (e) {
+  console.error('Failed to fetch CRM guests:', e);
+}
 
-// Counts for filters (cumulative - 50+ means 50 and above)
+// Static guests from JSON
+const staticGuests = (guestData.guests || [])
+  .filter((g: any) => g.region !== 'LatAm' && g.segment !== 'local' && g.lead_score >= 40);
+
+// Merge: CRM guests take priority (by email), then add static guests
+const crmEmails = new Set(crmGuests.map((g: any) => g.guest_email?.toLowerCase()));
+const mergedGuests = [
+  ...crmGuests.map((g: any) => ({
+    name: g.guest_name,
+    email: g.guest_email,
+    city: g.city,
+    region: g.region,
+    source: g.source || 'reservation',
+    lead_score: g.lead_score,
+    segment: g.lead_score >= 50 ? 'hot' : g.lead_score >= 40 ? 'warm' : 'cold',
+    is_new: true
+  })),
+  ...staticGuests.filter((g: any) => !crmEmails.has(g.email?.toLowerCase()))
+];
+
+// Sort by score
+const allLeads = mergedGuests.sort((a, b) => b.lead_score - a.lead_score);
+
+// Counts for filters
 const score50 = allLeads.filter(g => g.lead_score >= 50);
 const score45 = allLeads.filter(g => g.lead_score >= 45);
 const score40 = allLeads.filter(g => g.lead_score >= 40);
@@ -53,7 +88,10 @@ const score40 = allLeads.filter(g => g.lead_score >= 40);
           {allLeads.map((lead, i) => (
             <tr data-segment={lead.segment} data-score={lead.lead_score} data-name={lead.name?.toLowerCase() || ''}>
               <td class="col-rank">{i + 1}</td>
-              <td class="col-name">{lead.name || '—'}</td>
+              <td class="col-name">
+                {lead.name || '—'}
+                {lead.is_new && <span class="new-badge">NEW</span>}
+              </td>
               <td class="col-email">{lead.email}</td>
               <td class="col-city">{lead.city || lead.region || '—'}</td>
               <td class="col-source">{lead.source}</td>
@@ -240,6 +278,18 @@ const score40 = allLeads.filter(g => g.lead_score >= 40);
   
   .col-name {
     font-weight: 500;
+  }
+
+  .new-badge {
+    display: inline-block;
+    background: #22c55e;
+    color: #000;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 8px;
+    vertical-align: middle;
   }
   
   .col-email {
