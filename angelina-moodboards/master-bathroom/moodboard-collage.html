@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Master Bathroom — Mood Board</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background: #E8E4DE;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+    }
+    
+    .moodboard {
+      width: 700px;
+      height: 950px;
+      background: #F5F2ED;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      border-radius: 20px;
+    }
+    
+    /* Title */
+    .title {
+      position: absolute;
+      top: 25px;
+      left: 80px;
+      z-index: 100;
+    }
+    
+    .title h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.8rem;
+      font-weight: 400;
+      color: #8B6E5A;
+    }
+    
+    .title span {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.2rem;
+      color: #B89B7A;
+      margin-left: 10px;
+    }
+    
+    /* Color swatches - left side */
+    .swatches {
+      position: absolute;
+      left: 20px;
+      top: 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 50;
+    }
+    
+    .swatch {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    /* Images */
+    .img {
+      position: absolute;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+      overflow: hidden;
+    }
+    
+    .img img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .img.rounded {
+      border-radius: 15px;
+    }
+    
+    .img.circle {
+      border-radius: 50%;
+    }
+    
+    .img.round-top {
+      border-radius: 100px 100px 15px 15px;
+    }
+    
+    .img.round-bottom {
+      border-radius: 15px 15px 100px 100px;
+    }
+    
+    /* Layout */
+    .img-zellige {
+      width: 220px;
+      height: 300px;
+      top: 90px;
+      left: 70px;
+      z-index: 10;
+      border-radius: 110px 110px 15px 15px;
+    }
+    
+    .img-marble {
+      width: 200px;
+      height: 140px;
+      top: 25px;
+      right: 100px;
+      z-index: 11;
+      border-radius: 15px;
+    }
+    
+    .img-mosaic {
+      width: 160px;
+      height: 160px;
+      top: 175px;
+      right: 40px;
+      z-index: 14;
+      border-radius: 50%;
+    }
+    
+    .img-sink {
+      width: 200px;
+      height: 280px;
+      top: 90px;
+      right: 180px;
+      z-index: 12;
+      border-radius: 15px;
+    }
+    
+    .img-shower {
+      width: 120px;
+      height: 320px;
+      top: 400px;
+      left: 70px;
+      z-index: 20;
+      border-radius: 60px 60px 15px 15px;
+    }
+    
+    .img-tub-filler {
+      width: 130px;
+      height: 180px;
+      top: 410px;
+      left: 200px;
+      z-index: 21;
+      border-radius: 15px;
+    }
+    
+    .img-faucet {
+      width: 120px;
+      height: 120px;
+      top: 350px;
+      left: 280px;
+      z-index: 19;
+      border-radius: 50%;
+    }
+    
+    .img-pendant {
+      width: 240px;
+      height: 200px;
+      top: 360px;
+      right: 30px;
+      z-index: 22;
+      border-radius: 15px 15px 120px 120px;
+    }
+    
+    .img-stone-tub {
+      width: 180px;
+      height: 160px;
+      bottom: 100px;
+      left: 200px;
+      z-index: 25;
+      border-radius: 15px;
+    }
+    
+    .img-stone-walls {
+      width: 220px;
+      height: 170px;
+      bottom: 30px;
+      right: 30px;
+      z-index: 26;
+      border-radius: 15px;
+    }
+    
+    /* Handwritten label */
+    .label {
+      position: absolute;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.1rem;
+      color: #8B6E5A;
+      z-index: 100;
+    }
+    
+    .label-title {
+      bottom: 140px;
+      left: 75px;
+      font-size: 1.3rem;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="moodboard">
+    <div class="title">
+      <h1>Mood</h1>
+      <span>Board</span>
+    </div>
+    
+    <!-- Color swatches -->
+    <div class="swatches">
+      <div class="swatch" style="background: #1F3D3B;"></div>
+      <div class="swatch" style="background: #B8956E;"></div>
+      <div class="swatch" style="background: #3D3832;"></div>
+      <div class="swatch" style="background: #D4C9B5;"></div>
+      <div class="swatch" style="background: #8B6E5A;"></div>
+      <div class="swatch" style="background: #F5F3EF;"></div>
+    </div>
+    
+    <!-- Images with organic shapes -->
+    <div class="img img-zellige">
+      <img src="images/04-teal-zellige.jpg" alt="Teal Zellige">
+    </div>
+    
+    <div class="img img-marble">
+      <img src="images/07-marble-slab.jpg" alt="Dark Marble">
+    </div>
+    
+    <div class="img img-mosaic">
+      <img src="images/10-shower-floor.jpg" alt="Finger Mosaic">
+    </div>
+    
+    <div class="img img-sink">
+      <img src="images/08-integrated-sink.jpg" alt="Integrated Sink">
+    </div>
+    
+    <div class="img img-shower">
+      <img src="images/01-shower-fixture.jpg" alt="Shower Fixture">
+    </div>
+    
+    <div class="img img-tub-filler">
+      <img src="images/02-tub-filler.jpg" alt="Tub Filler">
+    </div>
+    
+    <div class="img img-faucet">
+      <img src="images/03-vanity-faucet.jpg" alt="Brass Faucet">
+    </div>
+    
+    <div class="img img-pendant">
+      <img src="images/09-pendant-lights.jpg" alt="Pendant Lights">
+    </div>
+    
+    <div class="img img-stone-tub">
+      <img src="images/05-stone-tub.jpg" alt="Stone Tub">
+    </div>
+    
+    <div class="img img-stone-walls">
+      <img src="images/06-stone-walls-bench.jpg" alt="Stone Walls">
+    </div>
+    
+    <!-- Handwritten label -->
+    <div class="label label-title">
+      Master<br>Bathroom
+    </div>
+  </div>
+</body>
+</html>
