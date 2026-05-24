@@ -14,6 +14,20 @@ These tasks MUST be completed before any project work:
 
 ---
 
+## 🎯 CRM Lead Scoring — RUN EVERY 15-30 MINUTES!
+
+**Script:** `bash ~/.openclaw/workspace/meraki-crm/run-score.sh`
+
+This scores new restaurant reservations and adds them to the CRM:
+- Checks Coyol + La Luna reservations
+- Scores by area code (NYC, LA, SF, Toronto = hot)
+- Adds to `crm_guests` table in Supabase
+- **Hot leads (40+) → Alert Marion immediately**
+
+**Run this script EVERY heartbeat to keep leads fresh.**
+
+---
+
 ## 🍽️ Restaurant Reservations — CHECK EVERY HEARTBEAT!
 
 ### Coyol Restaurant — AUTOMATED!

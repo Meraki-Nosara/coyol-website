@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+  <style>
+    body {
+      background: #F5F3EF;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      width: 600px;
+    }
+    h1 {
+      text-align: center;
+      color: #1A1F16;
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #666;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    .chart-container {
+      position: relative;
+      height: 500px;
+    }
+    .total {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 20px;
+      color: #3D4F3D;
+      font-weight: 600;
+    }
+    .margin-box {
+      background: #3D4F3D;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+    .margin-box .percent {
+      font-size: 36px;
+      font-weight: bold;
+    }
+    .margin-box .label {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>💰 Where Money Went</h1>
+    <div class="subtitle">January - April 2026</div>
+    <div class="chart-container">
+      <canvas id="pieChart"></canvas>
+    </div>
+    <div class="total">Total Outflow: $2,563,149</div>
+    <div class="margin-box">
+      <div class="percent">43%</div>
+      <div class="label">Operating Margin</div>
+    </div>
+  </div>
+
+  <script>
+    Chart.register(ChartDataLabels);
+    
+    const ctx = document.getElementById('pieChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: [
+          'Suppliers & Operating',
+          'Retained in Bank',
+          'Payroll/MDO',
+          'Equipment Repayment',
+          'Other Operations',
+          'Taxes',
+          'Loan to Rancho',
+          'Receivable Rancho'
+        ],
+        datasets: [{
+          data: [865476, 741931, 284616, 175030, 160082, 138614, 98700, 98700],
+          backgroundColor: [
+            '#A65D3F',  // Terracotta - Suppliers
+            '#3D4F3D',  // Keswick Green - Retained
+            '#C4A67C',  // Sand - Payroll
+            '#4A5D4A',  // Coniston - Equipment
+            '#D4C9B5',  // Limestone - Other
+            '#1A1F16',  // Santorini - Taxes
+            '#6B8E6B',  // Light green - Loan
+            '#8B7355'   // Brown - Receivable
+          ],
+          borderColor: '#fff',
+          borderWidth: 3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: 20
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          datalabels: {
+            color: function(context) {
+              return '#1A1F16';
+            },
+            backgroundColor: 'rgba(255,255,255,0.85)',
+            borderRadius: 6,
+            padding: 6,
+            font: {
+              size: 11,
+              weight: 'bold'
+            },
+            anchor: 'end',
+            align: 'end',
+            offset: 10,
+            formatter: function(value, context) {
+              const total = context.dataset.data.reduce((a, b) => a + b, 0);
+              const percent = Math.round(value / total * 100);
+              const label = context.chart.data.labels[context.dataIndex];
+              return label + '\n' + percent + '%';
+            },
+            textAlign: 'center'
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

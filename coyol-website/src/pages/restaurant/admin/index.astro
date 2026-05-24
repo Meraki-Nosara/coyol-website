@@ -291,6 +291,34 @@ import Layout from '../../../layouts/Layout.astro';
               <span class="detail-value" id="detailNotes">None</span>
             </div>
           </div>
+          
+          <!-- 3-Step Reservation Timeline -->
+          <div class="reservation-timeline" id="resTimeline">
+            <div class="timeline-step completed" id="step1">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <span class="timeline-label">Reserva creada</span>
+                <span class="timeline-meta" id="step1Meta">Website</span>
+                <span class="timeline-time" id="step1Time"></span>
+              </div>
+            </div>
+            <div class="timeline-connector"></div>
+            <div class="timeline-step" id="step2">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <span class="timeline-label">Not Confirmed</span>
+                <span class="timeline-meta" id="step2Meta">Waiting for guest</span>
+              </div>
+            </div>
+            <div class="timeline-connector"></div>
+            <div class="timeline-step" id="step3">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <span class="timeline-label">Confirmed</span>
+                <span class="timeline-time" id="step3Time"></span>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="modal-footer detail-actions" id="modalActions">
           <!-- Active reservation buttons -->
@@ -1510,6 +1538,81 @@ import Layout from '../../../layouts/Layout.astro';
     .table-badge.assigned { background: #22c55e; color: white; }
     .table-badge.unassigned { background: #f3f4f6; color: #666; }
     .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    
+    /* 3-Step Reservation Timeline */
+    .reservation-timeline {
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--limestone);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    .timeline-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      flex: 1;
+      position: relative;
+    }
+    .timeline-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--limestone);
+      border: 3px solid var(--limestone);
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 2;
+    }
+    .timeline-step.completed .timeline-dot {
+      background: var(--keswick);
+      border-color: var(--keswick);
+    }
+    .timeline-step.completed .timeline-dot::after {
+      content: '✓';
+      color: white;
+      font-size: 0.75rem;
+      font-weight: bold;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .timeline-step.current .timeline-dot {
+      background: white;
+      border-color: var(--keswick);
+      box-shadow: 0 0 0 4px rgba(61, 79, 61, 0.2);
+    }
+    .timeline-connector {
+      flex: 0.5;
+      height: 3px;
+      background: var(--limestone);
+      margin-top: 12px;
+    }
+    .timeline-step.completed + .timeline-connector {
+      background: var(--keswick);
+    }
+    .timeline-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.125rem;
+    }
+    .timeline-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--santorini);
+    }
+    .timeline-meta {
+      font-size: 0.625rem;
+      color: var(--keswick);
+    }
+    .timeline-time {
+      font-size: 0.625rem;
+      color: #666;
+    }
+    
     .detail-item { display: flex; flex-direction: column; gap: 0.25rem; }
     .detail-item.full-width { grid-column: 1 / -1; }
     .detail-label { font-size: 0.6875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -1854,7 +1957,7 @@ import Layout from '../../../layouts/Layout.astro';
         
         el.innerHTML = `
           <span class="table-label">${table.name}</span>
-          ${nextRes ? `<span class="table-time">${formatTime12(nextRes.time)}</span>` : ''}
+          ${nextRes ? `<span class="table-time">${formatTime12(nextRes.time)} · ${nextRes.guests} pax</span>` : ''}
           ${nextRes ? `<span class="table-guest">${nextRes.guestName}</span>` : ''}
           ${resCount > 1 ? `<span class="table-more">+${resCount - 1}</span>` : ''}
         `;
@@ -2040,7 +2143,63 @@ import Layout from '../../../layouts/Layout.astro';
         }
       }
       
+      // Update 3-step timeline
+      updateReservationTimeline(res);
+      
       modal.classList.add('open');
+    }
+    
+    function updateReservationTimeline(res) {
+      const step1 = document.getElementById('step1');
+      const step2 = document.getElementById('step2');
+      const step3 = document.getElementById('step3');
+      const step1Meta = document.getElementById('step1Meta');
+      const step1Time = document.getElementById('step1Time');
+      const step3Time = document.getElementById('step3Time');
+      
+      // Reset all steps
+      [step1, step2, step3].forEach(s => {
+        s.classList.remove('completed', 'current');
+      });
+      
+      // Step 1: Always completed (reservation was created)
+      step1.classList.add('completed');
+      
+      // Determine source from special_requests or default
+      const source = res.source || (res.specialRequests?.includes('Walk-in') ? 'En Casa' : 'Website');
+      step1Meta.textContent = source;
+      
+      // Format created_at timestamp if available
+      if (res.created_at) {
+        const created = new Date(res.created_at);
+        step1Time.textContent = created.toLocaleString('es-CR', { 
+          month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
+        });
+      } else {
+        step1Time.textContent = '';
+      }
+      
+      // Step 2 & 3 based on status
+      if (res.status === 'confirmed' || res.status === 'seated') {
+        // Fully confirmed
+        step2.classList.add('completed');
+        step3.classList.add('completed');
+        if (res.confirmed_at) {
+          const confirmed = new Date(res.confirmed_at);
+          step3Time.textContent = confirmed.toLocaleString('es-CR', {
+            month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
+          });
+        } else {
+          step3Time.textContent = '';
+        }
+      } else if (res.status === 'pending') {
+        // Waiting for confirmation
+        step2.classList.add('current');
+      } else if (res.status === 'cancelled') {
+        // Show cancelled state
+        step2.classList.add('completed');
+        document.querySelector('#step2 .timeline-label').textContent = 'Cancelled';
+      }
     }
     
     function closeDetailModal() {
