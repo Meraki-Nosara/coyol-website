@@ -72,7 +72,8 @@ import Layout from '../../../layouts/Layout.astro';
       <div class="topbar">
         <div class="date-nav">
           <button id="prevDay">←</button>
-          <span id="currentDate">Mon, 4 May</span>
+          <span id="currentDate" onclick="openDatePicker()" style="cursor:pointer;" title="Click to pick date">Mon, 4 May</span>
+          <input type="date" id="datePicker" style="position:absolute;opacity:0;pointer-events:none;" />
           <button id="nextDay">→</button>
         </div>
         <div class="zone-tabs">
@@ -2328,6 +2329,24 @@ import Layout from '../../../layouts/Layout.astro';
       currentDate.setDate(currentDate.getDate() + 1);
       await loadReservations();
       renderFloor();
+    });
+
+    // Date picker - click on date to jump to any date
+    function openDatePicker() {
+      const picker = document.getElementById('datePicker');
+      picker.value = getDateString(currentDate);
+      picker.style.pointerEvents = 'auto';
+      picker.showPicker();
+    }
+
+    document.getElementById('datePicker').addEventListener('change', async (e) => {
+      const newDate = new Date(e.target.value + 'T12:00:00');
+      if (!isNaN(newDate.getTime())) {
+        currentDate = newDate;
+        await loadReservations();
+        renderFloor();
+      }
+      e.target.style.pointerEvents = 'none';
     });
 
     // Zone tabs
