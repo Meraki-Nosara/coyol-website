@@ -1894,7 +1894,7 @@ import Layout from '../../../layouts/Layout.astro';
               <div class="res-time">${formatTime12(res.time)}</div>
               <span class="res-name" title="${res.guestName}">${res.guestName}</span>
               <span class="res-pax">${res.guests}</span>
-              <span class="table-badge ${res.tableId ? 'assigned' : 'unassigned'}">${res.tableId || 'TBA'}</span>
+              <span class="table-badge ${res.tableId ? 'assigned' : 'unassigned'}">${res.tableId ? res.tableId.toUpperCase() : 'TBA'}</span>
               <div class="res-actions-mini">
                 <button class="action-icon" onclick="event.stopPropagation();" title="Message">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>

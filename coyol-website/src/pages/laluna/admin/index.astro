@@ -2084,7 +2084,7 @@ import Layout from '../../../layouts/Layout.astro';
               <div class="res-time">${formatTime12(res.time)}</div>
               <span class="res-name" title="${res.guestName}">${res.guestName}</span>
               <span class="res-pax">${res.guests}</span>
-              <span class="table-badge ${res.tableId ? 'assigned' : 'unassigned'}">${res.tableId || 'TBA'}</span>
+              <span class="table-badge ${res.tableId ? 'assigned' : 'unassigned'}">${res.tableId ? res.tableId.toUpperCase() : 'TBA'}</span>
               <div class="res-actions-mini">
                 ${res.guestPhone ? `
                 <a class="whatsapp-icon" href="https://wa.me/${res.guestPhone.replace(/[^0-9]/g, '').replace(/^(?!506)/, '506')}?text=${encodeURIComponent(`Hola ${res.guestName.split(' ')[0]}! 🌙 Te escribimos de La Luna para confirmar tu reservación para ${res.guests} personas hoy a las ${formatTime12(res.time)}. ¿Podemos contar contigo?`)}" target="_blank" onclick="event.stopPropagation();" title="WhatsApp">
