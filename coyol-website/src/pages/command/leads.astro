@@ -3,7 +3,7 @@ import CommandLayout from '../../layouts/CommandLayout.astro';
 import guestData from '../../data/guests-enriched.json';
 
 const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
-const SUPABASE_SERVICE_KEY = import.meta.env.SUPABASE_SERVICE_KEY;
+const SUPABASE_SERVICE_KEY = import.meta.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_KEY;
 
 // Fetch live CRM guests from Supabase using service key
 let crmGuests: any[] = [];
