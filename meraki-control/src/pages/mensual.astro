@@ -789,58 +789,110 @@ const financialSummary = loadFinancialSummary();
               </div>
             </div>
             
-            <!-- Where Money Went -->
+            <!-- Where Money Went - PIE CHART -->
             <div class="card p-5 lg:p-6">
-              <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-bold text-landrover-santorini">Where Money Went</h3>
-                <span class="text-sm text-landrover-marine/60">{financialSummary.period.replace(/(\d{4})-(\d{2}) to (\d{4})-(\d{2})/, '$2/$1 to $4/$3')}</span>
+              <div class="text-center mb-4">
+                <h3 class="text-lg font-bold text-landrover-santorini flex items-center justify-center gap-2">
+                  <span>💰</span> Where Money Went
+                </h3>
+                <p class="text-sm text-landrover-marine/60">{financialSummary.period.replace(/(\d{4})-(\d{2}) to (\d{4})-(\d{2}).*/, (_, y1, m1, y2, m2) => {
+                  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+                  return `${months[parseInt(m1)-1]} - ${months[parseInt(m2)-1]} ${y2}`;
+                })}</p>
               </div>
               
-              <div class="space-y-2">
-                {financialSummary.whereMoneyWent.map((item, i) => {
-                  // Land Rover Heritage palette
-                  const lrColors = [
-                    'bg-landrover-terracotta',  // Suppliers - terracotta
-                    'bg-landrover-sand',         // Payroll - sand
-                    'bg-landrover-marine',       // Taxes - marine
-                    'bg-landrover-coniston',     // Equipment - coniston
-                    'bg-landrover-limestone',    // Loan - limestone
-                    'bg-landrover-arles',        // Other - arles
-                    'bg-landrover-keswick',      // Retained - keswick
-                    'bg-landrover-keswick/70'    // Receivable - keswick light
-                  ];
-                  const bgColor = lrColors[i % lrColors.length];
-                  const isRetained = item.category.includes('Bank') || item.category.includes('Receivable');
-                  
-                  return (
-                    <div>
-                      <div class="flex justify-between text-sm mb-1">
-                        <span class={isRetained ? 'font-medium text-landrover-keswick' : ''}>{item.category}</span>
-                        <span class="font-medium">${item.usd.toLocaleString()} <span class="text-landrover-marine/50">({item.pct}%)</span></span>
-                      </div>
-                      <div class="h-2 bg-landrover-limestone/50 rounded-full overflow-hidden">
-                        <div 
-                          class={`h-full rounded-full ${bgColor}`}
-                          style={`width: ${item.pct}%`}
-                        ></div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              
-              <div class="mt-6 p-4 bg-landrover-keswick/10 rounded-lg">
-                <div class="flex justify-between items-center mb-2">
-                  <span class="text-sm font-medium text-landrover-santorini">Operating Margin</span>
-                  <span class="text-2xl font-bold text-landrover-keswick">{financialSummary.operatingProfit.margin.toFixed(0)}%</span>
+              <!-- Pie Chart -->
+              <div class="flex justify-center mb-4">
+                <div class="relative w-56 h-56 lg:w-64 lg:h-64">
+                  <svg viewBox="0 0 100 100" class="w-full h-full">
+                    {(() => {
+                      // Land Rover Heritage palette for pie slices
+                      const pieColors = [
+                        '#A65D3F', // Suppliers - terracotta
+                        '#3D4F3D', // Payroll - keswick
+                        '#C4A67C', // Taxes - sand
+                        '#4A5D4A', // Equipment - coniston
+                        '#D4C9B5', // Loan - limestone
+                        '#1A1F16', // Other - santorini
+                        '#3D4F3D', // Retained - keswick
+                        '#5A6F5A'  // Receivable - lighter keswick
+                      ];
+                      
+                      let cumulativePercent = 0;
+                      const slices = financialSummary.whereMoneyWent.map((item, i) => {
+                        const percent = item.pct;
+                        const startAngle = cumulativePercent * 3.6; // Convert % to degrees
+                        cumulativePercent += percent;
+                        const endAngle = cumulativePercent * 3.6;
+                        
+                        // Calculate SVG arc path
+                        const startRad = (startAngle - 90) * Math.PI / 180;
+                        const endRad = (endAngle - 90) * Math.PI / 180;
+                        const x1 = 50 + 45 * Math.cos(startRad);
+                        const y1 = 50 + 45 * Math.sin(startRad);
+                        const x2 = 50 + 45 * Math.cos(endRad);
+                        const y2 = 50 + 45 * Math.sin(endRad);
+                        const largeArc = percent > 50 ? 1 : 0;
+                        
+                        // Label position (middle of slice, pushed out)
+                        const midAngle = ((startAngle + endAngle) / 2 - 90) * Math.PI / 180;
+                        const labelRadius = percent > 8 ? 30 : 52; // Inside for big slices, outside for small
+                        const labelX = 50 + labelRadius * Math.cos(midAngle);
+                        const labelY = 50 + labelRadius * Math.sin(midAngle);
+                        
+                        return { item, i, x1, y1, x2, y2, largeArc, labelX, labelY, color: pieColors[i % pieColors.length], percent };
+                      });
+                      
+                      return slices.map(({ item, i, x1, y1, x2, y2, largeArc, labelX, labelY, color, percent }) => (
+                        <g>
+                          <path
+                            d={`M 50 50 L ${x1} ${y1} A 45 45 0 ${largeArc} 1 ${x2} ${y2} Z`}
+                            fill={color}
+                            stroke="white"
+                            stroke-width="0.5"
+                          />
+                          {percent >= 5 && (
+                            <text
+                              x={labelX}
+                              y={labelY}
+                              text-anchor="middle"
+                              dominant-baseline="middle"
+                              fill={percent > 8 ? 'white' : '#1A1F16'}
+                              font-size="3.5"
+                              font-weight="600"
+                            >
+                              {item.category.split(' ')[0]}
+                            </text>
+                          )}
+                          {percent >= 5 && (
+                            <text
+                              x={labelX}
+                              y={labelY + 4}
+                              text-anchor="middle"
+                              dominant-baseline="middle"
+                              fill={percent > 8 ? 'white' : '#1A1F16'}
+                              font-size="3"
+                            >
+                              {percent}%
+                            </text>
+                          )}
+                        </g>
+                      ));
+                    })()}
+                  </svg>
                 </div>
-                <p class="text-xs text-landrover-marine/70">For every $100 in sales, ${financialSummary.operatingProfit.margin.toFixed(0)} is operating profit</p>
               </div>
               
-              <div class="mt-4 p-3 bg-landrover-sand/20 rounded-lg">
-                <p class="text-xs text-landrover-santorini">
-                  <strong>Note:</strong> Equipment repayment (${financialSummary.nonOperating.angelinaEquipment.usd.toLocaleString()}) went to Angelina for equipment purchased before Meraki.
-                </p>
+              <!-- Total Outflow -->
+              <div class="text-center mb-4">
+                <p class="text-sm text-landrover-marine/60">Total Outflow</p>
+                <p class="text-xl font-bold text-landrover-santorini">${financialSummary.whereMoneyWent.reduce((sum, item) => sum + item.usd, 0).toLocaleString()}</p>
+              </div>
+              
+              <!-- Operating Margin Bar -->
+              <div class="bg-landrover-keswick text-white rounded-lg p-4 text-center">
+                <p class="text-3xl font-bold">{financialSummary.operatingProfit.margin.toFixed(0)}%</p>
+                <p class="text-sm text-landrover-limestone/80">Operating Margin</p>
               </div>
             </div>
           </div>
