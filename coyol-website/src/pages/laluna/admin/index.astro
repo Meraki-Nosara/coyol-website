@@ -727,15 +727,15 @@ import Layout from '../../../layouts/Layout.astro';
       color: var(--keswick);
     }
 
-    /* Reservation Rows - Compact EatApp Style */
+    /* Reservation Rows - Clean Aligned Columns */
     :global(.res-row) {
       display: grid;
-      grid-template-columns: 65px 1fr 40px;
-      gap: 0.75rem;
+      grid-template-columns: 70px 1fr 50px 60px 40px;
+      gap: 0.5rem;
       padding: 0.75rem 1rem;
       border-bottom: 1px solid var(--parchment);
       cursor: pointer;
-      align-items: start;
+      align-items: center;
       transition: background 0.1s;
     }
 
@@ -773,36 +773,27 @@ import Layout from '../../../layouts/Layout.astro';
       min-width: 0;
     }
 
-    :global(.res-top-line) {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-    }
-
     :global(.res-name) {
       font-weight: 600;
-      font-size: 0.9375rem;
+      font-size: 0.875rem;
       color: var(--santorini);
       font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    :global(.res-meta-inline) {
-      display: flex;
-      align-items: center;
-      gap: 0.625rem;
-    }
-
-    :global(.meta-item) {
+    :global(.res-pax) {
       display: flex;
       align-items: center;
       gap: 0.25rem;
       font-size: 0.8125rem;
       color: var(--keswick);
       font-family: 'Inter', sans-serif;
+      justify-content: center;
     }
 
-    :global(.meta-item svg) {
+    :global(.res-pax svg) {
       opacity: 0.7;
     }
 
@@ -2080,16 +2071,9 @@ import Layout from '../../../layouts/Layout.astro';
           ${items.map(res => `
             <div class="res-row ${res.status}" onclick="selectReservation('${res.id}')">
               <div class="res-time">${formatTime12(res.time)}</div>
-              <div class="res-main">
-                <div class="res-top-line">
-                  <span class="res-name">${res.guestName}</span>
-                  <span class="res-meta-inline">
-                    <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> ${res.guests}</span>
-                    <span class="table-badge ${res.tableId ? 'assigned' : 'unassigned'}">${res.tableId || 'TBA'}</span>
-                  </span>
-                </div>
-                ${res.specialRequests ? `<div class="res-note">📄 ${res.specialRequests}</div>` : ''}
-              </div>
+              <span class="res-name" title="${res.guestName}">${res.guestName}</span>
+              <span class="res-pax"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> ${res.guests}</span>
+              <span class="table-badge ${res.tableId ? 'assigned' : 'unassigned'}">${res.tableId || 'TBA'}</span>
               <div class="res-actions-mini">
                 ${res.guestPhone ? `
                 <a class="whatsapp-icon" href="https://wa.me/${res.guestPhone.replace(/[^0-9]/g, '').replace(/^(?!506)/, '506')}?text=${encodeURIComponent(`Hola ${res.guestName.split(' ')[0]}! 🌙 Te escribimos de La Luna para confirmar tu reservación para ${res.guests} personas hoy a las ${formatTime12(res.time)}. ¿Podemos contar contigo?`)}" target="_blank" onclick="event.stopPropagation();" title="WhatsApp">
@@ -2098,6 +2082,7 @@ import Layout from '../../../layouts/Layout.astro';
                 ` : ''}
               </div>
             </div>
+            ${res.specialRequests ? `<div class="res-note-row"><div></div><div class="res-note" style="grid-column: 2 / -1;">📄 ${res.specialRequests}</div></div>` : ''}
           `).join('')}
         </div>
       `).join('');
