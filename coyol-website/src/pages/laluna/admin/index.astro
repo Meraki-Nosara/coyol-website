@@ -806,6 +806,27 @@ import Layout from '../../../layouts/Layout.astro';
       opacity: 0.7;
     }
 
+    :global(.table-badge) {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.02em;
+    }
+
+    :global(.table-badge.assigned) {
+      background: var(--keswick);
+      color: white;
+    }
+
+    :global(.table-badge.unassigned) {
+      background: #f3f4f6;
+      color: #666;
+      font-weight: 500;
+    }
+
     :global(.res-note) {
       font-size: 0.75rem;
       color: var(--santorini);
@@ -2064,7 +2085,7 @@ import Layout from '../../../layouts/Layout.astro';
                   <span class="res-name">${res.guestName}</span>
                   <span class="res-meta-inline">
                     <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> ${res.guests}</span>
-                    <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg> ${res.tableId || 'TBA'}</span>
+                    <span class="table-badge ${res.tableId ? 'assigned' : 'unassigned'}">${res.tableId || 'TBA'}</span>
                   </span>
                 </div>
                 ${res.specialRequests ? `<div class="res-note">📄 ${res.specialRequests}</div>` : ''}
