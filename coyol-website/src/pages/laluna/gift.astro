@@ -11,10 +11,11 @@ import Layout from '../../layouts/Layout.astro';
 
     <section class="gift-container">
       <div class="gift-card-preview">
-        <div class="card-visual">
+        <div class="card-visual silver" id="card-visual">
           <img src="/images/logos/laluna-logo-white.png" alt="La Luna" class="card-logo" />
           <div class="card-amount">$<span id="preview-amount">100</span></div>
           <div class="card-text">Gift Card</div>
+          <div class="card-tier" id="card-tier">Silver</div>
         </div>
       </div>
 
@@ -122,6 +123,32 @@ import Layout from '../../layouts/Layout.astro';
     flex-direction: column;
     justify-content: space-between;
     box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    transition: all 0.5s ease;
+  }
+
+  .card-visual.classic {
+    background: linear-gradient(145deg, #A65D3F 0%, #8B4532 100%);
+  }
+
+  .card-visual.silver {
+    background: linear-gradient(145deg, #8E9196 0%, #B8BCC2 30%, #6B7075 70%, #A8ACB2 100%);
+  }
+
+  .card-visual.gold {
+    background: linear-gradient(145deg, #C4A67C 0%, #D4B896 30%, #A68A5B 70%, #E5CFA9 100%);
+  }
+
+  .card-visual.platinum {
+    background: linear-gradient(145deg, #1A1F16 0%, #3D4F3D 30%, #1A1F16 70%, #4A5D4A 100%);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+
+  .card-tier {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    opacity: 0.9;
+    margin-top: 0.25rem;
   }
 
   .card-logo {
@@ -289,11 +316,29 @@ import Layout from '../../layouts/Layout.astro';
   const previewAmount = document.getElementById('preview-amount');
   const btnAmount = document.getElementById('btn-amount');
   const checkoutBtn = document.getElementById('checkout-btn') as HTMLButtonElement;
+  const cardVisual = document.getElementById('card-visual');
+  const cardTier = document.getElementById('card-tier');
+
+  function getTier(amount: number): { tier: string, label: string } {
+    if (amount >= 200) return { tier: 'platinum', label: 'Platinum' };
+    if (amount >= 150) return { tier: 'gold', label: 'Gold' };
+    if (amount >= 100) return { tier: 'silver', label: 'Silver' };
+    return { tier: 'classic', label: 'Classic' };
+  }
 
   function updateAmount(amount: number) {
     selectedAmountInput.value = amount.toString();
     if (previewAmount) previewAmount.textContent = amount.toString();
     if (btnAmount) btnAmount.textContent = amount.toString();
+    
+    // Update card tier
+    const { tier, label } = getTier(amount);
+    if (cardVisual) {
+      cardVisual.className = `card-visual ${tier}`;
+    }
+    if (cardTier) {
+      cardTier.textContent = label;
+    }
   }
 
   amountBtns.forEach(btn => {
