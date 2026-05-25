@@ -730,13 +730,23 @@ import Layout from '../../../layouts/Layout.astro';
     /* Reservation Rows - Clean Aligned Columns */
     :global(.res-row) {
       display: grid;
-      grid-template-columns: 70px 1fr 50px 60px 40px;
-      gap: 0.5rem;
-      padding: 0.75rem 1rem;
+      grid-template-columns: 75px minmax(120px, 1fr) 45px 55px 36px;
+      gap: 0.75rem;
+      padding: 0.625rem 1rem;
       border-bottom: 1px solid var(--parchment);
       cursor: pointer;
       align-items: center;
       transition: background 0.1s;
+    }
+    
+    :global(.res-row.has-note) {
+      border-bottom: none;
+      padding-bottom: 0.25rem;
+    }
+    
+    :global(.res-note-row) {
+      padding: 0 1rem 0.625rem 1rem;
+      border-bottom: 1px solid var(--parchment);
     }
 
     :global(.res-row:hover) {
@@ -819,13 +829,14 @@ import Layout from '../../../layouts/Layout.astro';
     }
 
     :global(.res-note) {
-      font-size: 0.75rem;
-      color: var(--santorini);
+      font-size: 0.6875rem;
+      color: #92400e;
       background: #fef3c7;
-      padding: 0.375rem 0.5rem;
+      padding: 0.25rem 0.5rem;
       border-radius: 4px;
-      margin-top: 0.375rem;
-      border-left: 3px solid #f59e0b;
+      border-left: 2px solid #f59e0b;
+      margin-left: 75px;
+      display: inline-block;
     }
 
     :global(.res-actions-mini) {
@@ -2069,10 +2080,10 @@ import Layout from '../../../layouts/Layout.astro';
             </div>
           </div>
           ${items.map(res => `
-            <div class="res-row ${res.status}" onclick="selectReservation('${res.id}')">
+            <div class="res-row ${res.status} ${res.specialRequests ? 'has-note' : ''}" onclick="selectReservation('${res.id}')">
               <div class="res-time">${formatTime12(res.time)}</div>
               <span class="res-name" title="${res.guestName}">${res.guestName}</span>
-              <span class="res-pax"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> ${res.guests}</span>
+              <span class="res-pax">${res.guests}</span>
               <span class="table-badge ${res.tableId ? 'assigned' : 'unassigned'}">${res.tableId || 'TBA'}</span>
               <div class="res-actions-mini">
                 ${res.guestPhone ? `
@@ -2082,7 +2093,7 @@ import Layout from '../../../layouts/Layout.astro';
                 ` : ''}
               </div>
             </div>
-            ${res.specialRequests ? `<div class="res-note-row"><div></div><div class="res-note" style="grid-column: 2 / -1;">📄 ${res.specialRequests}</div></div>` : ''}
+            ${res.specialRequests ? `<div class="res-note-row"><span class="res-note">📝 ${res.specialRequests}</span></div>` : ''}
           `).join('')}
         </div>
       `).join('');
