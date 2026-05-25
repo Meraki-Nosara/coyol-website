@@ -719,16 +719,26 @@ import Layout from '../../../layouts/Layout.astro';
       color: var(--keswick);
     }
 
-    /* Reservation Rows - Compact EatApp Style */
+    /* Reservation Rows - Clean Aligned Columns */
     :global(.res-row) {
       display: grid;
-      grid-template-columns: 65px 1fr 40px;
+      grid-template-columns: 75px minmax(120px, 1fr) 45px 55px 36px;
       gap: 0.75rem;
-      padding: 0.75rem 1rem;
+      padding: 0.625rem 1rem;
       border-bottom: 1px solid var(--parchment);
       cursor: pointer;
-      align-items: start;
+      align-items: center;
       transition: background 0.1s;
+    }
+    
+    :global(.res-row.has-note) {
+      border-bottom: none;
+      padding-bottom: 0.25rem;
+    }
+    
+    :global(.res-note-row) {
+      padding: 0 1rem 0.625rem 1rem;
+      border-bottom: 1px solid var(--parchment);
     }
 
     :global(.res-row:hover) {
@@ -765,47 +775,35 @@ import Layout from '../../../layouts/Layout.astro';
       min-width: 0;
     }
 
-    :global(.res-top-line) {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-    }
-
     :global(.res-name) {
       font-weight: 600;
-      font-size: 0.9375rem;
+      font-size: 0.875rem;
       color: var(--santorini);
       font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    :global(.res-meta-inline) {
-      display: flex;
-      align-items: center;
-      gap: 0.625rem;
-    }
-
-    :global(.meta-item) {
+    :global(.res-pax) {
       display: flex;
       align-items: center;
       gap: 0.25rem;
       font-size: 0.8125rem;
       color: var(--keswick);
       font-family: 'Inter', sans-serif;
-    }
-
-    :global(.meta-item svg) {
-      opacity: 0.7;
+      justify-content: center;
     }
 
     :global(.res-note) {
-      font-size: 0.75rem;
-      color: var(--santorini);
+      font-size: 0.6875rem;
+      color: #92400e;
       background: #fef3c7;
-      padding: 0.375rem 0.5rem;
+      padding: 0.25rem 0.5rem;
       border-radius: 4px;
-      margin-top: 0.375rem;
-      border-left: 3px solid #f59e0b;
+      border-left: 2px solid #f59e0b;
+      margin-left: 75px;
+      display: inline-block;
     }
 
     :global(.res-actions-mini) {
@@ -1892,24 +1890,18 @@ import Layout from '../../../layouts/Layout.astro';
             </div>
           </div>
           ${items.map(res => `
-            <div class="res-row ${res.status}" onclick="selectReservation('${res.id}')">
+            <div class="res-row ${res.status} ${res.specialRequests ? 'has-note' : ''}" onclick="selectReservation('${res.id}')">
               <div class="res-time">${formatTime12(res.time)}</div>
-              <div class="res-main">
-                <div class="res-top-line">
-                  <span class="res-name">${res.guestName}</span>
-                  <span class="res-meta-inline">
-                    <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> ${res.guests}</span>
-                    <span class="table-badge ${res.tableId ? 'assigned' : 'unassigned'}">${res.tableId || 'TBA'}</span>
-                  </span>
-                </div>
-                ${res.specialRequests ? `<div class="res-note">📄 ${res.specialRequests}</div>` : ''}
-              </div>
+              <span class="res-name" title="${res.guestName}">${res.guestName}</span>
+              <span class="res-pax">${res.guests}</span>
+              <span class="table-badge ${res.tableId ? 'assigned' : 'unassigned'}">${res.tableId || 'TBA'}</span>
               <div class="res-actions-mini">
                 <button class="action-icon" onclick="event.stopPropagation();" title="Message">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                 </button>
               </div>
             </div>
+            ${res.specialRequests ? `<div class="res-note-row"><span class="res-note">📝 ${res.specialRequests}</span></div>` : ''}
           `).join('')}
         </div>
       `).join('');
