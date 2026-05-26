@@ -56,6 +56,9 @@ const restaurantTotals = restaurants.map(code => {
   // Daily data (April onwards)
   const restDaily = dailyTotals.find(d => d.restaurant === code) || { total: 0, cash: 0, card: 0, food: 0, bar: 0, days: 0 };
   
+  const monthlyFood = restMonthly.reduce((sum, m) => sum + (m.food || 0), 0);
+  const monthlyBar = restMonthly.reduce((sum, m) => sum + (m.bar || 0), 0);
+  
   return {
     code,
     name: data.restaurants[code]?.name || code,
@@ -63,8 +66,8 @@ const restaurantTotals = restaurants.map(code => {
     logo: logos[code],
     // Combine monthly + daily totals
     totalSales: restMonthly.reduce((sum, m) => sum + m.totalSales, 0) + restDaily.total,
-    food: restMonthly.reduce((sum, m) => sum + m.food, 0) + restDaily.food,
-    bar: restMonthly.reduce((sum, m) => sum + m.bar, 0) + restDaily.bar,
+    food: monthlyFood + (restDaily.food || 0),
+    bar: monthlyBar + (restDaily.bar || 0),
     cash: restMonthly.reduce((sum, m) => sum + m.cash, 0) + restDaily.cash,
     card: restMonthly.reduce((sum, m) => sum + m.card, 0) + restDaily.card,
     customers: restMonthly.reduce((sum, m) => sum + m.customers, 0),
@@ -93,13 +96,13 @@ const year2026 = data.monthly.filter(m => m.month.startsWith('2026') && !m.parti
 const dailyTotal = dailyTotals.reduce((sum, d) => sum + d.total, 0);
 const dailyCash = dailyTotals.reduce((sum, d) => sum + d.cash, 0);
 const dailyCard = dailyTotals.reduce((sum, d) => sum + d.card, 0);
-const dailyFood = dailyTotals.reduce((sum, d) => sum + d.food, 0);
-const dailyBar = dailyTotals.reduce((sum, d) => sum + d.bar, 0);
+const dailyFood = dailyTotals.reduce((sum, d) => sum + (d.food || 0), 0);
+const dailyBar = dailyTotals.reduce((sum, d) => sum + (d.bar || 0), 0);
 
 const yearTotals = {
   totalSales: year2026.reduce((sum, m) => sum + m.totalSales, 0) + dailyTotal,
-  food: year2026.reduce((sum, m) => sum + m.food, 0) + dailyFood,
-  bar: year2026.reduce((sum, m) => sum + m.bar, 0) + dailyBar,
+  food: year2026.reduce((sum, m) => sum + (m.food || 0), 0) + dailyFood,
+  bar: year2026.reduce((sum, m) => sum + (m.bar || 0), 0) + dailyBar,
   cash: year2026.reduce((sum, m) => sum + m.cash, 0) + dailyCash,
   card: year2026.reduce((sum, m) => sum + m.card, 0) + dailyCard,
   customers: year2026.reduce((sum, m) => sum + m.customers, 0),
@@ -111,8 +114,8 @@ const yearTotals = {
 const year2025 = data.monthly.filter(m => m.month.startsWith('2025') && !m.partial);
 const year2025Totals = {
   totalSales: year2025.reduce((sum, m) => sum + m.totalSales, 0),
-  food: year2025.reduce((sum, m) => sum + m.food, 0),
-  bar: year2025.reduce((sum, m) => sum + m.bar, 0),
+  food: year2025.reduce((sum, m) => sum + (m.food || 0), 0),
+  bar: year2025.reduce((sum, m) => sum + (m.bar || 0), 0),
   cash: year2025.reduce((sum, m) => sum + m.cash, 0),
   card: year2025.reduce((sum, m) => sum + m.card, 0),
   customers: year2025.reduce((sum, m) => sum + m.customers, 0),
