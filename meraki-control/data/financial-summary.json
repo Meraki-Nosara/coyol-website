@@ -1,15 +1,15 @@
 {
-  "lastUpdated": "2026-05-25",
-  "period": "2026-01 to 2026-05 (partial)",
+  "lastUpdated": "2026-05-26",
+  "period": "2026-01 to 2026-05",
   "exchangeRate": 505,
   
   "revenue": {
-    "totalCRC": 1288536524,
-    "totalUSD": 2551557,
+    "totalCRC": 1324189082,
+    "totalUSD": 2622157,
     "byRestaurant": {
-      "laluna": {"crc": 794000000, "usd": 1572277, "share": 63},
-      "coyol": {"crc": 399000000, "usd": 790099, "share": 32},
-      "esh": {"crc": 58000000, "usd": 114851, "share": 5}
+      "laluna": {"crc": 838020137, "usd": 1659446, "share": 63},
+      "coyol": {"crc": 420889817, "usd": 833445, "share": 32},
+      "esh": {"crc": 65279129, "usd": 129266, "share": 5}
     }
   },
   
@@ -23,9 +23,9 @@
   },
   
   "operatingProfit": {
-    "crc": 556898837,
-    "usd": 1102769,
-    "margin": 43.2
+    "crc": 592551395,
+    "usd": 1173369,
+    "margin": 44.8
   },
   
   "nonOperating": {
@@ -46,8 +46,8 @@
   },
   
   "netCashGenerated": {
-    "crc": 418665020,
-    "usd": 829039
+    "crc": 454317578,
+    "usd": 899639
   },
   
   "cashPosition": {
