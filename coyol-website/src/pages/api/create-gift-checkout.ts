@@ -1,7 +1,13 @@
 import type { APIRoute } from 'astro';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
+const STRIPE_KEY = import.meta.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY;
+
+if (!STRIPE_KEY) {
+  console.error('STRIPE_SECRET_KEY is not configured');
+}
+
+const stripe = new Stripe(STRIPE_KEY || '');
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -61,7 +67,11 @@ export const POST: APIRoute = async ({ request }) => {
 
   } catch (error: any) {
     console.error('Stripe error:', error);
-    return new Response(JSON.stringify({ error: error.message || 'Failed to create checkout session' }), {
+    const errorMessage = error.message || 'Failed to create checkout session';
+    const isKeyMissing = !STRIPE_KEY || errorMessage.includes('Invalid API Key');
+    return new Response(JSON.stringify({ 
+      error: isKeyMissing ? 'Payment system is being configured. Please try again shortly.' : errorMessage 
+    }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     });
