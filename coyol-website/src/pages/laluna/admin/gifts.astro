@@ -1,37 +1,11 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
 ---
 
 <Layout hideFloatingButtons={true} title="Gift Cards | La Luna Admin" appleTouchIcon="/laluna-apple-touch-icon.png">
   <div class="admin">
-    <!-- Sidebar Icons -->
-    <aside class="sidebar">
-      <div class="sidebar-logo">
-        <img src="/images/laluna-moon-white-real.png" alt="La Luna" />
-      </div>
-      <nav class="sidebar-nav">
-        <a href="/laluna/admin" class="nav-icon" title="Dashboard">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-        </a>
-        <a href="/laluna/admin/floor" class="nav-icon" title="Floor Plan">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
-        </a>
-        <a href="/laluna/admin/guests" class="nav-icon" title="Guests">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-        </a>
-        <a href="/laluna/admin/gifts" class="nav-icon active" title="Gift Cards">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v10H4V12"></path><path d="M2 7h20v5H2z"></path><path d="M12 22V7"></path><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
-        </a>
-        <a href="/laluna/admin/settings" class="nav-icon" title="Settings">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-        </a>
-      </nav>
-      <div class="sidebar-footer">
-        <a href="/" class="nav-icon" title="View Site">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-        </a>
-      </div>
-    </aside>
+    <LaLunaAdminSidebar active="gifts" />
 
     <!-- Main Content -->
     <div class="gifts-content">
@@ -40,7 +14,7 @@ import Layout from '../../../layouts/Layout.astro';
         <div class="header-stats">
           <div class="stat pending">
             <span class="stat-value" id="pendingCount">0</span>
-            <span class="stat-label">Pending</span>
+            <span class="stat-label">Active</span>
           </div>
           <div class="stat redeemed">
             <span class="stat-value" id="redeemedCount">0</span>
@@ -54,12 +28,10 @@ import Layout from '../../../layouts/Layout.astro';
       </header>
 
       <!-- Alerts for matched reservations -->
-      <div class="alerts-section" id="alertsSection">
-        <!-- Populated by JS when gift matches reservation -->
-      </div>
+      <div class="alerts-section" id="alertsSection"></div>
 
-      <!-- Gift Cards List -->
-      <div class="gifts-list" id="giftsList">
+      <!-- Gift Cards Grid -->
+      <div class="cards-grid" id="giftsList">
         <div class="loading">Loading gift cards...</div>
       </div>
     </div>
@@ -72,58 +44,6 @@ import Layout from '../../../layouts/Layout.astro';
     min-height: 100vh;
     background: #1a1a1a;
     color: #fff;
-  }
-
-  .sidebar {
-    width: 60px;
-    background: #111;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem 0;
-  }
-
-  .sidebar-logo img {
-    width: 36px;
-    height: 36px;
-    opacity: 0.9;
-  }
-
-  .sidebar-nav {
-    margin-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .nav-icon {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    color: #888;
-    transition: all 0.2s;
-  }
-
-  .nav-icon:hover {
-    background: #333;
-    color: #fff;
-  }
-
-  .nav-icon.active {
-    background: #C4A67C;
-    color: #111;
-  }
-
-  .nav-icon svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .sidebar-footer {
-    margin-top: auto;
   }
 
   .gifts-content {
@@ -169,9 +89,9 @@ import Layout from '../../../layouts/Layout.astro';
     text-transform: uppercase;
   }
 
-  .stat.pending .stat-value { color: #f59e0b; }
+  .stat.pending .stat-value { color: #C4A67C; }
   .stat.redeemed .stat-value { color: #10b981; }
-  .stat.total-value .stat-value { color: #C4A67C; }
+  .stat.total-value .stat-value { color: #fff; }
 
   .alerts-section {
     margin-bottom: 1.5rem;
@@ -189,14 +109,7 @@ import Layout from '../../../layouts/Layout.astro';
   }
 
   .alert-icon {
-    width: 40px;
-    height: 40px;
-    background: #C4A67C;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.25rem;
+    font-size: 1.5rem;
   }
 
   .alert-content {
@@ -206,7 +119,6 @@ import Layout from '../../../layouts/Layout.astro';
   .alert-title {
     font-weight: 600;
     color: #C4A67C;
-    margin-bottom: 0.25rem;
   }
 
   .alert-details {
@@ -214,34 +126,46 @@ import Layout from '../../../layouts/Layout.astro';
     color: #aaa;
   }
 
-  .gifts-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .gifts-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    max-height: calc(100vh - 200px);
-    overflow-y: auto;
-    padding-right: 0.5rem;
-  }
-
-  .gift-card {
-    border-radius: 12px;
-    padding: 1.25rem 1.5rem;
-    display: flex;
-    align-items: center;
+  /* Cards Grid */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 1.5rem;
+  }
+
+  .loading {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+  }
+
+  /* Credit Card Style */
+  .gift-card {
+    aspect-ratio: 1.586;
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     position: relative;
     overflow: hidden;
-    min-height: 80px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
   }
 
-  /* Tier colors matching the purchase page */
+  .gift-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+  }
+
+  .gift-card.redeemed {
+    opacity: 0.5;
+    filter: grayscale(40%);
+  }
+
+  /* Tier Colors - Matching purchase page exactly */
   .gift-card.classic {
     background: linear-gradient(145deg, #A65D3F 0%, #8B4532 100%);
   }
@@ -256,173 +180,116 @@ import Layout from '../../../layouts/Layout.astro';
 
   .gift-card.platinum {
     background: linear-gradient(145deg, #1A1F16 0%, #3D4F3D 30%, #1A1F16 70%, #4A5D4A 100%);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
   }
 
-  .gift-card.redeemed {
-    opacity: 0.5;
-    filter: grayscale(50%);
+  /* Card Top Row */
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
   }
 
-  .gift-amount-section {
-    text-align: left;
-    min-width: 90px;
+  .card-logo {
+    height: 40px;
+    width: auto;
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
   }
 
-  .gift-amount {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #fff;
-    line-height: 1;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-  }
-
-  .gift-tier-label {
+  .card-tier {
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 2px;
     color: rgba(255,255,255,0.8);
-    margin-top: 0.25rem;
-  }
-
-  .gift-info {
-    flex: 1;
-  }
-
-  .gift-recipient {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #fff;
-    margin-bottom: 0.25rem;
     text-shadow: 0 1px 2px rgba(0,0,0,0.3);
   }
 
-  .gift-code {
-    font-family: 'Monaco', 'Consolas', monospace;
+  /* Card Center - Amount */
+  .card-center {
+    text-align: center;
+  }
+
+  .card-amount {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    line-height: 1;
+  }
+
+  .card-label {
     font-size: 0.7rem;
-    color: rgba(255,255,255,0.9);
-    background: rgba(0,0,0,0.2);
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    display: inline-block;
-    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 0.25rem;
+  }
+
+  /* Card Bottom - Owner Name */
+  .card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .card-owner {
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.95);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+
+  .card-code {
+    font-family: 'Monaco', 'Consolas', monospace;
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.6);
     letter-spacing: 1px;
   }
 
-  .gift-from {
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.7);
-  }
-
-  .gift-moon {
-    width: 50px;
-    height: 50px;
-    opacity: 0.15;
+  /* Redeemed Overlay */
+  .gift-card.redeemed::after {
+    content: 'REDEEMED';
     position: absolute;
-    right: 20px;
     top: 50%;
-    transform: translateY(-50%);
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 4px;
     pointer-events: none;
-    filter: brightness(0) invert(1);
   }
 
-  .gift-meta {
-    text-align: right;
-  }
-
-  .gift-date {
-    font-size: 0.875rem;
-    color: #666;
-  }
-
-  .gift-status {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    margin-top: 0.5rem;
-  }
-
-  .gift-status.pending {
-    background: #f59e0b22;
-    color: #f59e0b;
-  }
-
-  .gift-status.redeemed {
-    background: #10b98122;
-    color: #10b981;
-  }
-
-  .gift-status.sent {
-    background: #3b82f622;
-    color: #3b82f6;
-  }
-
-  .loading {
-    text-align: center;
-    padding: 3rem;
-    color: #666;
-  }
-
-  .btn-redeem {
-    padding: 0.5rem 1rem;
-    background: #C4A67C;
-    color: #111;
-    border: none;
+  /* Action Button */
+  .card-action {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    padding: 0.4rem 0.8rem;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.3);
     border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-redeem:hover {
-    background: #b8956e;
-  }
-
-  .btn-apply-bill {
-    padding: 0.5rem 1rem;
-    background: #3b82f6;
     color: #fff;
-    border: none;
-    border-radius: 6px;
+    font-size: 0.7rem;
     font-weight: 600;
     cursor: pointer;
-    margin-top: 0.5rem;
     transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
-  .btn-apply-bill:hover {
-    background: #2563eb;
-  }
-
-  .gift-amount-section {
-    min-width: 80px;
-  }
-
-  .original-amount {
-    font-size: 0.75rem;
-    color: #666;
-    text-decoration: line-through;
-  }
-
-  .gift-notes {
-    font-size: 0.75rem;
-    color: #888;
-    margin-top: 0.5rem;
-    font-style: italic;
-  }
-
-  .gift-status.partial {
-    background: #3b82f622;
-    color: #3b82f6;
+  .card-action:hover {
+    background: rgba(255,255,255,0.2);
   }
 
   /* Apply Modal */
   .apply-modal {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0,0,0,0.85);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -529,12 +396,10 @@ import Layout from '../../../layouts/Layout.astro';
 
   async function loadData() {
     try {
-      // Load gift cards via server API
       const giftsRes = await fetch('/api/gift-cards');
       giftCards = await giftsRes.json();
       if (!Array.isArray(giftCards)) giftCards = [];
 
-      // Load today's reservations via server API
       const resRes = await fetch('/api/laluna-reservations?today=true');
       reservations = await resRes.json();
       if (!Array.isArray(reservations)) reservations = [];
@@ -551,7 +416,10 @@ import Layout from '../../../layouts/Layout.astro';
   function renderStats() {
     const pending = giftCards.filter(g => g.status !== 'redeemed');
     const redeemed = giftCards.filter(g => g.status === 'redeemed');
-    const totalOutstanding = pending.reduce((sum, g) => sum + (g.amount || 0), 0);
+    const totalOutstanding = pending.reduce((sum, g) => {
+      const balance = g.remaining_balance !== undefined && g.remaining_balance !== null ? g.remaining_balance : g.amount;
+      return sum + balance;
+    }, 0);
 
     document.getElementById('pendingCount').textContent = pending.length;
     document.getElementById('redeemedCount').textContent = redeemed.length;
@@ -567,31 +435,36 @@ import Layout from '../../../layouts/Layout.astro';
     pendingGifts.forEach(gift => {
       const recipientName = (gift.recipient_name || '').toLowerCase().trim();
       const recipientEmail = (gift.recipient_email || '').toLowerCase().trim();
+      const availableBalance = gift.remaining_balance !== undefined && gift.remaining_balance !== null ? gift.remaining_balance : gift.amount;
       
       reservations.forEach(res => {
-        const resName = (res.name || '').toLowerCase().trim();
-        const resEmail = (res.email || '').toLowerCase().trim();
+        const resName = (res.guest_name || res.name || '').toLowerCase().trim();
+        const resEmail = (res.guest_email || res.email || '').toLowerCase().trim();
         
-        // Match by name or email
-        const availableBalance = gift.remaining_balance !== undefined && gift.remaining_balance !== null ? gift.remaining_balance : gift.amount;
         if ((recipientName && resName && (recipientName.includes(resName) || resName.includes(recipientName))) ||
             (recipientEmail && resEmail && recipientEmail === resEmail)) {
           alertsSection.innerHTML += `
             <div class="alert-card">
               <div class="alert-icon">🎁</div>
               <div class="alert-content">
-                <div class="alert-title">Gift Card Match Found!</div>
+                <div class="alert-title">Reservation Match!</div>
                 <div class="alert-details">
-                  <strong>${res.name}</strong> has a reservation at <strong>${res.time}</strong> for ${res.guests} guests.
-                  They have a <strong>$${availableBalance}</strong> gift card (${gift.code}).
+                  <strong>${res.guest_name || res.name}</strong> has a reservation at <strong>${res.time}</strong> — 
+                  they have a <strong>$${availableBalance}</strong> gift card ready to use.
                 </div>
               </div>
-              <button class="btn-apply-bill" onclick="applyToReservation('${gift.code}', ${availableBalance}, '${gift.recipient_name}')">Apply to Bill</button>
             </div>
           `;
         }
       });
     });
+  }
+
+  function getTier(amount) {
+    if (amount >= 200) return { tier: 'platinum', label: 'Platinum' };
+    if (amount >= 150) return { tier: 'gold', label: 'Gold' };
+    if (amount >= 100) return { tier: 'silver', label: 'Silver' };
+    return { tier: 'classic', label: 'Classic' };
   }
 
   function renderGiftCards() {
@@ -603,99 +476,69 @@ import Layout from '../../../layouts/Layout.astro';
     }
 
     list.innerHTML = giftCards.map(g => {
-      const date = new Date(g.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
       const availableBalance = g.remaining_balance !== undefined && g.remaining_balance !== null ? g.remaining_balance : g.amount;
-      const isUsable = g.status !== 'redeemed' && availableBalance > 0;
-      
-      // Determine tier based on amount
-      let tier = 'classic';
-      let tierLabel = 'Classic';
-      if (g.amount >= 200) { tier = 'platinum'; tierLabel = 'Platinum'; }
-      else if (g.amount >= 150) { tier = 'gold'; tierLabel = 'Gold'; }
-      else if (g.amount >= 100) { tier = 'silver'; tierLabel = 'Silver'; }
+      const isRedeemed = g.status === 'redeemed' || availableBalance <= 0;
+      const { tier, label } = getTier(g.amount);
+      const ownerName = (g.recipient_name || 'Guest').toUpperCase();
       
       return `
-        <div class="gift-card ${tier} ${g.status === 'redeemed' ? 'redeemed' : ''}">
-          <img src="/images/logos/laluna-icon-transparent.png" class="gift-moon" alt="" />
-          <div class="gift-amount-section">
-            <div class="gift-amount">$${availableBalance}</div>
-            <div class="gift-tier-label">${tierLabel}</div>
+        <div class="gift-card ${tier} ${isRedeemed ? 'redeemed' : ''}" data-code="${g.code}">
+          <div class="card-top">
+            <img src="/images/logos/laluna-icon-transparent.png" class="card-logo" alt="La Luna" />
+            <span class="card-tier">${label}</span>
           </div>
-          <div class="gift-info">
-            <div class="gift-code">${g.code}</div>
-            <div class="gift-recipient">${g.recipient_name}</div>
-            <div class="gift-from">From: ${g.sender_name} · ${date}</div>
+          <div class="card-center">
+            <div class="card-amount">$${availableBalance}</div>
+            <div class="card-label">Gift Card</div>
           </div>
-          <div class="gift-meta">
-            ${isUsable ? `
-              <button class="btn-apply-bill" onclick="applyToReservation('${g.code}', ${availableBalance}, '${g.recipient_name}')">Apply to Bill</button>
-            ` : `<span class="gift-status redeemed">Redeemed</span>`}
+          <div class="card-bottom">
+            <span class="card-owner">${ownerName}</span>
+            <span class="card-code">${g.code}</span>
           </div>
+          ${!isRedeemed ? `<button class="card-action" onclick="applyToReservation('${g.code}', ${availableBalance}, '${g.recipient_name?.replace(/'/g, "\\'")}')">Use</button>` : ''}
         </div>
       `;
     }).join('');
   }
 
-  window.markRedeemed = async function(code) {
-    if (!confirm('Mark this gift card as fully redeemed?')) return;
-    
-    try {
-      await fetch('/api/gift-cards', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          code,
-          status: 'redeemed',
-          remaining_balance: 0,
-          redeemed_at: new Date().toISOString() 
-        }),
-      });
-      loadData();
-    } catch (e) {
-      alert('Error updating gift card');
-    }
-  };
-
   window.applyToReservation = function(code, amount, recipientName) {
-    // Show modal to select reservation and amount
     const modal = document.createElement('div');
     modal.className = 'apply-modal';
     modal.innerHTML = `
       <div class="apply-modal-content">
-        <h2>Apply Gift Card to Bill</h2>
-        <p class="modal-subtitle">Gift Card: <strong>${code}</strong> - Available: <strong>$${amount}</strong></p>
+        <h2>Apply Gift Card</h2>
+        <p class="modal-subtitle"><strong>${code}</strong> — $${amount} available</p>
         
         <div class="form-group">
           <label>Select Reservation</label>
           <select id="resSelect">
-            <option value="">-- Select a reservation --</option>
-            ${reservations.map(r => `<option value="${r.id}" data-name="${r.name}">${r.time} - ${r.name} (${r.guests} guests)</option>`).join('')}
-            <option value="walkin">Walk-in / No Reservation</option>
+            <option value="">-- Select --</option>
+            ${reservations.map(r => `<option value="${r.id}" data-name="${r.guest_name || r.name}">${r.time} — ${r.guest_name || r.name} (${r.guests})</option>`).join('')}
+            <option value="walkin">Walk-in</option>
           </select>
         </div>
         
         <div class="form-group">
-          <label>Bill Amount ($)</label>
-          <input type="number" id="billAmount" placeholder="Enter bill total" min="0" step="0.01" />
+          <label>Bill Total ($)</label>
+          <input type="number" id="billAmount" placeholder="0.00" min="0" step="0.01" />
         </div>
         
         <div class="form-group">
-          <label>Amount to Apply from Gift Card ($)</label>
-          <input type="number" id="applyAmount" placeholder="Amount to use" min="0" max="${amount}" step="0.01" value="${amount}" />
-          <small>Max available: $${amount}</small>
+          <label>Amount to Apply ($)</label>
+          <input type="number" id="applyAmount" value="${amount}" min="0" max="${amount}" step="0.01" />
+          <small>Max: $${amount}</small>
         </div>
         
         <div class="calc-result" id="calcResult"></div>
         
         <div class="modal-buttons">
           <button class="btn-cancel" onclick="closeApplyModal()">Cancel</button>
-          <button class="btn-apply" onclick="confirmApply('${code}', ${amount})">Apply to Bill</button>
+          <button class="btn-apply" onclick="confirmApply('${code}', ${amount})">Apply</button>
         </div>
       </div>
     `;
     document.body.appendChild(modal);
     
-    // Calculate remaining on input
     document.getElementById('billAmount').addEventListener('input', updateCalc);
     document.getElementById('applyAmount').addEventListener('input', updateCalc);
     
@@ -710,12 +553,12 @@ import Layout from '../../../layouts/Layout.astro';
         if (remaining > 0) {
           html = `<p>Customer pays: <strong>$${remaining.toFixed(2)}</strong></p>`;
         } else {
-          html = `<p class="text-green">Bill fully covered by gift card!</p>`;
+          html = `<p class="text-green">Bill fully covered!</p>`;
         }
         if (giftRemaining > 0) {
-          html += `<p>Gift card remaining balance: <strong>$${giftRemaining.toFixed(2)}</strong></p>`;
+          html += `<p>Gift card balance remaining: <strong>$${giftRemaining.toFixed(2)}</strong></p>`;
         } else {
-          html += `<p>Gift card will be fully redeemed</p>`;
+          html += `<p>Gift card will be fully used</p>`;
         }
       }
       document.getElementById('calcResult').innerHTML = html;
@@ -732,15 +575,11 @@ import Layout from '../../../layouts/Layout.astro';
     const applyAmount = parseFloat(document.getElementById('applyAmount').value) || 0;
     
     if (!resSelect.value) {
-      alert('Please select a reservation or walk-in');
+      alert('Please select a reservation');
       return;
     }
-    if (applyAmount <= 0) {
-      alert('Please enter an amount to apply');
-      return;
-    }
-    if (applyAmount > originalAmount) {
-      alert('Cannot apply more than available balance');
+    if (applyAmount <= 0 || applyAmount > originalAmount) {
+      alert('Invalid amount');
       return;
     }
     
@@ -760,21 +599,17 @@ import Layout from '../../../layouts/Layout.astro';
           applied_to_reservation: resSelect.value,
           applied_amount: applyAmount,
           applied_at: new Date().toISOString(),
-          notes: `Applied $${applyAmount} to ${resName} bill ($${billAmount}). ${isFullyRedeemed ? 'Fully redeemed.' : `Remaining: $${remainingBalance}`}`
+          notes: `$${applyAmount} applied to ${resName} (bill: $${billAmount})`
         }),
       });
       
       closeApplyModal();
       loadData();
-      alert(`Gift card applied! ${isFullyRedeemed ? 'Fully redeemed.' : `Remaining balance: $${remainingBalance}`}`);
     } catch (e) {
       alert('Error applying gift card');
     }
   };
 
-  // Load on page load
   loadData();
-  
-  // Refresh every 30 seconds
   setInterval(loadData, 30000);
 </script>
