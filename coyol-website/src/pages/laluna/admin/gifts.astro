@@ -221,46 +221,91 @@ import Layout from '../../../layouts/Layout.astro';
   }
 
   .gift-card {
-    background: #222;
-    border-radius: 12px;
-    padding: 1.25rem;
-    display: flex;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
     gap: 1.5rem;
-    border-left: 4px solid #C4A67C;
+    border: 1px solid #333;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gift-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #C4A67C, #8B7355, #C4A67C);
   }
 
   .gift-card.redeemed {
-    opacity: 0.6;
-    border-left-color: #10b981;
+    opacity: 0.5;
+  }
+
+  .gift-card.redeemed::before {
+    background: linear-gradient(90deg, #10b981, #059669, #10b981);
+  }
+
+  .gift-amount-section {
+    text-align: center;
+    padding: 1rem 1.5rem;
+    background: rgba(196, 166, 124, 0.1);
+    border-radius: 12px;
+    min-width: 100px;
   }
 
   .gift-amount {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: bold;
     color: #C4A67C;
-    min-width: 80px;
+    line-height: 1;
   }
 
   .gift-info {
     flex: 1;
   }
 
-  .gift-code {
-    font-family: monospace;
-    font-size: 0.875rem;
-    color: #888;
-    margin-bottom: 0.25rem;
+  .gift-recipient {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.5rem;
   }
 
-  .gift-recipient {
-    font-weight: 500;
-    margin-bottom: 0.25rem;
+  .gift-code {
+    font-family: 'Monaco', 'Consolas', monospace;
+    font-size: 0.8rem;
+    color: #C4A67C;
+    background: rgba(196, 166, 124, 0.15);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
   }
 
   .gift-from {
     font-size: 0.875rem;
-    color: #666;
+    color: #888;
+  }
+
+  .gift-from span {
+    color: #aaa;
+  }
+
+  .gift-moon {
+    width: 60px;
+    height: 60px;
+    opacity: 0.15;
+    position: absolute;
+    right: 100px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   .gift-meta {
@@ -541,21 +586,22 @@ import Layout from '../../../layouts/Layout.astro';
     }
 
     list.innerHTML = giftCards.map(g => {
-      const date = new Date(g.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const date = new Date(g.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
       const statusClass = g.status === 'redeemed' ? 'redeemed' : g.status === 'partial' ? 'partial' : g.status === 'sent' ? 'sent' : 'pending';
       const availableBalance = g.remaining_balance !== undefined && g.remaining_balance !== null ? g.remaining_balance : g.amount;
       const isUsable = g.status !== 'redeemed' && availableBalance > 0;
       
       return `
         <div class="gift-card ${g.status === 'redeemed' ? 'redeemed' : ''}">
+          <img src="/images/laluna-moon-white-real.png" class="gift-moon" alt="" />
           <div class="gift-amount-section">
             <div class="gift-amount">$${availableBalance}</div>
             ${g.remaining_balance !== undefined && g.remaining_balance !== g.amount ? `<div class="original-amount">of $${g.amount}</div>` : ''}
           </div>
           <div class="gift-info">
             <div class="gift-code">${g.code}</div>
-            <div class="gift-recipient">${g.recipient_name}</div>
-            <div class="gift-from">From: ${g.sender_name}</div>
+            <div class="gift-recipient">To: ${g.recipient_name}</div>
+            <div class="gift-from">From: <span>${g.sender_name}</span></div>
             ${g.notes ? `<div class="gift-notes">${g.notes}</div>` : ''}
           </div>
           <div class="gift-meta">
