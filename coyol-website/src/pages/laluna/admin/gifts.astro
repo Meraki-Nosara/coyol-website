@@ -317,6 +317,148 @@ import Layout from '../../../layouts/Layout.astro';
   .btn-redeem:hover {
     background: #b8956e;
   }
+
+  .btn-apply-bill {
+    padding: 0.5rem 1rem;
+    background: #3b82f6;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: all 0.2s;
+  }
+
+  .btn-apply-bill:hover {
+    background: #2563eb;
+  }
+
+  .gift-amount-section {
+    min-width: 80px;
+  }
+
+  .original-amount {
+    font-size: 0.75rem;
+    color: #666;
+    text-decoration: line-through;
+  }
+
+  .gift-notes {
+    font-size: 0.75rem;
+    color: #888;
+    margin-top: 0.5rem;
+    font-style: italic;
+  }
+
+  .gift-status.partial {
+    background: #3b82f622;
+    color: #3b82f6;
+  }
+
+  /* Apply Modal */
+  .apply-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .apply-modal-content {
+    background: #222;
+    border-radius: 16px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 450px;
+  }
+
+  .apply-modal-content h2 {
+    color: #C4A67C;
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-subtitle {
+    color: #888;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #aaa;
+    font-size: 0.875rem;
+  }
+
+  .form-group select,
+  .form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    background: #333;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+  }
+
+  .form-group small {
+    color: #666;
+    font-size: 0.75rem;
+  }
+
+  .calc-result {
+    background: #333;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    min-height: 60px;
+  }
+
+  .calc-result p {
+    margin: 0.25rem 0;
+    color: #aaa;
+  }
+
+  .calc-result .text-green {
+    color: #10b981;
+  }
+
+  .modal-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .btn-cancel {
+    flex: 1;
+    padding: 0.75rem;
+    background: #444;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .btn-apply {
+    flex: 1;
+    padding: 0.75rem;
+    background: #C4A67C;
+    color: #111;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .btn-apply:hover {
+    background: #b8956e;
+  }
 </style>
 
 <script>
@@ -377,6 +519,7 @@ import Layout from '../../../layouts/Layout.astro';
         const resEmail = (res.email || '').toLowerCase().trim();
         
         // Match by name or email
+        const availableBalance = gift.remaining_balance !== undefined && gift.remaining_balance !== null ? gift.remaining_balance : gift.amount;
         if ((recipientName && resName && (recipientName.includes(resName) || resName.includes(recipientName))) ||
             (recipientEmail && resEmail && recipientEmail === resEmail)) {
           alertsSection.innerHTML += `
@@ -386,10 +529,10 @@ import Layout from '../../../layouts/Layout.astro';
                 <div class="alert-title">Gift Card Match Found!</div>
                 <div class="alert-details">
                   <strong>${res.name}</strong> has a reservation at <strong>${res.time}</strong> for ${res.guests} guests.
-                  They have a <strong>$${gift.amount}</strong> gift card (${gift.code}).
+                  They have a <strong>$${availableBalance}</strong> gift card (${gift.code}).
                 </div>
               </div>
-              <button class="btn-redeem" onclick="markRedeemed('${gift.code}')">Mark Redeemed</button>
+              <button class="btn-apply-bill" onclick="applyToReservation('${gift.code}', ${availableBalance}, '${gift.recipient_name}')">Apply to Bill</button>
             </div>
           `;
         }
@@ -407,20 +550,28 @@ import Layout from '../../../layouts/Layout.astro';
 
     list.innerHTML = giftCards.map(g => {
       const date = new Date(g.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-      const statusClass = g.status === 'redeemed' ? 'redeemed' : g.status === 'sent' ? 'sent' : 'pending';
+      const statusClass = g.status === 'redeemed' ? 'redeemed' : g.status === 'partial' ? 'partial' : g.status === 'sent' ? 'sent' : 'pending';
+      const availableBalance = g.remaining_balance !== undefined && g.remaining_balance !== null ? g.remaining_balance : g.amount;
+      const isUsable = g.status !== 'redeemed' && availableBalance > 0;
       
       return `
         <div class="gift-card ${g.status === 'redeemed' ? 'redeemed' : ''}">
-          <div class="gift-amount">$${g.amount}</div>
+          <div class="gift-amount-section">
+            <div class="gift-amount">$${availableBalance}</div>
+            ${g.remaining_balance !== undefined && g.remaining_balance !== g.amount ? `<div class="original-amount">of $${g.amount}</div>` : ''}
+          </div>
           <div class="gift-info">
             <div class="gift-code">${g.code}</div>
             <div class="gift-recipient">${g.recipient_name}</div>
             <div class="gift-from">From: ${g.sender_name}</div>
+            ${g.notes ? `<div class="gift-notes">${g.notes}</div>` : ''}
           </div>
           <div class="gift-meta">
             <div class="gift-date">${date}</div>
-            <div class="gift-status ${statusClass}">${g.status || 'pending'}</div>
-            ${g.status !== 'redeemed' ? `<button class="btn-redeem" style="margin-top:0.5rem" onclick="markRedeemed('${g.code}')">Redeem</button>` : ''}
+            <div class="gift-status ${statusClass}">${g.status === 'partial' ? 'Partial' : g.status || 'pending'}</div>
+            ${isUsable ? `
+              <button class="btn-apply-bill" onclick="applyToReservation('${g.code}', ${availableBalance}, '${g.recipient_name}')">Apply to Bill</button>
+            ` : ''}
           </div>
         </div>
       `;
@@ -428,7 +579,7 @@ import Layout from '../../../layouts/Layout.astro';
   }
 
   window.markRedeemed = async function(code) {
-    if (!confirm('Mark this gift card as redeemed?')) return;
+    if (!confirm('Mark this gift card as fully redeemed?')) return;
     
     try {
       await fetch(`${SUPABASE_URL}/rest/v1/laluna_gift_cards?code=eq.${code}`, {
@@ -439,13 +590,133 @@ import Layout from '../../../layouts/Layout.astro';
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ 
-          status: 'redeemed', 
+          status: 'redeemed',
+          remaining_balance: 0,
           redeemed_at: new Date().toISOString() 
         }),
       });
       loadData();
     } catch (e) {
       alert('Error updating gift card');
+    }
+  };
+
+  window.applyToReservation = function(code, amount, recipientName) {
+    // Show modal to select reservation and amount
+    const modal = document.createElement('div');
+    modal.className = 'apply-modal';
+    modal.innerHTML = `
+      <div class="apply-modal-content">
+        <h2>Apply Gift Card to Bill</h2>
+        <p class="modal-subtitle">Gift Card: <strong>${code}</strong> - Available: <strong>$${amount}</strong></p>
+        
+        <div class="form-group">
+          <label>Select Reservation</label>
+          <select id="resSelect">
+            <option value="">-- Select a reservation --</option>
+            ${reservations.map(r => `<option value="${r.id}" data-name="${r.name}">${r.time} - ${r.name} (${r.guests} guests)</option>`).join('')}
+            <option value="walkin">Walk-in / No Reservation</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Bill Amount ($)</label>
+          <input type="number" id="billAmount" placeholder="Enter bill total" min="0" step="0.01" />
+        </div>
+        
+        <div class="form-group">
+          <label>Amount to Apply from Gift Card ($)</label>
+          <input type="number" id="applyAmount" placeholder="Amount to use" min="0" max="${amount}" step="0.01" value="${amount}" />
+          <small>Max available: $${amount}</small>
+        </div>
+        
+        <div class="calc-result" id="calcResult"></div>
+        
+        <div class="modal-buttons">
+          <button class="btn-cancel" onclick="closeApplyModal()">Cancel</button>
+          <button class="btn-apply" onclick="confirmApply('${code}', ${amount})">Apply to Bill</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    
+    // Calculate remaining on input
+    document.getElementById('billAmount').addEventListener('input', updateCalc);
+    document.getElementById('applyAmount').addEventListener('input', updateCalc);
+    
+    function updateCalc() {
+      const bill = parseFloat(document.getElementById('billAmount').value) || 0;
+      const apply = parseFloat(document.getElementById('applyAmount').value) || 0;
+      const remaining = bill - apply;
+      const giftRemaining = amount - apply;
+      
+      let html = '';
+      if (bill > 0) {
+        if (remaining > 0) {
+          html = `<p>Customer pays: <strong>$${remaining.toFixed(2)}</strong></p>`;
+        } else {
+          html = `<p class="text-green">Bill fully covered by gift card!</p>`;
+        }
+        if (giftRemaining > 0) {
+          html += `<p>Gift card remaining balance: <strong>$${giftRemaining.toFixed(2)}</strong></p>`;
+        } else {
+          html += `<p>Gift card will be fully redeemed</p>`;
+        }
+      }
+      document.getElementById('calcResult').innerHTML = html;
+    }
+  };
+
+  window.closeApplyModal = function() {
+    document.querySelector('.apply-modal')?.remove();
+  };
+
+  window.confirmApply = async function(code, originalAmount) {
+    const resSelect = document.getElementById('resSelect');
+    const billAmount = parseFloat(document.getElementById('billAmount').value) || 0;
+    const applyAmount = parseFloat(document.getElementById('applyAmount').value) || 0;
+    
+    if (!resSelect.value) {
+      alert('Please select a reservation or walk-in');
+      return;
+    }
+    if (applyAmount <= 0) {
+      alert('Please enter an amount to apply');
+      return;
+    }
+    if (applyAmount > originalAmount) {
+      alert('Cannot apply more than available balance');
+      return;
+    }
+    
+    const remainingBalance = originalAmount - applyAmount;
+    const isFullyRedeemed = remainingBalance <= 0;
+    const resName = resSelect.options[resSelect.selectedIndex].dataset?.name || 'Walk-in';
+    
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/laluna_gift_cards?code=eq.${code}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          status: isFullyRedeemed ? 'redeemed' : 'partial',
+          remaining_balance: remainingBalance,
+          redeemed_at: isFullyRedeemed ? new Date().toISOString() : null,
+          applied_to_reservation: resSelect.value,
+          applied_amount: applyAmount,
+          applied_at: new Date().toISOString(),
+          notes: `Applied $${applyAmount} to ${resName} bill ($${billAmount}). ${isFullyRedeemed ? 'Fully redeemed.' : `Remaining: $${remainingBalance}`}`
+        }),
+      });
+      
+      closeApplyModal();
+      loadData();
+      alert(`Gift card applied! ${isFullyRedeemed ? 'Fully redeemed.' : `Remaining balance: $${remainingBalance}`}`);
+    } catch (e) {
+      alert('Error applying gift card');
     }
   };
 
