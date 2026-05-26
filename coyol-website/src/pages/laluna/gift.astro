@@ -13,7 +13,7 @@ import Layout from '../../layouts/Layout.astro';
       <div class="gift-card-preview">
         <div class="card-visual silver" id="card-visual">
           <div class="card-center">
-            <div class="card-brand">La Luna</div>
+            <img src="/images/logos/laluna-moon-white-final.png" alt="La Luna" class="card-logo-big" />
           </div>
           <div class="card-bottom">
             <div class="card-amount">$<span id="preview-amount">100</span></div>
@@ -164,16 +164,11 @@ import Layout from '../../layouts/Layout.astro';
     justify-content: center;
   }
 
-  .card-brand {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.5rem;
-    font-weight: 400;
-    font-style: italic;
-    color: rgba(255,255,255,0.9);
-    letter-spacing: 2px;
-    text-shadow: 
-      1px 1px 2px rgba(0,0,0,0.3),
-      0 -1px 0 rgba(255,255,255,0.1);
+  .card-logo-big {
+    height: 120px;
+    width: auto;
+    object-fit: contain;
+    opacity: 0.95;
   }
 
   .card-bottom {
