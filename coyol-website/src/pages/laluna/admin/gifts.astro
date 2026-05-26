@@ -184,6 +184,24 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
     box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
   }
 
+  /* Platinum gets gold text and logo */
+  .gift-card.platinum .card-logo {
+    filter: brightness(0) saturate(100%) invert(72%) sepia(29%) saturate(456%) hue-rotate(357deg) brightness(91%) contrast(89%);
+    opacity: 1;
+  }
+
+  .gift-card.platinum .card-amount,
+  .gift-card.platinum .card-tier,
+  .gift-card.platinum .card-type,
+  .gift-card.platinum .card-owner,
+  .gift-card.platinum .card-recipient-label {
+    color: #C4A67C;
+  }
+
+  .gift-card.platinum .card-amount {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  }
+
   /* Card Logo - Center Top */
   .card-logo-wrap {
     flex: 1;
