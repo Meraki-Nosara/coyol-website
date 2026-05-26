@@ -1,0 +1,172 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Legal cases data
+const cases = [
+  {
+    id: 'laluna-zmt',
+    title: 'La Luna ZMT',
+    subtitle: 'Due Diligence - Proteger la concesión',
+    status: 'active',
+    priority: 'high',
+    statusColor: 'bg-amber-500',
+    description: '40 años establecidos en zona marítimo terrestre. Victoria en Sala Cuarta.',
+    keyDates: [
+      { date: '2026-05', event: 'Damian inicia coordinación con IGN' },
+      { date: '~2004', event: 'Victoria en Sala Cuarta vs MINAET/SINAC' },
+    ],
+    contacts: [
+      { name: 'Damian Zsulman', role: 'Coordinador IGN', email: 'dzsulman@gmail.com' },
+      { name: 'Álvaro Álvarez Calderón', role: 'Director IGN', email: 'aalvarezc@rnp.go.cr' },
+      { name: 'Ing. Adriana Ibarra', role: 'TOPOS Topografía', email: 'topos226@gmail.com' },
+    ],
+    nextSteps: [
+      'Obtener informe técnico de Área de Conservación',
+      'Coordinar con IGN para publicación en La Gaceta',
+      'Recopilar documentación histórica',
+    ],
+    workflowUrl: 'https://coyol-control.vercel.app/laluna-zmt',
+  },
+  {
+    id: 'mar-azul-sfera',
+    title: 'SFERA vs Mar Azul',
+    subtitle: 'Caso 26-000076-1632-CI',
+    status: 'monitoring',
+    priority: 'high',
+    statusColor: 'bg-red-500',
+    description: 'Demanda de SFERA contra condominio Mar Azul. Estrategia: nulidad de notificación.',
+    keyDates: [
+      { date: '2026-05-22', event: 'Análisis completo del expediente' },
+      { date: '2026-05-24', event: 'Descubrimiento: Alfaro Vargas era juez antes de SFERA' },
+    ],
+    contacts: [
+      { name: 'Edwin Mora', role: 'Abogado - Impugnación', email: '' },
+      { name: 'Damian Zsulman', role: 'Fuente interna', email: 'dzsulman@gmail.com' },
+    ],
+    nextSteps: [
+      'NO responder hasta notificación válida',
+      'Edwin prepara impugnación de nulidad',
+      'Monitorear movimientos de SFERA',
+    ],
+    workflowUrl: 'https://mar-azul-legal.vercel.app',
+  },
+];
+
+const activeCases = cases.filter(c => c.status === 'active').length;
+const monitoringCases = cases.filter(c => c.status === 'monitoring').length;
+---
+
+<Layout title="Legal">
+  <div class="min-h-screen bg-landrover-limestone/30">
+    <!-- Header -->
+    <header class="bg-white border-b border-landrover-arles/30 px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-serif text-landrover-santorini">Legal</h1>
+          <p class="text-sm text-landrover-marine/60">Casos activos y seguimiento</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="text-center px-4 py-2 bg-amber-100 rounded-lg">
+            <p class="text-2xl font-bold text-amber-700">{activeCases}</p>
+            <p class="text-xs text-amber-600">Activos</p>
+          </div>
+          <div class="text-center px-4 py-2 bg-red-100 rounded-lg">
+            <p class="text-2xl font-bold text-red-700">{monitoringCases}</p>
+            <p class="text-xs text-red-600">Monitoreo</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Cases Grid -->
+    <main class="p-6">
+      <div class="grid gap-6">
+        {cases.map(c => (
+          <div class="bg-white rounded-xl shadow-sm border border-landrover-arles/20 overflow-hidden">
+            <!-- Case Header -->
+            <div class="px-6 py-4 border-b border-landrover-arles/20 flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class={`w-3 h-3 rounded-full ${c.statusColor}`}></div>
+                <div>
+                  <h2 class="text-xl font-serif text-landrover-santorini">{c.title}</h2>
+                  <p class="text-sm text-landrover-marine/60">{c.subtitle}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class={`px-3 py-1 rounded-full text-xs font-medium ${
+                  c.status === 'active' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'
+                }`}>
+                  {c.status === 'active' ? 'Activo' : 'Monitoreo'}
+                </span>
+                {c.workflowUrl && (
+                  <a 
+                    href={c.workflowUrl} 
+                    target="_blank"
+                    class="px-4 py-2 bg-landrover-keswick text-white rounded-lg text-sm hover:bg-landrover-keswick/90 transition-colors"
+                  >
+                    Ver Workflow
+                  </a>
+                )}
+              </div>
+            </div>
+
+            <!-- Case Content -->
+            <div class="p-6">
+              <p class="text-landrover-marine mb-6">{c.description}</p>
+
+              <div class="grid md:grid-cols-3 gap-6">
+                <!-- Key Dates -->
+                <div>
+                  <h3 class="text-sm font-semibold text-landrover-santorini mb-3">Fechas Clave</h3>
+                  <div class="space-y-2">
+                    {c.keyDates.map(d => (
+                      <div class="flex gap-3 text-sm">
+                        <span class="text-landrover-marine/50 w-20 flex-shrink-0">{d.date}</span>
+                        <span class="text-landrover-marine">{d.event}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <!-- Contacts -->
+                <div>
+                  <h3 class="text-sm font-semibold text-landrover-santorini mb-3">Contactos</h3>
+                  <div class="space-y-2">
+                    {c.contacts.map(contact => (
+                      <div class="text-sm">
+                        <p class="text-landrover-marine font-medium">{contact.name}</p>
+                        <p class="text-landrover-marine/50 text-xs">{contact.role}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <!-- Next Steps -->
+                <div>
+                  <h3 class="text-sm font-semibold text-landrover-santorini mb-3">Próximos Pasos</h3>
+                  <ul class="space-y-2">
+                    {c.nextSteps.map(step => (
+                      <li class="flex items-start gap-2 text-sm text-landrover-marine">
+                        <span class="text-landrover-keswick mt-1">→</span>
+                        {step}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Important Notice -->
+      <div class="mt-6 bg-red-50 border border-red-200 rounded-xl p-6">
+        <h3 class="text-red-800 font-semibold mb-2">Recordatorio Importante</h3>
+        <p class="text-red-700 text-sm">
+          <strong>SFERA vs Mar Azul:</strong> NO responder hasta recibir notificación válida. 
+          Estrategia es nulidad de notificación — no mostrar debilidad.
+        </p>
+      </div>
+    </main>
+  </div>
+</Layout>
