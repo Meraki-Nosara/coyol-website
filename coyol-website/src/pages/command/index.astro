@@ -5,39 +5,66 @@ import guestData from '../../data/guests-enriched.json';
 const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
 const SUPABASE_SERVICE_KEY = import.meta.env.SUPABASE_SERVICE_KEY || 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng';
 
-// Fetch live CRM data
+// Fetch live CRM data with counts
 let crmGuests: any[] = [];
 let crmHotLeads: any[] = [];
+let totalCount = 0;
+let hotCount = 0;
+let todayCount = 0;
+
+const today = new Date().toISOString().split('T')[0];
+
 try {
-  const [allRes, hotRes] = await Promise.all([
-    fetch(`${SUPABASE_URL}/rest/v1/crm_guests?select=name,email,city,region,lead_score,source,is_corporate_email&limit=50000`, {
-      headers: { 'apikey': SUPABASE_SERVICE_KEY, 'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}` }
+  const [totalRes, hotCountRes, todayRes, hotRes] = await Promise.all([
+    // Total count
+    fetch(`${SUPABASE_URL}/rest/v1/crm_guests?select=count`, {
+      headers: { 'apikey': SUPABASE_SERVICE_KEY, 'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`, 'Prefer': 'count=exact' }
     }),
-    fetch(`${SUPABASE_URL}/rest/v1/crm_guests?lead_score=gte.40&select=name,email,city,region,lead_score,source,is_corporate_email,created_at&order=created_at.desc&limit=5000`, {
+    // Hot leads count
+    fetch(`${SUPABASE_URL}/rest/v1/crm_guests?lead_score=gte.40&select=count`, {
+      headers: { 'apikey': SUPABASE_SERVICE_KEY, 'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`, 'Prefer': 'count=exact' }
+    }),
+    // New today count
+    fetch(`${SUPABASE_URL}/rest/v1/crm_guests?lead_score=gte.40&created_at=gte.${today}&select=count`, {
+      headers: { 'apikey': SUPABASE_SERVICE_KEY, 'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`, 'Prefer': 'count=exact' }
+    }),
+    // Top hot leads for display
+    fetch(`${SUPABASE_URL}/rest/v1/crm_guests?lead_score=gte.40&select=name,email,city,region,lead_score,source,is_corporate_email,created_at&order=created_at.desc&limit=100`, {
       headers: { 'apikey': SUPABASE_SERVICE_KEY, 'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}` }
     })
   ]);
-  if (allRes.ok) crmGuests = await allRes.json();
+  
+  if (totalRes.ok) {
+    const data = await totalRes.json();
+    totalCount = data[0]?.count || 0;
+  }
+  if (hotCountRes.ok) {
+    const data = await hotCountRes.json();
+    hotCount = data[0]?.count || 0;
+  }
+  if (todayRes.ok) {
+    const data = await todayRes.json();
+    todayCount = data[0]?.count || 0;
+  }
   if (hotRes.ok) crmHotLeads = await hotRes.json();
 } catch (e) {
   console.error('CRM fetch error:', e);
 }
 
-// Use CRM data if available, otherwise fall back to static JSON
-const guests = crmGuests.length > 0 ? crmGuests : (guestData.guests || []);
+// Use static data for city analysis
+const guests = guestData.guests || [];
 const summary = guestData.summary || {};
 
-// Real segments - use CRM hot leads for accuracy
-const hot = crmHotLeads.length > 0 ? crmHotLeads : guests.filter(g => g.lead_score >= 40);
-const warm = guests.filter(g => g.lead_score >= 30 && g.lead_score < 40);
+// Use live counts from CRM
+const hotLeadsCount = hotCount || guests.filter(g => g.lead_score >= 40).length;
+const totalGuests = totalCount || guests.length;
+const newTodayCount = todayCount;
+
+// For display purposes
 const targetMarkets = guests.filter(g => ['US-East', 'US-West', 'US-Central', 'Canada', 'Europe', 'Corporate'].includes(g.region) || g.lead_score >= 40);
 const corporate = guests.filter(g => g.is_corporate_email);
 
-// New leads today
-const today = new Date().toISOString().split('T')[0];
-const newToday = crmHotLeads.filter(g => g.created_at?.startsWith(today));
-
-// Top 10 hot leads (newest first)
+// Top 10 hot leads (newest first from CRM)
 const topHot = crmHotLeads.slice(0, 10);
 
 // Top cities
@@ -67,13 +94,13 @@ const topSources = Object.entries(sourceMap)
   <div class="page">
     <header class="page-header">
       <h1>Dashboard</h1>
-      <span class="updated">Live CRM: {guests.length.toLocaleString()} guests{newToday.length > 0 ? ` · ${newToday.length} new today` : ''}</span>
+      <span class="updated">Live CRM: {totalGuests.toLocaleString()} guests{newTodayCount > 0 ? ` · ${newTodayCount} new today` : ''}</span>
     </header>
 
     <!-- Hero Stats -->
     <section class="hero-stats">
       <div class="big-stat">
-        <div class="big-number">{hot.length.toLocaleString()}</div>
+        <div class="big-number">{hotLeadsCount.toLocaleString()}</div>
         <div class="big-label">Hot Leads</div>
         <div class="big-sub">Score 40+ · Ready to nurture</div>
       </div>
