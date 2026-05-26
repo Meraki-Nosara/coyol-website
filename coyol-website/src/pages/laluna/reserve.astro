@@ -21,6 +21,10 @@ import Layout from '../../layouts/Layout.astro';
       <div class="form-container">
         <h1>Reserve a Table</h1>
         <p class="subtitle">Guiones · Nosara</p>
+        
+        <a href="/laluna/gift" class="gift-link">
+          <span class="gift-icon">🎁</span> Gift a Friend
+        </a>
 
         <!-- Step 1: Date & Party -->
         <div class="step active" id="step-1">
@@ -693,6 +697,30 @@ import Layout from '../../layouts/Layout.astro';
     .or-call a {
       color: #A65D3F;
       font-weight: 600;
+    }
+    .gift-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding: 0.625rem 1.25rem;
+      background: transparent;
+      border: 1px solid #C4A67C;
+      color: #C4A67C;
+      border-radius: 25px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    
+    .gift-link:hover {
+      background: #C4A67C;
+      color: #1A1F16;
+    }
+    
+    .gift-icon {
+      font-size: 1rem;
     }
   </style>
 
