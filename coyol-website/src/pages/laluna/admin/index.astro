@@ -242,6 +242,11 @@ import Layout from '../../../layouts/Layout.astro';
           <button class="modal-close" onclick="closeWalkinModal()">×</button>
         </div>
         <div class="modal-body">
+          <div class="walkin-name">
+            <label>Guest Name (optional)</label>
+            <input type="text" id="walkinName" class="form-input" placeholder="Enter name to check for gift cards..." />
+            <div id="walkinGiftMatch" class="gift-match-alert" style="display:none;"></div>
+          </div>
           <div class="walkin-guests">
             <label>How many guests?</label>
             <div class="guest-buttons">
@@ -549,11 +554,37 @@ import Layout from '../../../layouts/Layout.astro';
       max-width: 360px;
     }
 
-    .walkin-guests label, .walkin-table label {
+    .walkin-guests label, .walkin-table label, .walkin-name label {
       display: block;
       font-size: 0.8rem;
       color: #666;
       margin-bottom: 8px;
+    }
+
+    .walkin-name {
+      margin-bottom: 20px;
+    }
+
+    .walkin-name input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0ddd5;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .gift-match-alert {
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: linear-gradient(135deg, #C4A67C22, #C4A67C11);
+      border: 1px solid #C4A67C;
+      border-radius: 8px;
+      color: #8B7355;
+      font-size: 0.9rem;
+    }
+
+    .gift-match-alert strong {
+      color: #C4A67C;
     }
 
     .guest-buttons {
@@ -2794,12 +2825,47 @@ import Layout from '../../../layouts/Layout.astro';
     // Walk-in functions
     let walkinGuests = 4;
 
+    let giftCardsCache = [];
+
+    async function loadGiftCards() {
+      try {
+        const res = await fetch('/api/gift-cards');
+        giftCardsCache = await res.json();
+        if (!Array.isArray(giftCardsCache)) giftCardsCache = [];
+      } catch (e) {
+        giftCardsCache = [];
+      }
+    }
+
+    function checkGiftCardMatch(name) {
+      const matchAlert = document.getElementById('walkinGiftMatch');
+      if (!name || name.length < 2) {
+        matchAlert.style.display = 'none';
+        return;
+      }
+      const nameLower = name.toLowerCase();
+      const matches = giftCardsCache.filter(g => 
+        g.status !== 'redeemed' && 
+        g.recipient_name && 
+        g.recipient_name.toLowerCase().includes(nameLower)
+      );
+      if (matches.length > 0) {
+        const total = matches.reduce((sum, g) => sum + (g.remaining_balance ?? g.amount), 0);
+        matchAlert.innerHTML = `🎁 <strong>Gift card found!</strong> ${matches[0].recipient_name} has <strong>$${total}</strong> available.`;
+        matchAlert.style.display = 'block';
+      } else {
+        matchAlert.style.display = 'none';
+      }
+    }
+
     function openWalkin() {
       walkinGuests = 4;
       document.querySelectorAll('.guest-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.guests === '4');
       });
       document.getElementById('walkinGuestCount').value = 4;
+      document.getElementById('walkinName').value = '';
+      document.getElementById('walkinGiftMatch').style.display = 'none';
       // Populate tables from current zone layout
       const tableSelect = document.getElementById('walkinTable');
       tableSelect.innerHTML = '<option value="">Auto-assign</option>';
@@ -2809,12 +2875,18 @@ import Layout from '../../../layouts/Layout.astro';
         const capacity = t.maxCovers || 4;
         tableSelect.innerHTML += `<option value="${t.id}">${t.name} (${capacity}p)</option>`;
       });
+      loadGiftCards();
       document.getElementById('walkinModal').classList.add('open');
     }
 
     function closeWalkinModal() {
       document.getElementById('walkinModal').classList.remove('open');
     }
+
+    // Name input - check for gift card matches
+    document.getElementById('walkinName')?.addEventListener('input', (e) => {
+      checkGiftCardMatch(e.target.value);
+    });
 
     // Guest button clicks
     document.querySelectorAll('.guest-btn').forEach(btn => {
@@ -2836,15 +2908,16 @@ import Layout from '../../../layouts/Layout.astro';
       const now = new Date();
       const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
       
+      const walkinNameValue = document.getElementById('walkinName').value.trim();
       const reservation = {
         date: getDateString(currentDate),
         time: timeStr,
         guests: walkinGuests,
-        guestName: `Walk-in (${walkinGuests})`,
+        guestName: walkinNameValue || `Walk-in (${walkinGuests})`,
         guestPhone: '',
         guestEmail: '',
         tableId: document.getElementById('walkinTable').value || null,
-        specialRequests: 'Walk-in',
+        specialRequests: walkinNameValue ? '' : 'Walk-in',
         status: 'seated'
       };
       
