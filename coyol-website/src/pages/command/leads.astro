@@ -59,7 +59,7 @@ const score40 = allLeads.filter(g => g.lead_score >= 40);
     <header class="page-header">
       <div>
         <h1>All Leads</h1>
-        <span class="subtitle">{allLeads.length} leads with score 40+ · US & Canada</span>
+        <span class="subtitle">{allLeads.length} leads with score 40+ · US & Canada · <span class="live-indicator">Live from {crmGuests.length} CRM + {staticGuests.length - crmEmails.size} historic</span></span>
       </div>
       <div class="header-controls">
         <div class="search-box">
@@ -179,6 +179,23 @@ const score40 = allLeads.filter(g => g.lead_score >= 40);
   .subtitle {
     font-size: 12px;
     color: #555;
+  }
+
+  .live-indicator {
+    color: #10b981;
+    font-weight: 500;
+  }
+
+  .new-badge {
+    display: inline-block;
+    background: #10b981;
+    color: #000;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
   }
   
   .header-controls {
