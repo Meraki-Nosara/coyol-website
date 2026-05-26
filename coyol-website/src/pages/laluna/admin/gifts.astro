@@ -143,6 +143,7 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
   /* Credit Card Style */
   .gift-card {
     aspect-ratio: 1.586;
+    min-height: 200px;
     border-radius: 16px;
     padding: 1.5rem;
     display: flex;
@@ -153,6 +154,7 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
     overflow: hidden;
     cursor: pointer;
     transition: transform 0.3s, box-shadow 0.3s;
+    background: #333; /* Fallback */
   }
 
   .gift-card:hover {
@@ -191,10 +193,10 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
   }
 
   .card-logo {
-    height: 40px;
+    height: 50px;
     width: auto;
     filter: brightness(0) invert(1);
-    opacity: 0.9;
+    opacity: 0.95;
   }
 
   .card-tier {
