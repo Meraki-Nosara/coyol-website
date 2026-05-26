@@ -462,26 +462,18 @@ import Layout from '../../../layouts/Layout.astro';
 </style>
 
 <script>
-  const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
-  const SUPABASE_KEY = 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng';
-
   let giftCards = [];
   let reservations = [];
 
   async function loadData() {
     try {
-      // Load gift cards
-      const giftsRes = await fetch(`${SUPABASE_URL}/rest/v1/laluna_gift_cards?select=*&order=created_at.desc`, {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-      });
+      // Load gift cards via server API
+      const giftsRes = await fetch('/api/gift-cards');
       giftCards = await giftsRes.json();
       if (!Array.isArray(giftCards)) giftCards = [];
 
-      // Load today's reservations
-      const today = new Date().toISOString().split('T')[0];
-      const resRes = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?select=*&date=eq.${today}`, {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-      });
+      // Load today's reservations via server API
+      const resRes = await fetch('/api/laluna-reservations?today=true');
       reservations = await resRes.json();
       if (!Array.isArray(reservations)) reservations = [];
 
@@ -582,14 +574,11 @@ import Layout from '../../../layouts/Layout.astro';
     if (!confirm('Mark this gift card as fully redeemed?')) return;
     
     try {
-      await fetch(`${SUPABASE_URL}/rest/v1/laluna_gift_cards?code=eq.${code}`, {
+      await fetch('/api/gift-cards', {
         method: 'PATCH',
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
+          code,
           status: 'redeemed',
           remaining_balance: 0,
           redeemed_at: new Date().toISOString() 
@@ -694,14 +683,11 @@ import Layout from '../../../layouts/Layout.astro';
     const resName = resSelect.options[resSelect.selectedIndex].dataset?.name || 'Walk-in';
     
     try {
-      await fetch(`${SUPABASE_URL}/rest/v1/laluna_gift_cards?code=eq.${code}`, {
+      await fetch('/api/gift-cards', {
         method: 'PATCH',
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
+          code,
           status: isFullyRedeemed ? 'redeemed' : 'partial',
           remaining_balance: remainingBalance,
           redeemed_at: isFullyRedeemed ? new Date().toISOString() : null,
