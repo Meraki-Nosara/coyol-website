@@ -12,10 +12,16 @@ import Layout from '../../layouts/Layout.astro';
     <section class="gift-container">
       <div class="gift-card-preview">
         <div class="card-visual silver" id="card-visual">
-          <img src="/images/logos/laluna-logo-white.png" alt="La Luna" class="card-logo" />
-          <div class="card-amount">$<span id="preview-amount">100</span></div>
-          <div class="card-text">Gift Card</div>
-          <div class="card-tier" id="card-tier">Silver</div>
+          <div class="card-center">
+            <img src="/images/logos/laluna-icon-transparent.png" alt="La Luna" class="card-logo-big" />
+          </div>
+          <div class="card-bottom">
+            <div class="card-amount">$<span id="preview-amount">100</span></div>
+            <div class="card-right">
+              <div class="card-text">GIFT CARD</div>
+              <div class="card-tier" id="card-tier">Silver</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -151,24 +157,41 @@ import Layout from '../../layouts/Layout.astro';
     margin-top: 0.25rem;
   }
 
-  .card-logo {
-    height: 40px;
+  .card-center {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-logo-big {
+    height: 120px;
     width: auto;
     object-fit: contain;
-    align-self: flex-start;
+    opacity: 0.9;
+  }
+
+  .card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
   }
 
   .card-amount {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 700;
     color: #F5F3EF;
   }
 
+  .card-right {
+    text-align: right;
+  }
+
   .card-text {
-    font-size: 1rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    opacity: 0.8;
+    letter-spacing: 3px;
+    opacity: 0.7;
   }
 
   .gift-form {
