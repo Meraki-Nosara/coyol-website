@@ -15,6 +15,7 @@ import Layout from '../../layouts/Layout.astro';
           <div class="card-center">
             <img src="/images/logos/laluna-icon-transparent.png" alt="La Luna" class="card-logo-big" style="filter: brightness(0) invert(1);" />
           </div>
+          <div class="card-name" id="card-name">RECIPIENT NAME</div>
           <div class="card-bottom">
             <div class="card-amount">$<span id="preview-amount">100</span></div>
             <div class="card-right">
@@ -169,6 +170,16 @@ import Layout from '../../layouts/Layout.astro';
     width: auto;
     object-fit: contain;
     opacity: 0.95;
+  }
+
+  .card-name {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.9);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    margin-bottom: 0.5rem;
   }
 
   .card-bottom {
@@ -355,6 +366,16 @@ import Layout from '../../layouts/Layout.astro';
   const checkoutBtn = document.getElementById('checkout-btn') as HTMLButtonElement;
   const cardVisual = document.getElementById('card-visual');
   const cardTier = document.getElementById('card-tier');
+  const cardName = document.getElementById('card-name');
+  const recipientNameInput = document.getElementById('recipient-name') as HTMLInputElement;
+
+  // Update card name as user types
+  if (recipientNameInput && cardName) {
+    recipientNameInput.addEventListener('input', () => {
+      const name = recipientNameInput.value.trim().toUpperCase();
+      cardName.textContent = name || 'RECIPIENT NAME';
+    });
+  }
 
   function getTier(amount: number): { tier: string, label: string } {
     if (amount >= 200) return { tier: 'platinum', label: 'Platinum' };
