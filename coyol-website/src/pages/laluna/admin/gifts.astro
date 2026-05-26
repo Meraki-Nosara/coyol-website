@@ -220,50 +220,68 @@ import Layout from '../../../layouts/Layout.astro';
     gap: 1rem;
   }
 
-  .gift-card {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
-    border-radius: 16px;
-    padding: 1.5rem;
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    gap: 1.5rem;
-    border: 1px solid #333;
-    position: relative;
-    overflow: hidden;
+  .gifts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    padding-right: 0.5rem;
   }
 
-  .gift-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #C4A67C, #8B7355, #C4A67C);
+  .gift-card {
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    min-height: 80px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+
+  /* Tier colors matching the purchase page */
+  .gift-card.classic {
+    background: linear-gradient(145deg, #A65D3F 0%, #8B4532 100%);
+  }
+
+  .gift-card.silver {
+    background: linear-gradient(145deg, #8E9196 0%, #B8BCC2 30%, #6B7075 70%, #A8ACB2 100%);
+  }
+
+  .gift-card.gold {
+    background: linear-gradient(145deg, #C4A67C 0%, #D4B896 30%, #A68A5B 70%, #E5CFA9 100%);
+  }
+
+  .gift-card.platinum {
+    background: linear-gradient(145deg, #1A1F16 0%, #3D4F3D 30%, #1A1F16 70%, #4A5D4A 100%);
   }
 
   .gift-card.redeemed {
     opacity: 0.5;
-  }
-
-  .gift-card.redeemed::before {
-    background: linear-gradient(90deg, #10b981, #059669, #10b981);
+    filter: grayscale(50%);
   }
 
   .gift-amount-section {
-    text-align: center;
-    padding: 1rem 1.5rem;
-    background: rgba(196, 166, 124, 0.1);
-    border-radius: 12px;
-    min-width: 100px;
+    text-align: left;
+    min-width: 90px;
   }
 
   .gift-amount {
     font-size: 2rem;
     font-weight: bold;
-    color: #C4A67C;
+    color: #fff;
     line-height: 1;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .gift-tier-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.8);
+    margin-top: 0.25rem;
   }
 
   .gift-info {
@@ -271,42 +289,40 @@ import Layout from '../../../layouts/Layout.astro';
   }
 
   .gift-recipient {
-    font-size: 1.125rem;
+    font-size: 1rem;
     font-weight: 600;
     color: #fff;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
   }
 
   .gift-code {
     font-family: 'Monaco', 'Consolas', monospace;
-    font-size: 0.8rem;
-    color: #C4A67C;
-    background: rgba(196, 166, 124, 0.15);
-    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.9);
+    background: rgba(0,0,0,0.2);
+    padding: 0.2rem 0.5rem;
     border-radius: 4px;
     display: inline-block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
     letter-spacing: 1px;
   }
 
   .gift-from {
-    font-size: 0.875rem;
-    color: #888;
-  }
-
-  .gift-from span {
-    color: #aaa;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.7);
   }
 
   .gift-moon {
-    width: 40px;
-    height: 40px;
-    opacity: 0.08;
+    width: 50px;
+    height: 50px;
+    opacity: 0.15;
     position: absolute;
-    right: 120px;
+    right: 20px;
     top: 50%;
     transform: translateY(-50%);
     pointer-events: none;
+    filter: brightness(0) invert(1);
   }
 
   .gift-meta {
@@ -587,30 +603,33 @@ import Layout from '../../../layouts/Layout.astro';
     }
 
     list.innerHTML = giftCards.map(g => {
-      const date = new Date(g.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-      const statusClass = g.status === 'redeemed' ? 'redeemed' : g.status === 'partial' ? 'partial' : g.status === 'sent' ? 'sent' : 'pending';
+      const date = new Date(g.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
       const availableBalance = g.remaining_balance !== undefined && g.remaining_balance !== null ? g.remaining_balance : g.amount;
       const isUsable = g.status !== 'redeemed' && availableBalance > 0;
       
+      // Determine tier based on amount
+      let tier = 'classic';
+      let tierLabel = 'Classic';
+      if (g.amount >= 200) { tier = 'platinum'; tierLabel = 'Platinum'; }
+      else if (g.amount >= 150) { tier = 'gold'; tierLabel = 'Gold'; }
+      else if (g.amount >= 100) { tier = 'silver'; tierLabel = 'Silver'; }
+      
       return `
-        <div class="gift-card ${g.status === 'redeemed' ? 'redeemed' : ''}">
-          <img src="/images/laluna-moon-white-real.png" class="gift-moon" alt="" />
+        <div class="gift-card ${tier} ${g.status === 'redeemed' ? 'redeemed' : ''}">
+          <img src="/images/logos/laluna-icon-transparent.png" class="gift-moon" alt="" />
           <div class="gift-amount-section">
             <div class="gift-amount">$${availableBalance}</div>
-            ${g.remaining_balance !== undefined && g.remaining_balance !== g.amount ? `<div class="original-amount">of $${g.amount}</div>` : ''}
+            <div class="gift-tier-label">${tierLabel}</div>
           </div>
           <div class="gift-info">
             <div class="gift-code">${g.code}</div>
-            <div class="gift-recipient">To: ${g.recipient_name}</div>
-            <div class="gift-from">From: <span>${g.sender_name}</span></div>
-            ${g.notes ? `<div class="gift-notes">${g.notes}</div>` : ''}
+            <div class="gift-recipient">${g.recipient_name}</div>
+            <div class="gift-from">From: ${g.sender_name} · ${date}</div>
           </div>
           <div class="gift-meta">
-            <div class="gift-date">${date}</div>
-            <div class="gift-status ${statusClass}">${g.status === 'partial' ? 'Partial' : g.status || 'pending'}</div>
             ${isUsable ? `
               <button class="btn-apply-bill" onclick="applyToReservation('${g.code}', ${availableBalance}, '${g.recipient_name}')">Apply to Bill</button>
-            ` : ''}
+            ` : `<span class="gift-status redeemed">Redeemed</span>`}
           </div>
         </div>
       `;
