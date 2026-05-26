@@ -199,11 +199,11 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
 
   .card-owner {
     position: absolute;
-    bottom: 1.25rem;
-    right: 1.5rem;
-    font-size: 0.85rem;
+    bottom: 1.5rem;
+    left: 2rem;
+    font-size: 0.9rem;
     font-weight: 500;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     text-transform: uppercase;
     color: rgba(255,255,255,0.9);
     text-shadow: 0 1px 2px rgba(0,0,0,0.3);
@@ -224,11 +224,16 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
 
   .card-bottom {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: flex-end;
+    padding-bottom: 2rem;
   }
 
   .card-amount {
+    position: absolute;
+    top: 50%;
+    left: 2rem;
+    transform: translateY(-50%);
     font-size: 2.5rem;
     font-weight: 700;
     color: #F5F3EF;
@@ -244,18 +249,18 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
   }
 
   .card-text {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: rgba(255,255,255,0.8);
+    color: rgba(255,255,255,0.7);
   }
 
   .card-tier {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 3px;
     color: rgba(255,255,255,0.9);
-    margin-top: 0.25rem;
+    margin-top: 0.15rem;
   }
 
   /* Use button */
