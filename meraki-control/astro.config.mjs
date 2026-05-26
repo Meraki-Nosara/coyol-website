@@ -8,8 +8,8 @@ export default defineConfig({
     mode: 'standalone'
   }),
   server: {
-    host: true,
-    port: 4400
+    host: '0.0.0.0',
+    port: parseInt(process.env.PORT || '4400')
   },
   security: {
     checkOrigin: false
