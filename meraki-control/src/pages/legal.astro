@@ -1,171 +1,213 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-// Legal cases data
-const cases = [
-  {
-    id: 'laluna-zmt',
-    title: 'La Luna ZMT',
-    subtitle: 'Due Diligence - Proteger la concesión',
-    status: 'active',
-    priority: 'high',
-    statusColor: 'bg-amber-500',
-    description: '40 años establecidos en zona marítimo terrestre. Victoria en Sala Cuarta.',
-    keyDates: [
-      { date: '2026-05', event: 'Damian inicia coordinación con IGN' },
-      { date: '~2004', event: 'Victoria en Sala Cuarta vs MINAET/SINAC' },
-    ],
-    contacts: [
-      { name: 'Damian Zsulman', role: 'Coordinador IGN', email: 'dzsulman@gmail.com' },
-      { name: 'Álvaro Álvarez Calderón', role: 'Director IGN', email: 'aalvarezc@rnp.go.cr' },
-      { name: 'Ing. Adriana Ibarra', role: 'TOPOS Topografía', email: 'topos226@gmail.com' },
-    ],
-    nextSteps: [
-      'Obtener informe técnico de Área de Conservación',
-      'Coordinar con IGN para publicación en La Gaceta',
-      'Recopilar documentación histórica',
-    ],
-    workflowUrl: 'https://coyol-control.vercel.app/laluna-zmt',
+// La Luna ZMT Timeline Events
+const events = [
+  { date: '~1986', type: 'milestone', title: 'La Luna establecida en ZMT', description: 'Inicio de operaciones en zona marítimo terrestre' },
+  { date: '~2004', type: 'victory', title: 'Victoria en Sala Cuarta', description: 'Caso vs MINAET/SINAC - Fallo a favor de La Luna' },
+  { date: '2026-05-24', type: 'contact', title: 'Damian contacta a Angelina', description: 'Ofrece ayuda con due diligence ZMT' },
+  { date: '2026-05-26', type: 'intel', title: 'Email de IGN Director', description: 'Álvaro Álvarez confirma proceso para delimitation' },
+  { date: '2026-05-26', type: 'info', title: 'Damian ofrece expeditar', description: 'Contactos en IGN pueden acelerar proceso' },
+];
+
+// Communications log
+const communications = [
+  { 
+    date: '2026-05-26', 
+    from: 'Damian', 
+    type: 'email',
+    summary: 'Email de IGN Director explicando proceso de delimitación. 18 avisos en cola pero intentarán incluir La Luna este año.',
   },
-  {
-    id: 'mar-azul-sfera',
-    title: 'SFERA vs Mar Azul',
-    subtitle: 'Caso 26-000076-1632-CI',
-    status: 'monitoring',
-    priority: 'high',
-    statusColor: 'bg-red-500',
-    description: 'Demanda de SFERA contra condominio Mar Azul. Estrategia: nulidad de notificación.',
-    keyDates: [
-      { date: '2026-05-22', event: 'Análisis completo del expediente' },
-      { date: '2026-05-24', event: 'Descubrimiento: Alfaro Vargas era juez antes de SFERA' },
-    ],
-    contacts: [
-      { name: 'Edwin Mora', role: 'Abogado - Impugnación', email: '' },
-      { name: 'Damian Zsulman', role: 'Fuente interna', email: 'dzsulman@gmail.com' },
-    ],
-    nextSteps: [
-      'NO responder hasta notificación válida',
-      'Edwin prepara impugnación de nulidad',
-      'Monitorear movimientos de SFERA',
-    ],
-    workflowUrl: 'https://mar-azul-legal.vercel.app',
+  { 
+    date: '2026-05-26', 
+    from: 'Damian', 
+    type: 'text',
+    summary: '"Due to my contact with IGN I could help expedite big time for your advance"',
+  },
+  { 
+    date: '2026-05-26', 
+    from: 'Damian', 
+    type: 'text',
+    summary: 'Sebastián (paralegal SFERA) alimenta info a Damian sin saber la conexión con nosotros.',
   },
 ];
 
-const activeCases = cases.filter(c => c.status === 'active').length;
-const monitoringCases = cases.filter(c => c.status === 'monitoring').length;
+// Key contacts
+const contacts = [
+  { name: 'Damian Zsulman', role: 'Coordinador / Fuente Interna', email: 'dzsulman@gmail.com', phone: '', notes: 'Contacto directo con IGN. Recibe info de SFERA.' },
+  { name: 'Álvaro A. Álvarez Calderón', role: 'Director IGN', email: 'aalvarezc@rnp.go.cr', phone: '+506 2202-0601', notes: '' },
+  { name: 'Ing. Adriana Ibarra', role: 'TOPOS Topografía', email: 'topos226@gmail.com', phone: '', notes: '' },
+  { name: 'Maikol López Castro', role: 'IGN Staff', email: 'mlopezc@rnp.go.cr', phone: '', notes: '' },
+];
+
+// Documents
+const documents = [
+  { name: 'Email IGN - Proceso Delimitación', date: '2026-05-26', type: 'email', status: 'saved' },
+  { name: 'Sala Cuarta Ruling (~2004)', date: '~2004', type: 'legal', status: 'pending' },
+  { name: 'Concesión Original', date: '~1986', type: 'legal', status: 'pending' },
+];
 ---
 
-<Layout title="Legal">
+<Layout title="La Luna ZMT">
   <div class="min-h-screen bg-landrover-limestone/30">
     <!-- Header -->
     <header class="bg-white border-b border-landrover-arles/30 px-6 py-4">
       <div class="flex items-center justify-between">
-        <div>
-          <h1 class="text-2xl font-serif text-landrover-santorini">Legal</h1>
-          <p class="text-sm text-landrover-marine/60">Casos activos y seguimiento</p>
-        </div>
         <div class="flex items-center gap-4">
-          <div class="text-center px-4 py-2 bg-amber-100 rounded-lg">
-            <p class="text-2xl font-bold text-amber-700">{activeCases}</p>
-            <p class="text-xs text-amber-600">Activos</p>
+          <a href="/mensual" class="text-landrover-marine/60 hover:text-landrover-santorini">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </a>
+          <div>
+            <h1 class="text-2xl font-serif text-landrover-santorini">La Luna ZMT</h1>
+            <p class="text-sm text-landrover-marine/60">Due Diligence Legal</p>
           </div>
-          <div class="text-center px-4 py-2 bg-red-100 rounded-lg">
-            <p class="text-2xl font-bold text-red-700">{monitoringCases}</p>
-            <p class="text-xs text-red-600">Monitoreo</p>
-          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium">40 Años Establecidos</span>
+          <span class="px-4 py-2 bg-amber-100 text-amber-700 rounded-lg text-sm font-medium">Sala Cuarta ✓</span>
+          <a 
+            href="https://coyol-control.vercel.app/laluna-zmt" 
+            target="_blank"
+            class="px-4 py-2 bg-landrover-keswick text-white rounded-lg text-sm hover:bg-landrover-keswick/90"
+          >
+            Ver Workflow
+          </a>
         </div>
       </div>
     </header>
 
-    <!-- Cases Grid -->
-    <main class="p-6">
-      <div class="grid gap-6">
-        {cases.map(c => (
-          <div class="bg-white rounded-xl shadow-sm border border-landrover-arles/20 overflow-hidden">
-            <!-- Case Header -->
-            <div class="px-6 py-4 border-b border-landrover-arles/20 flex items-center justify-between">
-              <div class="flex items-center gap-4">
-                <div class={`w-3 h-3 rounded-full ${c.statusColor}`}></div>
-                <div>
-                  <h2 class="text-xl font-serif text-landrover-santorini">{c.title}</h2>
-                  <p class="text-sm text-landrover-marine/60">{c.subtitle}</p>
-                </div>
-              </div>
-              <div class="flex items-center gap-3">
-                <span class={`px-3 py-1 rounded-full text-xs font-medium ${
-                  c.status === 'active' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'
-                }`}>
-                  {c.status === 'active' ? 'Activo' : 'Monitoreo'}
-                </span>
-                {c.workflowUrl && (
-                  <a 
-                    href={c.workflowUrl} 
-                    target="_blank"
-                    class="px-4 py-2 bg-landrover-keswick text-white rounded-lg text-sm hover:bg-landrover-keswick/90 transition-colors"
-                  >
-                    Ver Workflow
-                  </a>
-                )}
-              </div>
+    <main class="p-6 max-w-7xl mx-auto">
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-xl p-4 border border-landrover-arles/20">
+          <p class="text-3xl font-bold text-landrover-keswick">40</p>
+          <p class="text-sm text-landrover-marine/60">Años en ZMT</p>
+        </div>
+        <div class="bg-white rounded-xl p-4 border border-landrover-arles/20">
+          <p class="text-3xl font-bold text-green-600">1</p>
+          <p class="text-sm text-landrover-marine/60">Victoria Legal</p>
+        </div>
+        <div class="bg-white rounded-xl p-4 border border-landrover-arles/20">
+          <p class="text-3xl font-bold text-amber-600">{events.length}</p>
+          <p class="text-sm text-landrover-marine/60">Eventos</p>
+        </div>
+        <div class="bg-white rounded-xl p-4 border border-landrover-arles/20">
+          <p class="text-3xl font-bold text-landrover-terracotta">{documents.filter(d => d.status === 'pending').length}</p>
+          <p class="text-sm text-landrover-marine/60">Docs Pendientes</p>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-6">
+        <!-- Timeline Column -->
+        <div class="lg:col-span-2 space-y-6">
+          <!-- Timeline -->
+          <div class="bg-white rounded-xl border border-landrover-arles/20 overflow-hidden">
+            <div class="px-6 py-4 border-b border-landrover-arles/20">
+              <h2 class="text-lg font-serif text-landrover-santorini">Timeline</h2>
             </div>
-
-            <!-- Case Content -->
             <div class="p-6">
-              <p class="text-landrover-marine mb-6">{c.description}</p>
-
-              <div class="grid md:grid-cols-3 gap-6">
-                <!-- Key Dates -->
-                <div>
-                  <h3 class="text-sm font-semibold text-landrover-santorini mb-3">Fechas Clave</h3>
-                  <div class="space-y-2">
-                    {c.keyDates.map(d => (
-                      <div class="flex gap-3 text-sm">
-                        <span class="text-landrover-marine/50 w-20 flex-shrink-0">{d.date}</span>
-                        <span class="text-landrover-marine">{d.event}</span>
+              <div class="space-y-4">
+                {events.map((event, i) => (
+                  <div class="flex gap-4">
+                    <div class="flex flex-col items-center">
+                      <div class={`w-3 h-3 rounded-full ${
+                        event.type === 'victory' ? 'bg-green-500' :
+                        event.type === 'milestone' ? 'bg-blue-500' :
+                        event.type === 'intel' ? 'bg-purple-500' :
+                        event.type === 'contact' ? 'bg-amber-500' :
+                        'bg-gray-400'
+                      }`}></div>
+                      {i < events.length - 1 && <div class="w-0.5 h-full bg-gray-200 mt-1"></div>}
+                    </div>
+                    <div class="flex-1 pb-4">
+                      <div class="flex items-center gap-3 mb-1">
+                        <span class="text-sm font-medium text-landrover-santorini">{event.title}</span>
+                        <span class="text-xs text-landrover-marine/50">{event.date}</span>
                       </div>
-                    ))}
+                      <p class="text-sm text-landrover-marine/70">{event.description}</p>
+                    </div>
                   </div>
-                </div>
-
-                <!-- Contacts -->
-                <div>
-                  <h3 class="text-sm font-semibold text-landrover-santorini mb-3">Contactos</h3>
-                  <div class="space-y-2">
-                    {c.contacts.map(contact => (
-                      <div class="text-sm">
-                        <p class="text-landrover-marine font-medium">{contact.name}</p>
-                        <p class="text-landrover-marine/50 text-xs">{contact.role}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <!-- Next Steps -->
-                <div>
-                  <h3 class="text-sm font-semibold text-landrover-santorini mb-3">Próximos Pasos</h3>
-                  <ul class="space-y-2">
-                    {c.nextSteps.map(step => (
-                      <li class="flex items-start gap-2 text-sm text-landrover-marine">
-                        <span class="text-landrover-keswick mt-1">→</span>
-                        {step}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                ))}
               </div>
             </div>
           </div>
-        ))}
-      </div>
 
-      <!-- Important Notice -->
-      <div class="mt-6 bg-red-50 border border-red-200 rounded-xl p-6">
-        <h3 class="text-red-800 font-semibold mb-2">Recordatorio Importante</h3>
-        <p class="text-red-700 text-sm">
-          <strong>SFERA vs Mar Azul:</strong> NO responder hasta recibir notificación válida. 
-          Estrategia es nulidad de notificación — no mostrar debilidad.
-        </p>
+          <!-- Communications -->
+          <div class="bg-white rounded-xl border border-landrover-arles/20 overflow-hidden">
+            <div class="px-6 py-4 border-b border-landrover-arles/20">
+              <h2 class="text-lg font-serif text-landrover-santorini">Comunicaciones con Damian</h2>
+            </div>
+            <div class="divide-y divide-landrover-arles/20">
+              {communications.map(comm => (
+                <div class="p-4">
+                  <div class="flex items-center gap-3 mb-2">
+                    <span class={`px-2 py-0.5 rounded text-xs ${
+                      comm.type === 'email' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
+                    }`}>
+                      {comm.type === 'email' ? 'Email' : 'WhatsApp'}
+                    </span>
+                    <span class="text-sm font-medium text-landrover-santorini">{comm.from}</span>
+                    <span class="text-xs text-landrover-marine/50">{comm.date}</span>
+                  </div>
+                  <p class="text-sm text-landrover-marine">{comm.summary}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+          <!-- Contacts -->
+          <div class="bg-white rounded-xl border border-landrover-arles/20 overflow-hidden">
+            <div class="px-6 py-4 border-b border-landrover-arles/20">
+              <h2 class="text-lg font-serif text-landrover-santorini">Contactos Clave</h2>
+            </div>
+            <div class="divide-y divide-landrover-arles/20">
+              {contacts.map(contact => (
+                <div class="p-4">
+                  <p class="font-medium text-landrover-santorini">{contact.name}</p>
+                  <p class="text-xs text-landrover-marine/60 mb-1">{contact.role}</p>
+                  {contact.email && <p class="text-xs text-blue-600">{contact.email}</p>}
+                  {contact.phone && <p class="text-xs text-landrover-marine/60">{contact.phone}</p>}
+                  {contact.notes && <p class="text-xs text-amber-600 mt-1">{contact.notes}</p>}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Documents -->
+          <div class="bg-white rounded-xl border border-landrover-arles/20 overflow-hidden">
+            <div class="px-6 py-4 border-b border-landrover-arles/20">
+              <h2 class="text-lg font-serif text-landrover-santorini">Documentos</h2>
+            </div>
+            <div class="divide-y divide-landrover-arles/20">
+              {documents.map(doc => (
+                <div class="p-4 flex items-center justify-between">
+                  <div>
+                    <p class="text-sm font-medium text-landrover-santorini">{doc.name}</p>
+                    <p class="text-xs text-landrover-marine/50">{doc.date}</p>
+                  </div>
+                  <span class={`px-2 py-1 rounded text-xs ${
+                    doc.status === 'saved' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                  }`}>
+                    {doc.status === 'saved' ? 'Guardado' : 'Pendiente'}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Important Note -->
+          <div class="bg-purple-50 border border-purple-200 rounded-xl p-4">
+            <h3 class="text-purple-800 font-semibold text-sm mb-2">Intel Confidencial</h3>
+            <p class="text-purple-700 text-xs">
+              Sebastián (SFERA paralegal) alimenta info a Damian sin saber nuestra conexión. No exponer esta relación.
+            </p>
+          </div>
+        </div>
       </div>
     </main>
   </div>
