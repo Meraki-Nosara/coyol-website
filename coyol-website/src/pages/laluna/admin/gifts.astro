@@ -1,0 +1,457 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+---
+
+<Layout hideFloatingButtons={true} title="Gift Cards | La Luna Admin" appleTouchIcon="/laluna-apple-touch-icon.png">
+  <div class="admin">
+    <!-- Sidebar Icons -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="/images/laluna-moon-white-real.png" alt="La Luna" />
+      </div>
+      <nav class="sidebar-nav">
+        <a href="/laluna/admin" class="nav-icon" title="Dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </a>
+        <a href="/laluna/admin/floor" class="nav-icon" title="Floor Plan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+        </a>
+        <a href="/laluna/admin/guests" class="nav-icon" title="Guests">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </a>
+        <a href="/laluna/admin/gifts" class="nav-icon active" title="Gift Cards">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v10H4V12"></path><path d="M2 7h20v5H2z"></path><path d="M12 22V7"></path><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+        </a>
+        <a href="/laluna/admin/settings" class="nav-icon" title="Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="/" class="nav-icon" title="View Site">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="gifts-content">
+      <header class="gifts-header">
+        <h1>Gift Cards</h1>
+        <div class="header-stats">
+          <div class="stat pending">
+            <span class="stat-value" id="pendingCount">0</span>
+            <span class="stat-label">Pending</span>
+          </div>
+          <div class="stat redeemed">
+            <span class="stat-value" id="redeemedCount">0</span>
+            <span class="stat-label">Redeemed</span>
+          </div>
+          <div class="stat total-value">
+            <span class="stat-value" id="totalValue">$0</span>
+            <span class="stat-label">Outstanding</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Alerts for matched reservations -->
+      <div class="alerts-section" id="alertsSection">
+        <!-- Populated by JS when gift matches reservation -->
+      </div>
+
+      <!-- Gift Cards List -->
+      <div class="gifts-list" id="giftsList">
+        <div class="loading">Loading gift cards...</div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .admin {
+    display: flex;
+    min-height: 100vh;
+    background: #1a1a1a;
+    color: #fff;
+  }
+
+  .sidebar {
+    width: 60px;
+    background: #111;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0;
+  }
+
+  .sidebar-logo img {
+    width: 36px;
+    height: 36px;
+    opacity: 0.9;
+  }
+
+  .sidebar-nav {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .nav-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: #888;
+    transition: all 0.2s;
+  }
+
+  .nav-icon:hover {
+    background: #333;
+    color: #fff;
+  }
+
+  .nav-icon.active {
+    background: #C4A67C;
+    color: #111;
+  }
+
+  .nav-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+  }
+
+  .gifts-content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+  }
+
+  .gifts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .gifts-header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #C4A67C;
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .stat {
+    text-align: center;
+    padding: 0.75rem 1.5rem;
+    background: #222;
+    border-radius: 8px;
+  }
+
+  .stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: #888;
+    text-transform: uppercase;
+  }
+
+  .stat.pending .stat-value { color: #f59e0b; }
+  .stat.redeemed .stat-value { color: #10b981; }
+  .stat.total-value .stat-value { color: #C4A67C; }
+
+  .alerts-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .alert-card {
+    background: linear-gradient(135deg, #C4A67C22, #C4A67C11);
+    border: 1px solid #C4A67C;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .alert-icon {
+    width: 40px;
+    height: 40px;
+    background: #C4A67C;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+
+  .alert-content {
+    flex: 1;
+  }
+
+  .alert-title {
+    font-weight: 600;
+    color: #C4A67C;
+    margin-bottom: 0.25rem;
+  }
+
+  .alert-details {
+    font-size: 0.875rem;
+    color: #aaa;
+  }
+
+  .gifts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .gift-card {
+    background: #222;
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    border-left: 4px solid #C4A67C;
+  }
+
+  .gift-card.redeemed {
+    opacity: 0.6;
+    border-left-color: #10b981;
+  }
+
+  .gift-amount {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #C4A67C;
+    min-width: 80px;
+  }
+
+  .gift-info {
+    flex: 1;
+  }
+
+  .gift-code {
+    font-family: monospace;
+    font-size: 0.875rem;
+    color: #888;
+    margin-bottom: 0.25rem;
+  }
+
+  .gift-recipient {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+
+  .gift-from {
+    font-size: 0.875rem;
+    color: #666;
+  }
+
+  .gift-meta {
+    text-align: right;
+  }
+
+  .gift-date {
+    font-size: 0.875rem;
+    color: #666;
+  }
+
+  .gift-status {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+  }
+
+  .gift-status.pending {
+    background: #f59e0b22;
+    color: #f59e0b;
+  }
+
+  .gift-status.redeemed {
+    background: #10b98122;
+    color: #10b981;
+  }
+
+  .gift-status.sent {
+    background: #3b82f622;
+    color: #3b82f6;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+  }
+
+  .btn-redeem {
+    padding: 0.5rem 1rem;
+    background: #C4A67C;
+    color: #111;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-redeem:hover {
+    background: #b8956e;
+  }
+</style>
+
+<script>
+  const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ueGp6dnFncnJvZGFsY210bnRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMyNjgyMDUsImV4cCI6MjA1ODg0NDIwNX0.Jm7PRqScZYqpUuIxgfL_f9gPS2h-pL2P2ykXtio8Brw';
+
+  let giftCards = [];
+  let reservations = [];
+
+  async function loadData() {
+    try {
+      // Load gift cards
+      const giftsRes = await fetch(`${SUPABASE_URL}/rest/v1/laluna_gift_cards?select=*&order=created_at.desc`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      });
+      giftCards = await giftsRes.json();
+      if (!Array.isArray(giftCards)) giftCards = [];
+
+      // Load today's reservations
+      const today = new Date().toISOString().split('T')[0];
+      const resRes = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?select=*&date=eq.${today}`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      });
+      reservations = await resRes.json();
+      if (!Array.isArray(reservations)) reservations = [];
+
+      renderStats();
+      checkMatches();
+      renderGiftCards();
+    } catch (e) {
+      console.error('Error loading data:', e);
+      document.getElementById('giftsList').innerHTML = '<div class="loading">Error loading data</div>';
+    }
+  }
+
+  function renderStats() {
+    const pending = giftCards.filter(g => g.status !== 'redeemed');
+    const redeemed = giftCards.filter(g => g.status === 'redeemed');
+    const totalOutstanding = pending.reduce((sum, g) => sum + (g.amount || 0), 0);
+
+    document.getElementById('pendingCount').textContent = pending.length;
+    document.getElementById('redeemedCount').textContent = redeemed.length;
+    document.getElementById('totalValue').textContent = `$${totalOutstanding}`;
+  }
+
+  function checkMatches() {
+    const alertsSection = document.getElementById('alertsSection');
+    alertsSection.innerHTML = '';
+
+    const pendingGifts = giftCards.filter(g => g.status !== 'redeemed');
+    
+    pendingGifts.forEach(gift => {
+      const recipientName = (gift.recipient_name || '').toLowerCase().trim();
+      const recipientEmail = (gift.recipient_email || '').toLowerCase().trim();
+      
+      reservations.forEach(res => {
+        const resName = (res.name || '').toLowerCase().trim();
+        const resEmail = (res.email || '').toLowerCase().trim();
+        
+        // Match by name or email
+        if ((recipientName && resName && (recipientName.includes(resName) || resName.includes(recipientName))) ||
+            (recipientEmail && resEmail && recipientEmail === resEmail)) {
+          alertsSection.innerHTML += `
+            <div class="alert-card">
+              <div class="alert-icon">🎁</div>
+              <div class="alert-content">
+                <div class="alert-title">Gift Card Match Found!</div>
+                <div class="alert-details">
+                  <strong>${res.name}</strong> has a reservation at <strong>${res.time}</strong> for ${res.guests} guests.
+                  They have a <strong>$${gift.amount}</strong> gift card (${gift.code}).
+                </div>
+              </div>
+              <button class="btn-redeem" onclick="markRedeemed('${gift.code}')">Mark Redeemed</button>
+            </div>
+          `;
+        }
+      });
+    });
+  }
+
+  function renderGiftCards() {
+    const list = document.getElementById('giftsList');
+    
+    if (giftCards.length === 0) {
+      list.innerHTML = '<div class="loading">No gift cards yet</div>';
+      return;
+    }
+
+    list.innerHTML = giftCards.map(g => {
+      const date = new Date(g.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const statusClass = g.status === 'redeemed' ? 'redeemed' : g.status === 'sent' ? 'sent' : 'pending';
+      
+      return `
+        <div class="gift-card ${g.status === 'redeemed' ? 'redeemed' : ''}">
+          <div class="gift-amount">$${g.amount}</div>
+          <div class="gift-info">
+            <div class="gift-code">${g.code}</div>
+            <div class="gift-recipient">${g.recipient_name}</div>
+            <div class="gift-from">From: ${g.sender_name}</div>
+          </div>
+          <div class="gift-meta">
+            <div class="gift-date">${date}</div>
+            <div class="gift-status ${statusClass}">${g.status || 'pending'}</div>
+            ${g.status !== 'redeemed' ? `<button class="btn-redeem" style="margin-top:0.5rem" onclick="markRedeemed('${g.code}')">Redeem</button>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  window.markRedeemed = async function(code) {
+    if (!confirm('Mark this gift card as redeemed?')) return;
+    
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/laluna_gift_cards?code=eq.${code}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          status: 'redeemed', 
+          redeemed_at: new Date().toISOString() 
+        }),
+      });
+      loadData();
+    } catch (e) {
+      alert('Error updating gift card');
+    }
+  };
+
+  // Load on page load
+  loadData();
+  
+  // Refresh every 30 seconds
+  setInterval(loadData, 30000);
+</script>
