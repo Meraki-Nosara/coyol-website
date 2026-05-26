@@ -2,20 +2,43 @@
 import CommandLayout from '../../layouts/CommandLayout.astro';
 import guestData from '../../data/guests-enriched.json';
 
-const guests = guestData.guests || [];
+const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+const SUPABASE_SERVICE_KEY = import.meta.env.SUPABASE_SERVICE_KEY || 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng';
+
+// Fetch live CRM data
+let crmGuests: any[] = [];
+let crmHotLeads: any[] = [];
+try {
+  const [allRes, hotRes] = await Promise.all([
+    fetch(`${SUPABASE_URL}/rest/v1/crm_guests?select=name,email,city,region,lead_score,source,is_corporate_email&limit=50000`, {
+      headers: { 'apikey': SUPABASE_SERVICE_KEY, 'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}` }
+    }),
+    fetch(`${SUPABASE_URL}/rest/v1/crm_guests?lead_score=gte.40&select=name,email,city,region,lead_score,source,is_corporate_email,created_at&order=created_at.desc&limit=5000`, {
+      headers: { 'apikey': SUPABASE_SERVICE_KEY, 'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}` }
+    })
+  ]);
+  if (allRes.ok) crmGuests = await allRes.json();
+  if (hotRes.ok) crmHotLeads = await hotRes.json();
+} catch (e) {
+  console.error('CRM fetch error:', e);
+}
+
+// Use CRM data if available, otherwise fall back to static JSON
+const guests = crmGuests.length > 0 ? crmGuests : (guestData.guests || []);
 const summary = guestData.summary || {};
 
-// Real segments
-const hot = guests.filter(g => g.segment === 'hot');
-const warm = guests.filter(g => g.segment === 'warm');
-const targetMarkets = guests.filter(g => ['US-East', 'US-West', 'US-Central', 'Canada', 'Europe', 'Corporate'].includes(g.region));
+// Real segments - use CRM hot leads for accuracy
+const hot = crmHotLeads.length > 0 ? crmHotLeads : guests.filter(g => g.lead_score >= 40);
+const warm = guests.filter(g => g.lead_score >= 30 && g.lead_score < 40);
+const targetMarkets = guests.filter(g => ['US-East', 'US-West', 'US-Central', 'Canada', 'Europe', 'Corporate'].includes(g.region) || g.lead_score >= 40);
 const corporate = guests.filter(g => g.is_corporate_email);
 
-// Top 10 hot leads
-const topHot = guests
-  .filter(g => g.segment === 'hot' && g.region !== 'LatAm')
-  .sort((a, b) => b.lead_score - a.lead_score)
-  .slice(0, 10);
+// New leads today
+const today = new Date().toISOString().split('T')[0];
+const newToday = crmHotLeads.filter(g => g.created_at?.startsWith(today));
+
+// Top 10 hot leads (newest first)
+const topHot = crmHotLeads.slice(0, 10);
 
 // Top cities
 const cityMap = {};
@@ -44,7 +67,7 @@ const topSources = Object.entries(sourceMap)
   <div class="page">
     <header class="page-header">
       <h1>Dashboard</h1>
-      <span class="updated">Data: 34,566 restaurant guests</span>
+      <span class="updated">Live CRM: {guests.length.toLocaleString()} guests{newToday.length > 0 ? ` · ${newToday.length} new today` : ''}</span>
     </header>
 
     <!-- Hero Stats -->
