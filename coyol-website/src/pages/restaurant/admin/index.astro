@@ -286,6 +286,10 @@ import Layout from '../../../layouts/Layout.astro';
               <span class="detail-label">Seating</span>
               <span class="detail-value" id="detailZone">Any</span>
             </div>
+            <div class="detail-item">
+              <span class="detail-label">Booked On</span>
+              <span class="detail-value" id="detailCreatedAt">—</span>
+            </div>
             <div class="detail-item full-width">
               <span class="detail-label">Notes</span>
               <span class="detail-value" id="detailNotes">None</span>
@@ -395,7 +399,11 @@ import Layout from '../../../layouts/Layout.astro';
           <div class="form-row">
             <div class="form-group">
               <label>Party Size</label>
-              <input type="number" id="editGuests" class="form-input" min="1" max="50" value="2" />
+              <div class="stepper-input">
+                <button type="button" class="stepper-btn" onclick="adjustGuests(-1)">−</button>
+                <input type="number" id="editGuests" class="stepper-value" min="1" max="50" value="2" />
+                <button type="button" class="stepper-btn" onclick="adjustGuests(1)">+</button>
+              </div>
             </div>
             <div class="form-group">
               <label>Seating Preference</label>
@@ -1642,6 +1650,50 @@ import Layout from '../../../layouts/Layout.astro';
     .form-input { width: 100%; padding: 0.5rem; border: 1px solid var(--limestone); border-radius: 4px; font-size: 0.875rem; background: var(--cream); color: var(--santorini); }
     .form-input:focus { outline: none; border-color: var(--keswick); }
 
+    .stepper-input {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 1px solid var(--limestone);
+      border-radius: 4px;
+      overflow: hidden;
+      background: var(--cream);
+    }
+    .stepper-btn {
+      width: 44px;
+      height: 40px;
+      border: none;
+      background: var(--limestone);
+      color: var(--santorini);
+      font-size: 1.25rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .stepper-btn:hover {
+      background: var(--keswick);
+      color: white;
+    }
+    .stepper-btn:active {
+      background: var(--coniston);
+    }
+    .stepper-value {
+      flex: 1;
+      text-align: center;
+      border: none;
+      background: transparent;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--santorini);
+      padding: 0.5rem;
+      -moz-appearance: textfield;
+    }
+    .stepper-value::-webkit-outer-spin-button,
+    .stepper-value::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
     .btn-primary { padding: 0.5rem 1rem; background: var(--terracotta); color: var(--cream); border: none; border-radius: 4px; font-size: 0.8125rem; cursor: pointer; font-family: 'Inter', sans-serif; }
     .btn-primary:hover { background: #8B4D33; }
     .btn-secondary { padding: 0.5rem 1rem; background: var(--cream); color: var(--santorini); border: 1px solid var(--limestone); border-radius: 4px; font-size: 0.8125rem; cursor: pointer; font-family: 'Inter', sans-serif; }
@@ -2162,13 +2214,17 @@ import Layout from '../../../layouts/Layout.astro';
       step1Meta.textContent = source;
       
       // Format created_at timestamp if available
+      const detailCreatedAt = document.getElementById('detailCreatedAt');
       if (res.created_at) {
         const created = new Date(res.created_at);
-        step1Time.textContent = created.toLocaleString('es-CR', { 
+        const createdStr = created.toLocaleString('es-CR', { 
           month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
         });
+        step1Time.textContent = createdStr;
+        detailCreatedAt.textContent = createdStr;
       } else {
         step1Time.textContent = '';
+        detailCreatedAt.textContent = '—';
       }
       
       // Step 2 & 3 based on status
@@ -2199,6 +2255,13 @@ import Layout from '../../../layouts/Layout.astro';
       selectedReservationId = null;
     }
     
+    function adjustGuests(delta) {
+      const input = document.getElementById('editGuests');
+      const current = parseInt(input.value) || 2;
+      const newVal = Math.max(1, Math.min(50, current + delta));
+      input.value = newVal;
+    }
+
     function openEditModal() {
       if (!selectedReservationId) return;
       const res = cachedReservations.find(r => r.id === selectedReservationId);
