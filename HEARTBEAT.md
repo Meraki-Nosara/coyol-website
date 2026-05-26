@@ -14,6 +14,21 @@ These tasks MUST be completed before any project work:
 
 ---
 
+## 🎁 La Luna Gift Cards — CHECK EVERY HEARTBEAT!
+
+**Send pending gift card emails:**
+```bash
+bash ~/.openclaw/workspace/coyol-website/scripts/send-gift-emails.sh
+```
+
+This checks Supabase for purchased gift cards with `status=pending_email` and sends:
+1. Beautiful HTML email to recipient with gift code
+2. Confirmation email to sender
+
+**If script fails:** Check that `laluna_gift_cards` table exists in Supabase.
+
+---
+
 ## 🎯 CRM Lead Scoring — RUN EVERY 15-30 MINUTES!
 
 **Script:** `bash ~/.openclaw/workspace/meraki-crm/run-score.sh`
@@ -123,6 +138,18 @@ Booked a table — potential Mar Azul buyer.
 ---
 
 ## Priority Checks
+
+### La Luna Gift Cards — CHECK EVERY HEARTBEAT!
+**Script:** `bash ~/.openclaw/workspace/coyol-website/scripts/send-gift-emails.sh`
+
+This checks for pending gift card purchases and sends confirmation emails:
+- Recipient gets beautiful gift card email with code
+- Sender gets purchase confirmation
+- Updates status in Supabase to 'sent'
+
+**Run this script EVERY heartbeat to keep gift cards flowing.**
+
+---
 
 ### 🏗️ NC Control Orders — CHECK EVERY HEARTBEAT!
 **Supabase URL:** https://mnxjzvqgrrodalcmtntf.supabase.co
