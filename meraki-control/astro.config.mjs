@@ -1,23 +1,14 @@
 import { defineConfig } from 'astro/config';
-import node from '@astrojs/node';
+import vercel from '@astrojs/vercel';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   output: 'server',
-  adapter: node({
-    mode: 'standalone'
-  }),
-  server: {
-    host: '0.0.0.0',
-    port: parseInt(process.env.PORT || '4400')
-  },
+  adapter: vercel(),
   security: {
     checkOrigin: false
   },
   vite: {
     plugins: [tailwindcss()],
-    server: {
-      allowedHosts: true
-    }
   }
 });
