@@ -2843,12 +2843,15 @@ import Layout from '../../../layouts/Layout.astro';
         matchAlert.style.display = 'none';
         return;
       }
-      const nameLower = name.toLowerCase();
-      const matches = giftCardsCache.filter(g => 
-        g.status !== 'redeemed' && 
-        g.recipient_name && 
-        g.recipient_name.toLowerCase().includes(nameLower)
-      );
+      const nameLower = name.toLowerCase().trim();
+      const matches = giftCardsCache.filter(g => {
+        if (g.status === 'redeemed' || !g.recipient_name) return false;
+        const cardName = g.recipient_name.toLowerCase();
+        // Match if either contains the other, or if first/last names match
+        return cardName.includes(nameLower) || 
+               nameLower.includes(cardName) ||
+               nameLower.split(' ').some(part => part.length > 2 && cardName.includes(part));
+      });
       if (matches.length > 0) {
         const total = matches.reduce((sum, g) => sum + (g.remaining_balance ?? g.amount), 0);
         matchAlert.innerHTML = `🎁 <strong>Gift card found!</strong> ${matches[0].recipient_name} has <strong>$${total}</strong> available.`;
