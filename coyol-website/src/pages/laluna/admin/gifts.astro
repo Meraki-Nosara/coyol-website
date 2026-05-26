@@ -142,19 +142,18 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
 
   /* Credit Card Style */
   .gift-card {
-    aspect-ratio: 1.586;
-    min-height: 200px;
-    border-radius: 16px;
-    padding: 1.5rem;
+    aspect-ratio: 1.4;
+    min-height: 220px;
+    border-radius: 20px;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
     position: relative;
     overflow: hidden;
     cursor: pointer;
     transition: transform 0.3s, box-shadow 0.3s;
-    background: #333; /* Fallback */
+    background: #333;
   }
 
   .gift-card:hover {
@@ -185,70 +184,79 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
     box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
   }
 
-  /* Card Top Row */
-  .card-top {
+  /* Card Logo - Center Top */
+  .card-logo-wrap {
+    flex: 1;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
+    padding-top: 0.5rem;
   }
 
   .card-logo {
-    height: 50px;
+    height: 80px;
     width: auto;
     filter: brightness(0) invert(1);
     opacity: 0.95;
   }
 
-  .card-tier {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: rgba(255,255,255,0.8);
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-  }
-
-  /* Card Center - Amount */
-  .card-center {
-    text-align: center;
-  }
-
-  .card-amount {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #fff;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    line-height: 1;
-  }
-
-  .card-label {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    color: rgba(255,255,255,0.7);
-    margin-top: 0.25rem;
-  }
-
-  /* Card Bottom - Owner Name */
+  /* Card Bottom Section */
   .card-bottom {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
   }
 
+  .card-left {
+    text-align: left;
+  }
+
+  .card-recipient-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 0.25rem;
+  }
+
+  .card-amount {
+    font-size: 2.25rem;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    line-height: 1;
+  }
+
+  .card-right {
+    text-align: right;
+  }
+
+  .card-type {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .card-tier {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.9);
+    font-weight: 500;
+  }
+
+  /* Owner Name - Bottom Right like credit card */
   .card-owner {
-    font-size: 1rem;
+    position: absolute;
+    bottom: 1rem;
+    right: 1.5rem;
+    font-size: 0.8rem;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: rgba(255,255,255,0.95);
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-  }
-
-  .card-code {
-    font-family: 'Monaco', 'Consolas', monospace;
-    font-size: 0.65rem;
-    color: rgba(255,255,255,0.6);
-    letter-spacing: 1px;
+    color: rgba(255,255,255,0.85);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
   }
 
   /* Redeemed Overlay */
@@ -268,14 +276,14 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
   /* Action Button */
   .card-action {
     position: absolute;
-    bottom: 1rem;
+    top: 1rem;
     right: 1rem;
     padding: 0.4rem 0.8rem;
-    background: rgba(0,0,0,0.3);
-    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.25);
     border-radius: 6px;
     color: #fff;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
@@ -485,18 +493,20 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
       
       return `
         <div class="gift-card ${tier} ${isRedeemed ? 'redeemed' : ''}" data-code="${g.code}">
-          <div class="card-top">
+          <div class="card-logo-wrap">
             <img src="/images/logos/laluna-icon-transparent.png" class="card-logo" alt="La Luna" />
-            <span class="card-tier">${label}</span>
-          </div>
-          <div class="card-center">
-            <div class="card-amount">$${availableBalance}</div>
-            <div class="card-label">Gift Card</div>
           </div>
           <div class="card-bottom">
-            <span class="card-owner">${ownerName}</span>
-            <span class="card-code">${g.code}</span>
+            <div class="card-left">
+              <div class="card-recipient-label">Recipient Name</div>
+              <div class="card-amount">$${availableBalance}</div>
+            </div>
+            <div class="card-right">
+              <div class="card-type">Gift Card</div>
+              <div class="card-tier">${label}</div>
+            </div>
           </div>
+          <span class="card-owner">${ownerName}</span>
           ${!isRedeemed ? `<button class="card-action" onclick="applyToReservation('${g.code}', ${availableBalance}, '${g.recipient_name?.replace(/'/g, "\\'")}')">Use</button>` : ''}
         </div>
       `;
