@@ -530,7 +530,7 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
 
   <script is:inline>
     const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+    const SUPABASE_KEY = 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng';
     
     let guests = [];
     let editingGuestId = null;
@@ -538,7 +538,7 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
 
     async function loadGuests() {
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/coyol_guests?select=*&order=last_visit.desc.nullslast`, {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/laluna_guests?select=*&order=last_visit.desc.nullslast`, {
           headers: {
             'apikey': SUPABASE_KEY,
             'Authorization': `Bearer ${SUPABASE_KEY}`
