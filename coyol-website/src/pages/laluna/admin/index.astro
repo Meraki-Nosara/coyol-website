@@ -2756,13 +2756,35 @@ import Layout from '../../../layouts/Layout.astro';
     function populateTableDropdowns() {
       const layouts = getLayout();
       const allTables = Object.values(layouts).flat();
+      const dateStr = getDateString(currentDate);
+      const dayReservations = reservations.filter(r => r.date === dateStr && r.status !== 'cancelled' && r.status !== 'no-show');
+      
       document.querySelectorAll('.table-select-mobile').forEach(select => {
-        const currentValue = select.options[0]?.text || 'TBA';
         const resId = select.dataset.resId;
         const res = reservations.find(r => r.id === resId);
+        if (!res) return;
+        
+        const guestCount = parseInt(res.guests) || 2;
+        const resTime = res.time;
+        
+        // Filter tables: fits guests AND (not reserved at same time OR is current table)
+        const availableTables = allTables.filter(t => {
+          // Check capacity (extract number from table type or use default)
+          const capacity = t.capacity || (t.type === 'rect-2' ? 2 : t.type === 'rect-4' ? 4 : t.type === 'rect-6' ? 6 : t.type === 'round-4' ? 4 : t.type === 'round-6' ? 6 : t.type === 'round-8' ? 8 : 4);
+          if (capacity < guestCount) return false;
+          
+          // Check if table is taken at this time (allow if it's this reservation's current table)
+          if (t.id === res.tableId) return true;
+          const conflict = dayReservations.find(r => 
+            r.tableId === t.id && 
+            r.id !== resId &&
+            Math.abs(timeToMinutes(r.time) - timeToMinutes(resTime)) < 90
+          );
+          return !conflict;
+        });
         
         select.innerHTML = `<option value="">${res?.tableId ? res.tableId.toUpperCase() : 'TBA'}</option>`;
-        allTables.forEach(t => {
+        availableTables.forEach(t => {
           const opt = document.createElement('option');
           opt.value = t.id;
           opt.textContent = t.id.toUpperCase();
@@ -2770,6 +2792,12 @@ import Layout from '../../../layouts/Layout.astro';
           select.appendChild(opt);
         });
       });
+    }
+    
+    function timeToMinutes(timeStr) {
+      if (!timeStr) return 0;
+      const [h, m] = timeStr.split(':').map(Number);
+      return h * 60 + m;
     }
 
     // Table popup for multiple reservations
