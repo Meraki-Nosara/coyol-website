@@ -138,6 +138,8 @@ const topHot = hot.sort((a: any, b: any) => b.lead_score - a.lead_score).slice(0
     padding: 2rem;
     max-width: 1400px;
     margin: 0 auto;
+    background: #1a1a1a;
+    min-height: 100vh;
   }
 
   .page-header {
@@ -150,12 +152,12 @@ const topHot = hot.sort((a: any, b: any) => b.lead_score - a.lead_score).slice(0
   .page-header h1 {
     font-size: 1.75rem;
     font-weight: 600;
-    color: #1a1f16;
+    color: #F5F3EF;
   }
 
   .updated {
     font-size: 0.875rem;
-    color: #666;
+    color: #888;
   }
 
   .hero-stats {
@@ -198,10 +200,10 @@ const topHot = hot.sort((a: any, b: any) => b.lead_score - a.lead_score).slice(0
   }
 
   .card {
-    background: white;
+    background: #222;
     border-radius: 12px;
     padding: 1.5rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   }
 
   .card.wide {
@@ -211,12 +213,12 @@ const topHot = hot.sort((a: any, b: any) => b.lead_score - a.lead_score).slice(0
   .card h2 {
     font-size: 1.1rem;
     font-weight: 600;
-    color: #1a1f16;
+    color: #C4A67C;
   }
 
   .card-sub {
     font-size: 0.8rem;
-    color: #666;
+    color: #888;
     margin-top: 0.25rem;
     margin-bottom: 1rem;
   }
@@ -236,7 +238,7 @@ const topHot = hot.sort((a: any, b: any) => b.lead_score - a.lead_score).slice(0
   .bar-rank {
     width: 1.5rem;
     font-size: 0.8rem;
-    color: #999;
+    color: #666;
     text-align: center;
   }
 
@@ -244,6 +246,7 @@ const topHot = hot.sort((a: any, b: any) => b.lead_score - a.lead_score).slice(0
     width: 100px;
     font-size: 0.875rem;
     font-weight: 500;
+    color: #F5F3EF;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -252,7 +255,7 @@ const topHot = hot.sort((a: any, b: any) => b.lead_score - a.lead_score).slice(0
   .bar-track {
     flex: 1;
     height: 8px;
-    background: #f0f0f0;
+    background: #333;
     border-radius: 4px;
     overflow: hidden;
   }
@@ -265,14 +268,14 @@ const topHot = hot.sort((a: any, b: any) => b.lead_score - a.lead_score).slice(0
   }
 
   .bar-fill.top {
-    background: #3D4F3D;
+    background: #4A5D4A;
   }
 
   .bar-count {
     width: 3rem;
     text-align: right;
     font-size: 0.8rem;
-    color: #666;
+    color: #aaa;
   }
 
   .source-list {
@@ -285,15 +288,16 @@ const topHot = hot.sort((a: any, b: any) => b.lead_score - a.lead_score).slice(0
     display: flex;
     justify-content: space-between;
     padding: 0.5rem 0;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #333;
   }
 
   .source-name {
     font-weight: 500;
+    color: #F5F3EF;
   }
 
   .source-count {
-    color: #666;
+    color: #aaa;
   }
 
   .leads-table {
@@ -307,7 +311,7 @@ const topHot = hot.sort((a: any, b: any) => b.lead_score - a.lead_score).slice(0
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem;
-    background: #f8f8f8;
+    background: #2a2a2a;
     border-radius: 8px;
   }
 
@@ -318,11 +322,12 @@ const topHot = hot.sort((a: any, b: any) => b.lead_score - a.lead_score).slice(0
 
   .lead-name {
     font-weight: 500;
+    color: #F5F3EF;
   }
 
   .lead-city {
     font-size: 0.8rem;
-    color: #666;
+    color: #888;
   }
 
   .lead-score {
