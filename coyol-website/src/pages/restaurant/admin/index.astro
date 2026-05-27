@@ -1543,6 +1543,23 @@ import Layout from '../../../layouts/Layout.astro';
     .table-badge { display: inline-block; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem; font-weight: 700; font-family: 'Inter', sans-serif; letter-spacing: 0.02em; }
     .table-badge.assigned { background: var(--keswick); color: white; }
     .table-badge.unassigned { background: #f3f4f6; color: #666; font-weight: 500; }
+    
+    /* Mobile table selector */
+    :global(.table-select-mobile) {
+      padding: 0.25rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid var(--limestone);
+      background: var(--cream);
+      color: var(--santorini);
+      cursor: pointer;
+      min-width: 55px;
+    }
+    :global(.table-select-mobile:focus) {
+      outline: 2px solid var(--keswick);
+      outline-offset: 1px;
+    }
     .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     
     /* 3-Step Reservation Timeline */
@@ -1983,7 +2000,9 @@ import Layout from '../../../layouts/Layout.astro';
               <div class="res-time">${formatTime12(res.time)}</div>
               <span class="res-name" title="${res.guestName}">${res.guestName}</span>
               <span class="res-pax">${res.guests}</span>
-              <span class="table-badge ${res.tableId ? 'assigned' : 'unassigned'}">${res.tableId ? res.tableId.toUpperCase() : 'TBA'}</span>
+              <select class="table-select-mobile" data-res-id="${res.id}" onclick="event.stopPropagation();" onchange="quickAssignTable(this)">
+                <option value="">${res.tableId ? res.tableId.toUpperCase() : 'TBA'}</option>
+              </select>
               <div class="res-actions-mini">
                 <button class="action-icon" onclick="event.stopPropagation();" title="Message">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
@@ -2087,6 +2106,82 @@ import Layout from '../../../layouts/Layout.astro';
         
         grid.appendChild(el);
       });
+      
+      // Populate table dropdowns for mobile
+      populateTableDropdowns();
+    }
+    
+    // Quick table assignment from mobile dropdown
+    async function quickAssignTable(selectEl) {
+      const resId = selectEl.dataset.resId;
+      const tableId = selectEl.value;
+      if (!tableId || !resId) return;
+      
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?id=eq.${resId}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({ table_id: tableId })
+        });
+        
+        if (!response.ok) throw new Error('Failed to save');
+        await loadReservations();
+        renderFloor();
+      } catch (e) {
+        alert('Failed to assign table');
+        selectEl.value = '';
+      }
+    }
+
+    // Populate table dropdowns - only available tables that fit party
+    function populateTableDropdowns() {
+      const layouts = getLayout();
+      const allTables = Object.values(layouts).flat();
+      const dateStr = getDateString(currentDate);
+      const dayReservations = reservations.filter(r => r.date === dateStr && r.status !== 'cancelled' && r.status !== 'no-show');
+      
+      document.querySelectorAll('.table-select-mobile').forEach(select => {
+        const resId = select.dataset.resId;
+        const res = reservations.find(r => r.id === resId);
+        if (!res) return;
+        
+        const guestCount = parseInt(res.guests) || 2;
+        const resTime = res.time;
+        
+        // Filter tables: fits guests AND (not reserved at same time OR is current table)
+        const availableTables = allTables.filter(t => {
+          const capacity = t.capacity || (t.type === 'rect-2' ? 2 : t.type === 'rect-4' ? 4 : t.type === 'rect-6' ? 6 : t.type === 'round-4' ? 4 : t.type === 'round-6' ? 6 : t.type === 'round-8' ? 8 : 4);
+          if (capacity < guestCount) return false;
+          
+          if (t.id === res.tableId) return true;
+          const conflict = dayReservations.find(r => 
+            r.tableId === t.id && 
+            r.id !== resId &&
+            Math.abs(timeToMinutes(r.time) - timeToMinutes(resTime)) < 90
+          );
+          return !conflict;
+        });
+        
+        select.innerHTML = `<option value="">${res?.tableId ? res.tableId.toUpperCase() : 'TBA'}</option>`;
+        availableTables.forEach(t => {
+          const opt = document.createElement('option');
+          opt.value = t.id;
+          opt.textContent = t.id.toUpperCase();
+          if (res?.tableId === t.id) opt.selected = true;
+          select.appendChild(opt);
+        });
+      });
+    }
+    
+    function timeToMinutes(timeStr) {
+      if (!timeStr) return 0;
+      const [h, m] = timeStr.split(':').map(Number);
+      return h * 60 + m;
     }
 
     // Mouse move for dragging
