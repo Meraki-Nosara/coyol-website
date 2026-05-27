@@ -4,11 +4,11 @@ import Layout from '../../layouts/Layout.astro';
 const token = Astro.url.searchParams.get('token');
 ---
 
-<Layout title="Cancel Reservation | Coyol Restaurant" hideFloatingButtons={true}>
+<Layout title="Cancel Reservation | La Luna" hideFloatingButtons={true}>
   <div class="cancel-page">
     <div class="cancel-card">
       <div class="logo">
-        <img src="/images/coyol-logo.png" alt="Coyol" />
+        <img src="/images/laluna-moon-white-real.png" alt="La Luna" />
       </div>
       
       <div id="loading">
@@ -19,7 +19,7 @@ const token = Astro.url.searchParams.get('token');
       <div id="notFound" style="display: none;">
         <h1>Reservation Not Found</h1>
         <p>This cancellation link is invalid or has already been used.</p>
-        <a href="/restaurant" class="btn-back">Return to Coyol</a>
+        <a href="/laluna" class="btn-back">Return to La Luna</a>
       </div>
       
       <div id="details" style="display: none;">
@@ -47,7 +47,7 @@ const token = Astro.url.searchParams.get('token');
         <p class="warning">This will free up your table for other guests.</p>
         
         <div class="buttons">
-          <a href="/restaurant" class="btn-keep">Keep My Reservation</a>
+          <a href="/laluna" class="btn-keep">Keep My Reservation</a>
           <button id="cancelBtn" class="btn-cancel" onclick="cancelReservation()">Yes, Cancel It</button>
         </div>
       </div>
@@ -56,7 +56,7 @@ const token = Astro.url.searchParams.get('token');
         <div class="success-icon">✓</div>
         <h1>Reservation Cancelled</h1>
         <p>Your reservation has been cancelled. We hope to see you another time!</p>
-        <a href="/restaurant/reserve" class="btn-rebook">Make a New Reservation</a>
+        <a href="/laluna/reserve" class="btn-rebook">Make a New Reservation</a>
       </div>
     </div>
   </div>
@@ -65,7 +65,7 @@ const token = Astro.url.searchParams.get('token');
 <style>
   .cancel-page {
     min-height: 100vh;
-    background: linear-gradient(180deg, #1a1f16 0%, #3D4F3D 100%);
+    background: linear-gradient(180deg, #1a1f16 0%, #2d3428 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -82,15 +82,16 @@ const token = Astro.url.searchParams.get('token');
   }
   
   .logo img {
-    height: 50px;
+    height: 60px;
     margin-bottom: 30px;
+    filter: brightness(0);
   }
   
   .spinner {
     width: 40px;
     height: 40px;
     border: 3px solid #ddd;
-    border-top-color: #3D4F3D;
+    border-top-color: #A65D3F;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin: 0 auto 20px;
@@ -178,7 +179,7 @@ const token = Astro.url.searchParams.get('token');
   .btn-back, .btn-rebook {
     display: inline-block;
     padding: 14px 24px;
-    background: #3D4F3D;
+    background: #A65D3F;
     color: white;
     border-radius: 10px;
     text-decoration: none;
@@ -219,7 +220,7 @@ const token = Astro.url.searchParams.get('token');
     
     try {
       const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/coyol_reservations?cancel_token=eq.${token}&select=*`,
+        `${SUPABASE_URL}/rest/v1/laluna_reservations?cancel_token=eq.${token}&select=*`,
         {
           headers: {
             'apikey': SUPABASE_KEY,
@@ -284,7 +285,7 @@ const token = Astro.url.searchParams.get('token');
     
     try {
       const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/coyol_reservations?cancel_token=eq.${token}`,
+        `${SUPABASE_URL}/rest/v1/laluna_reservations?cancel_token=eq.${token}`,
         {
           method: 'PATCH',
           headers: {

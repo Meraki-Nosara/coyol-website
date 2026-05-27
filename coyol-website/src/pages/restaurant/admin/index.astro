@@ -36,6 +36,10 @@ import Layout from '../../../layouts/Layout.astro';
       <div class="panel-header">
         <button class="btn-new" onclick="openNewReservation()">+</button>
         <button class="btn-walkin" onclick="openWalkin()">Walk-in</button>
+        <button class="btn-send-reminders" onclick="sendDayReminders()" title="Email confirmation reminders">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          Remind
+        </button>
         <div class="res-tabs">
           <span class="res-count" id="resCount">RESERVATIONS <strong>0</strong></span>
           <span class="waitlist-count">WAITLIST <strong>0</strong></span>
@@ -546,6 +550,22 @@ import Layout from '../../../layouts/Layout.astro';
     }
 
     .btn-new:hover { background: #8B4D33; }
+    
+    .btn-send-reminders {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      height: 36px;
+      padding: 0 12px;
+      background: var(--terracotta);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-send-reminders:hover { background: #8B4D33; }
 
     .btn-walkin {
       height: 36px;
@@ -2965,6 +2985,52 @@ import Layout from '../../../layouts/Layout.astro';
         });
       } catch (err) {
         console.error('Failed to load shifts:', err);
+      }
+    }
+
+    // Send email reminders for the day
+    async function sendDayReminders() {
+      const dateStr = getDateString(currentDate);
+      const allRes = getReservations();
+      const todayRes = allRes.filter(r => 
+        r.date === dateStr && 
+        r.guestEmail && 
+        r.status === 'confirmed'
+      );
+      
+      if (todayRes.length === 0) {
+        alert('No reservations with email addresses for this date');
+        return;
+      }
+      
+      if (!confirm(`Send confirmation reminder emails to ${todayRes.length} reservation(s)?`)) {
+        return;
+      }
+      
+      const btn = document.querySelector('.btn-send-reminders');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = 'Sending...';
+      btn.disabled = true;
+      
+      try {
+        const res = await fetch('/api/send-reminders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ restaurant: 'coyol', date: dateStr })
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+          alert(`Sent ${data.sent} reminder email(s)!${data.errors ? '\n\nErrors:\n' + data.errors.join('\n') : ''}`);
+        } else {
+          alert('Failed to send reminders: ' + (data.error || 'Unknown error'));
+        }
+      } catch (e) {
+        alert('Failed to send reminders: ' + e.message);
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
       }
     }
 
