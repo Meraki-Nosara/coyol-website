@@ -189,12 +189,12 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
     width: auto;
     object-fit: contain;
     opacity: 0.95;
-    filter: brightness(0) invert(1);
+    filter: brightness(0) invert(1) drop-shadow(1px 1px 0 rgba(0,0,0,0.3)) drop-shadow(-1px -1px 0 rgba(255,255,255,0.1));
   }
 
   /* Platinum gold logo */
   .card-visual.platinum .card-logo-big {
-    filter: brightness(0) saturate(100%) invert(72%) sepia(29%) saturate(456%) hue-rotate(357deg) brightness(91%) contrast(89%);
+    filter: brightness(0) saturate(100%) invert(72%) sepia(29%) saturate(456%) hue-rotate(357deg) brightness(91%) contrast(89%) drop-shadow(1px 1px 0 rgba(0,0,0,0.4)) drop-shadow(-1px -1px 0 rgba(196,166,124,0.3));
   }
 
   .card-owner {
@@ -202,11 +202,14 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
     bottom: 1.5rem;
     left: 2rem;
     font-size: 0.9rem;
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.9);
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    color: rgba(255,255,255,0.95);
+    text-shadow: 
+      1px 1px 1px rgba(0,0,0,0.4),
+      -1px -1px 1px rgba(255,255,255,0.15),
+      0 2px 3px rgba(0,0,0,0.2);
   }
 
   .card-left {
@@ -214,12 +217,16 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
     flex-direction: column;
   }
 
-  /* Platinum gold text */
+  /* Platinum gold text - all elements */
   .card-visual.platinum .card-owner,
   .card-visual.platinum .card-amount,
   .card-visual.platinum .card-tier,
   .card-visual.platinum .card-text {
     color: #C4A67C;
+    text-shadow: 
+      1px 1px 2px rgba(0,0,0,0.5),
+      -1px -1px 1px rgba(196,166,124,0.3),
+      0 2px 4px rgba(0,0,0,0.3);
   }
 
   .card-bottom {
@@ -238,9 +245,9 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
     font-weight: 700;
     color: #F5F3EF;
     text-shadow: 
-      1px 1px 1px rgba(0,0,0,0.3),
-      0 1px 2px rgba(0,0,0,0.2),
-      0 -1px 0 rgba(255,255,255,0.15);
+      2px 2px 2px rgba(0,0,0,0.4),
+      -1px -1px 1px rgba(255,255,255,0.2),
+      0 3px 6px rgba(0,0,0,0.3);
     letter-spacing: 2px;
   }
 
@@ -252,15 +259,21 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
     font-size: 0.65rem;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: rgba(255,255,255,0.7);
+    color: rgba(255,255,255,0.8);
+    text-shadow: 
+      1px 1px 1px rgba(0,0,0,0.3),
+      -1px -1px 0 rgba(255,255,255,0.1);
   }
 
   .card-tier {
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 3px;
-    color: rgba(255,255,255,0.9);
+    color: rgba(255,255,255,0.95);
     margin-top: 0.15rem;
+    text-shadow: 
+      1px 1px 1px rgba(0,0,0,0.4),
+      -1px -1px 1px rgba(255,255,255,0.15);
   }
 
   /* Use button */
