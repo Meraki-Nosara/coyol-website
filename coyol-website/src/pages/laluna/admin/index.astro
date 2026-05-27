@@ -2854,7 +2854,7 @@ import Layout from '../../../layouts/Layout.astro';
       });
       if (matches.length > 0) {
         const total = matches.reduce((sum, g) => sum + (g.remaining_balance ?? g.amount), 0);
-        matchAlert.innerHTML = `🎁 <strong>Gift card found!</strong> ${matches[0].recipient_name} has <strong>$${total}</strong> available.`;
+        matchAlert.innerHTML = `<strong>Gift card found!</strong> ${matches[0].recipient_name} has <strong>$${total}</strong> available.`;
         matchAlert.style.display = 'block';
       } else {
         matchAlert.style.display = 'none';
