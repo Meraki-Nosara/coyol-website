@@ -47,7 +47,8 @@ try {
     todayCount = data[0]?.count || 0;
   }
   if (hotRes.ok) crmHotLeads = await hotRes.json();
-} catch (e) {
+} catch (e: any) {
+  console.error('CRM fetch error:', e?.message || e);
   console.error('CRM fetch error:', e);
 }
 
