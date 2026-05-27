@@ -2143,11 +2143,12 @@ import Layout from '../../../layouts/Layout.astro';
       const layouts = getLayout();
       const allTables = Object.values(layouts).flat();
       const dateStr = getDateString(currentDate);
-      const dayReservations = reservations.filter(r => r.date === dateStr && r.status !== 'cancelled' && r.status !== 'no-show');
+      const allReservations = getReservations();
+      const dayReservations = allReservations.filter(r => r.date === dateStr && r.status !== 'cancelled' && r.status !== 'no-show');
       
       document.querySelectorAll('.table-select-mobile').forEach(select => {
         const resId = select.dataset.resId;
-        const res = reservations.find(r => r.id === resId);
+        const res = allReservations.find(r => r.id === resId);
         if (!res) return;
         
         const guestCount = parseInt(res.guests) || 2;
