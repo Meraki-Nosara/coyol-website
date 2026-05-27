@@ -2027,11 +2027,7 @@ import Layout from '../../../layouts/Layout.astro';
               <select class="table-select-mobile" data-res-id="${res.id}" onclick="event.stopPropagation();" onchange="quickAssignTable(this)">
                 <option value="">${res.tableId ? res.tableId.toUpperCase() : 'TBA'}</option>
               </select>
-              <div class="res-actions-mini">
-                <button class="action-icon" onclick="event.stopPropagation();" title="Message">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                </button>
-              </div>
+              
             </div>
             ${res.specialRequests ? `<div class="res-note-row"><span class="res-note">📝 ${res.specialRequests}</span></div>` : ''}
           `).join('')}
