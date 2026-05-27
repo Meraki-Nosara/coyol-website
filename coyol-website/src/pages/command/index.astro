@@ -2,9 +2,6 @@
 import CommandLayout from '../../layouts/CommandLayout.astro';
 import guestData from '../../data/guests-enriched.json';
 
-const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
-const SUPABASE_SERVICE_KEY = import.meta.env.SUPABASE_SERVICE_KEY || 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng';
-
 // Static data fallback
 const guests = guestData.guests || [];
 
@@ -13,7 +10,6 @@ const hot = guests.filter((g: any) => g.lead_score >= 40);
 const targetMarkets = guests.filter((g: any) => ['US-East', 'US-West', 'US-Central', 'Canada', 'Europe', 'Corporate'].includes(g.region));
 const corporate = guests.filter((g: any) => g.is_corporate_email);
 
-// Live counts - fetched client-side to avoid SSR issues
 let hotCount = hot.length;
 let totalCount = guests.length;
 
@@ -43,167 +39,160 @@ const topHot = hot.sort((a: any, b: any) => b.lead_score - a.lead_score).slice(0
 ---
 
 <CommandLayout title="Dashboard" active="dashboard">
-  
-  <div class="page">
+  <div class="dashboard-page">
     <header class="page-header">
       <h1>Dashboard</h1>
-      <span class="updated">Data: {totalCount.toLocaleString()} guests</span>
+      <p class="source">CRM Data: <span id="totalGuests">{totalCount.toLocaleString()}</span> guests</p>
     </header>
 
-    <!-- Hero Stats -->
-    <section class="hero-stats">
-      <div class="big-stat">
-        <div class="big-number" id="hotCount">{hotCount.toLocaleString()}</div>
-        <div class="big-label">Hot Leads</div>
-        <div class="big-sub">Score 40+ · Ready to nurture</div>
+    <!-- Stats Row -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value" id="hotCount">{hotCount.toLocaleString()}</div>
+        <div class="stat-label">Hot Leads</div>
+        <div class="stat-sub">Score 40+</div>
       </div>
-      <div class="big-stat">
-        <div class="big-number">{targetMarkets.length.toLocaleString()}</div>
-        <div class="big-label">Target Markets</div>
-        <div class="big-sub">US, Canada, Europe & Corporate</div>
+      <div class="stat-card">
+        <div class="stat-value">{targetMarkets.length.toLocaleString()}</div>
+        <div class="stat-label">Target Markets</div>
+        <div class="stat-sub">US, CA, EU</div>
       </div>
-      <div class="big-stat">
-        <div class="big-number">{corporate.length.toLocaleString()}</div>
-        <div class="big-label">Corporate</div>
-        <div class="big-sub">Business emails = serious</div>
+      <div class="stat-card">
+        <div class="stat-value">{corporate.length.toLocaleString()}</div>
+        <div class="stat-label">Corporate</div>
+        <div class="stat-sub">Business emails</div>
       </div>
-    </section>
+      <div class="stat-card">
+        <div class="stat-value" id="newToday">0</div>
+        <div class="stat-label">New Today</div>
+        <div class="stat-sub">Hot leads</div>
+      </div>
+    </div>
 
     <!-- Grid -->
     <div class="grid">
-      
       <!-- Top Markets -->
-      <section class="card">
+      <div class="card">
         <h2>Top Markets</h2>
-        <p class="card-sub">Where your best leads come from</p>
-        
-        <div class="bars">
-          {topCities.map(([city, count], i) => {
-            const max = topCities[0][1];
-            const pct = (count / max) * 100;
-            const isTop = i < 3;
+        <div class="list">
+          {topCities.map(([city, count], i) => (
+            <div class="list-row">
+              <span class="rank">{i + 1}</span>
+              <span class="name">{city}</span>
+              <span class="value">{count.toLocaleString()}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Sources -->
+      <div class="card">
+        <h2>Lead Sources</h2>
+        <div class="sources">
+          {topSources.map(([source, count]) => {
+            const pct = Math.round((count / totalCount) * 100);
             return (
-              <div class="bar-row">
-                <span class="bar-rank">{i + 1}</span>
-                <span class="bar-city">{city}</span>
-                <div class="bar-track">
-                  <div class={`bar-fill ${isTop ? 'top' : ''}`} style={`width: ${pct}%`}></div>
-                </div>
-                <span class="bar-count">{count.toLocaleString()}</span>
+              <div class="source-card">
+                <div class="source-pct">{pct}%</div>
+                <div class="source-name">{source}</div>
               </div>
             );
           })}
         </div>
-      </section>
+      </div>
+    </div>
 
-      <!-- Sources -->
-      <section class="card">
-        <h2>Lead Sources</h2>
-        <p class="card-sub">Where guests found us</p>
-        
-        <div class="source-list">
-          {topSources.map(([source, count]) => (
-            <div class="source-item">
-              <span class="source-name">{source}</span>
-              <span class="source-count">{count.toLocaleString()}</span>
+    <!-- Hot Leads -->
+    <div class="card wide">
+      <h2>Top Hot Leads</h2>
+      <div class="leads-grid">
+        {topHot.map((lead: any, i: number) => (
+          <div class="lead-row">
+            <span class="rank">{i + 1}</span>
+            <div class="lead-info">
+              <span class="lead-name">{lead.name}</span>
+              <span class="lead-city">{lead.city || 'Unknown'}</span>
             </div>
-          ))}
-        </div>
-      </section>
-
-      <!-- Hot Leads -->
-      <section class="card wide">
-        <h2>Top Hot Leads</h2>
-        <p class="card-sub">Highest scoring prospects</p>
-        
-        <div class="leads-table">
-          {topHot.map((lead: any) => (
-            <div class="lead-row">
-              <div class="lead-info">
-                <span class="lead-name">{lead.name}</span>
-                <span class="lead-city">{lead.city || 'Unknown'}</span>
-              </div>
-              <div class="lead-score">{lead.lead_score}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
+            <span class="lead-score">{lead.lead_score}</span>
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 </CommandLayout>
 
 <style>
-  .page {
-    padding: 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
-    background: #1a1a1a;
-    min-height: 100vh;
+  .dashboard-page {
+    padding: 32px 40px;
+    max-width: 1200px;
   }
 
   .page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 32px;
   }
 
   .page-header h1 {
-    font-size: 1.75rem;
+    font-size: 24px;
     font-weight: 600;
-    color: #F5F3EF;
+    color: #c4a67c;
+    margin-bottom: 4px;
   }
 
-  .updated {
-    font-size: 0.875rem;
-    color: #888;
+  .source {
+    font-size: 12px;
+    color: #666;
   }
 
-  .hero-stats {
+  /* Stats Row - matches Analytics */
+  .stats-row {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
   }
 
-  .big-stat {
-    background: linear-gradient(135deg, #3D4F3D 0%, #4A5D4A 100%);
-    border-radius: 16px;
-    padding: 2rem;
+  .stat-card {
+    background: #0a0c09;
+    border: 1px solid #1a1d17;
+    border-radius: 12px;
+    padding: 20px;
     text-align: center;
-    color: white;
   }
 
-  .big-number {
-    font-size: 3rem;
-    font-weight: 700;
-    line-height: 1;
+  .stat-value {
+    font-size: 28px;
+    font-weight: 300;
+    color: #c4a67c;
   }
 
-  .big-label {
-    font-size: 1.1rem;
-    margin-top: 0.5rem;
-    opacity: 0.9;
+  .stat-label {
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 6px;
   }
 
-  .big-sub {
-    font-size: 0.8rem;
-    margin-top: 0.25rem;
-    opacity: 0.7;
+  .stat-sub {
+    font-size: 10px;
+    color: #555;
+    margin-top: 4px;
   }
 
+  /* Grid */
   .grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
   }
 
+  /* Cards - matches Analytics */
   .card {
-    background: #222;
+    background: #0a0c09;
+    border: 1px solid #1a1d17;
     border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    padding: 20px;
   }
 
   .card.wide {
@@ -211,142 +200,134 @@ const topHot = hot.sort((a: any, b: any) => b.lead_score - a.lead_score).slice(0
   }
 
   .card h2 {
-    font-size: 1.1rem;
+    font-size: 11px;
     font-weight: 600;
-    color: #C4A67C;
-  }
-
-  .card-sub {
-    font-size: 0.8rem;
     color: #888;
-    margin-top: 0.25rem;
-    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
   }
 
-  .bars {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .bar-row {
+  /* List rows - matches Analytics */
+  .list-row {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #1a1d17;
   }
 
-  .bar-rank {
-    width: 1.5rem;
-    font-size: 0.8rem;
+  .list-row:last-child {
+    border-bottom: none;
+  }
+
+  .rank {
+    width: 24px;
+    font-size: 11px;
     color: #666;
     text-align: center;
   }
 
-  .bar-city {
-    width: 100px;
-    font-size: 0.875rem;
+  .name {
+    flex: 1;
+    font-size: 13px;
+    color: #aaa;
+  }
+
+  .value {
+    font-size: 13px;
     font-weight: 500;
-    color: #F5F3EF;
+    color: #c4a67c;
+  }
+
+  /* Sources - matches Analytics */
+  .sources {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 12px;
+  }
+
+  .source-card {
+    background: #3d4f3d26;
+    border: 1px solid #1a1d17;
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .source-pct {
+    font-size: 22px;
+    font-weight: 500;
+    color: #c4a67c;
+  }
+
+  .source-name {
+    font-size: 10px;
+    color: #888;
+    margin-top: 4px;
+    text-transform: capitalize;
+  }
+
+  /* Leads grid */
+  .leads-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .lead-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: #0f1210;
+    border: 1px solid #1a1d17;
+    border-radius: 8px;
+  }
+
+  .lead-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .lead-name {
+    font-size: 13px;
+    color: #e8e6e1;
+    display: block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .bar-track {
-    flex: 1;
-    height: 8px;
-    background: #333;
-    border-radius: 4px;
-    overflow: hidden;
-  }
-
-  .bar-fill {
-    height: 100%;
-    background: #C4A67C;
-    border-radius: 4px;
-    transition: width 0.3s;
-  }
-
-  .bar-fill.top {
-    background: #4A5D4A;
-  }
-
-  .bar-count {
-    width: 3rem;
-    text-align: right;
-    font-size: 0.8rem;
-    color: #aaa;
-  }
-
-  .source-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .source-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #333;
-  }
-
-  .source-name {
-    font-weight: 500;
-    color: #F5F3EF;
-  }
-
-  .source-count {
-    color: #aaa;
-  }
-
-  .leads-table {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .lead-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem;
-    background: #2a2a2a;
-    border-radius: 8px;
-  }
-
-  .lead-info {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .lead-name {
-    font-weight: 500;
-    color: #F5F3EF;
-  }
-
   .lead-city {
-    font-size: 0.8rem;
-    color: #888;
+    font-size: 11px;
+    color: #666;
   }
 
   .lead-score {
-    background: #3D4F3D;
-    color: white;
-    padding: 0.25rem 0.75rem;
+    background: linear-gradient(135deg, #3d4f3d, #4a5d4a);
+    color: #e8e6e1;
+    padding: 4px 10px;
     border-radius: 12px;
+    font-size: 12px;
     font-weight: 600;
   }
 
-  @media (max-width: 768px) {
-    .hero-stats {
-      grid-template-columns: 1fr;
+  @media (max-width: 900px) {
+    .dashboard-page {
+      padding: 20px;
+    }
+    .stats-row {
+      grid-template-columns: repeat(2, 1fr);
     }
     .grid {
       grid-template-columns: 1fr;
     }
     .card.wide {
       grid-column: span 1;
+    }
+    .leads-grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>
@@ -355,18 +336,36 @@ const topHot = hot.sort((a: any, b: any) => b.lead_score - a.lead_score).slice(0
   // Fetch live counts client-side
   async function updateLiveCounts() {
     try {
-      const response = await fetch('https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/crm_guests?lead_score=gte.40&select=count', {
-        headers: {
-          'apikey': 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD',
-          'Prefer': 'count=exact'
-        }
-      });
-      if (response.ok) {
-        const data = await response.json();
-        const hotEl = document.getElementById('hotCount');
-        if (hotEl && data[0]?.count) {
-          hotEl.textContent = data[0].count.toLocaleString();
-        }
+      const today = new Date().toISOString().split('T')[0];
+      
+      const [hotRes, todayRes, totalRes] = await Promise.all([
+        fetch('https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/crm_guests?lead_score=gte.40&select=count', {
+          headers: { 'apikey': 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD', 'Prefer': 'count=exact' }
+        }),
+        fetch(`https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/crm_guests?lead_score=gte.40&created_at=gte.${today}&select=count`, {
+          headers: { 'apikey': 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD', 'Prefer': 'count=exact' }
+        }),
+        fetch('https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/crm_guests?select=count', {
+          headers: { 'apikey': 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD', 'Prefer': 'count=exact' }
+        })
+      ]);
+      
+      if (hotRes.ok) {
+        const data = await hotRes.json();
+        const el = document.getElementById('hotCount');
+        if (el && data[0]?.count) el.textContent = data[0].count.toLocaleString();
+      }
+      
+      if (todayRes.ok) {
+        const data = await todayRes.json();
+        const el = document.getElementById('newToday');
+        if (el) el.textContent = (data[0]?.count || 0).toLocaleString();
+      }
+      
+      if (totalRes.ok) {
+        const data = await totalRes.json();
+        const el = document.getElementById('totalGuests');
+        if (el && data[0]?.count) el.textContent = data[0].count.toLocaleString();
       }
     } catch (e) {
       console.log('Live count fetch failed, using cached data');
