@@ -978,5 +978,51 @@ import Layout from '../../../layouts/Layout.astro';
 
     // Initial render
     renderShifts();
+    
+    // Table Capacity Settings
+    const CAPACITY_KEY = 'coyol_table_capacities';
+    
+    function getCapacities() {
+      const saved = localStorage.getItem(CAPACITY_KEY);
+      return saved ? JSON.parse(saved) : {};
+    }
+    
+    function saveCapacities(caps) {
+      localStorage.setItem(CAPACITY_KEY, JSON.stringify(caps));
+    }
+    
+    function loadCapacities() {
+      const caps = getCapacities();
+      document.querySelectorAll('.capacity-row[data-type]').forEach(row => {
+        const type = row.dataset.type;
+        if (caps[type]) {
+          const minSelect = row.querySelector('[data-field="min"]');
+          const maxSelect = row.querySelector('[data-field="max"]');
+          if (minSelect && caps[type].min) minSelect.value = caps[type].min;
+          if (maxSelect && caps[type].max) maxSelect.value = caps[type].max;
+        }
+      });
+    }
+    
+    // Auto-save on change
+    document.querySelectorAll('.cap-select').forEach(select => {
+      select.addEventListener('change', () => {
+        const row = select.closest('.capacity-row');
+        const type = row.dataset.type;
+        const field = select.dataset.field;
+        
+        const caps = getCapacities();
+        if (!caps[type]) caps[type] = {};
+        caps[type][field] = parseInt(select.value);
+        saveCapacities(caps);
+        
+        // Show save feedback
+        select.style.outline = '2px solid #22c55e';
+        setTimeout(() => { select.style.outline = ''; }, 1000);
+      });
+    });
+    
+    // Load saved capacities on page load
+    loadCapacities();
   </script>
 </Layout>
