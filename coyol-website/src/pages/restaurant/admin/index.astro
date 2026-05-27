@@ -229,6 +229,10 @@ import Layout from '../../../layouts/Layout.astro';
           <button class="modal-close" onclick="closeWalkinModal()">×</button>
         </div>
         <div class="modal-body">
+          <div class="walkin-name">
+            <label>Guest Name (optional)</label>
+            <input type="text" id="walkinName" class="form-input" placeholder="Walk-in" />
+          </div>
           <div class="walkin-guests">
             <label>How many guests?</label>
             <div class="guest-buttons">
@@ -2804,6 +2808,7 @@ import Layout from '../../../layouts/Layout.astro';
 
     function closeWalkinModal() {
       document.getElementById('walkinModal').classList.remove('open');
+      document.getElementById('walkinName').value = '';
     }
 
     // Guest button clicks
@@ -2825,16 +2830,17 @@ import Layout from '../../../layouts/Layout.astro';
     async function seatWalkin() {
       const now = new Date();
       const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+      const walkinNameValue = document.getElementById('walkinName').value.trim();
       
       const reservation = {
         date: getDateString(currentDate),
         time: timeStr,
         guests: walkinGuests,
-        guestName: `Walk-in (${walkinGuests})`,
+        guestName: walkinNameValue || `Walk-in (${walkinGuests})`,
         guestPhone: '',
         guestEmail: '',
         tableId: document.getElementById('walkinTable').value || null,
-        specialRequests: 'Walk-in',
+        specialRequests: walkinNameValue ? '' : 'Walk-in',
         status: 'seated'
       };
       
