@@ -2971,6 +2971,19 @@ import Layout from '../../../layouts/Layout.astro';
       const guests = parseInt(document.getElementById('newGuests').value) || 2;
       let tableId = document.getElementById('newTable').value || null;
       
+      // Check for duplicate reservation (same name, same date)
+      const nameLower = name.toLowerCase();
+      const duplicate = reservations.find(r => 
+        r.date === date && 
+        r.guestName?.toLowerCase() === nameLower &&
+        r.status !== 'cancelled' && r.status !== 'no-show'
+      );
+      
+      if (duplicate) {
+        const proceed = confirm(`⚠️ Duplicate reservation detected!\n\n"${name}" already has a reservation at ${formatTime12(duplicate.time)} on this date.\n\nCreate another reservation anyway?`);
+        if (!proceed) return;
+      }
+      
       // Auto-assign best available table if none selected
       if (!tableId) {
         tableId = findBestAvailableTable(date, time, guests, null);
