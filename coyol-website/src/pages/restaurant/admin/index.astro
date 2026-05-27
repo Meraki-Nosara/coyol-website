@@ -2203,27 +2203,31 @@ import Layout from '../../../layouts/Layout.astro';
         
         const guestCount = parseInt(res.guests) || 2;
         const resTime = res.time;
+        const currentTableId = res.tableId?.toLowerCase();
         
         // Filter tables: fits guests AND (not reserved at same time OR is current table)
         const availableTables = allTables.filter(t => {
-          const capacity = t.capacity || (t.type === 'rect-2' ? 2 : t.type === 'rect-4' ? 4 : t.type === 'rect-6' ? 6 : t.type === 'round-4' ? 4 : t.type === 'round-6' ? 6 : t.type === 'round-8' ? 8 : 4);
+          const capacity = t.maxCovers || t.capacity || 4;
           if (capacity < guestCount) return false;
           
-          if (t.id === res.tableId) return true;
+          const tableIdLower = t.id.toLowerCase();
+          if (tableIdLower === currentTableId) return true;
+          
           const conflict = dayReservations.find(r => 
-            r.tableId === t.id && 
+            r.tableId?.toLowerCase() === tableIdLower && 
             r.id !== resId &&
             Math.abs(timeToMinutes(r.time) - timeToMinutes(resTime)) < 90
           );
           return !conflict;
         });
         
-        select.innerHTML = `<option value="">${res?.tableId ? res.tableId.toUpperCase() : 'TBA'}</option>`;
+        // Always show TBA option first
+        select.innerHTML = '<option value="">TBA</option>';
         availableTables.forEach(t => {
           const opt = document.createElement('option');
           opt.value = t.id;
-          opt.textContent = t.id.toUpperCase();
-          if (res?.tableId === t.id) opt.selected = true;
+          opt.textContent = t.name || t.id.toUpperCase();
+          if (currentTableId === t.id.toLowerCase()) opt.selected = true;
           select.appendChild(opt);
         });
       });
