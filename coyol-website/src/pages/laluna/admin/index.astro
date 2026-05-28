@@ -2682,11 +2682,14 @@ import '../../../styles/laluna-tables.css';
       grid.innerHTML = html;
       
       // Attach click handlers to all table buttons
-      grid.querySelectorAll('.table-btn').forEach(btn => {
+      const buttons = grid.querySelectorAll('.table-btn');
+      console.log('Attaching click handlers to', buttons.length, 'tables');
+      buttons.forEach(btn => {
         btn.addEventListener('click', function(e) {
           e.preventDefault();
           e.stopPropagation();
           const tableId = this.dataset.table;
+          console.log('Click event fired for:', tableId);
           handleTableClick(tableId);
         });
       });
