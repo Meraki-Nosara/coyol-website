@@ -1257,7 +1257,7 @@ import '../../../styles/laluna-tables.css';
     :global(.table-btn) {
       position: absolute;
       border: none;
-      background: #c4a67c;
+      background: #8B5E3C;
       cursor: pointer;
       display: flex;
       flex-direction: column;
@@ -1268,6 +1268,10 @@ import '../../../styles/laluna-tables.css';
       padding: 8px;
       transition: all 0.15s;
       z-index: 1;
+      width: 55px;
+      height: 55px;
+      border-radius: 6px;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 3px 8px rgba(0,0,0,0.2);
     }
     
     :global(.table-btn:hover) {
@@ -2795,9 +2799,12 @@ import '../../../styles/laluna-tables.css';
           transform = `transform:rotate(${45 + table.rotation}deg);`;
         }
         
+        // Ensure table type exists, default to 'square'
+        const tableType = table.type || 'square';
+        
         html += `
           <button type="button" 
-            class="table-btn ${table.type}" 
+            class="table-btn ${tableType}" 
             data-table="${table.id}" 
             data-status="${status}"
             style="left:${table.x}px;top:${table.y}px;${transform}"
