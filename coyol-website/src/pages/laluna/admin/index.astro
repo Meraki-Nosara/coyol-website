@@ -2170,15 +2170,29 @@ import '../../../styles/laluna-tables.css';
   <script is:inline>
     // TABLE CLICK - defined first so onclick works
     window.tableClick = function(id) {
+      console.log('Table clicked:', id);
+      
+      // Assignment mode - assign table to reservation being edited
+      if (window.isAssigningTable) {
+        window.assignTableToReservation && window.assignTableToReservation(id);
+        return;
+      }
+      
       var d = window.floorTables && window.floorTables[id];
+      console.log('Table data:', d);
+      
       if (!d) {
-        alert('No data for table: ' + id);
-        return;
+        // Fallback: create minimal table data
+        d = { table: { id: id, name: id.toUpperCase() }, tableReservations: [] };
       }
+      
       if (typeof window.showTableActionPopup !== 'function') {
-        alert('showTableActionPopup not ready');
+        console.error('showTableActionPopup not defined yet');
+        // Fallback: open new reservation form directly
+        window.openNewReservation && window.openNewReservation(id);
         return;
       }
+      
       // Show the popup!
       window.showTableActionPopup(d.table, d.tableReservations);
     };
