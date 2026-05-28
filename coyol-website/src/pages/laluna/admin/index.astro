@@ -73,7 +73,7 @@ import Layout from '../../../layouts/Layout.astro';
         </select>
         <div class="stats-mini">
           <span>👥 <span id="totalCovers">0</span></span>
-          <span>🪑 <span id="totalRes">0</span></span>
+          <span>📋 <span id="totalRes">0</span></span>
         </div>
       </div>
 
@@ -2296,7 +2296,7 @@ import Layout from '../../../layouts/Layout.astro';
             <span>${shift}</span>
             <div class="stats">
               <span>👥 ${items.reduce((s, r) => s + (parseInt(r.guests) || 2), 0)}</span>
-              <span>🪑 ${items.length}</span>
+              <span>📋 ${items.length} res</span>
             </div>
           </div>
           ${items.map(res => {
