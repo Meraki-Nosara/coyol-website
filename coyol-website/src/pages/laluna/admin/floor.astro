@@ -21,7 +21,8 @@ import '../../../styles/laluna-tables.css';
           <button class="zone-tab active" data-zone="jardin">Jardin</button>
         </div>
         <div class="header-actions">
-          <button class="btn-secondary" id="resetBtn">Reset Layout</button>
+          <button class="btn-secondary" id="resetBtn" title="Reload saved default">Reset Layout</button>
+          <button class="btn-success" id="saveDefaultBtn" title="Save current layout as default">Save as Default</button>
           <button class="btn-primary" id="addTableBtn">+ Add Table</button>
         </div>
       </header>
@@ -253,6 +254,8 @@ import '../../../styles/laluna-tables.css';
     }
 
     .btn-primary { background: var(--terracotta); color: var(--cream); }
+    .btn-success { background: #28a745; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.8125rem; }
+    .btn-success:hover { background: #218838; }
     .btn-primary:hover { background: #8B4D33; }
     .btn-secondary { background: var(--cream); color: var(--santorini); border: 1px solid var(--limestone); }
     .btn-secondary:hover { background: var(--parchment); }
@@ -685,6 +688,8 @@ import '../../../styles/laluna-tables.css';
   <script is:inline>
     const LAYOUT_KEY = 'laluna_floor_layout';
     const LAYOUT_VERSION = 'v3-eatapp-final';
+    const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
     
     // Force reset if version mismatch
     if (localStorage.getItem('laluna_floor_version') !== LAYOUT_VERSION) {
@@ -779,6 +784,68 @@ import '../../../styles/laluna-tables.css';
 
     function saveLayout(layouts) {
       localStorage.setItem(LAYOUT_KEY, JSON.stringify(layouts));
+    }
+    
+    // Save layout to Supabase as default
+    async function saveLayoutToSupabase() {
+      const layouts = getLayout();
+      try {
+        // Check if record exists
+        const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_floor_layout`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const existing = await checkRes.json();
+        
+        if (existing.length > 0) {
+          // Update existing
+          await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_floor_layout`, {
+            method: 'PATCH',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({ value: JSON.stringify(layouts), updated_at: new Date().toISOString() })
+          });
+        } else {
+          // Insert new
+          await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings`, {
+            method: 'POST',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ key: 'laluna_floor_layout', value: JSON.stringify(layouts) })
+          });
+        }
+        alert('Layout saved as default!');
+      } catch (e) {
+        console.error('Save to Supabase failed:', e);
+        alert('Failed to save. Check console.');
+      }
+    }
+    
+    // Load default layout from Supabase
+    async function loadLayoutFromSupabase() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_floor_layout`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const data = await res.json();
+        if (data.length > 0 && data[0].value) {
+          const layouts = JSON.parse(data[0].value);
+          localStorage.setItem(LAYOUT_KEY, JSON.stringify(layouts));
+          renderFloor();
+          updateStats();
+          alert('Default layout loaded!');
+          return true;
+        }
+      } catch (e) {
+        console.error('Load from Supabase failed:', e);
+      }
+      return false;
     }
 
     function updateStats() {
@@ -1041,13 +1108,24 @@ import '../../../styles/laluna-tables.css';
       selectTable(newId);
     });
 
-    // Reset
-    document.getElementById('resetBtn').addEventListener('click', () => {
-      if (!confirm('Reset ' + currentZone + ' layout to default?')) return;
-      const layouts = getLayout();
-      layouts[currentZone] = JSON.parse(JSON.stringify(defaultLayouts[currentZone]));
-      saveLayout(layouts);
-      renderFloor();
+    // Reset - load from Supabase or fallback to hardcoded default
+    document.getElementById('resetBtn').addEventListener('click', async () => {
+      if (!confirm('Reset layout to saved default?')) return;
+      const loaded = await loadLayoutFromSupabase();
+      if (!loaded) {
+        // Fallback to hardcoded default
+        const layouts = JSON.parse(JSON.stringify(defaultLayouts));
+        saveLayout(layouts);
+        renderFloor();
+        updateStats();
+        alert('Reset to built-in default (no saved default found)');
+      }
+    });
+    
+    // Save as Default - persist to Supabase
+    document.getElementById('saveDefaultBtn').addEventListener('click', async () => {
+      if (!confirm('Save current layout as the new default for all devices?')) return;
+      await saveLayoutToSupabase();
     });
 
     // Expose functions
