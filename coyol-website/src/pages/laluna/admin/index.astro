@@ -1200,11 +1200,11 @@ import Layout from '../../../layouts/Layout.astro';
     :global(.floor-grid .table:hover) {
       transform: scale(1.05);
       z-index: 10;
-      cursor: grab;
+      cursor: pointer;
     }
 
     :global(.floor-grid .table:active) {
-      cursor: grabbing;
+      cursor: pointer;
     }
 
     :global(.floor-grid .table-label) {
@@ -2372,6 +2372,7 @@ import Layout from '../../../layouts/Layout.astro';
         // Simple click handler - no dragging on main admin page
         el.addEventListener('click', async (e) => {
           e.stopPropagation();
+          console.log('Table clicked:', table.id, 'isAssigning:', isAssigningTable);
           if (isAssigningTable && !el.classList.contains('occupied')) {
             // Assignment mode
             const resIdToAssign = assigningReservationId;
