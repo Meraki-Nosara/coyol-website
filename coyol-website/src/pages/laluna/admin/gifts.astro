@@ -199,7 +199,7 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
 
   .card-owner {
     position: absolute;
-    bottom: 1.5rem;
+    bottom: 2.5rem;
     left: 2rem;
     font-size: 0.9rem;
     font-weight: 600;
@@ -210,6 +210,17 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
       1px 1px 1px rgba(0,0,0,0.4),
       -1px -1px 1px rgba(255,255,255,0.15),
       0 2px 3px rgba(0,0,0,0.2);
+  }
+  
+  .card-code {
+    position: absolute;
+    bottom: 1rem;
+    left: 2rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.6);
+    font-family: monospace;
   }
 
   .card-left {
@@ -499,6 +510,7 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
             </div>
           </div>
           <div class="card-owner">${ownerName}</div>
+          <div class="card-code">${g.code}</div>
           ${!isUsed ? `<button class="card-action" onclick="applyToReservation('${g.code}', ${balance}, '${(g.recipient_name || '').replace(/'/g, "\\'")}')">Use</button>` : ''}
         </div>
       `;
