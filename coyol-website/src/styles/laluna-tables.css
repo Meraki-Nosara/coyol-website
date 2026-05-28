@@ -160,13 +160,24 @@
   justify-content: center;
 }
 
-/* Status colors */
+/* Status colors - BRIGHT GREEN for reserved tables */
 .table-btn[data-status="confirmed"] {
-  background: linear-gradient(145deg, #6bb96e 0%, #4a9a4d 100%);
+  background: #4CAF50 !important;
+  box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 3px 8px rgba(0,0,0,0.2), 0 0 8px rgba(76, 175, 80, 0.4) !important;
 }
 
 .table-btn[data-status="seated"] {
-  background: linear-gradient(145deg, #5a9bd4 0%, #3a7bb4 100%);
+  background: #2196F3 !important;
+  box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 3px 8px rgba(0,0,0,0.2), 0 0 8px rgba(33, 150, 243, 0.4) !important;
+}
+
+/* Floor grid tables also need status colors */
+.floor-grid .table[data-status="confirmed"] {
+  background: #4CAF50 !important;
+}
+
+.floor-grid .table[data-status="seated"] {
+  background: #2196F3 !important;
 }
 
 /* Assignment mode */

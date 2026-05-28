@@ -351,7 +351,7 @@ import '../../../styles/laluna-tables.css';
         <div class="modal-footer detail-actions" id="modalActions">
           <!-- Active reservation buttons -->
           <div id="activeActions">
-            <button class="btn-edit" onclick="openEditModal()">✏️ Edit</button>
+            <button class="btn-edit" onclick="openEditModal()">Edit</button>
             <button class="btn-assign" id="assignBtn" onclick="startTableAssignment()">Assign Table</button>
             <button class="btn-seat" id="seatBtn" onclick="toggleSeatStatus()">Seat</button>
             <button class="btn-cancel" onclick="cancelReservation()">Cancel Reservation</button>
@@ -2665,7 +2665,6 @@ import '../../../styles/laluna-tables.css';
           e.preventDefault();
           e.stopPropagation();
           const tableId = this.dataset.table;
-          alert('Table clicked: ' + tableId);
           handleTableClick(tableId);
         });
       });
@@ -2676,8 +2675,6 @@ import '../../../styles/laluna-tables.css';
     
     // Global function for table button clicks
     window.handleTableClick = function(tableId) {
-      alert('Clicked: ' + tableId);
-      
       // If in assignment mode, assign the table
       if (isAssigningTable) {
         assignTableToReservation(tableId);
@@ -2687,16 +2684,11 @@ import '../../../styles/laluna-tables.css';
       // Otherwise show the table popup
       const data = window.floorTables?.[tableId];
       if (!data) {
-        alert('No data for: ' + tableId);
+        console.error('No data for table:', tableId);
         return;
       }
       
-      // Call popup function
-      if (typeof showTableActionPopup === 'function') {
-        showTableActionPopup(data.table, data.tableReservations);
-      } else {
-        alert('showTableActionPopup not found!');
-      }
+      showTableActionPopup(data.table, data.tableReservations);
     };
 
     // Mouse move for dragging
