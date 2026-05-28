@@ -2151,6 +2151,28 @@ import '../../../styles/laluna-tables.css';
     let currentZone = 'jardin';
     let currentStatusFilter = 'coming';
     let cachedReservations = [];
+    
+    // GLOBAL table click handler - defined early so inline onclick works
+    window.onTableClick = function(tableId) {
+      console.log('onTableClick:', tableId);
+      
+      if (typeof isAssigningTable !== 'undefined' && isAssigningTable) {
+        assignTableToReservation(tableId);
+        return;
+      }
+      
+      const data = window.floorTables?.[tableId];
+      if (!data) {
+        alert('Table data not found: ' + tableId);
+        return;
+      }
+      
+      if (typeof showTableActionPopup === 'function') {
+        showTableActionPopup(data.table, data.tableReservations);
+      } else {
+        alert('Popup function not ready');
+      }
+    };
 
     // Get reservations from Supabase
     async function fetchReservations(date) {
@@ -2669,7 +2691,8 @@ import '../../../styles/laluna-tables.css';
             class="table-btn ${table.type}" 
             data-table="${table.id}" 
             data-status="${status}"
-            style="left:${table.x}px;top:${table.y}px;${transform}">
+            style="left:${table.x}px;top:${table.y}px;${transform}"
+            onclick="window.onTableClick('${table.id}')">
             <span class="tbl-name">${table.name}</span>
             ${res ? `<span class="tbl-guest">${res.guestName.split(' ')[0]}</span>` : ''}
             ${res ? `<span class="tbl-time">${formatTime12(res.time)}</span>` : ''}
