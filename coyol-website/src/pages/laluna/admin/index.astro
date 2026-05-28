@@ -2343,7 +2343,7 @@ import Layout from '../../../layouts/Layout.astro';
     
     // Global table click handler
     window.onTableClick = async function(tableId) {
-      console.log('TABLE CLICKED:', tableId);
+      alert('Table: ' + tableId);
       const data = window['tableData_' + tableId];
       if (!data) return;
       const { table, tableReservations } = data;
