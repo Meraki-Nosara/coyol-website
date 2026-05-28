@@ -2152,26 +2152,18 @@ import '../../../styles/laluna-tables.css';
     let currentStatusFilter = 'coming';
     let cachedReservations = [];
     
-    // GLOBAL table click handler - defined early so inline onclick works
+    // GLOBAL table click handler
     window.onTableClick = function(tableId) {
-      // If in assignment mode, assign table
-      if (typeof isAssigningTable !== 'undefined' && isAssigningTable) {
+      // Assignment mode
+      if (window.isAssigningTable) {
         assignTableToReservation(tableId);
         return;
       }
       
-      // Get table data
+      // Get table data and show popup
       const data = window.floorTables?.[tableId];
-      if (!data) {
-        console.error('No data for table:', tableId);
-        return;
-      }
-      
-      // Show the popup
-      try {
-        showTableActionPopup(data.table, data.tableReservations);
-      } catch (e) {
-        console.error('Popup error:', e);
+      if (data) {
+        window.showTableActionPopup(data.table, data.tableReservations);
       }
     };
 
@@ -2617,7 +2609,7 @@ import '../../../styles/laluna-tables.css';
       if (isAssigningTable) {
         // Handle assignment mode
         const resIdToAssign = assigningReservationId;
-        isAssigningTable = false;
+        window.isAssigningTable = false;
         assigningReservationId = null;
         document.getElementById('floorGrid').classList.remove('assigning');
         document.getElementById('assignBanner').classList.remove('show');
@@ -2640,7 +2632,7 @@ import '../../../styles/laluna-tables.css';
       
       if (isAssigningTable) {
         const resIdToAssign = assigningReservationId;
-        isAssigningTable = false;
+        window.isAssigningTable = false;
         assigningReservationId = null;
         document.getElementById('floorGrid').classList.remove('assigning');
         document.getElementById('assignBanner').classList.remove('show');
@@ -2791,7 +2783,7 @@ import '../../../styles/laluna-tables.css';
     });
 
     let selectedReservationId = null;
-    let isAssigningTable = false;
+    window.window.isAssigningTable = false;
     let assigningReservationId = null;
     
     function selectReservation(id) {
@@ -3081,7 +3073,7 @@ import '../../../styles/laluna-tables.css';
         return;
       }
       
-      isAssigningTable = true;
+      window.isAssigningTable = true;
       assigningReservationId = selectedReservationId;
       
       // Close the modal
@@ -3119,7 +3111,7 @@ import '../../../styles/laluna-tables.css';
     }
     
     function cancelAssignment() {
-      isAssigningTable = false;
+      window.isAssigningTable = false;
       assigningReservationId = null;
       document.getElementById('floorGrid').classList.remove('assigning');
       document.getElementById('assignBanner').classList.remove('show');
@@ -3842,7 +3834,7 @@ import '../../../styles/laluna-tables.css';
           const tableReservations = cachedReservations.filter(r => r.date === dateStr && r.tableId === tableId);
           if (isAssigningTable && !tableEl.classList.contains('occupied')) {
             const resIdToAssign = assigningReservationId;
-            isAssigningTable = false;
+            window.isAssigningTable = false;
             assigningReservationId = null;
             document.getElementById('floorGrid').classList.remove('assigning');
             document.getElementById('assignBanner').classList.remove('show');
