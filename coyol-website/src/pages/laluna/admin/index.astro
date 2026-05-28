@@ -2665,7 +2665,7 @@ import Layout from '../../../layouts/Layout.astro';
     
     // Global function for table button clicks
     window.handleTableClick = function(tableId) {
-      console.log('handleTableClick:', tableId, 'isAssigning:', isAssigningTable);
+      alert('Clicked: ' + tableId);
       
       // If in assignment mode, assign the table
       if (isAssigningTable) {
@@ -2676,10 +2676,16 @@ import Layout from '../../../layouts/Layout.astro';
       // Otherwise show the table popup
       const data = window.floorTables?.[tableId];
       if (!data) {
-        console.error('No floor data for table:', tableId);
+        alert('No data for: ' + tableId);
         return;
       }
-      showTableActionPopup(data.table, data.tableReservations);
+      
+      // Call popup function
+      if (typeof showTableActionPopup === 'function') {
+        showTableActionPopup(data.table, data.tableReservations);
+      } else {
+        alert('showTableActionPopup not found!');
+      }
     };
 
     // Mouse move for dragging
