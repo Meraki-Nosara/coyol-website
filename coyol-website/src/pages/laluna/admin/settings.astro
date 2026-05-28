@@ -85,32 +85,32 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
               <span>Max Guests</span>
             </div>
             <div class="capacity-row" data-type="square">
-              <span class="table-type">🪑 Square (2-top)</span>
+              <span class="table-type"><span class="table-icon square-icon"></span> Square (2-top)</span>
               <select class="cap-select" data-field="min"><option value="1">1</option><option value="2" selected>2</option></select>
               <select class="cap-select" data-field="max"><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option></select>
             </div>
             <div class="capacity-row" data-type="round">
-              <span class="table-type">⭕ Round (4-top)</span>
+              <span class="table-type"><span class="table-icon round-icon"></span> Round (4-top)</span>
               <select class="cap-select" data-field="min"><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option></select>
               <select class="cap-select" data-field="max"><option value="4">4</option><option value="5">5</option><option value="6" selected>6</option></select>
             </div>
             <div class="capacity-row" data-type="round-lg">
-              <span class="table-type">⭕ Round Large</span>
+              <span class="table-type"><span class="table-icon round-lg-icon"></span> Round Large</span>
               <select class="cap-select" data-field="min"><option value="4" selected>4</option><option value="5">5</option><option value="6">6</option></select>
               <select class="cap-select" data-field="max"><option value="6">6</option><option value="7">7</option><option value="8" selected>8</option></select>
             </div>
             <div class="capacity-row" data-type="round-xl">
-              <span class="table-type">⭕ Round XL</span>
+              <span class="table-type"><span class="table-icon round-xl-icon"></span> Round XL</span>
               <select class="cap-select" data-field="min"><option value="6" selected>6</option><option value="7">7</option><option value="8">8</option></select>
               <select class="cap-select" data-field="max"><option value="8">8</option><option value="10" selected>10</option><option value="12">12</option></select>
             </div>
             <div class="capacity-row" data-type="sofa">
-              <span class="table-type">🛋️ Sofa/Lounge</span>
+              <span class="table-type"><span class="table-icon sofa-icon"></span> Sofa/Lounge</span>
               <select class="cap-select" data-field="min"><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option></select>
               <select class="cap-select" data-field="max"><option value="4" selected>4</option><option value="5">5</option><option value="6">6</option></select>
             </div>
             <div class="capacity-row" data-type="communal">
-              <span class="table-type">📏 Communal Table</span>
+              <span class="table-type"><span class="table-icon communal-icon"></span> Communal Table</span>
               <select class="cap-select" data-field="min"><option value="1" selected>1</option><option value="2">2</option></select>
               <select class="cap-select" data-field="max"><option value="12">12</option><option value="16" selected>16</option><option value="20">20</option></select>
             </div>
@@ -565,9 +565,76 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
     }
 
     .table-type {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
       font-size: 0.9375rem;
       color: var(--santorini);
       font-family: 'Inter', sans-serif;
+    }
+    
+    .table-icon {
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    
+    .square-icon {
+      width: 28px;
+      height: 28px;
+      background: #8B5E3C;
+      border-radius: 4px;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.15);
+    }
+    
+    .round-icon {
+      width: 28px;
+      height: 28px;
+      background: #8B5E3C;
+      border-radius: 50%;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.15);
+    }
+    
+    .round-lg-icon {
+      width: 34px;
+      height: 34px;
+      background: #8B5E3C;
+      border-radius: 50%;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.15);
+    }
+    
+    .round-xl-icon {
+      width: 40px;
+      height: 40px;
+      background: #8B5E3C;
+      border-radius: 50%;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.15);
+    }
+    
+    .sofa-icon {
+      width: 40px;
+      height: 24px;
+      background: #6B8E6B;
+      border-radius: 8px 8px 4px 4px;
+      position: relative;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.15);
+    }
+    .sofa-icon::before {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 2px;
+      right: 2px;
+      height: 6px;
+      background: #5a7a5a;
+      border-radius: 0 0 4px 4px;
+    }
+    
+    .communal-icon {
+      width: 50px;
+      height: 20px;
+      background: #8B5E3C;
+      border-radius: 4px;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.15);
     }
 
     .cap-select {
