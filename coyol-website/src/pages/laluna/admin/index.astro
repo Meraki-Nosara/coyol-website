@@ -2692,7 +2692,7 @@ import '../../../styles/laluna-tables.css';
             data-table="${table.id}" 
             data-status="${status}"
             style="left:${table.x}px;top:${table.y}px;${transform}"
-            onclick="window.onTableClick('${table.id}')">
+            onclick="alert('CLICK: ${table.id}'); window.onTableClick('${table.id}')">
             <span class="tbl-name">${table.name}</span>
             ${res ? `<span class="tbl-guest">${res.guestName.split(' ')[0]}</span>` : ''}
             ${res ? `<span class="tbl-time">${formatTime12(res.time)}</span>` : ''}
