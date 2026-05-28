@@ -5,10 +5,14 @@ const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
 const SUPABASE_SERVICE_KEY = import.meta.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_KEY || '';
 
 // Generate a unique gift card code
-function generateGiftCode(): string {
+function generateGiftCode(prefix: string = 'LL'): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let code = 'LALUNA-';
-  for (let i = 0; i < 8; i++) {
+  let code = `${prefix}-`;
+  for (let i = 0; i < 4; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  code += '-';
+  for (let i = 0; i < 4; i++) {
     code += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return code;
@@ -30,15 +34,18 @@ export const POST: APIRoute = async ({ request }) => {
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object;
       
-      // Only process La Luna gift cards
-      if (session.metadata?.type !== 'laluna_gift_card') {
+      // Process gift cards for both restaurants
+      const giftType = session.metadata?.type;
+      if (giftType !== 'laluna_gift_card' && giftType !== 'coyol_gift_card') {
         return new Response(JSON.stringify({ received: true }), { status: 200 });
       }
       
       const { recipientName, recipientEmail, senderName, senderEmail, message, amount } = session.metadata;
       
-      // Generate gift card code
-      const giftCode = generateGiftCode();
+      // Generate gift card code with restaurant prefix
+      const isCoyol = giftType === 'coyol_gift_card';
+      const giftCode = generateGiftCode(isCoyol ? 'CYL' : 'LL');
+      const tableName = isCoyol ? 'coyol_gift_cards' : 'laluna_gift_cards';
       
       // Save to Supabase for tracking and email queue
       const giftCard = {
@@ -55,7 +62,7 @@ export const POST: APIRoute = async ({ request }) => {
       };
       
       // Insert into Supabase
-      const insertResponse = await fetch(`${SUPABASE_URL}/rest/v1/laluna_gift_cards`, {
+      const insertResponse = await fetch(`${SUPABASE_URL}/rest/v1/${tableName}`, {
         method: 'POST',
         headers: {
           'apikey': SUPABASE_SERVICE_KEY,

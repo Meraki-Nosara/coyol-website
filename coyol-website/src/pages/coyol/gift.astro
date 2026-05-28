@@ -1,0 +1,461 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Gift a Dining Experience | Coyol Restaurant" hideFloatingButtons={true}>
+  <main class="gift-page">
+    <section class="hero">
+      <h1>Gift a Dining Experience</h1>
+      <p>Give the gift of unforgettable moments at Coyol Restaurant</p>
+    </section>
+
+    <section class="gift-container">
+      <div class="gift-card-preview">
+        <div class="card-visual silver" id="card-visual">
+          <div class="card-center">
+            <img src="/images/logos/coyol-restaurant-logo-white.png" alt="Coyol" class="card-logo-big" />
+          </div>
+          <div class="card-name" id="card-name">RECIPIENT NAME</div>
+          <div class="card-bottom">
+            <div class="card-amount">$<span id="preview-amount">100</span></div>
+            <div class="card-right">
+              <div class="card-text">GIFT CARD</div>
+              <div class="card-tier" id="card-tier">Silver</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <form id="gift-form" class="gift-form">
+        <h2>Select Amount</h2>
+        <div class="amount-options">
+          <button type="button" class="amount-btn" data-amount="50">$50</button>
+          <button type="button" class="amount-btn active" data-amount="100">$100</button>
+          <button type="button" class="amount-btn" data-amount="150">$150</button>
+          <button type="button" class="amount-btn" data-amount="200">$200</button>
+          <div class="custom-amount">
+            <input type="number" id="custom-amount" placeholder="Custom $" min="25" max="500" />
+          </div>
+        </div>
+
+        <h2>Recipient Details</h2>
+        <div class="form-group">
+          <label for="recipient-name">Recipient Name</label>
+          <input type="text" id="recipient-name" name="recipientName" required placeholder="Their name" />
+        </div>
+        <div class="form-group">
+          <label for="recipient-email">Recipient Email</label>
+          <input type="email" id="recipient-email" name="recipientEmail" required placeholder="their@email.com" />
+        </div>
+        <div class="form-group">
+          <label for="message">Personal Message (optional)</label>
+          <textarea id="message" name="message" rows="3" placeholder="Enjoy a special dinner at Coyol..."></textarea>
+        </div>
+
+        <h2>Your Details</h2>
+        <div class="form-group">
+          <label for="sender-name">Your Name</label>
+          <input type="text" id="sender-name" name="senderName" required placeholder="Your name" />
+        </div>
+        <div class="form-group">
+          <label for="sender-email">Your Email</label>
+          <input type="email" id="sender-email" name="senderEmail" required placeholder="your@email.com" />
+        </div>
+
+        <input type="hidden" id="selected-amount" name="amount" value="100" />
+        
+        <button type="submit" class="checkout-btn" id="checkout-btn">
+          <span class="btn-text">Purchase Gift Card — $<span id="btn-amount">100</span></span>
+          <span class="btn-loading" style="display:none;">Processing...</span>
+        </button>
+
+        <p class="secure-note">🔒 Secure payment powered by Stripe</p>
+      </form>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .gift-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #3D4F3D 0%, #2a3a2a 100%);
+    color: #F5F3EF;
+    padding: 2rem 1rem;
+  }
+
+  .hero {
+    text-align: center;
+    padding: 3rem 1rem;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: #C4A67C;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    opacity: 0.8;
+  }
+
+  .gift-container {
+    max-width: 800px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  @media (max-width: 768px) {
+    .gift-container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  .gift-card-preview {
+    position: sticky;
+    top: 2rem;
+  }
+
+  /* Card tiers - same colors as La Luna */
+  .card-visual {
+    background: linear-gradient(145deg, #A65D3F 0%, #8B4532 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    aspect-ratio: 1.6;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    transition: all 0.5s ease;
+  }
+
+  .card-visual.classic {
+    background: linear-gradient(145deg, #A65D3F 0%, #8B4532 100%);
+  }
+
+  .card-visual.silver {
+    background: linear-gradient(145deg, #8E9196 0%, #B8BCC2 30%, #6B7075 70%, #A8ACB2 100%);
+  }
+
+  .card-visual.gold {
+    background: linear-gradient(145deg, #C4A67C 0%, #D4B896 30%, #A68A5B 70%, #E5CFA9 100%);
+  }
+
+  .card-visual.platinum {
+    background: linear-gradient(145deg, #1A1F16 0%, #3D4F3D 30%, #1A1F16 70%, #4A5D4A 100%);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+
+  .card-center {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-logo-big {
+    height: 100px;
+    width: auto;
+    object-fit: contain;
+    opacity: 0.95;
+  }
+
+  .card-name {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.9);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    margin-bottom: 0.5rem;
+  }
+
+  .card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .card-amount {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #F5F3EF;
+    text-shadow: 
+      1px 1px 1px rgba(0,0,0,0.3),
+      0 1px 2px rgba(0,0,0,0.2),
+      0 -1px 0 rgba(255,255,255,0.15);
+    letter-spacing: 2px;
+  }
+
+  .card-right {
+    text-align: right;
+  }
+
+  .card-text {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    opacity: 0.9;
+    text-shadow: 
+      1px 1px 1px rgba(0,0,0,0.3),
+      0 -1px 0 rgba(255,255,255,0.1);
+  }
+
+  .card-tier {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    opacity: 0.9;
+    margin-top: 0.25rem;
+    text-shadow: 
+      1px 1px 1px rgba(0,0,0,0.3),
+      0 -1px 0 rgba(255,255,255,0.1);
+  }
+
+  .gift-form {
+    background: rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  .gift-form h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    margin: 1.5rem 0 1rem;
+    color: #C4A67C;
+  }
+
+  .gift-form h2:first-child {
+    margin-top: 0;
+  }
+
+  .amount-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .amount-btn {
+    flex: 1;
+    min-width: 70px;
+    padding: 1rem;
+    border: 2px solid rgba(196,166,124,0.3);
+    background: transparent;
+    color: #F5F3EF;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .amount-btn:hover {
+    border-color: #C4A67C;
+  }
+
+  .amount-btn.active {
+    background: #C4A67C;
+    border-color: #C4A67C;
+    color: #1A1F16;
+  }
+
+  .custom-amount {
+    flex: 1;
+    min-width: 100px;
+  }
+
+  .custom-amount input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid rgba(196,166,124,0.3);
+    background: transparent;
+    color: #F5F3EF;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .custom-amount input:focus {
+    outline: none;
+    border-color: #C4A67C;
+  }
+
+  .custom-amount input::placeholder {
+    color: rgba(245,243,239,0.5);
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 1px solid rgba(196,166,124,0.3);
+    background: rgba(0,0,0,0.2);
+    color: #F5F3EF;
+    font-size: 1rem;
+    border-radius: 8px;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: #C4A67C;
+  }
+
+  .form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .checkout-btn {
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 1.25rem;
+    background: #C4A67C;
+    border: none;
+    color: #1A1F16;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .checkout-btn:hover {
+    background: #d4b68c;
+    transform: translateY(-1px);
+  }
+
+  .checkout-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .secure-note {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    opacity: 0.6;
+  }
+</style>
+
+<script>
+  const form = document.getElementById('gift-form') as HTMLFormElement;
+  const amountBtns = document.querySelectorAll('.amount-btn');
+  const customInput = document.getElementById('custom-amount') as HTMLInputElement;
+  const selectedAmountInput = document.getElementById('selected-amount') as HTMLInputElement;
+  const previewAmount = document.getElementById('preview-amount');
+  const btnAmount = document.getElementById('btn-amount');
+  const checkoutBtn = document.getElementById('checkout-btn') as HTMLButtonElement;
+  const cardVisual = document.getElementById('card-visual');
+  const cardTier = document.getElementById('card-tier');
+  const cardName = document.getElementById('card-name');
+  const recipientNameInput = document.getElementById('recipient-name') as HTMLInputElement;
+
+  // Update card name as user types
+  if (recipientNameInput && cardName) {
+    recipientNameInput.addEventListener('input', () => {
+      const name = recipientNameInput.value.trim().toUpperCase();
+      cardName.textContent = name || 'RECIPIENT NAME';
+    });
+  }
+
+  function getTier(amount: number): { tier: string, label: string } {
+    if (amount >= 200) return { tier: 'platinum', label: 'Platinum' };
+    if (amount >= 150) return { tier: 'gold', label: 'Gold' };
+    if (amount >= 100) return { tier: 'silver', label: 'Silver' };
+    return { tier: 'classic', label: 'Classic' };
+  }
+
+  function updateAmount(amount: number) {
+    selectedAmountInput.value = amount.toString();
+    if (previewAmount) previewAmount.textContent = amount.toString();
+    if (btnAmount) btnAmount.textContent = amount.toString();
+    
+    // Update card tier
+    const { tier, label } = getTier(amount);
+    if (cardVisual) {
+      cardVisual.className = `card-visual ${tier}`;
+    }
+    if (cardTier) {
+      cardTier.textContent = label;
+    }
+  }
+
+  amountBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      amountBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      customInput.value = '';
+      const amount = parseInt(btn.getAttribute('data-amount') || '100');
+      updateAmount(amount);
+    });
+  });
+
+  customInput.addEventListener('input', () => {
+    if (customInput.value) {
+      amountBtns.forEach(b => b.classList.remove('active'));
+      const amount = parseInt(customInput.value) || 0;
+      updateAmount(amount);
+    }
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const btnText = checkoutBtn.querySelector('.btn-text') as HTMLElement;
+    const btnLoading = checkoutBtn.querySelector('.btn-loading') as HTMLElement;
+    
+    checkoutBtn.disabled = true;
+    btnText.style.display = 'none';
+    btnLoading.style.display = 'inline';
+
+    const formData = new FormData(form);
+    const data = {
+      amount: parseInt(formData.get('amount') as string),
+      recipientName: formData.get('recipientName'),
+      recipientEmail: formData.get('recipientEmail'),
+      message: formData.get('message'),
+      senderName: formData.get('senderName'),
+      senderEmail: formData.get('senderEmail'),
+      restaurant: 'coyol'
+    };
+
+    try {
+      const response = await fetch('/api/create-coyol-gift-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (result.url) {
+        window.location.href = result.url;
+      } else {
+        throw new Error(result.error || 'Failed to create checkout');
+      }
+    } catch (error) {
+      alert('Something went wrong. Please try again.');
+      console.error(error);
+      checkoutBtn.disabled = false;
+      btnText.style.display = 'inline';
+      btnLoading.style.display = 'none';
+    }
+  });
+</script>
