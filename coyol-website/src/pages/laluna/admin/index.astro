@@ -1199,9 +1199,19 @@ import Layout from '../../../layouts/Layout.astro';
     }
     
     :global(.floor-grid .table::before),
-    :global(.floor-grid .table::after),
-    :global(.floor-grid .table *) {
+    :global(.floor-grid .table::after) {
       pointer-events: none;
+    }
+    
+    :global(.table-click-zone) {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 100;
+      cursor: pointer;
+      background: transparent;
     }
 
     :global(.floor-grid .table:hover) {
@@ -2341,10 +2351,36 @@ import Layout from '../../../layouts/Layout.astro';
       localStorage.setItem(LAYOUT_KEY, JSON.stringify(layouts));
     }
     
-    // Global table click handler
+    // Simple global click handler for tables
+    window.handleTableTap = function(tableId) {
+      const data = window.tableDataStore?.[tableId];
+      if (!data) {
+        alert('No data for ' + tableId);
+        return;
+      }
+      const { table, tableReservations } = data;
+      
+      if (isAssigningTable) {
+        // Handle assignment mode
+        const resIdToAssign = assigningReservationId;
+        isAssigningTable = false;
+        assigningReservationId = null;
+        document.getElementById('floorGrid').classList.remove('assigning');
+        document.getElementById('assignBanner').classList.remove('show');
+        fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${resIdToAssign}`, {
+          method: 'PATCH',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+          body: JSON.stringify({ table_id: tableId })
+        }).then(() => { loadReservations(); renderFloor(); });
+      } else {
+        // Show popup
+        showTableActionPopup(table, tableReservations);
+      }
+    };
+    
+    // Legacy handler (keep for compatibility)
     window.onTableClick = async function(tableId) {
-      alert('Table: ' + tableId);
-      const data = window['tableData_' + tableId];
+      const data = window['tableData_' + tableId] || window.tableDataStore?.[tableId];
       if (!data) return;
       const { table, tableReservations } = data;
       
@@ -2382,16 +2418,13 @@ import Layout from '../../../layouts/Layout.astro';
         const res = tableReservations[0]; // Primary reservation
         const status = res ? res.status : 'available';
         
-        const el = document.createElement('button');
-        el.type = 'button';
+        // Create table container (for styling)
+        const el = document.createElement('div');
         el.className = `table ${table.type}`;
         el.dataset.table = table.id;
         el.dataset.status = status;
-        el.style.cssText = `left:${table.x}px; top:${table.y}px; position:absolute; border:none; background:none; cursor:pointer;`;
-        
-        // Store table data for click handler
-        window['tableData_' + table.id] = { table, tableReservations };
-        el.setAttribute('onclick', `window.onTableClick('${table.id}')`);
+        el.style.left = table.x + 'px';
+        el.style.top = table.y + 'px';
         
         if (table.rotation && table.type !== 'diamond') {
           el.style.transform = `rotate(${table.rotation}deg)`;
@@ -2399,12 +2432,17 @@ import Layout from '../../../layouts/Layout.astro';
           el.style.transform = `rotate(${45 + table.rotation}deg)`;
         }
         
-        // Show name and time if reserved
+        // Store table data globally
+        window.tableDataStore = window.tableDataStore || {};
+        window.tableDataStore[table.id] = { table, tableReservations };
+        
+        // Create content + clickable overlay
         el.innerHTML = `
           <span class="table-label">${table.name}</span>
           ${res ? `<span class="table-guest">${res.guestName.split(' ')[0]}</span>` : ''}
-          ${res ? `<span class="table-time">${formatTime12(res.time)} · ${res.guests} pax</span>` : ''}
+          ${res ? `<span class="table-time">${formatTime12(res.time)} \u00b7 ${res.guests} pax</span>` : ''}
           ${tableReservations.length > 1 ? `<span class="table-multi">+${tableReservations.length - 1}</span>` : ''}
+          <div class="table-click-zone" onclick="handleTableTap('${table.id}')"></div>
         `;
         
         // Hover for multi-reservation popup
