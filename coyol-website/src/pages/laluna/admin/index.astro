@@ -2144,11 +2144,17 @@ import '../../../styles/laluna-tables.css';
   <script is:inline>
     // TABLE CLICK - defined first so onclick works
     window.tableClick = function(id) {
-      alert('Click: ' + id);
       var d = window.floorTables && window.floorTables[id];
-      if (d && typeof window.showTableActionPopup === 'function') {
-        window.showTableActionPopup(d.table, d.tableReservations);
+      if (!d) {
+        alert('No data for table: ' + id);
+        return;
       }
+      if (typeof window.showTableActionPopup !== 'function') {
+        alert('showTableActionPopup not ready');
+        return;
+      }
+      // Show the popup!
+      window.showTableActionPopup(d.table, d.tableReservations);
     };
     
     // Auth check
