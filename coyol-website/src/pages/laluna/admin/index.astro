@@ -3076,6 +3076,26 @@ import '../../../styles/laluna-tables.css';
     }
     
     // Table assignment
+    // Apply flash effect to available tables (used by zone change too)
+    function applyAssignmentFlash() {
+      const assigningRes = cachedReservations.find(r => r.id === assigningReservationId);
+      const assigningShift = getShiftForTime(assigningRes?.time);
+      
+      document.querySelectorAll('.floor-grid .table-btn').forEach(el => {
+        const tableId = el.dataset.table;
+        const tableRes = cachedReservations.filter(r => r.tableId === tableId);
+        const hasConflict = tableRes.some(r => getShiftForTime(r.time) === assigningShift);
+        
+        if (hasConflict) {
+          el.classList.add('occupied');
+          el.classList.remove('available');
+        } else {
+          el.classList.add('available');
+          el.classList.remove('occupied');
+        }
+      });
+    }
+    
     function startTableAssignment() {
       if (!selectedReservationId) return;
       
@@ -3098,21 +3118,8 @@ import '../../../styles/laluna-tables.css';
       // Add assigning class to floor grid
       document.getElementById('floorGrid').classList.add('assigning');
       
-      // Mark tables occupied in same shift
-      const assigningRes = cachedReservations.find(r => r.id === assigningReservationId);
-      const assigningShift = getShiftForTime(assigningRes?.time);
-      
-      document.querySelectorAll('.floor-grid .table-btn').forEach(el => {
-        const tableId = el.dataset.table;
-        const tableRes = cachedReservations.filter(r => r.tableId === tableId);
-        const hasConflict = tableRes.some(r => getShiftForTime(r.time) === assigningShift);
-        
-        if (hasConflict) {
-          el.classList.add('occupied');
-        } else {
-          el.classList.add('available');
-        }
-      });
+      // Apply flash effect
+      applyAssignmentFlash();
     }
     
     function getShiftForTime(time) {
@@ -3444,6 +3451,10 @@ import '../../../styles/laluna-tables.css';
         tab.classList.add('active');
         currentZone = tab.dataset.zone;
         renderFloor();
+        // Re-apply assignment mode flash if active
+        if (window.isAssigningTable) {
+          applyAssignmentFlash();
+        }
       });
     });
 
