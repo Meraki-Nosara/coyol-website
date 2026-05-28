@@ -1,0 +1,700 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+---
+
+<Layout hideFloatingButtons={true} title="Gift Cards | Coyol Admin" appleTouchIcon="/coyol-restaurant-icon.png">
+  <div class="admin">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="/images/logos/coyol-restaurant-logo-black.png" alt="Coyol" />
+      </div>
+      <nav class="sidebar-nav">
+        <a href="/restaurant/admin" class="nav-icon" title="Dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </a>
+        <a href="/restaurant/admin/floor" class="nav-icon" title="Floor Plan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+        </a>
+        <a href="/restaurant/admin/guests" class="nav-icon" title="Guests">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </a>
+        <a href="/restaurant/admin/gifts" class="nav-icon active" title="Gift Cards">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="13" rx="2"></rect><path d="M12 8V21"></path><path d="M3 12h18"></path><path d="M12 8c-2-3-6-3-6 0s4 0 6-3c2 3 6 3 6 0s-4 0-6 3"></path></svg>
+        </a>
+        <a href="/restaurant/admin/settings" class="nav-icon" title="Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="/" class="nav-icon" title="View Site">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+      </div>
+    </aside>
+
+    <div class="gifts-content">
+      <header class="gifts-header">
+        <h1>Gift Cards</h1>
+        <div class="header-stats">
+          <div class="stat active">
+            <span class="stat-value" id="pendingCount">0</span>
+            <span class="stat-label">Active</span>
+          </div>
+          <div class="stat redeemed">
+            <span class="stat-value" id="redeemedCount">0</span>
+            <span class="stat-label">Redeemed</span>
+          </div>
+          <div class="stat outstanding">
+            <span class="stat-value" id="totalValue">$0</span>
+            <span class="stat-label">Outstanding</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="alerts-section" id="alertsSection"></div>
+
+      <div class="cards-grid" id="giftsList">
+        <div class="loading">Loading gift cards...</div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style is:global>
+  :root {
+    --keswick: #3D4F3D;
+    --cream: #F5F3EF;
+    --sand: #C4A67C;
+  }
+
+  .admin {
+    display: flex;
+    min-height: 100vh;
+    background: #1a1f16;
+    color: #fff;
+  }
+
+  .sidebar {
+    width: 60px;
+    background: var(--cream);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0;
+    border-right: 1px solid #e0ddd5;
+  }
+
+  .sidebar-logo img {
+    width: 36px;
+    height: auto;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+
+  .nav-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--keswick);
+    opacity: 0.6;
+    border-radius: 8px;
+    transition: all 0.15s;
+  }
+
+  .nav-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .nav-icon:hover {
+    opacity: 1;
+    background: rgba(61, 79, 61, 0.1);
+  }
+
+  .nav-icon.active {
+    opacity: 1;
+    background: var(--keswick);
+    color: var(--cream);
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+  }
+
+  .gifts-content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+  }
+
+  .gifts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .gifts-header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--sand);
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .stat {
+    text-align: center;
+    padding: 0.75rem 1.5rem;
+    background: #2a3020;
+    border-radius: 8px;
+  }
+
+  .stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: #888;
+    text-transform: uppercase;
+  }
+
+  .stat.active .stat-value { color: var(--sand); }
+  .stat.redeemed .stat-value { color: #10b981; }
+  .stat.outstanding .stat-value { color: #fff; }
+
+  .alerts-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .alert-card {
+    background: linear-gradient(135deg, rgba(196,166,124,0.15), rgba(196,166,124,0.05));
+    border: 1px solid var(--sand);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .alert-icon { font-size: 1.5rem; }
+  .alert-content { flex: 1; }
+  .alert-title { font-weight: 600; color: var(--sand); }
+  .alert-details { font-size: 0.875rem; color: #aaa; }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2rem;
+  }
+
+  .loading {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+  }
+
+  /* Card styles - same tiers as La Luna */
+  .card-visual {
+    background: linear-gradient(145deg, #A65D3F 0%, #8B4532 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    aspect-ratio: 1.6;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .card-visual:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+  }
+
+  .card-visual.classic {
+    background: linear-gradient(145deg, #A65D3F 0%, #8B4532 100%);
+  }
+
+  .card-visual.silver {
+    background: linear-gradient(145deg, #8E9196 0%, #B8BCC2 30%, #6B7075 70%, #A8ACB2 100%);
+  }
+
+  .card-visual.gold {
+    background: linear-gradient(145deg, #C4A67C 0%, #D4B896 30%, #A68A5B 70%, #E5CFA9 100%);
+  }
+
+  .card-visual.platinum {
+    background: linear-gradient(145deg, #1A1F16 0%, #3D4F3D 30%, #1A1F16 70%, #4A5D4A 100%);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+
+  .card-visual.used {
+    opacity: 0.5;
+    filter: grayscale(40%);
+  }
+
+  .card-visual.used::after {
+    content: 'REDEEMED';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 4px;
+  }
+
+  .card-center {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-logo-big {
+    height: 80px;
+    width: auto;
+    object-fit: contain;
+    opacity: 0.95;
+  }
+
+  .card-owner {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 2rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.95);
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+  }
+  
+  .card-code {
+    position: absolute;
+    bottom: 1rem;
+    left: 2rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.6);
+    font-family: monospace;
+  }
+
+  .card-visual.platinum .card-owner,
+  .card-visual.platinum .card-amount,
+  .card-visual.platinum .card-tier,
+  .card-visual.platinum .card-text {
+    color: var(--sand);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  }
+
+  .card-bottom {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding-bottom: 2rem;
+  }
+
+  .card-amount {
+    position: absolute;
+    top: 50%;
+    left: 2rem;
+    transform: translateY(-50%);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #F5F3EF;
+    text-shadow: 2px 2px 2px rgba(0,0,0,0.4);
+    letter-spacing: 2px;
+  }
+
+  .card-right {
+    text-align: right;
+  }
+
+  .card-text {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.8);
+  }
+
+  .card-tier {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.95);
+    margin-top: 0.15rem;
+  }
+
+  .card-action {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.4rem 0.8rem;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+
+  .card-action:hover {
+    background: rgba(255,255,255,0.2);
+  }
+
+  /* Modal styles */
+  .apply-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .apply-modal-content {
+    background: #2a3020;
+    border-radius: 16px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 450px;
+  }
+
+  .apply-modal-content h2 {
+    color: var(--sand);
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-subtitle {
+    color: #888;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #aaa;
+    font-size: 0.875rem;
+  }
+
+  .form-group select,
+  .form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    background: #1a1f16;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+  }
+
+  .calc-result {
+    background: #1a1f16;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    min-height: 60px;
+  }
+
+  .calc-result p { margin: 0.25rem 0; color: #aaa; }
+  .calc-result .text-green { color: #10b981; }
+
+  .modal-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .btn-cancel {
+    flex: 1;
+    padding: 0.75rem;
+    background: #444;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .btn-apply {
+    flex: 1;
+    padding: 0.75rem;
+    background: var(--sand);
+    color: #111;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .btn-apply:hover {
+    background: #b8956e;
+  }
+</style>
+
+<script>
+  const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+  
+  let giftCards = [];
+  let reservations = [];
+
+  async function loadData() {
+    try {
+      // Load gift cards
+      const giftsRes = await fetch(`${SUPABASE_URL}/rest/v1/coyol_gift_cards?select=*`, {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`
+        }
+      });
+      giftCards = await giftsRes.json();
+      if (!Array.isArray(giftCards)) giftCards = [];
+
+      // Load today's reservations
+      const today = new Date().toISOString().split('T')[0];
+      const resRes = await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?date=eq.${today}&select=*`, {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`
+        }
+      });
+      reservations = await resRes.json();
+      if (!Array.isArray(reservations)) reservations = [];
+
+      renderStats();
+      checkMatches();
+      renderGiftCards();
+    } catch (e) {
+      console.error('Error:', e);
+      document.getElementById('giftsList').innerHTML = '<div class="loading">Error loading</div>';
+    }
+  }
+
+  function renderStats() {
+    const pending = giftCards.filter(g => g.status !== 'redeemed');
+    const redeemed = giftCards.filter(g => g.status === 'redeemed');
+    const total = pending.reduce((sum, g) => {
+      return sum + (g.remaining_balance ?? g.amount);
+    }, 0);
+
+    document.getElementById('pendingCount').textContent = pending.length;
+    document.getElementById('redeemedCount').textContent = redeemed.length;
+    document.getElementById('totalValue').textContent = `$${total}`;
+  }
+
+  function checkMatches() {
+    const alertsSection = document.getElementById('alertsSection');
+    alertsSection.innerHTML = '';
+
+    giftCards.filter(g => g.status !== 'redeemed').forEach(gift => {
+      const name = (gift.recipient_name || '').toLowerCase();
+      const email = (gift.recipient_email || '').toLowerCase();
+      const balance = gift.remaining_balance ?? gift.amount;
+      
+      reservations.forEach(res => {
+        const rName = (res.guest_name || '').toLowerCase();
+        const rEmail = (res.guest_email || '').toLowerCase();
+        
+        if ((name && rName && (name.includes(rName) || rName.includes(name))) ||
+            (email && rEmail && email === rEmail)) {
+          alertsSection.innerHTML += `
+            <div class="alert-card">
+              <div class="alert-icon">🎁</div>
+              <div class="alert-content">
+                <div class="alert-title">Reservation Match!</div>
+                <div class="alert-details">
+                  <strong>${res.guest_name}</strong> at <strong>${res.time}</strong> has a <strong>$${balance}</strong> gift card.
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      });
+    });
+  }
+
+  function getTier(amount) {
+    if (amount >= 200) return { tier: 'platinum', label: 'Platinum' };
+    if (amount >= 150) return { tier: 'gold', label: 'Gold' };
+    if (amount >= 100) return { tier: 'silver', label: 'Silver' };
+    return { tier: 'classic', label: 'Classic' };
+  }
+
+  function renderGiftCards() {
+    const list = document.getElementById('giftsList');
+    
+    if (!giftCards.length) {
+      list.innerHTML = '<div class="loading">No gift cards yet</div>';
+      return;
+    }
+
+    list.innerHTML = giftCards.map(g => {
+      const balance = g.remaining_balance ?? g.amount;
+      const isUsed = g.status === 'redeemed' || balance <= 0;
+      const { tier, label } = getTier(g.amount);
+      const ownerName = (g.recipient_name || 'Guest').toUpperCase();
+      
+      return `
+        <div class="card-visual ${tier} ${isUsed ? 'used' : ''}" data-code="${g.code}">
+          <div class="card-center">
+            <img src="/images/logos/coyol-restaurant-logo-white.png" class="card-logo-big" alt="Coyol" />
+          </div>
+          <div class="card-bottom">
+            <div class="card-left">
+              <div class="card-amount">$${balance}</div>
+            </div>
+            <div class="card-right">
+              <div class="card-text">GIFT CARD</div>
+              <div class="card-tier">${label}</div>
+            </div>
+          </div>
+          <div class="card-owner">${ownerName}</div>
+          <div class="card-code">${g.code}</div>
+          ${!isUsed ? `<button class="card-action" onclick="applyToReservation('${g.code}', ${balance}, '${(g.recipient_name || '').replace(/'/g, "\\'")}')">Use</button>` : ''}
+        </div>
+      `;
+    }).join('');
+  }
+
+  window.applyToReservation = function(code, amount, name) {
+    const modal = document.createElement('div');
+    modal.className = 'apply-modal';
+    modal.innerHTML = `
+      <div class="apply-modal-content">
+        <h2>Apply Gift Card</h2>
+        <p class="modal-subtitle"><strong>${code}</strong> — $${amount} available</p>
+        
+        <div class="form-group">
+          <label>Reservation</label>
+          <select id="resSelect" onchange="toggleWalkinName()">
+            <option value="">Select...</option>
+            ${reservations.map(r => `<option value="${r.id}" data-name="${r.guest_name}">${r.time} — ${r.guest_name}</option>`).join('')}
+            <option value="walkin">Walk-in</option>
+          </select>
+        </div>
+        
+        <div class="form-group" id="walkinNameGroup" style="display:none">
+          <label>Guest Name (optional)</label>
+          <input type="text" id="walkinName" placeholder="Enter name..." />
+        </div>
+        
+        <div class="form-group">
+          <label>Bill Total ($)</label>
+          <input type="number" id="billAmount" min="0" step="0.01" />
+        </div>
+        
+        <div class="form-group">
+          <label>Apply Amount ($)</label>
+          <input type="number" id="applyAmount" value="${amount}" min="0" max="${amount}" step="0.01" />
+        </div>
+        
+        <div class="calc-result" id="calcResult"></div>
+        
+        <div class="modal-buttons">
+          <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+          <button class="btn-apply" onclick="confirmApply('${code}', ${amount})">Apply</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    
+    document.getElementById('billAmount').addEventListener('input', updateCalc);
+    document.getElementById('applyAmount').addEventListener('input', updateCalc);
+    
+    function updateCalc() {
+      const bill = parseFloat(document.getElementById('billAmount').value) || 0;
+      const apply = parseFloat(document.getElementById('applyAmount').value) || 0;
+      let html = '';
+      if (bill > 0) {
+        const due = bill - apply;
+        html = due > 0 
+          ? `<p>Customer pays: <strong>$${due.toFixed(2)}</strong></p>`
+          : `<p class="text-green">Bill fully covered!</p>`;
+        const rem = amount - apply;
+        html += rem > 0 
+          ? `<p>Remaining balance: <strong>$${rem.toFixed(2)}</strong></p>`
+          : `<p>Card fully used</p>`;
+      }
+      document.getElementById('calcResult').innerHTML = html;
+    }
+  };
+
+  window.closeModal = () => document.querySelector('.apply-modal')?.remove();
+
+  window.toggleWalkinName = function() {
+    const sel = document.getElementById('resSelect');
+    const group = document.getElementById('walkinNameGroup');
+    group.style.display = sel.value === 'walkin' ? 'block' : 'none';
+  };
+
+  window.confirmApply = async function(code, orig) {
+    const sel = document.getElementById('resSelect');
+    const apply = parseFloat(document.getElementById('applyAmount').value) || 0;
+    const bill = parseFloat(document.getElementById('billAmount').value) || 0;
+    
+    if (!sel.value || apply <= 0 || apply > orig) {
+      alert('Invalid selection');
+      return;
+    }
+    
+    const rem = orig - apply;
+    let name = sel.options[sel.selectedIndex].dataset?.name;
+    if (sel.value === 'walkin') {
+      const walkinName = document.getElementById('walkinName').value.trim();
+      name = walkinName || 'Walk-in';
+    }
+    
+    await fetch(`${SUPABASE_URL}/rest/v1/coyol_gift_cards?code=eq.${code}`, {
+      method: 'PATCH',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ 
+        status: rem <= 0 ? 'redeemed' : 'partial',
+        remaining_balance: rem,
+        redeemed_at: rem <= 0 ? new Date().toISOString() : null
+      }),
+    });
+    
+    closeModal();
+    loadData();
+  };
+
+  loadData();
+  setInterval(loadData, 30000);
+</script>
