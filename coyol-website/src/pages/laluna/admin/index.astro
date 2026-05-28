@@ -3219,7 +3219,15 @@ import '../../../styles/laluna-tables.css';
         availableTables.forEach(t => {
           const opt = document.createElement('option');
           opt.value = t.id;
-          opt.textContent = t.name || t.id.toUpperCase();
+          // Add prefix: T for Table, S for Sofa to distinguish from pax
+          let label = t.name || t.id.toUpperCase();
+          if (t.type === 'sofa') {
+            label = 'S: ' + label;
+          } else if (/^\d+$/.test(label)) {
+            // If it's just a number, prefix with T:
+            label = 'T' + label;
+          }
+          opt.textContent = label;
           if (res?.tableId === t.id) opt.selected = true;
           select.appendChild(opt);
         });
