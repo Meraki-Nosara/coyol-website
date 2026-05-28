@@ -2898,8 +2898,8 @@ import Layout from '../../../layouts/Layout.astro';
     // Quick table assignment from mobile dropdown
     async function quickAssignTable(selectEl) {
       const resId = selectEl.dataset.resId;
-      const tableId = selectEl.value;
-      if (!tableId || !resId) return;
+      const tableId = selectEl.value || null; // Allow setting to null (TBA)
+      if (!resId) return;
       
       try {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${resId}`, {
@@ -2953,14 +2953,19 @@ import Layout from '../../../layouts/Layout.astro';
           return !conflict;
         });
         
-        select.innerHTML = `<option value="">${res?.tableId ? res.tableId.toUpperCase() : 'TBA'}</option>`;
+        // Build options: TBA first, then all available tables
+        select.innerHTML = '<option value="">TBA</option>';
         availableTables.forEach(t => {
           const opt = document.createElement('option');
           opt.value = t.id;
-          opt.textContent = t.id.toUpperCase();
+          opt.textContent = t.name || t.id.toUpperCase();
           if (res?.tableId === t.id) opt.selected = true;
           select.appendChild(opt);
         });
+        // If current table not in list (edge case), still select TBA
+        if (res?.tableId && !availableTables.find(t => t.id === res.tableId)) {
+          select.value = '';
+        }
       });
     }
     
