@@ -3049,7 +3049,9 @@ import '../../../styles/laluna-tables.css';
       const newZone = document.getElementById('editZone').value;
       const newNotes = document.getElementById('editNotes').value;
       const newEmail = document.getElementById('editEmail').value.trim();
-      const newPhone = (document.getElementById('editPhoneCountry').value + document.getElementById('editPhone').value.replace(/[^0-9]/g, '')).trim();
+      const countryCode = document.getElementById('editPhoneCountry').value.replace('+', '');
+      const localNum = document.getElementById('editPhone').value.replace(/[^0-9]/g, '');
+      const newPhone = localNum ? (countryCode + localNum) : '';
       
       try {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${selectedReservationId}`, {
@@ -3808,7 +3810,7 @@ import '../../../styles/laluna-tables.css';
         time,
         guests,
         guestName: name,
-        guestPhone: (document.getElementById('newPhoneCountry').value + document.getElementById('newPhone').value.replace(/[^0-9]/g, '')).trim(),
+        guestPhone: (() => { const cc = document.getElementById('newPhoneCountry').value.replace('+', ''); const ln = document.getElementById('newPhone').value.replace(/[^0-9]/g, ''); return ln ? (cc + ln) : ''; })(),
         guestEmail: document.getElementById('newEmail').value.trim(),
         tableId,
         specialRequests: document.getElementById('newNotes').value.trim(),
