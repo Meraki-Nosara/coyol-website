@@ -2341,9 +2341,14 @@ import Layout from '../../../layouts/Layout.astro';
       localStorage.setItem(LAYOUT_KEY, JSON.stringify(layouts));
     }
     
-    // Handle table click - show popup or assign
-    async function handleTableClick(table, tableReservations) {
-      console.log('handleTableClick:', table.id);
+    // Global table click handler
+    window.onTableClick = async function(tableId) {
+      console.log('TABLE CLICKED:', tableId);
+      alert('Clicked: ' + tableId); // Temporary debug
+      const data = window['tableData_' + tableId];
+      if (!data) return;
+      const { table, tableReservations } = data;
+      
       if (isAssigningTable) {
         const resIdToAssign = assigningReservationId;
         isAssigningTable = false;
@@ -2362,7 +2367,7 @@ import Layout from '../../../layouts/Layout.astro';
       } else {
         showTableActionPopup(table, tableReservations);
       }
-    }
+    };
 
     function renderFloor() {
       const layouts = getLayout();
@@ -2378,13 +2383,16 @@ import Layout from '../../../layouts/Layout.astro';
         const res = tableReservations[0]; // Primary reservation
         const status = res ? res.status : 'available';
         
-        const el = document.createElement('div');
+        const el = document.createElement('button');
+        el.type = 'button';
         el.className = `table ${table.type}`;
         el.dataset.table = table.id;
         el.dataset.status = status;
-        el.style.left = table.x + 'px';
-        el.style.top = table.y + 'px';
-        el.onclick = () => handleTableClick(table, tableReservations);
+        el.style.cssText = `left:${table.x}px; top:${table.y}px; position:absolute; border:none; background:none; cursor:pointer;`;
+        
+        // Store table data for click handler
+        window['tableData_' + table.id] = { table, tableReservations };
+        el.setAttribute('onclick', `window.onTableClick('${table.id}')`);
         
         if (table.rotation && table.type !== 'diamond') {
           el.style.transform = `rotate(${table.rotation}deg)`;
