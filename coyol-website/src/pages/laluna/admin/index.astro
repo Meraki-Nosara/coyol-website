@@ -1324,6 +1324,33 @@ import Layout from '../../../layouts/Layout.astro';
     
     :global(.table-btn.bar .tbl-name) { color: #f5f3ef; }
     
+    /* Assignment mode - available tables pulse green */
+    :global(.table-btn.available) {
+      animation: pulse-available 0.6s infinite;
+      z-index: 50;
+    }
+    
+    @keyframes pulse-available {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+      50% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); transform: scale(1.05); }
+    }
+    
+    /* Occupied tables during assignment - dimmed */
+    :global(.table-btn.occupied) {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    
+    /* Flash when table is successfully assigned */
+    :global(.table-btn.just-assigned) {
+      animation: flash-assigned 0.5s ease-out 3;
+    }
+    
+    @keyframes flash-assigned {
+      0%, 100% { background: inherit; }
+      50% { background: #28a745 !important; box-shadow: 0 0 20px #28a745; }
+    }
+    
     /* Status colors */
     :global(.table-btn[data-status="confirmed"]) {
       background: linear-gradient(145deg, #a3d9a5 0%, #6bb96e 100%);
@@ -2620,7 +2647,7 @@ import Layout from '../../../layouts/Layout.astro';
             data-table="${table.id}" 
             data-status="${status}"
             style="left:${table.x}px;top:${table.y}px;${transform}"
-            onclick="openTablePopup('${table.id}')">
+            onclick="handleTableClick('${table.id}')">
             <span class="tbl-name">${table.name}</span>
             ${res ? `<span class="tbl-guest">${res.guestName.split(' ')[0]}</span>` : ''}
             ${res ? `<span class="tbl-time">${formatTime12(res.time)}</span>` : ''}
@@ -2636,21 +2663,23 @@ import Layout from '../../../layouts/Layout.astro';
       populateTableDropdowns();
     }
     
-    // Global function for table button clicks (defined early, calls function defined later)
-    window.openTablePopup = function(tableId) {
-      console.log('openTablePopup called for:', tableId);
-      const data = window.floorTables?.[tableId];
-      if (!data) {
-        console.error('No floor data for table:', tableId, 'Available:', Object.keys(window.floorTables || {}));
-        alert('Table data not found: ' + tableId);
+    // Global function for table button clicks
+    window.handleTableClick = function(tableId) {
+      console.log('handleTableClick:', tableId, 'isAssigning:', isAssigningTable);
+      
+      // If in assignment mode, assign the table
+      if (isAssigningTable) {
+        assignTableToReservation(tableId);
         return;
       }
-      console.log('Calling showTableActionPopup with:', data.table, data.tableReservations);
-      if (typeof showTableActionPopup === 'function') {
-        showTableActionPopup(data.table, data.tableReservations);
-      } else {
-        alert('showTableActionPopup not defined yet');
+      
+      // Otherwise show the table popup
+      const data = window.floorTables?.[tableId];
+      if (!data) {
+        console.error('No floor data for table:', tableId);
+        return;
       }
+      showTableActionPopup(data.table, data.tableReservations);
     };
 
     // Mouse move for dragging
@@ -3007,7 +3036,7 @@ import Layout from '../../../layouts/Layout.astro';
       const assigningRes = cachedReservations.find(r => r.id === assigningReservationId);
       const assigningShift = getShiftForTime(assigningRes?.time);
       
-      document.querySelectorAll('.floor-grid .table').forEach(el => {
+      document.querySelectorAll('.floor-grid .table-btn').forEach(el => {
         const tableId = el.dataset.table;
         const tableRes = cachedReservations.filter(r => r.tableId === tableId);
         const hasConflict = tableRes.some(r => getShiftForTime(r.time) === assigningShift);
@@ -3015,7 +3044,7 @@ import Layout from '../../../layouts/Layout.astro';
         if (hasConflict) {
           el.classList.add('occupied');
         } else {
-          el.classList.remove('occupied');
+          el.classList.add('available');
         }
       });
     }
@@ -3033,7 +3062,7 @@ import Layout from '../../../layouts/Layout.astro';
       assigningReservationId = null;
       document.getElementById('floorGrid').classList.remove('assigning');
       document.getElementById('assignBanner').classList.remove('show');
-      document.querySelectorAll('.table').forEach(t => {
+      document.querySelectorAll('.table-btn').forEach(t => {
         t.classList.remove('available');
         t.classList.remove('occupied');
       });
