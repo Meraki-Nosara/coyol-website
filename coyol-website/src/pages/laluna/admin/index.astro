@@ -3087,14 +3087,7 @@ import Layout from '../../../layouts/Layout.astro';
     
     function createReservationForTable(tableId) {
       hideTableActionPopup();
-      openNewReservation();
-      // Pre-select the table
-      setTimeout(() => {
-        const tableSelect = document.getElementById('newTable');
-        if (tableSelect) {
-          tableSelect.value = tableId;
-        }
-      }, 100);
+      openNewReservation(tableId);
     }
     window.createReservationForTable = createReservationForTable;
 
@@ -3159,8 +3152,32 @@ import Layout from '../../../layouts/Layout.astro';
     });
 
     // New reservation modal
-    function openNewReservation() {
+    function openNewReservation(preselectedTable = null) {
       document.getElementById('newDate').value = getDateString(currentDate);
+      
+      // Populate table dropdown
+      const tableSelect = document.getElementById('newTable');
+      const layouts = getLayout();
+      const allTables = [
+        ...(layouts.inside || []),
+        ...(layouts.terraza || []),
+        ...(layouts.jardin || []),
+        ...(layouts.fantasma || [])
+      ];
+      
+      tableSelect.innerHTML = '<option value="">Auto-assign</option>';
+      allTables.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.id;
+        opt.textContent = t.name || t.id.toUpperCase();
+        tableSelect.appendChild(opt);
+      });
+      
+      // Pre-select table if provided
+      if (preselectedTable) {
+        tableSelect.value = preselectedTable;
+      }
+      
       document.getElementById('newResModal').classList.add('open');
     }
     
