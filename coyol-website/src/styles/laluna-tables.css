@@ -112,34 +112,36 @@
 
 .table-btn.bar .tbl-name { color: white; }
 
-/* Table content labels */
+/* Table content labels - WHITE text for visibility on brown */
 .tbl-name {
   font-weight: 700;
-  color: white;
+  color: #fff;
   font-size: 0.6875rem;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
 .tbl-guest {
   font-weight: 600;
-  color: white;
+  color: #fff;
   font-size: 0.625rem;
   margin-top: 2px;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
 .tbl-time {
   font-size: 0.5625rem;
-  color: rgba(255,255,255,0.9);
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
 }
 
 .tbl-pax {
   font-size: 0.5rem;
   color: #333;
-  background: rgba(255,255,255,0.8);
+  background: rgba(255,255,255,0.9);
   padding: 1px 4px;
   border-radius: 3px;
   margin-top: 2px;
+  font-weight: 600;
 }
 
 .tbl-multi {
@@ -404,14 +406,20 @@
   box-shadow: var(--table-shadow);
 }
 
-/* Table labels */
+/* Table labels - WHITE for visibility */
 .floor-grid .table .table-label {
-  color: white;
-  font-weight: 600;
+  color: #fff;
+  font-weight: 700;
   font-size: 0.6875rem;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
 .floor-grid .table.diamond .table-label {
   transform: rotate(-45deg);
+}
+
+.floor-grid .table .table-time,
+.floor-grid .table .table-guest {
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
 }
