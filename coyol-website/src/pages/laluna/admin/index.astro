@@ -2054,8 +2054,10 @@ import Layout from '../../../layouts/Layout.astro';
       
       // Check each table for availability
       for (const table of allTables) {
-        // Check capacity
-        if (guests < table.minCovers || guests > table.maxCovers) continue;
+        // Check capacity (use defaults if not set: min=1, max=10)
+        const minC = table.minCovers || 1;
+        const maxC = table.maxCovers || 10;
+        if (guests < minC || guests > maxC) continue;
         
         // Check if table is occupied during this time window
         const conflicting = reservations.some(r => {
