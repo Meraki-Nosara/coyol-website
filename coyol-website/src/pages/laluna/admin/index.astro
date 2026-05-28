@@ -2536,11 +2536,11 @@ import '../../../styles/laluna-tables.css';
             <div class="res-row ${res.status} ${res.specialRequests ? 'has-note' : ''} ${hasGiftCard ? 'has-gift' : ''}" onclick="selectReservation('${res.id}')">
               <div class="res-time">${formatTime12(res.time)}</div>
               <span class="res-name" title="${res.guestName}">${hasGiftCard ? '<span class="gift-indicator">GC</span> ' : ''}${res.guestName}</span>
-              <select class="pax-select-mobile" data-res-id="${res.id}" onclick="event.stopPropagation();" onchange="quickUpdateGuests(this)">
-                ${[1,2,3,4,5,6,7,8,9,10,12,15,20].map(n => `<option value="${n}" ${res.guests == n ? 'selected' : ''}>${n}</option>`).join('')}
+              <select class="pax-select-mobile" data-res-id="${res.id}" onclick="event.stopPropagation();" onchange="quickUpdateGuests(this)" title="Guests">
+                ${[1,2,3,4,5,6,7,8,9,10,12,15,20].map(n => `<option value="${n}" ${res.guests == n ? 'selected' : ''}>${n}p</option>`).join('')}
               </select>
-              <select class="table-select-mobile" data-res-id="${res.id}" onclick="event.stopPropagation();" onchange="quickAssignTable(this)">
-                <option value="">${res.tableId ? res.tableId.toUpperCase() : 'TBA'}</option>
+              <select class="table-select-mobile" data-res-id="${res.id}" onclick="event.stopPropagation();" onchange="quickAssignTable(this)" title="Table">
+                <option value="">${res.tableId ? 'T' + res.tableId.replace('t','').toUpperCase() : 'TBA'}</option>
               </select>
               <div class="res-actions-mini">
                 ${res.guestPhone ? `
