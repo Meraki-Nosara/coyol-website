@@ -1,0 +1,417 @@
+/* La Luna Admin - Shared Table Styles
+   Import this in ALL admin pages for consistent look
+   Colors match Settings page exactly */
+
+:root {
+  --table-brown: #8B5E3C;
+  --table-green: #6B8E6B;
+  --table-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 3px 8px rgba(0,0,0,0.2);
+}
+
+/* === TABLE BUTTONS (Dashboard view) === */
+.table-btn {
+  position: absolute;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.625rem;
+  padding: 8px;
+  transition: all 0.15s;
+  z-index: 1;
+}
+
+.table-btn:hover {
+  transform: scale(1.08);
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Square */
+.table-btn.square {
+  width: 55px;
+  height: 55px;
+  border-radius: 6px;
+  background: var(--table-brown);
+  box-shadow: var(--table-shadow);
+}
+
+/* Round */
+.table-btn.round {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--table-brown);
+  box-shadow: var(--table-shadow);
+}
+
+/* Round Large */
+.table-btn.round-lg {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: var(--table-brown);
+  box-shadow: var(--table-shadow);
+}
+
+/* Round XL */
+.table-btn.round-xl {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--table-brown);
+  box-shadow: var(--table-shadow);
+}
+
+/* Sofa/Lounge - GREEN */
+.table-btn.sofa {
+  width: 70px;
+  height: 45px;
+  border-radius: 12px 12px 6px 6px;
+  background: var(--table-green);
+  box-shadow: var(--table-shadow);
+}
+
+/* Diamond/Fantasma */
+.table-btn.diamond {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  background: var(--table-brown);
+  box-shadow: var(--table-shadow);
+  transform: rotate(45deg);
+}
+
+.table-btn.diamond .tbl-name,
+.table-btn.diamond .tbl-guest,
+.table-btn.diamond .tbl-time,
+.table-btn.diamond .tbl-pax {
+  transform: rotate(-45deg);
+}
+
+/* Long/Rect table */
+.table-btn.rect {
+  width: 90px;
+  height: 45px;
+  border-radius: 6px;
+  background: var(--table-brown);
+  box-shadow: var(--table-shadow);
+}
+
+/* Bar/Communal */
+.table-btn.bar {
+  width: 100px;
+  height: 35px;
+  border-radius: 4px;
+  background: var(--table-brown);
+  box-shadow: var(--table-shadow);
+}
+
+.table-btn.bar .tbl-name { color: white; }
+
+/* Table content labels */
+.tbl-name {
+  font-weight: 700;
+  color: white;
+  font-size: 0.6875rem;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.tbl-guest {
+  font-weight: 600;
+  color: white;
+  font-size: 0.625rem;
+  margin-top: 2px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.tbl-time {
+  font-size: 0.5625rem;
+  color: rgba(255,255,255,0.9);
+}
+
+.tbl-pax {
+  font-size: 0.5rem;
+  color: #333;
+  background: rgba(255,255,255,0.8);
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-top: 2px;
+}
+
+.tbl-multi {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #0066cc;
+  color: white;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Status colors */
+.table-btn[data-status="confirmed"] {
+  background: linear-gradient(145deg, #6bb96e 0%, #4a9a4d 100%);
+}
+
+.table-btn[data-status="seated"] {
+  background: linear-gradient(145deg, #5a9bd4 0%, #3a7bb4 100%);
+}
+
+/* Assignment mode */
+.table-btn.available {
+  animation: pulse-available 0.6s infinite;
+  z-index: 50;
+}
+
+@keyframes pulse-available {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+  50% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); transform: scale(1.05); }
+}
+
+.table-btn.occupied {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.table-btn.just-assigned {
+  animation: flash-assigned 0.5s ease-out 3;
+}
+
+@keyframes flash-assigned {
+  0%, 100% { background: inherit; }
+  50% { background: #28a745 !important; box-shadow: 0 0 20px #28a745; }
+}
+
+/* === PALETTE PREVIEWS (Floor Plan editor) === */
+.palette-preview {
+  border: 2px solid #c4a67c;
+}
+
+.palette-preview.square {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  background: var(--table-brown);
+  box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+}
+
+.palette-preview.round {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--table-brown);
+  box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+}
+
+.palette-preview.round-lg {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--table-brown);
+  box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+}
+
+.palette-preview.sofa {
+  width: 40px;
+  height: 22px;
+  border-radius: 8px 8px 4px 4px;
+  background: var(--table-green);
+  box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+}
+
+.palette-preview.diamond {
+  width: 22px;
+  height: 22px;
+  border-radius: 3px;
+  transform: rotate(45deg);
+  background: var(--table-brown);
+  box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+}
+
+.palette-preview.rect {
+  width: 48px;
+  height: 22px;
+  border-radius: 3px;
+  background: var(--table-brown);
+  box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+}
+
+.palette-preview.bar {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background: var(--table-brown);
+  box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+}
+
+/* === SETTINGS PAGE TABLE ICONS === */
+.table-icon {
+  display: inline-block;
+}
+
+.square-icon {
+  width: 28px;
+  height: 28px;
+  background: var(--table-brown);
+  border-radius: 4px;
+  box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.round-icon {
+  width: 28px;
+  height: 28px;
+  background: var(--table-brown);
+  border-radius: 50%;
+  box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.round-lg-icon {
+  width: 34px;
+  height: 34px;
+  background: var(--table-brown);
+  border-radius: 50%;
+  box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.round-xl-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--table-brown);
+  border-radius: 50%;
+  box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.sofa-icon {
+  width: 40px;
+  height: 24px;
+  background: var(--table-green);
+  border-radius: 8px 8px 4px 4px;
+  position: relative;
+  box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.communal-icon {
+  width: 50px;
+  height: 20px;
+  background: var(--table-brown);
+  border-radius: 4px;
+  box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.15);
+}
+
+/* === LEGEND DOTS === */
+.dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.dot.wood { background: var(--table-brown); box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
+.dot.round { background: var(--table-brown); border-radius: 50%; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
+.dot.sofa { background: var(--table-green); border-radius: 6px; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
+.dot.bar { background: var(--table-brown); box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
+.dot.tree { background: radial-gradient(circle at 40% 35%, #5a8f5a, #2d4f2d); border-radius: 50%; }
+
+/* === FLOOR PLAN TABLES (for editor) === */
+.floor-grid .table {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Inter', sans-serif;
+}
+
+.floor-grid .table:hover {
+  transform: scale(1.05);
+  z-index: 10;
+}
+
+.floor-grid .table.square {
+  width: 55px;
+  height: 55px;
+  border-radius: 6px;
+  background: var(--table-brown);
+  box-shadow: var(--table-shadow);
+}
+
+.floor-grid .table.round {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--table-brown);
+  box-shadow: var(--table-shadow);
+}
+
+.floor-grid .table.round-lg {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: var(--table-brown);
+  box-shadow: var(--table-shadow);
+}
+
+.floor-grid .table.round-xl {
+  width: 95px;
+  height: 95px;
+  border-radius: 50%;
+  background: var(--table-brown);
+  box-shadow: var(--table-shadow);
+}
+
+.floor-grid .table.sofa {
+  width: 85px;
+  height: 50px;
+  border-radius: 25px;
+  background: var(--table-green);
+  box-shadow: var(--table-shadow);
+}
+
+.floor-grid .table.diamond {
+  width: 55px;
+  height: 55px;
+  border-radius: 6px;
+  transform: rotate(45deg);
+  background: var(--table-brown);
+  box-shadow: var(--table-shadow);
+}
+
+.floor-grid .table.rect,
+.floor-grid .table.communal {
+  width: 90px;
+  height: 55px;
+  border-radius: 8px;
+  background: var(--table-brown);
+  box-shadow: var(--table-shadow);
+}
+
+.floor-grid .table.bar {
+  width: 100px;
+  height: 35px;
+  border-radius: 4px;
+  background: var(--table-brown);
+  box-shadow: var(--table-shadow);
+}
+
+/* Table labels */
+.floor-grid .table .table-label {
+  color: white;
+  font-weight: 600;
+  font-size: 0.6875rem;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.floor-grid .table.diamond .table-label {
+  transform: rotate(-45deg);
+}
