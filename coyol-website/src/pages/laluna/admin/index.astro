@@ -2696,7 +2696,9 @@ import '../../../styles/laluna-tables.css';
     }
     
     // Global function for table button clicks
-    window.handleTableClick = function(tableId) {
+    function handleTableClick(tableId) {
+      console.log('Table clicked:', tableId);
+      
       // If in assignment mode, assign the table
       if (isAssigningTable) {
         assignTableToReservation(tableId);
@@ -2711,7 +2713,8 @@ import '../../../styles/laluna-tables.css';
       }
       
       showTableActionPopup(data.table, data.tableReservations);
-    };
+    }
+    window.handleTableClick = handleTableClick;
 
     // Mouse move for dragging
     document.addEventListener('mousemove', (e) => {
@@ -3363,6 +3366,7 @@ import '../../../styles/laluna-tables.css';
       document.removeEventListener('click', closeTableActionOnOutsideClick);
     }
     window.hideTableActionPopup = hideTableActionPopup;
+    window.showTableActionPopup = showTableActionPopup;
     
     function createReservationForTable(tableId) {
       hideTableActionPopup();
