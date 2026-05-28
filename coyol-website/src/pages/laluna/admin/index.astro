@@ -1214,13 +1214,159 @@ import Layout from '../../../layouts/Layout.astro';
       pointer-events: none;
     }
     
-    /* Make table children not block clicks */
-    :global(.floor-grid .table .table-label),
-    :global(.floor-grid .table .table-guest),
-    :global(.floor-grid .table .table-time),
-    :global(.floor-grid .table .table-pax),
-    :global(.floor-grid .table .table-multi) {
-      pointer-events: none;
+    /* Table buttons - floating clickable elements */
+    :global(.table-btn) {
+      position: absolute;
+      border: none;
+      background: #c4a67c;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.625rem;
+      padding: 8px;
+      transition: all 0.15s;
+      z-index: 1;
+    }
+    
+    :global(.table-btn:hover) {
+      transform: scale(1.08);
+      z-index: 10;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    :global(.table-btn:active) {
+      transform: scale(1.02);
+    }
+    
+    /* Table shapes */
+    :global(.table-btn.square) {
+      width: 55px;
+      height: 55px;
+      border-radius: 6px;
+      background: linear-gradient(145deg, #d4b896 0%, #a08060 100%);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+    
+    :global(.table-btn.round) {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #d4b896 0%, #a08060 100%);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+    
+    :global(.table-btn.round-lg) {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #d4b896 0%, #a08060 100%);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+    
+    :global(.table-btn.round-xl) {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #d4b896 0%, #a08060 100%);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+    
+    :global(.table-btn.sofa) {
+      width: 70px;
+      height: 45px;
+      border-radius: 12px 12px 6px 6px;
+      background: linear-gradient(145deg, #7a9a7a 0%, #5a7a5a 100%);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+    
+    :global(.table-btn.diamond) {
+      width: 50px;
+      height: 50px;
+      border-radius: 6px;
+      background: linear-gradient(145deg, #d4b896 0%, #a08060 100%);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+      transform: rotate(45deg);
+    }
+    
+    :global(.table-btn.diamond .tbl-name),
+    :global(.table-btn.diamond .tbl-guest),
+    :global(.table-btn.diamond .tbl-time),
+    :global(.table-btn.diamond .tbl-pax) {
+      transform: rotate(-45deg);
+    }
+    
+    :global(.table-btn.rect) {
+      width: 90px;
+      height: 45px;
+      border-radius: 6px;
+      background: linear-gradient(145deg, #d4b896 0%, #a08060 100%);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+    
+    :global(.table-btn.bar) {
+      width: 100px;
+      height: 35px;
+      border-radius: 4px;
+      background: linear-gradient(145deg, #555 0%, #333 100%);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    }
+    
+    :global(.table-btn.bar .tbl-name) { color: white; }
+    
+    /* Status colors */
+    :global(.table-btn[data-status="confirmed"]) {
+      background: linear-gradient(145deg, #a3d9a5 0%, #6bb96e 100%);
+    }
+    
+    :global(.table-btn[data-status="seated"]) {
+      background: linear-gradient(145deg, #a5c4e4 0%, #5a9bd4 100%);
+    }
+    
+    /* Table content */
+    :global(.tbl-name) {
+      font-weight: 700;
+      color: #3d2914;
+      font-size: 0.6875rem;
+    }
+    
+    :global(.tbl-guest) {
+      font-weight: 600;
+      color: #1a1a1a;
+      font-size: 0.625rem;
+      margin-top: 2px;
+    }
+    
+    :global(.tbl-time) {
+      font-size: 0.5625rem;
+      color: #444;
+    }
+    
+    :global(.tbl-pax) {
+      font-size: 0.5rem;
+      color: #666;
+      background: rgba(255,255,255,0.6);
+      padding: 1px 4px;
+      border-radius: 3px;
+      margin-top: 2px;
+    }
+    
+    :global(.tbl-multi) {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #0066cc;
+      color: white;
+      font-size: 0.5625rem;
+      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     :global(.floor-grid .table:hover) {
@@ -2434,60 +2580,59 @@ import Layout from '../../../layouts/Layout.astro';
       const reservations = getReservations().filter(r => r.date === dateStr);
       
       const grid = document.getElementById('floorGrid');
-      grid.innerHTML = '';
       
+      // Store all table data globally for click handlers
+      window.floorTables = {};
+      
+      // Build HTML string with button elements
+      let html = '';
       tables.forEach(table => {
         const tableReservations = reservations.filter(r => r.tableId === table.id);
-        const res = tableReservations[0]; // Primary reservation
+        const res = tableReservations[0];
         const status = res ? res.status : 'available';
         
-        // Create table container (for styling)
-        const el = document.createElement('div');
-        el.className = `table ${table.type}`;
-        el.dataset.table = table.id;
-        el.dataset.status = status;
-        el.style.left = table.x + 'px';
-        el.style.top = table.y + 'px';
+        // Store data for this table
+        window.floorTables[table.id] = { table, tableReservations };
         
+        // Calculate transform
+        let transform = '';
         if (table.rotation && table.type !== 'diamond') {
-          el.style.transform = `rotate(${table.rotation}deg)`;
+          transform = `transform:rotate(${table.rotation}deg);`;
         } else if (table.type === 'diamond' && table.rotation) {
-          el.style.transform = `rotate(${45 + table.rotation}deg)`;
+          transform = `transform:rotate(${45 + table.rotation}deg);`;
         }
         
-        // Store table data globally
-        window.tableDataStore = window.tableDataStore || {};
-        window.tableDataStore[table.id] = { table, tableReservations };
-        
-        // Make entire table clickable
-        el.style.cursor = 'pointer';
-        el.onclick = function(e) {
-          e.stopPropagation();
-          alert('Clicked table: ' + table.id);
-          window.handleTableTap(table.id);
-        };
-        
-        // Create content (no separate click zone needed)
-        el.innerHTML = `
-          <span class="table-label">${table.name}</span>
-          ${res ? `<span class="table-guest">${res.guestName.split(' ')[0]}</span>` : ''}
-          ${res ? `<span class="table-time">${formatTime12(res.time)}</span>` : ''}
-          ${res ? `<span class="table-pax">${res.guests}p</span>` : ''}
-          ${tableReservations.length > 1 ? `<span class="table-multi">+${tableReservations.length - 1}</span>` : ''}
+        html += `
+          <button type="button" 
+            class="table-btn ${table.type}" 
+            data-table="${table.id}" 
+            data-status="${status}"
+            style="left:${table.x}px;top:${table.y}px;${transform}"
+            onclick="openTablePopup('${table.id}')">
+            <span class="tbl-name">${table.name}</span>
+            ${res ? `<span class="tbl-guest">${res.guestName.split(' ')[0]}</span>` : ''}
+            ${res ? `<span class="tbl-time">${formatTime12(res.time)}</span>` : ''}
+            ${res ? `<span class="tbl-pax">${res.guests}p</span>` : ''}
+            ${tableReservations.length > 1 ? `<span class="tbl-multi">+${tableReservations.length - 1}</span>` : ''}
+          </button>
         `;
-        
-        // Hover for multi-reservation popup
-        if (tableReservations.length > 1) {
-          el.addEventListener('mouseenter', () => showTablePopup(el, tableReservations));
-          el.addEventListener('mouseleave', () => hideTablePopup());
-        }
-        
-        grid.appendChild(el);
       });
+      
+      grid.innerHTML = html;
       
       // Populate table dropdowns for mobile
       populateTableDropdowns();
     }
+    
+    // Global function for table button clicks
+    window.openTablePopup = function(tableId) {
+      const data = window.floorTables[tableId];
+      if (!data) {
+        alert('No data for table: ' + tableId);
+        return;
+      }
+      showTableActionPopup(data.table, data.tableReservations);
+    };
 
     // Mouse move for dragging
     document.addEventListener('mousemove', (e) => {
