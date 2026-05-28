@@ -31,33 +31,40 @@ import '../../../styles/laluna-tables.css';
         <div class="tool-section">
           <span class="tool-label">Add Table</span>
           <div class="table-palette">
-            <div class="palette-item" draggable="true" data-type="square" title="Square Table">
+            <div class="palette-item" draggable="true" data-type="square" title="Square (2-top)">
               <div class="palette-preview square"></div>
-              <span class="palette-capacity">2-4</span>
+              <span class="palette-name">Square</span>
+              <span class="palette-capacity" data-type="square">2-4</span>
             </div>
-            <div class="palette-item" draggable="true" data-type="round" title="Round Table">
+            <div class="palette-item" draggable="true" data-type="round" title="Round (4-top)">
               <div class="palette-preview round"></div>
-              <span class="palette-capacity">2-4</span>
+              <span class="palette-name">Round</span>
+              <span class="palette-capacity" data-type="round">2-4</span>
             </div>
             <div class="palette-item" draggable="true" data-type="round-lg" title="Large Round">
               <div class="palette-preview round-lg"></div>
-              <span class="palette-capacity">4-6</span>
+              <span class="palette-name">Lg Round</span>
+              <span class="palette-capacity" data-type="round-lg">4-6</span>
             </div>
-            <div class="palette-item" draggable="true" data-type="sofa" title="Sofa">
+            <div class="palette-item" draggable="true" data-type="sofa" title="Sofa/Lounge">
               <div class="palette-preview sofa"></div>
-              <span class="palette-capacity">2-4</span>
+              <span class="palette-name">Sofa</span>
+              <span class="palette-capacity" data-type="sofa">2-4</span>
             </div>
-            <div class="palette-item" draggable="true" data-type="diamond" title="Diamond">
+            <div class="palette-item" draggable="true" data-type="diamond" title="Diamond/Fantasma">
               <div class="palette-preview diamond"></div>
-              <span class="palette-capacity">2-4</span>
+              <span class="palette-name">Diamond</span>
+              <span class="palette-capacity" data-type="diamond">2-4</span>
             </div>
             <div class="palette-item" draggable="true" data-type="rect" title="Long Table">
               <div class="palette-preview rect"></div>
-              <span class="palette-capacity">4-8</span>
+              <span class="palette-name">Long</span>
+              <span class="palette-capacity" data-type="rect">4-8</span>
             </div>
-            <div class="palette-item" draggable="true" data-type="bar" title="Bar">
+            <div class="palette-item" draggable="true" data-type="bar" title="Bar/Communal">
               <div class="palette-preview bar"></div>
-              <span class="palette-capacity">1-8</span>
+              <span class="palette-name">Communal</span>
+              <span class="palette-capacity" data-type="communal">6-16</span>
             </div>
           </div>
         </div>
@@ -282,18 +289,19 @@ import '../../../styles/laluna-tables.css';
     }
 
     .palette-item {
-      width: 60px;
-      height: 70px;
+      width: 65px;
+      height: 85px;
       border: 2px dashed var(--limestone);
       border-radius: 8px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 4px;
+      gap: 2px;
       cursor: grab;
       transition: all 0.15s;
       background: var(--parchment);
+      padding: 4px;
     }
 
     .palette-item:hover { 
@@ -302,9 +310,18 @@ import '../../../styles/laluna-tables.css';
     }
     .palette-item:active { cursor: grabbing; }
     
-    .palette-capacity {
-      font-size: 0.625rem;
+    .palette-name {
+      font-size: 0.5625rem;
       font-weight: 600;
+      color: var(--santorini);
+      font-family: 'Inter', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    
+    .palette-capacity {
+      font-size: 0.5625rem;
+      font-weight: 500;
       color: var(--keswick);
       font-family: 'Inter', sans-serif;
     }
