@@ -2685,7 +2685,7 @@ import '../../../styles/laluna-tables.css';
             data-table="${table.id}" 
             data-status="${status}"
             style="left:${table.x}px;top:${table.y}px;${transform}"
-            onclick="alert('TABLE: ${table.id}')">
+            onclick="(function(id){ var d=window.floorTables[id]; if(d){window.showTableActionPopup(d.table,d.tableReservations);}else{alert('No data for '+id);} })('${table.id}')">
             <span class="tbl-name">${table.name}</span>
             ${res ? `<span class="tbl-guest">${res.guestName.split(' ')[0]}</span>` : ''}
             ${res ? `<span class="tbl-time">${formatTime12(res.time)}</span>` : ''}
