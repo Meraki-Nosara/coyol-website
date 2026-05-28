@@ -9,6 +9,7 @@ const restaurants = [
     tagline: 'Fire & Flavor',
     description: 'Farm-to-table dining with panoramic views. Open-fire cooking, premium cuts, and the art of slow living.',
     reserveUrl: '/restaurant/reserve',
+    giftUrl: '/coyol/gift',
     hasReservation: true,
     delay: '0'
   },
@@ -20,6 +21,7 @@ const restaurants = [
     tagline: 'Baked with Heart',
     description: 'Artisan bakery and bistro. Fresh-baked breads, buttery pastries, and the aroma of home.',
     reserveUrl: null,
+    giftUrl: null,
     hasReservation: false,
     delay: '150'
   },
@@ -31,6 +33,7 @@ const restaurants = [
     tagline: 'Where the Moon Meets the Sea',
     description: 'Iconic beachside dining. Mediterranean flavors, craft cocktails, and unforgettable sunsets at Playa Pelada.',
     reserveUrl: '/laluna/reserve',
+    giftUrl: '/laluna/gift',
     hasReservation: true,
     delay: '300'
   }
@@ -86,7 +89,7 @@ const restaurants = [
             </p>
             
             <!-- Buttons -->
-            <div class={`flex gap-4 ${index % 2 === 1 ? 'lg:justify-end' : ''}`}>
+            <div class={`flex flex-wrap gap-4 ${index % 2 === 1 ? 'lg:justify-end' : ''}`}>
               {r.hasReservation ? (
                 <a 
                   href={r.reserveUrl}
@@ -99,6 +102,14 @@ const restaurants = [
                 <span class="inline-flex items-center gap-2 px-6 py-3 text-landrover-limestone/60 text-xs tracking-wider uppercase">
                   Walk-ins Welcome
                 </span>
+              )}
+              {r.giftUrl && (
+                <a 
+                  href={r.giftUrl}
+                  class="inline-flex items-center gap-2 px-8 py-4 border border-landrover-sand text-landrover-sand text-xs font-semibold tracking-wider uppercase hover:bg-landrover-sand hover:text-landrover-santorini transition-colors"
+                >
+                  Gift a Friend
+                </a>
               )}
             </div>
           </div>
