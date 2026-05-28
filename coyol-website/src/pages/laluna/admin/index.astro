@@ -3096,7 +3096,11 @@ import '../../../styles/laluna-tables.css';
           })
         });
         
-        if (!response.ok) throw new Error('Failed to update');
+        if (!response.ok) {
+          const errText = await response.text();
+          console.error('Update failed:', response.status, errText);
+          throw new Error(`Failed: ${response.status} - ${errText}`);
+        }
         
         // Close edit modal and refresh
         document.getElementById('editResModal')?.classList.remove('open');
@@ -3110,7 +3114,7 @@ import '../../../styles/laluna-tables.css';
         
       } catch (err) {
         console.error('Failed to save:', err);
-        alert('Failed to save changes. Please try again.');
+        alert('Failed to save: ' + err.message);
       }
     }
     
