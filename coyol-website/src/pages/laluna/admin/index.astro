@@ -1241,52 +1241,58 @@ import Layout from '../../../layouts/Layout.astro';
       transform: scale(1.02);
     }
     
-    /* Table shapes */
+    /* Table shapes - colors match Settings page */
+    /* Square (2-top) = Brown #8B6914 */
     :global(.table-btn.square) {
       width: 55px;
       height: 55px;
       border-radius: 6px;
-      background: linear-gradient(145deg, #d4b896 0%, #a08060 100%);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+      background: linear-gradient(145deg, #a07a40 0%, #8B6914 100%);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2);
     }
     
+    /* Round (4-top) = Brown #8B6914 */
     :global(.table-btn.round) {
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      background: linear-gradient(145deg, #d4b896 0%, #a08060 100%);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+      background: linear-gradient(145deg, #a07a40 0%, #8B6914 100%);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2);
     }
     
+    /* Round Large = Brown #8B6914 */
     :global(.table-btn.round-lg) {
       width: 65px;
       height: 65px;
       border-radius: 50%;
-      background: linear-gradient(145deg, #d4b896 0%, #a08060 100%);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+      background: linear-gradient(145deg, #a07a40 0%, #8B6914 100%);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2);
     }
     
+    /* Round XL = Brown #8B6914 */
     :global(.table-btn.round-xl) {
       width: 80px;
       height: 80px;
       border-radius: 50%;
-      background: linear-gradient(145deg, #d4b896 0%, #a08060 100%);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+      background: linear-gradient(145deg, #a07a40 0%, #8B6914 100%);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2);
     }
     
+    /* Sofa/Lounge = Sage Green #7a9a7a */
     :global(.table-btn.sofa) {
       width: 70px;
       height: 45px;
       border-radius: 12px 12px 6px 6px;
-      background: linear-gradient(145deg, #7a9a7a 0%, #5a7a5a 100%);
+      background: linear-gradient(145deg, #8aaa8a 0%, #6a8a6a 100%);
       box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2);
     }
     
+    /* Diamond/Fantasma = Sand/beige #c4a67c */
     :global(.table-btn.diamond) {
       width: 50px;
       height: 50px;
       border-radius: 6px;
-      background: linear-gradient(145deg, #d4b896 0%, #a08060 100%);
+      background: linear-gradient(145deg, #d4b68c 0%, #b49670 100%);
       box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
       transform: rotate(45deg);
     }
@@ -1298,23 +1304,25 @@ import Layout from '../../../layouts/Layout.astro';
       transform: rotate(-45deg);
     }
     
+    /* Long/Rect table = Brown */
     :global(.table-btn.rect) {
       width: 90px;
       height: 45px;
       border-radius: 6px;
-      background: linear-gradient(145deg, #d4b896 0%, #a08060 100%);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+      background: linear-gradient(145deg, #a07a40 0%, #8B6914 100%);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2);
     }
     
+    /* Bar/Communal = Dark brown #5c4033 */
     :global(.table-btn.bar) {
       width: 100px;
       height: 35px;
       border-radius: 4px;
-      background: linear-gradient(145deg, #555 0%, #333 100%);
+      background: linear-gradient(145deg, #6c5043 0%, #4c3023 100%);
       box-shadow: 0 3px 8px rgba(0,0,0,0.3);
     }
     
-    :global(.table-btn.bar .tbl-name) { color: white; }
+    :global(.table-btn.bar .tbl-name) { color: #f5f3ef; }
     
     /* Status colors */
     :global(.table-btn[data-status="confirmed"]) {
@@ -1847,15 +1855,16 @@ import Layout from '../../../layouts/Layout.astro';
     .detail-item.full-width { grid-column: 1 / -1; }
     .detail-label { font-size: 0.6875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
     .detail-value { font-size: 0.9375rem; color: var(--santorini); }
-    .detail-actions { justify-content: space-between; }
-    .btn-edit { background: var(--sand); color: var(--santorini); border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
+    .detail-actions { justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+    #activeActions { display: flex; flex-wrap: wrap; gap: 0.5rem; width: 100%; }
+    .btn-edit { background: var(--sand); color: var(--santorini); border: none; padding: 0.625rem 1rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; font-size: 0.875rem; flex: 1; min-width: 70px; }
     .btn-edit:hover { background: #d4b68c; }
-    .btn-assign { background: #0066cc; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
+    .btn-assign { background: #0066cc; color: white; border: none; padding: 0.625rem 1rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; font-size: 0.875rem; flex: 1; min-width: 70px; }
     .btn-assign:hover { background: #0052a3; }
-    .btn-seat { background: var(--terracotta); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
+    .btn-seat { background: var(--terracotta); color: white; border: none; padding: 0.625rem 1rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; font-size: 0.875rem; flex: 1; min-width: 60px; }
     .btn-seat:hover { opacity: 0.9; }
     .btn-seat.active { background: #0066cc; }
-    .btn-cancel { background: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; }
+    .btn-cancel { background: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 0.625rem 1rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.875rem; flex: 1; min-width: 100px; white-space: nowrap; }
     .btn-cancel:hover { background: #dc3545; color: white; }
     .btn-reactivate { background: #10b981; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
     .btn-reactivate:hover { background: #059669; }
@@ -2627,14 +2636,21 @@ import Layout from '../../../layouts/Layout.astro';
       populateTableDropdowns();
     }
     
-    // Global function for table button clicks
+    // Global function for table button clicks (defined early, calls function defined later)
     window.openTablePopup = function(tableId) {
-      const data = window.floorTables[tableId];
+      console.log('openTablePopup called for:', tableId);
+      const data = window.floorTables?.[tableId];
       if (!data) {
-        alert('No data for table: ' + tableId);
+        console.error('No floor data for table:', tableId, 'Available:', Object.keys(window.floorTables || {}));
+        alert('Table data not found: ' + tableId);
         return;
       }
-      showTableActionPopup(data.table, data.tableReservations);
+      console.log('Calling showTableActionPopup with:', data.table, data.tableReservations);
+      if (typeof showTableActionPopup === 'function') {
+        showTableActionPopup(data.table, data.tableReservations);
+      } else {
+        alert('showTableActionPopup not defined yet');
+      }
     };
 
     // Mouse move for dragging
