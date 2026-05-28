@@ -1417,36 +1417,48 @@ import '../../../styles/laluna-tables.css';
       box-shadow: 0 0 12px rgba(33, 150, 243, 0.6) !important;
     }
     
-    /* Table content - WHITE text for visibility on brown */
+    /* Table content - compact layout */
     :global(.tbl-name) {
       font-weight: 700;
       color: #fff;
-      font-size: 0.6875rem;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+      font-size: 0.5625rem;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      line-height: 1.1;
     }
     
     :global(.tbl-guest) {
-      font-weight: 600;
+      font-weight: 700;
       color: #fff;
-      font-size: 0.625rem;
-      margin-top: 2px;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+      font-size: 0.6875rem;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      line-height: 1.1;
     }
     
     :global(.tbl-time) {
       font-size: 0.5625rem;
-      color: #fff;
+      color: rgba(255,255,255,0.9);
       text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+      line-height: 1.1;
     }
     
     :global(.tbl-pax) {
+      position: absolute;
+      top: 3px;
+      right: 3px;
       font-size: 0.5rem;
       color: #333;
-      background: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.95);
       padding: 1px 4px;
       border-radius: 3px;
-      margin-top: 2px;
-      font-weight: 600;
+      font-weight: 700;
     }
     
     :global(.tbl-multi) {
@@ -2790,10 +2802,11 @@ import '../../../styles/laluna-tables.css';
             data-status="${status}"
             style="left:${table.x}px;top:${table.y}px;${transform}"
             onclick="tableClick('${table.id}')">
-            <span class="tbl-name">${table.name}</span>
-            ${res ? `<span class="tbl-guest">${res.guestName.split(' ')[0]}</span>` : ''}
-            ${res ? `<span class="tbl-time">${formatTime12(res.time)}</span>` : ''}
-            ${res ? `<span class="tbl-pax">${res.guests}p</span>` : ''}
+            ${res ? `
+              <span class="tbl-guest">${res.guestName.split(' ')[0]}</span>
+              <span class="tbl-time">${formatTime12(res.time)}</span>
+              <span class="tbl-pax">${res.guests}p</span>
+            ` : `<span class="tbl-name">${table.name}</span>`}
             ${tableReservations.length > 1 ? `<span class="tbl-multi">+${tableReservations.length - 1}</span>` : ''}
           </button>
         `;
