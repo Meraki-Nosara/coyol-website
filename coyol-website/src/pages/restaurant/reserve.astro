@@ -20,6 +20,7 @@ import Layout from '../../layouts/Layout.astro';
 
       <div class="form-container">
         <h1>Reserve a Table</h1>
+        <a href="/coyol/gift" class="gift-link">Gift a Friend</a>
         <p class="subtitle">Mar Azul · Nosara</p>
 
         <!-- Step 1: Date & Party -->
@@ -237,6 +238,26 @@ import Layout from '../../layouts/Layout.astro';
       color: #78716c;
       font-size: 0.875rem;
       margin-bottom: 2rem;
+    }
+
+    .gift-link {
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, #C4A67C 0%, #d4b68c 100%);
+      color: #1A1F16;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .gift-link:hover {
+      background: linear-gradient(135deg, #d4b68c 0%, #e5cfa9 100%);
+      transform: translateY(-1px);
     }
 
     .step {
