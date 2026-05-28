@@ -2646,8 +2646,7 @@ import Layout from '../../../layouts/Layout.astro';
             class="table-btn ${table.type}" 
             data-table="${table.id}" 
             data-status="${status}"
-            style="left:${table.x}px;top:${table.y}px;${transform}"
-            onclick="handleTableClick('${table.id}')">
+            style="left:${table.x}px;top:${table.y}px;${transform}">
             <span class="tbl-name">${table.name}</span>
             ${res ? `<span class="tbl-guest">${res.guestName.split(' ')[0]}</span>` : ''}
             ${res ? `<span class="tbl-time">${formatTime12(res.time)}</span>` : ''}
@@ -2658,6 +2657,17 @@ import Layout from '../../../layouts/Layout.astro';
       });
       
       grid.innerHTML = html;
+      
+      // Attach click handlers to all table buttons
+      grid.querySelectorAll('.table-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const tableId = this.dataset.table;
+          alert('Table clicked: ' + tableId);
+          handleTableClick(tableId);
+        });
+      });
       
       // Populate table dropdowns for mobile
       populateTableDropdowns();
