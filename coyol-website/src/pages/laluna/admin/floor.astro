@@ -32,24 +32,31 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
           <div class="table-palette">
             <div class="palette-item" draggable="true" data-type="square" title="Square Table">
               <div class="palette-preview square"></div>
+              <span class="palette-capacity">2-4</span>
             </div>
             <div class="palette-item" draggable="true" data-type="round" title="Round Table">
               <div class="palette-preview round"></div>
+              <span class="palette-capacity">2-4</span>
             </div>
             <div class="palette-item" draggable="true" data-type="round-lg" title="Large Round">
               <div class="palette-preview round-lg"></div>
+              <span class="palette-capacity">4-6</span>
             </div>
             <div class="palette-item" draggable="true" data-type="sofa" title="Sofa">
               <div class="palette-preview sofa"></div>
+              <span class="palette-capacity">2-4</span>
             </div>
             <div class="palette-item" draggable="true" data-type="diamond" title="Diamond">
               <div class="palette-preview diamond"></div>
+              <span class="palette-capacity">2-4</span>
             </div>
             <div class="palette-item" draggable="true" data-type="rect" title="Long Table">
               <div class="palette-preview rect"></div>
+              <span class="palette-capacity">4-8</span>
             </div>
             <div class="palette-item" draggable="true" data-type="bar" title="Bar">
               <div class="palette-preview bar"></div>
+              <span class="palette-capacity">1-8</span>
             </div>
           </div>
         </div>
@@ -274,13 +281,15 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
     }
 
     .palette-item {
-      width: 56px;
-      height: 56px;
+      width: 60px;
+      height: 70px;
       border: 2px dashed var(--limestone);
       border-radius: 8px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 4px;
       cursor: grab;
       transition: all 0.15s;
       background: var(--parchment);
@@ -291,6 +300,13 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
       background: var(--cream);
     }
     .palette-item:active { cursor: grabbing; }
+    
+    .palette-capacity {
+      font-size: 0.625rem;
+      font-weight: 600;
+      color: var(--keswick);
+      font-family: 'Inter', sans-serif;
+    }
 
     .palette-preview {
       border: 2px solid var(--sand);
