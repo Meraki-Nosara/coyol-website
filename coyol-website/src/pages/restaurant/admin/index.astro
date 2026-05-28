@@ -2207,7 +2207,13 @@ import Layout from '../../../layouts/Layout.astro';
     // Populate table dropdowns - only available tables that fit party
     function populateTableDropdowns() {
       const layouts = getLayout();
-      const allTables = Object.values(layouts).flat();
+      // Flatten all zones into one array
+      const allTables = [
+        ...(layouts.inside || []),
+        ...(layouts.terraza || []),
+        ...(layouts.jardin || []),
+        ...(layouts.pool || [])
+      ];
       const dateStr = getDateString(currentDate);
       const allReservations = getReservations();
       const dayReservations = allReservations.filter(r => r.date === dateStr && r.status !== 'cancelled' && r.status !== 'no-show');
