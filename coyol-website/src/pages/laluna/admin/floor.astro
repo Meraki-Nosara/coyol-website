@@ -367,6 +367,23 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
     .detail-btn:hover { background: var(--parchment); }
     .detail-btn.danger { color: var(--terracotta); border-color: var(--terracotta); }
     .detail-btn.danger:hover { background: #fef2f2; }
+    
+    .covers-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--keswick);
+    }
+    
+    .covers-select {
+      padding: 0.375rem 0.5rem;
+      border: 1px solid var(--limestone);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      background: white;
+      min-width: 50px;
+    }
 
     /* Floor */
     .floor-wrapper {
@@ -816,6 +833,16 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
       document.getElementById('tableDetailsSection').style.display = 'flex';
       document.getElementById('tableDetails').innerHTML = `
         <input type="text" class="detail-input" id="tableName" value="${table.name}" placeholder="Name" />
+        <div class="covers-controls">
+          <label>Min:</label>
+          <select id="tableMinCovers" class="covers-select">
+            ${[1,2,3,4,5,6,7,8].map(n => `<option value="${n}" ${table.minCovers === n ? 'selected' : ''}>${n}</option>`).join('')}
+          </select>
+          <label>Max:</label>
+          <select id="tableMaxCovers" class="covers-select">
+            ${[2,3,4,5,6,7,8,10,12,15,20].map(n => `<option value="${n}" ${table.maxCovers === n ? 'selected' : ''}>${n}</option>`).join('')}
+          </select>
+        </div>
         <button class="detail-btn" onclick="rotateSelected(-45)">↺</button>
         <button class="detail-btn" onclick="rotateSelected(45)">↻</button>
         <button class="detail-btn danger" onclick="deleteSelected()">Delete</button>
@@ -829,6 +856,24 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
           saveLayout(layouts);
           renderFloor();
           selectTable(selectedTable);
+        }
+      });
+      
+      document.getElementById('tableMinCovers').addEventListener('change', (e) => {
+        const layouts = getLayout();
+        const t = layouts[currentZone].find(t => t.id === selectedTable);
+        if (t) {
+          t.minCovers = parseInt(e.target.value);
+          saveLayout(layouts);
+        }
+      });
+      
+      document.getElementById('tableMaxCovers').addEventListener('change', (e) => {
+        const layouts = getLayout();
+        const t = layouts[currentZone].find(t => t.id === selectedTable);
+        if (t) {
+          t.maxCovers = parseInt(e.target.value);
+          saveLayout(layouts);
         }
       });
     }
