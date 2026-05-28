@@ -1367,6 +1367,32 @@ import '../../../styles/laluna-tables.css';
     
     :global(.table-btn.bar .tbl-name) { color: white; }
     
+    /* Tree/Palm decorations */
+    :global(.table-btn.tree) {
+      width: 50px !important;
+      height: 50px !important;
+      border-radius: 50% !important;
+      background: radial-gradient(circle at 40% 35%, #5a8f5a 0%, #3d6b3d 40%, #2d4f2d 70%, #1f3d1f 100%) !important;
+      border: 2px solid #2d4f2d !important;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3), inset 0 -4px 8px rgba(0,0,0,0.2) !important;
+      pointer-events: none;
+    }
+    :global(.table-btn.tree .tbl-name) { display: none; }
+    
+    :global(.table-btn.palm) {
+      width: 45px !important;
+      height: 55px !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      font-size: 2.5rem;
+      pointer-events: none;
+    }
+    :global(.table-btn.palm::before) {
+      content: '🌴';
+    }
+    :global(.table-btn.palm .tbl-name) { display: none; }
+    
     /* Assignment mode - available tables pulse green */
     :global(.table-btn.available) {
       animation: pulse-available 0.6s infinite;
@@ -2802,21 +2828,34 @@ import '../../../styles/laluna-tables.css';
         // Ensure table type exists, default to 'square'
         const tableType = table.type || 'square';
         
-        html += `
-          <button type="button" 
-            class="table-btn ${tableType}" 
-            data-table="${table.id}" 
-            data-status="${status}"
-            style="left:${table.x}px;top:${table.y}px;${transform}"
-            onclick="tableClick('${table.id}')">
-            ${res ? `
-              <span class="tbl-guest">${res.guestName.split(' ')[0]}</span>
-              <span class="tbl-time">${formatTime12(res.time)}</span>
-              <span class="tbl-pax">${res.guests}p</span>
-            ` : `<span class="tbl-name">${table.name}</span>`}
-            ${tableReservations.length > 1 ? `<span class="tbl-multi">+${tableReservations.length - 1}</span>` : ''}
-          </button>
-        `;
+        // Skip decorations (trees, palms, plants) or render them differently
+        const isDecoration = ['tree', 'palm', 'plant'].includes(tableType);
+        
+        if (isDecoration) {
+          // Render decoration without click handler
+          html += `
+            <div class="table-btn ${tableType}" 
+              style="left:${table.x}px;top:${table.y}px;pointer-events:none;">
+              ${tableType === 'palm' ? '🌴' : ''}
+            </div>
+          `;
+        } else {
+          html += `
+            <button type="button" 
+              class="table-btn ${tableType}" 
+              data-table="${table.id}" 
+              data-status="${status}"
+              style="left:${table.x}px;top:${table.y}px;${transform}"
+              onclick="tableClick('${table.id}')">
+              ${res ? `
+                <span class="tbl-guest">${res.guestName.split(' ')[0]}</span>
+                <span class="tbl-time">${formatTime12(res.time)}</span>
+                <span class="tbl-pax">${res.guests}p</span>
+              ` : `<span class="tbl-name">${table.name}</span>`}
+              ${tableReservations.length > 1 ? `<span class="tbl-multi">+${tableReservations.length - 1}</span>` : ''}
+            </button>
+          `;
+        }
       });
       
       grid.innerHTML = html;
