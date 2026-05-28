@@ -2192,6 +2192,9 @@ import Layout from '../../../layouts/Layout.astro';
       // Sort by priority (best first)
       allTables.sort((a, b) => a.priority - b.priority);
       
+      console.log('Auto-assign searching for', guests, 'guests at', time);
+      console.log('Tables by priority:', allTables.slice(0, 10).map(t => `${t.name}(${t.zone}, min:${t.minCovers}, max:${t.maxCovers}, pri:${t.priority})`));
+      
       // Parse reservation time to check for conflicts (2-hour window)
       const [resHour, resMin] = time.split(':').map(Number);
       const resMinutes = resHour * 60 + resMin;
