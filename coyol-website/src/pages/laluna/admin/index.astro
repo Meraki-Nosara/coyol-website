@@ -1214,15 +1214,13 @@ import Layout from '../../../layouts/Layout.astro';
       pointer-events: none;
     }
     
-    :global(.table-click-zone) {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 100;
-      cursor: pointer;
-      background: transparent;
+    /* Make table children not block clicks */
+    :global(.floor-grid .table .table-label),
+    :global(.floor-grid .table .table-guest),
+    :global(.floor-grid .table .table-time),
+    :global(.floor-grid .table .table-pax),
+    :global(.floor-grid .table .table-multi) {
+      pointer-events: none;
     }
 
     :global(.floor-grid .table:hover) {
@@ -2461,14 +2459,20 @@ import Layout from '../../../layouts/Layout.astro';
         window.tableDataStore = window.tableDataStore || {};
         window.tableDataStore[table.id] = { table, tableReservations };
         
-        // Create content + clickable overlay
+        // Make entire table clickable
+        el.style.cursor = 'pointer';
+        el.onclick = function(e) {
+          e.stopPropagation();
+          window.handleTableTap(table.id);
+        };
+        
+        // Create content (no separate click zone needed)
         el.innerHTML = `
           <span class="table-label">${table.name}</span>
           ${res ? `<span class="table-guest">${res.guestName.split(' ')[0]}</span>` : ''}
           ${res ? `<span class="table-time">${formatTime12(res.time)}</span>` : ''}
           ${res ? `<span class="table-pax">${res.guests}p</span>` : ''}
           ${tableReservations.length > 1 ? `<span class="table-multi">+${tableReservations.length - 1}</span>` : ''}
-          <div class="table-click-zone" onclick="handleTableTap('${table.id}')"></div>
         `;
         
         // Hover for multi-reservation popup
