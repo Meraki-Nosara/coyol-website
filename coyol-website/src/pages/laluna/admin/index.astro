@@ -1352,15 +1352,31 @@ import '../../../styles/laluna-tables.css';
       50% { background: #28a745 !important; box-shadow: 0 0 20px #28a745; }
     }
     
-    /* Status colors - BRIGHT for visibility */
-    :global(.table-btn[data-status="confirmed"]) {
+    /* Status colors - BRIGHT for visibility - HIGH SPECIFICITY */
+    :global(.floor-grid .table-btn[data-status="confirmed"]),
+    :global(.table-btn.square[data-status="confirmed"]),
+    :global(.table-btn.round[data-status="confirmed"]),
+    :global(.table-btn.round-lg[data-status="confirmed"]),
+    :global(.table-btn.round-xl[data-status="confirmed"]),
+    :global(.table-btn.sofa[data-status="confirmed"]),
+    :global(.table-btn.diamond[data-status="confirmed"]),
+    :global(.table-btn.rect[data-status="confirmed"]),
+    :global(.table-btn.bar[data-status="confirmed"]) {
       background: #4CAF50 !important;
-      box-shadow: 0 0 10px rgba(76, 175, 80, 0.5) !important;
+      box-shadow: 0 0 12px rgba(76, 175, 80, 0.6) !important;
     }
     
-    :global(.table-btn[data-status="seated"]) {
+    :global(.floor-grid .table-btn[data-status="seated"]),
+    :global(.table-btn.square[data-status="seated"]),
+    :global(.table-btn.round[data-status="seated"]),
+    :global(.table-btn.round-lg[data-status="seated"]),
+    :global(.table-btn.round-xl[data-status="seated"]),
+    :global(.table-btn.sofa[data-status="seated"]),
+    :global(.table-btn.diamond[data-status="seated"]),
+    :global(.table-btn.rect[data-status="seated"]),
+    :global(.table-btn.bar[data-status="seated"]) {
       background: #2196F3 !important;
-      box-shadow: 0 0 10px rgba(33, 150, 243, 0.5) !important;
+      box-shadow: 0 0 12px rgba(33, 150, 243, 0.6) !important;
     }
     
     /* Table content - WHITE text for visibility on brown */
