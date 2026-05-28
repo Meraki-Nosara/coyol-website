@@ -1244,13 +1244,24 @@ import Layout from '../../../layouts/Layout.astro';
     }
     
     :global(.floor-grid .table-guest) {
-      font-size: 0.625rem;
-      font-weight: 600;
-      color: #333;
-      max-width: 50px;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      max-width: 60px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      margin-top: 2px;
+    }
+    
+    :global(.floor-grid .table-pax) {
+      font-size: 0.5625rem;
+      font-weight: 600;
+      color: #666;
+      background: rgba(255,255,255,0.7);
+      padding: 1px 4px;
+      border-radius: 3px;
+      margin-top: 1px;
     }
     
     :global(.floor-grid .table-multi) {
@@ -2353,7 +2364,6 @@ import Layout from '../../../layouts/Layout.astro';
     
     // Simple global click handler for tables
     window.handleTableTap = function(tableId) {
-      alert('handleTableTap called: ' + tableId);
       const data = window.tableDataStore?.[tableId];
       if (!data) {
         alert('No data for ' + tableId);
@@ -2441,7 +2451,8 @@ import Layout from '../../../layouts/Layout.astro';
         el.innerHTML = `
           <span class="table-label">${table.name}</span>
           ${res ? `<span class="table-guest">${res.guestName.split(' ')[0]}</span>` : ''}
-          ${res ? `<span class="table-time">${formatTime12(res.time)} \u00b7 ${res.guests} pax</span>` : ''}
+          ${res ? `<span class="table-time">${formatTime12(res.time)}</span>` : ''}
+          ${res ? `<span class="table-pax">${res.guests}p</span>` : ''}
           ${tableReservations.length > 1 ? `<span class="table-multi">+${tableReservations.length - 1}</span>` : ''}
           <div class="table-click-zone" onclick="handleTableTap('${table.id}')"></div>
         `;
