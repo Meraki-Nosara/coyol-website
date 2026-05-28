@@ -2545,15 +2545,38 @@ import '../../../styles/laluna-tables.css';
     // Format phone for WhatsApp - only add 506 if no country code exists
     function formatPhoneForWhatsApp(phone) {
       if (!phone) return '';
-      // Remove all non-digits
+      // Remove all non-digits AND the + sign
       let digits = phone.replace(/[^0-9]/g, '');
-      // If starts with common country codes, use as-is
-      // 1=US/CA, 44=UK, 52=MX, 506=CR, 507=PA, 33=FR, 49=DE, 34=ES, 39=IT, 55=BR, 57=CO
-      if (/^(1|44|52|506|507|33|49|34|39|55|57)/.test(digits) && digits.length > 8) {
-        return digits;
-      }
-      // Otherwise assume Costa Rica
-      return '506' + digits;
+      
+      // US/Canada: starts with 1 and has 11 digits
+      if (digits.startsWith('1') && digits.length === 11) return digits;
+      
+      // UK: starts with 44
+      if (digits.startsWith('44') && digits.length >= 10) return digits;
+      
+      // Mexico: starts with 52
+      if (digits.startsWith('52') && digits.length >= 10) return digits;
+      
+      // Costa Rica: starts with 506
+      if (digits.startsWith('506') && digits.length >= 11) return digits;
+      
+      // Panama: starts with 507
+      if (digits.startsWith('507') && digits.length >= 11) return digits;
+      
+      // Other European: 33, 34, 39, 49
+      if (/^(33|34|39|49)/.test(digits) && digits.length >= 10) return digits;
+      
+      // South America: 55, 57
+      if (/^(55|57)/.test(digits) && digits.length >= 10) return digits;
+      
+      // 8-digit number without code = Costa Rica local
+      if (digits.length === 8) return '506' + digits;
+      
+      // 10-digit starting with area code = US without country code
+      if (digits.length === 10 && /^[2-9]/.test(digits)) return '1' + digits;
+      
+      // Otherwise return as-is
+      return digits;
     }
 
     async function quickSeat(id) {
