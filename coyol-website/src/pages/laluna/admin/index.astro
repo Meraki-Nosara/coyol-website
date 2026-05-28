@@ -2456,17 +2456,31 @@ import Layout from '../../../layouts/Layout.astro';
         });
         
         // Enable dragging on desktop (only when not assigning)
+        // Use mousedown to prepare for drag, but only start actual drag on movement
+        let mouseDownPos = null;
         el.addEventListener('mousedown', (e) => {
           if (isAssigningTable) return;
-          e.preventDefault();
-          isDragging = true;
+          mouseDownPos = { x: e.clientX, y: e.clientY };
           draggedTable = el;
           const rect = el.getBoundingClientRect();
           dragOffset.x = e.clientX - rect.left;
           dragOffset.y = e.clientY - rect.top;
-          el.style.zIndex = '100';
-          el.style.cursor = 'grabbing';
-          el.style.opacity = '0.9';
+        });
+        
+        el.addEventListener('mousemove', (e) => {
+          if (!mouseDownPos || isDragging) return;
+          // Only start drag if moved more than 5 pixels
+          const dist = Math.sqrt(Math.pow(e.clientX - mouseDownPos.x, 2) + Math.pow(e.clientY - mouseDownPos.y, 2));
+          if (dist > 5) {
+            isDragging = true;
+            el.style.zIndex = '100';
+            el.style.cursor = 'grabbing';
+            el.style.opacity = '0.9';
+          }
+        });
+        
+        el.addEventListener('mouseup', () => {
+          mouseDownPos = null;
         });
         
         grid.appendChild(el);
