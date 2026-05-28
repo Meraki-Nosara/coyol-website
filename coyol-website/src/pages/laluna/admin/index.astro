@@ -354,7 +354,7 @@ import '../../../styles/laluna-tables.css';
             <button class="btn-edit" onclick="openEditModal()">Edit</button>
             <button class="btn-assign" id="assignBtn" onclick="startTableAssignment()">Assign Table</button>
             <button class="btn-seat" id="seatBtn" onclick="toggleSeatStatus()">Seat</button>
-            <button class="btn-cancel" onclick="cancelReservation()">Cancel Reservation</button>
+            <button class="btn-cancel" onclick="cancelReservation()">Cancel</button>
           </div>
           <!-- Cancelled reservation buttons -->
           <div id="cancelledActions" style="display:none;">
@@ -1914,7 +1914,7 @@ import '../../../styles/laluna-tables.css';
     .btn-seat { background: var(--terracotta); color: white; border: none; padding: 0.625rem 1rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; font-size: 0.875rem; flex: 1; min-width: 60px; }
     .btn-seat:hover { opacity: 0.9; }
     .btn-seat.active { background: #0066cc; }
-    .btn-cancel { background: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 0.625rem 1rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.875rem; flex: 1; min-width: 100px; white-space: nowrap; }
+    .btn-cancel { background: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 0.5rem 0.75rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.8125rem; flex: 0 0 auto; white-space: nowrap; }
     .btn-cancel:hover { background: #dc3545; color: white; }
     .btn-reactivate { background: #10b981; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
     .btn-reactivate:hover { background: #059669; }
