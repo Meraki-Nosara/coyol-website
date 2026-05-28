@@ -2377,6 +2377,7 @@ import Layout from '../../../layouts/Layout.astro';
     
     // Simple global click handler for tables
     window.handleTableTap = function(tableId) {
+      console.log('TAP:', tableId);
       const data = window.tableDataStore?.[tableId];
       if (!data) {
         alert('No data for ' + tableId);
