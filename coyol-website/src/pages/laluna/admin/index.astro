@@ -2369,63 +2369,30 @@ import Layout from '../../../layouts/Layout.astro';
           ${tableReservations.length > 1 ? `<span class="table-multi">+${tableReservations.length - 1}</span>` : ''}
         `;
         
-        // Track if we're dragging to prevent click popup
-        let tableMouseStart = null;
-        let tableDragged = false;
-        
-        el.addEventListener('mousedown', (e) => {
-          tableMouseStart = { x: e.clientX, y: e.clientY, time: Date.now() };
-          tableDragged = false;
-          if (!isAssigningTable) {
-            draggedTable = el;
-            const rect = el.getBoundingClientRect();
-            dragOffset.x = e.clientX - rect.left;
-            dragOffset.y = e.clientY - rect.top;
-          }
-        });
-        
-        el.addEventListener('mousemove', (e) => {
-          if (!tableMouseStart) return;
-          const dist = Math.sqrt(Math.pow(e.clientX - tableMouseStart.x, 2) + Math.pow(e.clientY - tableMouseStart.y, 2));
-          if (dist > 8) {
-            tableDragged = true;
-            if (!isAssigningTable && !isDragging) {
-              isDragging = true;
-              el.style.zIndex = '100';
-              el.style.cursor = 'grabbing';
-              el.style.opacity = '0.9';
-            }
-          }
-        });
-        
-        el.addEventListener('mouseup', async (e) => {
-          const wasClick = tableMouseStart && !tableDragged && (Date.now() - tableMouseStart.time < 300);
-          tableMouseStart = null;
-          
-          if (wasClick) {
-            e.stopPropagation();
-            if (isAssigningTable && !el.classList.contains('occupied')) {
-              // Assignment mode
-              const resIdToAssign = assigningReservationId;
-              const tableToAssign = table.id;
-              isAssigningTable = false;
-              assigningReservationId = null;
-              document.getElementById('floorGrid').classList.remove('assigning');
-              document.getElementById('assignBanner').classList.remove('show');
-              document.querySelectorAll('.table').forEach(t => t.classList.remove('occupied'));
-              try {
-                await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${resIdToAssign}`, {
-                  method: 'PATCH',
-                  headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-                  body: JSON.stringify({ table_id: tableToAssign })
-                });
-                await loadReservations();
-                renderFloor();
-              } catch (err) { alert('Failed: ' + err.message); }
-            } else if (!isAssigningTable) {
-              // Normal click - show popup
-              showTableActionPopup(table, tableReservations);
-            }
+        // Simple click handler - no dragging on main admin page
+        el.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          if (isAssigningTable && !el.classList.contains('occupied')) {
+            // Assignment mode
+            const resIdToAssign = assigningReservationId;
+            const tableToAssign = table.id;
+            isAssigningTable = false;
+            assigningReservationId = null;
+            document.getElementById('floorGrid').classList.remove('assigning');
+            document.getElementById('assignBanner').classList.remove('show');
+            document.querySelectorAll('.table').forEach(t => t.classList.remove('occupied'));
+            try {
+              await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${resIdToAssign}`, {
+                method: 'PATCH',
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+                body: JSON.stringify({ table_id: tableToAssign })
+              });
+              await loadReservations();
+              renderFloor();
+            } catch (err) { alert('Failed: ' + err.message); }
+          } else if (!isAssigningTable) {
+            // Normal click - show popup to create reservation
+            showTableActionPopup(table, tableReservations);
           }
         });
         
@@ -2434,25 +2401,6 @@ import Layout from '../../../layouts/Layout.astro';
           el.addEventListener('mouseenter', () => showTablePopup(el, tableReservations));
           el.addEventListener('mouseleave', () => hideTablePopup());
         }
-        
-        // Mobile tap
-        el.addEventListener('touchend', (e) => {
-          e.preventDefault();
-          if (isAssigningTable && !el.classList.contains('occupied')) {
-            const resIdToAssign = assigningReservationId;
-            isAssigningTable = false;
-            assigningReservationId = null;
-            document.getElementById('floorGrid').classList.remove('assigning');
-            document.getElementById('assignBanner').classList.remove('show');
-            fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${resIdToAssign}`, {
-              method: 'PATCH',
-              headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-              body: JSON.stringify({ table_id: table.id })
-            }).then(() => { loadReservations(); renderFloor(); });
-          } else {
-            showTableActionPopup(table, tableReservations);
-          }
-        });
         
         grid.appendChild(el);
       });
