@@ -809,28 +809,38 @@ import Layout from '../../../layouts/Layout.astro';
 
     .shift-group {
       border-bottom: 1px solid var(--limestone);
+      margin-bottom: 0.5rem;
     }
 
     .shift-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.5rem 0.75rem;
-      background: var(--parchment);
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--santorini);
+      padding: 0.75rem 1rem;
+      background: linear-gradient(135deg, #1a1f16 0%, #2d3428 100%);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: white;
       cursor: pointer;
       font-family: 'Inter', sans-serif;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
+      border-radius: 6px 6px 0 0;
+      margin: 0.5rem 0.5rem 0 0.5rem;
     }
 
     .shift-header .stats {
       display: flex;
-      gap: 0.75rem;
-      font-weight: normal;
-      color: var(--keswick);
+      gap: 1rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.85);
+      font-size: 0.8rem;
+    }
+    
+    .shift-header .stats span {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
     }
 
     /* Reservation Rows - Clean Aligned Columns */
