@@ -312,33 +312,41 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
       border: 2px solid var(--sand);
     }
 
+    /* Colors match Settings page: Brown #8B5E3C, Green #6B8E6B */
     .palette-preview.square { 
-      width: 28px; height: 28px; border-radius: 3px; 
-      background: linear-gradient(145deg, #d4a574, #b8956a);
+      width: 28px; height: 28px; border-radius: 4px; 
+      background: #8B5E3C;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
     }
     .palette-preview.round { 
       width: 28px; height: 28px; border-radius: 50%; 
-      background: radial-gradient(circle at 30% 30%, #e8dcc8, #c4b8a0);
+      background: #8B5E3C;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
     }
     .palette-preview.round-lg { 
       width: 36px; height: 36px; border-radius: 50%; 
-      background: radial-gradient(circle at 30% 30%, #e8dcc8, #c4b8a0);
+      background: #8B5E3C;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
     }
     .palette-preview.sofa { 
-      width: 40px; height: 22px; border-radius: 11px; 
-      background: linear-gradient(180deg, #6b5b4f, #4a3a2f);
+      width: 40px; height: 22px; border-radius: 8px 8px 4px 4px; 
+      background: #6B8E6B;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
     }
     .palette-preview.diamond { 
       width: 22px; height: 22px; border-radius: 3px; transform: rotate(45deg);
-      background: linear-gradient(145deg, #c4a67c, #a68558);
+      background: #8B5E3C;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
     }
     .palette-preview.rect { 
       width: 48px; height: 22px; border-radius: 3px; 
-      background: linear-gradient(145deg, #d4a574, #b8956a);
+      background: #8B5E3C;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
     }
     .palette-preview.bar { 
       width: 32px; height: 32px; border-radius: 4px; 
-      background: linear-gradient(145deg, #4a3a2f, #2d1d14);
+      background: #8B5E3C;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
     }
     .palette-preview.tree,
     .palette-preview.palm,
@@ -671,11 +679,12 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
       border-radius: 4px;
     }
 
-    .dot.wood { background: linear-gradient(145deg, #d4a574, #a68558); border: 2px solid #8b6914; }
-    .dot.round { background: radial-gradient(circle at 30% 30%, #e8dcc8, #c4b8a0); border-radius: 50%; border: 2px solid #a69880; }
-    .dot.sofa { background: linear-gradient(180deg, #6b5b4f, #4a3a2f); border-radius: 8px; border: 2px solid #3d2d22; }
-    .dot.bar { background: linear-gradient(145deg, #4a3a2f, #2d1d14); border: 2px solid #1a1008; }
-    .dot.tree { background: radial-gradient(circle at 40% 35%, #5a8f5a, #2d4f2d); border-radius: 50%; border: 2px solid #3d6b3d; }
+    /* Legend dots match Settings: Brown #8B5E3C, Green #6B8E6B */
+    .dot.wood { background: #8B5E3C; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
+    .dot.round { background: #8B5E3C; border-radius: 50%; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
+    .dot.sofa { background: #6B8E6B; border-radius: 6px; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
+    .dot.bar { background: #8B5E3C; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
+    .dot.tree { background: radial-gradient(circle at 40% 35%, #5a8f5a, #2d4f2d); border-radius: 50%; }
   </style>
 
   <script is:inline>
