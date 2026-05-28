@@ -1896,7 +1896,7 @@ import Layout from '../../../layouts/Layout.astro';
       console.log('Layout reset to new version:', LAYOUT_VERSION);
     }
     let currentDate = new Date();
-    let currentZone = 'jardin';
+    let currentZone = 'terraza';
     let currentStatusFilter = 'coming';
     let cachedReservations = [];
 
@@ -1924,7 +1924,9 @@ import Layout from '../../../layouts/Layout.astro';
           zonePreference: r.zone_preference,
           specialRequests: r.special_requests,
           status: r.status,
-          cancelToken: r.cancel_token
+          cancelToken: r.cancel_token,
+          created_at: r.created_at,
+          booked_on: r.booked_on || r.created_at
         }));
         return cachedReservations;
       } catch (e) {
