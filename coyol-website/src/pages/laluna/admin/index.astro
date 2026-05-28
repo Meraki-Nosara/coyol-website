@@ -2463,6 +2463,7 @@ import Layout from '../../../layouts/Layout.astro';
         el.style.cursor = 'pointer';
         el.onclick = function(e) {
           e.stopPropagation();
+          alert('Clicked table: ' + table.id);
           window.handleTableTap(table.id);
         };
         
