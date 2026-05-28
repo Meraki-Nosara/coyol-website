@@ -1352,13 +1352,15 @@ import '../../../styles/laluna-tables.css';
       50% { background: #28a745 !important; box-shadow: 0 0 20px #28a745; }
     }
     
-    /* Status colors */
+    /* Status colors - BRIGHT for visibility */
     :global(.table-btn[data-status="confirmed"]) {
-      background: linear-gradient(145deg, #a3d9a5 0%, #6bb96e 100%);
+      background: #4CAF50 !important;
+      box-shadow: 0 0 10px rgba(76, 175, 80, 0.5) !important;
     }
     
     :global(.table-btn[data-status="seated"]) {
-      background: linear-gradient(145deg, #a5c4e4 0%, #5a9bd4 100%);
+      background: #2196F3 !important;
+      box-shadow: 0 0 10px rgba(33, 150, 243, 0.5) !important;
     }
     
     /* Table content - WHITE text for visibility on brown */
