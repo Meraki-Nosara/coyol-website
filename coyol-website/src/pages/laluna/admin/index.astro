@@ -1195,6 +1195,13 @@ import Layout from '../../../layouts/Layout.astro';
       transition: all 0.2s ease;
       font-size: 0.625rem;
       text-align: center;
+      z-index: 1;
+    }
+    
+    :global(.floor-grid .table::before),
+    :global(.floor-grid .table::after),
+    :global(.floor-grid .table *) {
+      pointer-events: none;
     }
 
     :global(.floor-grid .table:hover) {
