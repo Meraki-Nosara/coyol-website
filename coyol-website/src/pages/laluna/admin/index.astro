@@ -68,9 +68,9 @@ import '../../../styles/laluna-tables.css';
           <button class="status-tab active" data-status="coming">Coming</button>
         </div>
         <select class="shift-select" id="shiftSelect">
-          <option value="all">✓ All Shifts</option>
-          <option value="upcoming">Upcoming</option>
-          <!-- Shifts loaded from Supabase -->
+          <option value="all">All Shifts</option>
+          <option value="dinner1">Dinner 1 (4-7pm)</option>
+          <option value="dinner2">Dinner 2 (7pm+)</option>
         </select>
         <div class="stats-mini">
           <span><span id="totalCovers">0</span> covers</span>
@@ -2611,6 +2611,14 @@ import '../../../styles/laluna-tables.css';
       // Sort by time
       filtered.sort((a, b) => a.time.localeCompare(b.time));
       
+      // Filter by shift if selected
+      if (currentShiftFilter && currentShiftFilter !== 'all') {
+        filtered = filtered.filter(res => {
+          const resShift = getShiftForTime(res.time);
+          return resShift.toLowerCase().replace(' ', '') === currentShiftFilter.toLowerCase().replace(' ', '');
+        });
+      }
+      
       // Group by shift
       const byShift = {};
       filtered.forEach(res => {
@@ -3941,6 +3949,13 @@ import '../../../styles/laluna-tables.css';
       }
     }
 
+    // Shift filter
+    let currentShiftFilter = 'all';
+    document.getElementById('shiftSelect').addEventListener('change', (e) => {
+      currentShiftFilter = e.target.value;
+      renderReservations();
+    });
+    
     // Initial load
     loadShifts();
     loadReservations().then(() => renderFloor());
