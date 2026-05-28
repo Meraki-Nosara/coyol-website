@@ -2897,8 +2897,7 @@ import '../../../styles/laluna-tables.css';
       // WhatsApp button
       const whatsappBtn = document.getElementById('whatsappBtn');
       if (res.guestPhone) {
-        const phone = res.guestPhone.replace(/[^0-9]/g, '');
-        const phoneWithCode = phone.startsWith('506') ? phone : '506' + phone;
+        const phoneWithCode = formatPhoneForWhatsApp(res.guestPhone);
         const date = new Date(res.date).toLocaleDateString('es-CR', { weekday: 'long', day: 'numeric', month: 'long' });
         const message = `Hola ${res.guestName.split(' ')[0]}! 🌙 Te escribimos de La Luna para confirmar tu reservación para ${res.guests} personas el ${date} a las ${formatTime12(res.time)}. ¿Podemos contar contigo?`;
         whatsappBtn.href = `https://wa.me/${phoneWithCode}?text=${encodeURIComponent(message)}`;
@@ -3622,8 +3621,7 @@ import '../../../styles/laluna-tables.css';
       const openNext = () => {
         if (index >= todayRes.length) return;
         const res = todayRes[index];
-        const phone = res.guestPhone.replace(/[^0-9]/g, '');
-        const phoneWithCode = phone.startsWith('506') ? phone : '506' + phone;
+        const phoneWithCode = formatPhoneForWhatsApp(res.guestPhone);
         const message = `Hola ${res.guestName.split(' ')[0]}! 🌙 Te escribimos de La Luna para confirmar tu reservación para ${res.guests} personas hoy a las ${formatTime12(res.time)}. ¿Podemos contar contigo?`;
         window.open(`https://wa.me/${phoneWithCode}?text=${encodeURIComponent(message)}`, '_blank');
         index++;
