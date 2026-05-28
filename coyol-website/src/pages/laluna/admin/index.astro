@@ -1958,17 +1958,19 @@ import '../../../styles/laluna-tables.css';
     .btn-reactivate:hover { background: #059669; }
     
     .whatsapp-btn { 
-      display: inline-flex; 
+      display: none; /* JS sets to inline-flex when phone exists */
       align-items: center; 
       margin-left: 8px; 
-      padding: 4px 8px;
+      padding: 6px 10px;
       background: #25D366; 
-      border-radius: 6px;
+      border-radius: 8px;
       text-decoration: none;
       vertical-align: middle;
+      gap: 4px;
     }
+    .whatsapp-btn::after { content: 'WhatsApp'; font-size: 0.75rem; color: white; font-weight: 500; }
     .whatsapp-btn:hover { background: #128C7E; }
-    .whatsapp-btn svg { fill: white; }
+    .whatsapp-btn svg { fill: white; width: 18px; height: 18px; }
     
     .whatsapp-icon {
       display: flex;
