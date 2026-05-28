@@ -2340,6 +2340,29 @@ import Layout from '../../../layouts/Layout.astro';
     function saveLayout(layouts) {
       localStorage.setItem(LAYOUT_KEY, JSON.stringify(layouts));
     }
+    
+    // Handle table click - show popup or assign
+    async function handleTableClick(table, tableReservations) {
+      console.log('handleTableClick:', table.id);
+      if (isAssigningTable) {
+        const resIdToAssign = assigningReservationId;
+        isAssigningTable = false;
+        assigningReservationId = null;
+        document.getElementById('floorGrid').classList.remove('assigning');
+        document.getElementById('assignBanner').classList.remove('show');
+        try {
+          await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${resIdToAssign}`, {
+            method: 'PATCH',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+            body: JSON.stringify({ table_id: table.id })
+          });
+          await loadReservations();
+          renderFloor();
+        } catch (err) { alert('Failed: ' + err.message); }
+      } else {
+        showTableActionPopup(table, tableReservations);
+      }
+    }
 
     function renderFloor() {
       const layouts = getLayout();
@@ -2361,6 +2384,7 @@ import Layout from '../../../layouts/Layout.astro';
         el.dataset.status = status;
         el.style.left = table.x + 'px';
         el.style.top = table.y + 'px';
+        el.onclick = () => handleTableClick(table, tableReservations);
         
         if (table.rotation && table.type !== 'diamond') {
           el.style.transform = `rotate(${table.rotation}deg)`;
@@ -2375,34 +2399,6 @@ import Layout from '../../../layouts/Layout.astro';
           ${res ? `<span class="table-time">${formatTime12(res.time)} · ${res.guests} pax</span>` : ''}
           ${tableReservations.length > 1 ? `<span class="table-multi">+${tableReservations.length - 1}</span>` : ''}
         `;
-        
-        // Simple click handler - no dragging on main admin page
-        el.addEventListener('click', async (e) => {
-          e.stopPropagation();
-          console.log('Table clicked:', table.id, 'isAssigning:', isAssigningTable);
-          if (isAssigningTable && !el.classList.contains('occupied')) {
-            // Assignment mode
-            const resIdToAssign = assigningReservationId;
-            const tableToAssign = table.id;
-            isAssigningTable = false;
-            assigningReservationId = null;
-            document.getElementById('floorGrid').classList.remove('assigning');
-            document.getElementById('assignBanner').classList.remove('show');
-            document.querySelectorAll('.table').forEach(t => t.classList.remove('occupied'));
-            try {
-              await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${resIdToAssign}`, {
-                method: 'PATCH',
-                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-                body: JSON.stringify({ table_id: tableToAssign })
-              });
-              await loadReservations();
-              renderFloor();
-            } catch (err) { alert('Failed: ' + err.message); }
-          } else if (!isAssigningTable) {
-            // Normal click - show popup to create reservation
-            showTableActionPopup(table, tableReservations);
-          }
-        });
         
         // Hover for multi-reservation popup
         if (tableReservations.length > 1) {
