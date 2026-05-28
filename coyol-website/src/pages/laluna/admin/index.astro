@@ -2125,6 +2125,15 @@ import '../../../styles/laluna-tables.css';
   </style>
 
   <script is:inline>
+    // TABLE CLICK - defined first so onclick works
+    window.tableClick = function(id) {
+      alert('Click: ' + id);
+      var d = window.floorTables && window.floorTables[id];
+      if (d && typeof window.showTableActionPopup === 'function') {
+        window.showTableActionPopup(d.table, d.tableReservations);
+      }
+    };
+    
     // Auth check
     if (localStorage.getItem('laluna_admin_auth') !== 'true') {
       window.location.href = '/laluna/admin/login';
@@ -2152,15 +2161,7 @@ import '../../../styles/laluna-tables.css';
     let currentStatusFilter = 'coming';
     let cachedReservations = [];
     
-    // Simple global table click - MUST work
-    function tableClick(id) {
-      alert('Clicked: ' + id);
-      var d = window.floorTables[id];
-      if (d && window.showTableActionPopup) {
-        window.showTableActionPopup(d.table, d.tableReservations);
-      }
-    }
-    window.tableClick = tableClick;
+    // tableClick defined at top of script
 
     // Get reservations from Supabase
     async function fetchReservations(date) {
