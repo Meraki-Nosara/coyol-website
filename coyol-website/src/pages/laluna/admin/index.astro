@@ -72,8 +72,8 @@ import Layout from '../../../layouts/Layout.astro';
           <!-- Shifts loaded from Supabase -->
         </select>
         <div class="stats-mini">
-          <span>👥 <span id="totalCovers">0</span></span>
-          <span>📋 <span id="totalRes">0</span></span>
+          <span><span id="totalCovers">0</span> covers</span>
+          <span><span id="totalRes">0</span> res</span>
         </div>
       </div>
 
@@ -2295,8 +2295,8 @@ import Layout from '../../../layouts/Layout.astro';
           <div class="shift-header">
             <span>${shift}</span>
             <div class="stats">
-              <span>👥 ${items.reduce((s, r) => s + (parseInt(r.guests) || 2), 0)}</span>
-              <span>📋 ${items.length} res</span>
+              <span>${items.reduce((s, r) => s + (parseInt(r.guests) || 2), 0)} guests</span>
+              <span>${items.length} reservations</span>
             </div>
           </div>
           ${items.map(res => {
@@ -2431,7 +2431,31 @@ import Layout from '../../../layouts/Layout.astro';
           el.addEventListener('mouseleave', () => hideTablePopup());
         }
         
-        // Enable dragging (only when not assigning)
+        // Mobile tap - show popup immediately (no drag on mobile)
+        el.addEventListener('touchend', (e) => {
+          if (isAssigningTable) {
+            // Handle assignment on mobile
+            e.preventDefault();
+            const resIdToAssign = assigningReservationId;
+            const tableToAssign = table.id;
+            if (resIdToAssign && !el.classList.contains('occupied')) {
+              isAssigningTable = false;
+              assigningReservationId = null;
+              document.getElementById('floorGrid').classList.remove('assigning');
+              document.getElementById('assignBanner').classList.remove('show');
+              fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${resIdToAssign}`, {
+                method: 'PATCH',
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+                body: JSON.stringify({ table_id: tableToAssign })
+              }).then(() => { loadReservations(); renderFloor(); });
+            }
+          } else {
+            // Show popup on tap
+            showTableActionPopup(table, tableReservations);
+          }
+        });
+        
+        // Enable dragging on desktop (only when not assigning)
         el.addEventListener('mousedown', (e) => {
           if (isAssigningTable) return;
           e.preventDefault();
