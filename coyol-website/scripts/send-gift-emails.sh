@@ -168,7 +168,12 @@ Content-Type: text/html; charset=utf-8
             </td>
           </tr>
           <tr>
-            <td align="center" style="padding-top: 30px;">
+            <td align="center" style="padding: 30px 0;">
+              <a href="https://lalunanosara.com" style="display: inline-block; background-color: #C4A67C; color: #1A1F16; text-decoration: none; padding: 15px 40px; border-radius: 8px; font-size: 16px; font-weight: bold;">Book a Table</a>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
               <p style="color: #F5F3EF; opacity: 0.5; font-size: 12px; margin: 0;">
                 La Luna Restaurant<br>
                 Guiones, Nosara, Costa Rica
