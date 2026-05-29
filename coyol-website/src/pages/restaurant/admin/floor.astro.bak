@@ -1,12 +1,12 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import CoyolAdminSidebar from '../../../components/CoyolAdminSidebar.astro';
-import '../../../styles/coyol-tables.css';
+import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
+import '../../../styles/laluna-tables.css';
 ---
 
-<Layout hideFloatingButtons={true} title="Floor Plan | Coyol Admin" appleTouchIcon="/coyol-restaurant-icon.png">
+<Layout hideFloatingButtons={true} title="Floor Plan | La Luna Admin" appleTouchIcon="/laluna-apple-touch-icon.png">
   <div class="admin">
-    <CoyolAdminSidebar active="floor" />
+    <LaLunaAdminSidebar active="floor" />
 
     <!-- Main Content -->
     <main class="main">
@@ -114,8 +114,8 @@ import '../../../styles/coyol-tables.css';
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     :root {
-      --keswick: #3D4F3D;
-      --coniston: #4A5D4A;
+      --keswick: #A65D3F;
+      --coniston: #B86B4A;
       --limestone: #D4C9B5;
       --sand: #C4A67C;
       --terracotta: #A65D3F;
