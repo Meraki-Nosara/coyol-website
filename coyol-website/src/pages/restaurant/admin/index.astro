@@ -2936,25 +2936,37 @@ import '../../../styles/coyol-tables.css';
       });
     });
 
+    // Populate table dropdown for new reservation modal
+    function populateTableDropdown(preselectedTableId = null) {
+      const tableSelect = document.getElementById('newTable');
+      const layouts = getLayout();
+      const allTables = [...(layouts.inside || []), ...(layouts.jardin || []), ...(layouts.terraza || [])];
+      
+      tableSelect.innerHTML = '<option value="">Auto-assign</option>';
+      allTables.forEach(t => {
+        const capacity = t.maxCovers || 4;
+        const opt = document.createElement('option');
+        opt.value = t.id;
+        opt.textContent = `${t.name} (${capacity}p)`;
+        tableSelect.appendChild(opt);
+      });
+      
+      if (preselectedTableId) {
+        tableSelect.value = preselectedTableId;
+      }
+    }
+
     // New reservation modal
     function openNewReservation() {
       document.getElementById('newDate').value = getDateString(currentDate);
-      // Clear any pre-selected table
-      const tableSelect = document.getElementById('newTable');
-      if (tableSelect) tableSelect.value = '';
+      populateTableDropdown();
       document.getElementById('newResModal').classList.add('open');
     }
 
     function openNewReservationWithTable(tableId, tableName) {
       document.getElementById('newDate').value = getDateString(currentDate);
+      populateTableDropdown(tableId);
       document.getElementById('newResModal').classList.add('open');
-      // Pre-select the table
-      setTimeout(() => {
-        const tableSelect = document.getElementById('newTable');
-        if (tableSelect) {
-          tableSelect.value = tableId;
-        }
-      }, 100);
     }
 
     function closeModal() {
