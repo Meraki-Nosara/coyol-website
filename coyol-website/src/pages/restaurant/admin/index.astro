@@ -324,9 +324,9 @@ import '../../../styles/coyol-tables.css';
           <!-- Active reservation buttons -->
           <div id="activeActions">
             <button class="btn-edit" onclick="openEditModal()">✏️ Edit</button>
-            <button class="btn-assign" id="assignBtn" onclick="startTableAssignment()">Assign Table</button>
+            <button class="btn-assign" id="assignBtn" onclick="startTableAssignment()">Change Table</button>
             <button class="btn-seat" id="seatBtn" onclick="toggleSeatStatus()">Seat</button>
-            <button class="btn-cancel" onclick="cancelReservation()">Cancel Reservation</button>
+            <button class="btn-cancel" onclick="cancelReservation()">Cancel</button>
           </div>
           <!-- Cancelled reservation buttons -->
           <div id="cancelledActions" style="display:none;">
@@ -1657,18 +1657,18 @@ import '../../../styles/coyol-tables.css';
     .detail-item.full-width { grid-column: 1 / -1; }
     .detail-label { font-size: 0.6875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
     .detail-value { font-size: 0.9375rem; color: var(--santorini); }
-    .detail-actions { justify-content: flex-start; gap: 0.5rem; flex-wrap: wrap; }
-    .btn-edit { background: var(--sand); color: var(--santorini); border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
+    .detail-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+    .btn-edit { background: var(--sand); color: var(--santorini); border: none; padding: 0.75rem 0.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; font-size: 0.8125rem; }
     .btn-edit:hover { background: #d4b68c; }
-    .btn-assign { background: #2563eb; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
-    .btn-assign:hover { background: #1d4ed8; }
+    .btn-assign { background: #f59e0b; color: white; border: none; padding: 0.75rem 0.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; font-size: 0.8125rem; }
+    .btn-assign:hover { background: #d97706; }
     .btn-assign.active { background: #dc2626; }
     .btn-assign.reassign { background: #f59e0b; }
     .btn-assign.reassign:hover { background: #d97706; }
-    .btn-seat { background: var(--keswick); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
+    .btn-seat { background: var(--keswick); color: white; border: none; padding: 0.75rem 0.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; font-size: 0.8125rem; }
     .btn-seat:hover { background: var(--coniston); }
     .btn-seat.active { background: #0066cc; }
-    .btn-cancel { background: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; }
+    .btn-cancel { background: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 0.75rem 0.5rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.8125rem; }
     .btn-cancel:hover { background: #dc3545; color: white; }
     .btn-reactivate { background: #10b981; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
     .btn-reactivate:hover { background: #059669; }
@@ -2249,11 +2249,19 @@ import '../../../styles/coyol-tables.css';
           hideTablePopup();
         });
         
-        // Click to assign table
+        // Click to assign table or open new reservation
         el.addEventListener('click', (e) => {
           if (isAssigningTable) {
             e.stopPropagation();
             assignTableToReservation(table.id);
+          } else if (isAvailable) {
+            // Empty table - open new reservation with this table pre-selected
+            e.stopPropagation();
+            openNewReservationWithTable(table.id, table.name);
+          } else if (nextRes) {
+            // Has reservation - select it
+            e.stopPropagation();
+            selectReservation(nextRes.id);
           }
         });
         
@@ -2931,7 +2939,22 @@ import '../../../styles/coyol-tables.css';
     // New reservation modal
     function openNewReservation() {
       document.getElementById('newDate').value = getDateString(currentDate);
+      // Clear any pre-selected table
+      const tableSelect = document.getElementById('newTable');
+      if (tableSelect) tableSelect.value = '';
       document.getElementById('newResModal').classList.add('open');
+    }
+
+    function openNewReservationWithTable(tableId, tableName) {
+      document.getElementById('newDate').value = getDateString(currentDate);
+      document.getElementById('newResModal').classList.add('open');
+      // Pre-select the table
+      setTimeout(() => {
+        const tableSelect = document.getElementById('newTable');
+        if (tableSelect) {
+          tableSelect.value = tableId;
+        }
+      }, 100);
     }
 
     function closeModal() {
