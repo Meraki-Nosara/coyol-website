@@ -1985,16 +1985,16 @@ import '../../../styles/laluna-tables.css';
     .detail-item.full-width { grid-column: 1 / -1; }
     .detail-label { font-size: 0.6875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
     .detail-value { font-size: 0.9375rem; color: var(--santorini); }
-    .detail-actions { justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
-    #activeActions { display: flex; flex-wrap: wrap; gap: 0.5rem; width: 100%; }
-    .btn-edit { background: var(--sand); color: var(--santorini); border: none; padding: 0.625rem 1rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; font-size: 0.875rem; flex: 1; min-width: 70px; }
+    .detail-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+    #activeActions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; width: 100%; }
+    .btn-edit { background: var(--sand); color: var(--santorini); border: none; padding: 0.75rem 0.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; font-size: 0.8125rem; }
     .btn-edit:hover { background: #d4b68c; }
-    .btn-assign { background: #0066cc; color: white; border: none; padding: 0.625rem 1rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; font-size: 0.875rem; flex: 1; min-width: 70px; }
-    .btn-assign:hover { background: #0052a3; }
-    .btn-seat { background: var(--terracotta); color: white; border: none; padding: 0.625rem 1rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; font-size: 0.875rem; flex: 1; min-width: 60px; }
+    .btn-assign { background: #f59e0b; color: white; border: none; padding: 0.75rem 0.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; font-size: 0.8125rem; }
+    .btn-assign:hover { background: #d97706; }
+    .btn-seat { background: var(--terracotta); color: white; border: none; padding: 0.75rem 0.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; font-size: 0.8125rem; }
     .btn-seat:hover { opacity: 0.9; }
     .btn-seat.active { background: #0066cc; }
-    .btn-cancel { background: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 0.5rem 0.75rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.8125rem; flex: 0 0 auto; white-space: nowrap; }
+    .btn-cancel { background: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 0.75rem 0.5rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.8125rem; }
     .btn-cancel:hover { background: #dc3545; color: white; }
     .btn-reactivate { background: #10b981; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
     .btn-reactivate:hover { background: #059669; }
@@ -2887,13 +2887,20 @@ import '../../../styles/laluna-tables.css';
         return;
       }
       
-      // Otherwise show the table popup
+      // Get table data
       const data = window.floorTables?.[tableId];
       if (!data) {
         console.error('No data for table:', tableId);
         return;
       }
       
+      // If empty table, open new reservation with this table pre-selected
+      if (!data.tableReservations || data.tableReservations.length === 0) {
+        openNewReservationWithTable(tableId, data.table.name);
+        return;
+      }
+      
+      // Otherwise show the table popup for occupied tables
       showTableActionPopup(data.table, data.tableReservations);
     }
     window.handleTableClick = handleTableClick;
@@ -3689,6 +3696,10 @@ import '../../../styles/laluna-tables.css';
       }
       
       document.getElementById('newResModal').classList.add('open');
+    }
+
+    function openNewReservationWithTable(tableId, tableName) {
+      openNewReservation(tableId);
     }
     
     function messageAllReservations() {
