@@ -97,7 +97,7 @@ EOF
           </tr>
           <tr>
             <td align="center" style="padding: 30px 0;">
-              <a href="https://coyolnosara.com/laluna/reserve" style="display: inline-block; background-color: #C4A67C; color: #1A1F16; text-decoration: none; padding: 15px 40px; border-radius: 8px; font-size: 16px; font-weight: bold;">Reserve a Table</a>
+              <a href="https://lalunanosara.com" style="display: inline-block; background-color: #C4A67C; color: #1A1F16; text-decoration: none; padding: 15px 40px; border-radius: 8px; font-size: 16px; font-weight: bold;">Book a Table</a>
             </td>
           </tr>
           <tr>

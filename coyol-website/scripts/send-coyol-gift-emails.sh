@@ -51,7 +51,7 @@ Content-Type: text/html
       <p style="color: white; font-size: 20px; letter-spacing: 3px; margin: 0;">${CODE}</p>
     </div>
     $([ -n "$MESSAGE" ] && [ "$MESSAGE" != "null" ] && echo "<p style=\"color: #666; font-style: italic; margin: 20px 0;\">\"${MESSAGE}\"</p>")
-    <a href="https://coyolnosara.com/coyol/reserve" style="display: inline-block; background: #C4A67C; color: #1a1f16; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; margin-top: 20px;">Make a Reservation</a>
+    <a href="https://coyolrestaurant.com" style="display: inline-block; background: #C4A67C; color: #1a1f16; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; margin-top: 20px;">Book a Table</a>
     <p style="color: #888; font-size: 14px; margin-top: 30px;">Present this code when dining at Coyol Restaurant in Nosara.</p>
   </div>
 </div>
