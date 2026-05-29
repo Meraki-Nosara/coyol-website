@@ -765,30 +765,41 @@ import '../../../styles/coyol-tables.css';
       color: var(--keswick);
     }
 
-    /* Reservation Rows - Clean Aligned Columns */
+    /* Reservation Rows - Card Style (matching La Luna) */
     :global(.res-row) {
       display: grid;
-      grid-template-columns: 75px minmax(120px, 1fr) 45px 55px 36px;
-      gap: 0.75rem;
-      padding: 0.625rem 1rem;
-      border-bottom: 1px solid var(--parchment);
+      grid-template-columns: 70px minmax(100px, 1fr) 42px 58px 32px;
+      gap: 0.5rem;
+      padding: 0.75rem 0.75rem;
+      margin: 0.375rem 0.5rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
       cursor: pointer;
       align-items: center;
-      transition: background 0.1s;
+      transition: all 0.15s;
+      border: 1px solid rgba(0,0,0,0.05);
     }
     
     :global(.res-row.has-note) {
-      border-bottom: none;
-      padding-bottom: 0.25rem;
+      border-radius: 8px 8px 0 0;
+      margin-bottom: 0;
     }
     
     :global(.res-note-row) {
-      padding: 0 1rem 0.625rem 1rem;
-      border-bottom: 1px solid var(--parchment);
+      padding: 0.375rem 0.75rem 0.625rem;
+      margin: 0 0.5rem 0.375rem;
+      background: white;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border: 1px solid rgba(0,0,0,0.05);
+      border-top: none;
     }
 
     :global(.res-row:hover) {
-      background: var(--parchment);
+      background: #faf8f5;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      transform: translateY(-1px);
     }
 
     :global(.res-row.seated) {
