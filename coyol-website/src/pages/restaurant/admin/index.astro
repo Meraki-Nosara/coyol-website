@@ -172,7 +172,8 @@ import '../../../styles/coyol-tables.css';
           <div class="form-row">
             <div class="form-group flex-2">
               <label>Guest Name *</label>
-              <input type="text" id="newName" class="form-input" placeholder="Name" />
+              <input type="text" id="newName" class="form-input" placeholder="Name" oninput="checkGiftCardMatch(this.value)" />
+              <div id="giftCardAlert" class="gift-match-alert" style="display:none;"></div>
             </div>
             <div class="form-group">
               <label>Table</label>
@@ -1841,6 +1842,22 @@ import '../../../styles/coyol-tables.css';
                nameLower.includes(recipientLower) ||
                recipientLower.includes(firstName);
       });
+    }
+
+    // Check gift card match while typing in new reservation form
+    function checkGiftCardMatch(name) {
+      const alert = document.getElementById('giftCardAlert');
+      if (!name || name.trim().length < 3) {
+        alert.style.display = 'none';
+        return;
+      }
+      const card = getGiftCardForName(name);
+      if (card) {
+        alert.innerHTML = `<strong>Gift Card Found!</strong> ${card.recipient_name} has a $${card.amount} card (${card.code})`;
+        alert.style.display = 'block';
+      } else {
+        alert.style.display = 'none';
+      }
     }
 
     // Get reservations from Supabase
