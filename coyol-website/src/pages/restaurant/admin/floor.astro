@@ -720,7 +720,7 @@ import '../../../styles/coyol-tables.css';
   </style>
 
   <script is:inline>
-    const LAYOUT_KEY = 'laluna_floor_layout';
+    const LAYOUT_KEY = 'coyol_floor_layout';
     const LAYOUT_VERSION = 'v3-eatapp-final';
     const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
@@ -798,14 +798,14 @@ import '../../../styles/coyol-tables.css';
       const layouts = getLayout();
       try {
         // Check if record exists
-        const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_floor_layout`, {
+        const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.coyol_floor_layout`, {
           headers: { 'apikey': SUPABASE_KEY }
         });
         const existing = await checkRes.json();
         
         if (existing.length > 0) {
           // Update existing
-          await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_floor_layout`, {
+          await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.coyol_floor_layout`, {
             method: 'PATCH',
             headers: {
               'apikey': SUPABASE_KEY,
@@ -824,7 +824,7 @@ import '../../../styles/coyol-tables.css';
               'Authorization': `Bearer ${SUPABASE_KEY}`,
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ key: 'laluna_floor_layout', value: JSON.stringify(layouts) })
+            body: JSON.stringify({ key: 'coyol_floor_layout', value: JSON.stringify(layouts) })
           });
         }
         alert('Layout saved as default!');
@@ -837,7 +837,7 @@ import '../../../styles/coyol-tables.css';
     // Load default layout from Supabase
     async function loadLayoutFromSupabase() {
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_floor_layout`, {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.coyol_floor_layout`, {
           headers: { 'apikey': SUPABASE_KEY }
         });
         const data = await res.json();

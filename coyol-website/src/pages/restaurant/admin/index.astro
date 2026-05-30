@@ -2000,54 +2000,69 @@ import '../../../styles/coyol-tables.css';
       }
     }
 
+    // Cached layout from Supabase
+    let cachedSupabaseLayout = null;
+
+    // Load layout from Supabase on page load
+    async function loadLayoutFromSupabase() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.coyol_floor_layout`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const data = await res.json();
+        if (data && data.length > 0 && data[0].value) {
+          cachedSupabaseLayout = JSON.parse(data[0].value);
+          console.log('Loaded layout from Supabase');
+          renderFloor(); // Re-render with new layout
+        }
+      } catch (e) {
+        console.log('No Supabase layout, using defaults');
+      }
+    }
+
     function getLayout() {
+      // Priority: Supabase > localStorage > defaults
+      if (cachedSupabaseLayout) return cachedSupabaseLayout;
+      
       const saved = localStorage.getItem(LAYOUT_KEY);
       if (saved) return JSON.parse(saved);
       
       // Default layouts - Coyol Restaurant
       return {
         inside: [
-          // Left side
           { id: 't32', name: '32', type: 'round-lg', x: 60, y: 60, minCovers: 4, maxCovers: 6 },
           { id: 't1', name: '1', type: 'square', x: 150, y: 60, minCovers: 2, maxCovers: 4 },
           { id: 't34', name: '34', type: 'round-lg', x: 250, y: 60, minCovers: 4, maxCovers: 6 },
-          // Center-right
           { id: 't3', name: '3', type: 'square', x: 200, y: 140, minCovers: 2, maxCovers: 4 },
           { id: 't2', name: '2', type: 'square', x: 300, y: 140, minCovers: 2, maxCovers: 4 },
           { id: 't4', name: '4', type: 'square', x: 350, y: 60, minCovers: 2, maxCovers: 4 },
-          // Bottom
           { id: 'sofa-adent', name: 'Sofa', type: 'sofa', x: 60, y: 220, minCovers: 2, maxCovers: 4 },
           { id: 'bar-1', name: 'Bar', type: 'square', x: 180, y: 250, minCovers: 2, maxCovers: 2 },
           { id: 'bar-2', name: 'Bar', type: 'square', x: 230, y: 250, minCovers: 2, maxCovers: 2 },
           { id: 'bar-3', name: 'Bar', type: 'square', x: 280, y: 250, minCovers: 2, maxCovers: 2 },
         ],
         terraza: [
-          // Top row
           { id: 't21', name: '21', type: 'square', x: 60, y: 50, minCovers: 2, maxCovers: 4 },
           { id: 't23', name: '23', type: 'square', x: 140, y: 50, minCovers: 2, maxCovers: 4 },
           { id: 't24', name: '24', type: 'square', x: 220, y: 50, minCovers: 2, maxCovers: 4 },
           { id: 't26', name: '26', type: 'square', x: 300, y: 50, minCovers: 2, maxCovers: 4 },
           { id: 't28', name: '28', type: 'square', x: 380, y: 50, minCovers: 2, maxCovers: 4 },
-          // Bottom row
           { id: 't20', name: '20', type: 'square', x: 100, y: 150, minCovers: 2, maxCovers: 4 },
           { id: 't22', name: '22', type: 'square', x: 180, y: 150, minCovers: 2, maxCovers: 4 },
           { id: 't25', name: '25', type: 'square', x: 260, y: 150, minCovers: 2, maxCovers: 4 },
           { id: 't27', name: '27', type: 'square', x: 340, y: 150, minCovers: 2, maxCovers: 4 },
         ],
         jardin: [
-          // Top row - tables 5-9
           { id: 't5', name: '5', type: 'square', x: 100, y: 80, minCovers: 2, maxCovers: 4 },
           { id: 't6', name: '6', type: 'square', x: 170, y: 80, minCovers: 2, maxCovers: 4 },
           { id: 't7', name: '7', type: 'square', x: 240, y: 80, minCovers: 2, maxCovers: 4 },
           { id: 't8', name: '8', type: 'square', x: 310, y: 80, minCovers: 2, maxCovers: 4 },
           { id: 't9', name: '9', type: 'square', x: 380, y: 80, minCovers: 2, maxCovers: 4 },
-          // Sofa afuer (top left)
           { id: 'sofa-afuer', name: 'Sofa', type: 'sofa', x: 40, y: 40, minCovers: 2, maxCovers: 4 },
-          // Left column - tables 4, 3, 2, 1 (top to bottom)
-          { id: 't4', name: '4', type: 'sofa', x: 40, y: 140, minCovers: 2, maxCovers: 4 },
-          { id: 't3', name: '3', type: 'square', x: 40, y: 210, minCovers: 2, maxCovers: 4 },
-          { id: 't2', name: '2', type: 'square', x: 40, y: 280, minCovers: 2, maxCovers: 4 },
-          { id: 't1', name: '1', type: 'square', x: 40, y: 350, minCovers: 2, maxCovers: 4 },
+          { id: 't4-j', name: '4', type: 'sofa', x: 40, y: 140, minCovers: 2, maxCovers: 4 },
+          { id: 't3-j', name: '3', type: 'square', x: 40, y: 210, minCovers: 2, maxCovers: 4 },
+          { id: 't2-j', name: '2', type: 'square', x: 40, y: 280, minCovers: 2, maxCovers: 4 },
+          { id: 't1-j', name: '1', type: 'square', x: 40, y: 350, minCovers: 2, maxCovers: 4 },
         ]
       };
     }
@@ -3221,6 +3236,7 @@ import '../../../styles/coyol-tables.css';
 
     // Initial load
     loadShifts();
+    loadLayoutFromSupabase(); // Load floor layout from Supabase
     loadReservations().then(async () => { await autoAssignTables(); renderFloor(); });
   </script>
 </Layout>
