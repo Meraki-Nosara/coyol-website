@@ -2708,7 +2708,13 @@ import '../../../styles/laluna-tables.css';
             </div>
           </div>
           ${items.map(res => {
-            const hasGiftCard = giftCardsCache.some(g => g.status !== 'redeemed' && g.recipient_name && g.recipient_name.toLowerCase().trim() === res.guestName?.toLowerCase().trim());
+            const hasGiftCard = giftCardsCache.some(g => {
+              if (g.status === 'redeemed' || !g.recipient_name || !res.guestName) return false;
+              const recipientLower = g.recipient_name.toLowerCase().trim();
+              const guestLower = res.guestName.toLowerCase().trim();
+              const firstName = guestLower.split(' ')[0];
+              return recipientLower === guestLower || recipientLower === firstName || guestLower.includes(recipientLower) || recipientLower.includes(firstName);
+            });
             return `
             <div class="res-row ${res.status} ${res.specialRequests ? 'has-note' : ''} ${hasGiftCard ? 'has-gift' : ''}" onclick="selectReservation('${res.id}')">
               <div class="res-time">${formatTime12(res.time)}</div>
@@ -2810,7 +2816,7 @@ import '../../../styles/laluna-tables.css';
       // Build HTML string with button elements
       let html = '';
       tables.forEach(table => {
-        const tableReservations = reservations.filter(r => r.tableId === table.id);
+        const tableReservations = reservations.filter(r => r.tableId === table.id && r.status !== 'cancelled');
         const res = tableReservations[0];
         const status = res ? res.status : 'available';
         
@@ -3810,11 +3816,12 @@ import '../../../styles/laluna-tables.css';
         return;
       }
       const nameLower = name.toLowerCase().trim();
+      const firstName = nameLower.split(' ')[0];
       const matches = giftCardsCache.filter(g => {
         if (g.status === 'redeemed' || !g.recipient_name) return false;
         const cardName = g.recipient_name.toLowerCase().trim();
-        // Only match if full name matches exactly
-        return cardName === nameLower;
+        // Match: exact, first name, partial
+        return cardName === nameLower || cardName === firstName || nameLower.includes(cardName) || cardName.includes(firstName);
       });
       if (matches.length > 0) {
         const total = matches.reduce((sum, g) => sum + (g.remaining_balance ?? g.amount), 0);
