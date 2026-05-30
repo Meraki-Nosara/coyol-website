@@ -1816,22 +1816,31 @@ import '../../../styles/coyol-tables.css';
     function hasGiftCard(guestName) {
       if (!guestName) return false;
       const nameLower = guestName.toLowerCase().trim();
-      return giftCardsCache.some(g => 
-        g.status !== 'redeemed' && 
-        g.recipient_name && 
-        g.recipient_name.toLowerCase().trim() === nameLower
-      );
+      const firstName = nameLower.split(' ')[0]; // Get first name
+      return giftCardsCache.some(g => {
+        if (g.status === 'redeemed' || !g.recipient_name) return false;
+        const recipientLower = g.recipient_name.toLowerCase().trim();
+        // Match if: exact match, first name match, or name includes recipient
+        return recipientLower === nameLower || 
+               recipientLower === firstName || 
+               nameLower.includes(recipientLower) ||
+               recipientLower.includes(firstName);
+      });
     }
 
     // Get gift card details for a name
     function getGiftCardForName(guestName) {
       if (!guestName) return null;
       const nameLower = guestName.toLowerCase().trim();
-      return giftCardsCache.find(g => 
-        g.status !== 'redeemed' && 
-        g.recipient_name && 
-        g.recipient_name.toLowerCase().trim() === nameLower
-      );
+      const firstName = nameLower.split(' ')[0];
+      return giftCardsCache.find(g => {
+        if (g.status === 'redeemed' || !g.recipient_name) return false;
+        const recipientLower = g.recipient_name.toLowerCase().trim();
+        return recipientLower === nameLower || 
+               recipientLower === firstName || 
+               nameLower.includes(recipientLower) ||
+               recipientLower.includes(firstName);
+      });
     }
 
     // Get reservations from Supabase
