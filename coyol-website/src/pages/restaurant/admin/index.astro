@@ -2241,8 +2241,8 @@ import '../../../styles/coyol-tables.css';
           el.style.transform = `rotate(${45 + table.rotation}deg)`;
         }
         
-        // Find ALL reservations for this table today
-        const tableReservations = reservations.filter(r => r.tableId === table.id);
+        // Find ALL reservations for this table today (exclude cancelled)
+        const tableReservations = reservations.filter(r => r.tableId === table.id && r.status !== 'cancelled');
         const resCount = tableReservations.length;
         const nextRes = tableReservations[0]; // First upcoming
         
