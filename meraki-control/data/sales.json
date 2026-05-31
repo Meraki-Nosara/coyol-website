@@ -2775,6 +2775,42 @@
       "source": "ingrid_email",
       "cashier": "Emanuel Ugarte",
       "note": "USD billing day - Hotel Nosara"
+    },
+    {
+      "date": "2026-05-30",
+      "restaurant": "laluna",
+      "cash": 648050,
+      "card": 4059936,
+      "total": 4708030,
+      "netSales": 3801305,
+      "service10": 368555,
+      "iva13": 494170,
+      "source": "ingrid_email",
+      "cashier": "Isa Prendas"
+    },
+    {
+      "date": "2026-05-30",
+      "restaurant": "coyol",
+      "cash": 30100,
+      "card": 1815822,
+      "total": 1845922,
+      "netSales": 1500750,
+      "service10": 150075,
+      "iva13": 195098,
+      "source": "ingrid_email",
+      "cashier": "John Freiser"
+    },
+    {
+      "date": "2026-05-30",
+      "restaurant": "esh",
+      "cash": 20000,
+      "card": 335794,
+      "total": 355794,
+      "netSales": 294778,
+      "service10": 22695,
+      "iva13": 38321,
+      "source": "ingrid_email",
+      "cashier": "Juan Castillo"
     }
   ]
 }

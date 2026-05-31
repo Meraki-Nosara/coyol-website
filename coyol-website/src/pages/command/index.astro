@@ -333,39 +333,27 @@ const topHot = hot.sort((a: any, b: any) => b.lead_score - a.lead_score).slice(0
 </style>
 
 <script>
-  // Fetch live counts client-side
+  // Fetch live counts from API (uses service key server-side)
   async function updateLiveCounts() {
     try {
-      const today = new Date().toISOString().split('T')[0];
-      
-      const [hotRes, todayRes, totalRes] = await Promise.all([
-        fetch('https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/crm_guests?lead_score=gte.40&select=count', {
-          headers: { 'apikey': 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD', 'Prefer': 'count=exact' }
-        }),
-        fetch(`https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/crm_guests?lead_score=gte.40&created_at=gte.${today}&select=count`, {
-          headers: { 'apikey': 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD', 'Prefer': 'count=exact' }
-        }),
-        fetch('https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/crm_guests?select=count', {
-          headers: { 'apikey': 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD', 'Prefer': 'count=exact' }
-        })
-      ]);
-      
-      if (hotRes.ok) {
-        const data = await hotRes.json();
-        const el = document.getElementById('hotCount');
-        if (el && data[0]?.count) el.textContent = data[0].count.toLocaleString();
-      }
-      
-      if (todayRes.ok) {
-        const data = await todayRes.json();
-        const el = document.getElementById('newToday');
-        if (el) el.textContent = (data[0]?.count || 0).toLocaleString();
-      }
-      
-      if (totalRes.ok) {
-        const data = await totalRes.json();
-        const el = document.getElementById('totalGuests');
-        if (el && data[0]?.count) el.textContent = data[0].count.toLocaleString();
+      const res = await fetch('/api/crm-stats');
+      if (res.ok) {
+        const data = await res.json();
+        
+        const hotEl = document.getElementById('hotCount');
+        if (hotEl) hotEl.textContent = data.hotLeads.toLocaleString();
+        
+        const todayEl = document.getElementById('newToday');
+        if (todayEl) todayEl.textContent = data.newToday.toLocaleString();
+        
+        const totalEl = document.getElementById('totalGuests');
+        if (totalEl) totalEl.textContent = data.totalGuests.toLocaleString();
+        
+        const targetEl = document.getElementById('targetMarkets');
+        if (targetEl) targetEl.textContent = data.targetMarkets.toLocaleString();
+        
+        const corpEl = document.getElementById('corpEmails');
+        if (corpEl) corpEl.textContent = data.corporateEmails.toLocaleString();
       }
     } catch (e) {
       console.log('Live count fetch failed, using cached data');
