@@ -3948,12 +3948,19 @@ import '../../../styles/laluna-tables.css';
       };
       
       try {
-        await saveReservation(reservation);
+        console.log('Saving reservation:', reservation);
+        const result = await saveReservation(reservation);
+        console.log('Save result:', result);
+        if (result && result.error) {
+          alert('Error: ' + (result.message || JSON.stringify(result)));
+          return;
+        }
         closeModal();
         await loadReservations();
         renderFloor();
       } catch (e) {
-        alert('Failed to save reservation');
+        console.error('Save error:', e);
+        alert('Failed to save reservation: ' + e.message);
       }
     }
 

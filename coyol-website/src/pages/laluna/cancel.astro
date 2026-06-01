@@ -1,316 +1,210 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 
-const token = Astro.url.searchParams.get('token');
+const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+const SUPABASE_KEY = import.meta.env.SUPABASE_SERVICE_KEY || 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
 ---
 
-<Layout title="Cancel Reservation | La Luna" hideFloatingButtons={true}>
-  <div class="cancel-page">
-    <div class="cancel-card">
-      <div class="logo">
-        <img src="/images/laluna-moon-white-real.png" alt="La Luna" />
+<Layout title="Cancel Reservation | La Luna">
+  <style>
+    body {
+      background: #f5f3ef;
+      font-family: Georgia, serif;
+    }
+    .container {
+      max-width: 500px;
+      margin: 60px auto;
+      padding: 40px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .logo {
+      width: 80px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: #A65D3F;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .details {
+      background: #faf9f7;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      text-align: left;
+    }
+    .details p {
+      margin: 8px 0;
+      color: #333;
+    }
+    .details strong {
+      color: #666;
+    }
+    .btn-cancel {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .btn-cancel:hover {
+      background: #c82333;
+    }
+    .btn-back {
+      display: inline-block;
+      margin-top: 15px;
+      color: #A65D3F;
+      text-decoration: none;
+    }
+    .success {
+      color: #28a745;
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+    .error {
+      color: #dc3545;
+    }
+    .loading {
+      color: #666;
+    }
+  </style>
+  
+  <div class="container">
+    <img src="/images/laluna-logo.png" alt="La Luna" class="logo" onerror="this.style.display='none'">
+    
+    <div id="loading" class="loading">
+      <p>Loading reservation...</p>
+    </div>
+    
+    <div id="reservation" style="display:none;">
+      <h1>Cancel Reservation?</h1>
+      <div class="details">
+        <p><strong>Name:</strong> <span id="guestName"></span></p>
+        <p><strong>Date:</strong> <span id="date"></span></p>
+        <p><strong>Time:</strong> <span id="time"></span></p>
+        <p><strong>Guests:</strong> <span id="guests"></span></p>
       </div>
-      
-      <div id="loading">
-        <div class="spinner"></div>
-        <p>Loading your reservation...</p>
-      </div>
-      
-      <div id="notFound" style="display: none;">
-        <h1>Reservation Not Found</h1>
-        <p>This cancellation link is invalid or has already been used.</p>
-        <a href="/laluna" class="btn-back">Return to La Luna</a>
-      </div>
-      
-      <div id="details" style="display: none;">
-        <h1>Cancel Your Reservation?</h1>
-        
-        <div class="reservation-info">
-          <div class="info-row">
-            <span class="label">Guest</span>
-            <span class="value" id="guestName"></span>
-          </div>
-          <div class="info-row">
-            <span class="label">Date</span>
-            <span class="value" id="resDate"></span>
-          </div>
-          <div class="info-row">
-            <span class="label">Time</span>
-            <span class="value" id="resTime"></span>
-          </div>
-          <div class="info-row">
-            <span class="label">Party Size</span>
-            <span class="value" id="resGuests"></span>
-          </div>
-        </div>
-        
-        <p class="warning">This will free up your table for other guests.</p>
-        
-        <div class="buttons">
-          <a href="/laluna" class="btn-keep">Keep My Reservation</a>
-          <button id="cancelBtn" class="btn-cancel" onclick="cancelReservation()">Yes, Cancel It</button>
-        </div>
-      </div>
-      
-      <div id="cancelled" style="display: none;">
-        <div class="success-icon">✓</div>
-        <h1>Reservation Cancelled</h1>
-        <p>Your reservation has been cancelled. We hope to see you another time!</p>
-        <a href="/laluna/reserve" class="btn-rebook">Make a New Reservation</a>
-      </div>
+      <button class="btn-cancel" onclick="cancelReservation()">Yes, Cancel My Reservation</button>
+      <br>
+      <a href="https://lalunanosara.com" class="btn-back">← Keep my reservation</a>
+    </div>
+    
+    <div id="success" style="display:none;">
+      <div class="success">✓</div>
+      <h1>Reservation Cancelled</h1>
+      <p>Your reservation has been successfully cancelled.</p>
+      <p style="color:#666; margin-top:20px;">We hope to see you another time!</p>
+      <a href="https://lalunanosara.com/reserve" class="btn-back">Book a new reservation →</a>
+    </div>
+    
+    <div id="error" style="display:none;">
+      <h1 class="error">Unable to Cancel</h1>
+      <p id="errorMsg">This reservation could not be found or has already been cancelled.</p>
+      <a href="https://lalunanosara.com" class="btn-back">← Return to website</a>
     </div>
   </div>
-</Layout>
-
-<style>
-  .cancel-page {
-    min-height: 100vh;
-    background: linear-gradient(180deg, #1a1f16 0%, #2d3428 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
   
-  .cancel-card {
-    background: #f8f6f3;
-    border-radius: 20px;
-    padding: 40px;
-    max-width: 440px;
-    width: 100%;
-    text-align: center;
-  }
-  
-  .logo img {
-    height: 60px;
-    margin-bottom: 30px;
-    filter: brightness(0);
-  }
-  
-  .spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid #ddd;
-    border-top-color: #A65D3F;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 20px;
-  }
-  
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  
-  h1 {
-    color: #1a1f16;
-    font-size: 1.5rem;
-    margin: 0 0 20px 0;
-    font-family: 'Playfair Display', serif;
-  }
-  
-  .reservation-info {
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    margin: 20px 0;
-    text-align: left;
-  }
-  
-  .info-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .info-row:last-child {
-    border-bottom: none;
-  }
-  
-  .label {
-    color: #666;
-    font-size: 0.875rem;
-  }
-  
-  .value {
-    color: #1a1f16;
-    font-weight: 600;
-  }
-  
-  .warning {
-    color: #666;
-    font-size: 0.9rem;
-    margin: 20px 0;
-  }
-  
-  .buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 30px;
-  }
-  
-  .btn-keep {
-    display: block;
-    padding: 14px 24px;
-    background: #3D4F3D;
-    color: white;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 600;
-  }
-  
-  .btn-cancel {
-    padding: 14px 24px;
-    background: transparent;
-    color: #dc2626;
-    border: 2px solid #dc2626;
-    border-radius: 10px;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 1rem;
-  }
-  
-  .btn-cancel:hover {
-    background: #dc2626;
-    color: white;
-  }
-  
-  .btn-back, .btn-rebook {
-    display: inline-block;
-    padding: 14px 24px;
-    background: #A65D3F;
-    color: white;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 600;
-    margin-top: 20px;
-  }
-  
-  .success-icon {
-    width: 60px;
-    height: 60px;
-    background: #22c55e;
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    margin: 0 auto 20px;
-  }
-  
-  #cancelled p {
-    color: #666;
-    margin: 10px 0;
-  }
-</style>
-
-<script define:vars={{ token }}>
-  const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
-  
-  let reservationId = null;
-  
-  async function loadReservation() {
-    if (!token) {
-      showNotFound();
-      return;
-    }
+  <script define:vars={{ SUPABASE_URL, SUPABASE_KEY }}>
+    let reservationId = null;
     
-    try {
-      const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/laluna_reservations?cancel_token=eq.${token}&select=*`,
-        {
+    async function loadReservation() {
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get('token');
+      
+      if (!token) {
+        showError('No cancellation token provided.');
+        return;
+      }
+      
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?cancel_token=eq.${token}&select=*`, {
           headers: {
             'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
           }
+        });
+        
+        const data = await res.json();
+        
+        if (!data || data.length === 0) {
+          showError('Reservation not found or already cancelled.');
+          return;
         }
-      );
-      
-      const data = await res.json();
-      
-      if (!data || data.length === 0) {
-        showNotFound();
-        return;
-      }
-      
-      const reservation = data[0];
-      
-      if (reservation.status === 'cancelled') {
+        
+        const reservation = data[0];
+        reservationId = reservation.id;
+        
+        if (reservation.status === 'cancelled') {
+          showError('This reservation has already been cancelled.');
+          return;
+        }
+        
+        // Show reservation details
+        document.getElementById('guestName').textContent = reservation.guest_name;
+        document.getElementById('date').textContent = formatDate(reservation.date);
+        document.getElementById('time').textContent = formatTime(reservation.time);
+        document.getElementById('guests').textContent = reservation.guests + ' guests';
+        
         document.getElementById('loading').style.display = 'none';
-        document.getElementById('cancelled').style.display = 'block';
-        return;
+        document.getElementById('reservation').style.display = 'block';
+        
+      } catch (e) {
+        console.error('Error loading reservation:', e);
+        showError('Unable to load reservation. Please try again.');
       }
-      
-      reservationId = reservation.id;
-      
-      // Populate details
-      document.getElementById('guestName').textContent = reservation.guest_name;
-      document.getElementById('resDate').textContent = new Date(reservation.date + 'T12:00:00').toLocaleDateString('en-US', {
-        weekday: 'long',
-        month: 'long',
-        day: 'numeric'
-      });
-      document.getElementById('resTime').textContent = formatTime12(reservation.time);
-      document.getElementById('resGuests').textContent = reservation.guests + ' guests';
-      
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('details').style.display = 'block';
-      
-    } catch (e) {
-      console.error(e);
-      showNotFound();
     }
-  }
-  
-  function showNotFound() {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('notFound').style.display = 'block';
-  }
-  
-  function formatTime12(time) {
-    if (!time) return '';
-    const [h, m] = time.split(':');
-    const hour = parseInt(h);
-    const ampm = hour >= 12 ? 'PM' : 'AM';
-    const hour12 = hour % 12 || 12;
-    return `${hour12}:${m} ${ampm}`;
-  }
-  
-  window.cancelReservation = async function() {
-    const btn = document.getElementById('cancelBtn');
-    btn.textContent = 'Cancelling...';
-    btn.disabled = true;
     
-    try {
-      const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/laluna_reservations?cancel_token=eq.${token}`,
-        {
+    async function cancelReservation() {
+      if (!reservationId) return;
+      
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${reservationId}`, {
           method: 'PATCH',
           headers: {
             'apikey': SUPABASE_KEY,
             'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({ status: 'cancelled' })
+        });
+        
+        if (res.ok) {
+          document.getElementById('reservation').style.display = 'none';
+          document.getElementById('success').style.display = 'block';
+        } else {
+          showError('Failed to cancel reservation. Please contact us directly.');
         }
-      );
-      
-      if (res.ok) {
-        document.getElementById('details').style.display = 'none';
-        document.getElementById('cancelled').style.display = 'block';
-      } else {
-        alert('Failed to cancel. Please try again.');
-        btn.textContent = 'Yes, Cancel It';
-        btn.disabled = false;
+      } catch (e) {
+        console.error('Error cancelling:', e);
+        showError('An error occurred. Please contact us directly.');
       }
-    } catch (e) {
-      alert('Failed to cancel. Please try again.');
-      btn.textContent = 'Yes, Cancel It';
-      btn.disabled = false;
     }
-  };
-  
-  loadReservation();
-</script>
+    
+    function showError(msg) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('errorMsg').textContent = msg;
+      document.getElementById('error').style.display = 'block';
+    }
+    
+    function formatDate(dateStr) {
+      const date = new Date(dateStr + 'T12:00:00');
+      return date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+    }
+    
+    function formatTime(timeStr) {
+      const [h, m] = timeStr.split(':');
+      const hour = parseInt(h);
+      const ampm = hour >= 12 ? 'PM' : 'AM';
+      const h12 = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
+      return `${h12}:${m} ${ampm}`;
+    }
+    
+    loadReservation();
+  </script>
+</Layout>
