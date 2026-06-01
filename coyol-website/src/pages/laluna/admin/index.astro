@@ -2400,22 +2400,7 @@ import '../../../styles/laluna-tables.css';
 
     // Save new reservation to Supabase
     async function saveReservation(reservation) {
-      console.log('saveReservation called with:', reservation);
       try {
-        const body = {
-          date: reservation.date,
-          time: reservation.time,
-          guests: reservation.guests,
-          guest_name: reservation.guestName,
-          guest_phone: reservation.guestPhone || '',
-          guest_email: reservation.guestEmail || '',
-          table_id: reservation.tableId || null,
-          zone_preference: reservation.zonePreference || null,
-          special_requests: reservation.specialRequests || '',
-          status: reservation.status || 'confirmed'
-        };
-        console.log('POST body:', JSON.stringify(body));
-        
         const res = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations`, {
           method: 'POST',
           headers: {
@@ -2424,23 +2409,22 @@ import '../../../styles/laluna-tables.css';
             'Content-Type': 'application/json',
             'Prefer': 'return=representation'
           },
-          body: JSON.stringify(body)
+          body: JSON.stringify({
+            date: reservation.date,
+            time: reservation.time,
+            guests: reservation.guests,
+            guest_name: reservation.guestName,
+            guest_phone: reservation.guestPhone || '',
+            guest_email: reservation.guestEmail || '',
+            table_id: reservation.tableId || null,
+            zone_preference: reservation.zonePreference || null,
+            special_requests: reservation.specialRequests || '',
+            status: reservation.status || 'confirmed'
+          })
         });
-        
-        console.log('Response status:', res.status);
-        const data = await res.json();
-        console.log('Response data:', data);
-        
-        if (!res.ok) {
-          alert('Supabase error: ' + (data.message || JSON.stringify(data)));
-          return { error: true, ...data };
-        }
-        
-        alert('Reservation saved successfully!');
-        return data;
+        return await res.json();
       } catch (e) {
         console.error('Failed to save reservation:', e);
-        alert('Network error: ' + e.message);
         throw e;
       }
     }
@@ -3925,10 +3909,7 @@ import '../../../styles/laluna-tables.css';
     }
 
     async function saveNewReservation() {
-      alert('SAVE clicked - function started');
-      console.log('saveNewReservation called');
       const name = document.getElementById('newName').value.trim();
-      console.log('Name:', name);
       if (!name) { alert('Name required'); return; }
       
       const date = document.getElementById('newDate').value;
@@ -3938,7 +3919,8 @@ import '../../../styles/laluna-tables.css';
       
       // Check for duplicate reservation (same name, same date)
       const nameLower = name.toLowerCase();
-      const duplicate = reservations.find(r => 
+      const allReservations = getReservations();
+      const duplicate = allReservations.find(r => 
         r.date === date && 
         r.guestName?.toLowerCase() === nameLower &&
         r.status !== 'cancelled' && r.status !== 'no-show'
