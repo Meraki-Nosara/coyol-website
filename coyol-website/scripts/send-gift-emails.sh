@@ -54,16 +54,12 @@ Content-Type: text/html; charset=utf-8
             </td>
           </tr>
           <tr>
-            <td>
-              <table width="100%" style="background: ${TIER_COLOR}; border-radius: 16px;">
-                <tr>
-                  <td style="padding: 40px; text-align: center;">
-                    <p style="color: #F5F3EF; opacity: 0.8; font-size: 12px; text-transform: uppercase; letter-spacing: 3px; margin: 0 0 20px 0;">${TIER} Gift Card</p>
-                    <p style="color: #F5F3EF; font-size: 48px; font-weight: bold; margin: 0;">\$${AMOUNT}</p>
-                    <p style="color: #F5F3EF; opacity: 0.9; font-size: 14px; margin: 20px 0 0 0; letter-spacing: 2px;">${CODE}</p>
-                  </td>
-                </tr>
-              </table>
+            <td align="center" style="padding-bottom: 20px;">
+              <!-- Gift Card Image -->
+              <img src="https://coyolnosara.com/api/gift-card-image?code=${CODE}&amount=${AMOUNT}&name=${RECIPIENT_NAME// /%20}" 
+                   alt="La Luna Gift Card - \$${AMOUNT}" 
+                   width="500" 
+                   style="max-width: 100%; height: auto; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);" />
             </td>
           </tr>
           <tr>
