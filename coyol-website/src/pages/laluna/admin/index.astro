@@ -2400,7 +2400,22 @@ import '../../../styles/laluna-tables.css';
 
     // Save new reservation to Supabase
     async function saveReservation(reservation) {
+      console.log('saveReservation called with:', reservation);
       try {
+        const body = {
+          date: reservation.date,
+          time: reservation.time,
+          guests: reservation.guests,
+          guest_name: reservation.guestName,
+          guest_phone: reservation.guestPhone || '',
+          guest_email: reservation.guestEmail || '',
+          table_id: reservation.tableId || null,
+          zone_preference: reservation.zonePreference || null,
+          special_requests: reservation.specialRequests || '',
+          status: reservation.status || 'confirmed'
+        };
+        console.log('POST body:', JSON.stringify(body));
+        
         const res = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations`, {
           method: 'POST',
           headers: {
@@ -2409,22 +2424,23 @@ import '../../../styles/laluna-tables.css';
             'Content-Type': 'application/json',
             'Prefer': 'return=representation'
           },
-          body: JSON.stringify({
-            date: reservation.date,
-            time: reservation.time,
-            guests: reservation.guests,
-            guest_name: reservation.guestName,
-            guest_phone: reservation.guestPhone,
-            guest_email: reservation.guestEmail,
-            table_id: reservation.tableId,
-            zone_preference: reservation.zonePreference,
-            special_requests: reservation.specialRequests,
-            status: reservation.status || 'confirmed'
-          })
+          body: JSON.stringify(body)
         });
-        return await res.json();
+        
+        console.log('Response status:', res.status);
+        const data = await res.json();
+        console.log('Response data:', data);
+        
+        if (!res.ok) {
+          alert('Supabase error: ' + (data.message || JSON.stringify(data)));
+          return { error: true, ...data };
+        }
+        
+        alert('Reservation saved successfully!');
+        return data;
       } catch (e) {
         console.error('Failed to save reservation:', e);
+        alert('Network error: ' + e.message);
         throw e;
       }
     }
