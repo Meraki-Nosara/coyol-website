@@ -443,8 +443,9 @@ import '../../../styles/coyol-tables.css';
 
     .admin {
       display: grid;
-      grid-template-columns: 60px 380px 1fr;
+      grid-template-columns: 60px 380px minmax(500px, 1fr);
       min-height: 100vh;
+      min-width: 1000px; /* Don't collapse - scroll instead */
       background: var(--parchment);
     }
 
