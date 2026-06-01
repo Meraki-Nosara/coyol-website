@@ -1740,7 +1740,8 @@ import '../../../styles/coyol-tables.css';
     .btn-secondary:hover { background: var(--parchment); }
 
     /* Tablet/narrow screen: stack layout */
-    @media (max-width: 1024px) {
+    /* Tablet/small laptop - stack vertically */
+    @media (max-width: 1200px) {
       .admin {
         grid-template-columns: 60px 1fr;
         grid-template-rows: auto 1fr;
@@ -1748,15 +1749,37 @@ import '../../../styles/coyol-tables.css';
       .res-panel {
         grid-column: 2;
         grid-row: 1;
-        max-height: 50vh;
+        max-height: 40vh;
         overflow-y: auto;
         border-bottom: 1px solid var(--limestone);
         border-right: none;
+        min-width: unset;
       }
       .floor-area {
         grid-column: 2;
         grid-row: 2;
-        min-height: 50vh;
+        min-height: 60vh;
+      }
+    }
+
+    /* Small screens - hide sidebar */
+    @media (max-width: 1024px) {
+      .admin {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+      }
+      .sidebar {
+        display: none;
+      }
+      .res-panel {
+        grid-column: 1;
+        grid-row: 1;
+        max-height: 35vh;
+      }
+      .floor-area {
+        grid-column: 1;
+        grid-row: 2;
+        min-height: 65vh;
       }
     }
 
