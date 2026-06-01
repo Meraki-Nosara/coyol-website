@@ -103,7 +103,7 @@ function generateEmailHtml(reservation) {
             <td style="padding: 20px 40px 30px; text-align: center; background: #faf9f7;">
               <p style="color: #333; margin: 0 0 8px; font-size: 16px; font-weight: bold;">La Luna Restaurant</p>
               <p style="color: #666; margin: 0 0 4px; font-size: 14px;">Guiones, Nosara, Costa Rica</p>
-              <p style="color: #666; margin: 0; font-size: 14px;">+506 2682-0122</p>
+              <p style="color: #666; margin: 0; font-size: 14px;">+506 8996-8221</p>
             </td>
           </tr>
 
@@ -118,7 +118,7 @@ function generateEmailHtml(reservation) {
           <tr>
             <td style="background-color: #A65D3F; padding: 30px 40px; text-align: center;">
               <p style="color: #ffffff; margin: 0 0 8px; font-size: 14px; opacity: 0.9;">We look forward to welcoming you</p>
-              <p style="color: #ffffff; margin: 0; font-size: 12px; opacity: 0.7;">Questions? Reply to this email or call +506 2682-0122</p>
+              <p style="color: #ffffff; margin: 0; font-size: 12px; opacity: 0.7;">Questions? Reply to this email or call +506 8996-8221</p>
             </td>
           </tr>
 

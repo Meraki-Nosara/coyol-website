@@ -101,7 +101,7 @@ EOF
               <p style="color: #F5F3EF; opacity: 0.5; font-size: 12px; margin: 0;">
                 La Luna Restaurant<br>
                 Guiones, Nosara, Costa Rica<br>
-                +506 2682-0122
+                +506 8996-8221
               </p>
             </td>
           </tr>
