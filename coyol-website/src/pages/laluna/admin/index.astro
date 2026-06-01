@@ -2314,11 +2314,11 @@ import '../../../styles/laluna-tables.css';
       const layout = getLayout();
       
       // Zone priority (lower = better)
-      // Priority: Garden first (best), then Terraza, then Inside
+      // Priority: Garden ALWAYS first, then Terraza, then Inside
       const zonePriority = {
-        'jardin': 0,    // Garden = best (assign first)
-        'terraza': 100, // Terraza = second choice
-        'inside': 200   // Indoor = last resort
+        'jardin': 0,      // Garden = ALWAYS first priority
+        'terraza': 1000,  // Terraza = only when garden full
+        'inside': 2000    // Indoor = last resort
       };
       
       const basePriority = zonePriority[zone] || 300;
@@ -2379,7 +2379,9 @@ import '../../../styles/laluna-tables.css';
         // Check capacity (use defaults if not set: min=1, max=10)
         const minC = table.minCovers || 1;
         const maxC = table.maxCovers || 10;
-        if (guests < minC || guests > maxC) continue;
+        // For Jardin, allow smaller parties (seat them even if table is bigger)
+        const effectiveMin = (table.zone === 'jardin') ? 1 : minC;
+        if (guests < effectiveMin || guests > maxC) continue;
         
         // Check if table is occupied during this time window
         const conflicting = reservations.some(r => {
