@@ -42,6 +42,12 @@ import '../../../styles/coyol-tables.css';
         </div>
       </div>
 
+      <!-- Search Bar -->
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search name or confirmation #..." autocomplete="off" />
+        <button id="clearSearch" class="clear-search" style="display:none;">✕</button>
+      </div>
+
       <!-- Reservations List -->
       <div class="res-list" id="resList">
         <!-- Rendered by JS -->
@@ -647,6 +653,45 @@ import '../../../styles/coyol-tables.css';
       display: flex;
       align-items: center;
       gap: 0.25rem;
+    }
+
+    /* Search Bar */
+    .search-bar {
+      padding: 0.75rem 1rem;
+      background: var(--cream);
+      border-bottom: 1px solid var(--limestone);
+      position: relative;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 0.6rem 2rem 0.6rem 0.75rem;
+      border: 1px solid var(--limestone);
+      border-radius: 6px;
+      font-size: 0.875rem;
+      background: white;
+    }
+
+    .search-bar input:focus {
+      outline: none;
+      border-color: var(--green);
+    }
+
+    .clear-search {
+      position: absolute;
+      right: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #999;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0.25rem;
+    }
+
+    .clear-search:hover {
+      color: var(--green);
     }
 
     /* Reservations List */
@@ -2138,6 +2183,21 @@ import '../../../styles/coyol-tables.css';
       // Sort by time
       filtered.sort((a, b) => a.time.localeCompare(b.time));
       
+      // Filter by search query
+      const searchQuery = document.getElementById('searchInput')?.value?.toLowerCase().trim();
+      if (searchQuery) {
+        filtered = filtered.filter(res => {
+          const name = (res.guestName || '').toLowerCase();
+          const confCode = res.id.slice(0, 8).toLowerCase();
+          const phone = (res.guestPhone || '').replace(/\D/g, '');
+          const email = (res.guestEmail || '').toLowerCase();
+          return name.includes(searchQuery) || 
+                 confCode.includes(searchQuery) || 
+                 phone.includes(searchQuery.replace(/\D/g, '')) ||
+                 email.includes(searchQuery);
+        });
+      }
+      
       // Group by shift
       const byShift = {};
       filtered.forEach(res => {
@@ -3227,6 +3287,21 @@ import '../../../styles/coyol-tables.css';
       window.location.href = '/restaurant/admin/login';
     };
 
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    const clearSearchBtn = document.getElementById('clearSearch');
+    
+    searchInput.addEventListener('input', () => {
+      clearSearchBtn.style.display = searchInput.value ? 'block' : 'none';
+      loadReservations();
+    });
+    
+    clearSearchBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      clearSearchBtn.style.display = 'none';
+      loadReservations();
+    });
+    
     // Initial load
     loadShifts();
     loadLayoutFromSupabase(); // Load floor layout from Supabase
