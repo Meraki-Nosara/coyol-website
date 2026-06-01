@@ -354,3 +354,23 @@ himalaya flag add <ID> seen               # Mark read after processing
 - Role: Food control & ordering (all 3 locations)
 - Also oversees Esh (smaller operation)
 - Hired by Angelina
+
+---
+
+## 📰 La Gaceta Monitor — CHECK DAILY!
+
+**Script:** `bash ~/.openclaw/workspace/scripts/check-la-gaceta.sh`
+
+Monitors Costa Rica's official gazette for mentions of:
+- SFERA (legal case)
+- Mar Azul (condominium)
+- Maryon/Marion Peri
+- La Luna Nosara
+- ZMT Nosara (concession)
+- Case number 26-000076-1632
+
+**If script returns exit code 2 → ALERT MARION IMMEDIATELY!**
+
+Government publishes permit applications, legal notifications, and concession updates in La Gaceta before granting them. Early detection = time to respond.
+
+**Run once daily** (morning is best, new editions publish ~6am).
