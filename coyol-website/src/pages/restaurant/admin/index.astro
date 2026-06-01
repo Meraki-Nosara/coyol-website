@@ -2977,9 +2977,71 @@ import '../../../styles/coyol-tables.css';
     });
 
     // Search
-    // Search functionality - both inputs
-    document.getElementById('searchInput').addEventListener('input', () => loadReservations());
-    document.getElementById('searchInputMiddle').addEventListener('input', () => loadReservations());
+    // Search functionality - filter without re-fetching
+    function filterAndRenderReservations() {
+      const reservations = getReservations();
+      const searchQuery = (document.getElementById('searchInputMiddle')?.value || document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+      
+      let filtered = reservations;
+      
+      // Filter by status
+      if (currentStatusFilter === 'seated') {
+        filtered = filtered.filter(r => r.status === 'seated');
+      } else {
+        filtered = filtered.filter(r => r.status !== 'seated' && r.status !== 'completed');
+      }
+      
+      // Filter by search
+      if (searchQuery) {
+        filtered = filtered.filter(res => {
+          const name = (res.guestName || '').toLowerCase();
+          const confCode = res.id.slice(0, 8).toLowerCase();
+          const phone = (res.guestPhone || '').replace(/\D/g, '');
+          const email = (res.guestEmail || '').toLowerCase();
+          return name.includes(searchQuery) || confCode.includes(searchQuery) || phone.includes(searchQuery.replace(/\D/g, '')) || email.includes(searchQuery);
+        });
+      }
+      
+      // Sort and group
+      filtered.sort((a, b) => a.time.localeCompare(b.time));
+      const byShift = {};
+      filtered.forEach(res => {
+        const shift = getShiftForTime(res.time);
+        if (!byShift[shift]) byShift[shift] = [];
+        byShift[shift].push(res);
+      });
+      
+      // Update counts
+      document.getElementById('totalCovers').textContent = filtered.reduce((sum, r) => sum + (parseInt(r.guests) || 2), 0);
+      document.getElementById('totalRes').textContent = filtered.length;
+      
+      // Render list
+      const list = document.getElementById('resList');
+      if (filtered.length === 0) {
+        list.innerHTML = '<div style="padding: 2rem; text-align: center; color: #999;">No reservations found</div>';
+        return;
+      }
+      
+      list.innerHTML = Object.entries(byShift).map(([shift, items]) => `
+        <div class="shift-group">
+          <div class="shift-header">
+            <span>${shift}</span>
+            <span class="shift-stats">${items.length} res / ${items.reduce((s, r) => s + (parseInt(r.guests) || 2), 0)} covers</span>
+          </div>
+          ${items.map(res => `
+            <div class="res-row ${res.status}" onclick="selectReservation('${res.id}')">
+              <div class="res-time">${formatTime12(res.time)}</div>
+              <span class="res-name">${res.guestName}</span>
+              <span class="res-pax">${res.guests}p</span>
+              <span class="res-table">${res.tableId ? res.tableId.replace('t','T') : 'TBA'}</span>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+    }
+    
+    document.getElementById('searchInput').addEventListener('input', filterAndRenderReservations);
+    document.getElementById('searchInputMiddle').addEventListener('input', filterAndRenderReservations);
 
     // Populate table dropdown for new reservation modal
     function populateTableDropdown(preselectedTableId = null) {
