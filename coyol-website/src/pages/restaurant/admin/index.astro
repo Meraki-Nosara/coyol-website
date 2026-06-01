@@ -22,7 +22,7 @@ import '../../../styles/coyol-tables.css';
           <span class="res-count" id="resCount">RESERVATIONS <strong>0</strong></span>
           <span class="waitlist-count">WAITLIST <strong>0</strong></span>
         </div>
-        <input type="text" class="search-input" id="searchInput" placeholder="Search" />
+        <input type="text" class="search-input" id="searchInput" placeholder="Search name or code..." autocomplete="off" />
       </div>
 
       <!-- Filters -->
@@ -40,12 +40,6 @@ import '../../../styles/coyol-tables.css';
           <span>👥 <span id="totalCovers">0</span></span>
           <span>🪑 <span id="totalRes">0</span></span>
         </div>
-      </div>
-
-      <!-- Search Bar -->
-      <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="Search name or confirmation #..." autocomplete="off" />
-        <button id="clearSearch" class="clear-search" style="display:none;">✕</button>
       </div>
 
       <!-- Reservations List -->
@@ -653,45 +647,6 @@ import '../../../styles/coyol-tables.css';
       display: flex;
       align-items: center;
       gap: 0.25rem;
-    }
-
-    /* Search Bar */
-    .search-bar {
-      padding: 0.75rem 1rem;
-      background: var(--cream);
-      border-bottom: 1px solid var(--limestone);
-      position: relative;
-    }
-
-    .search-bar input {
-      width: 100%;
-      padding: 0.6rem 2rem 0.6rem 0.75rem;
-      border: 1px solid var(--limestone);
-      border-radius: 6px;
-      font-size: 0.875rem;
-      background: white;
-    }
-
-    .search-bar input:focus {
-      outline: none;
-      border-color: var(--green);
-    }
-
-    .clear-search {
-      position: absolute;
-      right: 1.5rem;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: #999;
-      cursor: pointer;
-      font-size: 1rem;
-      padding: 0.25rem;
-    }
-
-    .clear-search:hover {
-      color: var(--green);
     }
 
     /* Reservations List */
@@ -2997,11 +2952,7 @@ import '../../../styles/coyol-tables.css';
 
     // Search
     document.getElementById('searchInput').addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase();
-      document.querySelectorAll('.res-item').forEach(item => {
-        const text = item.textContent.toLowerCase();
-        item.style.display = text.includes(query) ? 'grid' : 'none';
-      });
+      loadReservations(); // Re-render with search filter applied
     });
 
     // Populate table dropdown for new reservation modal
@@ -3287,21 +3238,6 @@ import '../../../styles/coyol-tables.css';
       window.location.href = '/restaurant/admin/login';
     };
 
-    // Search functionality
-    const searchInput = document.getElementById('searchInput');
-    const clearSearchBtn = document.getElementById('clearSearch');
-    
-    searchInput.addEventListener('input', () => {
-      clearSearchBtn.style.display = searchInput.value ? 'block' : 'none';
-      loadReservations();
-    });
-    
-    clearSearchBtn.addEventListener('click', () => {
-      searchInput.value = '';
-      clearSearchBtn.style.display = 'none';
-      loadReservations();
-    });
-    
     // Initial load
     loadShifts();
     loadLayoutFromSupabase(); // Load floor layout from Supabase
