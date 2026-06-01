@@ -249,7 +249,7 @@ import '../../../styles/laluna-tables.css';
         </div>
         <div class="modal-footer">
           <button class="btn-secondary" onclick="closeModal()">Cancel</button>
-          <button class="btn-primary" onclick="saveNewReservation()">Save</button>
+          <button type="button" class="btn-primary" onclick="saveNewReservation(); return false;">SAVE</button>
         </div>
       </div>
     </div>
@@ -3909,7 +3909,9 @@ import '../../../styles/laluna-tables.css';
     }
 
     async function saveNewReservation() {
+      console.log('saveNewReservation called');
       const name = document.getElementById('newName').value.trim();
+      console.log('Name:', name);
       if (!name) { alert('Name required'); return; }
       
       const date = document.getElementById('newDate').value;
