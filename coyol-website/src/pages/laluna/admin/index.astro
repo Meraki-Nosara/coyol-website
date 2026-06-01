@@ -3199,9 +3199,12 @@ import '../../../styles/laluna-tables.css';
         
         // Close edit modal and refresh
         document.getElementById('editResModal')?.classList.remove('open');
+        // Clear cache and force full reload
+        cachedReservations = [];
         await loadReservations();
         renderReservations();
         renderFloor();
+        console.log('Reservation saved, floor refreshed for date:', getDateString(currentDate));
         
         // Show success and reopen detail
         const updatedRes = cachedReservations.find(r => r.id === selectedReservationId);
