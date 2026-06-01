@@ -1023,37 +1023,16 @@ import '../../../styles/coyol-tables.css';
     /* Floor Area */
     .floor-area {
       flex: 1;
-      padding: 0.5rem;
+      padding: 1rem;
       overflow: auto;
-      display: flex;
-      flex-direction: column;
     }
 
     .floor-grid {
       background: var(--cream);
       border-radius: 8px;
-      min-height: 400px;
-      flex: 1;
+      min-height: 500px;
       position: relative;
       border: 1px solid var(--limestone);
-      /* Scale down on smaller screens */
-      transform-origin: top left;
-    }
-
-    @media (max-width: 1200px) {
-      .floor-grid {
-        min-height: 300px;
-        transform: scale(0.85);
-        width: 118%;
-      }
-    }
-
-    @media (max-width: 900px) {
-      .floor-grid {
-        min-height: 250px;
-        transform: scale(0.7);
-        width: 143%;
-      }
     }
 
     /* Tables on floor - 3D realistic style */
@@ -1760,65 +1739,8 @@ import '../../../styles/coyol-tables.css';
     .btn-secondary { padding: 0.5rem 1rem; background: var(--cream); color: var(--santorini); border: 1px solid var(--limestone); border-radius: 4px; font-size: 0.8125rem; cursor: pointer; font-family: 'Inter', sans-serif; }
     .btn-secondary:hover { background: var(--parchment); }
 
-    /* Tablet/narrow screen: stack layout */
-    /* Tablet/small laptop - stack vertically */
-    @media (max-width: 1200px) {
-      .admin {
-        grid-template-columns: 60px 1fr;
-        grid-template-rows: auto 1fr;
-      }
-      .res-panel {
-        grid-column: 2;
-        grid-row: 1;
-        max-height: 40vh;
-        overflow-y: auto;
-        border-bottom: 1px solid var(--limestone);
-        border-right: none;
-        min-width: unset;
-      }
-      .floor-area {
-        grid-column: 2;
-        grid-row: 2;
-        min-height: 60vh;
-      }
-    }
-
-    /* Small screens - hide sidebar */
-    @media (max-width: 1024px) {
-      .admin {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto 1fr;
-      }
-      .sidebar {
-        display: none;
-      }
-      .res-panel {
-        grid-column: 1;
-        grid-row: 1;
-        max-height: 35vh;
-      }
-      .floor-area {
-        grid-column: 1;
-        grid-row: 2;
-        min-height: 65vh;
-      }
-    }
-
-    /* Mobile: hide sidebar, full width */
-    @media (max-width: 768px) {
-      .admin {
-        grid-template-columns: 1fr;
-      }
-      .sidebar {
-        display: none;
-      }
-      .res-panel {
-        grid-column: 1;
-      }
-      .floor-area {
-        grid-column: 1;
-      }
-    }
+    /* No responsive breakpoints - fixed layout like La Luna */
+    /* Mobile users should use the mobile version instead */
   </style>
 
   <script is:inline>
