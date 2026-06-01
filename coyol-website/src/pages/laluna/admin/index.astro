@@ -3271,7 +3271,7 @@ import '../../../styles/laluna-tables.css';
         // Clear cache and force full reload
         cachedReservations = [];
         await loadReservations();
-        renderReservations();
+        loadReservations();
         renderFloor();
         console.log('Reservation saved, floor refreshed for date:', getDateString(currentDate));
         
@@ -4135,7 +4135,7 @@ import '../../../styles/laluna-tables.css';
     let currentShiftFilter = 'all';
     document.getElementById('shiftSelect').addEventListener('change', (e) => {
       currentShiftFilter = e.target.value;
-      renderReservations();
+      loadReservations();
     });
     
     // Search functionality
