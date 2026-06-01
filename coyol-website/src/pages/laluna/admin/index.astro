@@ -2908,7 +2908,14 @@ import '../../../styles/laluna-tables.css';
         return;
       }
       
-      // Otherwise show the table popup for occupied tables
+      // If table has ONE reservation, open edit modal directly
+      if (data.tableReservations.length === 1) {
+        const res = data.tableReservations[0];
+        selectReservation(res.id);
+        return;
+      }
+      
+      // If multiple reservations, show popup to choose which one
       showTableActionPopup(data.table, data.tableReservations);
     }
     window.handleTableClick = handleTableClick;
