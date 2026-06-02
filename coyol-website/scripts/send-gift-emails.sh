@@ -103,6 +103,11 @@ EOF
                 Guiones, Nosara, Costa Rica<br>
                 +506 8996-8221
               </p>
+              <p style="color: #F5F3EF; opacity: 0.35; font-size: 10px; margin: 15px 0 0 0; line-height: 1.5;">
+                Gift cards are non-refundable and cannot be exchanged for cash.<br>
+                Lost or stolen cards cannot be replaced. Gratuity not included.<br>
+                Valid only at La Luna Nosara. No expiration date.
+              </p>
             </td>
           </tr>
         </table>
@@ -173,6 +178,11 @@ Content-Type: text/html; charset=utf-8
               <p style="color: #F5F3EF; opacity: 0.5; font-size: 12px; margin: 0;">
                 La Luna Restaurant<br>
                 Guiones, Nosara, Costa Rica
+              </p>
+              <p style="color: #F5F3EF; opacity: 0.35; font-size: 10px; margin: 15px 0 0 0; line-height: 1.5;">
+                Gift cards are non-refundable and cannot be exchanged for cash.<br>
+                Lost or stolen cards cannot be replaced. Gratuity not included.<br>
+                Valid only at La Luna Nosara. No expiration date.
               </p>
             </td>
           </tr>

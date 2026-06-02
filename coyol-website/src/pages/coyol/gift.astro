@@ -75,6 +75,11 @@ import Layout from '../../layouts/Layout.astro';
 
         <p class="secure-note">🔒 Secure payment powered by Stripe</p>
       </form>
+      
+      <p class="terms-note">
+        Gift cards are non-refundable and cannot be exchanged for cash. Lost or stolen cards cannot be replaced. 
+        Gratuity not included. Valid only at Coyol Restaurant. No expiration date.
+      </p>
     </section>
   </main>
 </Layout>
@@ -363,6 +368,16 @@ import Layout from '../../layouts/Layout.astro';
     margin-top: 1rem;
     font-size: 0.85rem;
     opacity: 0.6;
+  }
+
+  .terms-note {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
   }
 
   .back-link {
