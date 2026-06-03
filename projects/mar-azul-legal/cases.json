@@ -3,8 +3,8 @@
     {
       "id": "26-000076-1632-CI",
       "court": "Tribunal Colegiado de Primera Instancia Civil del II Circuito Judicial de Guanacaste (Nicoya)",
-      "judge": "MSc. Jos\u00e9 Carlos Aguilar Bonilla",
-      "type": "Suspensi\u00f3n Provisional de Acuerdos",
+      "judge": "MSc. José Carlos Aguilar Bonilla",
+      "type": "Suspensión Provisional de Acuerdos",
       "status": "active",
       "filed": "2026-05-04",
       "resolution_date": "2026-05-06",
@@ -15,7 +15,7 @@
         "Rancho Verde Riabov Limitada",
         "Gratum Nosara SRL",
         "Propiedades y Terrenos Terrazas del Arco Iris Limitada",
-        "Rancho Azul Guzm\u00e1n Limitada"
+        "Rancho Azul Guzmán Limitada"
       ],
       "plaintiff_lawyer": {
         "name": "Luis Guillermo Alfaro Vargas",
@@ -39,10 +39,81 @@
           "pages": 8
         }
       ],
-      "notes": "SFERA Legal representing multiple shell companies challenging HOA decisions. Court denied their request for emergency injunction without hearing. URGENT: Served Sunday May 18 - deadline is Wednesday May 21!",
+      "notes": "SFERA Legal representing multiple shell companies challenging HOA decisions. Court denied their request for emergency injunction without hearing.",
       "forwarded_to": "Lawyers",
       "forwarded_date": "2026-05-21"
+    },
+    {
+      "id": "25-000372-0414-PE",
+      "court": "Fiscalía Adjunta del II Circuito Judicial de Guanacaste (Nicoya) - PENAL",
+      "fiscal": "MSc. Danny Francisco Arroyo Vargas",
+      "type": "Denuncia Penal - Acción Pública",
+      "status": "URGENTE - CITACIÓN ACTIVA",
+      "filed": "2025-03-17",
+      "ampliacion_date": "unknown - need to obtain",
+      "crime": "Usurpación (Art. 225 Código Penal)",
+      "original_crime": "Extorsión y Usurpación",
+      "plaintiffs": [
+        "Matthew O'Connell Fitzmaurice",
+        "Rancho Azul Guzeman Limitada (3-102-847228)"
+      ],
+      "plaintiff_lawyer": {
+        "name": "SFERA Legal",
+        "website": "sferalegal.com"
+      },
+      "original_accused": [
+        "Catalina Castro Rojas"
+      ],
+      "imputados_ampliacion": [
+        {
+          "name": "Angelina Vaila",
+          "status": "IMPUTADA",
+          "citacion_date": "2026-06-02",
+          "citacion_deadline": "24 HORAS",
+          "document": "2026-06-02 Citacion Angelina Imputada Usurpacion.jpg"
+        },
+        {
+          "name": "Maryon Peri",
+          "status": "Presumed imputado (ampliación)",
+          "citacion_date": null
+        },
+        {
+          "name": "Anlly",
+          "status": "Presumed imputado (ampliación)",
+          "citacion_date": null
+        },
+        {
+          "name": "Jordan",
+          "status": "Presumed imputado (ampliación)",
+          "citacion_date": null
+        },
+        {
+          "name": "Kemuel",
+          "status": "Presumed imputado (ampliación)",
+          "citacion_date": null
+        }
+      ],
+      "fiscalia_contact": {
+        "name": "Carlos Hernandez",
+        "phone": "2685-9065"
+      },
+      "documents": [
+        {
+          "filename": "2025-03-17 Denuncia Original SFERA vs Catalina - Usurpacion Extorsion.pdf",
+          "type": "Denuncia original",
+          "date": "2025-03-17"
+        },
+        {
+          "filename": "2026-06-02 Citacion Angelina Imputada Usurpacion.jpg",
+          "type": "Citación judicial",
+          "date": "2026-06-02"
+        }
+      ],
+      "notes": "URGENTE: Angelina citada como IMPUTADA con plazo de 24 HORAS. Si no se presenta, la declaran REBELDE y ordenan CAPTURA. SFERA amplió la denuncia original contra Catalina para incluir a Angelina, Marion, Anlly, Jordan y Kemuel. NECESITA ABOGADO PENALISTA INMEDIATAMENTE.",
+      "defense_strategy": "No declarar sin abogado presente. Derecho a guardar silencio. Analizar ampliación para identificar hechos específicos alegados contra cada persona.",
+      "forwarded_to": null,
+      "forwarded_date": null
     }
   ],
-  "last_updated": "2026-05-21"
+  "last_updated": "2026-06-02"
 }

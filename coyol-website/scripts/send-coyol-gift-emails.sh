@@ -2,7 +2,7 @@
 # Send pending Coyol gift card emails via himalaya
 
 SUPABASE_URL="https://mnxjzvqgrrodalcmtntf.supabase.co"
-SUPABASE_KEY="${SUPABASE_SERVICE_KEY}"
+SUPABASE_KEY="sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng"
 
 # Get pending gift cards
 PENDING=$(curl -s "${SUPABASE_URL}/rest/v1/coyol_gift_cards?status=eq.pending_email&select=*" \
@@ -53,6 +53,7 @@ Content-Type: text/html
     $([ -n "$MESSAGE" ] && [ "$MESSAGE" != "null" ] && echo "<p style=\"color: #666; font-style: italic; margin: 20px 0;\">\"${MESSAGE}\"</p>")
     <a href="https://coyolrestaurant.com" style="display: inline-block; background: #C4A67C; color: #1a1f16; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; margin-top: 20px;">Book a Table</a>
     <p style="color: #888; font-size: 14px; margin-top: 30px;">Present this code when dining at Coyol Restaurant in Nosara.</p>
+    <p style="color: #aaa; font-size: 10px; margin-top: 20px; line-height: 1.5;">Gift cards are non-refundable and cannot be exchanged for cash. Lost or stolen cards cannot be replaced. Gratuity not included. Valid only at Coyol Restaurant. No expiration date.</p>
   </div>
 </div>
 </body>

@@ -14,18 +14,20 @@ These tasks MUST be completed before any project work:
 
 ---
 
-## 🎁 La Luna Gift Cards — CHECK EVERY HEARTBEAT!
+## 🎁 Gift Cards (La Luna + Coyol) — CHECK EVERY HEARTBEAT!
 
-**Send pending gift card emails:**
+**Send pending gift card emails for BOTH restaurants:**
 ```bash
 bash ~/.openclaw/workspace/coyol-website/scripts/send-gift-emails.sh
+bash ~/.openclaw/workspace/coyol-website/scripts/send-coyol-gift-emails.sh
 ```
 
 This checks Supabase for purchased gift cards with `status=pending_email` and sends:
 1. Beautiful HTML email to recipient with gift code
 2. Confirmation email to sender
+3. Updates status to `sent`
 
-**If script fails:** Check that `laluna_gift_cards` table exists in Supabase.
+**Tables:** `laluna_gift_cards` and `coyol_gift_cards`
 
 ---
 
