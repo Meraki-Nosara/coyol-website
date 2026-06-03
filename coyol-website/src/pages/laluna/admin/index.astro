@@ -2774,8 +2774,8 @@ import '../../../styles/laluna-tables.css';
               if (g.status === 'redeemed' || !g.recipient_name || !res.guestName) return false;
               const recipientLower = g.recipient_name.toLowerCase().trim();
               const guestLower = res.guestName.toLowerCase().trim();
-              const firstName = guestLower.split(' ')[0];
-              return recipientLower === guestLower || recipientLower === firstName || guestLower.includes(recipientLower) || recipientLower.includes(firstName);
+              // STRICT MATCH: Only exact full name match
+              return recipientLower === guestLower;
             });
             return `
             <div class="res-row ${res.status} ${res.specialRequests ? 'has-note' : ''} ${hasGiftCard ? 'has-gift' : ''}" onclick="selectReservation('${res.id}')">
@@ -3901,8 +3901,8 @@ import '../../../styles/laluna-tables.css';
       const matches = giftCardsCache.filter(g => {
         if (g.status === 'redeemed' || !g.recipient_name) return false;
         const cardName = g.recipient_name.toLowerCase().trim();
-        // Match: exact, first name, partial
-        return cardName === nameLower || cardName === firstName || nameLower.includes(cardName) || cardName.includes(firstName);
+        // STRICT MATCH: Only exact full name match (prevents wrong person getting gift)
+        return cardName === nameLower;
       });
       if (matches.length > 0) {
         const total = matches.reduce((sum, g) => sum + (g.remaining_balance ?? g.amount), 0);
