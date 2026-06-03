@@ -42,11 +42,11 @@ Content-Type: text/html; charset=utf-8
           </tr>
           <tr>
             <td align="center" style="padding-bottom: 20px;">
-              <div style="background: linear-gradient(135deg, #3D4F3D 0%, #4A5D4A 100%); border-radius: 16px; padding: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
-                <p style="color: #C4A67C; font-size: 14px; letter-spacing: 2px; margin: 0;">GIFT CARD</p>
-                <p style="color: white; font-size: 56px; font-weight: bold; margin: 10px 0;">\$${AMOUNT}</p>
-                <p style="color: white; font-size: 20px; letter-spacing: 3px; margin: 0;">${CODE}</p>
-              </div>
+              <!-- Gift Card Image -->
+              <img src="https://coyolnosara.com/api/gift-card-image?code=${CODE}&amount=${AMOUNT}&name=${RECIPIENT_NAME// /%20}&type=coyol" 
+                   alt="Coyol Gift Card - \$${AMOUNT}" 
+                   width="500" 
+                   style="max-width: 100%; height: auto; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);" />
             </td>
           </tr>
           <tr>
