@@ -229,7 +229,8 @@ import '../../../styles/coyol-tables.css';
         <div class="modal-body">
           <div class="walkin-name">
             <label>Guest Name (optional)</label>
-            <input type="text" id="walkinName" class="form-input" placeholder="Walk-in" />
+            <input type="text" id="walkinName" class="form-input" placeholder="Walk-in" oninput="checkWalkinGiftCard(this.value)" />
+            <div id="walkinGiftCardAlert" class="gift-card-alert" style="display:none;"></div>
           </div>
           <div class="walkin-guests">
             <label>How many guests?</label>
@@ -764,7 +765,7 @@ import '../../../styles/coyol-tables.css';
     }
 
     /* Gift card styles */
-    .gift-match-alert {
+    .gift-match-alert, .gift-card-alert {
       background: linear-gradient(135deg, #C4A67C 0%, #d4b68c 100%);
       color: #1A1F16;
       padding: 10px 14px;
@@ -772,7 +773,7 @@ import '../../../styles/coyol-tables.css';
       margin-top: 10px;
       font-size: 0.875rem;
     }
-    .gift-match-alert strong {
+    .gift-match-alert strong, .gift-card-alert strong {
       font-weight: 700;
     }
     .gift-indicator {
@@ -1847,6 +1848,22 @@ import '../../../styles/coyol-tables.css';
       const card = getGiftCardForName(name);
       if (card) {
         alert.innerHTML = `<strong>Gift Card Found!</strong> ${card.recipient_name} has a $${card.amount} card (${card.code})`;
+        alert.style.display = 'block';
+      } else {
+        alert.style.display = 'none';
+      }
+    }
+
+    // Check gift card match for walk-in modal
+    function checkWalkinGiftCard(name) {
+      const alert = document.getElementById('walkinGiftCardAlert');
+      if (!name || name.trim().length < 3) {
+        alert.style.display = 'none';
+        return;
+      }
+      const card = getGiftCardForName(name);
+      if (card) {
+        alert.innerHTML = `🎁 <strong>Gift Card!</strong> $${card.amount} (${card.code})`;
         alert.style.display = 'block';
       } else {
         alert.style.display = 'none';
