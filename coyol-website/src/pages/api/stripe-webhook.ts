@@ -48,9 +48,11 @@ export const POST: APIRoute = async ({ request }) => {
       const tableName = isCoyol ? 'coyol_gift_cards' : 'laluna_gift_cards';
       
       // Save to Supabase for tracking and email queue
+      const amountNum = parseInt(amount);
       const giftCard = {
         code: giftCode,
-        amount: parseInt(amount),
+        amount: amountNum,
+        remaining_balance: amountNum, // Track partial redemptions
         recipient_name: recipientName,
         recipient_email: recipientEmail,
         sender_name: senderName,
