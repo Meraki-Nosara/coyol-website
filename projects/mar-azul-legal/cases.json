@@ -5,7 +5,7 @@
       "court": "Tribunal Colegiado de Primera Instancia Civil del II Circuito Judicial de Guanacaste (Nicoya)",
       "judge": "MSc. José Carlos Aguilar Bonilla",
       "type": "Suspensión Provisional de Acuerdos",
-      "status": "active",
+      "status": "DEFENSA COMPLETA PRESENTADA",
       "filed": "2026-05-04",
       "resolution_date": "2026-05-06",
       "served_date": "2026-05-18",
@@ -41,14 +41,41 @@
       ],
       "notes": "SFERA Legal representing multiple shell companies challenging HOA decisions. Court denied their request for emergency injunction without hearing.",
       "forwarded_to": "Lawyers",
-      "forwarded_date": "2026-05-21"
+      "forwarded_date": "2026-05-21",
+      "incidente_nulidad": {
+        "filed_date": "2026-05-30",
+        "filed_time": "20:17",
+        "delivery_number": "1294611-2026",
+        "status": "FILED",
+        "documents": [
+          "Notificación que dejaron.pdf",
+          "Prueba Documentación.pdf"
+        ],
+        "filed_by": "Condominio Mar Azul (Admin Mar Azul Nosara SRL)"
+      },
+      "oposicion_cautelar": {
+        "filed_date": "2026-05-30",
+        "filed_time": "20:26",
+        "delivery_number": "1294618-2026",
+        "status": "FILED",
+        "documents": [
+          "Oposición Medida Cautelar FIRMADO.pdf",
+          "CONVOCATORIA 26-3.pdf",
+          "2026-05-12 Acta_Asamblea_Condominio_Mar_Azul firmada.pdf",
+          "Certificación Saldo deudores del Contador Público.pdf",
+          "Certificación saldo deudores Contador FF.32.pdf",
+          "Certificación Saldo deudores del Contador FF.4.pdf",
+          "Certificación Saldo deudores del Contador FF.1.pdf"
+        ],
+        "filed_by": "Condominio Mar Azul (Admin Mar Azul Nosara SRL)"
+      }
     },
     {
       "id": "25-000372-0414-PE",
       "court": "Fiscalía Adjunta del II Circuito Judicial de Guanacaste (Nicoya) - PENAL",
       "fiscal": "MSc. Danny Francisco Arroyo Vargas",
       "type": "Denuncia Penal - Acción Pública",
-      "status": "URGENTE - CITACIÓN ACTIVA",
+      "status": "AUDIENCIA LUNES 9 JUNIO",
       "filed": "2025-03-17",
       "ampliacion_date": "unknown - need to obtain",
       "crime": "Usurpación (Art. 225 Código Penal)",
@@ -112,7 +139,32 @@
       "notes": "URGENTE: Angelina citada como IMPUTADA con plazo de 24 HORAS. Si no se presenta, la declaran REBELDE y ordenan CAPTURA. SFERA amplió la denuncia original contra Catalina para incluir a Angelina, Marion, Anlly, Jordan y Kemuel. NECESITA ABOGADO PENALISTA INMEDIATAMENTE.",
       "defense_strategy": "No declarar sin abogado presente. Derecho a guardar silencio. Analizar ampliación para identificar hechos específicos alegados contra cada persona.",
       "forwarded_to": null,
-      "forwarded_date": null
+      "forwarded_date": null,
+      "audiencia_cautelar": {
+        "date": "2026-06-09",
+        "day": "Monday",
+        "type": "Audiencia Medida Cautelar",
+        "subject": "Usurpación case against Catalina",
+        "notes": "Added June 3, 2026"
+      },
+      "events": [
+        {
+          "date": "2026-06-03",
+          "type": "Fiscalía meeting",
+          "attendees": [
+            "Edwin (penalista)",
+            "Catalina Castro Rojas"
+          ],
+          "notes": "Met at Fiscalía before Monday audiencia"
+        }
+      ],
+      "defense_lawyer": {
+        "name": "Edwin",
+        "role": "Penalista",
+        "representing": [
+          "Catalina Castro Rojas"
+        ]
+      }
     }
   ],
   "last_updated": "2026-06-02"
