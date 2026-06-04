@@ -165,7 +165,89 @@
           "Catalina Castro Rojas"
         ]
       }
+    },
+    {
+      "id": "11376-2026",
+      "court": "Municipalidad de Nicoya - Departamento de Control Constructivo y Obra Pública",
+      "authority": "Arq. César Andrés Espinoza Díaz (Coordinador)",
+      "type": "Recurso de Revocatoria con Apelación en Subsidio",
+      "status": "RESUELTO - CON LUGAR PARCIALMENTE ✅",
+      "filed": "2026-04-21",
+      "resolution_date": "2026-06-03",
+      "resolution_time": "13:58",
+      "finca": "5370-M-000",
+      "plano_catastro": "G-2043984-2018",
+      "distrito": "Nosara",
+      "recurrente": "Desarrollo Mar Azul Limitada",
+      "rep_legal": "Marion Peri (137600021710)",
+      "origin": {
+        "notification": "MN-DPTSA-CCOP-NOT-055-03-2026",
+        "date": "2026-04-16",
+        "order": "Clausura preventiva de actividades constructivas",
+        "reason": "Dirección de Aguas reported pozo CJ-135 sealed/not operating"
+      },
+      "timeline": [
+        {
+          "date": "2026-03-12",
+          "event": "Dirección de Aguas sends oficio DA-UHTPNOL-0208-2026 about pozo CJ-135"
+        },
+        {
+          "date": "2026-04-16",
+          "event": "Muni orders clausura preventiva (NOT-055-03-2026)"
+        },
+        {
+          "date": "2026-04-21",
+          "event": "Marion files recurso de revocatoria"
+        },
+        {
+          "date": "2026-04-XX",
+          "event": "Muni requests INVU technical opinion (OFI-154-04-2026)"
+        },
+        {
+          "date": "2026-05-XX",
+          "event": "INVU responds (CDU-212-05-2026) - administrado should have chance to prove"
+        },
+        {
+          "date": "2026-05-06",
+          "event": "Muni inspection confirms water system operational"
+        },
+        {
+          "date": "2026-06-03",
+          "event": "Resolution issued - clausura lifted"
+        }
+      ],
+      "invu_opinion": {
+        "oficio": "CDU-212-05-2026",
+        "key_finding": "Concession alone not sufficient if source not operational, BUT administrado should have opportunity to rehabilitate or prove alternative source"
+      },
+      "inspection_findings": {
+        "date": "2026-05-06",
+        "pozo_cj135": "Operational with pump + electrical system",
+        "tank": "155,000L storage tank in place",
+        "distribution": "Network reaching lots",
+        "concession": "Valid through 2036"
+      },
+      "resolution": {
+        "number": "MN-DPTSA-CCOP-RES-006-06-2026",
+        "result": "PARCIALMENTE CON LUGAR",
+        "primero": "Original clausura action was legal and based on official Dirección de Aguas info",
+        "segundo": "Revocatoria GRANTED - water system operability proven during proceedings",
+        "tercero": "CLAUSURA LIFTED - construction can resume",
+        "cuarto": "Apelación declared MOOT since revocatoria granted",
+        "quinto": "Notify recurrente and proceed with formal lifting"
+      },
+      "next_step": "Muni must do site visit to formally document clausura lifting via acta administrativa",
+      "documents": [
+        {
+          "filename": "2026-06-03-resolucion-revocatoria-clausura.pdf",
+          "type": "Resolution",
+          "date": "2026-06-03",
+          "pages": 15,
+          "signed_by": "Arq. César Andrés Espinoza Díaz"
+        }
+      ],
+      "notes": "WIN - Water system proven operational. Construction can resume. Muni followed INVU guidance."
     }
   ],
-  "last_updated": "2026-06-02"
+  "last_updated": "2026-06-04"
 }
