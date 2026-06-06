@@ -364,6 +364,12 @@
       animation: available-pulse 2s infinite;
     }
     
+    .avatar-stroller {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+    
     @keyframes available-pulse {
       0%, 100% { box-shadow: 0 4px 16px rgba(122, 194, 143, 0.4); }
       50% { box-shadow: 0 4px 24px rgba(122, 194, 143, 0.6); }
@@ -591,43 +597,43 @@
         <div class="marker me" style="top: 48%; left: 55%;">
           <div class="marker-bubble">
             <div class="online-ring"></div>
-            <div class="marker-avatar">את</div>
+            <div class="marker-avatar"><img src="/logo-white.png" class="avatar-stroller" alt=""></div>
           </div>
           <div class="marker-name">זה את!</div>
         </div>
         
-        <!-- Friends (all green = available) -->
-        <div class="marker" style="top: 22%; left: 35%;">
+        <!-- Friends (all green = available) - click to chat -->
+        <div class="marker" style="top: 22%; left: 35%;" onclick="openChat('רונית')">
           <div class="marker-bubble">
-            <div class="marker-avatar available">ר</div>
+            <div class="marker-avatar available"><img src="/logo-white.png" class="avatar-stroller" alt=""></div>
           </div>
           <div class="marker-name">רונית</div>
         </div>
         
-        <div class="marker" style="top: 32%; left: 72%;">
+        <div class="marker" style="top: 32%; left: 72%;" onclick="openChat('מיכל')">
           <div class="marker-bubble">
-            <div class="marker-avatar available">מ</div>
+            <div class="marker-avatar available"><img src="/logo-white.png" class="avatar-stroller" alt=""></div>
           </div>
           <div class="marker-name">מיכל</div>
         </div>
         
-        <div class="marker" style="top: 62%; left: 25%;">
+        <div class="marker" style="top: 62%; left: 25%;" onclick="openChat('שירה')">
           <div class="marker-bubble">
-            <div class="marker-avatar available">ש</div>
+            <div class="marker-avatar available"><img src="/logo-white.png" class="avatar-stroller" alt=""></div>
           </div>
           <div class="marker-name">שירה</div>
         </div>
         
-        <div class="marker" style="top: 75%; left: 60%;">
+        <div class="marker" style="top: 75%; left: 60%;" onclick="openChat('נועה')">
           <div class="marker-bubble">
-            <div class="marker-avatar available">נ</div>
+            <div class="marker-avatar available"><img src="/logo-white.png" class="avatar-stroller" alt=""></div>
           </div>
           <div class="marker-name">נועה</div>
         </div>
         
-        <div class="marker" style="top: 28%; left: 18%;">
+        <div class="marker" style="top: 28%; left: 18%;" onclick="openChat('דנה')">
           <div class="marker-bubble">
-            <div class="marker-avatar available">ד</div>
+            <div class="marker-avatar available"><img src="/logo-white.png" class="avatar-stroller" alt=""></div>
           </div>
           <div class="marker-name">דנה</div>
         </div>
@@ -643,8 +649,8 @@
           <div class="friend-mini" style="background: var(--sage);">ד</div>
         </div>
         <div class="bottom-title">5 חברות בחוץ עכשיו</div>
-        <div class="bottom-subtitle">לחצי על חברה לשלוח הודעה</div>
-        <button class="meet-btn">בואי נפגש!</button>
+        <div class="bottom-subtitle">לחצי על חברה לצ'אט, או שלחי לכולן</div>
+        <button class="meet-btn" onclick="openGroupChat()">צ'אט קבוצתי</button>
       </div>
     </div>
   </div>
@@ -664,7 +670,7 @@
     </div>
   </div>
 
-  <script>
+  <script is:inline>
     let isOut = false;
     
     function toggleStatus() {
@@ -713,6 +719,14 @@
     
     function respondNo() {
       hideNotification();
+    }
+    
+    function openChat(name) {
+      window.location.href = '/chat?name=' + encodeURIComponent(name);
+    }
+    
+    function openGroupChat() {
+      window.location.href = '/chat?group=true';
     }
   </script>
 

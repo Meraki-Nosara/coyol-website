@@ -33,10 +33,10 @@
       min-height: 100%;
       display: flex;
       flex-direction: column;
-      background: linear-gradient(180deg, rgba(255,220,220,0.5) 0%, rgba(255,235,235,0.7) 100%),
+      background: linear-gradient(180deg, rgba(255,240,235,0.3) 0%, rgba(255,245,240,0.5) 100%),
                   url('/bg-park.jpg');
       background-size: cover;
-      background-position: center;
+      background-position: top center;
     }
     
     .content {
@@ -53,20 +53,11 @@
       margin-bottom: 24px;
     }
     
-    .logo-icon {
+    .logo-text-img {
+      height: 70px;
       width: auto;
-      height: 80px;
       object-fit: contain;
-      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2));
-      margin-bottom: 16px;
-    }
-    
-    .logo-text {
-      font-size: 42px;
-      font-weight: 700;
-      color: white;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.2);
-      letter-spacing: 2px;
+      margin-bottom: 12px;
     }
     
     .tagline {
@@ -85,11 +76,6 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
-      background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.3) 30%, rgba(255,255,255,0.6) 100%);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-radius: 32px 32px 0 0;
-      margin-top: -20px;
     }
     
     .btn {
@@ -156,8 +142,7 @@
   <div class="app">
     <div class="content">
       <div class="logo">
-        <img src="/logo.png" alt="" class="logo-icon" />
-        <div class="logo-text">מיבחוץ</div>
+        <img src="/logo-text.png" alt="מי בחוץ" class="logo-text-img" />
         <div class="tagline">
           מקום בטוח לאמהות<br>
           להיפגש ולצאת ביחד
