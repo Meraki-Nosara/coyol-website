@@ -1,0 +1,302 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { cities } from '../lib/locations';
+
+const lang = Astro.url.searchParams.get('lang') || 'he';
+const isHebrew = lang === 'he';
+
+const t = {
+  he: {
+    tagline1: 'לפעמים כל מה שצריך',
+    tagline2: 'זו חבורה לצעוד איתה',
+    subtitle: 'את לא צריכה לעבור את החל״ד לבד. הצטרפי ותהיי חלק מקבוצת חברות שתהפוך את חופשת הלידה שלך לחופשה אמיתית!',
+    cta: 'הצטרפי עכשיו',
+    free: 'המיזם קהילתי וחינמי',
+    stats: '2,400+ אמהות כבר בפנים',
+    howTitle: 'איך נוצר הקסם?',
+    step1title: 'בוחרות עיר ושכונה',
+    step1text: 'שולחות טופס הצטרפות ומאשרות שיתוף פרטים',
+    step2title: 'אנחנו ממלאות קבוצה',
+    step2text: '8 נרשמות מהאיזור, אם מייסדת פותחת את הקבוצה',
+    step3title: 'אנחנו מלוות אתכן',
+    step3text: 'מפגשי ראשון ב-11:00 ברחבי הארץ, קפה ספוני, חברות אמיתיות',
+    cityTitle: 'איפה גרה?',
+    citySubtitle: 'בחרי עיר',
+    areaSubtitle: 'עכשיו בחרי שכונה',
+    testimonialText: '"בהריון השני שלי חזרתי לתל אביב וחברה ספרה לי על מי בחוץ?!. האמת לא חשבתי שזה יתאים לי. בדיעבד אני לא יכולה לדמיין את חופשת הלידה שלי בלעדיהן. זאת חבורה שנכנסה לי ללב."',
+    testimonialName: 'דפנה א.',
+    testimonialGroup: 'מי בחוץ?! גן מאיר',
+    footer: 'מי בחוץ?! © 2026',
+    footerSub: 'עוזרות לאמהות בחל"ד למצוא חברות',
+    langSwitch: 'English',
+    continue: 'המשיכי להרשמה'
+  },
+  en: {
+    tagline1: 'Sometimes all you need',
+    tagline2: 'is a crew to walk with',
+    subtitle: "You don't have to go through maternity leave alone. Join a group of mom friends and turn this time into a real vacation!",
+    cta: 'Join now',
+    free: 'Free community project',
+    stats: '2,400+ moms already inside',
+    howTitle: 'How the magic happens',
+    step1title: 'Choose city & neighborhood',
+    step1text: 'Fill out the form and approve sharing details',
+    step2title: 'We fill up the group',
+    step2text: '8 moms from your area, a founding mom opens the group',
+    step3title: 'We guide you',
+    step3text: 'Sunday meetups at 11:00 across Israel, spontaneous coffee, real friendships',
+    cityTitle: 'Where do you live?',
+    citySubtitle: 'Choose a city',
+    areaSubtitle: 'Now choose your neighborhood',
+    testimonialText: '"In my second pregnancy I moved back to Tel Aviv and a friend told me about Meebahutz. Honestly I didn\'t think it would be for me. Looking back, I can\'t imagine my maternity leave without them. This group became my heart."',
+    testimonialName: 'Dafna A.',
+    testimonialGroup: 'Meebahutz Gan Meir',
+    footer: 'Meebahutz © 2026',
+    footerSub: 'Helping moms on maternity leave find friends',
+    langSwitch: 'עברית',
+    continue: 'Continue to signup'
+  }
+};
+
+const text = isHebrew ? t.he : t.en;
+const dir = isHebrew ? 'rtl' : 'ltr';
+const otherLang = isHebrew ? 'en' : 'he';
+---
+
+<Layout title={isHebrew ? 'מי בחוץ?!' : 'Meebahutz'}>
+  <main class="min-h-screen flex flex-col" style="background-color: var(--color-oat);" dir={dir}>
+    
+    <!-- Language toggle -->
+    <div class="fixed top-4 z-20" style={isHebrew ? 'left: 1rem;' : 'right: 1rem;'}>
+      <a 
+        href={`?lang=${otherLang}`}
+        class="text-sm px-3 py-1.5 rounded-full shadow-sm"
+        style="background-color: var(--color-white); color: var(--color-navy);"
+      >
+        {text.langSwitch}
+      </a>
+    </div>
+
+    <!-- Hero -->
+    <section class="flex flex-col items-center justify-center px-6 pt-16 pb-10 text-center">
+      <img src="/logo.svg" alt="Meebahutz" class="w-24 h-24 mb-5" />
+      
+      <h1 class="text-3xl font-bold mb-1" style="color: var(--color-navy-dark);">
+        {text.tagline1}
+      </h1>
+      <h1 class="text-3xl font-bold mb-5" style="color: var(--color-rose);">
+        {text.tagline2}
+      </h1>
+      
+      <p class="text-lg mb-6 max-w-sm leading-relaxed" style="color: var(--color-text-light);">
+        {text.subtitle}
+      </p>
+      
+      <div class="flex items-center gap-2 mb-6 px-4 py-2 rounded-full" style="background-color: var(--color-rose-light);">
+        <span class="text-lg">👶</span>
+        <span class="text-sm font-medium" style="color: var(--color-rose-dark);">{text.stats}</span>
+      </div>
+      
+      <p class="text-sm" style="color: var(--color-text-light);">
+        {text.free}
+      </p>
+    </section>
+
+    <!-- City & Area Selection -->
+    <section class="px-6 py-8" style="background-color: var(--color-white);">
+      <h2 class="text-2xl font-bold text-center mb-2" style="color: var(--color-navy-dark);">{text.cityTitle}</h2>
+      <p id="selection-subtitle" class="text-center mb-6" style="color: var(--color-text-light);">{text.citySubtitle}</p>
+      
+      <!-- City pills -->
+      <div id="city-selection" class="flex flex-wrap justify-center gap-2 mb-6">
+        {cities.map(city => (
+          <button 
+            class="city-pill px-4 py-2.5 rounded-full text-sm font-medium transition-all border-2"
+            style="background-color: var(--color-oat); color: var(--color-navy); border-color: transparent;"
+            data-city={city.name}
+            data-city-en={city.nameEn}
+            data-lat={city.lat}
+            data-lng={city.lng}
+            data-areas={JSON.stringify(city.areas)}
+          >
+            {isHebrew ? city.name : city.nameEn}
+          </button>
+        ))}
+      </div>
+
+      <!-- Area pills (hidden until city selected) -->
+      <div id="area-selection" class="hidden">
+        <div class="flex flex-wrap justify-center gap-2 mb-6" id="area-pills"></div>
+      </div>
+
+      <!-- Map container -->
+      <div class="relative rounded-2xl overflow-hidden shadow-lg mb-6" style="height: 280px; background-color: var(--color-oat);">
+        <div id="map" class="w-full h-full"></div>
+      </div>
+
+      <!-- Continue button (hidden until area selected) -->
+      <div id="continue-section" class="hidden text-center">
+        <a id="continue-btn" href="/signup" class="btn-primary inline-block text-lg px-8 py-4 shadow-lg">
+          {text.continue} →
+        </a>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="px-6 py-10" style="background-color: var(--color-oat);">
+      <h2 class="text-2xl font-bold text-center mb-8" style="color: var(--color-navy-dark);">{text.howTitle}</h2>
+      
+      <div class="space-y-4 max-w-sm mx-auto">
+        <div class="flex items-start gap-4 p-4 rounded-xl" style="background-color: var(--color-white);">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 text-xl" style="background-color: var(--color-rose-light);">
+            📍
+          </div>
+          <div>
+            <h3 class="font-semibold text-lg" style="color: var(--color-navy-dark);">{text.step1title}</h3>
+            <p style="color: var(--color-text-light);">{text.step1text}</p>
+          </div>
+        </div>
+        
+        <div class="flex items-start gap-4 p-4 rounded-xl" style="background-color: var(--color-white);">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 text-xl" style="background-color: var(--color-sage-light);">
+            👯‍♀️
+          </div>
+          <div>
+            <h3 class="font-semibold text-lg" style="color: var(--color-navy-dark);">{text.step2title}</h3>
+            <p style="color: var(--color-text-light);">{text.step2text}</p>
+          </div>
+        </div>
+        
+        <div class="flex items-start gap-4 p-4 rounded-xl" style="background-color: var(--color-white);">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 text-xl" style="background-color: var(--color-navy-light);">
+            ☕
+          </div>
+          <div>
+            <h3 class="font-semibold text-lg" style="color: var(--color-navy-dark);">{text.step3title}</h3>
+            <p style="color: var(--color-text-light);">{text.step3text}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonial -->
+    <section class="px-6 py-10" style="background-color: var(--color-rose-light);">
+      <div class="max-w-md mx-auto text-center">
+        <p class="text-lg italic mb-4" style="color: var(--color-navy-dark);">
+          {text.testimonialText}
+        </p>
+        <p class="font-semibold" style="color: var(--color-rose-dark);">{text.testimonialName}</p>
+        <p class="text-sm" style="color: var(--color-navy);">{text.testimonialGroup}</p>
+      </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="text-center py-8 px-6" style="background-color: var(--color-navy); color: rgba(255,255,255,0.9);">
+      <img src="/favicon.svg" alt="" class="w-12 h-12 mx-auto mb-3 rounded-full" />
+      <p class="font-medium">{text.footer}</p>
+      <p class="text-sm mt-1 opacity-70">{text.footerSub}</p>
+    </footer>
+  </main>
+
+  <!-- Leaflet Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script is:inline src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <script is:inline define:vars={{ isHebrew, areaSubtitle: text.areaSubtitle, lang }}>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize map centered on Israel
+      const map = L.map('map', {
+        zoomControl: false,
+        attributionControl: false
+      }).setView([32.0, 34.8], 8);
+      
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19
+      }).addTo(map);
+
+      let markers = [];
+      let selectedCity = null;
+      let selectedArea = null;
+
+      // City selection
+      document.querySelectorAll('.city-pill').forEach(pill => {
+        pill.addEventListener('click', function() {
+          // Update styles
+          document.querySelectorAll('.city-pill').forEach(p => {
+            p.style.backgroundColor = 'var(--color-oat)';
+            p.style.borderColor = 'transparent';
+          });
+          this.style.backgroundColor = 'var(--color-rose-light)';
+          this.style.borderColor = 'var(--color-rose)';
+
+          // Get city data
+          const lat = parseFloat(this.dataset.lat);
+          const lng = parseFloat(this.dataset.lng);
+          const areas = JSON.parse(this.dataset.areas);
+          selectedCity = isHebrew ? this.dataset.city : this.dataset.cityEn;
+
+          // Zoom to city
+          map.flyTo([lat, lng], 12, { duration: 0.5 });
+
+          // Clear old markers
+          markers.forEach(m => map.removeLayer(m));
+          markers = [];
+
+          // Add area markers
+          areas.forEach(area => {
+            const markerIcon = L.divIcon({
+              className: 'area-marker',
+              html: '<div style="background-color: #E8B4BC; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.2);"></div>',
+              iconSize: [20, 20],
+              iconAnchor: [10, 10]
+            });
+            const marker = L.marker([area.lat, area.lng], { icon: markerIcon })
+              .addTo(map)
+              .bindPopup(`<strong>${isHebrew ? area.name : area.nameEn}</strong>`);
+            markers.push(marker);
+          });
+
+          // Show area pills
+          const areaPills = document.getElementById('area-pills');
+          areaPills.innerHTML = areas.map(area => `
+            <button 
+              class="area-pill px-4 py-2 rounded-full text-sm font-medium transition-all border-2"
+              style="background-color: var(--color-oat); color: var(--color-navy); border-color: transparent;"
+              data-name="${area.name}"
+              data-name-en="${area.nameEn}"
+              data-lat="${area.lat}"
+              data-lng="${area.lng}"
+            >
+              ${isHebrew ? area.name : area.nameEn}
+            </button>
+          `).join('');
+          
+          document.getElementById('area-selection').classList.remove('hidden');
+          document.getElementById('selection-subtitle').textContent = areaSubtitle;
+
+          // Area click handlers
+          document.querySelectorAll('.area-pill').forEach(areaPill => {
+            areaPill.addEventListener('click', function() {
+              document.querySelectorAll('.area-pill').forEach(p => {
+                p.style.backgroundColor = 'var(--color-oat)';
+                p.style.borderColor = 'transparent';
+              });
+              this.style.backgroundColor = 'var(--color-sage-light)';
+              this.style.borderColor = 'var(--color-sage)';
+
+              const areaLat = parseFloat(this.dataset.lat);
+              const areaLng = parseFloat(this.dataset.lng);
+              selectedArea = isHebrew ? this.dataset.name : this.dataset.nameEn;
+              
+              map.flyTo([areaLat, areaLng], 15, { duration: 0.5 });
+
+              // Show continue button
+              document.getElementById('continue-section').classList.remove('hidden');
+              document.getElementById('continue-btn').href = `/signup?lang=${lang}&city=${encodeURIComponent(selectedCity)}&area=${encodeURIComponent(selectedArea)}`;
+            });
+          });
+        });
+      });
+    });
+  </script>
+</Layout>

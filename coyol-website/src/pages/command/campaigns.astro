@@ -149,6 +149,46 @@ const clips = [
       </div>
     </section>
 
+    <!-- Email Campaign Status -->
+    <section class="email-campaign">
+      <h2>📧 Gift Card Email Campaign</h2>
+      <div class="campaign-stats" id="campaignStats">
+        <div class="stat-card sent">
+          <span class="stat-value" id="sentCount">--</span>
+          <span class="stat-label">Sent</span>
+        </div>
+        <div class="stat-card pending">
+          <span class="stat-value" id="pendingCount">--</span>
+          <span class="stat-label">Pending</span>
+        </div>
+        <div class="stat-card total">
+          <span class="stat-value" id="totalCount">--</span>
+          <span class="stat-label">Total</span>
+        </div>
+        <div class="stat-card progress">
+          <span class="stat-value" id="progressPct">--%</span>
+          <span class="stat-label">Progress</span>
+        </div>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+      </div>
+      <div class="campaign-lists">
+        <div class="list-section">
+          <h3>✅ Recently Sent (last 20)</h3>
+          <div class="email-list" id="sentList">Loading...</div>
+        </div>
+        <div class="list-section">
+          <h3>⏳ Next Up (20)</h3>
+          <div class="email-list" id="pendingList">Loading...</div>
+        </div>
+      </div>
+      <div class="campaign-actions">
+        <input type="text" id="searchEmail" placeholder="Search email..." class="search-input" />
+        <span id="searchResult" class="search-result"></span>
+      </div>
+    </section>
+
     <!-- Download -->
     <section class="download-section">
       <div class="download-content">
@@ -459,6 +499,119 @@ const clips = [
     flex-shrink: 0;
   }
   
+  /* Email Campaign Section */
+  .email-campaign {
+    background: #12140f;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid #22c55e;
+  }
+  
+  .campaign-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .stat-card {
+    background: #1a1d17;
+    padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .stat-card .stat-value {
+    display: block;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  
+  .stat-card.sent .stat-value { color: #22c55e; }
+  .stat-card.pending .stat-value { color: #f59e0b; }
+  .stat-card.total .stat-value { color: #3b82f6; }
+  .stat-card.progress .stat-value { color: #C4A67C; }
+  
+  .stat-card .stat-label {
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+  }
+  
+  .progress-bar-container {
+    height: 8px;
+    background: #1a1d17;
+    border-radius: 4px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #22c55e, #C4A67C);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+  
+  .campaign-lists {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .list-section h3 {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 12px;
+  }
+  
+  .email-list {
+    background: #1a1d17;
+    border-radius: 8px;
+    padding: 12px;
+    max-height: 200px;
+    overflow-y: auto;
+    font-size: 12px;
+    font-family: monospace;
+    color: #aaa;
+  }
+  
+  .email-list div {
+    padding: 4px 0;
+    border-bottom: 1px solid #252820;
+  }
+  
+  .campaign-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  
+  .search-input {
+    flex: 1;
+    max-width: 300px;
+    padding: 10px 14px;
+    background: #1a1d17;
+    border: 1px solid #333;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 13px;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: #C4A67C;
+  }
+  
+  .search-result {
+    font-size: 13px;
+  }
+  
+  .search-result.sent { color: #22c55e; }
+  .search-result.pending { color: #f59e0b; }
+  
   @media (max-width: 768px) {
     .page { padding: 20px; }
     .page-header { flex-direction: column; gap: 16px; }
@@ -467,5 +620,53 @@ const clips = [
     .flow-arrow { display: none; }
     .clips { grid-template-columns: 1fr 1fr; }
     .download-section { flex-direction: column; gap: 16px; text-align: center; }
+    .campaign-stats { grid-template-columns: repeat(2, 1fr); }
+    .campaign-lists { grid-template-columns: 1fr; }
   }
 </style>
+
+<script>
+  async function loadCampaignStatus() {
+    try {
+      const res = await fetch('/api/campaign-status');
+      const data = await res.json();
+      
+      document.getElementById('sentCount').textContent = data.sent.toLocaleString();
+      document.getElementById('pendingCount').textContent = data.pending.toLocaleString();
+      document.getElementById('totalCount').textContent = data.total.toLocaleString();
+      document.getElementById('progressPct').textContent = data.progress + '%';
+      document.getElementById('progressBar').style.width = data.progress + '%';
+      
+      document.getElementById('sentList').innerHTML = data.recentSent.map(e => `<div>${e}</div>`).join('') || '<div>No emails sent yet</div>';
+      document.getElementById('pendingList').innerHTML = data.nextPending.map(e => `<div>${e}</div>`).join('') || '<div>All done!</div>';
+    } catch (err) {
+      console.error('Failed to load campaign status:', err);
+    }
+  }
+  
+  document.getElementById('searchEmail').addEventListener('input', async (e) => {
+    const email = e.target.value.trim();
+    const resultEl = document.getElementById('searchResult');
+    
+    if (!email || !email.includes('@')) {
+      resultEl.textContent = '';
+      return;
+    }
+    
+    try {
+      const res = await fetch('/api/campaign-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+      
+      resultEl.textContent = data.status === 'sent' ? '✅ Already sent' : '⏳ Pending';
+      resultEl.className = 'search-result ' + data.status;
+    } catch (err) {
+      resultEl.textContent = '';
+    }
+  });
+  
+  loadCampaignStatus();
+</script>

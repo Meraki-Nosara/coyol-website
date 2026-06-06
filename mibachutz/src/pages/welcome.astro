@@ -1,0 +1,65 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="ברוכה הבאה! - מי בחוץ">
+  <div class="min-h-screen bg-gradient-to-b from-sage-100 to-sage-50 flex flex-col items-center justify-center px-6 py-12">
+    
+    <!-- Success Animation -->
+    <div class="mb-8">
+      <div class="w-24 h-24 bg-peach-500 rounded-full flex items-center justify-center shadow-lg animate-bounce">
+        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Message -->
+    <h1 class="text-3xl font-bold text-sage-800 mb-3 text-center">ברוכה הבאה!</h1>
+    <p class="text-lg text-sage-600 text-center mb-8 max-w-xs">
+      אנחנו מחפשות לך קבוצה מושלמת של אמהות באזור שלך
+    </p>
+
+    <!-- Status Card -->
+    <div class="w-full max-w-sm bg-white rounded-2xl p-6 shadow-lg mb-8">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-12 h-12 bg-sage-100 rounded-full flex items-center justify-center">
+          <svg class="w-6 h-6 text-sage-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+        </div>
+        <div>
+          <div class="font-semibold text-sage-800">מחפשות לך קבוצה</div>
+          <div class="text-sm text-sage-500">בדרך כלל תוך 24-48 שעות</div>
+        </div>
+      </div>
+      
+      <div class="space-y-3 text-sm">
+        <div class="flex items-center gap-3">
+          <div class="w-2 h-2 bg-peach-500 rounded-full"></div>
+          <span class="text-sage-600">נמצא אמהות עם ילדים בגילאים דומים</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-2 h-2 bg-sage-300 rounded-full"></div>
+          <span class="text-sage-400">נוודא שכולן מהאזור שלך</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-2 h-2 bg-sage-300 rounded-full"></div>
+          <span class="text-sage-400">נשלח לך הודעה כשהקבוצה מוכנה</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- What's Next -->
+    <div class="w-full max-w-sm text-center">
+      <p class="text-sage-500 mb-4">בינתיים, הוסיפי תמונה לפרופיל</p>
+      <a href="/profile" class="block w-full py-4 bg-peach-500 hover:bg-peach-600 text-white text-center font-semibold rounded-2xl shadow-lg transition">
+        עדכני פרופיל
+      </a>
+      <a href="/" class="block mt-3 text-sage-500 hover:text-sage-700">
+        חזרי לדף הבית
+      </a>
+    </div>
+
+  </div>
+</Layout>

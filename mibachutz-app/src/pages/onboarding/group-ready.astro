@@ -1,0 +1,84 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const lang = Astro.url.searchParams.get('lang') || 'he';
+const isHebrew = lang === 'he';
+const dir = isHebrew ? 'rtl' : 'ltr';
+---
+
+<Layout title={isHebrew ? 'הקבוצה מלאה!' : 'Group Ready!'}>
+  <main class="min-h-screen flex flex-col items-center justify-center p-6" style="background: linear-gradient(180deg, #FFF9F5 0%, #FFFFFF 100%);" dir={dir}>
+    
+    <div class="text-center max-w-sm">
+      <!-- Celebration -->
+      <div class="text-6xl mb-4">🎉</div>
+      
+      <h1 class="text-2xl font-bold mb-2" style="color: var(--color-text);">
+        {isHebrew ? 'הקבוצה שלך מלאה!' : 'Your group is full!'}
+      </h1>
+      
+      <p class="text-base mb-6" style="color: var(--color-text-light);">
+        {isHebrew ? '10 אמהות נרשמו - מחכים רק לך' : '10 moms signed up - just waiting for you'}
+      </p>
+      
+      <!-- Members preview -->
+      <div class="card p-5 mb-6">
+        <div class="flex justify-center -space-x-3 mb-4">
+          {[1,2,3,4,5,6,7,8,9,10].map((i) => (
+            <div class="avatar-ring">
+              <img src={`https://i.pravatar.cc/100?img=${i+10}`} class="w-10 h-10 rounded-full" />
+            </div>
+          ))}
+        </div>
+        <p class="text-sm font-medium" style="color: var(--color-text);">
+          {isHebrew ? 'גן מאיר #4' : 'Gan Meir #4'}
+        </p>
+        <p class="text-xs" style="color: var(--color-text-light);">
+          {isHebrew ? '10 אמהות מהשכונה' : '10 moms from your neighborhood'}
+        </p>
+      </div>
+
+      <!-- Meeting invite -->
+      <div class="card p-5 mb-6" style="background: linear-gradient(135deg, #FFE5E5 0%, #FFF9F5 100%); border: 2px solid #FF6B6B;">
+        <p class="text-lg font-bold mb-2" style="color: #FF6B6B;">
+          ☕ {isHebrew ? 'מפגש היכרות' : 'Meet & Greet'}
+        </p>
+        <p class="text-sm mb-1" style="color: var(--color-text);">
+          {isHebrew ? 'יום ראשון, 10:00' : 'Sunday, 10:00'}
+        </p>
+        <p class="text-sm mb-4" style="color: var(--color-text-light);">
+          {isHebrew ? 'קפה נחת, גן מאיר' : 'Cafe Nachat, Gan Meir'}
+        </p>
+        
+        <p class="text-xs mb-4" style="color: var(--color-text-light);">
+          {isHebrew ? '💡 המפגש הזה הוא חובה - רק מי שמגיעה מצטרפת לקבוצה' : '💡 This meetup is required - only attendees join the group'}
+        </p>
+        
+        <div class="flex gap-2">
+          <button id="confirm-btn" class="btn-pill btn-coral flex-1 py-3">
+            {isHebrew ? 'אני מגיעה!' : 'I\'ll be there!'}
+          </button>
+          <button id="cant-btn" class="btn-pill flex-1 py-3" style="background: var(--color-warm-gray);">
+            {isHebrew ? 'לא יכולה' : 'Can\'t make it'}
+          </button>
+        </div>
+      </div>
+
+      <p class="text-xs" style="color: var(--color-text-light);">
+        {isHebrew ? 'אם לא תגיעי, תצטרפי לקבוצה הבאה' : 'If you can\'t come, you\'ll join the next group'}
+      </p>
+    </div>
+
+  </main>
+
+  <script is:inline>
+    document.getElementById('confirm-btn').onclick = () => {
+      window.location.href = '/onboarding/confirmed';
+    };
+    document.getElementById('cant-btn').onclick = () => {
+      if (confirm('בטוחה? תצטרפי לקבוצה הבאה במקום')) {
+        window.location.href = '/onboarding/registered';
+      }
+    };
+  </script>
+</Layout>

@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+@theme {
+  /* Peanut-inspired warm coral palette */
+  --color-coral: #FF6B6B;
+  --color-coral-light: #FFE5E5;
+  --color-coral-dark: #E85555;
+  --color-peach: #FFAB91;
+  --color-cream: #FFF9F5;
+  --color-warm-gray: #F7F3F0;
+  --color-sage: #7ECEC0;
+  --color-sage-light: #D4F0EB;
+  --color-lavender: #B8A9C9;
+  
+  /* Legacy aliases for compatibility */
+  --color-rose: #FF6B6B;
+  --color-rose-light: #FFE5E5;
+  --color-rose-dark: #E85555;
+  --color-navy: #4A5568;
+  --color-navy-light: #718096;
+  --color-navy-dark: #2D3748;
+  --color-oat: #FFF9F5;
+  
+  --color-white: #FFFFFF;
+  --color-text: #2D3748;
+  --color-text-light: #718096;
+}
+
+/* RTL Support */
+html {
+  direction: rtl;
+}
+
+/* Hebrew-first font stack */
+body {
+  font-family: 'Heebo', 'Assistant', system-ui, sans-serif;
+  background-color: var(--color-cream);
+}
+
+/* Peanut-style rounded cards */
+.card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+/* Pill buttons */
+.btn-pill {
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.btn-coral {
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+.btn-coral:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(255, 107, 107, 0.4);
+}
+
+/* Avatar with ring */
+.avatar-ring {
+  padding: 3px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF6B6B 0%, #FFAB91 100%);
+}
+
+.avatar-ring img,
+.avatar-ring div {
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+/* Soft input */
+.input-soft {
+  background: var(--color-warm-gray);
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.input-soft:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-coral-light);
+}
+
+/* Tag pills */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: var(--color-coral-light);
+  color: var(--color-coral-dark);
+}
+
+/* Language toggle */
+html[dir="ltr"] {
+  direction: ltr;
+}
+html[dir="ltr"] body {
+  font-family: 'Inter', system-ui, sans-serif;
+}

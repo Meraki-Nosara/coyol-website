@@ -1,0 +1,86 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const lang = Astro.url.searchParams.get('lang') || 'he';
+const isHebrew = lang === 'he';
+const dir = isHebrew ? 'rtl' : 'ltr';
+---
+
+<Layout title={isHebrew ? 'מאושר!' : 'Confirmed!'}>
+  <main class="min-h-screen flex flex-col items-center justify-center p-6" style="background: linear-gradient(180deg, #FFF9F5 0%, #FFFFFF 100%);" dir={dir}>
+    
+    <div class="text-center max-w-sm">
+      <div class="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center" style="background: linear-gradient(135deg, #7ECEC0 0%, #A8E6CF 100%);">
+        <span class="text-3xl text-white">✓</span>
+      </div>
+      
+      <h1 class="text-2xl font-bold mb-2" style="color: var(--color-text);">
+        {isHebrew ? 'נתראה ביום ראשון!' : 'See you Sunday!'}
+      </h1>
+      
+      <p class="text-base mb-6" style="color: var(--color-text-light);">
+        {isHebrew ? 'שמרנו לך מקום במפגש ההיכרות' : 'We saved your spot at the meet & greet'}
+      </p>
+      
+      <!-- Meeting details -->
+      <div class="card p-5 mb-6">
+        <div class="text-4xl mb-3">☕</div>
+        <p class="text-lg font-bold mb-1" style="color: var(--color-text);">
+          {isHebrew ? 'יום ראשון, 10:00' : 'Sunday, 10:00'}
+        </p>
+        <p class="text-sm mb-4" style="color: var(--color-text-light);">
+          {isHebrew ? 'קפה נחת, רחוב שינקין 42' : 'Cafe Nachat, 42 Shenkin St'}
+        </p>
+        
+        <button id="calendar-btn" class="btn-pill w-full py-2.5 mb-2" style="background: var(--color-warm-gray);">
+          📅 {isHebrew ? 'הוסיפי ליומן' : 'Add to calendar'}
+        </button>
+        
+        <button id="maps-btn" class="btn-pill w-full py-2.5" style="background: var(--color-warm-gray);">
+          📍 {isHebrew ? 'נווטי לשם' : 'Get directions'}
+        </button>
+      </div>
+
+      <!-- What to expect -->
+      <div class="card p-5 text-right" style="background: linear-gradient(135deg, #FFE5E5 0%, #FFF9F5 100%);">
+        <p class="text-sm font-medium mb-3" style="color: var(--color-text);">
+          {isHebrew ? 'מה יקרה במפגש?' : 'What to expect?'}
+        </p>
+        <ul class="text-xs space-y-2" style="color: var(--color-text-light);">
+          <li>☕ {isHebrew ? 'קפה על חשבון מיבחוץ' : 'Coffee on us'}</li>
+          <li>👋 {isHebrew ? 'היכרות קצרה' : 'Quick introductions'}</li>
+          <li>📱 {isHebrew ? 'פתיחת הקבוצה באפליקציה' : 'Group opens in app'}</li>
+          <li>⏱️ {isHebrew ? 'כשעה בסה״כ' : 'About an hour'}</li>
+        </ul>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script is:inline>
+    document.getElementById('calendar-btn').onclick = () => {
+      // Create ICS file
+      const event = `BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:20260608T100000
+DTEND:20260608T110000
+SUMMARY:מפגש היכרות - מיבחוץ
+LOCATION:קפה נחת, רחוב שינקין 42
+END:VEVENT
+END:VCALENDAR`;
+      
+      const blob = new Blob([event], { type: 'text/calendar' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'mibachutz-meetup.ics';
+      a.click();
+    };
+    
+    document.getElementById('maps-btn').onclick = () => {
+      window.open('https://maps.google.com/?q=קפה+נחת+שינקין+תל+אביב', '_blank');
+    };
+  </script>
+</Layout>

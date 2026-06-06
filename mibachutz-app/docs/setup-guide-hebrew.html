@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מדריך התקנה - OpenClaw</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #FFF9F5;
+      color: #2D3748;
+      line-height: 1.6;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: #FF6B6B;
+      font-size: 28px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .subtitle {
+      text-align: center;
+      color: #718096;
+      margin-bottom: 30px;
+    }
+    .step {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+      color: white;
+      border-radius: 50%;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    .step h2 {
+      display: inline;
+      font-size: 18px;
+      color: #2D3748;
+    }
+    .step p {
+      margin-top: 12px;
+      color: #4A5568;
+    }
+    .step ol, .step ul {
+      margin-top: 12px;
+      margin-right: 20px;
+    }
+    .step li {
+      margin-bottom: 8px;
+    }
+    code {
+      background: #F7F3F0;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 14px;
+      direction: ltr;
+      display: inline-block;
+    }
+    .code-block {
+      background: #2D3748;
+      color: #A0F0A0;
+      padding: 16px;
+      border-radius: 12px;
+      margin-top: 12px;
+      direction: ltr;
+      text-align: left;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 14px;
+      overflow-x: auto;
+    }
+    .link {
+      color: #FF6B6B;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .link:hover {
+      text-decoration: underline;
+    }
+    .tip {
+      background: #D4F0EB;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 12px;
+    }
+    .tip::before {
+      content: '💡 ';
+    }
+    .warning {
+      background: #FFE5E5;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 12px;
+    }
+    .warning::before {
+      content: '⚠️ ';
+    }
+    .done {
+      background: linear-gradient(135deg, #7ECEC0 0%, #A8E6CF 100%);
+      color: white;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      margin-top: 30px;
+    }
+    .done h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 12px;
+      margin-top: 12px;
+    }
+    .time {
+      color: #718096;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🤖 מדריך התקנה</h1>
+  <p class="subtitle">OpenClaw על המק שלך</p>
+
+  <!-- Step 1 -->
+  <div class="step">
+    <span class="step-number">1</span>
+    <h2>יצירת בוט בטלגרם</h2>
+    <p class="time">⏱️ 2 דקות</p>
+    
+    <ol>
+      <li>פתחי טלגרם וחפשי <code>@BotFather</code></li>
+      <li>שלחי את ההודעה: <code>/newbot</code></li>
+      <li>בחרי שם לבוט: <code>מיבחוץ</code></li>
+      <li>בחרי username: <code>mibachutz_bot</code></li>
+      <li>תקבלי <strong>טוקן</strong> - שמרי אותו! נראה ככה:<br>
+        <code>7123456789:AAF...</code></li>
+    </ol>
+    
+    <div class="tip">
+      הטוקן הזה סודי! לא לשתף עם אף אחד.
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="step">
+    <span class="step-number">2</span>
+    <h2>יצירת חשבון API</h2>
+    <p class="time">⏱️ 3 דקות</p>
+    
+    <p>לכי לאתר:</p>
+    <p><a href="https://openrouter.ai" class="link" target="_blank">https://openrouter.ai</a></p>
+    
+    <ol>
+      <li>לחצי <strong>Sign Up</strong></li>
+      <li>הירשמי עם <code>meebahutz@gmail.com</code></li>
+      <li>לכי ל-<strong>Keys</strong> בתפריט</li>
+      <li>לחצי <strong>Create Key</strong></li>
+      <li>העתיקי את ה-API Key</li>
+      <li>הוסיפי קרדיט: <strong>Credits</strong> → Add $10</li>
+    </ol>
+    
+    <div class="tip">
+      $10 מספיק לכמה חודשים של שימוש רגיל.
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="step">
+    <span class="step-number">3</span>
+    <h2>התקנה על המק</h2>
+    <p class="time">⏱️ 5 דקות</p>
+    
+    <p>פתחי את <strong>Terminal</strong> (חפשי ב-Spotlight: ⌘+Space → Terminal)</p>
+    
+    <p><strong>קודם, התקיני Node.js:</strong></p>
+    <div class="code-block">/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</div>
+    <p style="margin-top: 8px; font-size: 14px; color: #718096;">המתיני שזה יסתיים (כמה דקות)</p>
+    
+    <div class="code-block">brew install node</div>
+    
+    <p style="margin-top: 16px;"><strong>עכשיו, התקיני OpenClaw:</strong></p>
+    <div class="code-block">npm install -g openclaw</div>
+    
+    <p style="margin-top: 16px;"><strong>הפעילי את ההגדרות:</strong></p>
+    <div class="code-block">openclaw init</div>
+    
+    <p style="margin-top: 12px;">תתבקשי להדביק:</p>
+    <ul>
+      <li>את הטוקן של הבוט (משלב 1)</li>
+      <li>את ה-API Key (משלב 2)</li>
+    </ul>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="step">
+    <span class="step-number">4</span>
+    <h2>הפעלה!</h2>
+    <p class="time">⏱️ 30 שניות</p>
+    
+    <p>ב-Terminal, כתבי:</p>
+    <div class="code-block">openclaw start</div>
+    
+    <p style="margin-top: 12px;">עכשיו פתחי טלגרם, חפשי את הבוט שיצרת (<code>@mibachutz_bot</code>) ושלחי הודעה!</p>
+    
+    <div class="warning">
+      המק צריך להיות דלוק כדי שהבוט יעבוד. אם את סוגרת את המחשב, הבוט נעצר.
+    </div>
+  </div>
+
+  <!-- Done -->
+  <div class="done">
+    <h2>🎉 זהו!</h2>
+    <p>יש לך עוזרת AI משלך.<br>דברי איתה בטלגרם ותתחילי לבנות.</p>
+  </div>
+
+  <div style="text-align: center; margin-top: 30px; color: #718096; font-size: 14px;">
+    <p>שאלות? דברי עם מריון 😊</p>
+  </div>
+
+</body>
+</html>

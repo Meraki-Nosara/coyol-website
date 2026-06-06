@@ -1,0 +1,81 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const lang = Astro.url.searchParams.get('lang') || 'he';
+const isHebrew = lang === 'he';
+const dir = isHebrew ? 'rtl' : 'ltr';
+---
+
+<Layout title={isHebrew ? 'נרשמת!' : 'Registered!'}>
+  <main class="min-h-screen flex flex-col items-center justify-center p-6" style="background: linear-gradient(180deg, #FFF9F5 0%, #FFFFFF 100%);" dir={dir}>
+    
+    <div class="text-center max-w-sm">
+      <!-- Success icon -->
+      <div class="w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center" style="background: linear-gradient(135deg, #7ECEC0 0%, #A8E6CF 100%);">
+        <span class="text-4xl">✓</span>
+      </div>
+      
+      <h1 class="text-2xl font-bold mb-2" style="color: var(--color-text);">
+        {isHebrew ? 'נרשמת בהצלחה!' : 'You\'re in!'}
+      </h1>
+      
+      <p class="text-base mb-6" style="color: var(--color-text-light);">
+        {isHebrew ? 'נמצאה קבוצה באזור שלך שמתמלאת עכשיו' : 'We found a group in your area that\'s filling up'}
+      </p>
+      
+      <!-- Group status card -->
+      <div class="card p-5 mb-6 text-center">
+        <p class="text-sm mb-2" style="color: var(--color-text-light);">
+          {isHebrew ? 'גן מאיר #4' : 'Gan Meir #4'}
+        </p>
+        <div class="flex justify-center gap-1 mb-3">
+          {[1,2,3,4,5,6,7,8,9,10].map((i) => (
+            <div class={`w-6 h-6 rounded-full ${i <= 4 ? '' : 'border-2 border-dashed'}`} 
+                 style={i <= 4 ? 'background: linear-gradient(135deg, #FF6B6B 0%, #FFAB91 100%);' : 'border-color: #FFE5E5;'}>
+              {i <= 4 && <img src={`https://i.pravatar.cc/100?img=${i}`} class="w-full h-full rounded-full" />}
+            </div>
+          ))}
+        </div>
+        <p class="text-lg font-bold" style="color: #FF6B6B;">4/10</p>
+        <p class="text-xs" style="color: var(--color-text-light);">
+          {isHebrew ? 'עוד 6 אמהות והקבוצה נפתחת!' : '6 more moms and the group opens!'}
+        </p>
+      </div>
+
+      <!-- Share CTA -->
+      <div class="card p-5 mb-6" style="background: linear-gradient(135deg, #FFE5E5 0%, #FFF9F5 100%);">
+        <p class="text-sm font-medium mb-3" style="color: var(--color-text);">
+          {isHebrew ? '🚀 רוצה שהקבוצה תיפתח מהר יותר?' : '🚀 Want the group to open faster?'}
+        </p>
+        <p class="text-xs mb-4" style="color: var(--color-text-light);">
+          {isHebrew ? 'שתפי את הלינק עם חברות מהאזור' : 'Share the link with friends nearby'}
+        </p>
+        <button id="share-btn" class="btn-pill btn-coral w-full py-3">
+          {isHebrew ? 'שתפי לינק' : 'Share link'} 📤
+        </button>
+      </div>
+
+      <p class="text-xs" style="color: var(--color-text-light);">
+        {isHebrew ? 'נעדכן אותך כשהקבוצה מתמלאת' : 'We\'ll notify you when the group fills up'}
+      </p>
+    </div>
+
+  </main>
+
+  <script is:inline>
+    document.getElementById('share-btn').onclick = async () => {
+      const shareData = {
+        title: 'מיבחוץ - קבוצת אמהות',
+        text: 'הצטרפי לקבוצת אמהות באזור שלך! 👶',
+        url: window.location.origin + '/signup'
+      };
+      
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        navigator.clipboard.writeText(shareData.url);
+        alert('הלינק הועתק!');
+      }
+    };
+  </script>
+</Layout>

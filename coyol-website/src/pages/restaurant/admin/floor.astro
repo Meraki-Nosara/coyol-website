@@ -985,13 +985,24 @@ import '../../../styles/coyol-tables.css';
     }
 
     function deleteSelected() {
-      if (!selectedTable || !confirm('Delete this table?')) return;
+      if (!selectedTable) {
+        alert('No table selected');
+        return;
+      }
+      // Use a simple confirm that works on all browsers/iPad
+      const confirmDelete = window.confirm('¿Eliminar esta mesa? / Delete this table?');
+      if (!confirmDelete) return;
+      
       const layouts = getLayout();
+      const tableToDelete = layouts[currentZone].find(t => t.id === selectedTable);
+      console.log('Deleting table:', tableToDelete?.name || selectedTable);
+      
       layouts[currentZone] = layouts[currentZone].filter(t => t.id !== selectedTable);
       saveLayout(layouts);
       selectedTable = null;
       document.getElementById('tableDetailsSection').style.display = 'none';
       renderFloor();
+      alert('Mesa eliminada / Table deleted');
     }
 
     // Mouse move

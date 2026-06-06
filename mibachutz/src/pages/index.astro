@@ -1,0 +1,109 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="מי בחוץ - מצאי חברות לילדים">
+  <div class="min-h-screen flex flex-col">
+    
+    <!-- Hero Section -->
+    <div class="flex-1 flex flex-col items-center justify-center px-6 py-12 bg-gradient-to-b from-sage-100 to-sage-50">
+      
+      <!-- Logo -->
+      <div class="mb-8">
+        <img src="/logo.svg" alt="מי בחוץ" class="w-28 h-28 drop-shadow-lg" />
+      </div>
+
+      <!-- Title -->
+      <h1 class="text-4xl font-bold text-sage-800 mb-3 text-center">מי בחוץ?</h1>
+      <p class="text-lg text-sage-600 text-center mb-8 max-w-xs">
+        הצטרפי לקבוצת אמהות באזור שלך ותמצאי חברות לילדים
+      </p>
+
+      <!-- Stats -->
+      <div class="flex gap-8 mb-12 text-center">
+        <div>
+          <div class="text-2xl font-bold text-peach-500">250+</div>
+          <div class="text-sm text-sage-500">אמהות</div>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-peach-500">32</div>
+          <div class="text-sm text-sage-500">קבוצות</div>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-peach-500">תל אביב</div>
+          <div class="text-sm text-sage-500">והסביבה</div>
+        </div>
+      </div>
+
+      <!-- CTA Buttons -->
+      <div class="w-full max-w-xs space-y-3">
+        <a href="/signup" class="block w-full py-4 bg-peach-500 hover:bg-peach-600 text-white text-center font-semibold rounded-2xl shadow-lg transition">
+          הצטרפי עכשיו
+        </a>
+        <a href="/login" class="block w-full py-4 bg-white hover:bg-sage-100 text-sage-700 text-center font-medium rounded-2xl border border-sage-200 transition">
+          יש לי חשבון
+        </a>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div class="px-6 py-10 bg-white">
+      <h2 class="text-xl font-bold text-sage-800 mb-6 text-center">איך זה עובד?</h2>
+      
+      <div class="space-y-6">
+        <div class="flex gap-4 items-start">
+          <div class="w-10 h-10 bg-sage-100 rounded-full flex items-center justify-center flex-shrink-0">
+            <span class="text-sage-600 font-bold">1</span>
+          </div>
+          <div>
+            <h3 class="font-semibold text-sage-800">הרשמי ב-2 דקות</h3>
+            <p class="text-sage-500 text-sm">ספרי לנו על עצמך ועל הילדים</p>
+          </div>
+        </div>
+        
+        <div class="flex gap-4 items-start">
+          <div class="w-10 h-10 bg-sage-100 rounded-full flex items-center justify-center flex-shrink-0">
+            <span class="text-sage-600 font-bold">2</span>
+          </div>
+          <div>
+            <h3 class="font-semibold text-sage-800">קבלי קבוצה</h3>
+            <p class="text-sage-500 text-sm">נחבר אותך ל-6-8 אמהות מהאזור עם ילדים בגילאים דומים</p>
+          </div>
+        </div>
+        
+        <div class="flex gap-4 items-start">
+          <div class="w-10 h-10 bg-sage-100 rounded-full flex items-center justify-center flex-shrink-0">
+            <span class="text-sage-600 font-bold">3</span>
+          </div>
+          <div>
+            <h3 class="font-semibold text-sage-800">צאי לפגוש</h3>
+            <p class="text-sage-500 text-sm">תאמי מפגשים בפארק, בבית או בבית קפה</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Testimonial -->
+    <div class="px-6 py-8 bg-sage-100">
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <p class="text-sage-700 mb-4 leading-relaxed">
+          "אחרי לידה הרגשתי מבודדת לגמרי. דרך מי בחוץ מצאתי קבוצה מדהימה של אמהות. עכשיו נפגשות כל שבוע!"
+        </p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-peach-200 rounded-full"></div>
+          <div>
+            <div class="font-medium text-sage-800">מיכל, 32</div>
+            <div class="text-sm text-sage-500">אמא לתומר (8 חודשים)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="px-6 py-6 bg-sage-800 text-sage-200 text-center text-sm safe-bottom">
+      <p>מי בחוץ © 2026</p>
+      <p class="mt-1 text-sage-400">עוזרות לאמהות למצוא חברות</p>
+    </footer>
+
+  </div>
+</Layout>

@@ -1,0 +1,217 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const lang = Astro.url.searchParams.get('lang') || 'he';
+const isHebrew = lang === 'he';
+const dir = isHebrew ? 'rtl' : 'ltr';
+
+// Mock data - will come from Supabase
+const group = {
+  id: '123',
+  name: 'גן מאיר #4',
+  status: 'pre_meeting',
+  meetingTime: 'יום ראשון 11:00'
+};
+
+const members = [
+  { id: '1', name: 'נועה', babyAge: '3 חודשים', about: 'גרה במזא"ה, אוהבת קפה', avatar: 'https://i.pravatar.cc/100?img=1' },
+  { id: '2', name: 'מיכל', babyAge: '4 חודשים', about: 'שינקין, גם יש לי בן של 3', avatar: 'https://i.pravatar.cc/100?img=5' },
+  { id: '3', name: 'דנה', babyAge: '2 חודשים', about: 'פלורנטין, עובדת מהבית', avatar: 'https://i.pravatar.cc/100?img=9' },
+  { id: '4', name: 'יעל', babyAge: '5 חודשים', about: 'לב העיר, חדשה בארץ', avatar: 'https://i.pravatar.cc/100?img=12' },
+  { id: '5', name: 'רונית', babyAge: '3 חודשים', about: 'רוטשילד, עורכת דין בחל"ד', avatar: 'https://i.pravatar.cc/100?img=15' },
+  { id: '6', name: 'שירה', babyAge: '4 חודשים', about: 'שינקין, מעצבת', avatar: 'https://i.pravatar.cc/100?img=20', isMe: true },
+  { id: '7', name: 'ליאת', babyAge: '2 חודשים', about: 'מזא"ה, רופאה', avatar: 'https://i.pravatar.cc/100?img=25' },
+  { id: '8', name: 'טל', babyAge: '4 חודשים', about: 'גן מאיר, אקטואריה', avatar: 'https://i.pravatar.cc/100?img=28' },
+  { id: '9', name: 'עדי', babyAge: '3 חודשים', about: 'הצפון הישן, מפתחת', avatar: 'https://i.pravatar.cc/100?img=32' },
+  { id: '10', name: 'נגה', babyAge: '5 חודשים', about: 'לב העיר, מורה', avatar: 'https://i.pravatar.cc/100?img=35' },
+];
+---
+
+<Layout title={isHebrew ? 'צ\'אט היכרות' : 'Pre-meeting Chat'}>
+  <main class="min-h-screen flex flex-col" style="background: var(--color-cream);" dir={dir}>
+    
+    <!-- Header -->
+    <header class="px-4 pt-4 pb-3" style="background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);">
+      <div class="flex items-center gap-3">
+        <a href="/home" class="text-white text-xl">←</a>
+        <div class="flex-1">
+          <h1 class="text-white font-semibold">{group.name}</h1>
+          <p class="text-white/80 text-xs">צ'אט זמני · {group.meetingTime}</p>
+        </div>
+        <button id="members-btn" class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white text-sm">
+          {members.length}
+        </button>
+      </div>
+    </header>
+
+    <!-- Meeting reminder banner -->
+    <div class="px-4 py-2" style="background: #7ECEC0;">
+      <p class="text-white text-xs text-center">
+        📍 {isHebrew ? 'עוד לא קבעתן מיקום למפגש!' : 'Location not set yet!'} 
+        <button id="set-location-btn" class="underline font-medium">{isHebrew ? 'הציעי מקום' : 'Suggest place'}</button>
+      </p>
+    </div>
+
+    <!-- Chat messages -->
+    <div id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-4">
+      
+      <!-- System message: intros -->
+      <div class="text-center">
+        <span class="inline-block px-3 py-1 rounded-full text-xs" style="background: var(--color-warm-gray); color: var(--color-text-light);">
+          {isHebrew ? 'הכירו את הקבוצה!' : 'Meet the group!'}
+        </span>
+      </div>
+
+      <!-- Auto-posted intros -->
+      {members.slice(0, 3).map(m => (
+        <div class="card p-3">
+          <div class="flex gap-3">
+            <div class="avatar-ring flex-shrink-0">
+              <img src={m.avatar} class="w-12 h-12 rounded-full" />
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-sm font-semibold" style="color: var(--color-text);">{m.name}</span>
+                <span class="text-xs" style="color: var(--color-text-light);">👶 {m.babyAge}</span>
+              </div>
+              <p class="text-sm" style="color: var(--color-text);">{m.about}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+
+      <!-- Regular chat messages -->
+      <div class="flex gap-2">
+        <img src="https://i.pravatar.cc/100?img=1" class="w-8 h-8 rounded-full flex-shrink-0" />
+        <div>
+          <p class="text-xs mb-1" style="color: var(--color-text-light);">נועה · 09:15</p>
+          <p class="text-sm p-3 rounded-2xl rounded-tr-sm" style="background: white;">בנות יש מקום מועדף למפגש? אני מכירה את קפה נחת בשינקין, יש להם פינה נוחה לעגלות</p>
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <img src="https://i.pravatar.cc/100?img=5" class="w-8 h-8 rounded-full flex-shrink-0" />
+        <div>
+          <p class="text-xs mb-1" style="color: var(--color-text-light);">מיכל · 09:18</p>
+          <p class="text-sm p-3 rounded-2xl rounded-tr-sm" style="background: white;">סבבה לי! מכירה את המקום</p>
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <img src="https://i.pravatar.cc/100?img=9" class="w-8 h-8 rounded-full flex-shrink-0" />
+        <div>
+          <p class="text-xs mb-1" style="color: var(--color-text-light);">דנה · 09:20</p>
+          <p class="text-sm p-3 rounded-2xl rounded-tr-sm" style="background: white;">+1 👍</p>
+        </div>
+      </div>
+
+      <!-- Location suggestion card -->
+      <div class="card p-3" style="border: 2px solid #7ECEC0;">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-lg">📍</span>
+          <span class="text-sm font-semibold" style="color: var(--color-text);">{isHebrew ? 'הצעת מיקום' : 'Location suggestion'}</span>
+        </div>
+        <p class="text-sm font-medium" style="color: var(--color-text);">קפה נחת</p>
+        <p class="text-xs mb-2" style="color: var(--color-text-light);">שינקין 42, תל אביב</p>
+        <div class="flex items-center gap-2">
+          <span class="text-xs" style="color: #7ECEC0;">✓ 3 אישרו</span>
+          <button class="btn-pill px-3 py-1 text-xs" style="background: #7ECEC0; color: white;">גם לי מתאים</button>
+        </div>
+      </div>
+
+      <!-- My message (aligned right for RTL) -->
+      <div class="flex gap-2 justify-end">
+        <div>
+          <p class="text-xs mb-1 text-left" style="color: var(--color-text-light);">את · 09:25</p>
+          <p class="text-sm p-3 rounded-2xl rounded-tl-sm" style="background: #FFE5E5;">מעולה! נתראה שם ביום ראשון 🙌</p>
+        </div>
+        <img src="https://i.pravatar.cc/100?img=20" class="w-8 h-8 rounded-full flex-shrink-0" />
+      </div>
+
+    </div>
+
+    <!-- Input -->
+    <div class="p-3 bg-white border-t" style="border-color: var(--color-warm-gray);">
+      <div class="flex gap-2">
+        <button class="w-10 h-10 rounded-full flex items-center justify-center" style="background: var(--color-warm-gray);">
+          📍
+        </button>
+        <input 
+          type="text" 
+          id="message-input"
+          placeholder={isHebrew ? 'כתבי הודעה...' : 'Message...'} 
+          class="input-soft flex-1" 
+        />
+        <button id="send-btn" class="w-10 h-10 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Members modal -->
+    <div id="members-modal" class="fixed inset-0 z-50 hidden">
+      <div class="absolute inset-0 bg-black/30" id="modal-backdrop"></div>
+      <div class="absolute bottom-0 left-0 right-0 rounded-t-3xl p-5 max-h-[80vh] overflow-y-auto" style="background: white;" dir={dir}>
+        <div class="w-12 h-1 rounded-full mx-auto mb-4" style="background: var(--color-warm-gray);"></div>
+        <h2 class="text-lg font-semibold mb-4 text-center" style="color: var(--color-text);">
+          {isHebrew ? '10 אמהות בקבוצה' : '10 moms in group'}
+        </h2>
+        
+        <div class="space-y-3">
+          {members.map(m => (
+            <div class="flex items-center gap-3 p-2 rounded-xl" style={m.isMe ? 'background: var(--color-coral-light);' : ''}>
+              <div class="avatar-ring">
+                <img src={m.avatar} class="w-12 h-12 rounded-full" />
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-medium" style="color: var(--color-text);">
+                  {m.name} {m.isMe && <span style="color: #FF6B6B;">(את)</span>}
+                </p>
+                <p class="text-xs" style="color: var(--color-text-light);">👶 {m.babyAge} · {m.about.split(',')[0]}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Location suggestion modal -->
+    <div id="location-modal" class="fixed inset-0 z-50 hidden">
+      <div class="absolute inset-0 bg-black/30" id="location-backdrop"></div>
+      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 card p-5" dir={dir}>
+        <h2 class="text-lg font-semibold mb-4 text-center" style="color: var(--color-text);">
+          📍 {isHebrew ? 'הציעי מקום למפגש' : 'Suggest a place'}
+        </h2>
+        
+        <div class="space-y-3">
+          <input type="text" placeholder={isHebrew ? 'שם המקום' : 'Place name'} class="input-soft w-full" />
+          <input type="text" placeholder={isHebrew ? 'כתובת' : 'Address'} class="input-soft w-full" />
+          <button class="btn-pill btn-coral w-full py-3">{isHebrew ? 'שלחי הצעה' : 'Send suggestion'}</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script is:inline>
+    const membersBtn = document.getElementById('members-btn');
+    const membersModal = document.getElementById('members-modal');
+    const modalBackdrop = document.getElementById('modal-backdrop');
+    
+    membersBtn.onclick = () => membersModal.classList.remove('hidden');
+    modalBackdrop.onclick = () => membersModal.classList.add('hidden');
+
+    const setLocationBtn = document.getElementById('set-location-btn');
+    const locationModal = document.getElementById('location-modal');
+    const locationBackdrop = document.getElementById('location-backdrop');
+    
+    setLocationBtn.onclick = () => locationModal.classList.remove('hidden');
+    locationBackdrop.onclick = () => locationModal.classList.add('hidden');
+
+    // Auto scroll to bottom
+    const chatContainer = document.getElementById('chat-container');
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  </script>
+</Layout>

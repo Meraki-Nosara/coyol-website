@@ -3075,19 +3075,39 @@ import '../../../styles/coyol-tables.css';
 
     // New reservation modal
     function openNewReservation() {
+      // CLEAR all form fields first (remove previous client data)
+      clearReservationForm();
       document.getElementById('newDate').value = getDateString(currentDate);
       populateTableDropdown();
       document.getElementById('newResModal').classList.add('open');
     }
 
     function openNewReservationWithTable(tableId, tableName) {
+      // CLEAR all form fields first
+      clearReservationForm();
       document.getElementById('newDate').value = getDateString(currentDate);
       populateTableDropdown(tableId);
       document.getElementById('newResModal').classList.add('open');
     }
 
+    function clearReservationForm() {
+      const fields = ['newName', 'newPhone', 'newEmail', 'newNotes'];
+      fields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      const guestsEl = document.getElementById('newGuests');
+      if (guestsEl) guestsEl.value = '2';
+      const timeEl = document.getElementById('newTime');
+      if (timeEl) timeEl.value = '18:00';
+      // Hide any gift card alerts
+      const giftMatch = document.getElementById('newResGiftMatch');
+      if (giftMatch) giftMatch.style.display = 'none';
+    }
+
     function closeModal() {
       document.getElementById('newResModal').classList.remove('open');
+      clearReservationForm(); // Clean up when closing too
     }
 
     // Walk-in functions

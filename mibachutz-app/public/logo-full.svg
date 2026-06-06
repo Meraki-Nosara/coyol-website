@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+  <!-- Logo circle -->
+  <g transform="translate(50, 0)">
+    <!-- Background circle -->
+    <circle cx="100" cy="100" r="95" fill="#F5EFE6"/>
+    
+    <!-- Top arc - Dusty Rose -->
+    <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#E8B4BC" stroke-width="14" stroke-linecap="round"/>
+    
+    <!-- Bottom arc - Soft Navy -->
+    <path d="M 20 100 A 80 80 0 0 0 180 100" fill="none" stroke="#5B7C99" stroke-width="14" stroke-linecap="round"/>
+    
+    <!-- Stroller icon -->
+    <g transform="translate(60, 55)" stroke="#5B7C99" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Handle -->
+      <path d="M 65 10 Q 70 25, 60 40"/>
+      <!-- Frame -->
+      <path d="M 15 40 L 60 40 L 55 70 L 10 70 Z"/>
+      <!-- Hood -->
+      <path d="M 15 40 Q 5 25, 25 20 Q 45 15, 55 30"/>
+      <!-- Wheels -->
+      <circle cx="15" cy="80" r="7" fill="#E8B4BC" stroke="#5B7C99"/>
+      <circle cx="50" cy="80" r="7" fill="#E8B4BC" stroke="#5B7C99"/>
+    </g>
+  </g>
+</svg>

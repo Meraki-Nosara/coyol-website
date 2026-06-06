@@ -1,0 +1,128 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Demo group data
+const group = {
+  name: 'אמהות הצפון הישן',
+  members: [
+    { name: 'מיכל', kidAge: '8 חודשים', avatar: null, lastSeen: 'פעילה' },
+    { name: 'שירה', kidAge: 'שנה', avatar: null, lastSeen: 'לפני שעה' },
+    { name: 'נועה', kidAge: '10 חודשים', avatar: null, lastSeen: 'פעילה' },
+    { name: 'רותם', kidAge: '6 חודשים', avatar: null, lastSeen: 'לפני 3 שעות' },
+    { name: 'דנה', kidAge: 'שנה וחצי', avatar: null, lastSeen: 'לפני יום' },
+    { name: 'יעל', kidAge: '9 חודשים', avatar: null, lastSeen: 'לפני שעתיים' },
+  ],
+  nextMeetup: {
+    date: 'יום שלישי, 10 ביוני',
+    time: '10:00',
+    place: 'פארק מאיר',
+    going: 4
+  }
+};
+---
+
+<Layout title="הקבוצה שלי - מי בחוץ">
+  <div class="min-h-screen bg-sage-50 pb-24">
+    
+    <!-- Header -->
+    <header class="px-4 py-4 bg-white border-b border-sage-100">
+      <div class="flex items-center justify-between">
+        <a href="/" class="text-sage-500">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+        <h1 class="font-semibold text-sage-800">{group.name}</h1>
+        <button class="text-sage-500">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Next Meetup Card -->
+    <div class="p-4">
+      <div class="bg-peach-50 border border-peach-200 rounded-2xl p-4">
+        <div class="flex items-center gap-2 mb-3">
+          <svg class="w-5 h-5 text-peach-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span class="font-semibold text-peach-700">המפגש הבא</span>
+        </div>
+        <div class="text-sage-800 font-medium mb-1">{group.nextMeetup.date}</div>
+        <div class="text-sage-600 text-sm mb-3">{group.nextMeetup.time} | {group.nextMeetup.place}</div>
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-sage-500">{group.nextMeetup.going} מגיעות</span>
+          <button class="px-4 py-2 bg-peach-500 text-white text-sm font-medium rounded-lg">
+            גם אני מגיעה!
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Members -->
+    <div class="px-4 mb-4">
+      <h2 class="text-sm font-semibold text-sage-500 mb-3 uppercase tracking-wide">חברות הקבוצה ({group.members.length})</h2>
+      <div class="bg-white rounded-2xl divide-y divide-sage-100">
+        {group.members.map(member => (
+          <div class="flex items-center gap-3 p-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-sage-200 to-peach-200 rounded-full flex items-center justify-center text-sage-600 font-bold">
+              {member.name[0]}
+            </div>
+            <div class="flex-1">
+              <div class="font-medium text-sage-800">{member.name}</div>
+              <div class="text-sm text-sage-500">ילד/ה בן/בת {member.kidAge}</div>
+            </div>
+            <div class="text-xs text-sage-400">{member.lastSeen}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="px-4 grid grid-cols-2 gap-3">
+      <button class="flex flex-col items-center gap-2 p-4 bg-white rounded-xl border border-sage-200 hover:border-peach-300 transition">
+        <svg class="w-6 h-6 text-sage-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+        <span class="text-sm text-sage-700">צ'אט קבוצתי</span>
+      </button>
+      <button class="flex flex-col items-center gap-2 p-4 bg-white rounded-xl border border-sage-200 hover:border-peach-300 transition">
+        <svg class="w-6 h-6 text-sage-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        </svg>
+        <span class="text-sm text-sage-700">הציעי מפגש</span>
+      </button>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-sage-100 flex safe-bottom">
+      <a href="/" class="flex-1 py-3 flex flex-col items-center gap-1 text-sage-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg>
+        <span class="text-xs">בית</span>
+      </a>
+      <a href="/group" class="flex-1 py-3 flex flex-col items-center gap-1 text-peach-500">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+        <span class="text-xs font-medium">הקבוצה</span>
+      </a>
+      <a href="/explore" class="flex-1 py-3 flex flex-col items-center gap-1 text-sage-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <span class="text-xs">גלי</span>
+      </a>
+      <a href="/profile" class="flex-1 py-3 flex flex-col items-center gap-1 text-sage-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+        <span class="text-xs">פרופיל</span>
+      </a>
+    </nav>
+
+  </div>
+</Layout>

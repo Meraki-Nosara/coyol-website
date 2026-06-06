@@ -214,6 +214,10 @@
         {
           "date": "2026-06-03",
           "event": "Resolution issued - clausura lifted"
+        },
+        {
+          "date": "2026-06-05",
+          "event": "Muni inspection to formally lift clausura (morning)"
         }
       ],
       "invu_opinion": {
@@ -236,7 +240,7 @@
         "cuarto": "Apelación declared MOOT since revocatoria granted",
         "quinto": "Notify recurrente and proceed with formal lifting"
       },
-      "next_step": "Muni must do site visit to formally document clausura lifting via acta administrativa",
+      "next_step": "TOMORROW June 5 - Muni inspection (morning) - need authorized person on site",
       "documents": [
         {
           "filename": "2026-06-03-resolucion-revocatoria-clausura.pdf",

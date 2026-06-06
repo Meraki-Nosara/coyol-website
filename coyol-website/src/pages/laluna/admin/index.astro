@@ -3757,6 +3757,17 @@ import '../../../styles/laluna-tables.css';
 
     // New reservation modal
     function openNewReservation(preselectedTable = null) {
+      // CLEAR all form fields first (remove previous client data)
+      document.getElementById('newName').value = '';
+      document.getElementById('newPhone').value = '';
+      document.getElementById('newEmail').value = '';
+      document.getElementById('newNotes').value = '';
+      document.getElementById('newGuests').value = '2';
+      document.getElementById('newTime').value = '18:00';
+      // Hide any gift card match alerts
+      const giftMatch = document.getElementById('newResGiftMatch');
+      if (giftMatch) giftMatch.style.display = 'none';
+      
       document.getElementById('newDate').value = getDateString(currentDate);
       
       // Populate table dropdown
@@ -3863,6 +3874,14 @@ import '../../../styles/laluna-tables.css';
 
     function closeModal() {
       document.getElementById('newResModal').classList.remove('open');
+      // Clear form fields when closing (privacy + clean slate)
+      document.getElementById('newName').value = '';
+      document.getElementById('newPhone').value = '';
+      document.getElementById('newEmail').value = '';
+      document.getElementById('newNotes').value = '';
+      document.getElementById('newGuests').value = '2';
+      const giftMatch = document.getElementById('newResGiftMatch');
+      if (giftMatch) giftMatch.style.display = 'none';
     }
 
     // Walk-in functions

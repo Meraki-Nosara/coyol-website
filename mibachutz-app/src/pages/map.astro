@@ -1,0 +1,791 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const lang = Astro.url.searchParams.get('lang') || 'he';
+const isHebrew = lang === 'he';
+
+const t = {
+  he: {
+    title: 'מפה',
+    momsOut: 'אמהות בחוץ',
+    activities: 'פעילויות',
+    classes: 'שיעורים',
+    all: 'הכל',
+    today: 'היום',
+    thisWeek: 'השבוע',
+    join: 'הצטרפי',
+    going: 'הולכות',
+    showList: 'רשימה',
+    showMap: 'מפה'
+  },
+  en: {
+    title: 'Map',
+    momsOut: 'Moms out',
+    activities: 'Activities', 
+    classes: 'Classes',
+    all: 'All',
+    today: 'Today',
+    thisWeek: 'This week',
+    join: 'Join',
+    going: 'going',
+    showList: 'List',
+    showMap: 'Map'
+  }
+};
+
+const text = isHebrew ? t.he : t.en;
+const dir = isHebrew ? 'rtl' : 'ltr';
+
+// Mock data
+const momsOut = [
+  { id: 1, name: 'נועה', location: 'קפה נחת', lat: 32.0735, lng: 34.7752, avatar: '👩‍🦰' },
+  { id: 2, name: 'מיכל', location: 'גן מאיר', lat: 32.0728, lng: 34.7742, avatar: '👩' },
+  { id: 3, name: 'דנה', location: 'פארק הירקון', lat: 32.0955, lng: 34.7945, avatar: '👩‍🦱' },
+];
+
+// Activities with actual dates (show today + tomorrow only)
+const today = new Date();
+const tomorrow = new Date(today);
+tomorrow.setDate(tomorrow.getDate() + 1);
+
+const formatDate = (d: Date) => d.toLocaleDateString('he-IL', { weekday: 'short' });
+const formatTime = (h: number, m: number) => `${h}:${m.toString().padStart(2, '0')}`;
+
+const activities = [
+  { id: 1, title: 'קפה בוקר', location: 'קפה שניאור', lat: 32.0745, lng: 34.7760, day: 'tomorrow', time: '10:00', displayTime: 'מחר 10:00', type: 'mom', icon: '☕', going: 3 },
+  { id: 2, title: 'יוגה אחרי לידה', location: 'סטודיו זן', lat: 32.0700, lng: 34.7800, day: 'tomorrow', time: '09:00', displayTime: 'מחר 09:00', type: 'class', icon: '🧘‍♀️', going: 5, price: '₪50' },
+  { id: 3, title: 'קפה + פארק', location: 'קפה לואיז', lat: 32.0710, lng: 34.7780, day: 'today', time: '16:00', displayTime: 'היום 16:00', type: 'mom', icon: '☕', going: 4 },
+  { id: 4, title: 'התפתחות הילד', location: 'מרכז מאמא', lat: 32.0680, lng: 34.7720, day: 'today', time: '12:00', displayTime: 'היום 12:00', type: 'class', icon: '👶', going: 6, price: '₪80' },
+];
+---
+
+<Layout title={text.title}>
+  <main class="h-screen flex flex-col" style="background-color: var(--color-oat);" dir={dir}>
+    
+    <!-- Header -->
+    <header class="px-5 pt-4 pb-3 flex items-center justify-between" style="background-color: var(--color-white);">
+      <h1 class="text-xl font-bold" style="color: var(--color-navy-dark);">{text.title}</h1>
+      
+      <!-- Filter toggles -->
+      <div class="flex gap-1 p-1 rounded-full" style="background-color: var(--color-oat);">
+        <button class="filter-btn active px-3 py-1 rounded-full text-xs font-medium transition-all" data-filter="all">
+          {text.all}
+        </button>
+        <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium transition-all" data-filter="moms">
+          👩
+        </button>
+        <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium transition-all" data-filter="activities">
+          ☕
+        </button>
+        <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium transition-all" data-filter="classes">
+          📚
+        </button>
+      </div>
+    </header>
+
+    <!-- Day picker - Mobile: single day with arrows / Desktop: full week -->
+    <div class="px-5 py-2 flex items-center justify-center gap-4" style="background-color: var(--color-white); border-bottom: 1px solid var(--color-oat);">
+      <!-- Mobile: arrows + single day -->
+      <div class="flex md:hidden items-center gap-4">
+        <button id="prev-day" class="w-8 h-8 rounded-full flex items-center justify-center" style="background-color: var(--color-oat);">
+          ←
+        </button>
+        <div id="current-day-mobile" class="px-4 py-2 rounded-xl text-center min-w-[100px]" style="background-color: var(--color-rose); color: white;">
+          <div class="text-xs" id="mobile-day-label">{isHebrew ? 'היום' : 'Today'}</div>
+          <div class="text-lg font-bold" id="mobile-day-num"></div>
+        </div>
+        <button id="next-day" class="w-8 h-8 rounded-full flex items-center justify-center" style="background-color: var(--color-oat);">
+          →
+        </button>
+      </div>
+      
+      <!-- Desktop: full week -->
+      <div class="hidden md:flex gap-2">
+        <button class="day-btn active flex-shrink-0 w-14 py-2 rounded-xl text-center" data-day="0" style="background-color: var(--color-rose); color: white;">
+          <div class="text-xs">{isHebrew ? 'היום' : 'Today'}</div>
+          <div class="text-lg font-bold" id="day-0"></div>
+        </button>
+        <button class="day-btn flex-shrink-0 w-14 py-2 rounded-xl text-center" data-day="1" style="background-color: var(--color-oat);">
+          <div class="text-xs" id="label-1"></div>
+          <div class="text-lg font-bold" id="day-1"></div>
+        </button>
+        <button class="day-btn flex-shrink-0 w-14 py-2 rounded-xl text-center" data-day="2" style="background-color: var(--color-oat);">
+          <div class="text-xs" id="label-2"></div>
+          <div class="text-lg font-bold" id="day-2"></div>
+        </button>
+        <button class="day-btn flex-shrink-0 w-14 py-2 rounded-xl text-center" data-day="3" style="background-color: var(--color-oat);">
+          <div class="text-xs" id="label-3"></div>
+          <div class="text-lg font-bold" id="day-3"></div>
+        </button>
+        <button class="day-btn flex-shrink-0 w-14 py-2 rounded-xl text-center" data-day="4" style="background-color: var(--color-oat);">
+          <div class="text-xs" id="label-4"></div>
+          <div class="text-lg font-bold" id="day-4"></div>
+        </button>
+        <button class="day-btn flex-shrink-0 w-14 py-2 rounded-xl text-center" data-day="5" style="background-color: var(--color-oat);">
+          <div class="text-xs" id="label-5"></div>
+          <div class="text-lg font-bold" id="day-5"></div>
+        </button>
+        <button class="day-btn flex-shrink-0 w-14 py-2 rounded-xl text-center" data-day="6" style="background-color: var(--color-oat);">
+          <div class="text-xs" id="label-6"></div>
+          <div class="text-lg font-bold" id="day-6"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Split view: Map 70% + Chat 30% (desktop) / Map 100% (mobile) -->
+    <div class="flex-1 flex">
+      <!-- Map section -->
+      <div class="w-full md:w-[70%] relative">
+      <div id="map" class="w-full h-full"></div>
+      
+      <!-- + Button ON THE MAP -->
+      <button 
+        id="fab-btn"
+        class="absolute w-14 h-14 rounded-full shadow-xl flex items-center justify-center text-2xl font-bold"
+        style="background-color: #E8B4BC; color: white; top: 20px; right: 20px; z-index: 1000;"
+      >
+        +
+      </button>
+      
+      <!-- Chat button (mobile only) -->
+      <button 
+        id="chat-fab"
+        class="md:hidden absolute w-12 h-12 rounded-full shadow-xl flex items-center justify-center"
+        style="background-color: #5B7C99; color: white; bottom: 100px; right: 20px; z-index: 1000;"
+      >
+        <span class="text-lg">💬</span>
+        <span class="absolute -top-1 -right-1 w-5 h-5 rounded-full text-xs flex items-center justify-center" style="background-color: #E8B4BC;">3</span>
+      </button>
+      
+      <!-- Mobile chat popup -->
+      <div id="chat-popup" class="md:hidden absolute inset-4 rounded-2xl shadow-2xl flex-col hidden" style="background-color: white; z-index: 1002;">
+        <!-- Chat header -->
+        <div class="p-3 border-b flex items-center justify-between" style="border-color: var(--color-oat);">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background-color: var(--color-rose-light);">
+              <span class="text-sm">👯‍♀️</span>
+            </div>
+            <div>
+              <h3 class="text-sm font-semibold" style="color: var(--color-navy-dark);">גן מאיר #3</h3>
+              <p class="text-xs" style="color: var(--color-text-light);">7 חברות</p>
+            </div>
+          </div>
+          <button id="close-chat" class="w-8 h-8 rounded-full flex items-center justify-center" style="background-color: var(--color-oat);">
+            ✕
+          </button>
+        </div>
+        
+        <!-- Messages -->
+        <div class="flex-1 overflow-y-auto p-3 space-y-3">
+          <div class="flex gap-2">
+            <div class="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center text-xs" style="background-color: var(--color-rose-light);">נ</div>
+            <div>
+              <p class="text-xs" style="color: var(--color-text-light);">נועה • 10:32</p>
+              <p class="text-sm p-2 rounded-lg" style="background-color: var(--color-oat);">בנות מי רוצה להצטרף? אני בקפה נחת ☕</p>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <div class="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center text-xs" style="background-color: var(--color-sage-light);">מ</div>
+            <div>
+              <p class="text-xs" style="color: var(--color-text-light);">מיכל • 10:35</p>
+              <p class="text-sm p-2 rounded-lg" style="background-color: var(--color-oat);">בדרך אלייך!</p>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <div class="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center text-xs" style="background-color: var(--color-navy-light); color: white;">ד</div>
+            <div>
+              <p class="text-xs" style="color: var(--color-text-light);">דנה • 10:38</p>
+              <p class="text-sm p-2 rounded-lg" style="background-color: var(--color-oat);">אני בפארק, אולי אחר כך 😊</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Input -->
+        <div class="p-2 border-t flex gap-2" style="border-color: var(--color-oat);">
+          <input 
+            type="text" 
+            placeholder="כתבי..."
+            class="flex-1 px-3 py-2 rounded-full text-sm"
+            style="background-color: var(--color-oat);"
+          />
+          <button class="w-8 h-8 rounded-full flex items-center justify-center" style="background-color: var(--color-rose);">
+            <svg class="w-4 h-4 text-white rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Legend -->
+      <div class="absolute top-3 right-3 rtl:right-auto rtl:left-3 p-3 rounded-xl shadow-lg" style="background-color: white;">
+        <div class="flex flex-col gap-2 text-xs">
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded-full" style="background-color: var(--color-rose);"></div>
+            <span>{text.momsOut}</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded-full" style="background-color: var(--color-sage);"></div>
+            <span>{text.activities}</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded-full" style="background-color: var(--color-navy);"></div>
+            <span>{text.classes}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick action menu (hidden by default) -->
+      <div id="fab-menu" class="absolute hidden" style="top: 80px; right: 20px; z-index: 1000;">
+        <div class="flex flex-col gap-2 items-end">
+          <button id="quick-link-btn" class="flex items-center gap-2 px-3 py-2 rounded-full shadow-lg text-sm" style="background-color: white;">
+            🔗 {isHebrew ? 'לינק' : 'Link'}
+          </button>
+          <button id="quick-meetup-btn" class="flex items-center gap-2 px-3 py-2 rounded-full shadow-lg text-sm" style="background-color: white;">
+            ☕ {isHebrew ? 'קפה?' : 'Coffee?'}
+          </button>
+          <button id="quick-walk-btn" class="flex items-center gap-2 px-3 py-2 rounded-full shadow-lg text-sm" style="background-color: white;">
+            🌳 {isHebrew ? 'טיול?' : 'Walk?'}
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick meetup modal - OVERLAY ON MAP -->
+      <div id="quick-modal" class="absolute inset-0 hidden" style="z-index: 1001;">
+        <div class="absolute inset-0 bg-black/30" id="quick-backdrop"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 rounded-2xl p-4 shadow-xl" style="background-color: white;" dir={dir}>
+          
+          <h2 id="modal-title" class="text-lg font-bold mb-3 text-center" style="color: var(--color-navy-dark);"></h2>
+          
+          <div id="meetup-form" class="space-y-3">
+            <input 
+              type="text" 
+              id="quick-location"
+              placeholder={isHebrew ? 'איפה?' : 'Where?'}
+              class="w-full px-3 py-2 rounded-lg text-sm"
+              style="background-color: var(--color-oat);"
+            />
+            <div class="flex gap-1">
+              <button class="when-btn flex-1 py-2 rounded-lg text-xs font-medium" data-when="now" style="background-color: var(--color-rose); color: white;">
+                {isHebrew ? 'עכשיו' : 'Now'}
+              </button>
+              <button class="when-btn flex-1 py-2 rounded-lg text-xs font-medium" data-when="30min" style="background-color: var(--color-oat);">
+                30ד׳
+              </button>
+              <button class="when-btn flex-1 py-2 rounded-lg text-xs font-medium" data-when="1hour" style="background-color: var(--color-oat);">
+                1ש׳
+              </button>
+              <select id="time-select" class="flex-1 py-2 px-1 rounded-lg text-xs font-medium text-center" style="background-color: var(--color-oat);">
+                <option value="">{isHebrew ? 'שעה' : 'Time'}</option>
+                <option value="09:00">09:00</option>
+                <option value="10:00">10:00</option>
+                <option value="11:00">11:00</option>
+                <option value="12:00">12:00</option>
+                <option value="13:00">13:00</option>
+                <option value="14:00">14:00</option>
+                <option value="15:00">15:00</option>
+                <option value="16:00">16:00</option>
+                <option value="17:00">17:00</option>
+                <option value="18:00">18:00</option>
+              </select>
+            </div>
+            <button 
+              id="send-invite-btn"
+              class="w-full py-2 rounded-lg font-bold text-sm"
+              style="background-color: var(--color-rose); color: white;"
+            >
+              {isHebrew ? 'שלחי →' : 'Send →'}
+            </button>
+          </div>
+          
+          <!-- Link form (hidden by default) -->
+          <div id="link-form" class="space-y-3 hidden">
+            <input 
+              type="url" 
+              id="quick-link"
+              placeholder="https://..."
+              class="w-full px-3 py-2 rounded-lg text-sm"
+              style="background-color: var(--color-oat);"
+            />
+            <div class="flex gap-2">
+              <input 
+                type="date" 
+                id="quick-date"
+                class="flex-1 px-2 py-2 rounded-lg text-sm"
+                style="background-color: var(--color-oat);"
+              />
+              <input 
+                type="time" 
+                id="quick-time"
+                class="w-20 px-2 py-2 rounded-lg text-sm"
+                style="background-color: var(--color-oat);"
+              />
+            </div>
+            <button 
+              id="send-link-btn"
+              class="w-full py-2 rounded-lg font-bold text-sm"
+              style="background-color: var(--color-rose); color: white;"
+            >
+              {isHebrew ? 'שתפי →' : 'Share →'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity cards (bottom sheet style) -->
+      <div id="activity-cards" class="absolute bottom-20 left-0 right-0 px-4">
+        <div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+          {activities.map(activity => (
+            <div 
+              class="activity-card flex-shrink-0 w-64 p-4 rounded-xl shadow-lg"
+              style="background-color: white;"
+              data-type={activity.type}
+              data-day={activity.day}
+              data-lat={activity.lat}
+              data-lng={activity.lng}
+            >
+              <div class="flex items-start gap-3">
+                <div 
+                  class="w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
+                  style={`background-color: ${activity.type === 'class' ? 'var(--color-navy-light)' : 'var(--color-sage-light)'};`}
+                >
+                  {activity.icon}
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-semibold truncate" style="color: var(--color-navy-dark);">{activity.title}</h3>
+                  <p class="text-xs truncate" style="color: var(--color-text-light);">📍 {activity.location}</p>
+                  <p class="text-xs font-medium" style="color: var(--color-rose);">
+                  {activity.day === 'today' ? '🟢' : '🟡'} {activity.displayTime}
+                </p>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-3">
+                <span class="text-xs" style="color: var(--color-text-light);">
+                  {activity.going} {text.going}
+                  {activity.price && ` • ${activity.price}`}
+                </span>
+                <button class="px-3 py-1 rounded-full text-xs font-medium" style="background-color: var(--color-rose); color: white;">
+                  {text.join}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      </div>
+      
+      <!-- Chat section - HIDDEN on mobile, 30% on desktop -->
+      <div class="hidden md:flex md:w-[30%] flex-col border-r" style="background-color: white; border-color: var(--color-oat);">
+        <!-- Chat header -->
+        <div class="p-3 border-b" style="border-color: var(--color-oat);">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background-color: var(--color-rose-light);">
+              <span class="text-sm">👯‍♀️</span>
+            </div>
+            <div>
+              <h3 class="text-sm font-semibold" style="color: var(--color-navy-dark);">גן מאיר #3</h3>
+              <p class="text-xs" style="color: var(--color-text-light);">7 חברות</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Messages -->
+        <div class="flex-1 overflow-y-auto p-3 space-y-3" id="chat-messages">
+          <div class="flex gap-2">
+            <div class="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center text-xs" style="background-color: var(--color-rose-light);">נ</div>
+            <div>
+              <p class="text-xs" style="color: var(--color-text-light);">נועה • 10:32</p>
+              <p class="text-sm p-2 rounded-lg" style="background-color: var(--color-oat);">בנות מי רוצה להצטרף? אני בקפה נחת ☕</p>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <div class="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center text-xs" style="background-color: var(--color-sage-light);">מ</div>
+            <div>
+              <p class="text-xs" style="color: var(--color-text-light);">מיכל • 10:35</p>
+              <p class="text-sm p-2 rounded-lg" style="background-color: var(--color-oat);">בדרך אלייך!</p>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <div class="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center text-xs" style="background-color: var(--color-navy-light); color: white;">ד</div>
+            <div>
+              <p class="text-xs" style="color: var(--color-text-light);">דנה • 10:38</p>
+              <p class="text-sm p-2 rounded-lg" style="background-color: var(--color-oat);">אני בפארק, אולי אחר כך 😊</p>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <div class="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center text-xs" style="background-color: var(--color-rose-light);">נ</div>
+            <div>
+              <p class="text-xs" style="color: var(--color-text-light);">נועה • 10:40</p>
+              <p class="text-sm p-2 rounded-lg" style="background-color: var(--color-oat);">סבבה! מיכל אני מזמינה לך מקום</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Input -->
+        <div class="p-2 border-t flex gap-2" style="border-color: var(--color-oat);">
+          <input 
+            type="text" 
+            placeholder="כתבי..."
+            class="flex-1 px-3 py-2 rounded-full text-sm"
+            style="background-color: var(--color-oat);"
+          />
+          <button class="w-8 h-8 rounded-full flex items-center justify-center" style="background-color: var(--color-rose);">
+            <svg class="w-4 h-4 text-white rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bg-white border-t px-6 py-3" style="border-color: var(--color-oat);">
+      <div class="flex justify-around max-w-md mx-auto">
+        <a href={`/home?lang=${lang}`} class="flex flex-col items-center" style="color: var(--color-text-light);">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          <span class="text-xs mt-1">{isHebrew ? 'בית' : 'Home'}</span>
+        </a>
+        <a href={`/map?lang=${lang}`} class="flex flex-col items-center" style="color: var(--color-rose);">
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </svg>
+          <span class="text-xs mt-1 font-medium">{isHebrew ? 'מפה' : 'Map'}</span>
+        </a>
+        <a href={`/activities?lang=${lang}`} class="flex flex-col items-center" style="color: var(--color-text-light);">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span class="text-xs mt-1">{isHebrew ? 'פעילויות' : 'Activities'}</span>
+        </a>
+        <a href={`/chat?lang=${lang}`} class="flex flex-col items-center" style="color: var(--color-text-light);">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+          <span class="text-xs mt-1">{isHebrew ? 'צ\'אט' : 'Chat'}</span>
+        </a>
+        <a href={`/profile?lang=${lang}`} class="flex flex-col items-center" style="color: var(--color-text-light);">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          <span class="text-xs mt-1">{isHebrew ? 'פרופיל' : 'Profile'}</span>
+        </a>
+      </div>
+    </nav>
+  </main>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script is:inline src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', function() {
+      const map = L.map('map', {
+        zoomControl: false,
+        attributionControl: false
+      }).setView([32.0731, 34.7747], 14);
+      
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19
+      }).addTo(map);
+
+      // Store all markers
+      const markers = { moms: [], activities: [], classes: [] };
+
+      // Moms out (pink markers)
+      const momsData = [
+        { name: 'נועה', location: 'קפה נחת', lat: 32.0735, lng: 34.7752 },
+        { name: 'מיכל', location: 'גן מאיר', lat: 32.0728, lng: 34.7742 },
+        { name: 'דנה', location: 'פארק הירקון', lat: 32.0955, lng: 34.7945 },
+      ];
+
+      momsData.forEach(mom => {
+        const icon = L.divIcon({
+          className: 'mom-marker',
+          html: `<div style="background-color: #E8B4BC; width: 32px; height: 32px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; font-size: 14px;">👩</div>`,
+          iconSize: [32, 32],
+          iconAnchor: [16, 16]
+        });
+        const marker = L.marker([mom.lat, mom.lng], { icon })
+          .addTo(map)
+          .bindPopup(`<strong>${mom.name}</strong><br/>📍 ${mom.location}`);
+        markers.moms.push(marker);
+      });
+
+      // Activities (green markers) & Classes (navy markers)
+      const activitiesData = [
+        { title: 'קפה בוקר', location: 'קפה שניאור', lat: 32.0745, lng: 34.7760, type: 'activity', icon: '☕' },
+        { title: 'יוגה אחרי לידה', location: 'סטודיו זן', lat: 32.0700, lng: 34.7800, type: 'class', icon: '🧘‍♀️' },
+        { title: 'טיול עגלות', location: 'פארק הירקון', lat: 32.0980, lng: 34.7900, type: 'activity', icon: '🌳' },
+        { title: 'התפתחות 0-4 חודשים', location: 'מרכז מאמא', lat: 32.0680, lng: 34.7720, type: 'class', icon: '👶' },
+        { title: 'קפה + פארק', location: 'קפה לואיז', lat: 32.0710, lng: 34.7780, type: 'activity', icon: '☕' },
+      ];
+
+      activitiesData.forEach(act => {
+        const color = act.type === 'class' ? '#5B7C99' : '#9CB09A';
+        const icon = L.divIcon({
+          className: 'activity-marker',
+          html: `<div style="background-color: ${color}; width: 36px; height: 36px; border-radius: 12px; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; font-size: 16px;">${act.icon}</div>`,
+          iconSize: [36, 36],
+          iconAnchor: [18, 18]
+        });
+        const marker = L.marker([act.lat, act.lng], { icon })
+          .addTo(map)
+          .bindPopup(`<strong>${act.title}</strong><br/>📍 ${act.location}`);
+        
+        if (act.type === 'class') {
+          markers.classes.push(marker);
+        } else {
+          markers.activities.push(marker);
+        }
+      });
+
+      // Filter buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.filter-btn').forEach(b => {
+            b.classList.remove('active');
+            b.style.backgroundColor = 'transparent';
+            b.style.color = 'var(--color-text-light)';
+          });
+          this.classList.add('active');
+          this.style.backgroundColor = 'var(--color-rose)';
+          this.style.color = 'white';
+
+          const filter = this.dataset.filter;
+          
+          // Show/hide markers
+          markers.moms.forEach(m => filter === 'all' || filter === 'moms' ? m.addTo(map) : map.removeLayer(m));
+          markers.activities.forEach(m => filter === 'all' || filter === 'activities' ? m.addTo(map) : map.removeLayer(m));
+          markers.classes.forEach(m => filter === 'all' || filter === 'classes' ? m.addTo(map) : map.removeLayer(m));
+
+          // Show/hide cards
+          document.querySelectorAll('.activity-card').forEach(card => {
+            if (filter === 'all') {
+              card.style.display = 'block';
+            } else if (filter === 'moms') {
+              card.style.display = 'none';
+            } else if (filter === 'activities') {
+              card.style.display = card.dataset.type === 'mom' ? 'block' : 'none';
+            } else if (filter === 'classes') {
+              card.style.display = card.dataset.type === 'class' ? 'block' : 'none';
+            }
+          });
+        });
+      });
+
+      // Generate week days
+      const hebrewDays = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳'];
+      const hebrewDaysFull = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+      const today = new Date();
+      
+      // Desktop: fill all 7 days
+      for (let i = 0; i < 7; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() + i);
+        const dayNum = date.getDate();
+        const dayName = hebrewDays[date.getDay()];
+        
+        const dayEl = document.getElementById(`day-${i}`);
+        if (dayEl) dayEl.textContent = dayNum;
+        
+        if (i > 0) {
+          const labelEl = document.getElementById(`label-${i}`);
+          if (labelEl) labelEl.textContent = dayName;
+        }
+      }
+      
+      // Mobile: single day with arrows
+      let currentMobileDay = 0;
+      const mobileDayLabel = document.getElementById('mobile-day-label');
+      const mobileDayNum = document.getElementById('mobile-day-num');
+      const prevDayBtn = document.getElementById('prev-day');
+      const nextDayBtn = document.getElementById('next-day');
+      
+      function updateMobileDay() {
+        const d = new Date(today);
+        d.setDate(d.getDate() + currentMobileDay);
+        
+        if (currentMobileDay === 0) {
+          mobileDayLabel.textContent = 'היום';
+        } else if (currentMobileDay === 1) {
+          mobileDayLabel.textContent = 'מחר';
+        } else {
+          mobileDayLabel.textContent = hebrewDaysFull[d.getDay()];
+        }
+        mobileDayNum.textContent = d.getDate();
+        
+        prevDayBtn.style.opacity = currentMobileDay === 0 ? '0.3' : '1';
+        nextDayBtn.style.opacity = currentMobileDay === 6 ? '0.3' : '1';
+      }
+      
+      if (mobileDayNum) updateMobileDay();
+      
+      if (prevDayBtn) {
+        prevDayBtn.addEventListener('click', function() {
+          if (currentMobileDay > 0) {
+            currentMobileDay--;
+            updateMobileDay();
+          }
+        });
+      }
+      
+      if (nextDayBtn) {
+        nextDayBtn.addEventListener('click', function() {
+          if (currentMobileDay < 6) {
+            currentMobileDay++;
+            updateMobileDay();
+          }
+        });
+      }
+
+      // Day picker buttons
+      document.querySelectorAll('.day-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.day-btn').forEach(b => {
+            b.style.backgroundColor = 'var(--color-oat)';
+            b.style.color = 'var(--color-navy-dark)';
+          });
+          this.style.backgroundColor = 'var(--color-rose)';
+          this.style.color = 'white';
+          
+          const selectedDay = parseInt(this.dataset.day);
+          
+          // TODO: Filter activities by selected date from Supabase
+          // For now just visual feedback
+          console.log('Selected day offset:', selectedDay);
+        });
+      });
+
+      // Card click -> fly to location
+      document.querySelectorAll('.activity-card').forEach(card => {
+        card.addEventListener('click', function() {
+          const lat = parseFloat(this.dataset.lat);
+          const lng = parseFloat(this.dataset.lng);
+          map.flyTo([lat, lng], 16, { duration: 0.5 });
+        });
+      });
+
+      // Initialize active states
+      const activeFilter = document.querySelector('.filter-btn.active');
+      if (activeFilter) {
+        activeFilter.style.backgroundColor = 'var(--color-rose)';
+        activeFilter.style.color = 'white';
+      }
+
+      // FAB button
+      const fabBtn = document.getElementById('fab-btn');
+      const fabMenu = document.getElementById('fab-menu');
+      let fabOpen = false;
+      
+      fabBtn.addEventListener('click', function() {
+        fabOpen = !fabOpen;
+        fabMenu.classList.toggle('hidden');
+        this.style.transform = fabOpen ? 'rotate(45deg)' : 'rotate(0deg)';
+      });
+
+      // Quick meetup buttons
+      const quickModal = document.getElementById('quick-modal');
+      const quickBackdrop = document.getElementById('quick-backdrop');
+      const modalTitle = document.getElementById('modal-title');
+      
+      const meetupForm = document.getElementById('meetup-form');
+      const linkForm = document.getElementById('link-form');
+      
+      function showModal(title, formType) {
+        modalTitle.textContent = title;
+        fabMenu.classList.add('hidden');
+        fabOpen = false;
+        fabBtn.style.transform = 'rotate(0deg)';
+        
+        if (formType === 'link') {
+          meetupForm.classList.add('hidden');
+          linkForm.classList.remove('hidden');
+        } else {
+          meetupForm.classList.remove('hidden');
+          linkForm.classList.add('hidden');
+        }
+        
+        quickModal.classList.remove('hidden');
+      }
+      
+      document.getElementById('quick-link-btn').addEventListener('click', function() {
+        showModal('🔗 שתפי לינק', 'link');
+      });
+      
+      document.getElementById('quick-meetup-btn').addEventListener('click', function() {
+        showModal('☕ קפה עכשיו?', 'meetup');
+      });
+      
+      document.getElementById('quick-walk-btn').addEventListener('click', function() {
+        showModal('🌳 טיול עגלות?', 'meetup');
+      });
+      
+      quickBackdrop.addEventListener('click', function() {
+        quickModal.classList.add('hidden');
+      });
+
+      // When buttons
+      document.querySelectorAll('.when-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.when-btn').forEach(b => {
+            b.style.backgroundColor = 'var(--color-oat)';
+            b.style.color = 'var(--color-navy-dark)';
+          });
+          this.style.backgroundColor = 'var(--color-rose)';
+          this.style.color = 'white';
+        });
+      });
+
+      // Send invite
+      document.getElementById('send-invite-btn').addEventListener('click', function() {
+        const location = document.getElementById('quick-location').value;
+        if (!location) {
+          alert('איפה נפגשות?');
+          return;
+        }
+        // TODO: Save to Supabase + send to group chat
+        alert('נשלח לקבוצה! 🎉');
+        quickModal.classList.add('hidden');
+      });
+      
+      // Send link
+      document.getElementById('send-link-btn').addEventListener('click', function() {
+        const link = document.getElementById('quick-link').value;
+        if (!link) {
+          alert('הדביקי לינק');
+          return;
+        }
+        // TODO: Save to Supabase + send to group chat
+        alert('שותף לקבוצה! 🎉');
+        quickModal.classList.add('hidden');
+      });
+      
+      // Mobile chat popup
+      const chatFab = document.getElementById('chat-fab');
+      const chatPopup = document.getElementById('chat-popup');
+      const closeChat = document.getElementById('close-chat');
+      
+      if (chatFab) {
+        chatFab.addEventListener('click', function() {
+          chatPopup.classList.remove('hidden');
+          chatPopup.classList.add('flex');
+        });
+      }
+      
+      if (closeChat) {
+        closeChat.addEventListener('click', function() {
+          chatPopup.classList.add('hidden');
+          chatPopup.classList.remove('flex');
+        });
+      }
+      document.querySelector('.time-btn.active').style.backgroundColor = 'var(--color-sage-light)';
+      document.querySelector('.time-btn.active').style.color = 'var(--color-navy-dark)';
+    });
+  </script>
+
+  <style is:inline>
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</Layout>

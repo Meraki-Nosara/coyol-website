@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-29T06:39:56.672746",
+  "lastUpdated": "2026-06-06T03:35:00Z",
   "source": "Anlly QuickBooks Ventas files (converted to NET)",
   "daily": [
     {
@@ -2413,7 +2413,7 @@
       "service10": 155460,
       "iva13": 208738,
       "source": "ingrid_email",
-      "cashier": "Carmen Mu\u00f1oz"
+      "cashier": "Carmen Muñoz"
     },
     {
       "date": "2026-05-20",
@@ -2533,7 +2533,7 @@
       "service10": 236442,
       "iva13": 320916,
       "source": "ingrid_email",
-      "cashier": "Carmen Mu\u00f1oz"
+      "cashier": "Carmen Muñoz"
     },
     {
       "date": "2026-05-23",
@@ -2635,7 +2635,7 @@
       "service10": 183707,
       "iva13": 239370,
       "source": "ingrid_email",
-      "cashier": "Carmen Mu\u00f1oz"
+      "cashier": "Carmen Muñoz"
     },
     {
       "date": "2026-05-26",
@@ -2906,7 +2906,7 @@
       "service10": 56770,
       "iva13": 73801,
       "source": "ingrid_email",
-      "cashier": "Yordany D\u00edaz"
+      "cashier": "Yordany Díaz"
     },
     {
       "date": "2026-06-02",
@@ -2917,6 +2917,42 @@
       "netSales": 565101,
       "service10": 40727,
       "iva13": 73463,
+      "source": "ingrid_email",
+      "cashier": "Carlos Cabrera"
+    },
+    {
+      "date": "2026-06-04",
+      "restaurant": "laluna",
+      "cash": 379600,
+      "card": 2654737,
+      "total": 2655641,
+      "netSales": 2163949,
+      "service10": 210378,
+      "iva13": 281314,
+      "source": "ingrid_email",
+      "cashier": "Diego Lopez"
+    },
+    {
+      "date": "2026-06-04",
+      "restaurant": "coyol",
+      "cash": 50000,
+      "card": 2970227,
+      "total": 2652249,
+      "netSales": 2156300,
+      "service10": 215630,
+      "iva13": 280319,
+      "source": "ingrid_email",
+      "cashier": "George Lopez"
+    },
+    {
+      "date": "2026-06-04",
+      "restaurant": "esh",
+      "cash": 207664,
+      "card": 368907,
+      "total": 526157,
+      "netSales": 439727,
+      "service10": 29265,
+      "iva13": 57165,
       "source": "ingrid_email",
       "cashier": "Carlos Cabrera"
     }

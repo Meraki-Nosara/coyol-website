@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+/* מי בחוץ - Mibachutz Brand Colors */
+@theme {
+  --color-sage-50: #f6f7f4;
+  --color-sage-100: #e8ebe3;
+  --color-sage-200: #d1d7c7;
+  --color-sage-300: #b3bda3;
+  --color-sage-400: #95a17f;
+  --color-sage-500: #7a8865;
+  --color-sage-600: #5f6b4e;
+  --color-sage-700: #4a5340;
+  --color-sage-800: #3d4436;
+  --color-sage-900: #343a2f;
+
+  --color-peach-50: #fef7f4;
+  --color-peach-100: #fdeee6;
+  --color-peach-200: #fbd9c8;
+  --color-peach-300: #f7be9f;
+  --color-peach-400: #f19a6e;
+  --color-peach-500: #ea7a47;
+  --color-peach-600: #d85f2f;
+  --color-peach-700: #b44926;
+  --color-peach-800: #913c24;
+  --color-peach-900: #763421;
+
+  --color-sky-50: #f0f9ff;
+  --color-sky-100: #e0f2fe;
+  --color-sky-200: #bae6fd;
+  --color-sky-300: #7dd3fc;
+  --color-sky-400: #38bdf8;
+  --color-sky-500: #0ea5e9;
+}
+
+/* RTL Support for Hebrew */
+[dir="rtl"] {
+  text-align: right;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-sage-100);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-sage-400);
+  border-radius: 2px;
+}
+
+/* Safe area for mobile */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+}
+
+/* Hebrew font */
+@font-face {
+  font-family: 'Heebo';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/heebo/v22/NGSpv5_NC0k9P_v6ZUCbLRAHxK1EiSysd0mm_00.woff2) format('woff2');
+}
+
+body {
+  font-family: 'Heebo', -apple-system, BlinkMacSystemFont, sans-serif;
+}

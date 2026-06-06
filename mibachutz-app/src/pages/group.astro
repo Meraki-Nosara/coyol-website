@@ -1,0 +1,126 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Mock data - will come from Supabase
+const group = {
+  name: "גן מאיר #3",
+  member_count: 7
+};
+
+const members = [
+  { name: "שירה", baby_age: "3 חודשים" },
+  { name: "נועה", baby_age: "2 חודשים" },
+  { name: "מיכל", baby_age: "4 חודשים" },
+  { name: "דנה", baby_age: "2 חודשים" },
+  { name: "רונית", baby_age: "3 חודשים" },
+  { name: "יעל", baby_age: "5 חודשים" },
+  { name: "את", baby_age: "3 חודשים", isMe: true },
+];
+
+const nextMeetup = {
+  location: "קפה נחת, דיזנגוף 99",
+  datetime: "יום ראשון, 11:00"
+};
+---
+
+<Layout title={group.name}>
+  <main class="min-h-screen flex flex-col bg-cream">
+    <!-- Header -->
+    <header class="bg-sage text-white px-6 py-4">
+      <h1 class="text-center text-xl font-semibold">{group.name}</h1>
+      <p class="text-center text-white/70 text-sm">{group.member_count} אמהות</p>
+    </header>
+    
+    <!-- Next meetup card -->
+    <section class="px-6 py-4 -mt-2">
+      <div class="bg-peach rounded-2xl p-5 shadow-sm">
+        <div class="flex items-start justify-between">
+          <div>
+            <p class="text-sm text-sage-dark/70 mb-1">המפגש הבא</p>
+            <p class="font-semibold text-sage-dark">{nextMeetup.datetime}</p>
+            <p class="text-sage-dark/80">{nextMeetup.location}</p>
+          </div>
+          <div class="w-12 h-12 bg-white/50 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-sage-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Members -->
+    <section class="px-6 py-4">
+      <h2 class="text-lg font-semibold text-sage-dark mb-4">החברות בקבוצה</h2>
+      <div class="grid grid-cols-4 gap-4">
+        {members.map(m => (
+          <div class="text-center">
+            <div class={`w-14 h-14 rounded-full mx-auto mb-2 flex items-center justify-center text-white text-lg font-medium ${m.isMe ? 'bg-peach text-sage-dark ring-2 ring-sage' : 'bg-sage/70'}`}>
+              {m.name.charAt(0)}
+            </div>
+            <p class="text-sm text-warm-gray font-medium">{m.isMe ? 'את' : m.name}</p>
+            <p class="text-xs text-warm-gray/60">{m.baby_age}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+    
+    <!-- Quick actions -->
+    <section class="px-6 py-4 space-y-3">
+      <a href="/chat" class="flex items-center gap-4 bg-white rounded-xl p-4 shadow-sm">
+        <div class="w-10 h-10 bg-sage/10 rounded-full flex items-center justify-center">
+          <svg class="w-5 h-5 text-sage" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+        </div>
+        <div class="flex-1">
+          <p class="font-medium text-sage-dark">צ'אט קבוצתי</p>
+          <p class="text-sm text-warm-gray/60">3 הודעות חדשות</p>
+        </div>
+        <svg class="w-5 h-5 text-sage/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+      </a>
+      
+      <a href="/meetups" class="flex items-center gap-4 bg-white rounded-xl p-4 shadow-sm">
+        <div class="w-10 h-10 bg-sage/10 rounded-full flex items-center justify-center">
+          <svg class="w-5 h-5 text-sage" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </div>
+        <div class="flex-1">
+          <p class="font-medium text-sage-dark">מפגשים</p>
+          <p class="text-sm text-warm-gray/60">קבעי מפגש חדש</p>
+        </div>
+        <svg class="w-5 h-5 text-sage/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+      </a>
+    </section>
+    
+    <!-- Bottom nav -->
+    <nav class="mt-auto bg-white border-t border-sage/10 px-6 py-3">
+      <div class="flex justify-around">
+        <a href="/group" class="flex flex-col items-center text-sage">
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+          </svg>
+          <span class="text-xs mt-1">קבוצה</span>
+        </a>
+        <a href="/chat" class="flex flex-col items-center text-sage/50">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+          <span class="text-xs mt-1">צ'אט</span>
+        </a>
+        <a href="/profile" class="flex flex-col items-center text-sage/50">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          <span class="text-xs mt-1">פרופיל</span>
+        </a>
+      </div>
+    </nav>
+  </main>
+</Layout>
