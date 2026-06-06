@@ -31,7 +31,7 @@
     html, body {
       height: 100%;
       font-family: 'Heebo', sans-serif;
-      background: linear-gradient(180deg, var(--cream) 0%, var(--peach) 100%);
+      background: url('/bg-pattern.jpg') center/cover fixed;
       color: var(--text);
       overflow: hidden;
     }
@@ -533,7 +533,7 @@
     </button>
     
     <div class="status-text" id="statusText">
-      את בבית
+      מהבית
     </div>
     
     <div class="bottom-hint">
@@ -674,7 +674,7 @@
       } else {
         btn.classList.remove('active');
         sub.textContent = 'לחצי לצאת';
-        status.textContent = 'את בבית';
+        status.textContent = 'מהבית';
         status.classList.remove('active');
         hideMap();
       }
