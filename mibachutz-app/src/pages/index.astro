@@ -58,11 +58,10 @@
       object-fit: contain;
     }
     
-    .logo-text {
-      font-size: 36px;
-      font-weight: 700;
-      color: var(--coral);
-      letter-spacing: 3px;
+    .logo-text-img {
+      height: 65px;
+      width: auto;
+      object-fit: contain;
     }
     
     .logo-sub {
@@ -231,17 +230,24 @@
       overflow: hidden;
     }
     
-    /* Illustrated park map background */
+    /* Map background - soft illustrated style */
     .map-bg {
       position: absolute;
       inset: 0;
       background: 
-        /* Grass texture */
-        radial-gradient(circle at 20% 30%, #C8E6C0 0%, transparent 25%),
-        radial-gradient(circle at 70% 60%, #D0E8C8 0%, transparent 30%),
-        radial-gradient(circle at 40% 80%, #C5E4BD 0%, transparent 20%),
-        /* Base grass */
-        linear-gradient(180deg, #D8EDCE 0%, #E5F2DC 50%, #EEF6E8 100%);
+        /* Soft clouds/sky at top */
+        radial-gradient(ellipse at 30% 10%, rgba(255,255,255,0.8) 0%, transparent 40%),
+        radial-gradient(ellipse at 70% 5%, rgba(255,255,255,0.6) 0%, transparent 35%),
+        /* Parks/green areas */
+        radial-gradient(circle at 25% 45%, #C8E6C0 0%, transparent 20%),
+        radial-gradient(circle at 75% 35%, #D0E8C8 0%, transparent 25%),
+        radial-gradient(circle at 50% 70%, #C5E4BD 0%, transparent 18%),
+        /* Buildings hint */
+        radial-gradient(circle at 15% 65%, #F5E6D8 0%, transparent 12%),
+        radial-gradient(circle at 85% 55%, #F5E6D8 0%, transparent 15%),
+        radial-gradient(circle at 60% 25%, #F5E6D8 0%, transparent 10%),
+        /* Base - soft cream/map color */
+        linear-gradient(180deg, #E8F4E8 0%, #F5F0E8 40%, #FFF8F0 100%);
     }
     
     /* Park paths */
@@ -353,8 +359,14 @@
       background: var(--sage);
     }
     
-    .marker-avatar.friend {
-      background: var(--coral);
+    .marker-avatar.available {
+      background: linear-gradient(145deg, #8ED4A0, var(--sage));
+      animation: available-pulse 2s infinite;
+    }
+    
+    @keyframes available-pulse {
+      0%, 100% { box-shadow: 0 4px 16px rgba(122, 194, 143, 0.4); }
+      50% { box-shadow: 0 4px 24px rgba(122, 194, 143, 0.6); }
     }
     
     .marker-name {
@@ -523,7 +535,7 @@
 
   <div class="app">
     <div class="logo">
-      <div class="logo-text">מי בחוץ</div>
+      <img src="/logo-text.png" alt="מי בחוץ" class="logo-text-img" />
       <div class="logo-sub">לצאת עם חברות</div>
     </div>
     
@@ -584,38 +596,38 @@
           <div class="marker-name">זה את!</div>
         </div>
         
-        <!-- Friends -->
+        <!-- Friends (all green = available) -->
         <div class="marker" style="top: 22%; left: 35%;">
           <div class="marker-bubble">
-            <div class="marker-avatar friend" style="background: #FF8E8E;">ר</div>
+            <div class="marker-avatar available">ר</div>
           </div>
           <div class="marker-name">רונית</div>
         </div>
         
         <div class="marker" style="top: 32%; left: 72%;">
           <div class="marker-bubble">
-            <div class="marker-avatar friend" style="background: #8EB8FF;">מ</div>
+            <div class="marker-avatar available">מ</div>
           </div>
           <div class="marker-name">מיכל</div>
         </div>
         
         <div class="marker" style="top: 62%; left: 25%;">
           <div class="marker-bubble">
-            <div class="marker-avatar friend" style="background: #FFB88E;">ש</div>
+            <div class="marker-avatar available">ש</div>
           </div>
           <div class="marker-name">שירה</div>
         </div>
         
         <div class="marker" style="top: 75%; left: 60%;">
           <div class="marker-bubble">
-            <div class="marker-avatar friend" style="background: #D08EFF;">נ</div>
+            <div class="marker-avatar available">נ</div>
           </div>
           <div class="marker-name">נועה</div>
         </div>
         
         <div class="marker" style="top: 28%; left: 18%;">
           <div class="marker-bubble">
-            <div class="marker-avatar friend" style="background: #8EFFD0;">ד</div>
+            <div class="marker-avatar available">ד</div>
           </div>
           <div class="marker-name">דנה</div>
         </div>
@@ -624,11 +636,11 @@
       <!-- Bottom card -->
       <div class="map-bottom">
         <div class="friends-row">
-          <div class="friend-mini" style="background: #FF8E8E;">ר</div>
-          <div class="friend-mini" style="background: #8EB8FF;">מ</div>
-          <div class="friend-mini" style="background: #FFB88E;">ש</div>
-          <div class="friend-mini" style="background: #D08EFF;">נ</div>
-          <div class="friend-mini" style="background: #8EFFD0;">ד</div>
+          <div class="friend-mini" style="background: var(--sage);">ר</div>
+          <div class="friend-mini" style="background: var(--sage);">מ</div>
+          <div class="friend-mini" style="background: var(--sage);">ש</div>
+          <div class="friend-mini" style="background: var(--sage);">נ</div>
+          <div class="friend-mini" style="background: var(--sage);">ד</div>
         </div>
         <div class="bottom-title">5 חברות בחוץ עכשיו</div>
         <div class="bottom-subtitle">לחצי על חברה לשלוח הודעה</div>
