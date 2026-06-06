@@ -1,23 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-  <!-- Background circle -->
-  <circle cx="100" cy="100" r="95" fill="#F5EFE6"/>
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Baby stroller / pushchair - more cursive, friendly style -->
   
-  <!-- Top arc - Dusty Rose -->
-  <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#E8B4BC" stroke-width="16" stroke-linecap="round"/>
+  <!-- Handle - curved elegant line -->
+  <path d="M48 12 C56 12, 58 20, 54 28 C50 36, 48 40, 48 44" 
+        stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"/>
   
-  <!-- Bottom arc - Soft Navy -->
-  <path d="M 20 100 A 80 80 0 0 0 180 100" fill="none" stroke="#5B7C99" stroke-width="16" stroke-linecap="round"/>
+  <!-- Canopy/Hood - soft curved shape -->
+  <path d="M18 26 C18 14, 44 14, 44 26 L44 32 C44 34, 42 36, 40 36 L22 36 C20 36, 18 34, 18 32 Z" 
+        fill="currentColor" opacity="0.85"/>
   
-  <!-- Stroller icon - elegant minimal -->
-  <g transform="translate(60, 55)" stroke="#5B7C99" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <!-- Handle -->
-    <path d="M 65 10 Q 70 25, 60 40"/>
-    <!-- Frame -->
-    <path d="M 15 40 L 60 40 L 55 70 L 10 70 Z"/>
-    <!-- Hood -->
-    <path d="M 15 40 Q 5 25, 25 20 Q 45 15, 55 30"/>
-    <!-- Wheels -->
-    <circle cx="15" cy="80" r="8" fill="#E8B4BC" stroke="#5B7C99"/>
-    <circle cx="50" cy="80" r="8" fill="#E8B4BC" stroke="#5B7C99"/>
-  </g>
+  <!-- Stroller body - rounded basket -->
+  <path d="M14 36 L48 36 L50 48 C50 50, 48 52, 46 52 L16 52 C14 52, 12 50, 12 48 Z" 
+        fill="currentColor"/>
+  
+  <!-- Baby silhouette hint inside -->
+  <ellipse cx="31" cy="44" rx="10" ry="6" fill="white" opacity="0.3"/>
+  
+  <!-- Wheels - cute round wheels -->
+  <circle cx="18" cy="58" r="5" fill="currentColor"/>
+  <circle cx="44" cy="58" r="5" fill="currentColor"/>
+  
+  <!-- Wheel centers -->
+  <circle cx="18" cy="58" r="2" fill="white"/>
+  <circle cx="44" cy="58" r="2" fill="white"/>
+  
+  <!-- Small front wheel -->
+  <circle cx="50" cy="52" r="3" fill="currentColor"/>
+  <circle cx="50" cy="52" r="1.2" fill="white"/>
 </svg>

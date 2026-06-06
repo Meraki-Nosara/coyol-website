@@ -778,12 +778,7 @@ import '../../../styles/coyol-tables.css';
     }
     .gift-indicator {
       display: inline-block;
-      background: linear-gradient(135deg, #C4A67C 0%, #d4b68c 100%);
-      color: #1A1F16;
-      font-size: 0.625rem;
-      font-weight: 700;
-      padding: 2px 5px;
-      border-radius: 3px;
+      font-size: 1rem;
       margin-right: 4px;
       vertical-align: middle;
     }
@@ -2224,7 +2219,7 @@ import '../../../styles/coyol-tables.css';
             return `
             <div class="res-row ${res.status} ${res.specialRequests ? 'has-note' : ''} ${hasGC ? 'has-gift' : ''}" onclick="selectReservation('${res.id}')">
               <div class="res-time">${formatTime12(res.time)}</div>
-              <span class="res-name" title="${res.guestName}">${hasGC ? '<span class="gift-indicator">GC</span> ' : ''}${res.guestName}</span>
+              <span class="res-name" title="${res.guestName}">${hasGC ? '<span class="gift-indicator">🎁</span>' : ''}${res.guestName}</span>
               <select class="pax-select-mobile" data-res-id="${res.id}" onclick="event.stopPropagation();" onchange="quickUpdateGuests(this)" title="Guests">
                 ${[1,2,3,4,5,6,7,8,9,10,12,15,20].map(n => `<option value="${n}" ${res.guests == n ? 'selected' : ''}>${n}p</option>`).join('')}
               </select>

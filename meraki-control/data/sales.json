@@ -2413,7 +2413,7 @@
       "service10": 155460,
       "iva13": 208738,
       "source": "ingrid_email",
-      "cashier": "Carmen Muñoz"
+      "cashier": "Carmen Mu\u00f1oz"
     },
     {
       "date": "2026-05-20",
@@ -2533,7 +2533,7 @@
       "service10": 236442,
       "iva13": 320916,
       "source": "ingrid_email",
-      "cashier": "Carmen Muñoz"
+      "cashier": "Carmen Mu\u00f1oz"
     },
     {
       "date": "2026-05-23",
@@ -2635,7 +2635,7 @@
       "service10": 183707,
       "iva13": 239370,
       "source": "ingrid_email",
-      "cashier": "Carmen Muñoz"
+      "cashier": "Carmen Mu\u00f1oz"
     },
     {
       "date": "2026-05-26",
@@ -2906,7 +2906,7 @@
       "service10": 56770,
       "iva13": 73801,
       "source": "ingrid_email",
-      "cashier": "Yordany Díaz"
+      "cashier": "Yordany D\u00edaz"
     },
     {
       "date": "2026-06-02",
@@ -2955,6 +2955,42 @@
       "iva13": 57165,
       "source": "ingrid_email",
       "cashier": "Carlos Cabrera"
+    },
+    {
+      "date": "2026-06-05",
+      "restaurant": "laluna",
+      "cash": 256760,
+      "card": 3186041,
+      "total": 3186048,
+      "netSales": 2601089,
+      "service10": 246817,
+      "iva13": 338142,
+      "source": "ingrid_email",
+      "cashier": "Julia Arrieta"
+    },
+    {
+      "date": "2026-06-05",
+      "restaurant": "coyol",
+      "cash": 0,
+      "card": 936645,
+      "total": 936645,
+      "netSales": 761500,
+      "service10": 76150,
+      "iva13": 98995,
+      "source": "ingrid_email",
+      "cashier": "George Lopez"
+    },
+    {
+      "date": "2026-06-05",
+      "restaurant": "esh",
+      "cash": 13025,
+      "card": 655710,
+      "total": 668735,
+      "netSales": 557460,
+      "service10": 38805,
+      "iva13": 72470,
+      "source": "ingrid_email",
+      "cashier": "Juan Castillo"
     }
   ]
 }

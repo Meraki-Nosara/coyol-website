@@ -1,0 +1,29 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Baby stroller - matching the header coral design, but white outline -->
+  
+  <!-- Hood/Canopy - rounded top with cute curve -->
+  <path d="M25 50 L25 35 C25 20, 55 20, 55 35 L55 50" 
+        stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- Top handle bar on hood -->
+  <path d="M30 28 C35 22, 50 22, 55 28" 
+        stroke="white" stroke-width="5" stroke-linecap="round" fill="none"/>
+  
+  <!-- Basket/body - trapezoid shape -->
+  <path d="M22 50 L58 50 L62 68 L18 68 Z" 
+        stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- Push handle - curved line going back -->
+  <path d="M55 35 C72 32, 76 48, 72 62" 
+        stroke="white" stroke-width="5" stroke-linecap="round" fill="none"/>
+  
+  <!-- Back wheel -->
+  <circle cx="28" cy="80" r="10" stroke="white" stroke-width="5" fill="none"/>
+  
+  <!-- Front wheel -->  
+  <circle cx="55" cy="80" r="10" stroke="white" stroke-width="5" fill="none"/>
+  
+  <!-- Wheel connectors -->
+  <line x1="28" y1="68" x2="28" y2="70" stroke="white" stroke-width="5" stroke-linecap="round"/>
+  <line x1="55" y1="68" x2="55" y2="70" stroke="white" stroke-width="5" stroke-linecap="round"/>
+</svg>

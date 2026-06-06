@@ -1,293 +1,201 @@
 ---
-import Layout from '../layouts/Layout.astro';
-
-const lang = Astro.url.searchParams.get('lang') || 'he';
-const isHebrew = lang === 'he';
-const dir = isHebrew ? 'rtl' : 'ltr';
+// Mibachutz - Signup/Login Page (Peanut style)
 ---
 
-<Layout title={isHebrew ? 'הרשמה' : 'Sign Up'}>
-  <main class="min-h-screen" style="background: linear-gradient(180deg, #FFF9F5 0%, #FFFFFF 100%);" dir={dir}>
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>מיבחוץ - הרשמה</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     
-    <!-- Header -->
-    <header class="px-5 pt-6 pb-4 text-center">
-      <img src="/logo.svg" alt="מיבחוץ" class="h-10 mx-auto mb-2" />
-      <h1 class="text-xl font-bold" style="color: var(--color-text);">
-        {isHebrew ? 'הצטרפי למיבחוץ' : 'Join Mibachutz'}
-      </h1>
-    </header>
-
-    <!-- How it works - THE FLOW -->
-    <section class="px-5 mb-6">
-      <div class="card p-4" style="background: linear-gradient(135deg, #FFE5E5 0%, #FFF9F5 100%);">
-        <p class="text-sm font-semibold mb-3 text-center" style="color: #FF6B6B;">
-          {isHebrew ? 'איך זה עובד?' : 'How it works?'}
-        </p>
-        
-        <div class="space-y-3 text-sm" style="color: var(--color-text);">
-          <div class="flex gap-3">
-            <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold" style="background: #FF6B6B; color: white;">1</div>
-            <div>
-              <p class="font-medium">{isHebrew ? 'נרשמת + בוחרת אזור' : 'Sign up + pick area'}</p>
-              <p class="text-xs" style="color: var(--color-text-light);">{isHebrew ? 'סלפי עם התינוק וכמה מילים עלייך' : 'Selfie with baby and a few words'}</p>
-            </div>
-          </div>
-          
-          <div class="flex gap-3">
-            <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold" style="background: #FF6B6B; color: white;">2</div>
-            <div>
-              <p class="font-medium">{isHebrew ? 'מחכים ל-10 אמהות מהאזור' : 'Wait for 10 moms from your area'}</p>
-              <p class="text-xs" style="color: var(--color-text-light);">{isHebrew ? 'נשלח לך התראה כשיש קבוצה' : "We'll notify you when there's a group"}</p>
-            </div>
-          </div>
-          
-          <div class="flex gap-3">
-            <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold" style="background: #FF6B6B; color: white;">3</div>
-            <div>
-              <p class="font-medium">{isHebrew ? 'צ\'אט זמני נפתח' : 'Temporary chat opens'}</p>
-              <p class="text-xs" style="color: var(--color-text-light);">{isHebrew ? 'להכיר ולתאם מיקום למפגש יום ראשון 11:00' : 'To meet and coordinate for Sunday 11:00'}</p>
-            </div>
-          </div>
-          
-          <div class="flex gap-3">
-            <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold" style="background: #FF6B6B; color: white;">4</div>
-            <div>
-              <p class="font-medium">{isHebrew ? 'מפגש היכרות ביום ראשון' : 'Sunday meetup'}</p>
-              <p class="text-xs" style="color: var(--color-text-light);">{isHebrew ? 'פוגשות פנים אל פנים!' : 'Meet face to face!'}</p>
-            </div>
-          </div>
-          
-          <div class="flex gap-3">
-            <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold" style="background: #7ECEC0; color: white;">✓</div>
-            <div>
-              <p class="font-medium">{isHebrew ? 'הקבוצה נפתחת!' : 'Group opens!'}</p>
-              <p class="text-xs" style="color: var(--color-text-light);">{isHebrew ? 'רק מי שהגיעה למפגש נכנסת לקבוצה' : 'Only those who came join the group'}</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="mt-4 p-3 rounded-xl text-center" style="background: white;">
-          <p class="text-xs" style="color: var(--color-text-light);">
-            {isHebrew ? '💡 לא הגעת? לא נורא - תקבלי הזמנה לקבוצה הבאה' : "💡 Couldn't make it? No worries - you'll get invited to the next one"}
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Sign up form -->
-    <form id="signup-form" class="px-5 space-y-4">
-      
-      <!-- Photo upload -->
-      <div class="text-center">
-        <div id="photo-preview" class="w-28 h-28 rounded-full mx-auto mb-3 flex items-center justify-center cursor-pointer" style="background: var(--color-warm-gray); border: 3px dashed #FFE5E5;">
-          <div class="text-center">
-            <span class="text-3xl">📸</span>
-            <p class="text-xs mt-1" style="color: var(--color-text-light);">{isHebrew ? 'סלפי עם התינוק' : 'Selfie with baby'}</p>
-          </div>
-        </div>
-        <input type="file" id="photo-input" accept="image/*" class="hidden" />
-      </div>
-
-      <!-- Name -->
-      <div>
-        <label class="text-sm font-medium block mb-1" style="color: var(--color-text);">
-          {isHebrew ? 'השם שלך' : 'Your name'}
-        </label>
-        <input type="text" name="name" required class="input-soft w-full" placeholder={isHebrew ? 'נועה' : 'Noa'} />
-      </div>
-
-      <!-- Baby age -->
-      <div>
-        <label class="text-sm font-medium block mb-1" style="color: var(--color-text);">
-          {isHebrew ? 'גיל התינוק' : 'Baby age'}
-        </label>
-        <select name="babyAge" required class="input-soft w-full">
-          <option value="">{isHebrew ? 'בחרי...' : 'Select...'}</option>
-          <option value="0-3">{isHebrew ? '0-3 חודשים' : '0-3 months'}</option>
-          <option value="3-6">{isHebrew ? '3-6 חודשים' : '3-6 months'}</option>
-          <option value="6-9">{isHebrew ? '6-9 חודשים' : '6-9 months'}</option>
-          <option value="9-12">{isHebrew ? '9-12 חודשים' : '9-12 months'}</option>
-          <option value="12+">{isHebrew ? 'שנה+' : '1 year+'}</option>
-        </select>
-      </div>
-
-      <!-- City + Area -->
-      <div class="grid grid-cols-2 gap-3">
-        <div>
-          <label class="text-sm font-medium block mb-1" style="color: var(--color-text);">
-            {isHebrew ? 'עיר' : 'City'}
-          </label>
-          <select name="city" id="city-select" required class="input-soft w-full">
-            <option value="">{isHebrew ? 'בחרי...' : 'Select...'}</option>
-            <option value="tel-aviv">{isHebrew ? 'תל אביב' : 'Tel Aviv'}</option>
-            <option value="jerusalem">{isHebrew ? 'ירושלים' : 'Jerusalem'}</option>
-            <option value="haifa">{isHebrew ? 'חיפה' : 'Haifa'}</option>
-            <option value="raanana">{isHebrew ? 'רעננה' : "Ra'anana"}</option>
-            <option value="herzliya">{isHebrew ? 'הרצליה' : 'Herzliya'}</option>
-          </select>
-        </div>
-        <div>
-          <label class="text-sm font-medium block mb-1" style="color: var(--color-text);">
-            {isHebrew ? 'אזור/שכונה' : 'Area'}
-          </label>
-          <select name="area" id="area-select" required class="input-soft w-full">
-            <option value="">{isHebrew ? 'קודם עיר' : 'Pick city first'}</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- About -->
-      <div>
-        <label class="text-sm font-medium block mb-1" style="color: var(--color-text);">
-          {isHebrew ? 'כמה מילים עלייך' : 'A few words about you'}
-        </label>
-        <textarea 
-          name="about" 
-          required
-          class="input-soft w-full h-20 resize-none" 
-          placeholder={isHebrew ? 'מה את אוהבת לעשות? מה חשוב לך בקבוצה?' : 'What do you like to do? What matters to you in a group?'}
-        ></textarea>
-      </div>
-
-      <!-- Phone -->
-      <div>
-        <label class="text-sm font-medium block mb-1" style="color: var(--color-text);">
-          {isHebrew ? 'טלפון' : 'Phone'}
-        </label>
-        <input type="tel" name="phone" required class="input-soft w-full" placeholder="050-1234567" dir="ltr" />
-      </div>
-
-      <!-- Notifications permission -->
-      <div class="card p-4" style="background: linear-gradient(135deg, #D4F0EB 0%, #FFF9F5 100%); border: 2px solid #7ECEC0;">
-        <div class="flex gap-3 items-start">
-          <span class="text-2xl">🔔</span>
-          <div>
-            <p class="text-sm font-semibold" style="color: var(--color-text);">
-              {isHebrew ? 'התראות = חובה!' : 'Notifications = required!'}
-            </p>
-            <p class="text-xs mt-1" style="color: var(--color-text-light);">
-              {isHebrew ? 'ככה נודיע לך כשיש קבוצה באזור שלך. בלי התראות - תפספסי.' : "That's how we notify you when there's a group. Without notifications - you'll miss it."}
-            </p>
-          </div>
-        </div>
-        <button type="button" id="enable-notifications" class="btn-pill w-full py-3 mt-3" style="background: #7ECEC0; color: white;">
-          {isHebrew ? 'אשרי התראות 🔔' : 'Enable notifications 🔔'}
-        </button>
-        <p id="notif-status" class="text-xs text-center mt-2 hidden" style="color: #7ECEC0;">✓ {isHebrew ? 'התראות מאושרות' : 'Notifications enabled'}</p>
-      </div>
-
-      <!-- Submit -->
-      <button type="submit" id="submit-btn" class="btn-pill btn-coral w-full py-4 text-lg" disabled style="opacity: 0.5;">
-        {isHebrew ? 'הרשמי וחכי לקבוצה' : 'Sign up and wait for group'} →
-      </button>
-
-      <p class="text-xs text-center" style="color: var(--color-text-light);">
-        {isHebrew ? 'בהרשמה את מסכימה לתנאי השימוש' : 'By signing up you agree to our terms'}
-      </p>
-
-    </form>
-
-    <div class="h-8"></div>
-  </main>
-
-  <script is:inline>
-    // Areas by city
-    const areas = {
-      'tel-aviv': ['גן מאיר', 'פלורנטין', 'לב העיר', 'הצפון הישן', 'הצפון החדש', 'יפו', 'נווה צדק', 'כרם התימנים', 'שינקין', 'רוטשילד'],
-      'jerusalem': ['רחביה', 'בקעה', 'קטמון', 'תלפיות', 'גילה', 'מרכז העיר'],
-      'haifa': ['כרמל', 'מרכז הכרמל', 'אחוזה', 'דניה', 'נווה שאנן'],
-      'raanana': ['מרכז', 'צפון', 'דרום'],
-      'herzliya': ['פיתוח', 'מרכז', 'הרצליה ב']
-    };
-
-    const citySelect = document.getElementById('city-select');
-    const areaSelect = document.getElementById('area-select');
-
-    citySelect.addEventListener('change', function() {
-      const city = this.value;
-      areaSelect.innerHTML = '<option value="">בחרי אזור...</option>';
-      if (areas[city]) {
-        areas[city].forEach(area => {
-          areaSelect.innerHTML += `<option value="${area}">${area}</option>`;
-        });
-      }
-    });
-
-    // Photo upload
-    const photoPreview = document.getElementById('photo-preview');
-    const photoInput = document.getElementById('photo-input');
-    let hasPhoto = false;
-
-    photoPreview.addEventListener('click', () => photoInput.click());
-    photoInput.addEventListener('change', function() {
-      const file = this.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          photoPreview.innerHTML = `<img src="${e.target.result}" class="w-full h-full rounded-full object-cover" />`;
-          photoPreview.style.border = '3px solid #7ECEC0';
-          hasPhoto = true;
-          checkForm();
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    // Notifications
-    const notifBtn = document.getElementById('enable-notifications');
-    const notifStatus = document.getElementById('notif-status');
-    const submitBtn = document.getElementById('submit-btn');
-    let notificationsEnabled = false;
-
-    notifBtn.addEventListener('click', async function() {
-      if ('Notification' in window) {
-        const permission = await Notification.requestPermission();
-        if (permission === 'granted') {
-          notificationsEnabled = true;
-          notifBtn.style.display = 'none';
-          notifStatus.classList.remove('hidden');
-          checkForm();
-        } else {
-          alert('בלי התראות לא נוכל לעדכן אותך כשיש קבוצה 😕');
-        }
-      } else {
-        // Fallback for browsers without notification support
-        notificationsEnabled = true;
-        notifBtn.style.display = 'none';
-        notifStatus.classList.remove('hidden');
-        checkForm();
-      }
-    });
-
-    // Form validation
-    function checkForm() {
-      const form = document.getElementById('signup-form');
-      const name = form.name.value;
-      const babyAge = form.babyAge.value;
-      const city = form.city.value;
-      const area = form.area.value;
-      const about = form.about.value;
-      const phone = form.phone.value;
-
-      const isValid = hasPhoto && name && babyAge && city && area && about && phone && notificationsEnabled;
-      
-      submitBtn.disabled = !isValid;
-      submitBtn.style.opacity = isValid ? '1' : '0.5';
+    :root {
+      --coral: #FF6B6B;
+      --coral-light: #FF8E8E;
+      --peach: #FFE5E5;
+      --cream: #FFF9F9;
+      --text: #4A4A4A;
+      --text-light: #888;
     }
+    
+    html, body {
+      height: 100%;
+      font-family: 'Heebo', sans-serif;
+      color: var(--text);
+    }
+    
+    .app {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(180deg, rgba(255,220,220,0.5) 0%, rgba(255,235,235,0.7) 100%),
+                  url('/bg-park.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 48px 24px;
+    }
+    
+    .logo {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    
+    .logo-icon {
+      width: auto;
+      height: 80px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2));
+      margin-bottom: 16px;
+    }
+    
+    .logo-text {
+      font-size: 42px;
+      font-weight: 700;
+      color: white;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.2);
+      letter-spacing: 2px;
+    }
+    
+    .tagline {
+      font-size: 18px;
+      color: white;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.2);
+      margin-top: 8px;
+      text-align: center;
+      line-height: 1.5;
+    }
+    
+    .buttons {
+      width: 100%;
+      max-width: 340px;
+      padding: 32px 24px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.3) 30%, rgba(255,255,255,0.6) 100%);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 32px 32px 0 0;
+      margin-top: -20px;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 16px 24px;
+      border-radius: 28px;
+      border: none;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15), 0 2px 6px rgba(0,0,0,0.1);
+    }
+    
+    .btn:active {
+      transform: scale(0.97) translateY(2px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    
+    .btn-apple {
+      background: #000;
+      color: white;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2);
+    }
+    
+    .btn-google {
+      background: white;
+      color: var(--text);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.08);
+    }
+    
+    .btn-phone {
+      background: white;
+      color: var(--text);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.08);
+    }
+    
+    .btn-icon {
+      width: 20px;
+      height: 20px;
+    }
+    
+    .terms {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-light);
+      padding: 0 24px 24px;
+      line-height: 1.6;
+    }
+    
+    .terms a {
+      color: var(--coral);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
 
-    // Check form on any input change
-    document.querySelectorAll('input, select, textarea').forEach(el => {
-      el.addEventListener('input', checkForm);
-      el.addEventListener('change', checkForm);
-    });
-
-    // Submit
-    document.getElementById('signup-form').addEventListener('submit', function(e) {
-      e.preventDefault();
+  <div class="app">
+    <div class="content">
+      <div class="logo">
+        <img src="/logo.png" alt="" class="logo-icon" />
+        <div class="logo-text">מיבחוץ</div>
+        <div class="tagline">
+          מקום בטוח לאמהות<br>
+          להיפגש ולצאת ביחד
+        </div>
+      </div>
+    </div>
+    
+    <div class="buttons">
+      <button class="btn btn-apple">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+        </svg>
+        התחברות עם Apple
+      </button>
       
-      // TODO: Save to Supabase
-      alert('נרשמת בהצלחה! נעדכן אותך כשיש קבוצה באזור 🎉');
-      window.location.href = '/onboarding/registered';
-    });
-  </script>
-</Layout>
+      <button class="btn btn-google">
+        <svg class="btn-icon" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        התחברות עם Google
+      </button>
+      
+      <button class="btn btn-phone" onclick="window.location.href='/phone-login'">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+        התחברות עם טלפון
+      </button>
+    </div>
+    
+    <div class="terms">
+      בהרשמה את מסכימה ל<a href="#">תנאי השימוש</a>
+      ול<a href="#">מדיניות הפרטיות</a>
+    </div>
+  </div>
+
+</body>
+</html>

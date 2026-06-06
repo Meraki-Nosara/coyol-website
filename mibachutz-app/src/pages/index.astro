@@ -1,302 +1,709 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { cities } from '../lib/locations';
-
-const lang = Astro.url.searchParams.get('lang') || 'he';
-const isHebrew = lang === 'he';
-
-const t = {
-  he: {
-    tagline1: 'לפעמים כל מה שצריך',
-    tagline2: 'זו חבורה לצעוד איתה',
-    subtitle: 'את לא צריכה לעבור את החל״ד לבד. הצטרפי ותהיי חלק מקבוצת חברות שתהפוך את חופשת הלידה שלך לחופשה אמיתית!',
-    cta: 'הצטרפי עכשיו',
-    free: 'המיזם קהילתי וחינמי',
-    stats: '2,400+ אמהות כבר בפנים',
-    howTitle: 'איך נוצר הקסם?',
-    step1title: 'בוחרות עיר ושכונה',
-    step1text: 'שולחות טופס הצטרפות ומאשרות שיתוף פרטים',
-    step2title: 'אנחנו ממלאות קבוצה',
-    step2text: '8 נרשמות מהאיזור, אם מייסדת פותחת את הקבוצה',
-    step3title: 'אנחנו מלוות אתכן',
-    step3text: 'מפגשי ראשון ב-11:00 ברחבי הארץ, קפה ספוני, חברות אמיתיות',
-    cityTitle: 'איפה גרה?',
-    citySubtitle: 'בחרי עיר',
-    areaSubtitle: 'עכשיו בחרי שכונה',
-    testimonialText: '"בהריון השני שלי חזרתי לתל אביב וחברה ספרה לי על מי בחוץ?!. האמת לא חשבתי שזה יתאים לי. בדיעבד אני לא יכולה לדמיין את חופשת הלידה שלי בלעדיהן. זאת חבורה שנכנסה לי ללב."',
-    testimonialName: 'דפנה א.',
-    testimonialGroup: 'מי בחוץ?! גן מאיר',
-    footer: 'מי בחוץ?! © 2026',
-    footerSub: 'עוזרות לאמהות בחל"ד למצוא חברות',
-    langSwitch: 'English',
-    continue: 'המשיכי להרשמה'
-  },
-  en: {
-    tagline1: 'Sometimes all you need',
-    tagline2: 'is a crew to walk with',
-    subtitle: "You don't have to go through maternity leave alone. Join a group of mom friends and turn this time into a real vacation!",
-    cta: 'Join now',
-    free: 'Free community project',
-    stats: '2,400+ moms already inside',
-    howTitle: 'How the magic happens',
-    step1title: 'Choose city & neighborhood',
-    step1text: 'Fill out the form and approve sharing details',
-    step2title: 'We fill up the group',
-    step2text: '8 moms from your area, a founding mom opens the group',
-    step3title: 'We guide you',
-    step3text: 'Sunday meetups at 11:00 across Israel, spontaneous coffee, real friendships',
-    cityTitle: 'Where do you live?',
-    citySubtitle: 'Choose a city',
-    areaSubtitle: 'Now choose your neighborhood',
-    testimonialText: '"In my second pregnancy I moved back to Tel Aviv and a friend told me about Meebahutz. Honestly I didn\'t think it would be for me. Looking back, I can\'t imagine my maternity leave without them. This group became my heart."',
-    testimonialName: 'Dafna A.',
-    testimonialGroup: 'Meebahutz Gan Meir',
-    footer: 'Meebahutz © 2026',
-    footerSub: 'Helping moms on maternity leave find friends',
-    langSwitch: 'עברית',
-    continue: 'Continue to signup'
-  }
-};
-
-const text = isHebrew ? t.he : t.en;
-const dir = isHebrew ? 'rtl' : 'ltr';
-const otherLang = isHebrew ? 'en' : 'he';
+// Mibachutz - Home Screen
+// The ONE big button experience
 ---
 
-<Layout title={isHebrew ? 'מי בחוץ?!' : 'Meebahutz'}>
-  <main class="min-h-screen flex flex-col" style="background-color: var(--color-oat);" dir={dir}>
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>מי בחוץ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     
-    <!-- Language toggle -->
-    <div class="fixed top-4 z-20" style={isHebrew ? 'left: 1rem;' : 'right: 1rem;'}>
-      <a 
-        href={`?lang=${otherLang}`}
-        class="text-sm px-3 py-1.5 rounded-full shadow-sm"
-        style="background-color: var(--color-white); color: var(--color-navy);"
-      >
-        {text.langSwitch}
-      </a>
+    :root {
+      --coral: #FF6B6B;
+      --coral-light: #FF8E8E;
+      --coral-dark: #E85555;
+      --peach: #FFE5E5;
+      --cream: #FFF9F9;
+      --sage: #7AC28F;
+      --sage-light: #A8D5BA;
+      --text: #4A4A4A;
+      --text-light: #888;
+    }
+    
+    html, body {
+      height: 100%;
+      font-family: 'Heebo', sans-serif;
+      background: linear-gradient(180deg, var(--cream) 0%, var(--peach) 100%);
+      color: var(--text);
+      overflow: hidden;
+    }
+    
+    .app {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      position: relative;
+    }
+    
+    .logo {
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    
+    .logo-icon {
+      width: auto;
+      height: 72px;
+      margin-bottom: 12px;
+      object-fit: contain;
+    }
+    
+    .logo-text {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--coral);
+      letter-spacing: 3px;
+    }
+    
+    .logo-sub {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+    
+    /* The BIG button */
+    .big-button {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(145deg, var(--coral-light), var(--coral-dark));
+      box-shadow: 
+        0 10px 40px rgba(255, 107, 107, 0.4),
+        0 0 0 8px rgba(255, 107, 107, 0.1),
+        inset 0 -4px 12px rgba(0,0,0,0.1);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .big-button:active {
+      transform: scale(0.95);
+      box-shadow: 
+        0 5px 20px rgba(255, 107, 107, 0.4),
+        0 0 0 8px rgba(255, 107, 107, 0.15);
+    }
+    
+    .big-button.active {
+      background: linear-gradient(145deg, #8ED4A0, var(--sage));
+      box-shadow: 
+        0 10px 40px rgba(122, 194, 143, 0.5),
+        0 0 0 8px rgba(122, 194, 143, 0.2),
+        inset 0 -4px 12px rgba(0,0,0,0.1);
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 10px 40px rgba(122, 194, 143, 0.5), 0 0 0 8px rgba(122, 194, 143, 0.2); }
+      50% { box-shadow: 0 10px 50px rgba(122, 194, 143, 0.6), 0 0 0 16px rgba(122, 194, 143, 0.15); }
+    }
+    
+    .button-logo {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+    }
+    
+    .button-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,0.9);
+      margin-top: 6px;
+    }
+    
+    .status-text {
+      margin-top: 28px;
+      font-size: 15px;
+      color: var(--text-light);
+      text-align: center;
+    }
+    
+    .status-text.active {
+      color: var(--sage);
+      font-weight: 500;
+    }
+    
+    /* Bottom nav hint */
+    .bottom-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-light);
+    }
+    
+    .bottom-hint a {
+      color: var(--coral);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    /* ========== MAP OVERLAY ========== */
+    .map-overlay {
+      position: fixed;
+      inset: 0;
+      background: #F5F2EB;
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+    }
+    
+    .map-overlay.show {
+      display: flex;
+    }
+    
+    .map-header {
+      padding: 12px 16px;
+      background: white;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      z-index: 10;
+    }
+    
+    .close-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: var(--peach);
+      color: var(--coral);
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .map-title {
+      flex: 1;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    
+    .online-badge {
+      background: var(--sage);
+      color: white;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+      animation: blink 1.5s infinite;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    
+    /* Map area */
+    .map-content {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Illustrated park map background */
+    .map-bg {
+      position: absolute;
+      inset: 0;
+      background: 
+        /* Grass texture */
+        radial-gradient(circle at 20% 30%, #C8E6C0 0%, transparent 25%),
+        radial-gradient(circle at 70% 60%, #D0E8C8 0%, transparent 30%),
+        radial-gradient(circle at 40% 80%, #C5E4BD 0%, transparent 20%),
+        /* Base grass */
+        linear-gradient(180deg, #D8EDCE 0%, #E5F2DC 50%, #EEF6E8 100%);
+    }
+    
+    /* Park paths */
+    .park-paths {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    
+    .path {
+      position: absolute;
+      background: #F0E6D3;
+      border-radius: 100px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .path-1 { width: 120%; height: 24px; top: 35%; left: -10%; transform: rotate(-8deg); }
+    .path-2 { width: 80%; height: 20px; top: 65%; left: 15%; transform: rotate(5deg); }
+    .path-3 { width: 60%; height: 18px; top: 20%; left: 25%; transform: rotate(-3deg); }
+    
+    /* Trees */
+    .trees {
+      position: absolute;
+      inset: 0;
+    }
+    
+    .tree {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, #8FBF7A, #6BA35C);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+    
+    .tree::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 12px;
+      background: #8B6B4D;
+      border-radius: 2px;
+    }
+    
+    .tree-1 { top: 12%; left: 8%; width: 45px; height: 45px; }
+    .tree-2 { top: 8%; left: 75%; width: 55px; height: 55px; }
+    .tree-3 { top: 45%; left: 5%; width: 40px; height: 40px; }
+    .tree-4 { top: 78%; left: 82%; width: 48px; height: 48px; }
+    .tree-5 { top: 55%; left: 88%; width: 38px; height: 38px; }
+    .tree-6 { top: 85%; left: 15%; width: 42px; height: 42px; }
+    
+    /* Playground area */
+    .playground {
+      position: absolute;
+      top: 42%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100px;
+      height: 70px;
+      background: #FFE4C4;
+      border-radius: 16px;
+      border: 3px dashed #E8CBA8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    
+    /* Friend markers */
+    .markers {
+      position: absolute;
+      inset: 0;
+    }
+    
+    .marker {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+      z-index: 5;
+    }
+    
+    .marker:active {
+      transform: translate(-50%, -50%) scale(1.15);
+    }
+    
+    .marker-bubble {
+      position: relative;
+    }
+    
+    .marker-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 4px solid white;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 20px;
+      background: var(--sage);
+    }
+    
+    .marker-avatar.friend {
+      background: var(--coral);
+    }
+    
+    .marker-name {
+      background: white;
+      padding: 5px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      white-space: nowrap;
+    }
+    
+    .marker.me .marker-avatar {
+      width: 64px;
+      height: 64px;
+      border-width: 5px;
+      font-size: 22px;
+      background: linear-gradient(145deg, #8ED4A0, var(--sage));
+      box-shadow: 0 4px 20px rgba(122, 194, 143, 0.4);
+    }
+    
+    .marker.me .marker-name {
+      background: var(--sage);
+      color: white;
+    }
+    
+    /* Online indicator */
+    .online-ring {
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 3px solid var(--sage);
+      animation: ring-pulse 2s infinite;
+    }
+    
+    @keyframes ring-pulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.1); opacity: 0.4; }
+    }
+    
+    /* Bottom card */
+    .map-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: 20px 24px 28px;
+      border-radius: 24px 24px 0 0;
+      box-shadow: 0 -4px 24px rgba(0,0,0,0.1);
+    }
+    
+    .friends-row {
+      display: flex;
+      gap: -8px;
+      margin-bottom: 12px;
+    }
+    
+    .friend-mini {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 3px solid white;
+      margin-right: -12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .bottom-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    
+    .bottom-subtitle {
+      font-size: 13px;
+      color: var(--text-light);
+    }
+    
+    .meet-btn {
+      width: 100%;
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      background: var(--coral);
+      color: white;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(255, 107, 107, 0.3);
+    }
+    
+    /* Notification */
+    .notification {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: 20px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+      border-radius: 0 0 24px 24px;
+      transform: translateY(-100%);
+      transition: transform 0.3s ease;
+      z-index: 200;
+    }
+    
+    .notification.show {
+      transform: translateY(0);
+    }
+    
+    .notification-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    
+    .notification-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--coral);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 18px;
+    }
+    
+    .notification-text { flex: 1; }
+    .notification-name { font-weight: 600; font-size: 16px; color: var(--text); }
+    .notification-msg { font-size: 14px; color: var(--text-light); margin-top: 2px; }
+    
+    .notification-actions {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .notif-btn {
+      flex: 1;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    .notif-btn.yes { background: var(--coral); color: white; }
+    .notif-btn.no { background: var(--peach); color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <div class="app">
+    <div class="logo">
+      <img src="/logo.png" alt="" class="logo-icon" />
+      <div class="logo-text">מי בחוץ</div>
+      <div class="logo-sub">לצאת עם חברות</div>
     </div>
-
-    <!-- Hero -->
-    <section class="flex flex-col items-center justify-center px-6 pt-16 pb-10 text-center">
-      <img src="/logo.svg" alt="Meebahutz" class="w-24 h-24 mb-5" />
-      
-      <h1 class="text-3xl font-bold mb-1" style="color: var(--color-navy-dark);">
-        {text.tagline1}
-      </h1>
-      <h1 class="text-3xl font-bold mb-5" style="color: var(--color-rose);">
-        {text.tagline2}
-      </h1>
-      
-      <p class="text-lg mb-6 max-w-sm leading-relaxed" style="color: var(--color-text-light);">
-        {text.subtitle}
-      </p>
-      
-      <div class="flex items-center gap-2 mb-6 px-4 py-2 rounded-full" style="background-color: var(--color-rose-light);">
-        <span class="text-lg">👶</span>
-        <span class="text-sm font-medium" style="color: var(--color-rose-dark);">{text.stats}</span>
-      </div>
-      
-      <p class="text-sm" style="color: var(--color-text-light);">
-        {text.free}
-      </p>
-    </section>
-
-    <!-- City & Area Selection -->
-    <section class="px-6 py-8" style="background-color: var(--color-white);">
-      <h2 class="text-2xl font-bold text-center mb-2" style="color: var(--color-navy-dark);">{text.cityTitle}</h2>
-      <p id="selection-subtitle" class="text-center mb-6" style="color: var(--color-text-light);">{text.citySubtitle}</p>
-      
-      <!-- City pills -->
-      <div id="city-selection" class="flex flex-wrap justify-center gap-2 mb-6">
-        {cities.map(city => (
-          <button 
-            class="city-pill px-4 py-2.5 rounded-full text-sm font-medium transition-all border-2"
-            style="background-color: var(--color-oat); color: var(--color-navy); border-color: transparent;"
-            data-city={city.name}
-            data-city-en={city.nameEn}
-            data-lat={city.lat}
-            data-lng={city.lng}
-            data-areas={JSON.stringify(city.areas)}
-          >
-            {isHebrew ? city.name : city.nameEn}
-          </button>
-        ))}
-      </div>
-
-      <!-- Area pills (hidden until city selected) -->
-      <div id="area-selection" class="hidden">
-        <div class="flex flex-wrap justify-center gap-2 mb-6" id="area-pills"></div>
-      </div>
-
-      <!-- Map container -->
-      <div class="relative rounded-2xl overflow-hidden shadow-lg mb-6" style="height: 280px; background-color: var(--color-oat);">
-        <div id="map" class="w-full h-full"></div>
-      </div>
-
-      <!-- Continue button (hidden until area selected) -->
-      <div id="continue-section" class="hidden text-center">
-        <a id="continue-btn" href="/signup" class="btn-primary inline-block text-lg px-8 py-4 shadow-lg">
-          {text.continue} →
-        </a>
-      </div>
-    </section>
-
-    <!-- How it works -->
-    <section class="px-6 py-10" style="background-color: var(--color-oat);">
-      <h2 class="text-2xl font-bold text-center mb-8" style="color: var(--color-navy-dark);">{text.howTitle}</h2>
-      
-      <div class="space-y-4 max-w-sm mx-auto">
-        <div class="flex items-start gap-4 p-4 rounded-xl" style="background-color: var(--color-white);">
-          <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 text-xl" style="background-color: var(--color-rose-light);">
-            📍
-          </div>
-          <div>
-            <h3 class="font-semibold text-lg" style="color: var(--color-navy-dark);">{text.step1title}</h3>
-            <p style="color: var(--color-text-light);">{text.step1text}</p>
-          </div>
-        </div>
-        
-        <div class="flex items-start gap-4 p-4 rounded-xl" style="background-color: var(--color-white);">
-          <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 text-xl" style="background-color: var(--color-sage-light);">
-            👯‍♀️
-          </div>
-          <div>
-            <h3 class="font-semibold text-lg" style="color: var(--color-navy-dark);">{text.step2title}</h3>
-            <p style="color: var(--color-text-light);">{text.step2text}</p>
-          </div>
-        </div>
-        
-        <div class="flex items-start gap-4 p-4 rounded-xl" style="background-color: var(--color-white);">
-          <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 text-xl" style="background-color: var(--color-navy-light);">
-            ☕
-          </div>
-          <div>
-            <h3 class="font-semibold text-lg" style="color: var(--color-navy-dark);">{text.step3title}</h3>
-            <p style="color: var(--color-text-light);">{text.step3text}</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Testimonial -->
-    <section class="px-6 py-10" style="background-color: var(--color-rose-light);">
-      <div class="max-w-md mx-auto text-center">
-        <p class="text-lg italic mb-4" style="color: var(--color-navy-dark);">
-          {text.testimonialText}
-        </p>
-        <p class="font-semibold" style="color: var(--color-rose-dark);">{text.testimonialName}</p>
-        <p class="text-sm" style="color: var(--color-navy);">{text.testimonialGroup}</p>
-      </div>
-    </section>
     
-    <!-- Footer -->
-    <footer class="text-center py-8 px-6" style="background-color: var(--color-navy); color: rgba(255,255,255,0.9);">
-      <img src="/favicon.svg" alt="" class="w-12 h-12 mx-auto mb-3 rounded-full" />
-      <p class="font-medium">{text.footer}</p>
-      <p class="text-sm mt-1 opacity-70">{text.footerSub}</p>
-    </footer>
-  </main>
-
-  <!-- Leaflet Map -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script is:inline src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <button class="big-button" id="mainButton" onclick="toggleStatus()">
+      <img src="/logo-white.png" alt="" class="button-logo" id="buttonLogo" />
+      <span class="button-sub" id="buttonSub">לחצי לצאת</span>
+    </button>
+    
+    <div class="status-text" id="statusText">
+      את בבית
+    </div>
+    
+    <div class="bottom-hint">
+      <a href="/signup">הרשמה</a> · <a href="/group">הקבוצה שלי</a>
+    </div>
+  </div>
   
-  <script is:inline define:vars={{ isHebrew, areaSubtitle: text.areaSubtitle, lang }}>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Initialize map centered on Israel
-      const map = L.map('map', {
-        zoomControl: false,
-        attributionControl: false
-      }).setView([32.0, 34.8], 8);
+  <!-- ========== MAP OVERLAY ========== -->
+  <div class="map-overlay" id="mapOverlay">
+    <div class="map-header">
+      <button class="close-btn" onclick="hideMap()">×</button>
+      <span class="map-title">חברות בחוץ</span>
+      <div class="online-badge">5 זמינות <span class="pulse-dot"></span></div>
+    </div>
+    
+    <div class="map-content">
+      <!-- Background -->
+      <div class="map-bg"></div>
       
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        maxZoom: 19
-      }).addTo(map);
+      <!-- Paths -->
+      <div class="park-paths">
+        <div class="path path-1"></div>
+        <div class="path path-2"></div>
+        <div class="path path-3"></div>
+      </div>
+      
+      <!-- Trees -->
+      <div class="trees">
+        <div class="tree tree-1"></div>
+        <div class="tree tree-2"></div>
+        <div class="tree tree-3"></div>
+        <div class="tree tree-4"></div>
+        <div class="tree tree-5"></div>
+        <div class="tree tree-6"></div>
+      </div>
+      
+      <!-- Playground -->
+      <div class="playground">🎠</div>
+      
+      <!-- Friend markers -->
+      <div class="markers">
+        <!-- Me (center-ish) -->
+        <div class="marker me" style="top: 48%; left: 55%;">
+          <div class="marker-bubble">
+            <div class="online-ring"></div>
+            <div class="marker-avatar">את</div>
+          </div>
+          <div class="marker-name">זה את!</div>
+        </div>
+        
+        <!-- Friends -->
+        <div class="marker" style="top: 22%; left: 35%;">
+          <div class="marker-bubble">
+            <div class="marker-avatar friend" style="background: #FF8E8E;">ר</div>
+          </div>
+          <div class="marker-name">רונית</div>
+        </div>
+        
+        <div class="marker" style="top: 32%; left: 72%;">
+          <div class="marker-bubble">
+            <div class="marker-avatar friend" style="background: #8EB8FF;">מ</div>
+          </div>
+          <div class="marker-name">מיכל</div>
+        </div>
+        
+        <div class="marker" style="top: 62%; left: 25%;">
+          <div class="marker-bubble">
+            <div class="marker-avatar friend" style="background: #FFB88E;">ש</div>
+          </div>
+          <div class="marker-name">שירה</div>
+        </div>
+        
+        <div class="marker" style="top: 75%; left: 60%;">
+          <div class="marker-bubble">
+            <div class="marker-avatar friend" style="background: #D08EFF;">נ</div>
+          </div>
+          <div class="marker-name">נועה</div>
+        </div>
+        
+        <div class="marker" style="top: 28%; left: 18%;">
+          <div class="marker-bubble">
+            <div class="marker-avatar friend" style="background: #8EFFD0;">ד</div>
+          </div>
+          <div class="marker-name">דנה</div>
+        </div>
+      </div>
+      
+      <!-- Bottom card -->
+      <div class="map-bottom">
+        <div class="friends-row">
+          <div class="friend-mini" style="background: #FF8E8E;">ר</div>
+          <div class="friend-mini" style="background: #8EB8FF;">מ</div>
+          <div class="friend-mini" style="background: #FFB88E;">ש</div>
+          <div class="friend-mini" style="background: #D08EFF;">נ</div>
+          <div class="friend-mini" style="background: #8EFFD0;">ד</div>
+        </div>
+        <div class="bottom-title">5 חברות בחוץ עכשיו</div>
+        <div class="bottom-subtitle">לחצי על חברה לשלוח הודעה</div>
+        <button class="meet-btn">בואי נפגש!</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Notification popup -->
+  <div class="notification" id="notification">
+    <div class="notification-content">
+      <div class="notification-avatar">ר</div>
+      <div class="notification-text">
+        <div class="notification-name">רונית</div>
+        <div class="notification-msg">בחוץ עכשיו! את זמינה?</div>
+      </div>
+    </div>
+    <div class="notification-actions">
+      <button class="notif-btn yes" onclick="respondYes()">כן, אני בחוץ!</button>
+      <button class="notif-btn no" onclick="respondNo()">לא עכשיו</button>
+    </div>
+  </div>
 
-      let markers = [];
-      let selectedCity = null;
-      let selectedArea = null;
-
-      // City selection
-      document.querySelectorAll('.city-pill').forEach(pill => {
-        pill.addEventListener('click', function() {
-          // Update styles
-          document.querySelectorAll('.city-pill').forEach(p => {
-            p.style.backgroundColor = 'var(--color-oat)';
-            p.style.borderColor = 'transparent';
-          });
-          this.style.backgroundColor = 'var(--color-rose-light)';
-          this.style.borderColor = 'var(--color-rose)';
-
-          // Get city data
-          const lat = parseFloat(this.dataset.lat);
-          const lng = parseFloat(this.dataset.lng);
-          const areas = JSON.parse(this.dataset.areas);
-          selectedCity = isHebrew ? this.dataset.city : this.dataset.cityEn;
-
-          // Zoom to city
-          map.flyTo([lat, lng], 12, { duration: 0.5 });
-
-          // Clear old markers
-          markers.forEach(m => map.removeLayer(m));
-          markers = [];
-
-          // Add area markers
-          areas.forEach(area => {
-            const markerIcon = L.divIcon({
-              className: 'area-marker',
-              html: '<div style="background-color: #E8B4BC; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.2);"></div>',
-              iconSize: [20, 20],
-              iconAnchor: [10, 10]
-            });
-            const marker = L.marker([area.lat, area.lng], { icon: markerIcon })
-              .addTo(map)
-              .bindPopup(`<strong>${isHebrew ? area.name : area.nameEn}</strong>`);
-            markers.push(marker);
-          });
-
-          // Show area pills
-          const areaPills = document.getElementById('area-pills');
-          areaPills.innerHTML = areas.map(area => `
-            <button 
-              class="area-pill px-4 py-2 rounded-full text-sm font-medium transition-all border-2"
-              style="background-color: var(--color-oat); color: var(--color-navy); border-color: transparent;"
-              data-name="${area.name}"
-              data-name-en="${area.nameEn}"
-              data-lat="${area.lat}"
-              data-lng="${area.lng}"
-            >
-              ${isHebrew ? area.name : area.nameEn}
-            </button>
-          `).join('');
-          
-          document.getElementById('area-selection').classList.remove('hidden');
-          document.getElementById('selection-subtitle').textContent = areaSubtitle;
-
-          // Area click handlers
-          document.querySelectorAll('.area-pill').forEach(areaPill => {
-            areaPill.addEventListener('click', function() {
-              document.querySelectorAll('.area-pill').forEach(p => {
-                p.style.backgroundColor = 'var(--color-oat)';
-                p.style.borderColor = 'transparent';
-              });
-              this.style.backgroundColor = 'var(--color-sage-light)';
-              this.style.borderColor = 'var(--color-sage)';
-
-              const areaLat = parseFloat(this.dataset.lat);
-              const areaLng = parseFloat(this.dataset.lng);
-              selectedArea = isHebrew ? this.dataset.name : this.dataset.nameEn;
-              
-              map.flyTo([areaLat, areaLng], 15, { duration: 0.5 });
-
-              // Show continue button
-              document.getElementById('continue-section').classList.remove('hidden');
-              document.getElementById('continue-btn').href = `/signup?lang=${lang}&city=${encodeURIComponent(selectedCity)}&area=${encodeURIComponent(selectedArea)}`;
-            });
-          });
-        });
-      });
-    });
+  <script>
+    let isOut = false;
+    
+    function toggleStatus() {
+      isOut = !isOut;
+      const btn = document.getElementById('mainButton');
+      const sub = document.getElementById('buttonSub');
+      const status = document.getElementById('statusText');
+      
+      if (isOut) {
+        btn.classList.add('active');
+        sub.textContent = 'את בחוץ!';
+        status.textContent = 'את בחוץ וזמינה';
+        status.classList.add('active');
+        
+        // Show map after short delay
+        setTimeout(() => {
+          document.getElementById('mapOverlay').classList.add('show');
+        }, 400);
+      } else {
+        btn.classList.remove('active');
+        sub.textContent = 'לחצי לצאת';
+        status.textContent = 'את בבית';
+        status.classList.remove('active');
+        hideMap();
+      }
+    }
+    
+    function hideMap() {
+      document.getElementById('mapOverlay').classList.remove('show');
+    }
+    
+    function showNotification() {
+      document.getElementById('notification').classList.add('show');
+    }
+    
+    function hideNotification() {
+      document.getElementById('notification').classList.remove('show');
+    }
+    
+    function respondYes() {
+      hideNotification();
+      if (!isOut) {
+        toggleStatus();
+      }
+    }
+    
+    function respondNo() {
+      hideNotification();
+    }
   </script>
-</Layout>
+
+</body>
+</html>

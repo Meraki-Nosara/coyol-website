@@ -26,6 +26,11 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
         </div>
       </header>
 
+      <!-- Search Bar -->
+      <div class="search-bar">
+        <input type="text" id="giftSearch" placeholder="Search by code or name..." oninput="filterGiftCards()" />
+      </div>
+
       <div class="alerts-section" id="alertsSection"></div>
 
       <div class="cards-grid" id="giftsList">
@@ -47,6 +52,30 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
     flex: 1;
     padding: 2rem;
     overflow-y: auto;
+  }
+
+  .search-bar {
+    margin-bottom: 1.5rem;
+  }
+
+  .search-bar input {
+    width: 100%;
+    max-width: 400px;
+    padding: 0.75rem 1rem;
+    background: #222;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+  }
+
+  .search-bar input:focus {
+    outline: none;
+    border-color: #C4A67C;
+  }
+
+  .search-bar input::placeholder {
+    color: #666;
   }
 
   .gifts-header {
@@ -411,6 +440,12 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
 <script>
   let giftCards = [];
   let reservations = [];
+  let searchQuery = '';
+
+  window.filterGiftCards = function() {
+    searchQuery = document.getElementById('giftSearch').value.toLowerCase().trim();
+    renderGiftCards();
+  };
 
   async function loadData() {
     try {
@@ -489,7 +524,23 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
       return;
     }
 
-    list.innerHTML = giftCards.map(g => {
+    // Filter by search query
+    let filtered = giftCards;
+    if (searchQuery) {
+      filtered = giftCards.filter(g => {
+        const code = (g.code || '').toLowerCase();
+        const name = (g.recipient_name || '').toLowerCase();
+        const email = (g.recipient_email || '').toLowerCase();
+        return code.includes(searchQuery) || name.includes(searchQuery) || email.includes(searchQuery);
+      });
+    }
+
+    if (!filtered.length) {
+      list.innerHTML = '<div class="loading">No gift cards match your search</div>';
+      return;
+    }
+
+    list.innerHTML = filtered.map(g => {
       const balance = g.remaining_balance ?? g.amount;
       const isUsed = g.status === 'redeemed' || balance <= 0;
       const { tier, label } = getTier(g.amount);
@@ -564,17 +615,27 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
     
     function updateCalc() {
       const bill = parseFloat(document.getElementById('billAmount').value) || 0;
-      const apply = parseFloat(document.getElementById('applyAmount').value) || 0;
+      let apply = parseFloat(document.getElementById('applyAmount').value) || 0;
+      
+      // Auto-adjust: can't apply more than the bill
+      const actualApply = Math.min(apply, bill, amount);
+      
       let html = '';
       if (bill > 0) {
-        const due = bill - apply;
+        const due = bill - actualApply;
         html = due > 0 
           ? `<p>Customer pays: <strong>$${due.toFixed(2)}</strong></p>`
           : `<p class="text-green">Bill fully covered!</p>`;
-        const rem = amount - apply;
+        
+        const rem = amount - actualApply;
         html += rem > 0 
-          ? `<p>Remaining balance: <strong>$${rem.toFixed(2)}</strong></p>`
+          ? `<p class="text-green">Remaining credit: <strong>$${rem.toFixed(2)}</strong></p>`
           : `<p>Card fully used</p>`;
+        
+        // Show suggestion if apply > bill
+        if (apply > bill) {
+          html += `<p style="color:#C4A67C;font-size:0.85rem;">💡 Only $${bill.toFixed(2)} needed for this bill</p>`;
+        }
       }
       document.getElementById('calcResult').innerHTML = html;
     }
@@ -590,7 +651,7 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
 
   window.confirmApply = async function(code, orig) {
     const sel = document.getElementById('resSelect');
-    const apply = parseFloat(document.getElementById('applyAmount').value) || 0;
+    let apply = parseFloat(document.getElementById('applyAmount').value) || 0;
     const bill = parseFloat(document.getElementById('billAmount').value) || 0;
     
     if (!sel.value || apply <= 0 || apply > orig) {
@@ -598,7 +659,9 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
       return;
     }
     
-    const rem = orig - apply;
+    // Auto-adjust: don't apply more than the bill
+    const actualApply = Math.min(apply, bill);
+    const rem = orig - actualApply;
     let name = sel.options[sel.selectedIndex].dataset?.name;
     if (sel.value === 'walkin') {
       const walkinName = document.getElementById('walkinName').value.trim();
@@ -613,7 +676,7 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
         status: rem <= 0 ? 'redeemed' : 'partial',
         remaining_balance: rem,
         redeemed_at: rem <= 0 ? new Date().toISOString() : null,
-        notes: `$${apply} applied to ${name} (bill: $${bill})`
+        notes: `$${actualApply} applied to ${name} (bill: $${bill})${rem > 0 ? ` — $${rem} remaining` : ''}`
       }),
     });
     

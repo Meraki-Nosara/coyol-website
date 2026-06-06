@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 
 # Config
 SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co'
-SUPABASE_SERVICE_KEY = os.environ.get('SUPABASE_SERVICE_KEY', '')
+SUPABASE_SERVICE_KEY = os.environ.get('SUPABASE_SERVICE_KEY', 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng')
 
 HEADERS = {
     'apikey': SUPABASE_SERVICE_KEY,
@@ -115,7 +115,8 @@ def guest_exists(email):
 def add_guest_to_crm(reservation, source):
     """Add new guest to CRM with scoring."""
     # Handle both column naming conventions
-    email = reservation.get('guest_email', reservation.get('email', '')).lower().strip()
+    email_raw = reservation.get('guest_email') or reservation.get('email') or ''
+    email = email_raw.lower().strip() if email_raw else ''
     if not email:
         return None
     

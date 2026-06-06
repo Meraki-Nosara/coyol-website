@@ -611,6 +611,30 @@ const clips = [
   
   .search-result.sent { color: #22c55e; }
   .search-result.pending { color: #f59e0b; }
+  .search-result.hot-lead-reserved { color: #f43f5e; }
+  
+  .campaign-note {
+    display: inline-block;
+    background: #f59e0b;
+    color: #000;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  
+  .today-count {
+    display: inline-block;
+    background: #22c55e;
+    color: #000;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 10px;
+    font-weight: 600;
+  }
   
   @media (max-width: 768px) {
     .page { padding: 20px; }
@@ -630,15 +654,41 @@ const clips = [
     try {
       const res = await fetch('/api/campaign-status');
       const data = await res.json();
+      const stats = data.stats || {};
       
-      document.getElementById('sentCount').textContent = data.sent.toLocaleString();
-      document.getElementById('pendingCount').textContent = data.pending.toLocaleString();
-      document.getElementById('totalCount').textContent = data.total.toLocaleString();
-      document.getElementById('progressPct').textContent = data.progress + '%';
-      document.getElementById('progressBar').style.width = data.progress + '%';
+      document.getElementById('sentCount').textContent = (stats.sent || 0).toLocaleString();
+      document.getElementById('pendingCount').textContent = (stats.pending || 0).toLocaleString();
+      document.getElementById('totalCount').textContent = (stats.totalEmails || 0).toLocaleString();
+      document.getElementById('progressPct').textContent = (stats.percentComplete || 0) + '%';
+      document.getElementById('progressBar').style.width = (stats.percentComplete || 0) + '%';
       
-      document.getElementById('sentList').innerHTML = data.recentSent.map(e => `<div>${e}</div>`).join('') || '<div>No emails sent yet</div>';
-      document.getElementById('pendingList').innerHTML = data.nextPending.map(e => `<div>${e}</div>`).join('') || '<div>All done!</div>';
+      // Show status badge
+      const statusNote = data.status === 'paused' 
+        ? `<div class="campaign-note">⏸️ ${data.note || 'Paused'}</div>` 
+        : '';
+      
+      // Today's count
+      const todayNote = stats.todaySent 
+        ? `<div class="today-count">Today: ${stats.todaySent} sent</div>` 
+        : '';
+      
+      const headerEl = document.querySelector('.email-campaign h2');
+      if (headerEl) {
+        headerEl.innerHTML = `📧 Gift Card Email Campaign ${statusNote}${todayNote}`;
+      }
+      
+      // Recent sent
+      const recentSent = data.recentSent || [];
+      document.getElementById('sentList').innerHTML = recentSent.length 
+        ? recentSent.map(e => `<div>${e}</div>`).join('') 
+        : '<div>No emails sent yet</div>';
+      
+      // Show sent by day
+      const sentByDay = data.sentByDay || [];
+      if (sentByDay.length > 0) {
+        const dayHtml = sentByDay.slice(0, 5).map(d => `<div>${d.date}: ${d.count}</div>`).join('');
+        document.getElementById('pendingList').innerHTML = `<div style="color:#C4A67C;">Sent by Day:</div>${dayHtml}`;
+      }
     } catch (err) {
       console.error('Failed to load campaign status:', err);
     }
@@ -661,7 +711,14 @@ const clips = [
       });
       const data = await res.json();
       
-      resultEl.textContent = data.status === 'sent' ? '✅ Already sent' : '⏳ Pending';
+      const statusText = {
+        'sent': '✅ Already sent',
+        'pending': '⏳ Pending',
+        'hot-lead-reserved': '🔥 Hot lead (reserved for Meta Ads)',
+        'unknown': '❓ Not in list'
+      };
+      
+      resultEl.textContent = statusText[data.status] || data.status;
       resultEl.className = 'search-result ' + data.status;
     } catch (err) {
       resultEl.textContent = '';
@@ -669,4 +726,5 @@ const clips = [
   });
   
   loadCampaignStatus();
+  setInterval(loadCampaignStatus, 30000); // Refresh every 30s
 </script>

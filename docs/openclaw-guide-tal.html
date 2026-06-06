@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OpenClaw Guide - Tal Shilton</title>
+  <style>
+    @page { size: letter; margin: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Georgia', serif;
+      color: #1A1F16;
+      line-height: 1.6;
+    }
+    
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      padding: 0.6in;
+      page-break-after: always;
+      position: relative;
+    }
+    
+    .page:last-child { page-break-after: auto; }
+    
+    /* Cover Page */
+    .cover {
+      background: linear-gradient(135deg, #1A1F16 0%, #3D4F3D 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #F5F3EF;
+    }
+    
+    .cover-badge {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #C4A67C;
+      margin-bottom: 30px;
+    }
+    
+    .cover h1 {
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin-bottom: 15px;
+    }
+    
+    .cover .subtitle {
+      font-size: 18px;
+      color: #C4A67C;
+      font-style: italic;
+      margin-bottom: 60px;
+    }
+    
+    .cover .dedication {
+      font-size: 14px;
+      color: #D4C9B5;
+      margin-top: 80px;
+    }
+    
+    .cover .dedication strong {
+      color: #C4A67C;
+      font-size: 16px;
+    }
+    
+    .cover-footer {
+      position: absolute;
+      bottom: 0.6in;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 10px;
+      color: #666;
+      letter-spacing: 2px;
+    }
+    
+    /* Content Pages */
+    .content {
+      background: #F5F3EF;
+    }
+    
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #C4A67C;
+      padding-bottom: 10px;
+      margin-bottom: 25px;
+    }
+    
+    .page-header h2 {
+      font-size: 22px;
+      color: #3D4F3D;
+      font-weight: 500;
+    }
+    
+    .page-num {
+      width: 28px;
+      height: 28px;
+      background: #3D4F3D;
+      color: #F5F3EF;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-family: sans-serif;
+    }
+    
+    h3 {
+      font-size: 14px;
+      color: #3D4F3D;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 20px 0 10px 0;
+      padding-left: 12px;
+      border-left: 3px solid #C4A67C;
+    }
+    
+    p {
+      font-size: 12px;
+      margin-bottom: 12px;
+      color: #333;
+    }
+    
+    .intro {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #C4A67C;
+      margin-bottom: 25px;
+      font-size: 13px;
+      font-style: italic;
+      color: #555;
+    }
+    
+    .step-box {
+      background: #fff;
+      border-radius: 8px;
+      padding: 18px 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    
+    .step-num {
+      display: inline-block;
+      width: 26px;
+      height: 26px;
+      background: linear-gradient(135deg, #3D4F3D, #4A5D4A);
+      color: #F5F3EF;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 26px;
+      font-size: 12px;
+      font-family: sans-serif;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+    
+    .step-title {
+      font-weight: 600;
+      color: #3D4F3D;
+      font-size: 13px;
+    }
+    
+    .step-content {
+      margin-top: 10px;
+      padding-left: 36px;
+      font-size: 11.5px;
+      color: #444;
+    }
+    
+    code {
+      background: #1A1F16;
+      color: #C4A67C;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Consolas', monospace;
+      font-size: 10px;
+    }
+    
+    .code-block {
+      background: #1A1F16;
+      color: #D4C9B5;
+      padding: 15px 18px;
+      border-radius: 6px;
+      font-family: 'Monaco', 'Consolas', monospace;
+      font-size: 10px;
+      margin: 12px 0;
+      line-height: 1.7;
+      overflow-x: auto;
+    }
+    
+    .code-block .comment { color: #666; }
+    .code-block .cmd { color: #C4A67C; }
+    
+    .link-box {
+      background: linear-gradient(135deg, #3D4F3D, #4A5D4A);
+      color: #F5F3EF;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin: 15px 0;
+    }
+    
+    .link-box strong {
+      color: #C4A67C;
+    }
+    
+    .link-box a {
+      color: #C4A67C;
+      text-decoration: none;
+      word-break: break-all;
+    }
+    
+    ul {
+      margin: 10px 0;
+      padding-left: 20px;
+    }
+    
+    li {
+      font-size: 11.5px;
+      margin: 6px 0;
+      color: #444;
+    }
+    
+    .tip {
+      background: #fff8e6;
+      border: 1px solid #C4A67C;
+      padding: 12px 15px;
+      border-radius: 6px;
+      font-size: 11px;
+      margin: 15px 0;
+    }
+    
+    .tip-title {
+      font-weight: 600;
+      color: #996600;
+      margin-bottom: 5px;
+    }
+    
+    .two-col {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .two-col > div { flex: 1; }
+    
+    .footer {
+      position: absolute;
+      bottom: 0.5in;
+      left: 0.6in;
+      right: 0.6in;
+      text-align: center;
+      font-size: 9px;
+      color: #999;
+      border-top: 1px solid #ddd;
+      padding-top: 10px;
+    }
+    
+    .qr-placeholder {
+      width: 80px;
+      height: 80px;
+      background: #ddd;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cover Page -->
+  <div class="page cover">
+    <div class="cover-badge">Personal AI Assistant</div>
+    <h1>OPENCLAW</h1>
+    <div class="subtitle">Build Your Own AI Bot from Scratch</div>
+    
+    <div class="dedication">
+      Prepared exclusively for<br>
+      <strong>Tal Shilton</strong>
+    </div>
+    
+    <div class="cover-footer">COYOL GROUP — NOSARA, COSTA RICA</div>
+  </div>
+
+  <!-- Page 1: What is OpenClaw -->
+  <div class="page content">
+    <div class="page-header">
+      <h2>What is OpenClaw?</h2>
+      <div class="page-num">1</div>
+    </div>
+    
+    <div class="intro">
+      OpenClaw is an open-source AI assistant that runs on your own computer. Unlike ChatGPT or other cloud services, you control everything — your data stays with you, and you can connect it to Telegram, WhatsApp, email, and more.
+    </div>
+    
+    <h3>Why OpenClaw?</h3>
+    <ul>
+      <li><strong>Privacy:</strong> Your conversations never leave your machine</li>
+      <li><strong>Control:</strong> Customize behavior, add skills, connect to your apps</li>
+      <li><strong>Multi-channel:</strong> Same bot on Telegram, WhatsApp, Discord, CLI</li>
+      <li><strong>Persistent memory:</strong> Remembers context across sessions</li>
+      <li><strong>Skills system:</strong> Add capabilities like calendar, email, home automation</li>
+    </ul>
+    
+    <h3>What You'll Need</h3>
+    <div class="two-col">
+      <div>
+        <div class="step-box">
+          <span class="step-title">Hardware</span>
+          <ul>
+            <li>Mac, Windows, or Linux computer</li>
+            <li>Always-on machine (or VPS) for 24/7 bot</li>
+            <li>8GB RAM minimum recommended</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="step-box">
+          <span class="step-title">Accounts</span>
+          <ul>
+            <li>Anthropic API key (for Claude)</li>
+            <li>Or OpenAI/OpenRouter API key</li>
+            <li>Telegram account (for bot)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <h3>Download Links</h3>
+    <div class="link-box">
+      <strong>OpenClaw GitHub:</strong><br>
+      <a href="https://github.com/openclaw/openclaw">github.com/openclaw/openclaw</a><br><br>
+      <strong>Documentation:</strong><br>
+      <a href="https://docs.openclaw.ai">docs.openclaw.ai</a><br><br>
+      <strong>Community Discord:</strong><br>
+      <a href="https://discord.com/invite/clawd">discord.com/invite/clawd</a>
+    </div>
+    
+    <div class="footer">OpenClaw Guide — Prepared for Tal Shilton</div>
+  </div>
+
+  <!-- Page 2: Installation -->
+  <div class="page content">
+    <div class="page-header">
+      <h2>Installation</h2>
+      <div class="page-num">2</div>
+    </div>
+    
+    <h3>Step 1: Install Node.js</h3>
+    <div class="step-box">
+      <span class="step-num">1</span>
+      <span class="step-title">Download Node.js (v22+)</span>
+      <div class="step-content">
+        Visit <strong>nodejs.org</strong> and download the LTS version. Install with default options.
+        <div class="code-block">
+          <span class="comment"># Verify installation:</span><br>
+          <span class="cmd">node --version</span>  <span class="comment"># Should show v22.x.x</span><br>
+          <span class="cmd">npm --version</span>   <span class="comment"># Should show 10.x.x</span>
+        </div>
+      </div>
+    </div>
+    
+    <h3>Step 2: Install OpenClaw</h3>
+    <div class="step-box">
+      <span class="step-num">2</span>
+      <span class="step-title">Install via npm</span>
+      <div class="step-content">
+        <div class="code-block">
+          <span class="comment"># Install OpenClaw globally</span><br>
+          <span class="cmd">npm install -g openclaw</span><br><br>
+          <span class="comment"># Verify installation</span><br>
+          <span class="cmd">openclaw --version</span>
+        </div>
+      </div>
+    </div>
+    
+    <h3>Step 3: Initialize Your Workspace</h3>
+    <div class="step-box">
+      <span class="step-num">3</span>
+      <span class="step-title">Create workspace and configure</span>
+      <div class="step-content">
+        <div class="code-block">
+          <span class="comment"># Initialize OpenClaw (creates ~/.openclaw/)</span><br>
+          <span class="cmd">openclaw init</span><br><br>
+          <span class="comment"># Set your API key</span><br>
+          <span class="cmd">openclaw config set anthropic.apiKey YOUR_API_KEY</span>
+        </div>
+      </div>
+    </div>
+    
+    <h3>Step 4: Start Chatting</h3>
+    <div class="step-box">
+      <span class="step-num">4</span>
+      <span class="step-title">Launch the CLI</span>
+      <div class="step-content">
+        <div class="code-block">
+          <span class="comment"># Start OpenClaw in terminal</span><br>
+          <span class="cmd">openclaw</span><br><br>
+          <span class="comment"># You can now chat with your AI assistant!</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="tip">
+      <div class="tip-title">Getting an API Key</div>
+      Go to <strong>console.anthropic.com</strong>, create an account, and generate an API key. You'll need to add a payment method — usage is typically $5-20/month for personal use.
+    </div>
+    
+    <div class="footer">OpenClaw Guide — Prepared for Tal Shilton</div>
+  </div>
+
+  <!-- Page 3: Telegram Bot -->
+  <div class="page content">
+    <div class="page-header">
+      <h2>Create Your Telegram Bot</h2>
+      <div class="page-num">3</div>
+    </div>
+    
+    <div class="intro">
+      Connect OpenClaw to Telegram so you can chat with your AI from your phone, anywhere in the world.
+    </div>
+    
+    <h3>Step 1: Create Bot with BotFather</h3>
+    <div class="step-box">
+      <span class="step-num">1</span>
+      <span class="step-title">Open Telegram and find @BotFather</span>
+      <div class="step-content">
+        <ul>
+          <li>Open Telegram and search for <code>@BotFather</code></li>
+          <li>Send <code>/newbot</code></li>
+          <li>Choose a name: "Tal's Assistant"</li>
+          <li>Choose a username: <code>tal_assistant_bot</code> (must end in "bot")</li>
+          <li>BotFather will give you an <strong>API token</strong> — save it!</li>
+        </ul>
+      </div>
+    </div>
+    
+    <h3>Step 2: Configure OpenClaw</h3>
+    <div class="step-box">
+      <span class="step-num">2</span>
+      <span class="step-title">Add your Telegram token</span>
+      <div class="step-content">
+        <div class="code-block">
+          <span class="comment"># Add Telegram bot configuration</span><br>
+          <span class="cmd">openclaw config set telegram.botToken YOUR_BOT_TOKEN</span><br><br>
+          <span class="comment"># Optional: Restrict to your Telegram ID only</span><br>
+          <span class="cmd">openclaw config set telegram.allowedUsers YOUR_TELEGRAM_ID</span>
+        </div>
+        <p style="margin-top:10px;">To find your Telegram ID, message <code>@userinfobot</code> on Telegram.</p>
+      </div>
+    </div>
+    
+    <h3>Step 3: Start the Gateway</h3>
+    <div class="step-box">
+      <span class="step-num">3</span>
+      <span class="step-title">Run OpenClaw as a service</span>
+      <div class="step-content">
+        <div class="code-block">
+          <span class="comment"># Start the gateway (keeps running in background)</span><br>
+          <span class="cmd">openclaw gateway start</span><br><br>
+          <span class="comment"># Check status</span><br>
+          <span class="cmd">openclaw gateway status</span><br><br>
+          <span class="comment"># View logs</span><br>
+          <span class="cmd">openclaw gateway logs</span>
+        </div>
+      </div>
+    </div>
+    
+    <h3>Step 4: Chat!</h3>
+    <div class="step-box">
+      <span class="step-num">4</span>
+      <span class="step-title">Message your bot on Telegram</span>
+      <div class="step-content">
+        Find your bot on Telegram by its username and start chatting. Your AI assistant is now available on your phone 24/7!
+      </div>
+    </div>
+    
+    <div class="tip">
+      <div class="tip-title">Keep It Running</div>
+      For 24/7 availability, run OpenClaw on an always-on machine (Mac mini, Raspberry Pi, or a VPS like DigitalOcean or Hetzner for ~$5/month).
+    </div>
+    
+    <div class="footer">OpenClaw Guide — Prepared for Tal Shilton</div>
+  </div>
+
+  <!-- Page 4: Customization -->
+  <div class="page content">
+    <div class="page-header">
+      <h2>Make It Yours</h2>
+      <div class="page-num">4</div>
+    </div>
+    
+    <h3>Workspace Files</h3>
+    <p>Your OpenClaw workspace (<code>~/.openclaw/workspace/</code>) contains files that shape your assistant:</p>
+    
+    <div class="two-col">
+      <div>
+        <div class="step-box">
+          <span class="step-title">SOUL.md</span>
+          <div class="step-content">
+            Your assistant's personality. Edit this to change how it talks, what it prioritizes, and its general vibe.
+          </div>
+        </div>
+        <div class="step-box">
+          <span class="step-title">USER.md</span>
+          <div class="step-content">
+            Information about you — name, preferences, timezone, contacts. Helps the AI understand context.
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="step-box">
+          <span class="step-title">MEMORY.md</span>
+          <div class="step-content">
+            Long-term memory. The AI reads and writes here to remember important things across sessions.
+          </div>
+        </div>
+        <div class="step-box">
+          <span class="step-title">TOOLS.md</span>
+          <div class="step-content">
+            Notes about your specific setup — API keys, local services, device names, etc.
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <h3>Adding Skills</h3>
+    <p>Skills add capabilities to your assistant. Browse and install from ClawHub:</p>
+    <div class="code-block">
+      <span class="comment"># Search for skills</span><br>
+      <span class="cmd">clawhub search calendar</span><br><br>
+      <span class="comment"># Install a skill</span><br>
+      <span class="cmd">clawhub install apple-reminders</span><br><br>
+      <span class="comment"># List installed skills</span><br>
+      <span class="cmd">clawhub list</span>
+    </div>
+    
+    <h3>Popular Skills</h3>
+    <ul>
+      <li><strong>himalaya:</strong> Read and send emails</li>
+      <li><strong>apple-reminders:</strong> Manage iOS/macOS reminders</li>
+      <li><strong>apple-notes:</strong> Create and search notes</li>
+      <li><strong>github:</strong> Manage repos, issues, PRs</li>
+      <li><strong>weather:</strong> Get forecasts</li>
+      <li><strong>imsg:</strong> Send iMessages (Mac only)</li>
+    </ul>
+    
+    <h3>Useful Commands</h3>
+    <div class="code-block">
+      <span class="cmd">openclaw status</span>         <span class="comment"># Check system status</span><br>
+      <span class="cmd">openclaw gateway restart</span> <span class="comment"># Restart the bot</span><br>
+      <span class="cmd">openclaw config list</span>     <span class="comment"># View all settings</span><br>
+      <span class="cmd">openclaw help</span>            <span class="comment"># Get help</span>
+    </div>
+    
+    <div class="link-box">
+      <strong>Find more skills:</strong> <a href="https://clawhub.ai">clawhub.ai</a><br>
+      <strong>Full documentation:</strong> <a href="https://docs.openclaw.ai">docs.openclaw.ai</a><br>
+      <strong>Get help:</strong> <a href="https://discord.com/invite/clawd">Discord Community</a>
+    </div>
+    
+    <div class="footer">OpenClaw Guide — Prepared for Tal Shilton</div>
+  </div>
+
+</body>
+</html>

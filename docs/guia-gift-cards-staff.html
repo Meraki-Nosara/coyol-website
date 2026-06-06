@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Guía Gift Cards</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    @page { size: letter; margin: 0.4in; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      padding: 15px;
+      color: #1a1a1a;
+      line-height: 1.35;
+      font-size: 9.5pt;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid #C4A67C;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    h1 {
+      color: #3D4F3D;
+      font-size: 16pt;
+    }
+    .header-right {
+      text-align: right;
+      font-size: 8pt;
+      color: #666;
+    }
+    h2 {
+      color: #fff;
+      background: #3D4F3D;
+      padding: 4px 10px;
+      font-size: 9pt;
+      margin: 10px 0 6px 0;
+      border-radius: 3px;
+    }
+    .intro {
+      background: #f5f3ef;
+      padding: 8px 10px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      font-size: 9pt;
+    }
+    .columns {
+      display: flex;
+      gap: 15px;
+    }
+    .col { flex: 1; }
+    .steps {
+      display: grid;
+      gap: 4px;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      background: #f9f9f9;
+      padding: 5px 8px;
+      border-radius: 3px;
+      border-left: 3px solid #C4A67C;
+    }
+    .step-num {
+      background: #3D4F3D;
+      color: white;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 16px;
+      font-weight: bold;
+      margin-right: 8px;
+      font-size: 8pt;
+      flex-shrink: 0;
+    }
+    .example {
+      background: #f5f3ef;
+      padding: 6px 10px;
+      border-radius: 4px;
+      margin: 6px 0;
+      font-size: 8.5pt;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8.5pt;
+      margin: 6px 0;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 4px 8px;
+    }
+    th { background: #3D4F3D; color: white; }
+    .warning {
+      background: #fff3cd;
+      border: 1px solid #e6c200;
+      padding: 6px 10px;
+      border-radius: 4px;
+      margin: 8px 0;
+      font-size: 8.5pt;
+    }
+    .warning-title { font-weight: bold; margin-bottom: 3px; }
+    .urls {
+      background: #eee;
+      padding: 5px 8px;
+      border-radius: 3px;
+      font-size: 8pt;
+      margin: 6px 0;
+    }
+    ul { padding-left: 15px; margin: 3px 0; }
+    li { margin: 2px 0; }
+    .faq { font-size: 8.5pt; }
+    .faq-item { margin-bottom: 4px; }
+    .faq-q { font-weight: bold; }
+    .footer {
+      text-align: center;
+      color: #999;
+      font-size: 7pt;
+      margin-top: 10px;
+      padding-top: 6px;
+      border-top: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Sistema de Gift Cards</h1>
+    <div class="header-right">La Luna & Coyol Restaurant<br>Guía para Staff</div>
+  </div>
+
+  <div class="intro">
+    Los clientes compran tarjetas de regalo en línea. Pueden usar el saldo para pagar parte o toda su cuenta.
+  </div>
+
+  <div class="columns">
+    <div class="col">
+      
+      <h2>CÓMO APLICAR UNA GIFT CARD</h2>
+      
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">1</span>
+          <span><strong>Buscar</strong> — Por nombre o código en la página de Gift Cards</span>
+        </div>
+        <div class="step">
+          <span class="step-num">2</span>
+          <span><strong>Presionar "Use"</strong> — En la tarjeta del cliente</span>
+        </div>
+        <div class="step">
+          <span class="step-num">3</span>
+          <span><strong>Ingresar</strong> — Reservación, total de cuenta, monto a aplicar</span>
+        </div>
+        <div class="step">
+          <span class="step-num">4</span>
+          <span><strong>Revisar</strong> — Ver cuánto paga y crédito restante</span>
+        </div>
+        <div class="step">
+          <span class="step-num">5</span>
+          <span><strong>Confirmar</strong> — Presionar "Apply"</span>
+        </div>
+      </div>
+
+      <h2>EJEMPLO DE USO PARCIAL</h2>
+      <div class="example">
+        <strong>Gift Card: $100</strong> — Cuenta: $60<br>
+        Se aplican $60 — Cliente no paga — <strong>Quedan $40</strong> para otra visita
+      </div>
+
+      <h2>PREGUNTAS FRECUENTES</h2>
+      <div class="faq">
+        <div class="faq-item"><span class="faq-q">¿No tiene código?</span> Buscar por nombre o que revise su email.</div>
+        <div class="faq-item"><span class="faq-q">¿Propinas?</span> No, solo comida y bebidas.</div>
+        <div class="faq-item"><span class="faq-q">¿Vencen?</span> No, nunca vencen.</div>
+      </div>
+
+    </div>
+    
+    <div class="col">
+      
+      <h2>IDENTIFICAR CLIENTE</h2>
+      <p style="font-size:8.5pt;margin:4px 0;">En reservaciones verás un icono de regalo junto al nombre si tiene Gift Card.</p>
+      
+      <div class="urls">
+        <strong>Admin La Luna:</strong> coyolnosara.com/laluna/admin/gifts<br>
+        <strong>Admin Coyol:</strong> coyolnosara.com/restaurant/admin/gifts
+      </div>
+
+      <h2>TIPOS DE GIFT CARDS</h2>
+      <table>
+        <tr><th>Tipo</th><th>Monto</th></tr>
+        <tr><td>Classic</td><td>$50 - $99</td></tr>
+        <tr><td>Silver</td><td>$100 - $149</td></tr>
+        <tr><td>Gold</td><td>$150 - $199</td></tr>
+        <tr><td>Platinum</td><td>$200+</td></tr>
+      </table>
+
+      <div class="warning">
+        <div class="warning-title">IMPORTANTE</div>
+        <ul>
+          <li>La Luna Gift Cards = SOLO La Luna</li>
+          <li>Coyol Gift Cards = SOLO Coyol</li>
+          <li>Si no aparece, pedir código al cliente</li>
+          <li>Dudas: Marion o Angelina</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">Coyol Group — Nosara, Costa Rica</div>
+
+</body>
+</html>
