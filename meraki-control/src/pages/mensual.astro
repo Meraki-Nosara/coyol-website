@@ -728,33 +728,8 @@ const financialSummary = loadFinancialSummary();
               </div>
             </div>
             
-            <!-- Weekly breakdown bar chart -->
-            <div class="mb-6">
-              <p class="text-sm font-medium text-landrover-santorini mb-3">Weekly Variable Payroll</p>
-              <div class="space-y-2">
-                {allPayroll.filter(p => p.month === '2026-04').flatMap(p => p.weekly).map((week, i) => {
-                  const maxWeekly = Math.max(...allPayroll.filter(p => p.month === '2026-04').flatMap(p => p.weekly).map(w => w.total));
-                  const pct = maxWeekly > 0 ? (week.total / maxWeekly * 100) : 0;
-                  const weekLabel = week.period.split('/')[0].split('-').slice(1).join('/');
-                  return (
-                    <div class="flex items-center gap-3">
-                      <span class="text-xs text-landrover-marine/60 w-16">{weekLabel}</span>
-                      <div class="flex-1 h-6 bg-gray-100 rounded-full overflow-hidden">
-                        <div 
-                          class="h-full bg-gradient-to-r from-amber-400 to-amber-500 rounded-full flex items-center justify-end pr-2"
-                          style={`width: ${pct}%`}
-                        >
-                          <span class="text-xs font-medium text-white">{fmt(week.total)}</span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            
 <p class="text-xs text-landrover-marine/40 mt-4 text-center">
-              Source: PLANILLA_MERAKI_ABRIL_2026.xlsx
+              Source: Planilla Meraki
             </p>
           </div>
         )}
