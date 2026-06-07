@@ -392,7 +392,7 @@ const financialSummary = loadFinancialSummary();
             <div>
               <p class="text-landrover-limestone/60 text-xs uppercase tracking-wider mb-1">Total Sales 2026</p>
               <p class="text-3xl lg:text-5xl font-semibold">{fmt(grandTotal)}</p>
-              <p class="text-landrover-limestone/60 text-xs lg:text-sm mt-2">{yearTotals.customers.toLocaleString()} customers • {yearTotals.orders.toLocaleString()} orders</p>
+              <p class="text-landrover-limestone/60 text-xs lg:text-sm mt-2">{(yearTotals.customers || 0).toLocaleString()} customers • {(yearTotals.orders || 0).toLocaleString()} orders</p>
             </div>
             <div class="flex gap-6 pt-2 border-t border-white/20">
               <div>

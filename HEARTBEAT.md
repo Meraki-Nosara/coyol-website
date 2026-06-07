@@ -6,7 +6,8 @@ These tasks MUST be completed before any project work:
 
 1. **Ingrid cierres** — Check marionnosara@gmail.com for closing photos, OCR immediately
 2. **Facturas** — Parse any new electronic invoices, update invoices.json
-3. **8pm Daily Report** — Generate and send to Angelina (vailas78@yahoo.com)
+3. **Meraki Dashboard** — After adding new sales data, commit & push to deploy. Check `git status` in meraki-control.
+4. **8pm Daily Report** — Generate and send to Angelina (vailas78@yahoo.com)
 4. **Restaurant Reservations** — Check for new bookings, send confirmation emails
 5. **CRM Lead Sync** — Run reservation → CRM pipeline, alert Marion on hot leads
 

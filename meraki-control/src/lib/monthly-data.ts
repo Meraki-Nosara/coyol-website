@@ -85,6 +85,10 @@ export function getYearData(year: string): MonthlySale[] {
 export const USD_RATE = 505; // 1 USD = 505 CRC
 
 export function formatCurrency(amount: number, currency: 'CRC' | 'USD' = 'CRC', abbreviate: boolean = true): string {
+  // Guard against NaN/undefined
+  if (amount === undefined || amount === null || isNaN(amount)) {
+    return currency === 'USD' ? '$0' : '₡0';
+  }
   if (currency === 'USD') {
     const usd = amount / USD_RATE;
     if (!abbreviate) {
