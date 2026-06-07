@@ -1,0 +1,18 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Bold pushchair icon -->
+  <!-- Handle -->
+  <path d="M70 15 C82 15 85 28 78 42 C72 54 70 62 70 70" 
+        stroke="white" stroke-width="8" stroke-linecap="round" fill="none"/>
+  <!-- Hood/Canopy -->
+  <path d="M25 35 C25 20 55 20 55 35 L55 45 C55 48 52 50 49 50 L31 50 C28 50 25 48 25 45 Z" 
+        fill="white"/>
+  <!-- Body -->
+  <path d="M20 50 L60 50 L63 72 C63 75 60 78 57 78 L23 78 C20 78 17 75 17 72 Z" 
+        fill="white"/>
+  <!-- Wheels -->
+  <circle cx="26" cy="88" r="10" fill="white"/>
+  <circle cx="54" cy="88" r="10" fill="white"/>
+  <!-- Wheel centers -->
+  <circle cx="26" cy="88" r="4" fill="#FF6B6B"/>
+  <circle cx="54" cy="88" r="4" fill="#FF6B6B"/>
+</svg>
