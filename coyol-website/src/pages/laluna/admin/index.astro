@@ -2228,6 +2228,11 @@ import '../../../styles/laluna-tables.css';
       color: white;
     }
     .tap-btn-create:hover { background: #4A5D4A; }
+    .tap-btn-clear {
+      background: #A65D3F;
+      color: white;
+    }
+    .tap-btn-clear:hover { background: #8B4D35; }
     
     /* Selected states */
     .res-row.selected { background: rgba(166, 93, 63, 0.15); border-left: 3px solid var(--terracotta); }
@@ -3641,6 +3646,12 @@ import '../../../styles/laluna-tables.css';
           `}
         </div>
         <div class="tap-actions">
+          ${hasReservations && tableReservations.some(r => r.status === 'seated') ? `
+            <button class="tap-btn tap-btn-clear" onclick="clearTable('${table.id}', '${tableReservations.find(r => r.status === 'seated')?.id}')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+              Clear Table
+            </button>
+          ` : ''}
           <button class="tap-btn tap-btn-create" onclick="createReservationForTable('${table.id}')">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             New Reservation
@@ -3674,6 +3685,38 @@ import '../../../styles/laluna-tables.css';
     function createReservationForTable(tableId) {
       hideTableActionPopup();
       openNewReservation(tableId);
+    }
+    window.createReservationForTable = createReservationForTable;
+    
+    // Clear table - mark reservation as completed
+    async function clearTable(tableId, reservationId) {
+      if (!confirm('Clear this table? The reservation will be marked as completed.')) return;
+      
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${reservationId}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({ status: 'completed' })
+        });
+        
+        hideTableActionPopup();
+        await loadReservations();
+        renderFloor();
+        
+        // Toast notification
+        const toast = document.createElement('div');
+        toast.textContent = 'Table cleared';
+        toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 24px;border-radius:8px;z-index:9999;';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+      } catch (err) {
+        alert('Failed to clear table: ' + err.message);
+      }
     }
     window.createReservationForTable = createReservationForTable;
 
