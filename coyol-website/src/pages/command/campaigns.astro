@@ -683,11 +683,12 @@ const clips = [
         ? recentSent.map(e => `<div>${e}</div>`).join('') 
         : '<div>No emails sent yet</div>';
       
-      // Show sent by day
-      const sentByDay = data.sentByDay || [];
-      if (sentByDay.length > 0) {
-        const dayHtml = sentByDay.slice(0, 5).map(d => `<div>${d.date}: ${d.count}</div>`).join('');
-        document.getElementById('pendingList').innerHTML = `<div style="color:#C4A67C;">Sent by Day:</div>${dayHtml}`;
+      // Show next up
+      const nextUp = data.nextUp || [];
+      if (nextUp.length > 0) {
+        document.getElementById('pendingList').innerHTML = nextUp.map(e => `<div>${e}</div>`).join('');
+      } else {
+        document.getElementById('pendingList').innerHTML = '<div>All contacts sent!</div>';
       }
     } catch (err) {
       console.error('Failed to load campaign status:', err);
