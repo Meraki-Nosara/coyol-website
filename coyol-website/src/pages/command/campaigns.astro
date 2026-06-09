@@ -663,8 +663,8 @@ const clips = [
       document.getElementById('progressBar').style.width = (stats.percentComplete || 0) + '%';
       
       // Show status badge
-      const statusNote = data.status === 'paused' 
-        ? `<div class="campaign-note">⏸️ ${data.note || 'Paused'}</div>` 
+      const statusNote = data.note 
+        ? `<div class="campaign-note">${data.note}</div>` 
         : '';
       
       // Today's count
@@ -674,7 +674,7 @@ const clips = [
       
       const headerEl = document.querySelector('.email-campaign h2');
       if (headerEl) {
-        headerEl.innerHTML = `📧 Gift Card Email Campaign ${statusNote}${todayNote}`;
+        headerEl.innerHTML = `Gift Card Email Campaign ${statusNote}${todayNote}`;
       }
       
       // Recent sent
@@ -713,10 +713,10 @@ const clips = [
       const data = await res.json();
       
       const statusText = {
-        'sent': '✅ Already sent',
-        'pending': '⏳ Pending',
-        'hot-lead-reserved': '🔥 Hot lead (reserved for Meta Ads)',
-        'unknown': '❓ Not in list'
+        'sent': 'Already sent',
+        'pending': 'Pending',
+        'hot-lead-reserved': 'Hot lead (reserved for Meta Ads)',
+        'unknown': 'Not in list'
       };
       
       resultEl.textContent = statusText[data.status] || data.status;
