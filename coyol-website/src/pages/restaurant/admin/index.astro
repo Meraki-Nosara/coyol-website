@@ -2428,7 +2428,7 @@ import '../../../styles/coyol-tables.css';
         
         // Filter tables: fits guests AND (not reserved at same time OR is current table)
         const availableTables = allTables.filter(t => {
-          const capacity = t.maxCovers || t.capacity || 4;
+          const capacity = t.maxCovers || t.capacity || 10;
           if (capacity < guestCount) return false;
           
           const tableIdLower = t.id.toLowerCase();
@@ -3116,7 +3116,7 @@ import '../../../styles/coyol-tables.css';
       
       tableSelect.innerHTML = '<option value="">Auto-assign</option>';
       allTables.forEach(t => {
-        const capacity = t.maxCovers || 4;
+        const capacity = t.maxCovers || 10;
         const opt = document.createElement('option');
         opt.value = t.id;
         opt.textContent = `${t.name} (${capacity}p)`;
@@ -3180,7 +3180,7 @@ import '../../../styles/coyol-tables.css';
       const layouts = getLayout();
       const allTables = [...(layouts.inside || []), ...(layouts.jardin || []), ...(layouts.terraza || [])];
       allTables.forEach(t => {
-        const capacity = t.maxCovers || 4;
+        const capacity = t.maxCovers || 10;
         tableSelect.innerHTML += `<option value="${t.id}">${t.name} (${capacity}p)</option>`;
       });
       document.getElementById('walkinModal').classList.add('open');

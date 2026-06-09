@@ -989,13 +989,21 @@ import '../../../styles/coyol-tables.css';
         alert('No table selected');
         return;
       }
-      // Use a simple confirm that works on all browsers/iPad
-      const confirmDelete = window.confirm('¿Eliminar esta mesa? / Delete this table?');
-      if (!confirmDelete) return;
       
       const layouts = getLayout();
       const tableToDelete = layouts[currentZone].find(t => t.id === selectedTable);
-      console.log('Deleting table:', tableToDelete?.name || selectedTable);
+      const tableName = tableToDelete?.name || selectedTable;
+      
+      // Use confirm - if it fails, proceed anyway (some iPads block it)
+      let proceed = true;
+      try {
+        proceed = window.confirm(`¿Eliminar mesa ${tableName}? / Delete table ${tableName}?`);
+      } catch(e) {
+        proceed = true; // If confirm fails, allow delete
+      }
+      if (!proceed) return;
+      
+      console.log('Deleting table:', tableName);
       
       layouts[currentZone] = layouts[currentZone].filter(t => t.id !== selectedTable);
       saveLayout(layouts);
@@ -1112,14 +1120,28 @@ import '../../../styles/coyol-tables.css';
 
       const layouts = getLayout();
       const newId = 'new-' + Date.now();
+      
+      // Set default covers based on table type
+      const coversByType = {
+        'square': { min: 2, max: 4 },
+        'round': { min: 2, max: 4 },
+        'round-lg': { min: 4, max: 6 },
+        'sofa': { min: 2, max: 4 },
+        'diamond': { min: 2, max: 4 },
+        'rect': { min: 4, max: 8 },
+        'bar': { min: 6, max: 16 },
+        'communal': { min: 6, max: 16 }
+      };
+      const covers = coversByType[type] || { min: 2, max: 4 };
+      
       layouts[currentZone].push({
         id: newId,
         name: 'New',
         type: type,
         x: x,
         y: y,
-        minCovers: 2,
-        maxCovers: 4
+        minCovers: covers.min,
+        maxCovers: covers.max
       });
       saveLayout(layouts);
       renderFloor();
