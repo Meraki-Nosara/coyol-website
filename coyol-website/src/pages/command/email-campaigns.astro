@@ -1,0 +1,767 @@
+---
+import CommandLayout from '../../layouts/CommandLayout.astro';
+
+// This page manages email campaigns with a proper pipeline
+// Data comes from Supabase: email_campaigns, email_contacts, email_sends
+---
+
+<CommandLayout title="Email Campaigns" active="campaigns">
+  
+  <div class="page">
+    <header class="page-header">
+      <div>
+        <h1>Email Campaigns</h1>
+        <span class="subtitle">Restaurant guest marketing pipeline</span>
+      </div>
+      <button class="btn-new" onclick="showNewCampaign()">+ New Campaign</button>
+    </header>
+
+    <!-- Stats Overview -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value" id="totalContacts">-</div>
+        <div class="stat-label">Total Contacts</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="totalSent">-</div>
+        <div class="stat-label">Emails Sent</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="pendingQueue">-</div>
+        <div class="stat-label">In Queue</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="activeCampaign">-</div>
+        <div class="stat-label">Active Campaign</div>
+      </div>
+    </div>
+
+    <!-- Campaign Selector -->
+    <section class="campaigns-section">
+      <h2>Campaigns</h2>
+      <div class="campaigns-list" id="campaignsList">
+        <div class="loading">Loading campaigns...</div>
+      </div>
+    </section>
+
+    <!-- Pipeline View -->
+    <section class="pipeline-section" id="pipelineSection" style="display: none;">
+      <div class="pipeline-header">
+        <h2 id="pipelineTitle">Campaign Pipeline</h2>
+        <div class="pipeline-actions">
+          <button class="btn-secondary" onclick="loadNextBatch()">Load Next 50</button>
+          <button class="btn-primary" id="approveBtn" onclick="approveAndSend()" disabled>Approve & Send</button>
+        </div>
+      </div>
+
+      <!-- Queue for Approval -->
+      <div class="queue-section">
+        <h3>Queue for Approval <span class="queue-count" id="queueCount">(0)</span></h3>
+        <div class="queue-table-wrap">
+          <table class="queue-table">
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="selectAll" onchange="toggleSelectAll()"></th>
+                <th>Email</th>
+                <th>Source</th>
+                <th>Last Visit</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="queueBody">
+              <tr><td colspan="5" class="empty">No contacts in queue. Click "Load Next 50" to add.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Send Log -->
+      <div class="log-section">
+        <h3>Recent Sends</h3>
+        <div class="log-table-wrap">
+          <table class="log-table">
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Sent At</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="logBody">
+              <tr><td colspan="3" class="empty">No sends yet</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- New Campaign Modal -->
+  <div class="modal" id="newCampaignModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>New Email Campaign</h2>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Campaign Name</label>
+          <input type="text" id="campaignName" placeholder="e.g. Gift Card Summer 2026">
+        </div>
+        <div class="form-group">
+          <label>Subject Line</label>
+          <input type="text" id="campaignSubject" placeholder="e.g. A Gift for Someone Special">
+        </div>
+        <div class="form-group">
+          <label>Email Template</label>
+          <select id="campaignTemplate">
+            <option value="gift-card-v23">Gift Card Announcement (v23)</option>
+            <option value="custom">Custom HTML</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn-primary" onclick="createCampaign()">Create Campaign</button>
+      </div>
+    </div>
+  </div>
+
+</CommandLayout>
+
+<style>
+  .page { padding: 0; }
+  
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .page-header h1 {
+    font-size: 28px;
+    color: #1A1F16;
+    margin: 0;
+  }
+  
+  .subtitle {
+    color: #666;
+    font-size: 14px;
+  }
+  
+  .btn-new {
+    background: #3D4F3D;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .btn-new:hover { background: #2d3d2d; }
+  
+  /* Stats */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+  
+  .stat-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+  }
+  
+  .stat-value {
+    font-size: 32px;
+    font-weight: 600;
+    color: #3D4F3D;
+  }
+  
+  .stat-label {
+    color: #666;
+    font-size: 13px;
+    margin-top: 4px;
+  }
+  
+  /* Campaigns List */
+  .campaigns-section { margin-bottom: 40px; }
+  
+  .campaigns-section h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+    color: #1A1F16;
+  }
+  
+  .campaigns-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  
+  .campaign-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .campaign-card:hover {
+    border-color: #3D4F3D;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  .campaign-card.active {
+    border-color: #3D4F3D;
+    background: #f8faf8;
+  }
+  
+  .campaign-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1A1F16;
+    margin-bottom: 8px;
+  }
+  
+  .campaign-stats {
+    display: flex;
+    gap: 20px;
+    font-size: 13px;
+    color: #666;
+  }
+  
+  .campaign-status {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    margin-top: 12px;
+  }
+  
+  .campaign-status.active { background: #d4edda; color: #155724; }
+  .campaign-status.paused { background: #fff3cd; color: #856404; }
+  .campaign-status.completed { background: #e2e3e5; color: #383d41; }
+  
+  /* Pipeline */
+  .pipeline-section {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 24px;
+  }
+  
+  .pipeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  
+  .pipeline-header h2 {
+    font-size: 18px;
+    color: #1A1F16;
+    margin: 0;
+  }
+  
+  .pipeline-actions {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .btn-secondary {
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .btn-primary {
+    background: #3D4F3D;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .btn-primary:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* Queue Table */
+  .queue-section { margin-bottom: 30px; }
+  
+  .queue-section h3 {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 12px;
+  }
+  
+  .queue-count { color: #3D4F3D; }
+  
+  .queue-table-wrap {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+  }
+  
+  .queue-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  
+  .queue-table th {
+    background: #f5f5f5;
+    padding: 12px;
+    text-align: left;
+    font-weight: 500;
+    position: sticky;
+    top: 0;
+  }
+  
+  .queue-table td {
+    padding: 12px;
+    border-top: 1px solid #eee;
+  }
+  
+  .queue-table tr:hover { background: #fafafa; }
+  
+  .queue-table .empty {
+    text-align: center;
+    color: #999;
+    padding: 40px;
+  }
+  
+  .status-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+  }
+  
+  .status-badge.pending { background: #e3f2fd; color: #1565c0; }
+  .status-badge.sent { background: #e8f5e9; color: #2e7d32; }
+  .status-badge.failed { background: #ffebee; color: #c62828; }
+  
+  /* Log Table */
+  .log-section h3 {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 12px;
+  }
+  
+  .log-table-wrap {
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+  }
+  
+  .log-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  
+  .log-table th {
+    background: #f5f5f5;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 500;
+    position: sticky;
+    top: 0;
+  }
+  
+  .log-table td {
+    padding: 10px 12px;
+    border-top: 1px solid #eee;
+  }
+  
+  .log-table .empty {
+    text-align: center;
+    color: #999;
+    padding: 30px;
+  }
+  
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modal.open { display: flex; }
+  
+  .modal-content {
+    background: white;
+    border-radius: 12px;
+    width: 500px;
+    max-width: 90%;
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+  }
+  
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+  }
+  
+  .modal-body { padding: 24px; }
+  
+  .form-group { margin-bottom: 20px; }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px;
+    border-top: 1px solid #eee;
+  }
+  
+  .loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+  }
+  
+  @media (max-width: 768px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .pipeline-header { flex-direction: column; gap: 16px; }
+  }
+</style>
+
+<script>
+  const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ueGp6dnFncnJvZGFsY210bnRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMxMjMzMDUsImV4cCI6MjA1ODY5OTMwNX0.Gf0gYB3HT4qSYHlYmTTvYvdxWXK3J4bXcaIH0r9Psws';
+  
+  let currentCampaign = null;
+  let queuedContacts = [];
+  let selectedContacts = new Set();
+  
+  // Initialize
+  document.addEventListener('DOMContentLoaded', () => {
+    loadStats();
+    loadCampaigns();
+  });
+  
+  async function supabase(endpoint, options = {}) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${endpoint}`, {
+      ...options,
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': options.prefer || 'return=representation',
+        ...options.headers
+      }
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return options.method === 'DELETE' ? null : res.json();
+  }
+  
+  async function loadStats() {
+    try {
+      // Get total contacts
+      const contacts = await supabase('email_contacts?select=id', { headers: { 'Prefer': 'count=exact' } });
+      document.getElementById('totalContacts').textContent = contacts.length.toLocaleString();
+      
+      // Get total sent
+      const sent = await supabase('email_sends?select=id&status=eq.sent', { headers: { 'Prefer': 'count=exact' } });
+      document.getElementById('totalSent').textContent = sent.length.toLocaleString();
+      
+      // Get pending queue
+      const pending = await supabase('email_sends?select=id&status=eq.queued', { headers: { 'Prefer': 'count=exact' } });
+      document.getElementById('pendingQueue').textContent = pending.length.toLocaleString();
+      
+      // Active campaign
+      const active = await supabase('email_campaigns?status=eq.active&limit=1');
+      document.getElementById('activeCampaign').textContent = active.length > 0 ? active[0].name : 'None';
+    } catch (e) {
+      console.log('Stats not available yet - tables may not exist');
+    }
+  }
+  
+  async function loadCampaigns() {
+    const container = document.getElementById('campaignsList');
+    try {
+      const campaigns = await supabase('email_campaigns?order=created_at.desc');
+      
+      if (campaigns.length === 0) {
+        container.innerHTML = `
+          <div class="campaign-card" onclick="showNewCampaign()">
+            <div class="campaign-name">+ Create your first campaign</div>
+            <div class="campaign-stats">Click to get started</div>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = campaigns.map(c => `
+        <div class="campaign-card ${currentCampaign?.id === c.id ? 'active' : ''}" onclick="selectCampaign('${c.id}')">
+          <div class="campaign-name">${c.name}</div>
+          <div class="campaign-stats">
+            <span>Sent: ${c.sent_count || 0}</span>
+            <span>Pending: ${c.pending_count || 0}</span>
+          </div>
+          <span class="campaign-status ${c.status}">${c.status}</span>
+        </div>
+      `).join('');
+    } catch (e) {
+      container.innerHTML = `
+        <div class="campaign-card" onclick="showNewCampaign()">
+          <div class="campaign-name">+ Create your first campaign</div>
+          <div class="campaign-stats">Database tables will be created automatically</div>
+        </div>
+      `;
+    }
+  }
+  
+  async function selectCampaign(id) {
+    try {
+      const campaigns = await supabase(`email_campaigns?id=eq.${id}`);
+      if (campaigns.length === 0) return;
+      
+      currentCampaign = campaigns[0];
+      document.getElementById('pipelineSection').style.display = 'block';
+      document.getElementById('pipelineTitle').textContent = currentCampaign.name;
+      
+      // Reload campaigns to show active state
+      loadCampaigns();
+      
+      // Load queue and log
+      loadQueue();
+      loadLog();
+    } catch (e) {
+      console.error('Error selecting campaign:', e);
+    }
+  }
+  
+  async function loadNextBatch() {
+    if (!currentCampaign) return;
+    
+    try {
+      // Get 50 contacts not yet sent for this campaign
+      const sent = await supabase(`email_sends?campaign_id=eq.${currentCampaign.id}&select=contact_id`);
+      const sentIds = sent.map(s => s.contact_id);
+      
+      let query = 'email_contacts?select=*&limit=50';
+      if (sentIds.length > 0) {
+        query += `&id=not.in.(${sentIds.join(',')})`;
+      }
+      
+      const contacts = await supabase(query);
+      queuedContacts = contacts;
+      renderQueue();
+    } catch (e) {
+      console.error('Error loading batch:', e);
+      alert('Error loading contacts: ' + e.message);
+    }
+  }
+  
+  function renderQueue() {
+    const tbody = document.getElementById('queueBody');
+    document.getElementById('queueCount').textContent = `(${queuedContacts.length})`;
+    
+    if (queuedContacts.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="empty">No contacts in queue. Click "Load Next 50" to add.</td></tr>';
+      document.getElementById('approveBtn').disabled = true;
+      return;
+    }
+    
+    tbody.innerHTML = queuedContacts.map(c => `
+      <tr>
+        <td><input type="checkbox" data-id="${c.id}" onchange="toggleSelect('${c.id}')" ${selectedContacts.has(c.id) ? 'checked' : ''}></td>
+        <td>${c.email}</td>
+        <td>${c.source || 'reservation'}</td>
+        <td>${c.last_visit ? new Date(c.last_visit).toLocaleDateString() : '-'}</td>
+        <td><span class="status-badge pending">Ready</span></td>
+      </tr>
+    `).join('');
+    
+    updateApproveButton();
+  }
+  
+  function toggleSelect(id) {
+    if (selectedContacts.has(id)) {
+      selectedContacts.delete(id);
+    } else {
+      selectedContacts.add(id);
+    }
+    updateApproveButton();
+  }
+  
+  function toggleSelectAll() {
+    const checked = document.getElementById('selectAll').checked;
+    if (checked) {
+      queuedContacts.forEach(c => selectedContacts.add(c.id));
+    } else {
+      selectedContacts.clear();
+    }
+    renderQueue();
+  }
+  
+  function updateApproveButton() {
+    const btn = document.getElementById('approveBtn');
+    btn.disabled = selectedContacts.size === 0;
+    btn.textContent = selectedContacts.size > 0 
+      ? `Approve & Send (${selectedContacts.size})`
+      : 'Approve & Send';
+  }
+  
+  async function approveAndSend() {
+    if (selectedContacts.size === 0 || !currentCampaign) return;
+    
+    const btn = document.getElementById('approveBtn');
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    
+    const toSend = queuedContacts.filter(c => selectedContacts.has(c.id));
+    let sent = 0;
+    let failed = 0;
+    
+    for (const contact of toSend) {
+      try {
+        // Record the send attempt
+        await supabase('email_sends', {
+          method: 'POST',
+          body: JSON.stringify({
+            campaign_id: currentCampaign.id,
+            contact_id: contact.id,
+            email: contact.email,
+            status: 'queued',
+            queued_at: new Date().toISOString()
+          })
+        });
+        sent++;
+      } catch (e) {
+        console.error('Failed to queue:', contact.email, e);
+        failed++;
+      }
+    }
+    
+    alert(`Queued ${sent} emails for sending. ${failed > 0 ? `${failed} failed.` : ''}\n\nOpenClaw will process the queue.`);
+    
+    // Clear selection and reload
+    selectedContacts.clear();
+    queuedContacts = [];
+    renderQueue();
+    loadLog();
+    loadStats();
+    
+    btn.textContent = 'Approve & Send';
+  }
+  
+  async function loadLog() {
+    if (!currentCampaign) return;
+    
+    const tbody = document.getElementById('logBody');
+    try {
+      const sends = await supabase(`email_sends?campaign_id=eq.${currentCampaign.id}&order=created_at.desc&limit=50`);
+      
+      if (sends.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" class="empty">No sends yet</td></tr>';
+        return;
+      }
+      
+      tbody.innerHTML = sends.map(s => `
+        <tr>
+          <td>${s.email}</td>
+          <td>${s.sent_at ? new Date(s.sent_at).toLocaleString() : '-'}</td>
+          <td><span class="status-badge ${s.status}">${s.status}</span></td>
+        </tr>
+      `).join('');
+    } catch (e) {
+      console.log('Log not available');
+    }
+  }
+  
+  function showNewCampaign() {
+    document.getElementById('newCampaignModal').classList.add('open');
+  }
+  
+  function closeModal() {
+    document.getElementById('newCampaignModal').classList.remove('open');
+  }
+  
+  async function createCampaign() {
+    const name = document.getElementById('campaignName').value.trim();
+    const subject = document.getElementById('campaignSubject').value.trim();
+    const template = document.getElementById('campaignTemplate').value;
+    
+    if (!name || !subject) {
+      alert('Please fill in campaign name and subject line');
+      return;
+    }
+    
+    try {
+      const campaign = await supabase('email_campaigns', {
+        method: 'POST',
+        body: JSON.stringify({
+          name,
+          subject,
+          template,
+          status: 'active',
+          sent_count: 0,
+          pending_count: 0
+        })
+      });
+      
+      closeModal();
+      loadCampaigns();
+      selectCampaign(campaign[0].id);
+    } catch (e) {
+      alert('Error creating campaign: ' + e.message);
+    }
+  }
+</script>

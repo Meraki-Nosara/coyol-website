@@ -71,7 +71,11 @@ const { title, active } = Astro.props;
         </a>
         <a href="/command/campaigns" class={`nav-item ${active === 'campaigns' ? 'active' : ''}`}>
           <span class="nav-icon">◆</span>
-          <span>Campaigns</span>
+          <span>Ad Campaigns</span>
+        </a>
+        <a href="/command/email-campaigns" class={`nav-item ${active === 'email' ? 'active' : ''}`}>
+          <span class="nav-icon">✉</span>
+          <span>Email Pipeline</span>
         </a>
       </nav>
       
