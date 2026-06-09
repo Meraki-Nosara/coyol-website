@@ -436,6 +436,16 @@ import '../../../styles/laluna-tables.css';
           </div>
           <div class="form-row">
             <div class="form-group">
+              <label>Guest Name</label>
+              <input type="text" id="editGuestName" class="form-input" placeholder="Guest name" />
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="editEmail" class="form-input" placeholder="Email" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
               <label>Phone</label>
               <div class="phone-input-group">
                 <select id="editPhoneCountry" class="country-select">
@@ -452,10 +462,6 @@ import '../../../styles/laluna-tables.css';
                 </select>
                 <input type="tel" id="editPhone" class="form-input phone-number" placeholder="8888-8888" />
               </div>
-            </div>
-            <div class="form-group">
-              <label>Email</label>
-              <input type="email" id="editEmail" class="form-input" placeholder="Email" />
             </div>
           </div>
           <div class="form-group">
@@ -3186,6 +3192,7 @@ import '../../../styles/laluna-tables.css';
       document.getElementById('editTime').value = timeForDropdown;
       document.getElementById('editGuests').value = res.guests;
       document.getElementById('editZone').value = res.zonePreference || 'any';
+      document.getElementById('editGuestName').value = res.guestName || '';
       document.getElementById('editNotes').value = res.specialRequests || '';
       document.getElementById('editEmail').value = res.guestEmail || '';
       
@@ -3234,6 +3241,7 @@ import '../../../styles/laluna-tables.css';
       const newTime = document.getElementById('editTime').value;
       const newGuests = parseInt(document.getElementById('editGuests').value);
       const newZone = document.getElementById('editZone').value;
+      const newGuestName = document.getElementById('editGuestName').value.trim();
       const newNotes = document.getElementById('editNotes').value;
       const newEmail = document.getElementById('editEmail').value.trim();
       const countryCode = document.getElementById('editPhoneCountry').value.replace('+', '');
@@ -3254,6 +3262,7 @@ import '../../../styles/laluna-tables.css';
             time: newTime,
             guests: newGuests,
             zone_preference: newZone,
+            guest_name: newGuestName,
             special_requests: newNotes,
             guest_email: newEmail,
             guest_phone: newPhone
