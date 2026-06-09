@@ -34,38 +34,33 @@ import '../../../styles/coyol-tables.css';
           <div class="table-palette">
             <div class="palette-item" draggable="true" data-type="square" title="Square (2-top)">
               <div class="palette-preview square"></div>
-              <span class="palette-name">Square</span>
-              <span class="palette-capacity" data-type="square">2-4</span>
+              <span class="palette-name">Square (2-top)</span>
+              <span class="palette-capacity" data-type="square">2</span>
             </div>
             <div class="palette-item" draggable="true" data-type="round" title="Round (4-top)">
               <div class="palette-preview round"></div>
-              <span class="palette-name">Round</span>
-              <span class="palette-capacity" data-type="round">2-4</span>
+              <span class="palette-name">Round (4-top)</span>
+              <span class="palette-capacity" data-type="round">2</span>
             </div>
-            <div class="palette-item" draggable="true" data-type="round-lg" title="Large Round">
+            <div class="palette-item" draggable="true" data-type="round-lg" title="Round Large">
               <div class="palette-preview round-lg"></div>
-              <span class="palette-name">Lg Round</span>
-              <span class="palette-capacity" data-type="round-lg">4-6</span>
+              <span class="palette-name">Round Large</span>
+              <span class="palette-capacity" data-type="round-lg">4</span>
+            </div>
+            <div class="palette-item" draggable="true" data-type="round-xl" title="Round XL">
+              <div class="palette-preview round-xl"></div>
+              <span class="palette-name">Round XL</span>
+              <span class="palette-capacity" data-type="round-xl">6</span>
             </div>
             <div class="palette-item" draggable="true" data-type="sofa" title="Sofa/Lounge">
               <div class="palette-preview sofa"></div>
-              <span class="palette-name">Sofa</span>
-              <span class="palette-capacity" data-type="sofa">2-4</span>
+              <span class="palette-name">Sofa/Lounge</span>
+              <span class="palette-capacity" data-type="sofa">2</span>
             </div>
-            <div class="palette-item" draggable="true" data-type="diamond" title="Diamond/Fantasma">
-              <div class="palette-preview diamond"></div>
-              <span class="palette-name">Diamond</span>
-              <span class="palette-capacity" data-type="diamond">2-4</span>
-            </div>
-            <div class="palette-item" draggable="true" data-type="rect" title="Long Table">
-              <div class="palette-preview rect"></div>
-              <span class="palette-name">Long</span>
-              <span class="palette-capacity" data-type="rect">4-8</span>
-            </div>
-            <div class="palette-item" draggable="true" data-type="bar" title="Bar/Communal">
+            <div class="palette-item" draggable="true" data-type="communal" title="Communal Table">
               <div class="palette-preview bar"></div>
-              <span class="palette-name">Communal</span>
-              <span class="palette-capacity" data-type="communal">6-16</span>
+              <span class="palette-name">Communal Table</span>
+              <span class="palette-capacity" data-type="communal">1</span>
             </div>
           </div>
         </div>
@@ -101,10 +96,12 @@ import '../../../styles/coyol-tables.css';
 
       <!-- Legend -->
       <div class="legend">
-        <span class="legend-item"><span class="dot wood"></span> Wood Table</span>
-        <span class="legend-item"><span class="dot round"></span> Round Table</span>
+        <span class="legend-item"><span class="dot wood"></span> Square (2-top)</span>
+        <span class="legend-item"><span class="dot round"></span> Round (4-top)</span>
+        <span class="legend-item"><span class="dot round-lg"></span> Round Large</span>
+        <span class="legend-item"><span class="dot round-xl"></span> Round XL</span>
         <span class="legend-item"><span class="dot sofa"></span> Sofa/Lounge</span>
-        <span class="legend-item"><span class="dot bar"></span> Bar</span>
+        <span class="legend-item"><span class="dot communal"></span> Communal Table</span>
         <span class="legend-item"><span class="dot tree"></span> Tree/Plant</span>
       </div>
     </main>
@@ -714,8 +711,10 @@ import '../../../styles/coyol-tables.css';
     /* Legend dots match Settings: Brown #8B5E3C, Green #6B8E6B */
     .dot.wood { background: #8B5E3C; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
     .dot.round { background: #8B5E3C; border-radius: 50%; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
+    .dot.round-lg { background: #8B5E3C; border-radius: 50%; width: 14px; height: 14px; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
+    .dot.round-xl { background: #8B5E3C; border-radius: 50%; width: 16px; height: 16px; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
     .dot.sofa { background: #6B8E6B; border-radius: 6px; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
-    .dot.bar { background: #8B5E3C; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
+    .dot.communal { background: #8B5E3C; width: 20px; height: 10px; border-radius: 3px; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
     .dot.tree { background: radial-gradient(circle at 40% 35%, #5a8f5a, #2d4f2d); border-radius: 50%; }
   </style>
 
@@ -1121,16 +1120,14 @@ import '../../../styles/coyol-tables.css';
       const layouts = getLayout();
       const newId = 'new-' + Date.now();
       
-      // Set default covers based on table type
+      // Set default covers based on table type (matches Settings page)
       const coversByType = {
-        'square': { min: 2, max: 4 },
-        'round': { min: 2, max: 4 },
-        'round-lg': { min: 4, max: 6 },
-        'sofa': { min: 2, max: 4 },
-        'diamond': { min: 2, max: 4 },
-        'rect': { min: 4, max: 8 },
-        'bar': { min: 6, max: 16 },
-        'communal': { min: 6, max: 16 }
+        'square': { min: 2, max: 4 },        // Square (2-top)
+        'round': { min: 2, max: 4 },         // Round (4-top)
+        'round-lg': { min: 4, max: 6 },      // Round Large
+        'round-xl': { min: 6, max: 10 },     // Round XL
+        'sofa': { min: 2, max: 4 },          // Sofa/Lounge
+        'communal': { min: 1, max: 20 }      // Communal Table
       };
       const covers = coversByType[type] || { min: 2, max: 4 };
       
