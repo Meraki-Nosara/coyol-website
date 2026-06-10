@@ -1,0 +1,376 @@
+---
+// Mibachutz - Full Registration Page (with neighborhood + baby age)
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="הרשמה - מי בחוץ">
+  <div class="register-page">
+    <div class="header">
+      <img src="/logo-white.svg" alt="מי בחוץ" class="logo" />
+      <h1>הצטרפי אלינו</h1>
+      <p>מלאי את הפרטים ותתחילי להיפגש עם אמהות באזור</p>
+    </div>
+
+    <form id="registerForm" class="form">
+      <!-- Mom's Name -->
+      <div class="field">
+        <label for="name">השם שלך</label>
+        <input type="text" id="name" name="name" placeholder="שרה" required />
+      </div>
+
+      <!-- Phone -->
+      <div class="field">
+        <label for="phone">מספר טלפון</label>
+        <input type="tel" id="phone" name="phone" placeholder="050-1234567" required />
+      </div>
+
+      <!-- Baby's Name -->
+      <div class="field">
+        <label for="babyName">שם התינוק/ת</label>
+        <input type="text" id="babyName" name="babyName" placeholder="עידן" required />
+      </div>
+
+      <!-- Baby's Birth Date -->
+      <div class="field">
+        <label for="babyBirthDate">תאריך לידה של התינוק/ת</label>
+        <input type="date" id="babyBirthDate" name="babyBirthDate" required />
+      </div>
+
+      <!-- Neighborhood -->
+      <div class="field">
+        <label for="neighborhood">איזור מגורים</label>
+        <select id="neighborhood" name="neighborhood" required>
+          <option value="">בחרי איזור...</option>
+          <option value="ramat-aviv">רמת אביב</option>
+          <option value="tel-aviv-center">תל אביב מרכז</option>
+          <option value="jaffa">יפו</option>
+          <option value="florentin">פלורנטין</option>
+          <option value="neve-tzedek">נווה צדק</option>
+          <option value="hatikva">שכונת התקווה</option>
+          <option value="ramat-hahayal">רמת החייל</option>
+          <option value="herzliya">הרצליה פיתוח</option>
+          <option value="raanana">רעננה</option>
+          <option value="kfar-saba">כפר סבא</option>
+          <option value="petah-tikva">פתח תקווה</option>
+          <option value="rishon">ראשון לציון</option>
+          <option value="holon">חולון</option>
+          <option value="bat-yam">בת ים</option>
+        </select>
+      </div>
+
+      <!-- Availability Preference -->
+      <div class="field toggle-field">
+        <label>
+          <span class="toggle-label">זמינה תמיד</span>
+          <span class="toggle-desc">אמהות יראו שאת פתוחה להיפגש בכל זמן</span>
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="alwaysAvailable" name="alwaysAvailable" />
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <button type="submit" class="btn-submit">
+        <span>הרשמי עכשיו</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+
+      <p class="terms">
+        בלחיצה על "הרשמי" את מסכימה ל<a href="/terms">תנאי השימוש</a> ו<a href="/privacy">מדיניות הפרטיות</a>
+      </p>
+    </form>
+
+    <div id="successMessage" class="success-message" style="display: none;">
+      <div class="success-icon">✓</div>
+      <h2>נרשמת בהצלחה!</h2>
+      <p>שיבצנו אותך לקבוצה עם אמהות מ<span id="groupName"></span></p>
+      <a href="/map" class="btn-map">צפי במפה</a>
+    </div>
+  </div>
+
+  <style>
+    .register-page {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+      padding: 40px 20px;
+      font-family: 'Heebo', sans-serif;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+      color: white;
+    }
+
+    .logo {
+      height: 60px;
+      margin-bottom: 16px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .form {
+      background: white;
+      border-radius: 24px;
+      padding: 24px;
+      max-width: 400px;
+      margin: 0 auto;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    .field label {
+      display: block;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #eee;
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      outline: none;
+      border-color: #FF6B6B;
+    }
+
+    /* Toggle Switch */
+    .toggle-field {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      background: #FFF5F5;
+      border-radius: 12px;
+    }
+
+    .toggle-label {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .toggle-desc {
+      display: block;
+      font-size: 12px;
+      color: #888;
+      font-weight: normal;
+      margin-top: 4px;
+    }
+
+    .toggle {
+      position: relative;
+      width: 52px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.3s;
+      border-radius: 28px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    input:checked + .slider {
+      background-color: #FF6B6B;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+      color: white;
+      border: none;
+      border-radius: 28px;
+      font-size: 18px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+      margin-top: 24px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255,107,107,0.5);
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    .terms {
+      text-align: center;
+      font-size: 12px;
+      color: #888;
+      margin-top: 16px;
+    }
+
+    .terms a {
+      color: #FF6B6B;
+      text-decoration: none;
+    }
+
+    /* Success Message */
+    .success-message {
+      text-align: center;
+      background: white;
+      border-radius: 24px;
+      padding: 40px 24px;
+      max-width: 400px;
+      margin: 0 auto;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin: 0 auto 24px;
+    }
+
+    .success-message h2 {
+      color: #333;
+      margin-bottom: 12px;
+    }
+
+    .success-message p {
+      color: #666;
+      margin-bottom: 24px;
+    }
+
+    .btn-map {
+      display: inline-block;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 28px;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+    }
+  </style>
+
+  <script>
+    const form = document.getElementById('registerForm');
+    const successMessage = document.getElementById('successMessage');
+    const groupNameSpan = document.getElementById('groupName');
+
+    // Neighborhood coordinates for map
+    const neighborhoodCoords = {
+      'ramat-aviv': { lat: 32.1133, lng: 34.7978 },
+      'tel-aviv-center': { lat: 32.0731, lng: 34.7820 },
+      'jaffa': { lat: 32.0503, lng: 34.7597 },
+      'florentin': { lat: 32.0560, lng: 34.7680 },
+      'neve-tzedek': { lat: 32.0590, lng: 34.7670 },
+      'hatikva': { lat: 32.0520, lng: 34.7920 },
+      'ramat-hahayal': { lat: 32.1050, lng: 34.8120 },
+      'herzliya': { lat: 32.1620, lng: 34.8050 },
+      'raanana': { lat: 32.1840, lng: 34.8710 },
+      'kfar-saba': { lat: 32.1780, lng: 34.9070 },
+      'petah-tikva': { lat: 32.0870, lng: 34.8870 },
+      'rishon': { lat: 31.9730, lng: 34.7890 },
+      'holon': { lat: 32.0110, lng: 34.7740 },
+      'bat-yam': { lat: 32.0170, lng: 34.7510 }
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = {
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value,
+        baby_name: document.getElementById('babyName').value,
+        baby_birth_date: document.getElementById('babyBirthDate').value,
+        neighborhood: document.getElementById('neighborhood').value,
+        always_available: document.getElementById('alwaysAvailable').checked,
+        latitude: neighborhoodCoords[document.getElementById('neighborhood').value]?.lat,
+        longitude: neighborhoodCoords[document.getElementById('neighborhood').value]?.lng
+      };
+
+      try {
+        const response = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          form.style.display = 'none';
+          groupNameSpan.textContent = result.groupName || 'האזור שלך';
+          successMessage.style.display = 'block';
+        } else {
+          alert(result.error || 'שגיאה בהרשמה. נסי שוב.');
+        }
+      } catch (error) {
+        console.error('Registration error:', error);
+        alert('שגיאה בהרשמה. נסי שוב.');
+      }
+    });
+  </script>
+</Layout>

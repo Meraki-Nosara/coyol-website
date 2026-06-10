@@ -1,0 +1,565 @@
+---
+// Mibachutz Admin - Messages & Chat Monitoring
+import Layout from '../../layouts/Layout.astro';
+export const prerender = false;
+---
+
+<Layout title="הודעות - מי בחוץ">
+  <div class="admin-page">
+    <header class="admin-header">
+      <div class="header-content">
+        <img src="/logo-white.svg" alt="מי בחוץ" class="logo" />
+        <h1>מוניטור הודעות</h1>
+      </div>
+      <nav class="admin-nav">
+        <a href="/admin">ראשי</a>
+        <a href="/admin/groups">קבוצות</a>
+        <a href="/admin/moms">אמהות</a>
+        <a href="/admin/messages" class="active">הודעות</a>
+      </nav>
+    </header>
+
+    <main class="admin-main">
+      <div class="layout">
+        <!-- Groups sidebar -->
+        <aside class="sidebar">
+          <h3>קבוצות</h3>
+          <div id="groupsList" class="groups-list">
+            <!-- Loaded dynamically -->
+          </div>
+        </aside>
+
+        <!-- Chat viewer -->
+        <div class="chat-viewer">
+          <div class="chat-header" id="chatHeader">
+            <span>בחרי קבוצה לצפייה</span>
+          </div>
+          
+          <div class="messages" id="messagesContainer">
+            <div class="empty-state">
+              <div class="empty-icon"></div>
+              <div class="empty-text">בחרי קבוצה מהרשימה לצפייה בהודעות</div>
+            </div>
+          </div>
+
+          <div class="chat-input" id="adminInput" style="display: none;">
+            <input type="text" id="messageInput" placeholder="שלחי הודעה כמנהלת..." />
+            <button id="sendBtn">שלח</button>
+          </div>
+        </div>
+
+        <!-- Stats panel -->
+        <aside class="stats-panel">
+          <h3>סטטיסטיקות</h3>
+          
+          <div class="stat-card">
+            <div class="stat-value" id="totalMessages">--</div>
+            <div class="stat-label">הודעות היום</div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-value" id="activeGroups">--</div>
+            <div class="stat-label">קבוצות פעילות</div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-value" id="peakHour">--</div>
+            <div class="stat-label">שעת שיא</div>
+          </div>
+
+          <h4>קבוצות פעילות</h4>
+          <div id="activeGroupsList" class="active-groups">
+            <!-- Top active groups -->
+          </div>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <style>
+    .admin-page {
+      min-height: 100vh;
+      background: #f5f5f5;
+      font-family: 'Heebo', sans-serif;
+    }
+
+    .admin-header {
+      background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+      color: white;
+      padding: 20px;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .logo { height: 40px; }
+
+    .admin-header h1 {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .admin-nav {
+      display: flex;
+      gap: 8px;
+    }
+
+    .admin-nav a {
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+
+    .admin-nav a.active,
+    .admin-nav a:hover {
+      background: white;
+      color: #FF6B6B;
+    }
+
+    .admin-main {
+      padding: 20px;
+      height: calc(100vh - 120px);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr 250px;
+      gap: 20px;
+      height: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      overflow-y: auto;
+    }
+
+    .sidebar h3 {
+      margin-bottom: 16px;
+      color: #333;
+      font-size: 16px;
+    }
+
+    .groups-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .group-item {
+      padding: 12px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .group-item:hover {
+      background: #FFE5E5;
+    }
+
+    .group-item.active {
+      background: #FF6B6B;
+      color: white;
+    }
+
+    .group-item-name {
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .group-item-count {
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    .unread-badge {
+      background: #FF6B6B;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+    }
+
+    .group-item.active .unread-badge {
+      background: white;
+      color: #FF6B6B;
+    }
+
+    /* Chat viewer */
+    .chat-viewer {
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: #f9f9f9;
+      padding: 16px;
+      font-weight: 600;
+      border-bottom: 1px solid #eee;
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      background: #E8DFD8;
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #888;
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .message {
+      max-width: 70%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      position: relative;
+    }
+
+    .message.incoming {
+      background: white;
+      margin-right: auto;
+      border-bottom-left-radius: 0;
+    }
+
+    .message.outgoing {
+      background: #E7FFDB;
+      margin-left: auto;
+      border-bottom-right-radius: 0;
+    }
+
+    .message-sender {
+      font-size: 12px;
+      font-weight: 600;
+      color: #FF6B6B;
+      margin-bottom: 4px;
+    }
+
+    .message-text {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .message-time {
+      font-size: 11px;
+      color: #888;
+      text-align: left;
+      margin-top: 4px;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      background: #f0f0f0;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 24px;
+      font-family: inherit;
+      font-size: 14px;
+    }
+
+    .chat-input button {
+      padding: 12px 24px;
+      background: #FF6B6B;
+      color: white;
+      border: none;
+      border-radius: 24px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    /* Stats panel */
+    .stats-panel {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      overflow-y: auto;
+    }
+
+    .stats-panel h3 {
+      margin-bottom: 16px;
+      color: #333;
+      font-size: 16px;
+    }
+
+    .stats-panel h4 {
+      margin: 20px 0 12px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .stat-card {
+      background: #f9f9f9;
+      padding: 16px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #FF6B6B;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .active-groups {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .active-group-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: #f9f9f9;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 1024px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar, .stats-panel {
+        display: none;
+      }
+    }
+  </style>
+
+  <script>
+    const SUPABASE_URL = 'https://fkikzryelozciailbryh.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
+    
+    let supabase = null;
+    let currentGroupId = null;
+    let subscription = null;
+
+    async function init() {
+      const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
+      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      
+      await loadGroups();
+      await loadStats();
+    }
+
+    async function loadGroups() {
+      const { data: groups } = await supabase
+        .from('groups')
+        .select('*, moms(count)')
+        .eq('is_active', true)
+        .order('name');
+
+      const list = document.getElementById('groupsList');
+      list.innerHTML = '';
+
+      (groups || []).forEach(g => {
+        const item = document.createElement('div');
+        item.className = 'group-item';
+        item.dataset.id = g.id;
+        item.innerHTML = `
+          <div>
+            <div class="group-item-name">${g.name}</div>
+            <div class="group-item-count">${g.moms?.[0]?.count || 0} אמהות</div>
+          </div>
+        `;
+        item.addEventListener('click', () => selectGroup(g.id, g.name));
+        list.appendChild(item);
+      });
+    }
+
+    async function loadStats() {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      // Messages today
+      const { count: messagesCount } = await supabase
+        .from('messages')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', today.toISOString());
+
+      document.getElementById('totalMessages').textContent = messagesCount || 0;
+
+      // Active groups (with messages today)
+      const { data: activeGroups } = await supabase
+        .from('messages')
+        .select('group_id, groups(name)')
+        .gte('created_at', today.toISOString());
+
+      const uniqueGroups = [...new Set((activeGroups || []).map(m => m.group_id))];
+      document.getElementById('activeGroups').textContent = uniqueGroups.length;
+
+      // Top active groups
+      const groupCounts = {};
+      (activeGroups || []).forEach(m => {
+        groupCounts[m.group_id] = groupCounts[m.group_id] || { name: m.groups?.name, count: 0 };
+        groupCounts[m.group_id].count++;
+      });
+
+      const sorted = Object.entries(groupCounts)
+        .sort((a, b) => b[1].count - a[1].count)
+        .slice(0, 5);
+
+      const activeList = document.getElementById('activeGroupsList');
+      activeList.innerHTML = sorted.map(([id, data]) => `
+        <div class="active-group-item">
+          <span>${data.name}</span>
+          <span>${data.count} הודעות</span>
+        </div>
+      `).join('') || '<div style="color: #888; font-size: 13px;">אין פעילות היום</div>';
+    }
+
+    async function selectGroup(groupId, groupName) {
+      // Update UI
+      document.querySelectorAll('.group-item').forEach(el => {
+        el.classList.toggle('active', el.dataset.id === groupId);
+      });
+
+      document.getElementById('chatHeader').textContent = groupName;
+      document.getElementById('adminInput').style.display = 'flex';
+
+      currentGroupId = groupId;
+
+      // Unsubscribe previous
+      if (subscription) {
+        supabase.removeChannel(subscription);
+      }
+
+      // Load messages
+      await loadMessages(groupId);
+
+      // Subscribe to new messages
+      subscription = supabase
+        .channel(`messages:${groupId}`)
+        .on('postgres_changes', {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'messages',
+          filter: `group_id=eq.${groupId}`
+        }, (payload) => {
+          appendMessage(payload.new);
+        })
+        .subscribe();
+    }
+
+    async function loadMessages(groupId) {
+      const { data: messages } = await supabase
+        .from('messages')
+        .select('*, moms(name)')
+        .eq('group_id', groupId)
+        .order('created_at', { ascending: true })
+        .limit(100);
+
+      const container = document.getElementById('messagesContainer');
+      
+      if (!messages?.length) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon"></div>
+            <div class="empty-text">אין הודעות עדיין בקבוצה זו</div>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = messages.map(m => {
+        const time = new Date(m.created_at).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
+        return `
+          <div class="message incoming">
+            <div class="message-sender">${m.moms?.name || 'אמא'}</div>
+            <div class="message-text">${escapeHtml(m.content)}</div>
+            <div class="message-time">${time}</div>
+          </div>
+        `;
+      }).join('');
+
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function appendMessage(msg) {
+      const container = document.getElementById('messagesContainer');
+      const time = new Date(msg.created_at).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
+      
+      const div = document.createElement('div');
+      div.className = 'message incoming';
+      div.innerHTML = `
+        <div class="message-sender">אמא חדשה</div>
+        <div class="message-text">${escapeHtml(msg.content)}</div>
+        <div class="message-time">${time}</div>
+      `;
+      
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    async function sendAdminMessage() {
+      const input = document.getElementById('messageInput');
+      const content = input.value.trim();
+      
+      if (!content || !currentGroupId) return;
+      
+      input.value = '';
+
+      // Send as system/admin message
+      await supabase.from('messages').insert({
+        group_id: currentGroupId,
+        content: `[מנהלת] ${content}`,
+        is_admin: true
+      });
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Event listeners
+    document.getElementById('sendBtn').addEventListener('click', sendAdminMessage);
+    document.getElementById('messageInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendAdminMessage();
+    });
+
+    init();
+  </script>
+</Layout>

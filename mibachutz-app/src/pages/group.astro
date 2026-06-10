@@ -1,0 +1,362 @@
+---
+// Group Page - View your group members and chat
+export const prerender = false;
+---
+
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>הקבוצה שלי - מי בחוץ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --green: #25D366;
+      --green-dark: #128C7E;
+      --green-light: #DCF8C6;
+      --text: #303030;
+      --text-light: #667781;
+      --bg: #F8F9FA;
+    }
+    
+    html, body {
+      height: 100%;
+      font-family: 'Heebo', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    
+    .app {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      max-width: 500px;
+      margin: 0 auto;
+      background: white;
+    }
+    
+    .header {
+      background: var(--green-dark);
+      padding: 16px 20px;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .back-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    
+    .header h1 {
+      font-size: 18px;
+      font-weight: 600;
+      flex: 1;
+    }
+    
+    .group-info {
+      background: white;
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .group-name {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .group-meta {
+      color: var(--text-light);
+      font-size: 14px;
+    }
+    
+    .members-header {
+      padding: 16px 20px;
+      font-weight: 600;
+      color: var(--text-light);
+      font-size: 13px;
+      background: #f5f5f5;
+    }
+    
+    .members-list {
+      flex: 1;
+      overflow-y: auto;
+    }
+    
+    .member-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      gap: 12px;
+      border-bottom: 1px solid #f0f0f0;
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .member-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 18px;
+    }
+    
+    .member-avatar.available {
+      box-shadow: 0 0 0 3px var(--green);
+    }
+    
+    .member-info {
+      flex: 1;
+    }
+    
+    .member-name {
+      font-weight: 500;
+      font-size: 16px;
+    }
+    
+    .member-status {
+      font-size: 13px;
+      color: var(--text-light);
+    }
+    
+    .member-status.available {
+      color: var(--green);
+    }
+    
+    .member-baby {
+      font-size: 12px;
+      color: var(--text-light);
+    }
+    
+    .chat-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--green-light);
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-light);
+    }
+    
+    .empty-state h3 {
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    
+    .group-chat-btn {
+      margin: 16px 20px;
+      padding: 14px;
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    /* Bottom Nav */
+    .bottom-nav {
+      display: flex;
+      background: white;
+      border-top: 1px solid #eee;
+      padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+    }
+    
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      color: var(--text-light);
+      font-size: 11px;
+      padding: 8px;
+    }
+    
+    .nav-item.active { color: var(--green-dark); }
+    .nav-icon { font-size: 22px; }
+    
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-light);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app">
+    <header class="header">
+      <button class="back-btn" onclick="history.back()"></button>
+      <h1>הקבוצה שלי</h1>
+    </header>
+    
+    <div class="group-info" id="groupInfo">
+      <div class="group-name" id="groupName">טוען...</div>
+      <div class="group-meta" id="groupMeta"></div>
+    </div>
+    
+    <button class="group-chat-btn" id="groupChatBtn" style="display: none;">
+      <span></span>
+      <span>צ'אט קבוצתי</span>
+    </button>
+    
+    <div class="members-header">
+      חברות הקבוצה (<span id="memberCount">0</span>)
+    </div>
+    
+    <div class="members-list" id="membersList">
+      <div class="loading">טוען...</div>
+    </div>
+    
+    <nav class="bottom-nav">
+      <a href="/home" class="nav-item">
+        <span class="nav-icon"></span>
+        <span>בית</span>
+      </a>
+      <a href="/chats" class="nav-item">
+        <span class="nav-icon"></span>
+        <span>שיחות</span>
+      </a>
+      <a href="/map" class="nav-item">
+        <span class="nav-icon"></span>
+        <span>מפה</span>
+      </a>
+      <a href="/group" class="nav-item active">
+        <span class="nav-icon"></span>
+        <span>קבוצה</span>
+      </a>
+    </nav>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://fkikzryelozciailbryh.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
+    
+    let supabase = null;
+    let currentUser = null;
+    
+    async function init() {
+      const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
+      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      
+      const phone = localStorage.getItem('mibachutz_phone');
+      if (!phone) {
+        window.location.href = '/register';
+        return;
+      }
+      
+      // Load current user
+      const { data: user, error } = await supabase
+        .from('moms')
+        .select('*, groups(id, name, age_range)')
+        .eq('phone', phone)
+        .single();
+      
+      if (!user || error) {
+        localStorage.removeItem('mibachutz_phone');
+        window.location.href = '/register';
+        return;
+      }
+      
+      currentUser = user;
+      
+      if (!user.group_id) {
+        showNoGroup();
+        return;
+      }
+      
+      // Show group info
+      document.getElementById('groupName').textContent = user.groups?.name || 'הקבוצה שלי';
+      document.getElementById('groupMeta').textContent = `גיל תינוקות: ${user.groups?.age_range || 'מעורב'}`;
+      document.getElementById('groupChatBtn').style.display = 'flex';
+      document.getElementById('groupChatBtn').onclick = () => {
+        // Group chat - using group_id as receiver
+        window.location.href = '/chat/group-' + user.group_id;
+      };
+      
+      // Load group members
+      await loadMembers(user.group_id);
+    }
+    
+    async function loadMembers(groupId) {
+      const { data: members, error } = await supabase
+        .from('moms')
+        .select('*')
+        .eq('group_id', groupId)
+        .eq('is_active', true)
+        .order('name');
+      
+      const list = document.getElementById('membersList');
+      
+      if (error || !members || members.length === 0) {
+        list.innerHTML = '<div class="empty-state"><h3>אין חברות בקבוצה</h3></div>';
+        return;
+      }
+      
+      document.getElementById('memberCount').textContent = members.length;
+      
+      list.innerHTML = members.map(m => `
+        <a href="/chat/${m.id}" class="member-item">
+          <div class="member-avatar ${m.is_available ? 'available' : ''}" style="background: hsl(${hashCode(m.name) % 360}, 60%, 55%)">
+            ${m.name.charAt(0)}
+          </div>
+          <div class="member-info">
+            <div class="member-name">${m.name}${m.id === currentUser.id ? ' (את)' : ''}</div>
+            <div class="member-status ${m.is_available ? 'available' : ''}">${m.is_available ? 'בחוץ עכשיו' : 'לא זמינה'}</div>
+            ${m.baby_name ? `<div class="member-baby">${m.baby_name} (${m.baby_age_range || ''})</div>` : ''}
+          </div>
+          ${m.id !== currentUser.id ? '<button class="chat-btn"></button>' : ''}
+        </a>
+      `).join('');
+    }
+    
+    function showNoGroup() {
+      document.getElementById('groupName').textContent = 'עדיין לא בקבוצה';
+      document.getElementById('groupMeta').textContent = 'נחפש לך קבוצה מתאימה בקרוב!';
+      document.getElementById('membersList').innerHTML = `
+        <div class="empty-state">
+          <h3>עוד לא שובצת לקבוצה</h3>
+          <p>ברגע שנמצא קבוצה מתאימה באזור שלך, נודיע לך!</p>
+        </div>
+      `;
+    }
+    
+    function hashCode(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      return Math.abs(hash);
+    }
+    
+    init();
+  </script>
+
+</body>
+</html>

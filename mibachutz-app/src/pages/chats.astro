@@ -1,0 +1,430 @@
+---
+// Chat List - WhatsApp style
+export const prerender = false;
+---
+
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>שיחות - מי בחוץ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --green: #25D366;
+      --green-dark: #128C7E;
+      --header-bg: #075E54;
+      --text: #303030;
+      --text-light: #667781;
+      --divider: #E9EDEF;
+    }
+    
+    html, body {
+      height: 100%;
+      font-family: 'Heebo', -apple-system, sans-serif;
+      background: #fff;
+      color: var(--text);
+    }
+    
+    .page-container {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      background: var(--header-bg);
+      padding: 16px 20px;
+      color: white;
+    }
+    
+    .header h1 {
+      font-size: 22px;
+      font-weight: 600;
+    }
+    
+    .tabs {
+      display: flex;
+      background: var(--header-bg);
+      border-bottom: 2px solid var(--green);
+    }
+    
+    .tab {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      color: rgba(255,255,255,0.7);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .tab.active {
+      color: white;
+    }
+    
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: white;
+    }
+    
+    .search-bar {
+      padding: 8px 16px;
+      background: #F6F6F6;
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 20px;
+      background: white;
+      font-family: inherit;
+      font-size: 14px;
+    }
+    
+    .search-input::placeholder {
+      color: var(--text-light);
+    }
+    
+    .chat-list {
+      flex: 1;
+      overflow-y: auto;
+    }
+    
+    .chat-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      gap: 12px;
+      border-bottom: 1px solid var(--divider);
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .chat-item:hover {
+      background: #F5F6F6;
+    }
+    
+    .chat-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 18px;
+      color: white;
+      flex-shrink: 0;
+    }
+    
+    .chat-avatar.available {
+      box-shadow: 0 0 0 3px #25D366;
+    }
+    
+    .chat-content {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .chat-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+    
+    .chat-name {
+      font-size: 16px;
+      font-weight: 500;
+    }
+    
+    .chat-time {
+      font-size: 12px;
+      color: var(--text-light);
+    }
+    
+    .chat-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .chat-preview {
+      font-size: 14px;
+      color: var(--text-light);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+    
+    .unread-badge {
+      background: var(--green);
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 12px;
+      margin-right: 8px;
+    }
+    
+    .available-indicator {
+      font-size: 12px;
+      color: var(--green);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-light);
+    }
+    
+    .empty-state h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    
+    .fab {
+      position: fixed;
+      bottom: 80px;
+      left: 20px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--green);
+      color: white;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Bottom Nav */
+    .bottom-nav {
+      display: flex;
+      background: white;
+      border-top: 1px solid var(--divider);
+      padding: 8px 0;
+    }
+    
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      color: var(--text-light);
+      font-size: 11px;
+      padding: 6px;
+    }
+    
+    .nav-item.active {
+      color: var(--green-dark);
+    }
+    
+    .nav-icon {
+      font-size: 22px;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-light);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-container">
+    <header class="header">
+      <h1>מי בחוץ</h1>
+    </header>
+    
+    <div class="tabs">
+      <div class="tab active">שיחות</div>
+      <div class="tab">קבוצה</div>
+      <div class="tab">זמינות</div>
+    </div>
+    
+    <div class="search-bar">
+      <input type="text" class="search-input" placeholder="חיפוש..." id="searchInput">
+    </div>
+    
+    <div class="chat-list" id="chatList">
+      <div class="loading">טוען שיחות...</div>
+    </div>
+    
+    <button class="fab" onclick="location.href='/map'">+</button>
+    
+    <nav class="bottom-nav">
+      <a href="/home" class="nav-item">
+        <span class="nav-icon"></span>
+        <span>בית</span>
+      </a>
+      <a href="/chats" class="nav-item active">
+        <span class="nav-icon"></span>
+        <span>שיחות</span>
+      </a>
+      <a href="/map" class="nav-item">
+        <span class="nav-icon"></span>
+        <span>מפה</span>
+      </a>
+      <a href="/group" class="nav-item">
+        <span class="nav-icon"></span>
+        <span>קבוצה</span>
+      </a>
+    </nav>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://fkikzryelozciailbryh.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
+    
+    let currentUserId = localStorage.getItem('mibachutz_user_id');
+    let supabase = null;
+    
+    async function init() {
+      const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
+      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      
+      if (!currentUserId) {
+        // Demo mode
+        showDemoChats();
+        return;
+      }
+      
+      await loadChats();
+    }
+    
+    async function loadChats() {
+      const chatList = document.getElementById('chatList');
+      
+      // Get all messages involving current user
+      const { data: messages, error } = await supabase
+        .from('messages')
+        .select(`
+          *,
+          sender:sender_id(id, name, is_available),
+          receiver:receiver_id(id, name, is_available)
+        `)
+        .or(`sender_id.eq.${currentUserId},receiver_id.eq.${currentUserId}`)
+        .order('created_at', { ascending: false });
+      
+      if (!messages || messages.length === 0) {
+        showDemoChats();
+        return;
+      }
+      
+      // Group by conversation partner
+      const conversations = new Map();
+      messages.forEach(msg => {
+        const partnerId = msg.sender_id === currentUserId ? msg.receiver_id : msg.sender_id;
+        const partner = msg.sender_id === currentUserId ? msg.receiver : msg.sender;
+        
+        if (!conversations.has(partnerId) && partner) {
+          conversations.set(partnerId, {
+            partner,
+            lastMessage: msg,
+            unread: msg.receiver_id === currentUserId && !msg.is_read ? 1 : 0
+          });
+        } else if (conversations.has(partnerId)) {
+          const conv = conversations.get(partnerId);
+          if (msg.receiver_id === currentUserId && !msg.is_read) {
+            conv.unread++;
+          }
+        }
+      });
+      
+      renderChats(Array.from(conversations.values()));
+    }
+    
+    function showDemoChats() {
+      const demoChats = [
+        { partner: { id: 'demo1', name: 'רונית', is_available: true }, lastMessage: { text: 'מעולה! אני בדרך', created_at: new Date().toISOString() }, unread: 2 },
+        { partner: { id: 'demo2', name: 'מיכל', is_available: false }, lastMessage: { text: 'נדבר מחר!', created_at: new Date(Date.now() - 3600000).toISOString() }, unread: 0 },
+        { partner: { id: 'demo3', name: 'שרית', is_available: true }, lastMessage: { text: 'איפה את עכשיו?', created_at: new Date(Date.now() - 7200000).toISOString() }, unread: 1 },
+      ];
+      renderChats(demoChats);
+    }
+    
+    function renderChats(conversations) {
+      const chatList = document.getElementById('chatList');
+      
+      if (conversations.length === 0) {
+        chatList.innerHTML = `
+          <div class="empty-state">
+            <h3>אין שיחות עדיין</h3>
+            <p>לחצי על + כדי למצוא אמהות בסביבה</p>
+          </div>
+        `;
+        return;
+      }
+      
+      chatList.innerHTML = conversations.map(conv => `
+        <a href="/chat/${conv.partner.id}" class="chat-item">
+          <div class="chat-avatar ${conv.partner.is_available ? 'available' : ''}">
+            ${conv.partner.name.charAt(0)}
+          </div>
+          <div class="chat-content">
+            <div class="chat-top">
+              <span class="chat-name">${conv.partner.name}</span>
+              <span class="chat-time">${formatTime(conv.lastMessage.created_at)}</span>
+            </div>
+            <div class="chat-bottom">
+              <span class="chat-preview">${conv.lastMessage.text}</span>
+              ${conv.unread > 0 ? `<span class="unread-badge">${conv.unread}</span>` : ''}
+              ${conv.partner.is_available ? '<span class="available-indicator">בחוץ</span>' : ''}
+            </div>
+          </div>
+        </a>
+      `).join('');
+    }
+    
+    function formatTime(isoString) {
+      const date = new Date(isoString);
+      const now = new Date();
+      const diff = now - date;
+      
+      if (diff < 86400000) {
+        return date.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
+      } else if (diff < 172800000) {
+        return 'אתמול';
+      } else {
+        return date.toLocaleDateString('he-IL', { day: 'numeric', month: 'numeric' });
+      }
+    }
+    
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      document.querySelectorAll('.chat-item').forEach(item => {
+        const name = item.querySelector('.chat-name').textContent.toLowerCase();
+        item.style.display = name.includes(query) ? 'flex' : 'none';
+      });
+    });
+    
+    init();
+  </script>
+
+</body>
+</html>

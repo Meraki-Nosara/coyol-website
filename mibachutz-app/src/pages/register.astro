@@ -1,0 +1,537 @@
+---
+// Mibachutz - Sleek 4-Step Registration
+---
+
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>הרשמה - מי בחוץ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --coral: #FF6B6B;
+      --coral-dark: #E85555;
+      --text: #4A4A4A;
+      --text-light: #888;
+    }
+    
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: url('/bg-pattern.jpg') center/cover fixed;
+      min-height: 100vh;
+      color: var(--text);
+      overflow: hidden;
+    }
+    
+    .app {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Progress dots */
+    .progress {
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+    
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.4);
+      transition: all 0.3s;
+    }
+    
+    .dot.active {
+      background: var(--coral);
+      transform: scale(1.3);
+    }
+    
+    .dot.done {
+      background: white;
+    }
+    
+    /* Steps container */
+    .steps-wrapper {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .steps {
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.4s ease;
+      height: 400%; /* 4 steps */
+    }
+    
+    .step {
+      height: 25%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    
+    /* Card */
+    .card {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 340px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    }
+    
+    .card-title {
+      font-size: 22px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 24px;
+      color: var(--text);
+    }
+    
+    /* Photo */
+    .photo-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    
+    .photo-circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #f5f5f5;
+      border: 2px dashed #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      overflow: hidden;
+      flex-shrink: 0;
+      color: #bbb;
+      font-size: 13px;
+    }
+    
+    .photo-circle.has-photo {
+      border: 2px solid var(--coral);
+    }
+    
+    .photo-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    #photoInput { display: none; }
+    
+    .input {
+      flex: 1;
+      padding: 14px 16px;
+      border: 2px solid #eee;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 16px;
+      background: white;
+    }
+    
+    .input:focus {
+      outline: none;
+      border-color: var(--coral);
+    }
+    
+    .hint {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-light);
+      margin-top: 8px;
+    }
+    
+    /* Choice buttons */
+    .choices {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    
+    .choice {
+      padding: 12px 20px;
+      border: 2px solid #eee;
+      border-radius: 25px;
+      background: white;
+      font-family: inherit;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .choice:hover {
+      border-color: #fcc;
+    }
+    
+    .choice.selected {
+      background: var(--coral);
+      border-color: var(--coral);
+      color: white;
+    }
+    
+    /* Location */
+    .location-btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      background: var(--coral);
+      color: white;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    .location-btn.done {
+      background: #7AC28F;
+    }
+    
+    #miniMap {
+      height: 120px;
+      border-radius: 12px;
+      margin-top: 16px;
+      display: none;
+    }
+    
+    /* Next button */
+    .next-btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      background: var(--coral);
+      color: white;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+      box-shadow: 0 4px 16px rgba(255, 107, 107, 0.3);
+      transition: all 0.2s;
+    }
+    
+    .next-btn:disabled {
+      background: #ccc;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+    
+    .next-btn:not(:disabled):active {
+      transform: scale(0.98);
+    }
+    
+    /* Success */
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--coral);
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .success-icon::after {
+      content: '';
+      width: 20px;
+      height: 36px;
+      border: 4px solid white;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translateY(-4px);
+    }
+    
+    .success-text {
+      text-align: center;
+      font-size: 15px;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+    
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <div class="app">
+    <div class="progress">
+      <div class="dot active" data-step="1"></div>
+      <div class="dot" data-step="2"></div>
+      <div class="dot" data-step="3"></div>
+      <div class="dot" data-step="4"></div>
+    </div>
+    
+    <div class="steps-wrapper">
+      <div class="steps" id="steps">
+        
+        <!-- Step 1: Name + Photo -->
+        <div class="step">
+          <div class="card">
+            <div class="card-title">מי את?</div>
+            <div class="photo-row">
+              <div class="photo-circle" id="photoCircle">תמונה</div>
+              <input type="text" class="input" id="nameInput" placeholder="השם שלך">
+            </div>
+            <p class="hint">תמונה לא חובה</p>
+            <input type="file" id="photoInput" accept="image/*" capture="user">
+            <button class="next-btn" id="next1" disabled>המשך</button>
+          </div>
+        </div>
+        
+        <!-- Step 2: Kids -->
+        <div class="step">
+          <div class="card">
+            <div class="card-title">כמה ילדים?</div>
+            <div class="choices" id="kidsGrid">
+              <button type="button" class="choice" data-kids="0">בהריון</button>
+              <button type="button" class="choice" data-kids="1">1</button>
+              <button type="button" class="choice" data-kids="2">2</button>
+              <button type="button" class="choice" data-kids="3">3+</button>
+            </div>
+            <div id="ageSection" style="display:none; margin-top: 20px;">
+              <div class="card-title" style="font-size: 18px; margin-bottom: 16px;">גיל הקטנה?</div>
+              <div class="choices" id="ageGrid">
+                <button type="button" class="choice" data-age="0-6m">0-6 חודשים</button>
+                <button type="button" class="choice" data-age="6-12m">6-12 חודשים</button>
+                <button type="button" class="choice" data-age="1-2y">שנה-שנתיים</button>
+                <button type="button" class="choice" data-age="2y+">2+ שנים</button>
+              </div>
+            </div>
+            <button class="next-btn" id="next2" disabled>המשך</button>
+          </div>
+        </div>
+        
+        <!-- Step 3: Location -->
+        <div class="step">
+          <div class="card">
+            <div class="card-title">איפה את גרה?</div>
+            <button type="button" class="location-btn" id="locationBtn">שתפי מיקום</button>
+            <div id="miniMap"></div>
+            <p class="hint">כדי למצוא אמהות קרובות אלייך</p>
+            <button class="next-btn" id="next3" disabled>המשך</button>
+          </div>
+        </div>
+        
+        <!-- Step 4: Done -->
+        <div class="step">
+          <div class="card">
+            <div class="success-icon"></div>
+            <div class="card-title">מעולה!</div>
+            <p class="success-text">
+              ברגע שנמצא אמהות באזור שלך<br>
+              עם ילדים בגילאים דומים, נודיע לך
+            </p>
+            <button class="next-btn" id="submitBtn">סיום</button>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const MAPBOX_TOKEN = 'pk.eyJ1IjoiY295b2xyZWFsZXN0YXRlIiwiYSI6ImNtcTM0OHQyZTFhcHMycnF3bHd1eXNwN2QifQ.-Yxz19rYZnAumXNyF2-pJw';
+    const SUPABASE_URL = 'https://fkikzryelozciailbryh.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
+    
+    let currentStep = 1;
+    let data = { name: '', photo_url: '', num_kids: null, kids_age: '', home_lat: null, home_lng: null };
+    
+    const stepsEl = document.getElementById('steps');
+    const dots = document.querySelectorAll('.dot');
+    
+    function goToStep(step) {
+      currentStep = step;
+      stepsEl.style.transform = `translateY(-${(step - 1) * 25}%)`;
+      dots.forEach((d, i) => {
+        d.classList.remove('active', 'done');
+        if (i + 1 === step) d.classList.add('active');
+        if (i + 1 < step) d.classList.add('done');
+      });
+    }
+    
+    // Step 1: Photo + Name
+    const photoCircle = document.getElementById('photoCircle');
+    const photoInput = document.getElementById('photoInput');
+    const nameInput = document.getElementById('nameInput');
+    const next1 = document.getElementById('next1');
+    
+    photoCircle.addEventListener('click', () => photoInput.click());
+    
+    photoInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          data.photo_url = ev.target.result;
+          photoCircle.innerHTML = `<img src="${ev.target.result}" alt="">`;
+          photoCircle.classList.add('has-photo');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+    
+    nameInput.addEventListener('input', () => {
+      data.name = nameInput.value.trim();
+      next1.disabled = data.name.length < 2;
+    });
+    
+    next1.addEventListener('click', () => goToStep(2));
+    
+    // Step 2: Kids
+    const kidsGrid = document.getElementById('kidsGrid');
+    const ageSection = document.getElementById('ageSection');
+    const ageGrid = document.getElementById('ageGrid');
+    const next2 = document.getElementById('next2');
+    
+    kidsGrid.querySelectorAll('.choice').forEach(btn => {
+      btn.addEventListener('click', () => {
+        kidsGrid.querySelectorAll('.choice').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        data.num_kids = parseInt(btn.dataset.kids);
+        
+        if (data.num_kids > 0) {
+          ageSection.style.display = 'block';
+          data.kids_age = '';
+          next2.disabled = true;
+        } else {
+          ageSection.style.display = 'none';
+          data.kids_age = 'pregnant';
+          next2.disabled = false;
+        }
+      });
+    });
+    
+    ageGrid.querySelectorAll('.choice').forEach(btn => {
+      btn.addEventListener('click', () => {
+        ageGrid.querySelectorAll('.choice').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        data.kids_age = btn.dataset.age;
+        next2.disabled = false;
+      });
+    });
+    
+    next2.addEventListener('click', () => goToStep(3));
+    
+    // Step 3: Location
+    const locationBtn = document.getElementById('locationBtn');
+    const next3 = document.getElementById('next3');
+    
+    locationBtn.addEventListener('click', async () => {
+      locationBtn.textContent = 'מאתר...';
+      locationBtn.disabled = true;
+      
+      try {
+        const pos = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 15000
+          });
+        });
+        
+        data.home_lat = pos.coords.latitude;
+        data.home_lng = pos.coords.longitude;
+        
+        locationBtn.textContent = 'המיקום נשמר';
+        locationBtn.classList.add('done');
+        
+        const mapDiv = document.getElementById('miniMap');
+        mapDiv.style.display = 'block';
+        mapboxgl.accessToken = MAPBOX_TOKEN;
+        const map = new mapboxgl.Map({
+          container: 'miniMap',
+          style: 'mapbox://styles/mapbox/light-v11',
+          center: [data.home_lng, data.home_lat],
+          zoom: 14,
+          interactive: false
+        });
+        map.on('load', () => {
+          new mapboxgl.Marker({ color: '#FF6B6B' })
+            .setLngLat([data.home_lng, data.home_lat])
+            .addTo(map);
+        });
+        
+        next3.disabled = false;
+        
+      } catch (err) {
+        locationBtn.textContent = 'נסי שוב';
+        locationBtn.disabled = false;
+      }
+    });
+    
+    next3.addEventListener('click', () => goToStep(4));
+    
+    // Step 4: Submit
+    const submitBtn = document.getElementById('submitBtn');
+    
+    submitBtn.addEventListener('click', async () => {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span>';
+      
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/mibachutz_moms`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Prefer': 'return=representation'
+          },
+          body: JSON.stringify({
+            name: data.name,
+            photo_url: data.photo_url || null,
+            num_kids: data.num_kids,
+            kids_age: data.kids_age,
+            home_lat: data.home_lat,
+            home_lng: data.home_lng,
+            status: 'waiting'
+          })
+        });
+        
+        if (!res.ok) throw new Error('Failed');
+        
+        const result = await res.json();
+        localStorage.setItem('mibachutz_user', JSON.stringify(result[0]));
+        window.location.href = '/?registered=true';
+        
+      } catch (err) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'סיום';
+        alert('משהו השתבש');
+      }
+    });
+  </script>
+</body>
+</html>

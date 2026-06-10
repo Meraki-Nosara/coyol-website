@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מי בחוץ - מדריך למנהלת</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+      color: white;
+      padding: 40px;
+      border-radius: 16px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    
+    .header h1 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+    
+    .header p {
+      opacity: 0.9;
+    }
+    
+    .section {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .section h2 {
+      font-size: 20px;
+      color: #FF6B6B;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #FFE5E5;
+    }
+    
+    .link-box {
+      display: block;
+      background: #f9f9f9;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s;
+    }
+    
+    .link-box:hover {
+      background: #FFE5E5;
+    }
+    
+    .link-box .title {
+      font-weight: 600;
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 4px;
+    }
+    
+    .link-box .url {
+      font-size: 13px;
+      color: #FF6B6B;
+      word-break: break-all;
+    }
+    
+    .link-box .desc {
+      font-size: 13px;
+      color: #666;
+      margin-top: 4px;
+    }
+    
+    .flow-diagram {
+      background: #1a1a2e;
+      color: #eee;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 12px;
+      overflow-x: auto;
+      white-space: pre;
+      direction: ltr;
+      text-align: left;
+    }
+    
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .step:last-child {
+      border-bottom: none;
+    }
+    
+    .step-num {
+      width: 32px;
+      height: 32px;
+      background: #FF6B6B;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    
+    .step-content h3 {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+    
+    .step-content p {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .credentials {
+      background: #FFF3E0;
+      border: 1px solid #FFB74D;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+    
+    .credentials h4 {
+      color: #E65100;
+      margin-bottom: 8px;
+    }
+    
+    .credentials code {
+      display: block;
+      background: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      margin: 4px 0;
+      font-family: monospace;
+    }
+    
+    .tip {
+      background: #E8F5E9;
+      border-right: 4px solid #4CAF50;
+      padding: 12px 16px;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+    
+    .warning {
+      background: #FFF3E0;
+      border-right: 4px solid #FF9800;
+      padding: 12px 16px;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="header">
+    <h1>מי בחוץ</h1>
+    <p>מדריך למנהלת המערכת</p>
+  </div>
+
+  <div class="section">
+    <h2>קישורים חשובים</h2>
+    
+    <a href="https://mibahutz.com/admin" class="link-box" target="_blank">
+      <div class="title">לוח בקרה ראשי</div>
+      <div class="url">mibahutz.com/admin</div>
+      <div class="desc">סטטיסטיקות, שליחת הודעות לקבוצות, סקירה כללית</div>
+    </a>
+    
+    <a href="https://mibahutz.com/admin/moms" class="link-box" target="_blank">
+      <div class="title">ניהול אמהות</div>
+      <div class="url">mibahutz.com/admin/moms</div>
+      <div class="desc">רשימת כל האמהות הרשומות, חיפוש, סינון, ייצוא לאקסל</div>
+    </a>
+    
+    <a href="https://mibahutz.com/admin/groups" class="link-box" target="_blank">
+      <div class="title">ניהול קבוצות</div>
+      <div class="url">mibahutz.com/admin/groups</div>
+      <div class="desc">צפייה בקבוצות, העברת אמהות בין קבוצות</div>
+    </a>
+    
+    <a href="https://mibahutz.com/admin/messages" class="link-box" target="_blank">
+      <div class="title">מוניטור הודעות</div>
+      <div class="url">mibahutz.com/admin/messages</div>
+      <div class="desc">צפייה בשיחות של כל הקבוצות בזמן אמת</div>
+    </a>
+  </div>
+
+  <div class="section">
+    <h2>איך המערכת עובדת</h2>
+    
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>אמא נרשמת</h3>
+        <p>אמא נכנסת לאתר, ממלאת את הפרטים (שם, טלפון, שכונה, גיל תינוק) ומאשרת מיקום</p>
+      </div>
+    </div>
+    
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>שיבוץ אוטומטי לקבוצה</h3>
+        <p>המערכת משבצת אותה אוטומטית לקבוצה לפי השכונה שלה. אם אין קבוצה - נוצרת חדשה</p>
+      </div>
+    </div>
+    
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>צ'אט עם הקבוצה</h3>
+        <p>האמא יכולה לשוחח עם אמהות אחרות בקבוצה שלה בזמן אמת</p>
+      </div>
+    </div>
+    
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h3>מפה - מי בחוץ עכשיו</h3>
+        <p>אמהות שסימנו "אני בחוץ" מופיעות על המפה. אמהות אחרות יכולות לראות אותן ולשלוח הודעה</p>
+      </div>
+    </div>
+    
+    <div class="tip">
+      <strong>טיפ:</strong> את יכולה לראות את כל הפעילות בלוח הבקרה בזמן אמת
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>תרשים המערכת</h2>
+    <div class="flow-diagram">
++------------------+     +------------------+     +------------------+
+|                  |     |                  |     |                  |
+|   /register      |---->|    SUPABASE      |---->|   /admin/moms    |
+|   (הרשמה)        |     |    (מסד נתונים)   |     |   (רשימת אמהות)  |
+|                  |     |                  |     |                  |
++------------------+     +--------+---------+     +------------------+
+                                  |
+                                  |
+         +------------------------+------------------------+
+         |                        |                        |
+         v                        v                        v
++------------------+     +------------------+     +------------------+
+|                  |     |                  |     |                  |
+|      /map        |     |      /chat       |     |  /admin/groups   |
+|     (מפה)        |     |     (צ'אט)       |     |   (קבוצות)       |
+|                  |     |                  |     |                  |
++------------------+     +------------------+     +------------------+
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>פעולות נפוצות</h2>
+    
+    <div class="step">
+      <div class="step-num">A</div>
+      <div class="step-content">
+        <h3>לראות כמה אמהות נרשמו</h3>
+        <p>לוח בקרה ראשי > מספר מופיע בכרטיס "אמהות רשומות"</p>
+      </div>
+    </div>
+    
+    <div class="step">
+      <div class="step-num">B</div>
+      <div class="step-content">
+        <h3>לשלוח הודעה לכל הקבוצות</h3>
+        <p>לוח בקרה ראשי > טופס "שליחת הודעה" > בחרי קבוצות > כתבי הודעה > שלחי</p>
+      </div>
+    </div>
+    
+    <div class="step">
+      <div class="step-num">C</div>
+      <div class="step-content">
+        <h3>לייצא רשימת אמהות לאקסל</h3>
+        <p>ניהול אמהות > כפתור "ייצוא CSV" בפינה</p>
+      </div>
+    </div>
+    
+    <div class="step">
+      <div class="step-num">D</div>
+      <div class="step-content">
+        <h3>להעביר אמא לקבוצה אחרת</h3>
+        <p>ניהול קבוצות > מצאי את האמא > כפתור "העבר" > בחרי קבוצה חדשה</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>גישה למסד הנתונים</h2>
+    
+    <div class="credentials">
+      <h4>Supabase (מסד נתונים)</h4>
+      <code>URL: https://supabase.com/dashboard</code>
+      <code>Project: fkikzryelozciailbryh</code>
+      <p style="margin-top: 12px; font-size: 13px;">לגישה מלאה למסד הנתונים, בקשי מMarion את פרטי ההתחברות</p>
+    </div>
+    
+    <div class="warning">
+      <strong>שימי לב:</strong> שינויים ישירים במסד הנתונים יכולים להשפיע על המערכת. עדיף לעבוד דרך לוח הבקרה
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>קישור להרשמה לאמהות</h2>
+    <a href="https://mibahutz.com/register" class="link-box" target="_blank">
+      <div class="title">דף הרשמה</div>
+      <div class="url">mibahutz.com/register</div>
+      <div class="desc">שלחי את הקישור הזה לאמהות שרוצות להצטרף</div>
+    </a>
+    
+    <div class="tip">
+      <strong>טיפ:</strong> אפשר לשתף את הקישור בקבוצות וואטסאפ, אינסטגרם, או בכל מקום אחר
+    </div>
+  </div>
+
+  <div class="section" style="text-align: center; background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%); color: white;">
+    <h2 style="color: white; border: none;">צריכה עזרה?</h2>
+    <p>פני לMarion</p>
+    <p style="margin-top: 8px; opacity: 0.9;">marionnosara@gmail.com</p>
+  </div>
+
+</div>
+
+</body>
+</html>

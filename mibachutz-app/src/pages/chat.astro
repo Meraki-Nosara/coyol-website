@@ -1,5 +1,6 @@
 ---
-// Mibachutz - Chat Screen (WhatsApp style)
+// Mibachutz - Real-time Group Chat (WhatsApp style)
+export const prerender = false;
 ---
 
 <!DOCTYPE html>
@@ -9,115 +10,111 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>צ'אט - מי בחוץ</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     :root {
-      --green: #25D366;
-      --green-dark: #128C7E;
-      --green-light: #DCF8C6;
-      --blue-check: #53BDEB;
-      --header-bg: #075E54;
-      --bubble-out: #DCF8C6;
+      --coral: #FF6B6B;
+      --coral-light: #FF8E8E;
+      --sage: #7AC28F;
+      --cream: #FFF9F9;
+      --bubble-out: #E7FFDB;
       --bubble-in: #FFFFFF;
-      --text: #303030;
-      --text-light: #667781;
-      --time: #667781;
+      --text: #333;
+      --text-light: #888;
+      --bg: #E8DFD8;
     }
     
     html, body {
       height: 100%;
-      font-family: 'Heebo', -apple-system, sans-serif;
-      background: url('/bg-pattern.jpg') center/cover fixed;
-      color: var(--text);
+      font-family: 'Heebo', sans-serif;
+      background: var(--bg);
+      overflow: hidden;
     }
     
-    .chat-container {
+    .chat-app {
       height: 100%;
       display: flex;
       flex-direction: column;
+      max-width: 600px;
+      margin: 0 auto;
+      background: url('/baby-doodles.jpg') center/cover fixed;
     }
     
-    /* Header - WhatsApp style */
+    /* Header */
     .chat-header {
-      background: var(--header-bg);
-      padding: 10px 16px;
+      background: var(--coral);
+      color: white;
+      padding: 12px 16px;
       display: flex;
       align-items: center;
       gap: 12px;
-      color: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
     
     .back-btn {
-      width: 36px;
-      height: 36px;
-      border: none;
       background: none;
+      border: none;
       color: white;
       font-size: 24px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      padding: 4px;
     }
     
-    .chat-avatar {
+    .group-avatar {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background: var(--green);
+      background: rgba(255,255,255,0.2);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 600;
-      font-size: 16px;
+      font-size: 20px;
     }
     
-    .chat-info {
+    .group-info {
       flex: 1;
     }
     
-    .chat-name {
-      font-size: 16px;
+    .group-name {
       font-weight: 600;
+      font-size: 16px;
     }
     
-    .chat-status {
+    .group-members {
       font-size: 12px;
-      opacity: 0.8;
+      opacity: 0.9;
     }
     
-    .header-actions {
-      display: flex;
-      gap: 16px;
-    }
-    
-    .header-btn {
-      width: 36px;
-      height: 36px;
-      border: none;
-      background: none;
-      color: white;
-      font-size: 20px;
-      cursor: pointer;
-    }
-    
-    /* Messages area */
+    /* Messages */
     .messages {
       flex: 1;
       overflow-y: auto;
-      padding: 12px 16px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 8px;
+    }
+    
+    .date-divider {
+      text-align: center;
+      margin: 12px 0;
+    }
+    
+    .date-divider span {
+      background: rgba(255,255,255,0.9);
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      color: var(--text-light);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
     
     .message {
       max-width: 80%;
       padding: 8px 12px;
-      border-radius: 8px;
+      border-radius: 12px;
       position: relative;
       box-shadow: 0 1px 2px rgba(0,0,0,0.1);
     }
@@ -134,10 +131,22 @@
       border-top-right-radius: 0;
     }
     
+    .message-sender {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--coral);
+      margin-bottom: 4px;
+    }
+    
+    .message.out .message-sender {
+      color: var(--sage);
+    }
+    
     .message-text {
-      font-size: 14.5px;
+      font-size: 14px;
       line-height: 1.4;
-      margin-bottom: 2px;
+      color: var(--text);
+      word-wrap: break-word;
     }
     
     .message-meta {
@@ -145,247 +154,406 @@
       justify-content: flex-end;
       align-items: center;
       gap: 4px;
+      margin-top: 4px;
     }
     
     .message-time {
       font-size: 11px;
-      color: var(--time);
+      color: var(--text-light);
     }
     
     .message-checks {
       font-size: 14px;
-      color: var(--blue-check);
+      color: #53BDEB;
     }
     
-    /* Date divider */
-    .date-divider {
-      text-align: center;
-      margin: 12px 0;
-    }
-    
-    .date-divider span {
+    /* System message */
+    .message.system {
+      align-self: center;
+      max-width: 90%;
       background: rgba(255,255,255,0.9);
-      padding: 4px 12px;
-      border-radius: 8px;
-      font-size: 12px;
+      text-align: center;
+      font-size: 13px;
       color: var(--text-light);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      padding: 8px 16px;
     }
     
-    /* Input area */
-    .input-area {
-      padding: 8px 12px;
+    /* Input */
+    .chat-input {
       background: #F0F0F0;
+      padding: 8px 12px;
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       gap: 8px;
     }
     
     .input-wrapper {
       flex: 1;
-      display: flex;
-      align-items: center;
       background: white;
       border-radius: 24px;
-      padding: 6px 12px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
       gap: 8px;
     }
     
-    .emoji-btn {
-      width: 28px;
-      height: 28px;
-      border: none;
-      background: none;
-      font-size: 22px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .message-input {
+    .input-wrapper input {
       flex: 1;
       border: none;
       outline: none;
       font-family: inherit;
-      font-size: 15px;
-      resize: none;
-      max-height: 100px;
-      line-height: 1.4;
+      font-size: 16px;
+      background: transparent;
     }
     
-    .attach-btn {
-      width: 28px;
-      height: 28px;
-      border: none;
+    .emoji-btn {
       background: none;
-      color: var(--text-light);
-      font-size: 20px;
-      cursor: pointer;
-      transform: rotate(45deg);
-    }
-    
-    .camera-btn {
-      width: 28px;
-      height: 28px;
       border: none;
-      background: none;
-      color: var(--text-light);
-      font-size: 20px;
+      font-size: 24px;
       cursor: pointer;
+      opacity: 0.6;
     }
     
     .send-btn {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       border: none;
-      background: var(--green);
+      background: var(--coral);
       color: white;
-      font-size: 22px;
+      font-size: 20px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transition: transform 0.2s;
     }
     
-    .mic-icon { font-size: 24px; }
-    .send-icon { font-size: 20px; margin-right: 2px; }
+    .send-btn:active {
+      transform: scale(0.95);
+    }
+    
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-light);
+    }
+    
+    /* Typing indicator */
+    .typing {
+      display: none;
+      padding: 8px 16px;
+      background: white;
+      border-radius: 12px;
+      align-self: flex-end;
+      max-width: 80%;
+    }
+    
+    .typing.active {
+      display: block;
+    }
+    
+    .typing-dots {
+      display: flex;
+      gap: 4px;
+    }
+    
+    .typing-dots span {
+      width: 8px;
+      height: 8px;
+      background: var(--text-light);
+      border-radius: 50%;
+      animation: typing 1.4s infinite;
+    }
+    
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    
+    @keyframes typing {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+    
+    /* Empty state */
+    .empty-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+    }
+    
+    .empty-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+    
+    .empty-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    
+    .empty-desc {
+      font-size: 14px;
+      color: var(--text-light);
+    }
   </style>
 </head>
 <body>
 
-  <div class="chat-container">
-    
-    <!-- Header -->
-    <div class="chat-header">
-      <button class="back-btn" onclick="history.back()">←</button>
-      <div class="chat-avatar">ר</div>
-      <div class="chat-info">
-        <div class="chat-name">רונית</div>
-        <div class="chat-status">בחוץ עכשיו</div>
+  <div class="chat-app">
+    <header class="chat-header">
+      <button class="back-btn" onclick="history.back()"></button>
+      <div class="group-avatar" id="groupAvatar"></div>
+      <div class="group-info">
+        <div class="group-name" id="groupName">טוען...</div>
+        <div class="group-members" id="groupMembers">...</div>
       </div>
-      <div class="header-actions">
-        <button class="header-btn">📞</button>
-        <button class="header-btn">⋮</button>
-      </div>
+    </header>
+
+    <div class="messages" id="messages">
+      <div class="loading">טוען הודעות...</div>
     </div>
     
-    <!-- Messages -->
-    <div class="messages">
-      
-      <div class="date-divider">
-        <span>היום</span>
+    <div class="typing" id="typingIndicator">
+      <div class="typing-dots">
+        <span></span><span></span><span></span>
       </div>
-      
-      <div class="message in">
-        <div class="message-text">היי! ראיתי שאת בחוץ 😊</div>
-        <div class="message-meta">
-          <span class="message-time">15:42</span>
-        </div>
-      </div>
-      
-      <div class="message out">
-        <div class="message-text">היי רונית! כן, יצאתי עם התינוק לפארק</div>
-        <div class="message-meta">
-          <span class="message-time">15:43</span>
-          <span class="message-checks">✓✓</span>
-        </div>
-      </div>
-      
-      <div class="message in">
-        <div class="message-text">איזה כיף! איפה את? אולי אבוא לשבת איתך?</div>
-        <div class="message-meta">
-          <span class="message-time">15:43</span>
-        </div>
-      </div>
-      
-      <div class="message out">
-        <div class="message-text">בפארק גורדון, ליד המגלשה הגדולה 🛝</div>
-        <div class="message-meta">
-          <span class="message-time">15:44</span>
-          <span class="message-checks">✓✓</span>
-        </div>
-      </div>
-      
-      <div class="message in">
-        <div class="message-text">מעולה! אני בדרך, 5 דקות 🏃‍♀️</div>
-        <div class="message-meta">
-          <span class="message-time">15:44</span>
-        </div>
-      </div>
-      
-      <div class="message out">
-        <div class="message-text">יופי! אני ליד הספסל הכחול, תראי אותי</div>
-        <div class="message-meta">
-          <span class="message-time">15:45</span>
-          <span class="message-checks">✓✓</span>
-        </div>
-      </div>
-      
     </div>
-    
-    <!-- Input -->
-    <div class="input-area">
+
+    <div class="chat-input">
       <div class="input-wrapper">
-        <button class="emoji-btn">😊</button>
-        <input type="text" class="message-input" placeholder="הודעה" id="messageInput">
-        <button class="attach-btn">📎</button>
-        <button class="camera-btn">📷</button>
+        <button class="emoji-btn"></button>
+        <input type="text" id="messageInput" placeholder="הקלידי הודעה..." />
       </div>
       <button class="send-btn" id="sendBtn">
-        <span class="mic-icon">🎤</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" fill="currentColor"/>
+        </svg>
       </button>
     </div>
-    
   </div>
 
-  <script is:inline>
-    const input = document.getElementById('messageInput');
-    const sendBtn = document.getElementById('sendBtn');
+  <script>
+    const SUPABASE_URL = 'https://fkikzryelozciailbryh.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
     
-    input.addEventListener('input', () => {
-      if (input.value.trim()) {
-        sendBtn.innerHTML = '<span class="send-icon">➤</span>';
-      } else {
-        sendBtn.innerHTML = '<span class="mic-icon">🎤</span>';
+    let supabase = null;
+    let currentUser = null;
+    let currentGroup = null;
+    let subscription = null;
+    
+    async function init() {
+      // Check login
+      const userId = localStorage.getItem('mibachutz_user_id');
+      if (!userId) {
+        window.location.href = '/register';
+        return;
       }
-    });
+      
+      // Load Supabase
+      const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
+      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      
+      // Get user and their group
+      const { data: user } = await supabase
+        .from('moms')
+        .select('*, groups(*)')
+        .eq('id', userId)
+        .single();
+      
+      if (!user) {
+        localStorage.clear();
+        window.location.href = '/register';
+        return;
+      }
+      
+      currentUser = user;
+      
+      // Check if user has a group
+      if (!user.group_id) {
+        showNoGroup();
+        return;
+      }
+      
+      currentGroup = user.groups;
+      
+      // Update header
+      document.getElementById('groupName').textContent = currentGroup.name || 'הקבוצה שלך';
+      
+      // Get member count
+      const { count } = await supabase
+        .from('moms')
+        .select('*', { count: 'exact', head: true })
+        .eq('group_id', currentGroup.id);
+      
+      document.getElementById('groupMembers').textContent = `${count} אמהות`;
+      
+      // Load messages
+      await loadMessages();
+      
+      // Subscribe to new messages
+      subscribeToMessages();
+    }
     
-    sendBtn.addEventListener('click', () => {
-      const text = input.value.trim();
-      if (text) {
-        // Add message to chat
-        const messages = document.querySelector('.messages');
-        const msg = document.createElement('div');
-        msg.className = 'message out';
-        msg.innerHTML = `
-          <div class="message-text">${text}</div>
-          <div class="message-meta">
-            <span class="message-time">${new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute: '2-digit'})}</span>
-            <span class="message-checks">✓</span>
+    function showNoGroup() {
+      document.getElementById('groupName').textContent = 'עוד לא בקבוצה';
+      document.getElementById('groupMembers').textContent = '';
+      document.getElementById('messages').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon"></div>
+          <div class="empty-title">עוד לא צורפת לקבוצה</div>
+          <div class="empty-desc">ברגע שנמצא קבוצה מתאימה באזור שלך, נעדכן אותך!</div>
+        </div>
+      `;
+      document.querySelector('.chat-input').style.display = 'none';
+    }
+    
+    async function loadMessages() {
+      const { data: messages, error } = await supabase
+        .from('messages')
+        .select('*, moms(id, name)')
+        .eq('group_id', currentGroup.id)
+        .order('created_at', { ascending: true })
+        .limit(100);
+      
+      if (error) {
+        console.error('Error loading messages:', error);
+        return;
+      }
+      
+      renderMessages(messages);
+    }
+    
+    function renderMessages(messages) {
+      const container = document.getElementById('messages');
+      
+      if (!messages || messages.length === 0) {
+        container.innerHTML = `
+          <div class="message system">
+             ברוכות הבאות לקבוצה! זה המקום לתאם מפגשים ולהכיר
           </div>
         `;
-        messages.appendChild(msg);
-        messages.scrollTop = messages.scrollHeight;
-        input.value = '';
-        sendBtn.innerHTML = '<span class="mic-icon">🎤</span>';
-        
-        // Simulate read receipt
-        setTimeout(() => {
-          msg.querySelector('.message-checks').textContent = '✓✓';
-          msg.querySelector('.message-checks').style.color = 'var(--blue-check)';
-        }, 1000);
+        return;
       }
+      
+      let html = '';
+      let lastDate = null;
+      
+      messages.forEach(msg => {
+        const date = new Date(msg.created_at);
+        const dateStr = date.toLocaleDateString('he-IL');
+        const timeStr = date.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
+        
+        // Date divider
+        if (dateStr !== lastDate) {
+          const isToday = dateStr === new Date().toLocaleDateString('he-IL');
+          html += `<div class="date-divider"><span>${isToday ? 'היום' : dateStr}</span></div>`;
+          lastDate = dateStr;
+        }
+        
+        const isOwn = msg.sender_id === currentUser.id;
+        const senderName = msg.moms?.name || 'אמא';
+        
+        html += `
+          <div class="message ${isOwn ? 'out' : 'in'}">
+            ${!isOwn ? `<div class="message-sender">${senderName}</div>` : ''}
+            <div class="message-text">${escapeHtml(msg.text || msg.content || '')}</div>
+            <div class="message-meta">
+              <span class="message-time">${timeStr}</span>
+              ${isOwn ? '<span class="message-checks">✓✓</span>' : ''}
+            </div>
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html;
+      container.scrollTop = container.scrollHeight;
+    }
+    
+    function subscribeToMessages() {
+      subscription = supabase
+        .channel('messages')
+        .on('postgres_changes', {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'messages',
+          filter: `group_id=eq.${currentGroup.id}`
+        }, async (payload) => {
+          // Get sender info
+          const { data: sender } = await supabase
+            .from('moms')
+            .select('id, name')
+            .eq('id', payload.new.sender_id)
+            .single();
+          
+          const msg = { ...payload.new, moms: sender };
+          appendMessage(msg);
+        })
+        .subscribe();
+    }
+    
+    function appendMessage(msg) {
+      const container = document.getElementById('messages');
+      const date = new Date(msg.created_at);
+      const timeStr = date.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
+      const isOwn = msg.sender_id === currentUser.id;
+      const senderName = msg.moms?.name || 'אמא';
+      
+      const div = document.createElement('div');
+      div.className = `message ${isOwn ? 'out' : 'in'}`;
+      div.innerHTML = `
+        ${!isOwn ? `<div class="message-sender">${senderName}</div>` : ''}
+        <div class="message-text">${escapeHtml(msg.text || msg.content || '')}</div>
+        <div class="message-meta">
+          <span class="message-time">${timeStr}</span>
+          ${isOwn ? '<span class="message-checks">✓✓</span>' : ''}
+        </div>
+      `;
+      
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+    
+    async function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const content = input.value.trim();
+      
+      if (!content || !currentGroup) return;
+      
+      input.value = '';
+      
+      const { error } = await supabase.from('messages').insert({
+        group_id: currentGroup.id,
+        sender_id: currentUser.id,
+        text: content
+      });
+      
+      if (error) {
+        console.error('Error sending message:', error);
+        input.value = content;
+      }
+    }
+    
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    // Event listeners
+    document.getElementById('sendBtn').addEventListener('click', sendMessage);
+    document.getElementById('messageInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
     });
     
-    input.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendBtn.click();
-      }
-    });
+    // Init
+    init();
   </script>
 
 </body>

@@ -671,6 +671,11 @@
   </div>
 
   <script is:inline>
+    // Check if already logged in - redirect to home
+    if (localStorage.getItem('mibachutz_phone')) {
+      window.location.href = '/home';
+    }
+    
     let isOut = false;
     
     function toggleStatus() {

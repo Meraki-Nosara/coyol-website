@@ -1,0 +1,392 @@
+---
+// Mibachutz Home - Main "I'm Outside" button experience
+export const prerender = false;
+---
+
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#FF6B6B">
+  <title>מי בחוץ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --coral: #FF6B6B;
+      --coral-dark: #E85555;
+      --green: #4CAF50;
+      --green-dark: #388E3C;
+      --text: #333;
+      --text-light: #666;
+      --bg: #FFF9F9;
+    }
+    
+    html, body {
+      height: 100%;
+      font-family: 'Heebo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    
+    .app {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      max-width: 500px;
+      margin: 0 auto;
+      background: var(--bg);
+    }
+    
+    /* Header */
+    .header {
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .logo {
+      height: 50px;
+      margin-bottom: 8px;
+    }
+    
+    .user-greeting {
+      font-size: 14px;
+      color: var(--text-light);
+    }
+    
+    .user-name {
+      font-weight: 600;
+      color: var(--text);
+    }
+    
+    /* Main Area */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    /* Big Button */
+    .big-button {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(145deg, var(--coral), var(--coral-dark));
+      color: white;
+      font-family: inherit;
+      font-size: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 10px 40px rgba(255, 107, 107, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .big-button:active {
+      transform: scale(0.95);
+    }
+    
+    .big-button.available {
+      background: linear-gradient(145deg, var(--green), var(--green-dark));
+      box-shadow: 0 10px 40px rgba(76, 175, 80, 0.4);
+    }
+    
+    .big-button .status-text {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
+    /* Available Count */
+    .available-count {
+      margin-top: 24px;
+      font-size: 16px;
+      color: var(--text-light);
+    }
+    
+    .available-count strong {
+      color: var(--coral);
+      font-size: 24px;
+    }
+    
+    /* Toggle for Always Available */
+    .always-toggle {
+      margin-top: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 24px;
+      background: white;
+      border-radius: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .always-toggle span {
+      font-size: 14px;
+      color: var(--text);
+    }
+    
+    .toggle-switch {
+      width: 50px;
+      height: 28px;
+      background: #ddd;
+      border-radius: 14px;
+      position: relative;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    
+    .toggle-switch.active {
+      background: var(--green);
+    }
+    
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: 0.3s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .toggle-switch.active::after {
+      left: 24px;
+    }
+    
+    /* Bottom Nav */
+    .bottom-nav {
+      display: flex;
+      background: white;
+      border-top: 1px solid #eee;
+      padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+    }
+    
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      color: var(--text-light);
+      font-size: 11px;
+      padding: 8px;
+    }
+    
+    .nav-item.active {
+      color: var(--coral);
+    }
+    
+    .nav-icon {
+      width: 22px;
+      height: 22px;
+    }
+    
+    /* Guest state */
+    .guest-message {
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .guest-message p {
+      margin-bottom: 16px;
+      color: var(--text-light);
+    }
+    
+    .btn-register {
+      display: inline-block;
+      background: var(--coral);
+      color: white;
+      padding: 14px 32px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app">
+    <header class="header">
+      <img src="/logo-text.png" alt="מי בחוץ" class="logo" />
+      <div class="user-greeting">
+        שלום, <span class="user-name" id="userName">אורחת</span>
+      </div>
+    </header>
+    
+    <main class="main" id="mainContent">
+      <!-- Content loaded by JS -->
+    </main>
+    
+    <nav class="bottom-nav">
+      <a href="/home" class="nav-item active">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>בית</span>
+      </a>
+      <a href="/chat" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+        <span>צ'אט</span>
+      </a>
+      <a href="/map" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        <span>מפה</span>
+      </a>
+      <a href="/group" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+        <span>קבוצה</span>
+      </a>
+    </nav>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://fkikzryelozciailbryh.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
+    
+    let supabase = null;
+    let currentUser = null;
+    let isAvailable = false;
+    let alwaysAvailable = false;
+    
+    async function init() {
+      const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
+      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      
+      const phone = localStorage.getItem('mibachutz_phone');
+      if (phone) {
+        await loadUser(phone);
+      } else {
+        showGuestState();
+      }
+    }
+    
+    async function loadUser(phone) {
+      const { data, error } = await supabase
+        .from('moms')
+        .select('*')
+        .eq('phone', phone)
+        .single();
+      
+      if (!data) {
+        localStorage.removeItem('mibachutz_phone');
+        showGuestState();
+        return;
+      }
+      
+      currentUser = data;
+      isAvailable = data.is_available || false;
+      alwaysAvailable = data.always_available || false;
+      
+      document.getElementById('userName').textContent = data.name;
+      
+      // Get available count
+      const { count } = await supabase
+        .from('moms')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true)
+        .or('is_available.eq.true,always_available.eq.true');
+      
+      showUserState(count || 0);
+    }
+    
+    function showGuestState() {
+      document.getElementById('mainContent').innerHTML = `
+        <div class="guest-message">
+          <p>הרשמי כדי לראות אמהות בסביבה</p>
+          <a href="/register" class="btn-register">הרשמה</a>
+        </div>
+      `;
+    }
+    
+    function showUserState(availableCount) {
+      const buttonText = isAvailable ? 'אני בחוץ' : 'לחצי כשתצאי';
+      const statusText = isAvailable ? 'אמהות יכולות לראות אותך' : 'את לא מופיעה במפה';
+      
+      document.getElementById('mainContent').innerHTML = `
+        <button class="big-button ${isAvailable ? 'available' : ''}" id="bigButton" onclick="toggleAvailable()">
+          <span>${buttonText}</span>
+          <span class="status-text">${statusText}</span>
+        </button>
+        
+        <div class="available-count">
+          <strong>${availableCount}</strong> אמהות בחוץ עכשיו
+        </div>
+        
+        <div class="always-toggle">
+          <span>תמיד זמינה</span>
+          <div class="toggle-switch ${alwaysAvailable ? 'active' : ''}" id="alwaysToggle" onclick="toggleAlways()"></div>
+        </div>
+      `;
+    }
+    
+    async function toggleAvailable() {
+      if (!currentUser) return;
+      
+      isAvailable = !isAvailable;
+      
+      // Get location if becoming available
+      let lat = currentUser.latitude;
+      let lng = currentUser.longitude;
+      
+      if (isAvailable && 'geolocation' in navigator) {
+        try {
+          const pos = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
+          });
+          lat = pos.coords.latitude;
+          lng = pos.coords.longitude;
+        } catch (e) {
+          console.log('Location unavailable');
+        }
+      }
+      
+      await supabase
+        .from('moms')
+        .update({
+          is_available: isAvailable,
+          latitude: lat,
+          longitude: lng,
+          last_available_at: isAvailable ? new Date().toISOString() : null
+        })
+        .eq('id', currentUser.id);
+      
+      // Update UI
+      const btn = document.getElementById('bigButton');
+      btn.classList.toggle('available', isAvailable);
+      btn.innerHTML = `
+        <span>${isAvailable ? 'אני בחוץ' : 'לחצי כשתצאי'}</span>
+        <span class="status-text">${isAvailable ? 'אמהות יכולות לראות אותך' : 'את לא מופיעה במפה'}</span>
+      `;
+    }
+    
+    async function toggleAlways() {
+      if (!currentUser) return;
+      
+      alwaysAvailable = !alwaysAvailable;
+      
+      await supabase
+        .from('moms')
+        .update({ always_available: alwaysAvailable })
+        .eq('id', currentUser.id);
+      
+      document.getElementById('alwaysToggle').classList.toggle('active', alwaysAvailable);
+    }
+    
+    init();
+  </script>
+
+</body>
+</html>

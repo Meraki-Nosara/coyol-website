@@ -1,0 +1,404 @@
+---
+// Mibachutz Admin - Moms Management
+import Layout from '../../layouts/Layout.astro';
+export const prerender = false;
+---
+
+<Layout title="אמהות - מי בחוץ">
+  <div class="admin-page">
+    <header class="admin-header">
+      <div class="header-content">
+        <img src="/logo-white.svg" alt="מי בחוץ" class="logo" />
+        <h1>ניהול אמהות</h1>
+      </div>
+      <nav class="admin-nav">
+        <a href="/admin">ראשי</a>
+        <a href="/admin/groups">קבוצות</a>
+        <a href="/admin/moms" class="active">אמהות</a>
+        <a href="/admin/messages">הודעות</a>
+      </nav>
+    </header>
+
+    <main class="admin-main">
+      <!-- Search & Filters -->
+      <div class="toolbar">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="חיפוש לפי שם או טלפון..." />
+        </div>
+        <select id="filterStatus">
+          <option value="">כל הסטטוסים</option>
+          <option value="waiting">ממתינות</option>
+          <option value="in_group">בקבוצה</option>
+          <option value="available">זמינות עכשיו</option>
+        </select>
+        <button id="exportBtn" class="btn-export">ייצוא CSV</button>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-pill">
+          <span id="totalCount">0</span> אמהות
+        </div>
+        <div class="stat-pill green">
+          <span id="inGroupCount">0</span> בקבוצות
+        </div>
+        <div class="stat-pill orange">
+          <span id="waitingCount">0</span> ממתינות
+        </div>
+        <div class="stat-pill blue">
+          <span id="availableCount">0</span> זמינות עכשיו
+        </div>
+      </div>
+
+      <!-- Moms Table -->
+      <div class="table-container">
+        <table id="momsTable">
+          <thead>
+            <tr>
+              <th>שם</th>
+              <th>טלפון</th>
+              <th>תינוק/ת</th>
+              <th>שכונה</th>
+              <th>קבוצה</th>
+              <th>זמינות</th>
+              <th>נרשמה</th>
+              <th>פעולות</th>
+            </tr>
+          </thead>
+          <tbody id="momsBody">
+            <!-- Loaded dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <style>
+    .admin-page {
+      min-height: 100vh;
+      background: #f5f5f5;
+      font-family: 'Heebo', sans-serif;
+    }
+
+    .admin-header {
+      background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+      color: white;
+      padding: 20px;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .logo { height: 40px; }
+
+    .admin-header h1 {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .admin-nav {
+      display: flex;
+      gap: 8px;
+    }
+
+    .admin-nav a {
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+
+    .admin-nav a.active,
+    .admin-nav a:hover {
+      background: white;
+      color: #FF6B6B;
+    }
+
+    .admin-main {
+      padding: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .toolbar select {
+      padding: 12px 16px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-family: inherit;
+      background: white;
+    }
+
+    .btn-export {
+      padding: 12px 20px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      background: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .stat-pill span {
+      font-weight: 700;
+      color: #FF6B6B;
+    }
+
+    .stat-pill.green span { color: #4CAF50; }
+    .stat-pill.orange span { color: #FF9800; }
+    .stat-pill.blue span { color: #2196F3; }
+
+    .table-container {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      text-align: right;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    th {
+      background: #f9f9f9;
+      font-weight: 600;
+      color: #666;
+      font-size: 13px;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    tr:hover {
+      background: #fafafa;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status-badge.waiting {
+      background: #FFF3E0;
+      color: #E65100;
+    }
+
+    .status-badge.in-group {
+      background: #E8F5E9;
+      color: #2E7D32;
+    }
+
+    .status-badge.available {
+      background: #E3F2FD;
+      color: #1565C0;
+    }
+
+    .btn-action {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-left: 4px;
+    }
+
+    .btn-view {
+      background: #E3F2FD;
+      color: #1565C0;
+    }
+
+    .btn-message {
+      background: #FFF3E0;
+      color: #E65100;
+    }
+
+    @media (max-width: 768px) {
+      .table-container {
+        overflow-x: auto;
+      }
+      
+      table {
+        min-width: 800px;
+      }
+    }
+  </style>
+
+  <script>
+    const SUPABASE_URL = 'https://fkikzryelozciailbryh.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
+    
+    let supabase = null;
+    let allMoms = [];
+
+    async function init() {
+      const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
+      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      await loadMoms();
+    }
+
+    async function loadMoms() {
+      const { data: moms, error } = await supabase
+        .from('moms')
+        .select('*, neighborhoods(name_he), groups(name)')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error loading moms:', error);
+        return;
+      }
+
+      allMoms = moms || [];
+      updateStats();
+      renderMoms(allMoms);
+    }
+
+    function updateStats() {
+      const total = allMoms.length;
+      const inGroup = allMoms.filter(m => m.group_id).length;
+      const waiting = allMoms.filter(m => !m.group_id).length;
+      const available = allMoms.filter(m => m.is_available || m.always_available).length;
+
+      document.getElementById('totalCount').textContent = total;
+      document.getElementById('inGroupCount').textContent = inGroup;
+      document.getElementById('waitingCount').textContent = waiting;
+      document.getElementById('availableCount').textContent = available;
+    }
+
+    function renderMoms(moms) {
+      const tbody = document.getElementById('momsBody');
+      
+      if (!moms.length) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px; color: #888;">לא נמצאו אמהות</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = moms.map(m => {
+        const status = m.group_id ? 'in-group' : 'waiting';
+        const statusText = m.group_id ? 'בקבוצה' : 'ממתינה';
+        const availability = m.always_available ? 'תמיד' : m.is_available ? 'כרגע' : 'לא';
+        const registered = new Date(m.created_at).toLocaleDateString('he-IL');
+
+        return `
+          <tr>
+            <td><strong>${m.name}</strong></td>
+            <td>${m.phone}</td>
+            <td>${m.baby_name || '-'}</td>
+            <td>${m.neighborhoods?.name_he || '-'}</td>
+            <td>${m.groups?.name || '-'}</td>
+            <td>
+              <span class="status-badge ${m.always_available ? 'available' : m.is_available ? 'available' : ''}">${availability}</span>
+            </td>
+            <td>${registered}</td>
+            <td>
+              <button class="btn-action btn-view" data-id="${m.id}">צפה</button>
+              <button class="btn-action btn-message" data-id="${m.id}" data-name="${m.name}">הודעה</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterMoms() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const status = document.getElementById('filterStatus').value;
+
+      let filtered = allMoms;
+
+      if (search) {
+        filtered = filtered.filter(m => 
+          m.name.toLowerCase().includes(search) || 
+          m.phone.includes(search)
+        );
+      }
+
+      if (status === 'waiting') {
+        filtered = filtered.filter(m => !m.group_id);
+      } else if (status === 'in_group') {
+        filtered = filtered.filter(m => m.group_id);
+      } else if (status === 'available') {
+        filtered = filtered.filter(m => m.is_available || m.always_available);
+      }
+
+      renderMoms(filtered);
+    }
+
+    function exportCSV() {
+      const headers = ['שם', 'טלפון', 'שם תינוק', 'שכונה', 'קבוצה', 'זמינה תמיד', 'תאריך הרשמה'];
+      const rows = allMoms.map(m => [
+        m.name,
+        m.phone,
+        m.baby_name || '',
+        m.neighborhoods?.name_he || '',
+        m.groups?.name || '',
+        m.always_available ? 'כן' : 'לא',
+        new Date(m.created_at).toLocaleDateString('he-IL')
+      ]);
+
+      const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `mibachutz-moms-${new Date().toISOString().split('T')[0]}.csv`;
+      link.click();
+    }
+
+    // Event listeners
+    document.getElementById('searchInput').addEventListener('input', filterMoms);
+    document.getElementById('filterStatus').addEventListener('change', filterMoms);
+    document.getElementById('exportBtn').addEventListener('click', exportCSV);
+
+    init();
+  </script>
+</Layout>

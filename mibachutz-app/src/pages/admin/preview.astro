@@ -1,0 +1,464 @@
+---
+// Static preview - Tuscan Coffee Shop Dashboard
+---
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>לוח בקרה - מי בחוץ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    .admin-page {
+      min-height: 100vh;
+      background: url('/images/tuscan-bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      font-family: 'Heebo', sans-serif;
+    }
+
+    .admin-page::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(30, 25, 20, 0.35);
+      pointer-events: none;
+    }
+
+    .admin-header {
+      background: rgba(45, 32, 22, 0.75);
+      backdrop-filter: blur(12px);
+      color: #F5E6D3;
+      padding: 20px;
+      border-bottom: 2px solid rgba(201, 168, 108, 0.4);
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .admin-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .admin-nav {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .admin-nav a {
+      padding: 8px 16px;
+      background: rgba(245, 230, 211, 0.12);
+      color: #F5E6D3;
+      text-decoration: none;
+      border-radius: 20px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-weight: 600;
+      border: 1px solid rgba(245, 230, 211, 0.25);
+      transition: all 0.2s;
+    }
+
+    .admin-nav a.active,
+    .admin-nav a:hover {
+      background: rgba(245, 230, 211, 0.9);
+      color: #5D3A1A;
+    }
+
+    .admin-main {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: rgba(255, 251, 245, 0.65);
+      backdrop-filter: blur(12px);
+      padding: 18px 14px;
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 4px;
+      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(212, 196, 176, 0.3);
+    }
+
+    .stat-card.highlight {
+      background: rgba(120, 75, 40, 0.8);
+      color: #F5E6D3;
+    }
+
+    .stat-icon { 
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: #5D3A1A;
+      line-height: 1;
+    }
+
+    .stat-card.highlight .stat-icon { color: #F5E6D3; }
+
+    .stat-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      font-style: italic;
+      color: #7A6A55;
+    }
+
+    .stat-card.highlight .stat-label { color: rgba(245, 230, 211, 0.85); }
+
+    .quick-actions {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .quick-btn {
+      padding: 12px 20px;
+      background: rgba(255, 251, 245, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(212, 196, 176, 0.3);
+      border-radius: 20px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: #5D3A1A;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quick-btn:hover {
+      background: rgba(139, 90, 43, 0.85);
+      color: #F5E6D3;
+    }
+
+    .action-card {
+      background: rgba(255, 251, 245, 0.6);
+      backdrop-filter: blur(14px);
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 3px 18px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(212, 196, 176, 0.25);
+      max-width: 320px;
+    }
+
+    .action-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      color: #5D3A1A;
+      border-bottom: 1px solid rgba(201, 168, 108, 0.35);
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(30, 25, 20, 0.7);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: rgba(255, 251, 245, 0.95);
+      backdrop-filter: blur(16px);
+      padding: 24px;
+      border-radius: 20px;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(212, 196, 176, 0.4);
+      max-width: 450px;
+      width: 90%;
+      position: relative;
+    }
+
+    .modal-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: #5D3A1A;
+      border-bottom: 1px solid rgba(201, 168, 108, 0.4);
+      padding-bottom: 10px;
+      margin-bottom: 16px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 32px;
+      height: 32px;
+      background: rgba(180, 160, 130, 0.3);
+      border: none;
+      border-radius: 50%;
+      font-size: 18px;
+      color: #5D3A1A;
+      cursor: pointer;
+    }
+
+    .form-section {
+      margin-bottom: 14px;
+    }
+
+    .form-section label {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: #5D3A1A;
+    }
+
+    .form-section input,
+    .form-section textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid rgba(180, 160, 130, 0.5);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 14px;
+      background: rgba(255, 253, 249, 0.8);
+      color: #5D3A1A;
+    }
+
+    .form-section input::placeholder,
+    .form-section textarea::placeholder {
+      color: #A89880;
+      font-style: italic;
+    }
+
+    .message-types {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .type-btn {
+      padding: 8px 14px;
+      border: 1px solid rgba(180, 160, 130, 0.4);
+      background: rgba(255, 251, 245, 0.7);
+      border-radius: 18px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 14px;
+      color: #5D3A1A;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .type-btn.active {
+      background: rgba(139, 90, 43, 0.85);
+      color: #F5E6D3;
+      border-color: rgba(139, 90, 43, 0.6);
+    }
+
+    .type-btn:hover:not(.active) {
+      background: rgba(201, 168, 108, 0.3);
+    }
+
+    .btn-send {
+      width: 100%;
+      padding: 12px;
+      background: rgba(100, 65, 35, 0.85);
+      color: #F5E6D3;
+      border: none;
+      border-radius: 20px;
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 14px;
+      transition: all 0.2s;
+    }
+
+    .btn-send:hover {
+      background: rgba(80, 50, 25, 0.9);
+    }
+
+    .activity-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px dashed rgba(180, 160, 130, 0.4);
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-icon {
+      width: 36px;
+      height: 36px;
+      background: rgba(201, 168, 108, 0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: #5D3A1A;
+      border: 1px solid rgba(180, 160, 130, 0.3);
+    }
+
+    .activity-text {
+      flex: 1;
+    }
+
+    .activity-text strong {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 14px;
+      color: #5D3A1A;
+      font-weight: 600;
+    }
+
+    .activity-text span {
+      font-size: 12px;
+      color: #8B7355;
+      font-style: italic;
+    }
+
+    @media (max-width: 900px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .actions-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 500px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .stat-card { padding: 14px 10px; }
+      .stat-icon { font-size: 26px; }
+      .admin-header h1 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-page">
+    <header class="admin-header">
+      <div class="header-content">
+        <h1>מי בחוץ control</h1>
+      </div>
+      <nav class="admin-nav">
+        <a href="#" class="active">ראשי</a>
+        <a href="#">קבוצות</a>
+        <a href="#">אמהות</a>
+        <a href="#">הודעות</a>
+        <a href="#">אירועים</a>
+      </nav>
+    </header>
+
+    <main class="admin-main">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">127</div>
+          <span class="stat-label">אמהות רשומות</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">14</div>
+          <span class="stat-label">קבוצות</span>
+        </div>
+        <div class="stat-card highlight">
+          <div class="stat-icon">23</div>
+          <span class="stat-label">זמינות עכשיו</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">3</div>
+          <span class="stat-label">אירועים קרובים</span>
+        </div>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="quick-actions">
+        <button class="quick-btn" onclick="document.getElementById('messageModal').classList.add('active')">שליחת הודעה</button>
+        <button class="quick-btn">יצירת אירוע</button>
+        <button class="quick-btn">ניהול קבוצות</button>
+      </div>
+
+      <!-- Activity Card (smaller, to the side) -->
+      <div class="action-card">
+        <h3>פעילות אחרונה</h3>
+        
+        <div class="activity-item">
+          <div class="activity-icon">+</div>
+          <div class="activity-text">
+            <strong>שרה נרשמה לקבוצה</strong>
+            <span>לפני 5 דקות</span>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon">M</div>
+          <div class="activity-text">
+            <strong>נשלחה הודעה ל-14 קבוצות</strong>
+            <span>לפני שעה</span>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon">~</div>
+          <div class="activity-text">
+            <strong>מיכל הועברה לקבוצה חדשה</strong>
+            <span>לפני 3 שעות</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Message Modal -->
+    <div class="modal-overlay" id="messageModal">
+      <div class="modal-card">
+        <button class="modal-close" onclick="document.getElementById('messageModal').classList.remove('active')">&times;</button>
+        <h3>שליחת הודעה</h3>
+        
+        <div class="form-section">
+          <label>סוג ההודעה:</label>
+          <div class="message-types">
+            <button class="type-btn active">התראה</button>
+            <button class="type-btn">הטבה</button>
+            <button class="type-btn">אירוע</button>
+            <button class="type-btn">טיפ</button>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label>כותרת:</label>
+          <input type="text" placeholder="למשל: מפגש אמהות בפארק" />
+        </div>
+
+        <div class="form-section">
+          <label>תוכן ההודעה:</label>
+          <textarea rows="3" placeholder="כתבי כאן את ההודעה..."></textarea>
+        </div>
+
+        <button class="btn-send" onclick="document.getElementById('messageModal').classList.remove('active')">שלחי הודעה (127 נמענות)</button>
+      </div>
+    </div>
+    </div>
+</body>
+</html>

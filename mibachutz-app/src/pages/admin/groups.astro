@@ -1,0 +1,638 @@
+---
+// Mibachutz Admin - Groups Management Dashboard
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="ניהול קבוצות - מי בחוץ">
+  <div class="admin-page">
+    <header class="admin-header">
+      <div class="header-content">
+        <img src="/logo-white.svg" alt="מי בחוץ" class="logo" />
+        <h1>ניהול קבוצות</h1>
+      </div>
+      <nav class="admin-nav">
+        <a href="/admin/groups" class="active">קבוצות</a>
+        <a href="/admin/moms">אמהות</a>
+        <a href="/admin/stats">סטטיסטיקות</a>
+      </nav>
+    </header>
+
+    <main class="admin-main">
+      <!-- Stats Bar -->
+      <div class="stats-bar">
+        <div class="stat">
+          <span class="stat-value" id="totalMoms">--</span>
+          <span class="stat-label">אמהות רשומות</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="totalGroups">--</span>
+          <span class="stat-label">קבוצות פעילות</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="availableNow">--</span>
+          <span class="stat-label">זמינות עכשיו</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="alwaysAvailable">--</span>
+          <span class="stat-label">זמינות תמיד</span>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters">
+        <select id="filterNeighborhood">
+          <option value="">כל האזורים</option>
+        </select>
+        <select id="filterAgeRange">
+          <option value="">כל הגילאים</option>
+          <option value="0-6m">0-6 חודשים</option>
+          <option value="6-12m">6-12 חודשים</option>
+          <option value="1-2y">1-2 שנים</option>
+          <option value="2-3y">2-3 שנים</option>
+          <option value="3y+">3+ שנים</option>
+        </select>
+        <button id="refreshBtn" class="btn-refresh">רענן</button>
+      </div>
+
+      <!-- Groups Grid -->
+      <div id="groupsGrid" class="groups-grid">
+        <!-- Groups will be loaded here -->
+      </div>
+
+      <!-- Mom Move Modal -->
+      <div id="moveModal" class="modal" style="display: none;">
+        <div class="modal-content">
+          <h3>העברת אמא לקבוצה אחרת</h3>
+          <p id="moveMomName"></p>
+          
+          <label>בחרי קבוצה חדשה:</label>
+          <select id="targetGroup"></select>
+          
+          <label>סיבה להעברה (אופציונלי):</label>
+          <textarea id="moveReason" placeholder="למשל: מעדיפה קבוצה קרובה יותר"></textarea>
+          
+          <div class="modal-actions">
+            <button id="confirmMove" class="btn-primary">העבר</button>
+            <button id="cancelMove" class="btn-secondary">ביטול</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <style>
+    .admin-page {
+      min-height: 100vh;
+      background: #f5f5f5;
+      font-family: 'Heebo', sans-serif;
+    }
+
+    .admin-header {
+      background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+      color: white;
+      padding: 20px;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .logo {
+      height: 40px;
+    }
+
+    .admin-header h1 {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .admin-nav {
+      display: flex;
+      gap: 8px;
+    }
+
+    .admin-nav a {
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 20px;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    .admin-nav a.active,
+    .admin-nav a:hover {
+      background: white;
+      color: #FF6B6B;
+    }
+
+    .admin-main {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .stat-value {
+      display: block;
+      font-size: 32px;
+      font-weight: 700;
+      color: #FF6B6B;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .filters {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .filters select {
+      padding: 10px 16px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      background: white;
+    }
+
+    .btn-refresh {
+      padding: 10px 20px;
+      background: #FF6B6B;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .groups-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+    }
+
+    .group-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    .group-header {
+      background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+      color: white;
+      padding: 16px;
+    }
+
+    .group-name {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .group-meta {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .group-members {
+      padding: 16px;
+    }
+
+    .member-count {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .count-bar {
+      flex: 1;
+      height: 8px;
+      background: #eee;
+      border-radius: 4px;
+      margin: 0 12px;
+      overflow: hidden;
+    }
+
+    .count-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4CAF50, #8BC34A);
+      border-radius: 4px;
+      transition: width 0.3s;
+    }
+
+    .count-fill.warning {
+      background: linear-gradient(90deg, #FFC107, #FF9800);
+    }
+
+    .count-fill.full {
+      background: linear-gradient(90deg, #F44336, #E91E63);
+    }
+
+    .member-list {
+      list-style: none;
+    }
+
+    .member-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .member-item:last-child {
+      border-bottom: none;
+    }
+
+    .member-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .member-avatar {
+      width: 36px;
+      height: 36px;
+      background: #FFE5E5;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .member-name {
+      font-weight: 500;
+    }
+
+    .member-baby {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .member-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ccc;
+    }
+
+    .status-dot.available {
+      background: #4CAF50;
+    }
+
+    .status-dot.always {
+      background: #2196F3;
+    }
+
+    .btn-move {
+      padding: 4px 12px;
+      background: #f5f5f5;
+      border: none;
+      border-radius: 12px;
+      font-size: 12px;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .btn-move:hover {
+      background: #FFE5E5;
+      color: #FF6B6B;
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 24px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .modal-content h3 {
+      margin-bottom: 16px;
+    }
+
+    .modal-content label {
+      display: block;
+      margin: 12px 0 6px;
+      font-weight: 500;
+    }
+
+    .modal-content select,
+    .modal-content textarea {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-family: inherit;
+    }
+
+    .modal-content textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .btn-primary {
+      flex: 1;
+      padding: 12px;
+      background: #FF6B6B;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .btn-secondary {
+      flex: 1;
+      padding: 12px;
+      background: #f5f5f5;
+      color: #333;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .stats-bar {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .groups-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script>
+    import { createClient } from '@supabase/supabase-js';
+
+    const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+    const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    let allGroups = [];
+    let allMoms = [];
+    let neighborhoods = [];
+    let selectedMom = null;
+
+    async function loadData() {
+      // Load neighborhoods
+      const { data: hoods } = await supabase
+        .from('neighborhoods')
+        .select('*')
+        .order('name_he');
+      neighborhoods = hoods || [];
+      
+      // Populate filter
+      const filterNeighborhood = document.getElementById('filterNeighborhood');
+      neighborhoods.forEach(n => {
+        const option = document.createElement('option');
+        option.value = n.id;
+        option.textContent = n.name_he;
+        filterNeighborhood.appendChild(option);
+      });
+
+      // Load groups with members
+      const { data: groups } = await supabase
+        .from('groups')
+        .select(`
+          *,
+          neighborhoods (name_he),
+          moms (*)
+        `)
+        .eq('is_active', true)
+        .order('name');
+      
+      allGroups = groups || [];
+
+      // Load stats
+      const { count: totalMoms } = await supabase
+        .from('moms')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true);
+      
+      const { count: availableNow } = await supabase
+        .from('moms')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_available', true);
+      
+      const { count: alwaysAvail } = await supabase
+        .from('moms')
+        .select('*', { count: 'exact', head: true })
+        .eq('always_available', true);
+
+      document.getElementById('totalMoms').textContent = totalMoms || 0;
+      document.getElementById('totalGroups').textContent = allGroups.length;
+      document.getElementById('availableNow').textContent = availableNow || 0;
+      document.getElementById('alwaysAvailable').textContent = alwaysAvail || 0;
+
+      renderGroups(allGroups);
+    }
+
+    function renderGroups(groups) {
+      const grid = document.getElementById('groupsGrid');
+      grid.innerHTML = '';
+
+      groups.forEach(group => {
+        const members = group.moms || [];
+        const fillPercent = (members.length / group.max_members) * 100;
+        const fillClass = fillPercent >= 100 ? 'full' : fillPercent >= 80 ? 'warning' : '';
+
+        const card = document.createElement('div');
+        card.className = 'group-card';
+        card.innerHTML = `
+          <div class="group-header">
+            <div class="group-name">${group.name}</div>
+            <div class="group-meta">${group.neighborhoods?.name_he || ''} • ${formatAgeRange(group.age_range)}</div>
+          </div>
+          <div class="group-members">
+            <div class="member-count">
+              <span>${members.length}</span>
+              <div class="count-bar">
+                <div class="count-fill ${fillClass}" style="width: ${fillPercent}%"></div>
+              </div>
+              <span>${group.max_members}</span>
+            </div>
+            <ul class="member-list">
+              ${members.map(m => `
+                <li class="member-item">
+                  <div class="member-info">
+                    <div class="member-avatar"></div>
+                    <div>
+                      <div class="member-name">${m.name}</div>
+                      <div class="member-baby">${m.baby_name || ''} • ${m.baby_age_range || ''}</div>
+                    </div>
+                  </div>
+                  <div class="member-status">
+                    <span class="status-dot ${m.always_available ? 'always' : m.is_available ? 'available' : ''}"></span>
+                    <button class="btn-move" data-mom-id="${m.id}" data-mom-name="${m.name}" data-current-group="${group.id}">העבר</button>
+                  </div>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      // Add move button listeners
+      document.querySelectorAll('.btn-move').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const momId = e.target.dataset.momId;
+          const momName = e.target.dataset.momName;
+          const currentGroup = e.target.dataset.currentGroup;
+          openMoveModal(momId, momName, currentGroup);
+        });
+      });
+    }
+
+    function formatAgeRange(range) {
+      const labels = {
+        '0-6m': '0-6 חודשים',
+        '6-12m': '6-12 חודשים',
+        '1-2y': '1-2 שנים',
+        '2-3y': '2-3 שנים',
+        '3y+': '3+ שנים'
+      };
+      return labels[range] || range;
+    }
+
+    function openMoveModal(momId, momName, currentGroupId) {
+      selectedMom = { id: momId, name: momName, currentGroupId };
+      
+      document.getElementById('moveMomName').textContent = `העברת ${momName} לקבוצה אחרת`;
+      
+      const select = document.getElementById('targetGroup');
+      select.innerHTML = '<option value="">בחרי קבוצה...</option>';
+      
+      allGroups
+        .filter(g => g.id !== currentGroupId && !g.is_full)
+        .forEach(g => {
+          const option = document.createElement('option');
+          option.value = g.id;
+          option.textContent = `${g.name} (${g.moms?.length || 0}/${g.max_members})`;
+          select.appendChild(option);
+        });
+
+      document.getElementById('moveModal').style.display = 'flex';
+    }
+
+    async function moveMom() {
+      const targetGroupId = document.getElementById('targetGroup').value;
+      const reason = document.getElementById('moveReason').value;
+
+      if (!targetGroupId) {
+        alert('בחרי קבוצה');
+        return;
+      }
+
+      // Update mom's group
+      const { error } = await supabase
+        .from('moms')
+        .update({ group_id: targetGroupId })
+        .eq('id', selectedMom.id);
+
+      if (error) {
+        alert('שגיאה בהעברה');
+        return;
+      }
+
+      // Update member counts
+      await supabase.rpc('update_group_counts', {
+        old_group: selectedMom.currentGroupId,
+        new_group: targetGroupId
+      });
+
+      // Log the move (optional - for audit trail)
+      await supabase.from('admin_logs').insert({
+        action: 'move_mom',
+        mom_id: selectedMom.id,
+        from_group: selectedMom.currentGroupId,
+        to_group: targetGroupId,
+        reason: reason
+      });
+
+      document.getElementById('moveModal').style.display = 'none';
+      loadData(); // Refresh
+    }
+
+    // Event listeners
+    document.getElementById('refreshBtn').addEventListener('click', loadData);
+    document.getElementById('confirmMove').addEventListener('click', moveMom);
+    document.getElementById('cancelMove').addEventListener('click', () => {
+      document.getElementById('moveModal').style.display = 'none';
+    });
+
+    document.getElementById('filterNeighborhood').addEventListener('change', (e) => {
+      const filtered = e.target.value 
+        ? allGroups.filter(g => g.neighborhood_id === e.target.value)
+        : allGroups;
+      renderGroups(filtered);
+    });
+
+    document.getElementById('filterAgeRange').addEventListener('change', (e) => {
+      const filtered = e.target.value 
+        ? allGroups.filter(g => g.age_range === e.target.value)
+        : allGroups;
+      renderGroups(filtered);
+    });
+
+    // Initial load
+    loadData();
+  </script>
+</Layout>
