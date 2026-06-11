@@ -6,9 +6,14 @@ export const prerender = false;
 <Layout title="CRM - Meraki Control">
   <div class="crm-page">
     <header class="page-header">
-      <div>
-        <h1>CRM</h1>
-        <p class="subtitle">Restaurant contacts & leads</p>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <a href="/" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: #f0f0f0; border-radius: 8px; text-decoration: none; color: #333;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </a>
+        <div>
+          <h1>CRM</h1>
+          <p class="subtitle">Restaurant contacts & leads</p>
+        </div>
       </div>
       <div class="header-actions">
         <button class="btn btn-secondary" onclick="exportCSV()">Export CSV</button>
@@ -291,7 +296,9 @@ export const prerender = false;
     function isHotLead(phone) {
       if (!phone) return false;
       const clean = phone.replace(/\D/g, '');
-      return HOT_CODES.some(code => clean.includes(code));
+      // Check if area code appears in first 6 digits (handles +1, country codes)
+      const prefix = clean.slice(0, 6);
+      return HOT_CODES.some(code => prefix.includes(code));
     }
 
     async function loadContacts() {

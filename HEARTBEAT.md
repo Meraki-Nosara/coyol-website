@@ -32,17 +32,42 @@ This checks Supabase for purchased gift cards with `status=pending_email` and se
 
 ---
 
-## 🎯 CRM Lead Scoring — RUN EVERY 15-30 MINUTES!
+## 🎯 CRM Lead Sync & Hot Lead Alerts — EVERY HEARTBEAT!
 
-**Script:** `bash ~/.openclaw/workspace/meraki-crm/run-score.sh`
+**Check for new hot leads from restaurant reservations:**
 
-This scores new restaurant reservations and adds them to the CRM:
-- Checks Coyol + La Luna reservations
-- Scores by area code (NYC, LA, SF, Toronto = hot)
-- Adds to `crm_guests` table in Supabase
-- **Hot leads (40+) → Alert Marion immediately**
+```bash
+# Query both reservation tables for hot lead area codes
+HOT_CODES="212|917|646|718|310|323|213|818|415|650|408|305|786|416|647"
 
-**Run this script EVERY heartbeat to keep leads fresh.**
+# Check Coyol for new reservations in last 2 hours with hot area codes
+curl -s "https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/coyol_reservations?created_at=gte.$(date -u -v-2H +%Y-%m-%dT%H:%M:%S)&select=guest_name,guest_email,guest_phone" \
+  -H "apikey: sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD"
+
+# Check La Luna same way
+curl -s "https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/laluna_reservations?created_at=gte.$(date -u -v-2H +%Y-%m-%dT%H:%M:%S)&select=guest_name,guest_email,guest_phone" \
+  -H "apikey: sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD"
+```
+
+**Hot lead area codes (NYC/LA/SF/Miami/Toronto):**
+- NYC: 212, 917, 646, 718
+- LA: 310, 323, 213, 818  
+- SF: 415, 650, 408
+- Miami: 305, 786
+- Toronto: 416, 647
+
+**If ANY new hot leads found:**
+1. Alert Marion immediately via Telegram
+2. Include: Name, Email, Phone, Restaurant
+3. These go to VIP pipeline in Coyol Command
+
+**Track in:** `~/.openclaw/workspace/memory/crm-last-check.json`
+```json
+{
+  "lastCheck": "2026-06-10T14:00:00Z",
+  "hotLeadsAlerted": ["email1@example.com"]
+}
+```
 
 ---
 
