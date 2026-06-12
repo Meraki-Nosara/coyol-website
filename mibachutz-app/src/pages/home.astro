@@ -1,5 +1,6 @@
 ---
-// Mibachutz Home - Main "I'm Outside" button experience
+// Mibachutz Home V2 - Main "I'm Outside" button
+// Chat only available when status = available AND in a group
 export const prerender = false;
 ---
 
@@ -41,7 +42,6 @@ export const prerender = false;
       background: var(--bg);
     }
     
-    /* Header */
     .header {
       padding: 20px;
       text-align: center;
@@ -62,7 +62,16 @@ export const prerender = false;
       color: var(--text);
     }
     
-    /* Main Area */
+    .group-badge {
+      display: inline-block;
+      background: var(--coral);
+      color: white;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      margin-top: 6px;
+    }
+    
     .main {
       flex: 1;
       display: flex;
@@ -100,6 +109,12 @@ export const prerender = false;
     .big-button.available {
       background: linear-gradient(145deg, var(--green), var(--green-dark));
       box-shadow: 0 10px 40px rgba(76, 175, 80, 0.4);
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 10px 40px rgba(76, 175, 80, 0.4); }
+      50% { box-shadow: 0 10px 60px rgba(76, 175, 80, 0.6); }
     }
     
     .big-button .status-text {
@@ -107,7 +122,6 @@ export const prerender = false;
       opacity: 0.9;
     }
     
-    /* Available Count */
     .available-count {
       margin-top: 24px;
       font-size: 16px;
@@ -115,56 +129,21 @@ export const prerender = false;
     }
     
     .available-count strong {
-      color: var(--coral);
+      color: var(--green);
       font-size: 24px;
     }
     
-    /* Toggle for Always Available */
-    .always-toggle {
-      margin-top: 32px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 24px;
-      background: white;
-      border-radius: 30px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    .chat-hint {
+      margin-top: 16px;
+      font-size: 13px;
+      color: var(--text-light);
+      text-align: center;
+      max-width: 240px;
     }
     
-    .always-toggle span {
-      font-size: 14px;
-      color: var(--text);
-    }
-    
-    .toggle-switch {
-      width: 50px;
-      height: 28px;
-      background: #ddd;
-      border-radius: 14px;
-      position: relative;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    
-    .toggle-switch.active {
-      background: var(--green);
-    }
-    
-    .toggle-switch::after {
-      content: '';
-      position: absolute;
-      width: 24px;
-      height: 24px;
-      background: white;
-      border-radius: 50%;
-      top: 2px;
-      left: 2px;
-      transition: 0.3s;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-    
-    .toggle-switch.active::after {
-      left: 24px;
+    .chat-hint.unlocked {
+      color: var(--green);
+      font-weight: 500;
     }
     
     /* Bottom Nav */
@@ -185,10 +164,20 @@ export const prerender = false;
       color: var(--text-light);
       font-size: 11px;
       padding: 8px;
+      transition: color 0.2s;
     }
     
     .nav-item.active {
       color: var(--coral);
+    }
+    
+    .nav-item.disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    
+    .nav-item.unlocked {
+      color: var(--green);
     }
     
     .nav-icon {
@@ -196,7 +185,6 @@ export const prerender = false;
       height: 22px;
     }
     
-    /* Guest state */
     .guest-message {
       text-align: center;
       padding: 20px;
@@ -216,6 +204,28 @@ export const prerender = false;
       text-decoration: none;
       font-weight: 600;
     }
+    
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--green);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 100;
+    }
+    
+    .toast.show {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -224,20 +234,21 @@ export const prerender = false;
     <header class="header">
       <img src="/logo-text.png" alt="מי בחוץ" class="logo" />
       <div class="user-greeting">
-        שלום, <span class="user-name" id="userName">אורחת</span>
+        שלום, <span class="user-name" id="userName">טוען...</span>
       </div>
+      <div class="group-badge" id="groupBadge" style="display:none;"></div>
     </header>
     
     <main class="main" id="mainContent">
-      <!-- Content loaded by JS -->
+      <div style="text-align: center; color: var(--text-light);">טוען...</div>
     </main>
     
-    <nav class="bottom-nav">
+    <nav class="bottom-nav" id="bottomNav">
       <a href="/home" class="nav-item active">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
         <span>בית</span>
       </a>
-      <a href="/chat" class="nav-item">
+      <a href="#" class="nav-item disabled" id="chatNav">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
         <span>צ'אט</span>
       </a>
@@ -251,138 +262,207 @@ export const prerender = false;
       </a>
     </nav>
   </div>
+  
+  <div class="toast" id="toast"></div>
 
   <script>
     const SUPABASE_URL = 'https://fkikzryelozciailbryh.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
+    const SUPABASE_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
     
-    let supabase = null;
-    let currentUser = null;
+    let user = null;
     let isAvailable = false;
-    let alwaysAvailable = false;
+    let groupName = '';
     
-    async function init() {
-      const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
-      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      
-      const phone = localStorage.getItem('mibachutz_phone');
-      if (phone) {
-        await loadUser(phone);
-      } else {
-        showGuestState();
-      }
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
     }
     
-    async function loadUser(phone) {
-      const { data, error } = await supabase
-        .from('moms')
-        .select('*')
-        .eq('phone', phone)
-        .single();
-      
-      if (!data) {
-        localStorage.removeItem('mibachutz_phone');
+    async function init() {
+      // Check for stored user
+      const stored = localStorage.getItem('mibachutz_user');
+      if (!stored) {
         showGuestState();
         return;
       }
       
-      currentUser = data;
-      isAvailable = data.is_available || false;
-      alwaysAvailable = data.always_available || false;
+      user = JSON.parse(stored);
       
-      document.getElementById('userName').textContent = data.name;
-      
-      // Get available count
-      const { count } = await supabase
-        .from('moms')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_active', true)
-        .or('is_available.eq.true,always_available.eq.true');
-      
-      showUserState(count || 0);
+      // Refresh user data from DB
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?id=eq.${user.id}&select=*`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const data = await res.json();
+        
+        if (!data[0]) {
+          localStorage.removeItem('mibachutz_user');
+          showGuestState();
+          return;
+        }
+        
+        user = data[0];
+        localStorage.setItem('mibachutz_user', JSON.stringify(user));
+        
+        // Check status
+        if (user.status === 'standby') {
+          window.location.href = '/waiting';
+          return;
+        }
+        
+        isAvailable = user.is_available || false;
+        
+        // Get group name if in group
+        if (user.group_id) {
+          const gRes = await fetch(`${SUPABASE_URL}/rest/v1/groups_v2?id=eq.${user.group_id}&select=name`, {
+            headers: { 'apikey': SUPABASE_KEY }
+          });
+          const gData = await gRes.json();
+          if (gData[0]) {
+            groupName = gData[0].name;
+          }
+        }
+        
+        showUserState();
+        
+        // Show welcome toast if just formed group
+        if (new URLSearchParams(window.location.search).get('group_formed')) {
+          showToast('הקבוצה נוצרה! לחצי על הכפתור כשתצאי');
+          history.replaceState({}, '', '/home');
+        }
+        
+      } catch (err) {
+        console.error(err);
+        showGuestState();
+      }
     }
     
     function showGuestState() {
+      document.getElementById('userName').textContent = 'אורחת';
       document.getElementById('mainContent').innerHTML = `
         <div class="guest-message">
-          <p>הרשמי כדי לראות אמהות בסביבה</p>
+          <p>הרשמי כדי להצטרף לקבוצה ולמצוא אמהות בסביבה</p>
           <a href="/register" class="btn-register">הרשמה</a>
         </div>
       `;
     }
     
-    function showUserState(availableCount) {
-      const buttonText = isAvailable ? 'אני בחוץ' : 'לחצי כשתצאי';
-      const statusText = isAvailable ? 'אמהות יכולות לראות אותך' : 'את לא מופיעה במפה';
+    async function showUserState() {
+      document.getElementById('userName').textContent = user.first_name;
+      
+      if (groupName) {
+        const badge = document.getElementById('groupBadge');
+        badge.textContent = groupName;
+        badge.style.display = 'inline-block';
+      }
+      
+      // Count available moms in this group
+      let availableCount = 0;
+      if (user.group_id) {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?group_id=eq.${user.group_id}&is_available=eq.true&select=id`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const data = await res.json();
+        availableCount = data.length;
+      }
+      
+      const buttonClass = isAvailable ? 'available' : '';
+      const buttonText = isAvailable ? 'אני בחוץ!' : 'לחצי כשתצאי';
+      const statusText = isAvailable ? 'אמהות רואות אותך' : 'את מוסתרת';
+      
+      let chatHint = '';
+      if (isAvailable) {
+        chatHint = '<div class="chat-hint unlocked">הצ\'אט פתוח - דברי עם אמהות אחרות בחוץ!</div>';
+      } else {
+        chatHint = '<div class="chat-hint">לחצי על הכפתור כדי לפתוח את הצ\'אט</div>';
+      }
       
       document.getElementById('mainContent').innerHTML = `
-        <button class="big-button ${isAvailable ? 'available' : ''}" id="bigButton" onclick="toggleAvailable()">
+        <button class="big-button ${buttonClass}" id="bigButton">
           <span>${buttonText}</span>
           <span class="status-text">${statusText}</span>
         </button>
         
         <div class="available-count">
-          <strong>${availableCount}</strong> אמהות בחוץ עכשיו
+          <strong>${availableCount}</strong> אמהות בחוץ בקבוצה
         </div>
         
-        <div class="always-toggle">
-          <span>תמיד זמינה</span>
-          <div class="toggle-switch ${alwaysAvailable ? 'active' : ''}" id="alwaysToggle" onclick="toggleAlways()"></div>
-        </div>
+        ${chatHint}
       `;
+      
+      document.getElementById('bigButton').addEventListener('click', toggleAvailable);
+      
+      // Update chat nav
+      updateChatNav();
+    }
+    
+    function updateChatNav() {
+      const chatNav = document.getElementById('chatNav');
+      if (isAvailable && user.group_id) {
+        chatNav.classList.remove('disabled');
+        chatNav.classList.add('unlocked');
+        chatNav.href = '/chat';
+      } else {
+        chatNav.classList.add('disabled');
+        chatNav.classList.remove('unlocked');
+        chatNav.href = '#';
+      }
     }
     
     async function toggleAvailable() {
-      if (!currentUser) return;
-      
       isAvailable = !isAvailable;
       
-      // Get location if becoming available
-      let lat = currentUser.latitude;
-      let lng = currentUser.longitude;
-      
-      if (isAvailable && 'geolocation' in navigator) {
-        try {
-          const pos = await new Promise((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
-          });
-          lat = pos.coords.latitude;
-          lng = pos.coords.longitude;
-        } catch (e) {
-          console.log('Location unavailable');
+      // Update in DB
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?id=eq.${user.id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          },
+          body: JSON.stringify({
+            is_available: isAvailable,
+            status: isAvailable ? 'available' : 'in_group',
+            last_available_at: isAvailable ? new Date().toISOString() : null
+          })
+        });
+        
+        user.is_available = isAvailable;
+        localStorage.setItem('mibachutz_user', JSON.stringify(user));
+        
+        // Update UI
+        const btn = document.getElementById('bigButton');
+        btn.classList.toggle('available', isAvailable);
+        btn.innerHTML = `
+          <span>${isAvailable ? 'אני בחוץ!' : 'לחצי כשתצאי'}</span>
+          <span class="status-text">${isAvailable ? 'אמהות רואות אותך' : 'את מוסתרת'}</span>
+        `;
+        
+        // Update hint
+        const hints = document.querySelectorAll('.chat-hint');
+        hints.forEach(h => {
+          if (isAvailable) {
+            h.className = 'chat-hint unlocked';
+            h.textContent = 'הצ\'אט פתוח - דברי עם אמהות אחרות בחוץ!';
+          } else {
+            h.className = 'chat-hint';
+            h.textContent = 'לחצי על הכפתור כדי לפתוח את הצ\'אט';
+          }
+        });
+        
+        updateChatNav();
+        
+        if (isAvailable) {
+          showToast('מעולה! את עכשיו נראית לאמהות בקבוצה');
         }
+        
+      } catch (err) {
+        console.error(err);
+        isAvailable = !isAvailable; // revert
       }
-      
-      await supabase
-        .from('moms')
-        .update({
-          is_available: isAvailable,
-          latitude: lat,
-          longitude: lng,
-          last_available_at: isAvailable ? new Date().toISOString() : null
-        })
-        .eq('id', currentUser.id);
-      
-      // Update UI
-      const btn = document.getElementById('bigButton');
-      btn.classList.toggle('available', isAvailable);
-      btn.innerHTML = `
-        <span>${isAvailable ? 'אני בחוץ' : 'לחצי כשתצאי'}</span>
-        <span class="status-text">${isAvailable ? 'אמהות יכולות לראות אותך' : 'את לא מופיעה במפה'}</span>
-      `;
-    }
-    
-    async function toggleAlways() {
-      if (!currentUser) return;
-      
-      alwaysAvailable = !alwaysAvailable;
-      
-      await supabase
-        .from('moms')
-        .update({ always_available: alwaysAvailable })
-        .eq('id', currentUser.id);
-      
-      document.getElementById('alwaysToggle').classList.toggle('active', alwaysAvailable);
     }
     
     init();

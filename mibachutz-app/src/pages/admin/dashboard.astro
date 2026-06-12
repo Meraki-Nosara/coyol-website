@@ -758,13 +758,13 @@ import Layout from '../../layouts/Layout.astro';
     async function loadDashboard() {
       // Load stats
       const { count: totalMoms } = await supabase
-        .from('moms').select('*', { count: 'exact', head: true }).eq('is_active', true);
+        .from('moms_v2').select('*', { count: 'exact', head: true }).eq('is_active', true);
       
       const { count: totalGroups } = await supabase
         .from('groups').select('*', { count: 'exact', head: true }).eq('is_active', true);
       
       const { count: availableNow } = await supabase
-        .from('moms').select('*', { count: 'exact', head: true })
+        .from('moms_v2').select('*', { count: 'exact', head: true })
         .or('is_available.eq.true,always_available.eq.true');
       
       const { count: upcomingEvents } = await supabase
@@ -1025,7 +1025,7 @@ import Layout from '../../layouts/Layout.astro';
     document.getElementById('sendMessage').addEventListener('click', sendMessage);
 
     document.getElementById('btnExportMoms').addEventListener('click', async () => {
-      const { data } = await supabase.from('moms').select('name, phone, baby_name, baby_age_range');
+      const { data } = await supabase.from('moms_v2').select('name, phone, baby_name, baby_age_range');
       const csv = [
         ['שם', 'טלפון', 'שם תינוק', 'גיל'].join(','),
         ...data.map(m => [m.name, m.phone, m.baby_name, m.baby_age_range].join(','))

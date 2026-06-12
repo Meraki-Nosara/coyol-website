@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mibachutz - Full Flow Diagram</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0f0f1a;
+      color: #eee;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #FF6B6B;
+      margin-bottom: 10px;
+      font-size: 32px;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #888;
+      margin-bottom: 40px;
+      font-size: 14px;
+    }
+    
+    .pages {
+      display: flex;
+      gap: 60px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .page {
+      background: #1a1a2e;
+      border-radius: 20px;
+      padding: 30px;
+      min-width: 500px;
+      max-width: 600px;
+    }
+    
+    .page-title {
+      text-align: center;
+      color: #667eea;
+      font-size: 18px;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #333;
+    }
+    
+    .flow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .start, .end {
+      width: 160px;
+      height: 50px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: white;
+      font-size: 14px;
+    }
+    
+    .end {
+      background: linear-gradient(135deg, #4CAF50, #66BB6A);
+    }
+    
+    .diamond {
+      width: 130px;
+      height: 130px;
+      background: #FF6B6B;
+      transform: rotate(45deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 15px 0;
+    }
+    
+    .diamond-text {
+      transform: rotate(-45deg);
+      text-align: center;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 1.3;
+    }
+    
+    .box {
+      background: #2d2d44;
+      border: 2px solid #444;
+      border-radius: 12px;
+      padding: 15px 20px;
+      min-width: 200px;
+      text-align: center;
+    }
+    
+    .box-title {
+      font-weight: 600;
+      color: #FF6B6B;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    
+    .box-content {
+      font-size: 12px;
+      color: #aaa;
+      line-height: 1.5;
+    }
+    
+    .box.highlight {
+      border-color: #667eea;
+      background: #252540;
+    }
+    
+    .box.action {
+      border-color: #4CAF50;
+      background: #1e3a1e;
+    }
+    
+    .arrow {
+      width: 2px;
+      height: 30px;
+      background: #555;
+      position: relative;
+    }
+    
+    .arrow::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 8px solid #555;
+    }
+    
+    .branch {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+      margin: 10px 0;
+    }
+    
+    .vertical-branch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .yes-no {
+      display: flex;
+      justify-content: space-between;
+      width: 180px;
+      font-size: 13px;
+    }
+    
+    .yes { color: #4CAF50; font-weight: 600; }
+    .no { color: #f44336; font-weight: 600; }
+    
+    .screen {
+      background: #16213e;
+      border-radius: 16px;
+      padding: 12px;
+      width: 180px;
+      border: 3px solid #333;
+    }
+    
+    .screen-header {
+      background: #FF6B6B;
+      color: white;
+      padding: 6px;
+      border-radius: 6px 6px 0 0;
+      font-size: 11px;
+      font-weight: 600;
+      text-align: center;
+    }
+    
+    .screen-body {
+      background: #fff;
+      color: #333;
+      padding: 12px 8px;
+      border-radius: 0 0 6px 6px;
+      min-height: 80px;
+      font-size: 10px;
+    }
+    
+    .form-list {
+      text-align: left;
+      font-size: 11px;
+      color: #ccc;
+      list-style: none;
+    }
+    
+    .form-list li {
+      margin: 4px 0;
+      padding-left: 12px;
+      position: relative;
+    }
+    
+    .form-list li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: #FF6B6B;
+    }
+    
+    .btn-mock {
+      background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+      color: white;
+      border: none;
+      padding: 8px 25px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    
+    .status-list {
+      font-size: 10px;
+      text-align: left;
+    }
+    
+    .status-list div {
+      margin: 3px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Mibachutz - Who's Outside?!</h1>
+    <p class="subtitle">Complete User Flow - Pages 1 + 2</p>
+    
+    <div class="pages">
+      
+      <!-- PAGE 1: Registration Flow -->
+      <div class="page">
+        <div class="page-title">Page 1: Registration & Group Assignment</div>
+        
+        <div class="flow">
+          <div class="start">START</div>
+          <div class="arrow"></div>
+          
+          <div class="diamond">
+            <div class="diamond-text">New<br>mom?</div>
+          </div>
+          
+          <div class="yes-no">
+            <span class="yes">YES (new)</span>
+            <span class="no">NO (existing)</span>
+          </div>
+          
+          <div class="branch">
+            <!-- YES: New user registration -->
+            <div class="vertical-branch">
+              <div class="box highlight">
+                <div class="box-title">Registration Form</div>
+                <ul class="form-list">
+                  <li>First name</li>
+                  <li>Last name</li>
+                  <li>Photo</li>
+                  <li>Baby's birthday (dd/mm/yyyy)</li>
+                  <li>City (dropdown)</li>
+                  <li>Neighborhood (dropdown, based on city)</li>
+                  <li>Email</li>
+                  <li>Phone</li>
+                  <li>Terms checkbox</li>
+                </ul>
+                <button class="btn-mock">Submit</button>
+              </div>
+            </div>
+            
+            <!-- NO: Existing user -->
+            <div class="vertical-branch">
+              <div class="screen">
+                <div class="screen-header">Home Screen</div>
+                <div class="screen-body">
+                  <div style="text-align:center;">
+                    Hi Mom!<br>
+                    <small style="color:#666;">Your group is waiting</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="arrow"></div>
+          
+          <div class="diamond">
+            <div class="diamond-text">8 moms<br>reached?</div>
+          </div>
+          
+          <div class="yes-no">
+            <span class="yes">YES</span>
+            <span class="no">NO (waiting)</span>
+          </div>
+          
+          <div class="branch">
+            <!-- YES: Group forms -->
+            <div class="vertical-branch">
+              <div class="box action">
+                <div class="box-title">Group Created!</div>
+                <div class="box-content">8 moms matched<br>by city + neighborhood<br>Group chat opens</div>
+              </div>
+              <div class="arrow"></div>
+              <div class="end">Continue to Page 2</div>
+            </div>
+            
+            <!-- NO: Standby -->
+            <div class="vertical-branch">
+              <div class="box">
+                <div class="box-title">Standby Mode</div>
+                <div class="box-content">
+                  Waiting for 8 moms<br>
+                  in same city +<br>
+                  neighborhood
+                </div>
+              </div>
+              <div style="margin-top: 15px; font-size: 11px; color: #888;">(waits here until 8 reached)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- PAGE 2: App Usage Flow -->
+      <div class="page">
+        <div class="page-title">Page 2: Using the App</div>
+        
+        <div class="flow">
+          <div class="start">Enter App</div>
+          <div class="arrow"></div>
+          
+          <div class="screen">
+            <div class="screen-header">Home Screen</div>
+            <div class="screen-body">
+              <div style="text-align:center;">
+                <div style="font-size: 24px; margin: 10px 0;">BIG BUTTON</div>
+                <small style="color:#666;">"I'm Outside!"</small>
+              </div>
+            </div>
+          </div>
+          
+          <div class="arrow"></div>
+          
+          <div class="diamond">
+            <div class="diamond-text">Button<br>pressed?</div>
+          </div>
+          
+          <div class="yes-no">
+            <span class="yes">YES</span>
+            <span class="no">NO</span>
+          </div>
+          
+          <div class="branch">
+            <!-- YES: Available -->
+            <div class="vertical-branch">
+              <div class="box action">
+                <div class="box-title">Available</div>
+                <div class="box-content">Status: Outside<br>Visible to group</div>
+              </div>
+              <div class="arrow"></div>
+              <div class="box highlight">
+                <div class="box-title">Group Chat Unlocked</div>
+                <div class="box-content">Can chat with OTHER<br>available moms in group<br><br><strong style="color:#f44336;">No personal messaging</strong><br><small>Group chat only</small></div>
+              </div>
+            </div>
+            
+            <!-- NO: Not available -->
+            <div class="vertical-branch">
+              <div class="box">
+                <div class="box-title">Not Available</div>
+                <div class="box-content">Status: Home<br>Hidden from group</div>
+              </div>
+              <div style="margin-top: 15px; font-size: 11px; color: #888;">(no chat access)</div>
+            </div>
+          </div>
+          
+          <div class="arrow"></div>
+          
+          <div class="screen">
+            <div class="screen-header">Group Chat</div>
+            <div class="screen-body">
+              <div class="status-list">
+                <div>See who's outside</div>
+                <div>Chat with available moms</div>
+                <div>Coordinate meetup spot</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="arrow"></div>
+          
+          <div class="end">Meet at the park!</div>
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- Summary -->
+    <div style="margin-top: 60px; background: #1a1a2e; border-radius: 20px; padding: 30px;">
+      <h2 style="color: #667eea; font-size: 20px; margin-bottom: 25px; text-align: center;">Flow Summary</h2>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;">
+        <div class="box">
+          <div class="box-title">1. Register</div>
+          <div class="box-content">Fill details<br>Photo + Terms</div>
+        </div>
+        <div class="box">
+          <div class="box-title">2. Search</div>
+          <div class="box-content">Find group by<br>Area + Baby age</div>
+        </div>
+        <div class="box">
+          <div class="box-title">3. Assign</div>
+          <div class="box-content">Join existing or<br>Create new group</div>
+        </div>
+        <div class="box">
+          <div class="box-title">4. Login</div>
+          <div class="box-content">Update status<br>"I'm outside"</div>
+        </div>
+        <div class="box">
+          <div class="box-title">5. Connect</div>
+          <div class="box-content">See other moms<br>View on map</div>
+        </div>
+        <div class="box">
+          <div class="box-title">6. Meetup</div>
+          <div class="box-content">Arrive at spot<br>Meet in person</div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</body>
+</html>

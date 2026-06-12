@@ -290,7 +290,7 @@ export const prerender = false;
 
     async function loadMoms() {
       const { data: moms, error } = await supabase
-        .from('moms')
+        .from('moms_v2')
         .select('*, neighborhoods(name_he), groups(name)')
         .order('created_at', { ascending: false });
 

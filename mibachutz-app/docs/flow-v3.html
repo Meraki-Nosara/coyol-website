@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מי בחוץ - תרשים זרימה מלא</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: #0f0f1a;
+      color: #eee;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #FF6B6B;
+      margin-bottom: 10px;
+      font-size: 32px;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #888;
+      margin-bottom: 40px;
+      font-size: 14px;
+    }
+    
+    .pages {
+      display: flex;
+      gap: 60px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .page {
+      background: #1a1a2e;
+      border-radius: 20px;
+      padding: 30px;
+      min-width: 500px;
+      max-width: 600px;
+    }
+    
+    .page-title {
+      text-align: center;
+      color: #667eea;
+      font-size: 18px;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #333;
+    }
+    
+    .flow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    /* Shapes */
+    .start, .end {
+      width: 140px;
+      height: 50px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: white;
+      font-size: 14px;
+    }
+    
+    .end {
+      background: linear-gradient(135deg, #4CAF50, #66BB6A);
+    }
+    
+    .diamond {
+      width: 120px;
+      height: 120px;
+      background: #FF6B6B;
+      transform: rotate(45deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 15px 0;
+    }
+    
+    .diamond-text {
+      transform: rotate(-45deg);
+      text-align: center;
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 1.3;
+    }
+    
+    .box {
+      background: #2d2d44;
+      border: 2px solid #444;
+      border-radius: 12px;
+      padding: 15px 20px;
+      min-width: 180px;
+      text-align: center;
+    }
+    
+    .box-title {
+      font-weight: 600;
+      color: #FF6B6B;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    
+    .box-content {
+      font-size: 12px;
+      color: #aaa;
+      line-height: 1.5;
+    }
+    
+    .box.highlight {
+      border-color: #667eea;
+      background: #252540;
+    }
+    
+    .box.action {
+      border-color: #4CAF50;
+      background: #1e3a1e;
+    }
+    
+    .arrow {
+      width: 2px;
+      height: 30px;
+      background: #555;
+      position: relative;
+    }
+    
+    .arrow::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 8px solid #555;
+    }
+    
+    .branch {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+      margin: 10px 0;
+    }
+    
+    .vertical-branch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .yes-no {
+      display: flex;
+      justify-content: space-between;
+      width: 160px;
+      font-size: 13px;
+    }
+    
+    .yes { color: #4CAF50; font-weight: 600; }
+    .no { color: #f44336; font-weight: 600; }
+    
+    .note {
+      background: #2d3436;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 11px;
+      color: #ffeaa7;
+      border-right: 3px solid #ffeaa7;
+      max-width: 200px;
+      text-align: right;
+    }
+    
+    .screen {
+      background: #16213e;
+      border-radius: 16px;
+      padding: 12px;
+      width: 160px;
+      border: 3px solid #333;
+    }
+    
+    .screen-header {
+      background: #FF6B6B;
+      color: white;
+      padding: 6px;
+      border-radius: 6px 6px 0 0;
+      font-size: 11px;
+      font-weight: 600;
+      text-align: center;
+    }
+    
+    .screen-body {
+      background: #fff;
+      color: #333;
+      padding: 12px 8px;
+      border-radius: 0 0 6px 6px;
+      min-height: 80px;
+      font-size: 10px;
+    }
+    
+    .connector {
+      height: 40px;
+      width: 2px;
+      background: linear-gradient(to bottom, #555, #667eea);
+    }
+    
+    .form-list {
+      text-align: right;
+      font-size: 11px;
+      color: #ccc;
+      list-style: none;
+    }
+    
+    .form-list li {
+      margin: 4px 0;
+      padding-right: 12px;
+      position: relative;
+    }
+    
+    .form-list li::before {
+      content: '•';
+      position: absolute;
+      right: 0;
+      color: #FF6B6B;
+    }
+    
+    .btn-mock {
+      background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+      color: white;
+      border: none;
+      padding: 8px 25px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    
+    .status-list {
+      font-size: 10px;
+      text-align: right;
+    }
+    
+    .status-list div {
+      margin: 3px 0;
+    }
+    
+    .page-connector {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #667eea;
+      font-size: 12px;
+      padding: 20px 0;
+    }
+    
+    .page-connector-line {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(to right, #667eea, #764ba2);
+    }
+    
+    /* Mobile phone frame */
+    .phone-frame {
+      background: #1a1a1a;
+      border-radius: 30px;
+      padding: 10px;
+      width: 180px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+    
+    .phone-notch {
+      width: 60px;
+      height: 6px;
+      background: #333;
+      border-radius: 3px;
+      margin: 0 auto 8px;
+    }
+    
+    .phone-screen {
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      min-height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>מי בחוץ?!</h1>
+    <p class="subtitle">תרשים זרימה מלא - עמודים 1 + 2</p>
+    
+    <div class="pages">
+      
+      <!-- PAGE 1: Registration Flow -->
+      <div class="page">
+        <div class="page-title">עמוד 1: הרשמה ושיוך לקבוצה</div>
+        
+        <div class="flow">
+          <div class="start">התחלה</div>
+          <div class="arrow"></div>
+          
+          <div class="diamond">
+            <div class="diamond-text">חיפוש<br>קבוצה?</div>
+          </div>
+          
+          <div class="yes-no">
+            <span class="yes">כן</span>
+            <span class="no">לא</span>
+          </div>
+          
+          <div class="branch">
+            <!-- YES: New user registration -->
+            <div class="vertical-branch">
+              <div class="box highlight">
+                <div class="box-title">טופס הרשמה</div>
+                <ul class="form-list">
+                  <li>שם פרטי + משפחה</li>
+                  <li>תמונה</li>
+                  <li>גיל תינוק/ת</li>
+                  <li>מגדר - בן/בת</li>
+                  <li>אזור מגורים</li>
+                  <li>Email + טלפון</li>
+                </ul>
+                <button class="btn-mock">שלחי</button>
+              </div>
+            </div>
+            
+            <!-- NO: Existing user -->
+            <div class="vertical-branch">
+              <div class="screen">
+                <div class="screen-header">מסך בית</div>
+                <div class="screen-body">
+                  <div style="text-align:center;">
+                    שלום אמא!<br>
+                    <small style="color:#666;">הקבוצה שלך מחכה</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="arrow"></div>
+          
+          <div class="diamond">
+            <div class="diamond-text">יש קבוצה<br>מתאימה?</div>
+          </div>
+          
+          <div class="yes-no">
+            <span class="yes">כן</span>
+            <span class="no">לא</span>
+          </div>
+          
+          <div class="branch">
+            <!-- YES: Join existing -->
+            <div class="vertical-branch">
+              <div class="box action">
+                <div class="box-title">שיוך לקבוצה</div>
+                <div class="box-content">מצטרפת לקבוצה קיימת</div>
+              </div>
+            </div>
+            
+            <!-- NO: Create new -->
+            <div class="vertical-branch">
+              <div class="box">
+                <div class="box-title">פתיחת קבוצה</div>
+                <div class="box-content">
+                  פנייה לקהילה<br>
+                  בחירת קטגוריה<br>
+                  יצירת אירוע
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="arrow"></div>
+          <div class="end">ממשיכה לעמוד 2</div>
+        </div>
+      </div>
+      
+      <!-- PAGE 2: App Usage Flow -->
+      <div class="page">
+        <div class="page-title">עמוד 2: שימוש באפליקציה</div>
+        
+        <div class="flow">
+          <div class="start">כניסה לאפ</div>
+          <div class="arrow"></div>
+          
+          <div class="diamond">
+            <div class="diamond-text">האם<br>שונות?</div>
+          </div>
+          
+          <div class="yes-no">
+            <span class="yes">כן</span>
+            <span class="no">לא</span>
+          </div>
+          
+          <div class="branch">
+            <!-- YES: Changes/updates -->
+            <div class="vertical-branch">
+              <div class="box">
+                <div class="box-title">סוגים קשורה = מגוון</div>
+                <div class="box-content">עדכון סטטוס</div>
+              </div>
+              <div class="arrow"></div>
+              <div class="box">
+                <div class="box-title">תוכנת הקבוצה</div>
+                <div class="box-content">מוגבלת / חוזרת</div>
+              </div>
+            </div>
+            
+            <!-- NO: Same status -->
+            <div class="vertical-branch">
+              <div class="box highlight">
+                <div class="box-title">סוגים בבד</div>
+                <div class="box-content">ממשיכה כרגיל</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="arrow"></div>
+          
+          <div class="note">
+            מסורתית:<br>
+            מפה זה כיוונים<br>
+            אחרי כל הצבא<br>
+            יש בד אנושי<br>
+            אבל גם קבוצות
+          </div>
+          
+          <div class="arrow"></div>
+          
+          <div class="box highlight">
+            <div class="box-title">בלוק אינטגרציה</div>
+            <div class="box-content">חיבור בין משתמשות</div>
+          </div>
+          
+          <div class="arrow"></div>
+          
+          <div class="box">
+            <div class="box-title">תמונה</div>
+            <div class="box-content">הצגת פרופיל + תמונה</div>
+          </div>
+          
+          <div class="arrow"></div>
+          
+          <div class="box action">
+            <div class="box-title">המכינס הכא</div>
+            <div class="box-content">הגעה למיקום</div>
+          </div>
+          
+          <div class="arrow"></div>
+          
+          <div class="screen">
+            <div class="screen-header">מיגהו - מבט על</div>
+            <div class="screen-body">
+              <div class="status-list">
+                <div>הכרות התוכן</div>
+                <div>מבט על הקבוצה</div>
+                <div>מי בחוץ עכשיו?</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="arrow"></div>
+          
+          <div class="end">בד קבוצי + אינטראקציה</div>
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- Summary -->
+    <div style="margin-top: 60px; background: #1a1a2e; border-radius: 20px; padding: 30px;">
+      <h2 style="color: #667eea; font-size: 20px; margin-bottom: 25px; text-align: center;">סיכום הזרימה</h2>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;">
+        <div class="box">
+          <div class="box-title">1. הרשמה</div>
+          <div class="box-content">מילוי פרטים<br>תמונה + אישור</div>
+        </div>
+        <div class="box">
+          <div class="box-title">2. חיפוש</div>
+          <div class="box-content">חיפוש קבוצה<br>לפי אזור + גיל</div>
+        </div>
+        <div class="box">
+          <div class="box-title">3. שיוך</div>
+          <div class="box-content">הצטרפות לקבוצה<br>או פתיחת חדשה</div>
+        </div>
+        <div class="box">
+          <div class="box-title">4. כניסה</div>
+          <div class="box-content">עדכון סטטוס<br>"אני בחוץ"</div>
+        </div>
+        <div class="box">
+          <div class="box-title">5. אינטגרציה</div>
+          <div class="box-content">חיבור עם אמהות<br>צפייה במפה</div>
+        </div>
+        <div class="box">
+          <div class="box-title">6. מפגש</div>
+          <div class="box-content">הגעה למיקום<br>מפגש בפועל</div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</body>
+</html>

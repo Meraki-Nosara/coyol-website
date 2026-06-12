@@ -23,7 +23,7 @@ export const prerender = false;
     
     body {
       min-height: 100vh;
-      background: url('/images/tuscan-bg.jpg') center/cover fixed;
+      background: url('/images/cafe-bg.jpg') center/cover fixed;
       font-family: 'Heebo', sans-serif;
       color: var(--cream);
     }
@@ -32,14 +32,14 @@ export const prerender = false;
       content: '';
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(30, 20, 10, 0.75);
+      background: rgba(30, 20, 10, 0.4);
       pointer-events: none;
       z-index: -1;
     }
 
     /* Header */
     .header {
-      background: rgba(45, 32, 22, 0.9);
+      background: rgba(45, 32, 22, 0.6);
       backdrop-filter: blur(12px);
       padding: 20px 24px;
       border-bottom: 2px solid rgba(201, 168, 108, 0.3);
@@ -307,21 +307,25 @@ export const prerender = false;
 
     /* Group card */
     .group-card {
-      background: rgba(45, 32, 22, 0.3);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 12px;
-      border: 1px solid rgba(201, 168, 108, 0.15);
+      background: linear-gradient(135deg, rgba(255,251,245,0.95), rgba(245,230,211,0.9));
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      border: 2px solid rgba(201, 168, 108, 0.4);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     .group-name {
       font-family: 'Playfair Display', serif;
-      font-size: 18px;
-      margin-bottom: 8px;
+      font-size: 22px;
+      font-weight: 600;
+      color: #5D3A1A;
+      margin-bottom: 12px;
     }
 
     .group-stats {
       display: flex;
+      color: #6B5344;
       gap: 16px;
       font-size: 13px;
       opacity: 0.8;
@@ -416,8 +420,8 @@ export const prerender = false;
               <th>שם</th>
               <th>טלפון</th>
               <th>שכונה</th>
-              <th>תינוק</th>
               <th>סטטוס</th>
+              <th>זמינות</th>
               <th>הרשמה</th>
             </tr>
           </thead>
@@ -524,24 +528,21 @@ export const prerender = false;
     async function loadStats() {
       // Total moms
       const { count: totalMoms } = await supabase
-        .from('moms')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_active', true);
+        .from('moms_v2')
+        .select('*', { count: 'exact', head: true });
       document.getElementById('totalMoms').textContent = totalMoms || 0;
       
       // Available now
       const { count: available } = await supabase
-        .from('moms')
+        .from('moms_v2')
         .select('*', { count: 'exact', head: true })
-        .eq('is_active', true)
-        .or('is_available.eq.true,always_available.eq.true');
+        .eq('is_available', true);
       document.getElementById('availableNow').textContent = available || 0;
       
       // Groups
       const { count: groups } = await supabase
-        .from('groups')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_active', true);
+        .from('groups_v2')
+        .select('*', { count: 'exact', head: true });
       document.getElementById('totalGroups').textContent = groups || 0;
       
       // Today messages
@@ -555,9 +556,8 @@ export const prerender = false;
     
     async function loadMoms() {
       const { data, error } = await supabase
-        .from('moms')
-        .select('*, neighborhoods(name_he), groups(name)')
-        .eq('is_active', true)
+        .from('moms_v2')
+        .select('*')
         .order('created_at', { ascending: false });
       
       if (error) {
@@ -567,7 +567,7 @@ export const prerender = false;
       
       allMoms = data || [];
       renderMomsTable(allMoms);
-      renderAvailableList(allMoms.filter(m => m.is_available || m.always_available));
+      renderAvailableList(allMoms.filter(m => m.is_available));
     }
     
     function renderMomsTable(moms) {
@@ -580,15 +580,14 @@ export const prerender = false;
       
       tbody.innerHTML = moms.map(mom => `
         <tr>
-          <td><strong>${fixHebrew(mom.name)}</strong></td>
+          <td><strong>${mom.first_name} ${mom.last_name || ''}</strong></td>
           <td dir="ltr">${mom.phone || '-'}</td>
-          <td>${fixHebrew(mom.neighborhoods?.name_he) || '-'}</td>
-          <td>${mom.baby_name || '-'} (${mom.baby_age_range || '-'})</td>
+          <td>${mom.neighborhood_id ? 'Raanana' : '-'}</td>
+          <td>${mom.status || 'standby'}</td>
           <td>
-            ${mom.is_available || mom.always_available 
+            ${mom.is_available 
               ? '<span class="badge badge-green">בחוץ</span>' 
-              : '<span class="badge badge-gray">לא זמינה</span>'}
-            ${mom.always_available ? '<span class="badge badge-gold">תמיד</span>' : ''}
+              : '<span class="badge badge-gray">ממתינה</span>'}
           </td>
           <td>${new Date(mom.created_at).toLocaleDateString('he-IL')}</td>
         </tr>
@@ -629,10 +628,9 @@ export const prerender = false;
     
     async function loadGroups() {
       const { data, error } = await supabase
-        .from('groups')
+        .from('groups_v2')
         .select('*')
-        .eq('is_active', true)
-        .order('name');
+        .order('created_at', { ascending: false });
       
       if (error) {
         console.error('Error loading groups:', error);
@@ -644,10 +642,9 @@ export const prerender = false;
       // Get member counts
       for (const group of allGroups) {
         const { count } = await supabase
-          .from('moms')
+          .from('moms_v2')
           .select('*', { count: 'exact', head: true })
-          .eq('group_id', group.id)
-          .eq('is_active', true);
+          .eq('group_id', group.id);
         group.memberCount = count || 0;
       }
       
@@ -662,12 +659,13 @@ export const prerender = false;
         return;
       }
       
-      container.innerHTML = groups.map(group => `
+      container.innerHTML = groups.map((group, index) => `
         <div class="group-card">
-          <div class="group-name">${fixHebrew(group.name)}</div>
+          <div class="group-name">רעננה #${groups.length - index}</div>
           <div class="group-stats">
-            <span>${group.memberCount} חברות</span>
-            <span>נוצרה: ${new Date(group.created_at).toLocaleDateString('he-IL')}</span>
+            <span><strong>${group.memberCount}</strong> אמהות</span>
+            <span>•</span>
+            <span>נוצרה ${new Date(group.created_at).toLocaleDateString('he-IL')}</span>
           </div>
         </div>
       `).join('');

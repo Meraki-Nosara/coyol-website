@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מי בחוץ - תרשים זרימה</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: #1a1a2e;
+      color: #eee;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #FF6B6B;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #888;
+      margin-bottom: 40px;
+      font-size: 14px;
+    }
+    
+    .flow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    /* Shapes */
+    .start {
+      width: 120px;
+      height: 50px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: white;
+    }
+    
+    .diamond {
+      width: 140px;
+      height: 140px;
+      background: #FF6B6B;
+      transform: rotate(45deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    
+    .diamond-text {
+      transform: rotate(-45deg);
+      text-align: center;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .box {
+      background: #2d2d44;
+      border: 2px solid #444;
+      border-radius: 12px;
+      padding: 20px;
+      min-width: 200px;
+      text-align: center;
+    }
+    
+    .box-title {
+      font-weight: 600;
+      color: #FF6B6B;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    
+    .box-content {
+      font-size: 13px;
+      color: #aaa;
+      line-height: 1.6;
+    }
+    
+    .arrow {
+      width: 2px;
+      height: 40px;
+      background: #666;
+      position: relative;
+    }
+    
+    .arrow::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 10px solid #666;
+    }
+    
+    .branch {
+      display: flex;
+      gap: 60px;
+      align-items: flex-start;
+      margin: 20px 0;
+    }
+    
+    .branch-label {
+      position: absolute;
+      font-size: 12px;
+      color: #4CAF50;
+      font-weight: 600;
+    }
+    
+    .section {
+      border: 1px dashed #444;
+      border-radius: 16px;
+      padding: 30px;
+      margin: 20px 0;
+      background: rgba(255,255,255,0.02);
+    }
+    
+    .section-title {
+      color: #667eea;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .form-fields {
+      text-align: right;
+      font-size: 13px;
+      color: #ccc;
+    }
+    
+    .form-fields li {
+      margin: 6px 0;
+      list-style: none;
+      padding-right: 15px;
+      position: relative;
+    }
+    
+    .form-fields li::before {
+      content: '•';
+      position: absolute;
+      right: 0;
+      color: #FF6B6B;
+    }
+    
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+      margin: 15px 0;
+      font-size: 13px;
+    }
+    
+    .checkbox input {
+      width: 18px;
+      height: 18px;
+      accent-color: #FF6B6B;
+    }
+    
+    .btn {
+      background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+      color: white;
+      border: none;
+      padding: 12px 40px;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    
+    .screen-preview {
+      background: #16213e;
+      border-radius: 20px;
+      padding: 15px;
+      width: 180px;
+      border: 3px solid #333;
+    }
+    
+    .screen-header {
+      background: #FF6B6B;
+      color: white;
+      padding: 8px;
+      border-radius: 8px 8px 0 0;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+    }
+    
+    .screen-body {
+      background: #fff;
+      color: #333;
+      padding: 15px 10px;
+      border-radius: 0 0 8px 8px;
+      min-height: 100px;
+      font-size: 11px;
+    }
+    
+    .connector {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #666;
+      font-size: 12px;
+    }
+    
+    .connector-line {
+      flex: 1;
+      height: 2px;
+      background: #444;
+    }
+    
+    .yes-no {
+      display: flex;
+      justify-content: space-between;
+      width: 200px;
+      margin-top: -10px;
+    }
+    
+    .yes { color: #4CAF50; font-weight: 600; }
+    .no { color: #f44336; font-weight: 600; }
+    
+    /* Flow containers */
+    .horizontal-flow {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+    
+    .vertical-branch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .side-arrow {
+      width: 60px;
+      height: 2px;
+      background: #666;
+      position: relative;
+    }
+    
+    .side-arrow.left::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-right: 10px solid #666;
+    }
+    
+    .side-arrow.right::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-left: 10px solid #666;
+    }
+    
+    .note {
+      background: #2d3436;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #ffeaa7;
+      border-right: 3px solid #ffeaa7;
+      margin: 10px 0;
+      max-width: 250px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>מי בחוץ?! - תרשים זרימה</h1>
+    <p class="subtitle">פתיחה למנ נרשמות לפתיחת קבוצה</p>
+    
+    <div class="flow">
+      
+      <!-- START -->
+      <div class="start">התחלה</div>
+      <div class="arrow"></div>
+      
+      <!-- SEARCH DECISION -->
+      <div class="diamond">
+        <div class="diamond-text">חיפוש<br>קבוצה</div>
+      </div>
+      
+      <div class="yes-no">
+        <span class="yes">כן ←</span>
+        <span class="no">→ לא</span>
+      </div>
+      
+      <!-- BRANCHES -->
+      <div class="branch">
+        
+        <!-- YES BRANCH - Registration -->
+        <div class="vertical-branch">
+          <div class="section">
+            <div class="section-title">טופס הרשמה</div>
+            <div class="box">
+              <ul class="form-fields">
+                <li>שם פרטי</li>
+                <li>שם משפחה</li>
+                <li>תמונה</li>
+                <li>גיל התינוק/ת</li>
+                <li>מגדר - בן / בת</li>
+                <li>אזור מגורים</li>
+                <li>Email</li>
+                <li>טלפון</li>
+                <li>מס׳ ילדים</li>
+                <li>סוג עבודה - פרילנס / שכיר</li>
+                <li>מתי רוצה להיפגש / תאריכים</li>
+              </ul>
+            </div>
+            
+            <div class="checkbox">
+              <input type="checkbox" checked>
+              <span>אני מאשרת את התקנון</span>
+            </div>
+            
+            <button class="btn">שלחי</button>
+          </div>
+          
+          <div class="arrow"></div>
+          
+          <div class="note">
+            המערכת מחפשת קבוצה מתאימה<br>
+            לפי אזור + גיל תינוק
+          </div>
+        </div>
+        
+        <!-- NO BRANCH - Home Screen -->
+        <div class="vertical-branch">
+          <div class="screen-preview">
+            <div class="screen-header">מסך בית</div>
+            <div class="screen-body">
+              <div style="text-align: center; padding: 10px;">
+                <div style="font-size: 24px; margin-bottom: 5px;">👩‍👧</div>
+                <div>שלום אמא!</div>
+                <div style="margin-top: 10px; font-size: 10px; color: #666;">
+                  הקבוצה שלך:<br>
+                  <strong>רמת אביב 0-6 חודשים</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="arrow"></div>
+          
+          <div class="screen-preview">
+            <div class="screen-header">מסך הקבוצה</div>
+            <div class="screen-body">
+              <div style="font-size: 10px;">
+                <div>🟢 רונית - בחוץ עכשיו</div>
+                <div>⚪ מיכל - לא זמינה</div>
+                <div>🟢 דנה - בחוץ עכשיו</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      
+      <!-- MATCHING DECISION -->
+      <div class="arrow"></div>
+      
+      <div class="diamond">
+        <div class="diamond-text">יש קבוצה<br>מתאימה?</div>
+      </div>
+      
+      <div class="yes-no">
+        <span class="yes">כן ←</span>
+        <span class="no">→ לא</span>
+      </div>
+      
+      <div class="branch">
+        
+        <!-- YES - Join Group -->
+        <div class="vertical-branch">
+          <div class="box">
+            <div class="box-title">שיוך לקבוצה</div>
+            <div class="box-content">
+              נמצאה קבוצה מתאימה!<br>
+              מצטרפת אוטומטית
+            </div>
+          </div>
+          
+          <div class="arrow"></div>
+          
+          <div class="box">
+            <div class="box-title">מסך הקבוצה</div>
+            <div class="box-content">
+              רואה את כל האמהות בקבוצה<br>
+              יכולה לסמן "אני בחוץ"
+            </div>
+          </div>
+        </div>
+        
+        <!-- NO - Create Group -->
+        <div class="vertical-branch">
+          <div class="box">
+            <div class="box-title">פנייה לקהילה</div>
+            <div class="box-content">
+              אין קבוצה קיימת באזור שלך<br>
+              רוצה לפתוח אחת?
+            </div>
+          </div>
+          
+          <div class="arrow"></div>
+          
+          <div class="box">
+            <div class="box-title">בחירת קטגוריה</div>
+            <div class="box-content">
+              גיל תינוק: 0-6m / 6-12m / 1-2y<br>
+              אזור: רמת אביב / תל אביב מרכז...
+            </div>
+          </div>
+          
+          <div class="arrow"></div>
+          
+          <div class="box">
+            <div class="box-title">יצירת אירוע</div>
+            <div class="box-content">
+              "אני פותחת קבוצה חדשה!<br>
+              מי מצטרפת?"
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      
+      <!-- END -->
+      <div class="arrow"></div>
+      
+      <div class="box" style="background: linear-gradient(135deg, #4CAF50, #66BB6A); border: none;">
+        <div class="box-title" style="color: white;">סרטיס לאפ</div>
+        <div class="box-content" style="color: rgba(255,255,255,0.9);">
+          האמא מוכנה להשתמש באפליקציה!<br>
+          יכולה לסמן זמינות ולמצוא חברות
+        </div>
+      </div>
+      
+    </div>
+    
+    <div style="margin-top: 60px; border-top: 1px solid #333; padding-top: 30px;">
+      <h2 style="color: #667eea; font-size: 18px; margin-bottom: 20px;">סיכום השלבים</h2>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+        <div class="box">
+          <div class="box-title">1. הרשמה</div>
+          <div class="box-content">מילוי פרטים + תמונה + אישור תקנון</div>
+        </div>
+        <div class="box">
+          <div class="box-title">2. חיפוש קבוצה</div>
+          <div class="box-content">המערכת מחפשת לפי אזור + גיל</div>
+        </div>
+        <div class="box">
+          <div class="box-title">3. שיוך / פתיחה</div>
+          <div class="box-content">מצטרפת לקבוצה קיימת או פותחת חדשה</div>
+        </div>
+        <div class="box">
+          <div class="box-title">4. שימוש באפ</div>
+          <div class="box-content">מסמנת "אני בחוץ" ומוצאת חברות</div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</body>
+</html>

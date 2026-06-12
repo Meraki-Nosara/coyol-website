@@ -1,64 +1,276 @@
 ---
-import Layout from '../layouts/Layout.astro';
+// Mibachutz - Waiting/Standby Screen
+// Shows while waiting for 8 moms to form a group
 ---
 
-<Layout title="מחפשות לך קבוצה">
-  <main class="min-h-screen flex flex-col bg-cream">
-    <!-- Header -->
-    <header class="bg-sage text-white px-6 py-4">
-      <h1 class="text-center text-xl font-semibold">מי בחוץ?!</h1>
-    </header>
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#FF6B6B">
+  <title>ממתינה - מי בחוץ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     
-    <!-- Content -->
-    <section class="flex-1 flex flex-col items-center justify-center px-6 py-12 text-center">
-      <!-- Animated loader -->
-      <div class="relative w-32 h-32 mb-8">
-        <div class="absolute inset-0 bg-peach/30 rounded-full animate-ping"></div>
-        <div class="absolute inset-4 bg-peach/50 rounded-full animate-pulse"></div>
-        <div class="absolute inset-8 bg-sage rounded-full flex items-center justify-center">
-          <span class="text-2xl text-white font-bold" id="count">3</span>
-        </div>
+    :root {
+      --coral: #FF6B6B;
+      --coral-light: #FF8E8E;
+      --text: #4A4A4A;
+      --text-light: #888;
+      --bg: #FFF9F9;
+    }
+    
+    html, body {
+      height: 100%;
+      font-family: 'Heebo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    
+    .app {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+    
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 30px;
+    }
+    
+    .title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+    
+    .subtitle {
+      font-size: 15px;
+      color: var(--text-light);
+      line-height: 1.6;
+      max-width: 280px;
+      margin-bottom: 40px;
+    }
+    
+    .progress-ring {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin-bottom: 30px;
+    }
+    
+    .progress-ring svg {
+      transform: rotate(-90deg);
+    }
+    
+    .progress-ring circle {
+      fill: none;
+      stroke-width: 12;
+    }
+    
+    .progress-ring .bg {
+      stroke: #f0e0e0;
+    }
+    
+    .progress-ring .progress {
+      stroke: var(--coral);
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.5s ease;
+    }
+    
+    .progress-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    
+    .progress-number {
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--coral);
+      line-height: 1;
+    }
+    
+    .progress-label {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+    
+    .neighborhood-name {
+      font-size: 16px;
+      color: var(--coral);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    
+    .info-text {
+      font-size: 13px;
+      color: var(--text-light);
+      max-width: 260px;
+    }
+    
+    .refresh-btn {
+      margin-top: 30px;
+      padding: 12px 30px;
+      background: white;
+      border: 2px solid var(--coral);
+      border-radius: 25px;
+      color: var(--coral);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .refresh-btn:active {
+      background: var(--coral);
+      color: white;
+    }
+    
+    .map-btn {
+      display: inline-block;
+      padding: 14px 32px;
+      background: var(--coral);
+      color: white;
+      border-radius: 25px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      margin-top: 10px;
+      transition: all 0.2s;
+    }
+    
+    .map-btn:active {
+      transform: scale(0.98);
+      background: var(--coral-light);
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <img src="/apple-touch-icon.png" alt="מי בחוץ" class="logo">
+    
+    <h1 class="title">ממתינה לקבוצה</h1>
+    <p class="subtitle">
+      ברגע שיהיו 8 אמהות בשכונה שלך,<br>
+      הקבוצה תיפתח אוטומטית!
+    </p>
+    
+    <div class="progress-ring">
+      <svg width="200" height="200">
+        <circle class="bg" cx="100" cy="100" r="88"></circle>
+        <circle class="progress" cx="100" cy="100" r="88" 
+                stroke-dasharray="553" 
+                stroke-dashoffset="553"
+                id="progressCircle"></circle>
+      </svg>
+      <div class="progress-center">
+        <div class="progress-number" id="countNumber">0</div>
+        <div class="progress-label">מתוך 8</div>
       </div>
-      
-      <h2 class="text-2xl font-bold text-sage-dark mb-4">מחפשות לך קבוצה</h2>
-      
-      <p class="text-lg text-warm-gray mb-2">
-        יש עוד <span class="font-bold text-sage" id="waiting-count">3</span> אמהות
-      </p>
-      <p class="text-lg text-warm-gray mb-8">
-        מחכות לקבוצה באיזור שלך
-      </p>
-      
-      <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-sm">
-        <p class="text-warm-gray/80 mb-4">
-          ברגע שיהיו 6 אמהות מהאיזור שלך, נפתח קבוצה ונודיע לך!
-        </p>
+    </div>
+    
+    <div class="neighborhood-name" id="neighborhoodName">טוען...</div>
+    
+    <a href="/map" class="map-btn">ראי מי עוד באזור</a>
+    
+    <p class="info-text" style="margin-top:20px;">
+      נעדכן אותך ברגע שהקבוצה תיפתח!<br>
+      <span class="pulse">בודק עדכונים...</span>
+    </p>
+    
+    <button class="refresh-btn" id="refreshBtn">בדקי עכשיו</button>
+  </div>
+  
+  <script>
+    const SUPABASE_URL = 'https://fkikzryelozciailbryh.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
+    
+    const user = JSON.parse(localStorage.getItem('mibachutz_user') || 'null');
+    
+    if (!user) {
+      window.location.href = '/register';
+    }
+    
+    const progressCircle = document.getElementById('progressCircle');
+    const countNumber = document.getElementById('countNumber');
+    const neighborhoodName = document.getElementById('neighborhoodName');
+    const circumference = 2 * Math.PI * 88; // 553
+    
+    async function checkStatus() {
+      try {
+        // First check if our status changed (group formed)
+        const userRes = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?id=eq.${user.id}&select=*`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const userData = await userRes.json();
         
-        <div class="flex items-center justify-center gap-2 text-sage">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-          </svg>
-          <span class="text-sm">נעדכן אותך בהתראה</span>
-        </div>
-      </div>
-      
-      <!-- Progress dots -->
-      <div class="flex items-center gap-3 mt-12">
-        <div class="w-3 h-3 bg-sage rounded-full"></div>
-        <div class="w-3 h-3 bg-sage rounded-full"></div>
-        <div class="w-3 h-3 bg-sage rounded-full"></div>
-        <div class="w-3 h-3 bg-sage/30 rounded-full"></div>
-        <div class="w-3 h-3 bg-sage/30 rounded-full"></div>
-        <div class="w-3 h-3 bg-sage/30 rounded-full"></div>
-      </div>
-      <p class="text-sm text-warm-gray/60 mt-2">3 מתוך 6 אמהות</p>
-    </section>
+        if (userData[0]?.status === 'in_group' || userData[0]?.group_id) {
+          // Group was formed! Redirect to home
+          localStorage.setItem('mibachutz_user', JSON.stringify(userData[0]));
+          window.location.href = '/home?group_formed=true';
+          return;
+        }
+        
+        // Get neighborhood name
+        const nRes = await fetch(`${SUPABASE_URL}/rest/v1/neighborhoods_v2?id=eq.${user.neighborhood_id}&select=name_he`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const nData = await nRes.json();
+        if (nData[0]) {
+          neighborhoodName.textContent = nData[0].name_he;
+        }
+        
+        // Count waiting moms in same neighborhood
+        const countRes = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?neighborhood_id=eq.${user.neighborhood_id}&status=eq.standby&select=id`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const moms = await countRes.json();
+        const count = moms.length;
+        
+        // Update UI
+        countNumber.textContent = count;
+        const offset = circumference - (count / 8) * circumference;
+        progressCircle.style.strokeDashoffset = offset;
+        
+      } catch (err) {
+        console.error('Failed to check status:', err);
+      }
+    }
     
-    <!-- Bottom nav placeholder -->
-    <footer class="bg-white border-t border-sage/10 px-6 py-4">
-      <p class="text-center text-sm text-warm-gray/60">
-        שאלות? <a href="mailto:hi@mibachutz.com" class="text-sage underline">דברי איתנו</a>
-      </p>
-    </footer>
-  </main>
-</Layout>
+    // Check immediately
+    checkStatus();
+    
+    // Check every 30 seconds
+    setInterval(checkStatus, 30000);
+    
+    // Manual refresh
+    document.getElementById('refreshBtn').addEventListener('click', () => {
+      checkStatus();
+    });
+  </script>
+</body>
+</html>

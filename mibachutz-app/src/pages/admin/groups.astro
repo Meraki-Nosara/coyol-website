@@ -462,17 +462,17 @@ import Layout from '../../layouts/Layout.astro';
 
       // Load stats
       const { count: totalMoms } = await supabase
-        .from('moms')
+        .from('moms_v2')
         .select('*', { count: 'exact', head: true })
         .eq('is_active', true);
       
       const { count: availableNow } = await supabase
-        .from('moms')
+        .from('moms_v2')
         .select('*', { count: 'exact', head: true })
         .eq('is_available', true);
       
       const { count: alwaysAvail } = await supabase
-        .from('moms')
+        .from('moms_v2')
         .select('*', { count: 'exact', head: true })
         .eq('always_available', true);
 
@@ -583,7 +583,7 @@ import Layout from '../../layouts/Layout.astro';
 
       // Update mom's group
       const { error } = await supabase
-        .from('moms')
+        .from('moms_v2')
         .update({ group_id: targetGroupId })
         .eq('id', selectedMom.id);
 

@@ -1,5 +1,5 @@
 ---
-// Mibachutz - Real-time Group Chat (WhatsApp style)
+// Mibachutz V2 - Group Chat (only available moms can see/send)
 export const prerender = false;
 ---
 
@@ -9,21 +9,20 @@ export const prerender = false;
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>צ'אט - מי בחוץ</title>
+  <title>צ'אט קבוצתי - מי בחוץ</title>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     :root {
       --coral: #FF6B6B;
-      --coral-light: #FF8E8E;
-      --sage: #7AC28F;
-      --cream: #FFF9F9;
-      --bubble-out: #E7FFDB;
+      --green: #4CAF50;
+      --green-dark: #388E3C;
+      --bubble-out: #DCF8C6;
       --bubble-in: #FFFFFF;
       --text: #333;
       --text-light: #888;
-      --bg: #E8DFD8;
+      --bg: #E5DDD5;
     }
     
     html, body {
@@ -39,18 +38,18 @@ export const prerender = false;
       flex-direction: column;
       max-width: 600px;
       margin: 0 auto;
-      background: url('/baby-doodles.jpg') center/cover fixed;
+      background: url('/chat-bg.svg') repeat;
     }
     
     /* Header */
     .chat-header {
-      background: var(--coral);
+      background: var(--green-dark);
       color: white;
       padding: 12px 16px;
       display: flex;
       align-items: center;
       gap: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
     
     .back-btn {
@@ -70,7 +69,7 @@ export const prerender = false;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 18px;
     }
     
     .group-info {
@@ -82,7 +81,7 @@ export const prerender = false;
       font-size: 16px;
     }
     
-    .group-members {
+    .online-count {
       font-size: 12px;
       opacity: 0.9;
     }
@@ -97,210 +96,147 @@ export const prerender = false;
       gap: 8px;
     }
     
-    .date-divider {
-      text-align: center;
-      margin: 12px 0;
-    }
-    
-    .date-divider span {
-      background: rgba(255,255,255,0.9);
-      padding: 4px 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      color: var(--text-light);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    
     .message {
       max-width: 80%;
       padding: 8px 12px;
-      border-radius: 12px;
+      border-radius: 8px;
       position: relative;
       box-shadow: 0 1px 2px rgba(0,0,0,0.1);
     }
     
-    .message.out {
-      align-self: flex-start;
+    .message.outgoing {
       background: var(--bubble-out);
-      border-top-left-radius: 0;
+      align-self: flex-end;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 0;
     }
     
-    .message.in {
-      align-self: flex-end;
+    .message.incoming {
       background: var(--bubble-in);
-      border-top-right-radius: 0;
+      align-self: flex-start;
+      border-top-right-radius: 8px;
+      border-top-left-radius: 0;
     }
     
     .message-sender {
       font-size: 12px;
       font-weight: 600;
-      color: var(--coral);
-      margin-bottom: 4px;
-    }
-    
-    .message.out .message-sender {
-      color: var(--sage);
+      color: var(--green);
+      margin-bottom: 2px;
     }
     
     .message-text {
       font-size: 14px;
-      line-height: 1.4;
       color: var(--text);
-      word-wrap: break-word;
-    }
-    
-    .message-meta {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 4px;
-      margin-top: 4px;
+      line-height: 1.4;
     }
     
     .message-time {
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-light);
+      text-align: left;
+      margin-top: 4px;
     }
     
-    .message-checks {
-      font-size: 14px;
-      color: #53BDEB;
-    }
-    
-    /* System message */
     .message.system {
+      background: rgba(255,255,255,0.8);
       align-self: center;
-      max-width: 90%;
-      background: rgba(255,255,255,0.9);
       text-align: center;
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-light);
-      padding: 8px 16px;
+      padding: 6px 16px;
+      border-radius: 20px;
+      max-width: 90%;
     }
     
     /* Input */
-    .chat-input {
-      background: #F0F0F0;
+    .input-area {
       padding: 8px 12px;
+      background: #f0f0f0;
       display: flex;
-      align-items: center;
       gap: 8px;
+      align-items: flex-end;
     }
     
-    .input-wrapper {
+    .message-input {
       flex: 1;
-      background: white;
-      border-radius: 24px;
-      padding: 8px 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .input-wrapper input {
-      flex: 1;
+      padding: 10px 16px;
       border: none;
-      outline: none;
+      border-radius: 20px;
       font-family: inherit;
-      font-size: 16px;
-      background: transparent;
+      font-size: 15px;
+      background: white;
+      resize: none;
+      max-height: 100px;
+      min-height: 40px;
     }
     
-    .emoji-btn {
-      background: none;
-      border: none;
-      font-size: 24px;
-      cursor: pointer;
-      opacity: 0.6;
+    .message-input:focus {
+      outline: none;
     }
     
     .send-btn {
       width: 44px;
       height: 44px;
-      border-radius: 50%;
       border: none;
-      background: var(--coral);
+      border-radius: 50%;
+      background: var(--green);
       color: white;
-      font-size: 20px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.2s;
+      transition: transform 0.1s;
     }
     
     .send-btn:active {
-      transform: scale(0.95);
+      transform: scale(0.9);
     }
     
-    /* Loading */
-    .loading {
+    .send-btn:disabled {
+      background: #ccc;
+    }
+    
+    /* Available moms indicator */
+    .available-banner {
+      background: var(--green);
+      color: white;
       text-align: center;
-      padding: 40px;
-      color: var(--text-light);
+      padding: 8px;
+      font-size: 12px;
     }
     
-    /* Typing indicator */
-    .typing {
-      display: none;
-      padding: 8px 16px;
-      background: white;
-      border-radius: 12px;
-      align-self: flex-end;
-      max-width: 80%;
-    }
-    
-    .typing.active {
-      display: block;
-    }
-    
-    .typing-dots {
-      display: flex;
-      gap: 4px;
-    }
-    
-    .typing-dots span {
-      width: 8px;
-      height: 8px;
-      background: var(--text-light);
-      border-radius: 50%;
-      animation: typing 1.4s infinite;
-    }
-    
-    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-    
-    @keyframes typing {
-      0%, 100% { opacity: 0.4; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.2); }
-    }
-    
-    /* Empty state */
-    .empty-state {
+    /* Not available state */
+    .not-available {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 40px;
       text-align: center;
+      padding: 40px;
     }
     
-    .empty-icon {
-      font-size: 64px;
-      margin-bottom: 16px;
+    .not-available h2 {
+      color: var(--coral);
+      margin-bottom: 12px;
     }
     
-    .empty-title {
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-    
-    .empty-desc {
-      font-size: 14px;
+    .not-available p {
       color: var(--text-light);
+      margin-bottom: 24px;
+    }
+    
+    .go-home-btn {
+      background: var(--coral);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 25px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -308,91 +244,62 @@ export const prerender = false;
 
   <div class="chat-app">
     <header class="chat-header">
-      <button class="back-btn" onclick="history.back()"></button>
-      <div class="group-avatar" id="groupAvatar"></div>
+      <button class="back-btn" onclick="window.location.href='/home'">&larr;</button>
+      <div class="group-avatar" id="groupAvatar">Q</div>
       <div class="group-info">
         <div class="group-name" id="groupName">טוען...</div>
-        <div class="group-members" id="groupMembers">...</div>
+        <div class="online-count" id="onlineCount"></div>
       </div>
     </header>
-
-    <div class="messages" id="messages">
-      <div class="loading">טוען הודעות...</div>
+    
+    <div class="available-banner" id="availableBanner">
+      צ'אט פתוח רק לאמהות שסימנו "אני בחוץ"
     </div>
     
-    <div class="typing" id="typingIndicator">
-      <div class="typing-dots">
-        <span></span><span></span><span></span>
-      </div>
-    </div>
-
-    <div class="chat-input">
-      <div class="input-wrapper">
-        <button class="emoji-btn"></button>
-        <input type="text" id="messageInput" placeholder="הקלידי הודעה..." />
-      </div>
-      <button class="send-btn" id="sendBtn">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" fill="currentColor"/>
-        </svg>
-      </button>
-    </div>
+    <main id="mainContent">
+      <!-- Loaded by JS -->
+    </main>
   </div>
 
   <script>
     const SUPABASE_URL = 'https://fkikzryelozciailbryh.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
+    const SUPABASE_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
     
-    let supabase = null;
-    let currentUser = null;
-    let currentGroup = null;
-    let subscription = null;
+    let user = null;
+    let groupId = null;
+    let messages = [];
+    let availableMoms = {};
     
     async function init() {
-      // Check login
-      const userId = localStorage.getItem('mibachutz_user_id');
-      if (!userId) {
+      const stored = localStorage.getItem('mibachutz_user');
+      if (!stored) {
         window.location.href = '/register';
         return;
       }
       
-      // Load Supabase
-      const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
-      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      user = JSON.parse(stored);
       
-      // Get user and their group
-      const { data: user } = await supabase
-        .from('moms')
-        .select('*, groups(*)')
-        .eq('id', userId)
-        .single();
-      
-      if (!user) {
-        localStorage.clear();
-        window.location.href = '/register';
+      // Check if user is available
+      if (!user.is_available) {
+        showNotAvailable();
         return;
       }
       
-      currentUser = user;
-      
-      // Check if user has a group
       if (!user.group_id) {
-        showNoGroup();
+        showNotAvailable();
         return;
       }
       
-      currentGroup = user.groups;
+      groupId = user.group_id;
       
-      // Update header
-      document.getElementById('groupName').textContent = currentGroup.name || 'הקבוצה שלך';
+      // Load group info
+      await loadGroupInfo();
       
-      // Get member count
-      const { count } = await supabase
-        .from('moms')
-        .select('*', { count: 'exact', head: true })
-        .eq('group_id', currentGroup.id);
+      // Load available moms in this group
+      await loadAvailableMoms();
       
-      document.getElementById('groupMembers').textContent = `${count} אמהות`;
+      // Show chat UI
+      showChatUI();
       
       // Load messages
       await loadMessages();
@@ -401,122 +308,105 @@ export const prerender = false;
       subscribeToMessages();
     }
     
-    function showNoGroup() {
-      document.getElementById('groupName').textContent = 'עוד לא בקבוצה';
-      document.getElementById('groupMembers').textContent = '';
-      document.getElementById('messages').innerHTML = `
-        <div class="empty-state">
-          <div class="empty-icon"></div>
-          <div class="empty-title">עוד לא צורפת לקבוצה</div>
-          <div class="empty-desc">ברגע שנמצא קבוצה מתאימה באזור שלך, נעדכן אותך!</div>
+    function showNotAvailable() {
+      document.getElementById('availableBanner').style.display = 'none';
+      document.getElementById('mainContent').innerHTML = `
+        <div class="not-available">
+          <h2>הצ'אט סגור</h2>
+          <p>כדי לדבר עם אמהות אחרות,<br>צריך ללחוץ על הכפתור "אני בחוץ"</p>
+          <button class="go-home-btn" onclick="window.location.href='/home'">חזרה הביתה</button>
         </div>
       `;
-      document.querySelector('.chat-input').style.display = 'none';
+    }
+    
+    async function loadGroupInfo() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/groups_v2?id=eq.${groupId}&select=*`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const data = await res.json();
+        if (data[0]) {
+          document.getElementById('groupName').textContent = data[0].name;
+          document.getElementById('groupAvatar').textContent = data[0].name.charAt(0);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    
+    async function loadAvailableMoms() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?group_id=eq.${groupId}&is_available=eq.true&select=id,first_name`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const data = await res.json();
+        data.forEach(m => {
+          availableMoms[m.id] = m.first_name;
+        });
+        document.getElementById('onlineCount').textContent = `${data.length} בחוץ עכשיו`;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    
+    function showChatUI() {
+      document.getElementById('mainContent').innerHTML = `
+        <div class="messages" id="messagesContainer"></div>
+        <div class="input-area">
+          <textarea class="message-input" id="messageInput" placeholder="כתבי הודעה..." rows="1"></textarea>
+          <button class="send-btn" id="sendBtn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+          </button>
+        </div>
+      `;
+      
+      const input = document.getElementById('messageInput');
+      const sendBtn = document.getElementById('sendBtn');
+      
+      input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+      
+      sendBtn.addEventListener('click', sendMessage);
     }
     
     async function loadMessages() {
-      const { data: messages, error } = await supabase
-        .from('messages')
-        .select('*, moms(id, name)')
-        .eq('group_id', currentGroup.id)
-        .order('created_at', { ascending: true })
-        .limit(100);
-      
-      if (error) {
-        console.error('Error loading messages:', error);
-        return;
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/messages_v2?group_id=eq.${groupId}&select=*&order=created_at.asc&limit=100`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        messages = await res.json();
+        renderMessages();
+      } catch (err) {
+        console.error(err);
       }
-      
-      renderMessages(messages);
     }
     
-    function renderMessages(messages) {
-      const container = document.getElementById('messages');
-      
-      if (!messages || messages.length === 0) {
-        container.innerHTML = `
-          <div class="message system">
-             ברוכות הבאות לקבוצה! זה המקום לתאם מפגשים ולהכיר
-          </div>
-        `;
-        return;
-      }
-      
-      let html = '';
-      let lastDate = null;
-      
-      messages.forEach(msg => {
-        const date = new Date(msg.created_at);
-        const dateStr = date.toLocaleDateString('he-IL');
-        const timeStr = date.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
-        
-        // Date divider
-        if (dateStr !== lastDate) {
-          const isToday = dateStr === new Date().toLocaleDateString('he-IL');
-          html += `<div class="date-divider"><span>${isToday ? 'היום' : dateStr}</span></div>`;
-          lastDate = dateStr;
+    function renderMessages() {
+      const container = document.getElementById('messagesContainer');
+      container.innerHTML = messages.map(msg => {
+        if (!msg.sender_id) {
+          // System message
+          return `<div class="message system">${msg.content}</div>`;
         }
         
-        const isOwn = msg.sender_id === currentUser.id;
-        const senderName = msg.moms?.name || 'אמא';
+        const isMe = msg.sender_id === user.id;
+        const senderName = availableMoms[msg.sender_id] || 'משתמשת';
+        const time = new Date(msg.created_at).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
         
-        html += `
-          <div class="message ${isOwn ? 'out' : 'in'}">
-            ${!isOwn ? `<div class="message-sender">${senderName}</div>` : ''}
-            <div class="message-text">${escapeHtml(msg.text || msg.content || '')}</div>
-            <div class="message-meta">
-              <span class="message-time">${timeStr}</span>
-              ${isOwn ? '<span class="message-checks">✓✓</span>' : ''}
-            </div>
+        return `
+          <div class="message ${isMe ? 'outgoing' : 'incoming'}">
+            ${!isMe ? `<div class="message-sender">${senderName}</div>` : ''}
+            <div class="message-text">${msg.content}</div>
+            <div class="message-time">${time}</div>
           </div>
         `;
-      });
+      }).join('');
       
-      container.innerHTML = html;
-      container.scrollTop = container.scrollHeight;
-    }
-    
-    function subscribeToMessages() {
-      subscription = supabase
-        .channel('messages')
-        .on('postgres_changes', {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'messages',
-          filter: `group_id=eq.${currentGroup.id}`
-        }, async (payload) => {
-          // Get sender info
-          const { data: sender } = await supabase
-            .from('moms')
-            .select('id, name')
-            .eq('id', payload.new.sender_id)
-            .single();
-          
-          const msg = { ...payload.new, moms: sender };
-          appendMessage(msg);
-        })
-        .subscribe();
-    }
-    
-    function appendMessage(msg) {
-      const container = document.getElementById('messages');
-      const date = new Date(msg.created_at);
-      const timeStr = date.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
-      const isOwn = msg.sender_id === currentUser.id;
-      const senderName = msg.moms?.name || 'אמא';
-      
-      const div = document.createElement('div');
-      div.className = `message ${isOwn ? 'out' : 'in'}`;
-      div.innerHTML = `
-        ${!isOwn ? `<div class="message-sender">${senderName}</div>` : ''}
-        <div class="message-text">${escapeHtml(msg.text || msg.content || '')}</div>
-        <div class="message-meta">
-          <span class="message-time">${timeStr}</span>
-          ${isOwn ? '<span class="message-checks">✓✓</span>' : ''}
-        </div>
-      `;
-      
-      container.appendChild(div);
+      // Scroll to bottom
       container.scrollTop = container.scrollHeight;
     }
     
@@ -524,35 +414,69 @@ export const prerender = false;
       const input = document.getElementById('messageInput');
       const content = input.value.trim();
       
-      if (!content || !currentGroup) return;
+      if (!content) return;
       
       input.value = '';
       
-      const { error } = await supabase.from('messages').insert({
-        group_id: currentGroup.id,
-        sender_id: currentUser.id,
-        text: content
-      });
-      
-      if (error) {
-        console.error('Error sending message:', error);
-        input.value = content;
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/messages_v2`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          },
+          body: JSON.stringify({
+            group_id: groupId,
+            sender_id: user.id,
+            content: content
+          })
+        });
+        
+        // Optimistically add message
+        messages.push({
+          id: Date.now(),
+          group_id: groupId,
+          sender_id: user.id,
+          content: content,
+          created_at: new Date().toISOString()
+        });
+        renderMessages();
+        
+      } catch (err) {
+        console.error(err);
+        input.value = content; // restore
       }
     }
     
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
+    function subscribeToMessages() {
+      // Poll for new messages every 5 seconds (simpler than websocket for now)
+      setInterval(async () => {
+        const lastMsg = messages[messages.length - 1];
+        const since = lastMsg?.created_at || new Date(0).toISOString();
+        
+        try {
+          const res = await fetch(`${SUPABASE_URL}/rest/v1/messages_v2?group_id=eq.${groupId}&created_at=gt.${since}&select=*&order=created_at.asc`, {
+            headers: { 'apikey': SUPABASE_KEY }
+          });
+          const newMsgs = await res.json();
+          
+          if (newMsgs.length > 0) {
+            // Filter out messages we already have
+            const existingIds = new Set(messages.map(m => m.id));
+            const trulyNew = newMsgs.filter(m => !existingIds.has(m.id));
+            
+            if (trulyNew.length > 0) {
+              messages.push(...trulyNew);
+              renderMessages();
+            }
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }, 5000);
     }
     
-    // Event listeners
-    document.getElementById('sendBtn').addEventListener('click', sendMessage);
-    document.getElementById('messageInput').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') sendMessage();
-    });
-    
-    // Init
     init();
   </script>
 

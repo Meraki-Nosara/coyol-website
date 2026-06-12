@@ -1,5 +1,6 @@
 ---
-// Mibachutz - Sleek 4-Step Registration
+// Mibachutz - Registration V2
+// New flow: City → Neighborhood dropdown, Birthday, Standby until 8 moms
 ---
 
 <!DOCTYPE html>
@@ -9,8 +10,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>הרשמה - מי בחוץ</title>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
-  <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
@@ -71,11 +70,11 @@
       display: flex;
       flex-direction: column;
       transition: transform 0.4s ease;
-      height: 400%; /* 4 steps */
+      height: 500%; /* 5 steps */
     }
     
     .step {
-      height: 25%;
+      height: 20%;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -107,12 +106,12 @@
       display: flex;
       align-items: center;
       gap: 16px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     
     .photo-circle {
-      width: 72px;
-      height: 72px;
+      width: 90px;
+      height: 90px;
       border-radius: 50%;
       background: #f5f5f5;
       border: 2px dashed #ddd;
@@ -134,23 +133,34 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: center center;
     }
     
     #photoInput { display: none; }
     
     .input {
-      flex: 1;
+      width: 100%;
       padding: 14px 16px;
       border: 2px solid #eee;
       border-radius: 12px;
       font-family: inherit;
       font-size: 16px;
       background: white;
+      margin-bottom: 12px;
     }
     
     .input:focus {
       outline: none;
       border-color: var(--coral);
+    }
+    
+    .input-row {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .input-row .input {
+      flex: 1;
     }
     
     .hint {
@@ -160,58 +170,48 @@
       margin-top: 8px;
     }
     
-    /* Choice buttons */
-    .choices {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-    }
-    
-    .choice {
-      padding: 12px 20px;
-      border: 2px solid #eee;
-      border-radius: 25px;
-      background: white;
-      font-family: inherit;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .choice:hover {
-      border-color: #fcc;
-    }
-    
-    .choice.selected {
-      background: var(--coral);
-      border-color: var(--coral);
-      color: white;
-    }
-    
-    /* Location */
-    .location-btn {
+    /* Select dropdown */
+    .select {
       width: 100%;
-      padding: 16px;
-      border: none;
-      border-radius: 14px;
-      background: var(--coral);
-      color: white;
+      padding: 14px 16px;
+      border: 2px solid #eee;
+      border-radius: 12px;
       font-family: inherit;
-      font-size: 15px;
-      font-weight: 600;
+      font-size: 16px;
+      background: white;
+      margin-bottom: 12px;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: left 12px center;
       cursor: pointer;
     }
     
-    .location-btn.done {
-      background: #7AC28F;
+    .select:focus {
+      outline: none;
+      border-color: var(--coral);
     }
     
-    #miniMap {
-      height: 120px;
+    .select:disabled {
+      background-color: #f5f5f5;
+      cursor: not-allowed;
+    }
+    
+    /* Date input */
+    .date-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #eee;
       border-radius: 12px;
-      margin-top: 16px;
-      display: none;
+      font-family: inherit;
+      font-size: 16px;
+      background: white;
+      margin-bottom: 12px;
+    }
+    
+    .date-input:focus {
+      outline: none;
+      border-color: var(--coral);
     }
     
     /* Next button */
@@ -270,6 +270,14 @@
       line-height: 1.6;
     }
     
+    .waiting-count {
+      text-align: center;
+      font-size: 14px;
+      color: var(--coral);
+      font-weight: 600;
+      margin-top: 12px;
+    }
+    
     .spinner {
       display: inline-block;
       width: 20px;
@@ -281,6 +289,13 @@
     }
     
     @keyframes spin { to { transform: rotate(360deg); } }
+    
+    .label {
+      font-size: 14px;
+      color: var(--text);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
   </style>
 </head>
 <body>
@@ -291,6 +306,7 @@
       <div class="dot" data-step="2"></div>
       <div class="dot" data-step="3"></div>
       <div class="dot" data-step="4"></div>
+      <div class="dot" data-step="5"></div>
     </div>
     
     <div class="steps-wrapper">
@@ -300,59 +316,61 @@
         <div class="step">
           <div class="card">
             <div class="card-title">מי את?</div>
-            <div class="photo-row">
-              <div class="photo-circle" id="photoCircle">תמונה</div>
-              <input type="text" class="input" id="nameInput" placeholder="השם שלך">
-            </div>
-            <p class="hint">תמונה לא חובה</p>
-            <input type="file" id="photoInput" accept="image/*" capture="user">
+            <input type="text" class="input" id="firstNameInput" placeholder="שם פרטי">
+            <input type="text" class="input" id="lastNameInput" placeholder="שם משפחה">
             <button class="next-btn" id="next1" disabled>המשך</button>
           </div>
         </div>
         
-        <!-- Step 2: Kids -->
+        <!-- Step 2: Contact -->
         <div class="step">
           <div class="card">
-            <div class="card-title">כמה ילדים?</div>
-            <div class="choices" id="kidsGrid">
-              <button type="button" class="choice" data-kids="0">בהריון</button>
-              <button type="button" class="choice" data-kids="1">1</button>
-              <button type="button" class="choice" data-kids="2">2</button>
-              <button type="button" class="choice" data-kids="3">3+</button>
-            </div>
-            <div id="ageSection" style="display:none; margin-top: 20px;">
-              <div class="card-title" style="font-size: 18px; margin-bottom: 16px;">גיל הקטנה?</div>
-              <div class="choices" id="ageGrid">
-                <button type="button" class="choice" data-age="0-6m">0-6 חודשים</button>
-                <button type="button" class="choice" data-age="6-12m">6-12 חודשים</button>
-                <button type="button" class="choice" data-age="1-2y">שנה-שנתיים</button>
-                <button type="button" class="choice" data-age="2y+">2+ שנים</button>
-              </div>
-            </div>
+            <div class="card-title">פרטי התקשרות</div>
+            <input type="email" class="input" id="emailInput" placeholder="אימייל">
+            <input type="tel" class="input" id="phoneInput" placeholder="טלפון" style="direction: ltr; text-align: right;">
+            <p class="hint">נשתמש בזה רק לעדכונים חשובים</p>
             <button class="next-btn" id="next2" disabled>המשך</button>
           </div>
         </div>
         
-        <!-- Step 3: Location -->
+        <!-- Step 3: Baby Birthday -->
         <div class="step">
           <div class="card">
-            <div class="card-title">איפה את גרה?</div>
-            <button type="button" class="location-btn" id="locationBtn">שתפי מיקום</button>
-            <div id="miniMap"></div>
-            <p class="hint">כדי למצוא אמהות קרובות אלייך</p>
+            <div class="card-title">מתי נולד/ה התינוק/ת?</div>
+            <input type="date" class="date-input" id="birthdayInput">
+            
             <button class="next-btn" id="next3" disabled>המשך</button>
           </div>
         </div>
         
-        <!-- Step 4: Done -->
+        <!-- Step 4: Location (City + Neighborhood) -->
+        <div class="step">
+          <div class="card">
+            <div class="card-title">איפה את גרה?</div>
+            <div class="label">עיר</div>
+            <select class="select" id="citySelect">
+              <option value="">בחרי עיר</option>
+            </select>
+            <div class="label">שכונה</div>
+            <select class="select" id="neighborhoodSelect" disabled>
+              <option value="">בחרי שכונה</option>
+            </select>
+            <p class="hint">הקבוצה תיווצר לפי השכונה שבחרת</p>
+            <button class="next-btn" id="next4" disabled>המשך</button>
+          </div>
+        </div>
+        
+        <!-- Step 5: Done / Standby -->
         <div class="step">
           <div class="card">
             <div class="success-icon"></div>
-            <div class="card-title">מעולה!</div>
+            <div class="card-title">נרשמת בהצלחה!</div>
             <p class="success-text">
-              ברגע שנמצא אמהות באזור שלך<br>
-              עם ילדים בגילאים דומים, נודיע לך
+              את עכשיו בהמתנה לקבוצה.<br>
+              ברגע שיהיו 8 אמהות בשכונה שלך,<br>
+              הקבוצה תיפתח ונעדכן אותך!
             </p>
+            <div class="waiting-count" id="waitingCount"></div>
             <button class="next-btn" id="submitBtn">סיום</button>
           </div>
         </div>
@@ -362,19 +380,29 @@
   </div>
 
   <script>
-    const MAPBOX_TOKEN = 'pk.eyJ1IjoiY295b2xyZWFsZXN0YXRlIiwiYSI6ImNtcTM0OHQyZTFhcHMycnF3bHd1eXNwN2QifQ.-Yxz19rYZnAumXNyF2-pJw';
     const SUPABASE_URL = 'https://fkikzryelozciailbryh.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
     
     let currentStep = 1;
-    let data = { name: '', photo_url: '', num_kids: null, kids_age: '', home_lat: null, home_lng: null };
+    let cities = [];
+    let neighborhoods = [];
+    let data = { 
+      first_name: '', 
+      last_name: '', 
+      email: '',
+      phone: '',
+      photo_url: '', 
+      baby_birthday: null,
+      city_id: null,
+      neighborhood_id: null
+    };
     
     const stepsEl = document.getElementById('steps');
     const dots = document.querySelectorAll('.dot');
     
     function goToStep(step) {
       currentStep = step;
-      stepsEl.style.transform = `translateY(-${(step - 1) * 25}%)`;
+      stepsEl.style.transform = `translateY(-${(step - 1) * 20}%)`;
       dots.forEach((d, i) => {
         d.classList.remove('active', 'done');
         if (i + 1 === step) d.classList.add('active');
@@ -382,118 +410,161 @@
       });
     }
     
-    // Step 1: Photo + Name
-    const photoCircle = document.getElementById('photoCircle');
-    const photoInput = document.getElementById('photoInput');
-    const nameInput = document.getElementById('nameInput');
-    const next1 = document.getElementById('next1');
-    
-    photoCircle.addEventListener('click', () => photoInput.click());
-    
-    photoInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-          data.photo_url = ev.target.result;
-          photoCircle.innerHTML = `<img src="${ev.target.result}" alt="">`;
-          photoCircle.classList.add('has-photo');
-        };
-        reader.readAsDataURL(file);
+    // Load cities on page load
+    async function loadCities() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/cities?select=*&order=name_he`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        cities = await res.json();
+        const citySelect = document.getElementById('citySelect');
+        cities.forEach(city => {
+          const opt = document.createElement('option');
+          opt.value = city.id;
+          opt.textContent = city.name_he;
+          citySelect.appendChild(opt);
+        });
+      } catch (err) {
+        console.error('Failed to load cities:', err);
       }
-    });
+    }
     
-    nameInput.addEventListener('input', () => {
-      data.name = nameInput.value.trim();
-      next1.disabled = data.name.length < 2;
-    });
-    
-    next1.addEventListener('click', () => goToStep(2));
-    
-    // Step 2: Kids
-    const kidsGrid = document.getElementById('kidsGrid');
-    const ageSection = document.getElementById('ageSection');
-    const ageGrid = document.getElementById('ageGrid');
-    const next2 = document.getElementById('next2');
-    
-    kidsGrid.querySelectorAll('.choice').forEach(btn => {
-      btn.addEventListener('click', () => {
-        kidsGrid.querySelectorAll('.choice').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        data.num_kids = parseInt(btn.dataset.kids);
-        
-        if (data.num_kids > 0) {
-          ageSection.style.display = 'block';
-          data.kids_age = '';
-          next2.disabled = true;
-        } else {
-          ageSection.style.display = 'none';
-          data.kids_age = 'pregnant';
-          next2.disabled = false;
-        }
-      });
-    });
-    
-    ageGrid.querySelectorAll('.choice').forEach(btn => {
-      btn.addEventListener('click', () => {
-        ageGrid.querySelectorAll('.choice').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        data.kids_age = btn.dataset.age;
-        next2.disabled = false;
-      });
-    });
-    
-    next2.addEventListener('click', () => goToStep(3));
-    
-    // Step 3: Location
-    const locationBtn = document.getElementById('locationBtn');
-    const next3 = document.getElementById('next3');
-    
-    locationBtn.addEventListener('click', async () => {
-      locationBtn.textContent = 'מאתר...';
-      locationBtn.disabled = true;
+    // Load neighborhoods when city selected
+    async function loadNeighborhoods(cityId) {
+      const neighborhoodSelect = document.getElementById('neighborhoodSelect');
+      neighborhoodSelect.innerHTML = '<option value="">בחרי שכונה</option>';
+      neighborhoodSelect.disabled = true;
+      
+      if (!cityId) return;
       
       try {
-        const pos = await new Promise((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject, {
-            enableHighAccuracy: true,
-            timeout: 15000
-          });
+        // Get all neighborhoods and filter by city name match
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/neighborhoods?select=*&order=name_en`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const allNeighborhoods = await res.json();
+        
+        // Get city name to filter
+        const selectedCity = cities.find(c => c.id === cityId);
+        const cityName = selectedCity?.name_en || '';
+        
+        // Filter neighborhoods that contain city name or are in Tel Aviv area
+        neighborhoods = allNeighborhoods.filter(n => {
+          const name = n.name_en?.toLowerCase() || '';
+          if (cityName === 'Tel Aviv') {
+            return ['ramat aviv', 'florentin', 'neve tzedek', 'jaffa', 'tel aviv'].some(x => name.includes(x));
+          }
+          if (cityName === 'Herzliya') {
+            return name.includes('herzliya');
+          }
+          if (cityName === 'Raanana') {
+            return name.includes('raanana');
+          }
+          return true; // show all for other cities
         });
         
-        data.home_lat = pos.coords.latitude;
-        data.home_lng = pos.coords.longitude;
-        
-        locationBtn.textContent = 'המיקום נשמר';
-        locationBtn.classList.add('done');
-        
-        const mapDiv = document.getElementById('miniMap');
-        mapDiv.style.display = 'block';
-        mapboxgl.accessToken = MAPBOX_TOKEN;
-        const map = new mapboxgl.Map({
-          container: 'miniMap',
-          style: 'mapbox://styles/mapbox/light-v11',
-          center: [data.home_lng, data.home_lat],
-          zoom: 14,
-          interactive: false
+        neighborhoods.forEach(n => {
+          const opt = document.createElement('option');
+          opt.value = n.id;
+          opt.textContent = n.name_en; // Using English since Hebrew is corrupted in DB
+          neighborhoodSelect.appendChild(opt);
         });
-        map.on('load', () => {
-          new mapboxgl.Marker({ color: '#FF6B6B' })
-            .setLngLat([data.home_lng, data.home_lat])
-            .addTo(map);
-        });
-        
-        next3.disabled = false;
-        
+        neighborhoodSelect.disabled = false;
       } catch (err) {
-        locationBtn.textContent = 'נסי שוב';
-        locationBtn.disabled = false;
+        console.error('Failed to load neighborhoods:', err);
       }
+    }
+    
+    // Check how many moms waiting in this neighborhood
+    async function checkWaitingCount(neighborhoodId) {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?neighborhood_id=eq.${neighborhoodId}&status=eq.standby&select=id`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const moms = await res.json();
+        return moms.length;
+      } catch (err) {
+        return 0;
+      }
+    }
+    
+    loadCities();
+    
+    // Step 1: Photo + Name
+    // Photo removed
+    const firstNameInput = document.getElementById('firstNameInput');
+    const lastNameInput = document.getElementById('lastNameInput');
+    const next1 = document.getElementById('next1');
+    
+    // Photo upload removed
+    
+    function checkStep1() {
+      data.first_name = firstNameInput.value.trim();
+      data.last_name = lastNameInput.value.trim();
+      next1.disabled = data.first_name.length < 2 || data.last_name.length < 2;
+    }
+    
+    firstNameInput.addEventListener('input', checkStep1);
+    lastNameInput.addEventListener('input', checkStep1);
+    next1.addEventListener('click', () => goToStep(2));
+    
+    // Step 2: Contact
+    const emailInput = document.getElementById('emailInput');
+    const phoneInput = document.getElementById('phoneInput');
+    const next2 = document.getElementById('next2');
+    
+    function checkStep2() {
+      data.email = emailInput.value.trim();
+      data.phone = phoneInput.value.trim();
+      // Phone required, email optional
+      next2.disabled = data.phone.length < 9;
+    }
+    
+    emailInput.addEventListener('input', checkStep2);
+    phoneInput.addEventListener('input', checkStep2);
+    next2.addEventListener('click', () => goToStep(3));
+    
+    // Step 3: Baby Birthday
+    const birthdayInput = document.getElementById('birthdayInput');
+    const next3 = document.getElementById('next3');
+    
+    birthdayInput.addEventListener('change', () => {
+      data.baby_birthday = birthdayInput.value;
+      next3.disabled = !data.baby_birthday;
     });
     
     next3.addEventListener('click', () => goToStep(4));
     
-    // Step 4: Submit
+    // Step 4: City + Neighborhood
+    const citySelect = document.getElementById('citySelect');
+    const neighborhoodSelect = document.getElementById('neighborhoodSelect');
+    const next4 = document.getElementById('next4');
+    
+    citySelect.addEventListener('change', () => {
+      data.city_id = citySelect.value || null;
+      data.neighborhood_id = null;
+      loadNeighborhoods(data.city_id);
+      next4.disabled = true;
+    });
+    
+    neighborhoodSelect.addEventListener('change', () => {
+      data.neighborhood_id = neighborhoodSelect.value || null;
+      next4.disabled = !data.neighborhood_id;
+    });
+    
+    next4.addEventListener('click', async () => {
+      // Show waiting count before final step
+      const count = await checkWaitingCount(data.neighborhood_id);
+      const waitingEl = document.getElementById('waitingCount');
+      if (count > 0) {
+        waitingEl.textContent = `כבר יש ${count} אמהות בהמתנה בשכונה שלך (צריך 8 לפתיחת קבוצה)`;
+      } else {
+        waitingEl.textContent = 'את הראשונה בשכונה! ברגע שיצטרפו עוד 7 אמהות, הקבוצה תיפתח';
+      }
+      goToStep(5);
+    });
+    
+    // Step 5: Submit
     const submitBtn = document.getElementById('submitBtn');
     
     submitBtn.addEventListener('click', async () => {
@@ -501,7 +572,7 @@
       submitBtn.innerHTML = '<span class="spinner"></span>';
       
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/mibachutz_moms`, {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -510,28 +581,42 @@
             'Prefer': 'return=representation'
           },
           body: JSON.stringify({
-            name: data.name,
-            photo_url: data.photo_url || null,
-            num_kids: data.num_kids,
-            kids_age: data.kids_age,
-            home_lat: data.home_lat,
-            home_lng: data.home_lng,
-            status: 'waiting'
+            first_name: data.first_name,
+            last_name: data.last_name,
+            email: data.email || null,
+            phone: data.phone,
+            neighborhood_id: data.neighborhood_id,
+            status: 'standby'
           })
         });
         
-        if (!res.ok) throw new Error('Failed');
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.message || 'Failed');
+        }
         
         const result = await res.json();
         localStorage.setItem('mibachutz_user', JSON.stringify(result[0]));
-        window.location.href = '/?registered=true';
+        
+        // Check if group was formed (status changed from standby)
+        if (result[0].status === 'in_group') {
+          window.location.href = '/home?group_formed=true';
+        } else {
+          window.location.href = '/waiting';
+        }
         
       } catch (err) {
         submitBtn.disabled = false;
         submitBtn.textContent = 'סיום';
-        alert('משהו השתבש');
+        console.error(err);
+        if (err.message.includes('duplicate') || err.message.includes('phone')) {
+          alert('מספר הטלפון הזה כבר רשום במערכת');
+        } else {
+          alert('משהו השתבש, נסי שוב');
+        }
       }
     });
   </script>
 </body>
 </html>
+/* v2 */
