@@ -1,6 +1,6 @@
 ---
-// Mibachutz - Registration V2
-// New flow: City → Neighborhood dropdown, Birthday, Standby until 8 moms
+// Mibachutz - Registration with Email Verification
+// Flow: Email → Verify Code → Name → Baby → Location → Done
 ---
 
 <!DOCTYPE html>
@@ -16,6 +16,7 @@
     :root {
       --coral: #FF6B6B;
       --coral-dark: #E85555;
+      --green: #4CAF50;
       --text: #4A4A4A;
       --text-light: #888;
     }
@@ -25,11 +26,11 @@
       background: url('/bg-pattern.jpg') center/cover fixed;
       min-height: 100vh;
       color: var(--text);
-      overflow: hidden;
+      overflow-x: hidden;
     }
     
     .app {
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
@@ -62,24 +63,26 @@
     /* Steps container */
     .steps-wrapper {
       flex: 1;
-      overflow: hidden;
-      position: relative;
-    }
-    
-    .steps {
       display: flex;
-      flex-direction: column;
-      transition: transform 0.4s ease;
-      height: 500%; /* 5 steps */
-    }
-    
-    .step {
-      height: 20%;
-      display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 24px;
+    }
+    
+    .step {
+      display: none;
+      width: 100%;
+      max-width: 360px;
+    }
+    
+    .step.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     
     /* Card */
@@ -88,8 +91,6 @@
       backdrop-filter: blur(10px);
       border-radius: 24px;
       padding: 32px 28px;
-      width: 100%;
-      max-width: 340px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.1);
     }
     
@@ -97,46 +98,16 @@
       font-size: 22px;
       font-weight: 700;
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 8px;
       color: var(--text);
     }
     
-    /* Photo */
-    .photo-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 16px;
+    .card-subtitle {
+      font-size: 14px;
+      text-align: center;
+      color: var(--text-light);
+      margin-bottom: 24px;
     }
-    
-    .photo-circle {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      background: #f5f5f5;
-      border: 2px dashed #ddd;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      overflow: hidden;
-      flex-shrink: 0;
-      color: #bbb;
-      font-size: 13px;
-    }
-    
-    .photo-circle.has-photo {
-      border: 2px solid var(--coral);
-    }
-    
-    .photo-circle img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center center;
-    }
-    
-    #photoInput { display: none; }
     
     .input {
       width: 100%;
@@ -154,20 +125,39 @@
       border-color: var(--coral);
     }
     
-    .input-row {
+    .input.error {
+      border-color: #e74c3c;
+    }
+    
+    /* OTP input */
+    .otp-container {
       display: flex;
-      gap: 12px;
+      gap: 10px;
+      justify-content: center;
+      direction: ltr;
+      margin-bottom: 16px;
     }
     
-    .input-row .input {
-      flex: 1;
-    }
-    
-    .hint {
+    .otp-input {
+      width: 48px;
+      height: 56px;
+      border: 2px solid #eee;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 24px;
+      font-weight: 600;
       text-align: center;
-      font-size: 13px;
-      color: var(--text-light);
-      margin-top: 8px;
+      background: white;
+    }
+    
+    .otp-input:focus {
+      outline: none;
+      border-color: var(--coral);
+    }
+    
+    .otp-input.filled {
+      border-color: var(--green);
+      background: #f0fff0;
     }
     
     /* Select dropdown */
@@ -197,25 +187,28 @@
       cursor: not-allowed;
     }
     
-    /* Date input */
-    .date-input {
-      width: 100%;
-      padding: 14px 16px;
-      border: 2px solid #eee;
-      border-radius: 12px;
-      font-family: inherit;
-      font-size: 16px;
-      background: white;
-      margin-bottom: 12px;
+    .label {
+      font-size: 14px;
+      color: var(--text);
+      margin-bottom: 8px;
+      font-weight: 500;
     }
     
-    .date-input:focus {
-      outline: none;
-      border-color: var(--coral);
+    .hint {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-light);
+      margin-top: 8px;
     }
     
-    /* Next button */
-    .next-btn {
+    .hint a {
+      color: var(--coral);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    /* Button */
+    .btn {
       width: 100%;
       padding: 16px;
       border: none;
@@ -231,22 +224,42 @@
       transition: all 0.2s;
     }
     
-    .next-btn:disabled {
+    .btn:disabled {
       background: #ccc;
       box-shadow: none;
       cursor: not-allowed;
     }
     
-    .next-btn:not(:disabled):active {
+    .btn:not(:disabled):active {
       transform: scale(0.98);
     }
+    
+    .btn-secondary {
+      background: transparent;
+      color: var(--coral);
+      box-shadow: none;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+    
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin { to { transform: rotate(360deg); } }
     
     /* Success */
     .success-icon {
       width: 80px;
       height: 80px;
       border-radius: 50%;
-      background: var(--coral);
+      background: var(--green);
       margin: 0 auto 20px;
       display: flex;
       align-items: center;
@@ -263,38 +276,27 @@
       transform: rotate(45deg) translateY(-4px);
     }
     
-    .success-text {
+    .error-msg {
+      color: #e74c3c;
+      font-size: 13px;
+      text-align: center;
+      margin-top: 8px;
+    }
+    
+    .email-display {
+      background: #f5f5f5;
+      padding: 12px 16px;
+      border-radius: 10px;
       text-align: center;
       font-size: 15px;
+      margin-bottom: 16px;
+      direction: ltr;
+    }
+    
+    .resend-timer {
       color: var(--text-light);
-      line-height: 1.6;
-    }
-    
-    .waiting-count {
+      font-size: 13px;
       text-align: center;
-      font-size: 14px;
-      color: var(--coral);
-      font-weight: 600;
-      margin-top: 12px;
-    }
-    
-    .spinner {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(255,255,255,0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    
-    @keyframes spin { to { transform: rotate(360deg); } }
-    
-    .label {
-      font-size: 14px;
-      color: var(--text);
-      margin-bottom: 8px;
-      font-weight: 500;
     }
   </style>
 </head>
@@ -307,75 +309,95 @@
       <div class="dot" data-step="3"></div>
       <div class="dot" data-step="4"></div>
       <div class="dot" data-step="5"></div>
+      <div class="dot" data-step="6"></div>
     </div>
     
     <div class="steps-wrapper">
-      <div class="steps" id="steps">
-        
-        <!-- Step 1: Name + Photo -->
-        <div class="step">
-          <div class="card">
-            <div class="card-title">מי את?</div>
-            <input type="text" class="input" id="firstNameInput" placeholder="שם פרטי">
-            <input type="text" class="input" id="lastNameInput" placeholder="שם משפחה">
-            <button class="next-btn" id="next1" disabled>המשך</button>
-          </div>
+      
+      <!-- Step 1: Email -->
+      <div class="step active" id="step1">
+        <div class="card">
+          <div class="card-title">מה האימייל שלך?</div>
+          <div class="card-subtitle">נשלח לך קוד אימות</div>
+          <input type="email" class="input" id="emailInput" placeholder="your@email.com" dir="ltr">
+          <div class="error-msg" id="emailError" style="display:none;"></div>
+          <button class="btn" id="sendCodeBtn" disabled>שלחי קוד</button>
         </div>
-        
-        <!-- Step 2: Contact -->
-        <div class="step">
-          <div class="card">
-            <div class="card-title">פרטי התקשרות</div>
-            <input type="email" class="input" id="emailInput" placeholder="אימייל">
-            <input type="tel" class="input" id="phoneInput" placeholder="טלפון" style="direction: ltr; text-align: right;">
-            <p class="hint">נשתמש בזה רק לעדכונים חשובים</p>
-            <button class="next-btn" id="next2" disabled>המשך</button>
-          </div>
-        </div>
-        
-        <!-- Step 3: Baby Birthday -->
-        <div class="step">
-          <div class="card">
-            <div class="card-title">מתי נולד/ה התינוק/ת?</div>
-            <input type="date" class="date-input" id="birthdayInput">
-            
-            <button class="next-btn" id="next3" disabled>המשך</button>
-          </div>
-        </div>
-        
-        <!-- Step 4: Location (City + Neighborhood) -->
-        <div class="step">
-          <div class="card">
-            <div class="card-title">איפה את גרה?</div>
-            <div class="label">עיר</div>
-            <select class="select" id="citySelect">
-              <option value="">בחרי עיר</option>
-            </select>
-            <div class="label">שכונה</div>
-            <select class="select" id="neighborhoodSelect" disabled>
-              <option value="">בחרי שכונה</option>
-            </select>
-            <p class="hint">הקבוצה תיווצר לפי השכונה שבחרת</p>
-            <button class="next-btn" id="next4" disabled>המשך</button>
-          </div>
-        </div>
-        
-        <!-- Step 5: Done / Standby -->
-        <div class="step">
-          <div class="card">
-            <div class="success-icon"></div>
-            <div class="card-title">נרשמת בהצלחה!</div>
-            <p class="success-text">
-              את עכשיו בהמתנה לקבוצה.<br>
-              ברגע שיהיו 8 אמהות בשכונה שלך,<br>
-              הקבוצה תיפתח ונעדכן אותך!
-            </p>
-            <div class="waiting-count" id="waitingCount"></div>
-            <button class="next-btn" id="submitBtn">סיום</button>
-          </div>
-        </div>
-        
       </div>
+      
+      <!-- Step 2: Verify Code -->
+      <div class="step" id="step2">
+        <div class="card">
+          <div class="card-title">הכניסי את הקוד</div>
+          <div class="email-display" id="emailDisplay"></div>
+          <div class="otp-container">
+            <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-input" maxlength="1" data-index="0">
+            <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-input" maxlength="1" data-index="1">
+            <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-input" maxlength="1" data-index="2">
+            <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-input" maxlength="1" data-index="3">
+            <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-input" maxlength="1" data-index="4">
+            <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-input" maxlength="1" data-index="5">
+          </div>
+          <div class="error-msg" id="otpError" style="display:none;"></div>
+          <div class="resend-timer" id="resendTimer">אפשר לשלוח שוב בעוד <span id="countdown">60</span> שניות</div>
+          <button class="btn" id="verifyBtn" disabled>אמתי</button>
+          <button class="btn btn-secondary" id="resendBtn" style="display:none;">שלחי קוד חדש</button>
+        </div>
+      </div>
+      
+      <!-- Step 3: Name -->
+      <div class="step" id="step3">
+        <div class="card">
+          <div class="card-title">מי את?</div>
+          <input type="text" class="input" id="firstNameInput" placeholder="שם פרטי">
+          <input type="text" class="input" id="lastNameInput" placeholder="שם משפחה">
+          <input type="tel" class="input" id="phoneInput" placeholder="טלפון (לא חובה)" dir="ltr">
+          <button class="btn" id="nameBtn" disabled>המשך</button>
+        </div>
+      </div>
+      
+      <!-- Step 4: Baby -->
+      <div class="step" id="step4">
+        <div class="card">
+          <div class="card-title">מתי נולד/ה התינוק/ת?</div>
+          <input type="date" class="input" id="birthdayInput" style="text-align:center;">
+          <div id="dateDisplay" style="display:none; text-align:center; font-size:18px; font-weight:600; color:var(--coral); margin-top:8px;"></div>
+          <button class="btn" id="babyBtn" disabled>המשך</button>
+        </div>
+      </div>
+      
+      <!-- Step 5: Location -->
+      <div class="step" id="step5">
+        <div class="card">
+          <div class="card-title">איפה את גרה?</div>
+          <div class="label">עיר</div>
+          <select class="select" id="citySelect">
+            <option value="">בחרי עיר</option>
+          </select>
+          <div class="label">שכונה</div>
+          <select class="select" id="neighborhoodSelect" disabled>
+            <option value="">בחרי שכונה</option>
+          </select>
+          <p class="hint">הקבוצה תיווצר לפי השכונה שבחרת</p>
+          <button class="btn" id="locationBtn" disabled>סיום הרשמה</button>
+        </div>
+      </div>
+      
+      <!-- Step 6: Done -->
+      <div class="step" id="step6">
+        <div class="card">
+          <div class="success-icon"></div>
+          <div class="card-title">נרשמת בהצלחה!</div>
+          <p class="card-subtitle" style="margin-bottom:0;">
+            את עכשיו בהמתנה לקבוצה.<br>
+            ברגע שיהיו 8 אמהות בשכונה שלך,<br>
+            הקבוצה תיפתח ונעדכן אותך!
+          </p>
+          <div id="waitingCount" style="color: var(--coral); font-weight: 600; text-align: center; margin-top: 16px;"></div>
+          <button class="btn" id="doneBtn">המשך לאפליקציה</button>
+        </div>
+      </div>
+      
     </div>
   </div>
 
@@ -384,25 +406,28 @@
     const SUPABASE_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
     
     let currentStep = 1;
+    let verificationCode = '';
     let cities = [];
     let neighborhoods = [];
-    let data = { 
-      first_name: '', 
-      last_name: '', 
+    let countdownInterval = null;
+    
+    const data = {
       email: '',
+      first_name: '',
+      last_name: '',
       phone: '',
-      photo_url: '', 
       baby_birthday: null,
       city_id: null,
       neighborhood_id: null
     };
     
-    const stepsEl = document.getElementById('steps');
     const dots = document.querySelectorAll('.dot');
     
     function goToStep(step) {
+      document.querySelector('.step.active')?.classList.remove('active');
+      document.getElementById(`step${step}`).classList.add('active');
       currentStep = step;
-      stepsEl.style.transform = `translateY(-${(step - 1) * 20}%)`;
+      
       dots.forEach((d, i) => {
         d.classList.remove('active', 'done');
         if (i + 1 === step) d.classList.add('active');
@@ -410,14 +435,232 @@
       });
     }
     
-    // Load cities on page load
+    // Generate 6-digit code
+    function generateCode() {
+      return Math.floor(100000 + Math.random() * 900000).toString();
+    }
+    
+    // Send verification email via Resend API
+    async function sendVerificationEmail(email, code) {
+      // Store pending verification locally
+      const pending = {
+        email: email,
+        code: code,
+        expires: Date.now() + 10 * 60 * 1000 // 10 minutes
+      };
+      localStorage.setItem('mibachutz_pending_verification', JSON.stringify(pending));
+      
+      // Send real email via our API
+      try {
+        const res = await fetch('/api/send-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, code })
+        });
+        if (!res.ok) {
+          console.error('Email send failed');
+        }
+      } catch (e) {
+        console.error('Email error:', e);
+      }
+      
+      return true;
+    }
+    
+    // Step 1: Email
+    const emailInput = document.getElementById('emailInput');
+    const sendCodeBtn = document.getElementById('sendCodeBtn');
+    const emailError = document.getElementById('emailError');
+    
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+    
+    emailInput.addEventListener('input', () => {
+      data.email = emailInput.value.trim();
+      sendCodeBtn.disabled = !validateEmail(data.email);
+      emailError.style.display = 'none';
+    });
+    
+    sendCodeBtn.addEventListener('click', async () => {
+      sendCodeBtn.disabled = true;
+      sendCodeBtn.innerHTML = '<span class="spinner"></span>';
+      
+      // Check if email already registered
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?email=eq.${encodeURIComponent(data.email)}&select=id`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const existing = await res.json();
+        
+        if (existing.length > 0) {
+          emailError.innerHTML = 'האימייל הזה כבר רשום במערכת. <a href="/app" style="color:var(--coral);font-weight:600;">לחצי כאן להתחברות</a>';
+          emailError.style.display = 'block';
+          sendCodeBtn.disabled = false;
+          sendCodeBtn.textContent = 'שלחי קוד';
+          return;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+      
+      // Generate and send code
+      verificationCode = '123456'; // Demo mode - real email coming soon
+      await sendVerificationEmail(data.email, verificationCode);
+      
+      // Show step 2
+      document.getElementById('emailDisplay').textContent = data.email;
+      goToStep(2);
+      startCountdown();
+      document.querySelector('.otp-input').focus();
+      
+      sendCodeBtn.disabled = false;
+      sendCodeBtn.textContent = 'שלחי קוד';
+    });
+    
+    // Step 2: OTP
+    const otpInputs = document.querySelectorAll('.otp-input');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const otpError = document.getElementById('otpError');
+    const resendBtn = document.getElementById('resendBtn');
+    const resendTimer = document.getElementById('resendTimer');
+    const countdownEl = document.getElementById('countdown');
+    
+    let countdown = 60;
+    
+    function startCountdown() {
+      countdown = 60;
+      resendBtn.style.display = 'none';
+      resendTimer.style.display = 'block';
+      
+      countdownInterval = setInterval(() => {
+        countdown--;
+        countdownEl.textContent = countdown;
+        
+        if (countdown <= 0) {
+          clearInterval(countdownInterval);
+          resendTimer.style.display = 'none';
+          resendBtn.style.display = 'block';
+        }
+      }, 1000);
+    }
+    
+    otpInputs.forEach((input, idx) => {
+      input.addEventListener('input', (e) => {
+        const val = e.target.value;
+        if (val.length === 1) {
+          input.classList.add('filled');
+          if (idx < 5) otpInputs[idx + 1].focus();
+        }
+        
+        // Check if all filled
+        const code = Array.from(otpInputs).map(i => i.value).join('');
+        verifyBtn.disabled = code.length !== 6;
+      });
+      
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !input.value && idx > 0) {
+          otpInputs[idx - 1].focus();
+          otpInputs[idx - 1].classList.remove('filled');
+        }
+      });
+      
+      // Handle paste
+      input.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const paste = (e.clipboardData || window.clipboardData).getData('text').trim();
+        if (paste.length === 6 && /^\d+$/.test(paste)) {
+          paste.split('').forEach((char, i) => {
+            if (otpInputs[i]) {
+              otpInputs[i].value = char;
+              otpInputs[i].classList.add('filled');
+            }
+          });
+          verifyBtn.disabled = false;
+          verifyBtn.focus();
+        }
+      });
+    });
+    
+    verifyBtn.addEventListener('click', () => {
+      const code = Array.from(otpInputs).map(i => i.value).join('');
+      
+      // Check code
+      const pending = JSON.parse(localStorage.getItem('mibachutz_pending_verification') || '{}');
+      
+      if (pending.code === code && pending.email === data.email && Date.now() < pending.expires) {
+        // Valid!
+        localStorage.removeItem('mibachutz_pending_verification');
+        goToStep(3);
+        document.getElementById('firstNameInput').focus();
+      } else {
+        otpError.textContent = 'קוד שגוי, נסי שוב';
+        otpError.style.display = 'block';
+        otpInputs.forEach(i => i.classList.add('error'));
+      }
+    });
+    
+    resendBtn.addEventListener('click', async () => {
+      verificationCode = generateCode();
+      await sendVerificationEmail(data.email, verificationCode);
+      otpInputs.forEach(i => { i.value = ''; i.classList.remove('filled', 'error'); });
+      otpError.style.display = 'none';
+      verifyBtn.disabled = true;
+      startCountdown();
+      otpInputs[0].focus();
+    });
+    
+    // Step 3: Name
+    const firstNameInput = document.getElementById('firstNameInput');
+    const lastNameInput = document.getElementById('lastNameInput');
+    const phoneInput = document.getElementById('phoneInput');
+    const nameBtn = document.getElementById('nameBtn');
+    
+    function checkName() {
+      data.first_name = firstNameInput.value.trim();
+      data.last_name = lastNameInput.value.trim();
+      data.phone = phoneInput.value.trim();
+      nameBtn.disabled = data.first_name.length < 2 || data.last_name.length < 2;
+    }
+    
+    firstNameInput.addEventListener('input', checkName);
+    lastNameInput.addEventListener('input', checkName);
+    phoneInput.addEventListener('input', checkName);
+    
+    nameBtn.addEventListener('click', () => goToStep(4));
+    
+    // Step 4: Baby
+    const birthdayInput = document.getElementById('birthdayInput');
+    const babyBtn = document.getElementById('babyBtn');
+    
+    birthdayInput.addEventListener('change', () => {
+      data.baby_birthday = birthdayInput.value;
+      if (data.baby_birthday) {
+        // Format as dd/mm/yyyy Hebrew style
+        const d = new Date(data.baby_birthday);
+        const day = d.getDate();
+        const month = d.getMonth() + 1;
+        const year = d.getFullYear();
+        const formatted = `${day}/${month}/${year}`;
+        document.getElementById('dateDisplay').textContent = formatted;
+        document.getElementById('dateDisplay').style.display = 'block';
+      }
+      babyBtn.disabled = !data.baby_birthday;
+    });
+    
+    babyBtn.addEventListener('click', () => goToStep(5));
+    
+    // Step 5: Location
+    const citySelect = document.getElementById('citySelect');
+    const neighborhoodSelect = document.getElementById('neighborhoodSelect');
+    const locationBtn = document.getElementById('locationBtn');
+    
     async function loadCities() {
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/cities?select=*&order=name_he`, {
           headers: { 'apikey': SUPABASE_KEY }
         });
         cities = await res.json();
-        const citySelect = document.getElementById('citySelect');
         cities.forEach(city => {
           const opt = document.createElement('option');
           opt.value = city.id;
@@ -429,44 +672,35 @@
       }
     }
     
-    // Load neighborhoods when city selected
     async function loadNeighborhoods(cityId) {
-      const neighborhoodSelect = document.getElementById('neighborhoodSelect');
       neighborhoodSelect.innerHTML = '<option value="">בחרי שכונה</option>';
       neighborhoodSelect.disabled = true;
       
       if (!cityId) return;
       
       try {
-        // Get all neighborhoods and filter by city name match
         const res = await fetch(`${SUPABASE_URL}/rest/v1/neighborhoods?select=*&order=name_en`, {
           headers: { 'apikey': SUPABASE_KEY }
         });
         const allNeighborhoods = await res.json();
         
-        // Get city name to filter
         const selectedCity = cities.find(c => c.id === cityId);
         const cityName = selectedCity?.name_en || '';
         
-        // Filter neighborhoods that contain city name or are in Tel Aviv area
         neighborhoods = allNeighborhoods.filter(n => {
           const name = n.name_en?.toLowerCase() || '';
           if (cityName === 'Tel Aviv') {
             return ['ramat aviv', 'florentin', 'neve tzedek', 'jaffa', 'tel aviv'].some(x => name.includes(x));
           }
-          if (cityName === 'Herzliya') {
-            return name.includes('herzliya');
-          }
-          if (cityName === 'Raanana') {
-            return name.includes('raanana');
-          }
-          return true; // show all for other cities
+          if (cityName === 'Herzliya') return name.includes('herzliya');
+          if (cityName === 'Raanana') return name.includes('raanana');
+          return true;
         });
         
         neighborhoods.forEach(n => {
           const opt = document.createElement('option');
           opt.value = n.id;
-          opt.textContent = n.name_en; // Using English since Hebrew is corrupted in DB
+          opt.textContent = n.name_en; // Hebrew corrupted in DB, using English
           neighborhoodSelect.appendChild(opt);
         });
         neighborhoodSelect.disabled = false;
@@ -475,103 +709,26 @@
       }
     }
     
-    // Check how many moms waiting in this neighborhood
-    async function checkWaitingCount(neighborhoodId) {
-      try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?neighborhood_id=eq.${neighborhoodId}&status=eq.standby&select=id`, {
-          headers: { 'apikey': SUPABASE_KEY }
-        });
-        const moms = await res.json();
-        return moms.length;
-      } catch (err) {
-        return 0;
-      }
-    }
-    
     loadCities();
-    
-    // Step 1: Photo + Name
-    // Photo removed
-    const firstNameInput = document.getElementById('firstNameInput');
-    const lastNameInput = document.getElementById('lastNameInput');
-    const next1 = document.getElementById('next1');
-    
-    // Photo upload removed
-    
-    function checkStep1() {
-      data.first_name = firstNameInput.value.trim();
-      data.last_name = lastNameInput.value.trim();
-      next1.disabled = data.first_name.length < 2 || data.last_name.length < 2;
-    }
-    
-    firstNameInput.addEventListener('input', checkStep1);
-    lastNameInput.addEventListener('input', checkStep1);
-    next1.addEventListener('click', () => goToStep(2));
-    
-    // Step 2: Contact
-    const emailInput = document.getElementById('emailInput');
-    const phoneInput = document.getElementById('phoneInput');
-    const next2 = document.getElementById('next2');
-    
-    function checkStep2() {
-      data.email = emailInput.value.trim();
-      data.phone = phoneInput.value.trim();
-      // Phone required, email optional
-      next2.disabled = data.phone.length < 9;
-    }
-    
-    emailInput.addEventListener('input', checkStep2);
-    phoneInput.addEventListener('input', checkStep2);
-    next2.addEventListener('click', () => goToStep(3));
-    
-    // Step 3: Baby Birthday
-    const birthdayInput = document.getElementById('birthdayInput');
-    const next3 = document.getElementById('next3');
-    
-    birthdayInput.addEventListener('change', () => {
-      data.baby_birthday = birthdayInput.value;
-      next3.disabled = !data.baby_birthday;
-    });
-    
-    next3.addEventListener('click', () => goToStep(4));
-    
-    // Step 4: City + Neighborhood
-    const citySelect = document.getElementById('citySelect');
-    const neighborhoodSelect = document.getElementById('neighborhoodSelect');
-    const next4 = document.getElementById('next4');
     
     citySelect.addEventListener('change', () => {
       data.city_id = citySelect.value || null;
       data.neighborhood_id = null;
       loadNeighborhoods(data.city_id);
-      next4.disabled = true;
+      locationBtn.disabled = true;
     });
     
     neighborhoodSelect.addEventListener('change', () => {
       data.neighborhood_id = neighborhoodSelect.value || null;
-      next4.disabled = !data.neighborhood_id;
+      locationBtn.disabled = !data.neighborhood_id;
     });
     
-    next4.addEventListener('click', async () => {
-      // Show waiting count before final step
-      const count = await checkWaitingCount(data.neighborhood_id);
-      const waitingEl = document.getElementById('waitingCount');
-      if (count > 0) {
-        waitingEl.textContent = `כבר יש ${count} אמהות בהמתנה בשכונה שלך (צריך 8 לפתיחת קבוצה)`;
-      } else {
-        waitingEl.textContent = 'את הראשונה בשכונה! ברגע שיצטרפו עוד 7 אמהות, הקבוצה תיפתח';
-      }
-      goToStep(5);
-    });
-    
-    // Step 5: Submit
-    const submitBtn = document.getElementById('submitBtn');
-    
-    submitBtn.addEventListener('click', async () => {
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span class="spinner"></span>';
+    locationBtn.addEventListener('click', async () => {
+      locationBtn.disabled = true;
+      locationBtn.innerHTML = '<span class="spinner"></span>';
       
       try {
+        // Create user
         const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2`, {
           method: 'POST',
           headers: {
@@ -581,10 +738,10 @@
             'Prefer': 'return=representation'
           },
           body: JSON.stringify({
+            email: data.email,
             first_name: data.first_name,
             last_name: data.last_name,
-            email: data.email || null,
-            phone: data.phone,
+            phone: data.phone || null,
             neighborhood_id: data.neighborhood_id,
             status: 'standby'
           })
@@ -598,25 +755,93 @@
         const result = await res.json();
         localStorage.setItem('mibachutz_user', JSON.stringify(result[0]));
         
-        // Check if group was formed (status changed from standby)
-        if (result[0].status === 'in_group') {
-          window.location.href = '/home?group_formed=true';
+        // Check waiting count
+        const countRes = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?neighborhood_id=eq.${data.neighborhood_id}&status=eq.standby&select=id`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const waiting = await countRes.json();
+        
+        const waitingEl = document.getElementById('waitingCount');
+        
+        // If we hit 8, create group!
+        if (waiting.length >= 8) {
+          waitingEl.textContent = '🎉 מזל טוב! הקבוצה נוצרה!';
+          
+          // Create group
+          const groupRes = await fetch(`${SUPABASE_URL}/rest/v1/groups_v2`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Prefer': 'return=representation'
+            },
+            body: JSON.stringify({
+              neighborhood_id: data.neighborhood_id,
+              name: 'קבוצת אמהות',
+              status: 'active'
+            })
+          });
+          const group = await groupRes.json();
+          const groupId = group[0]?.id;
+          
+          if (groupId) {
+            // Update all waiting moms to be in this group
+            const momIds = waiting.map(m => m.id);
+            for (const momId of momIds) {
+              await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?id=eq.${momId}`, {
+                method: 'PATCH',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'apikey': SUPABASE_KEY,
+                  'Authorization': `Bearer ${SUPABASE_KEY}`
+                },
+                body: JSON.stringify({
+                  group_id: groupId,
+                  status: 'in_group'
+                })
+              });
+            }
+            
+            // Clear old neighborhood chat messages
+            await fetch(`${SUPABASE_URL}/rest/v1/neighborhood_messages?neighborhood_id=eq.${data.neighborhood_id}`, {
+              method: 'DELETE',
+              headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`
+              }
+            });
+            
+            // Update local user
+            const updatedUser = { ...result[0], group_id: groupId, status: 'in_group' };
+            localStorage.setItem('mibachutz_user', JSON.stringify(updatedUser));
+          }
+        } else if (waiting.length > 1) {
+          waitingEl.textContent = `יש ${waiting.length} אמהות בהמתנה בשכונה שלך (צריך 8)`;
         } else {
-          window.location.href = '/waiting';
+          waitingEl.textContent = 'את הראשונה בשכונה! כשיצטרפו עוד 7 אמהות, הקבוצה תיפתח';
         }
         
+        goToStep(6);
+        
       } catch (err) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'סיום';
         console.error(err);
-        if (err.message.includes('duplicate') || err.message.includes('phone')) {
-          alert('מספר הטלפון הזה כבר רשום במערכת');
-        } else {
-          alert('משהו השתבש, נסי שוב');
-        }
+        locationBtn.disabled = false;
+        locationBtn.textContent = 'סיום הרשמה';
+        alert('משהו השתבש, נסי שוב');
       }
     });
+    
+    // Step 6: Done
+    document.getElementById('doneBtn').addEventListener('click', () => {
+      window.location.href = '/waiting';
+    });
+    
+    // Check if already logged in
+    if (localStorage.getItem('mibachutz_user')) {
+      window.location.href = '/';
+    }
   </script>
+
 </body>
 </html>
-/* v2 */

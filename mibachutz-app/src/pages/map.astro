@@ -192,7 +192,7 @@ export const prerender = false;
   <script>
     const SUPABASE_URL = 'https://fkikzryelozciailbryh.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
-    const MAPBOX_TOKEN = 'pk.eyJ1IjoiY295b2xyZWFsZXN0YXRlIiwiYSI6ImNtcTM0OHQyZTFhcHMycnF3bHd1eXNwN2QifQ.-Yxz19rYZnAumXNyF2-pJw';
+    const MAPBOX_TOKEN = import.meta.env.PUBLIC_MAPBOX_TOKEN || '';
     
     let supabase = null;
     let map = null;

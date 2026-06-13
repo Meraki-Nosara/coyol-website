@@ -1,8 +1,11 @@
 {
-  "pending_notification": [
+  "last_notified": "2026-06-13T12:54:00Z",
+  "notified_orders": [
     "65026cd4-eeb0-4c97-95ba-677056efd390",
-    "86fa411e-98d3-4196-a8d2-b95aa83ab8ae"
+    "86fa411e-98d3-4196-a8d2-b95aa83ab8ae",
+    "a75827d2-d287-4772-a7cd-32520d6ff2f1",
+    "cd085747-c9fc-4291-a895-7a5ae3e8a895",
+    "cf978479-6ef8-45ef-9ccd-bd86aba9d7c7"
   ],
-  "notify_after": "2026-06-10T08:00:00-06:00",
-  "note": "2 orders from Jorge (Casa Nispero) - wait for Costa Rica morning"
+  "note": "All 5 Casa Nispero orders from Jorge now notified to Anlly"
 }

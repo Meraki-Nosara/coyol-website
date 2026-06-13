@@ -519,7 +519,7 @@ export const prerender = false;
       // Live updates for messages
       supabase
         .channel('admin-messages')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'group_messages' }, payload => {
           addMessageToList(payload.new);
         })
         .subscribe();
@@ -579,7 +579,7 @@ export const prerender = false;
       }
       
       tbody.innerHTML = moms.map(mom => `
-        <tr>
+        <tr style="${mom.is_available ? 'background: rgba(76, 175, 80, 0.2);' : ''}">
           <td><strong>${mom.first_name} ${mom.last_name || ''}</strong></td>
           <td dir="ltr">${mom.phone || '-'}</td>
           <td>${mom.neighborhood_id ? 'Raanana' : '-'}</td>
@@ -673,8 +673,8 @@ export const prerender = false;
     
     async function loadMessages() {
       const { data, error } = await supabase
-        .from('messages')
-        .select('*, moms(name), groups(name)')
+        .from('group_messages')
+        .select('*')
         .order('created_at', { ascending: false })
         .limit(50);
       
@@ -698,10 +698,10 @@ export const prerender = false;
       container.innerHTML = messages.map(msg => `
         <div class="message-item">
           <div class="message-header">
-            <span class="message-sender">${fixHebrew(msg.moms?.name) || 'לא ידוע'}</span>
-            <span>${fixHebrew(msg.groups?.name) || ''} | ${new Date(msg.created_at).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}</span>
+            <span class="message-sender">${msg.sender_name || 'לא ידוע'}</span>
+            <span>${new Date(msg.created_at).toLocaleString('he-IL', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</span>
           </div>
-          <div class="message-text">${msg.text || msg.content || ''}</div>
+          <div class="message-text">${msg.text || ''}</div>
         </div>
       `).join('');
     }

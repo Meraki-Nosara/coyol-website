@@ -1,0 +1,420 @@
+---
+// Mibachutz - App Login (for returning moms)
+// Simple email login → verify code → enter app
+---
+
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#FF6B6B">
+  <title>מי בחוץ</title>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --coral: #FF6B6B;
+      --coral-dark: #E85555;
+      --green: #4CAF50;
+      --text: #4A4A4A;
+      --text-light: #888;
+    }
+    
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: url('/bg-pattern.jpg') center/cover fixed;
+      min-height: 100vh;
+      color: var(--text);
+    }
+    
+    .app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    
+    .logo {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    
+    .logo img {
+      height: 60px;
+    }
+    
+    .card {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 340px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    }
+    
+    .card-title {
+      font-size: 22px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    
+    .card-subtitle {
+      font-size: 14px;
+      text-align: center;
+      color: var(--text-light);
+      margin-bottom: 24px;
+    }
+    
+    .input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #eee;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+    
+    .input:focus {
+      outline: none;
+      border-color: var(--coral);
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      background: var(--coral);
+      color: white;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 12px;
+      box-shadow: 0 4px 16px rgba(255, 107, 107, 0.3);
+    }
+    
+    .btn:disabled {
+      background: #ccc;
+      box-shadow: none;
+    }
+    
+    .btn:not(:disabled):active {
+      transform: scale(0.98);
+    }
+    
+    /* OTP */
+    .otp-container {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      direction: ltr;
+      margin-bottom: 16px;
+    }
+    
+    .otp-input {
+      width: 44px;
+      height: 52px;
+      border: 2px solid #eee;
+      border-radius: 10px;
+      font-size: 22px;
+      font-weight: 600;
+      text-align: center;
+    }
+    
+    .otp-input:focus {
+      outline: none;
+      border-color: var(--coral);
+    }
+    
+    .otp-input.filled {
+      border-color: var(--green);
+      background: #f0fff0;
+    }
+    
+    .email-display {
+      background: #f5f5f5;
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 14px;
+      margin-bottom: 16px;
+      direction: ltr;
+    }
+    
+    .error-msg {
+      color: #e74c3c;
+      font-size: 13px;
+      text-align: center;
+      margin-top: 8px;
+    }
+    
+    .link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: var(--text-light);
+    }
+    
+    .link a {
+      color: var(--coral);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    .step { display: none; }
+    .step.active { display: block; }
+    
+    .resend {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-light);
+      margin-top: 12px;
+    }
+    
+    .resend a {
+      color: var(--coral);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="logo">
+      <img src="/logo-text.png" alt="מי בחוץ">
+    </div>
+    
+    <!-- Step 1: Email -->
+    <div class="card step active" id="step1">
+      <div class="card-title">ברוכה הבאה!</div>
+      <div class="card-subtitle">הכניסי את האימייל שנרשמת איתו</div>
+      <input type="email" class="input" id="emailInput" placeholder="your@email.com" dir="ltr">
+      <div class="error-msg" id="emailError" style="display:none;"></div>
+      <button class="btn" id="sendBtn" disabled>שלחי קוד</button>
+      <div class="link">עוד לא נרשמת? <a href="/register">הרשמה</a></div>
+    </div>
+    
+    <!-- Step 2: Code -->
+    <div class="card step" id="step2">
+      <div class="card-title">הכניסי את הקוד</div>
+      <div class="email-display" id="emailDisplay"></div>
+      <div class="otp-container">
+        <input type="text" class="otp-input" maxlength="1">
+        <input type="text" class="otp-input" maxlength="1">
+        <input type="text" class="otp-input" maxlength="1">
+        <input type="text" class="otp-input" maxlength="1">
+        <input type="text" class="otp-input" maxlength="1">
+        <input type="text" class="otp-input" maxlength="1">
+      </div>
+      <div class="error-msg" id="codeError" style="display:none;"></div>
+      <button class="btn" id="verifyBtn" disabled>כניסה</button>
+      <div class="resend" id="resendArea">
+        <span id="countdown">שלחי שוב בעוד 60 שניות</span>
+        <a href="#" id="resendLink" style="display:none;">שלחי קוד חדש</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://fkikzryelozciailbryh.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
+    
+    let userEmail = '';
+    let verificationCode = '';
+    let userData = null;
+    let countdownTimer = null;
+    
+    // Check if already logged in
+    const existingUser = localStorage.getItem('mibachutz_user');
+    if (existingUser) {
+      const user = JSON.parse(existingUser);
+      redirectBasedOnStatus(user);
+    }
+    
+    function redirectBasedOnStatus(user) {
+      if (user.status === 'standby') {
+        window.location.href = '/waiting';
+      } else {
+        window.location.href = '/home';
+      }
+    }
+    
+    function showStep(n) {
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      document.getElementById(`step${n}`).classList.add('active');
+    }
+    
+    function generateCode() {
+      return Math.floor(100000 + Math.random() * 900000).toString();
+    }
+    
+    function startCountdown() {
+      let seconds = 60;
+      document.getElementById('countdown').style.display = 'inline';
+      document.getElementById('resendLink').style.display = 'none';
+      
+      countdownTimer = setInterval(() => {
+        seconds--;
+        document.getElementById('countdown').textContent = `שלחי שוב בעוד ${seconds} שניות`;
+        if (seconds <= 0) {
+          clearInterval(countdownTimer);
+          document.getElementById('countdown').style.display = 'none';
+          document.getElementById('resendLink').style.display = 'inline';
+        }
+      }, 1000);
+    }
+    
+    // Step 1: Email
+    const emailInput = document.getElementById('emailInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const emailError = document.getElementById('emailError');
+    
+    emailInput.addEventListener('input', () => {
+      const email = emailInput.value.trim();
+      sendBtn.disabled = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      emailError.style.display = 'none';
+    });
+    
+    sendBtn.addEventListener('click', async () => {
+      userEmail = emailInput.value.trim();
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = '<span class="spinner"></span>';
+      emailError.style.display = 'none';
+      
+      try {
+        // Check if user exists
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?email=eq.${encodeURIComponent(userEmail)}&select=*`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const users = await res.json();
+        
+        if (users.length === 0) {
+          emailError.textContent = 'האימייל לא נמצא. צריכה להרשם קודם';
+          emailError.style.display = 'block';
+          sendBtn.disabled = false;
+          sendBtn.textContent = 'שלחי קוד';
+          return;
+        }
+        
+        userData = users[0];
+        
+        // Generate and store code
+        verificationCode = generateCode();
+        localStorage.setItem('mibachutz_login_code', JSON.stringify({
+          email: userEmail,
+          code: verificationCode,
+          expires: Date.now() + 10 * 60 * 1000
+        }));
+        
+        // In production, send email here
+        console.log('Login code:', verificationCode);
+        
+        // Show step 2
+        document.getElementById('emailDisplay').textContent = userEmail;
+        showStep(2);
+        startCountdown();
+        document.querySelector('.otp-input').focus();
+        
+      } catch (err) {
+        console.error(err);
+        emailError.textContent = 'משהו השתבש, נסי שוב';
+        emailError.style.display = 'block';
+      }
+      
+      sendBtn.disabled = false;
+      sendBtn.textContent = 'שלחי קוד';
+    });
+    
+    // Step 2: OTP
+    const otpInputs = document.querySelectorAll('.otp-input');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const codeError = document.getElementById('codeError');
+    
+    otpInputs.forEach((input, idx) => {
+      input.addEventListener('input', (e) => {
+        if (e.target.value.length === 1) {
+          input.classList.add('filled');
+          if (idx < 5) otpInputs[idx + 1].focus();
+        }
+        const code = Array.from(otpInputs).map(i => i.value).join('');
+        verifyBtn.disabled = code.length !== 6;
+      });
+      
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !input.value && idx > 0) {
+          otpInputs[idx - 1].focus();
+          otpInputs[idx - 1].classList.remove('filled');
+        }
+      });
+      
+      input.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const paste = (e.clipboardData || window.clipboardData).getData('text').trim();
+        if (paste.length === 6 && /^\d+$/.test(paste)) {
+          paste.split('').forEach((char, i) => {
+            if (otpInputs[i]) {
+              otpInputs[i].value = char;
+              otpInputs[i].classList.add('filled');
+            }
+          });
+          verifyBtn.disabled = false;
+        }
+      });
+    });
+    
+    verifyBtn.addEventListener('click', () => {
+      const code = Array.from(otpInputs).map(i => i.value).join('');
+      const stored = JSON.parse(localStorage.getItem('mibachutz_login_code') || '{}');
+      
+      if (stored.code === code && stored.email === userEmail && Date.now() < stored.expires) {
+        // Success! Save user and redirect
+        localStorage.removeItem('mibachutz_login_code');
+        localStorage.setItem('mibachutz_user', JSON.stringify(userData));
+        redirectBasedOnStatus(userData);
+      } else {
+        codeError.textContent = 'קוד שגוי';
+        codeError.style.display = 'block';
+      }
+    });
+    
+    // Resend
+    document.getElementById('resendLink').addEventListener('click', (e) => {
+      e.preventDefault();
+      verificationCode = generateCode();
+      localStorage.setItem('mibachutz_login_code', JSON.stringify({
+        email: userEmail,
+        code: verificationCode,
+        expires: Date.now() + 10 * 60 * 1000
+      }));
+      console.log('New login code:', verificationCode);
+      otpInputs.forEach(i => { i.value = ''; i.classList.remove('filled'); });
+      codeError.style.display = 'none';
+      verifyBtn.disabled = true;
+      startCountdown();
+      otpInputs[0].focus();
+    });
+  </script>
+</body>
+</html>
