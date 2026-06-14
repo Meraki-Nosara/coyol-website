@@ -1,0 +1,229 @@
+---
+// Nosara Go - Registration First
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#3D4F3D">
+  <title>Nosara Go</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --keswick: #3D4F3D;
+      --coniston: #4A5D4A;
+      --limestone: #D4C9B5;
+      --alaska: #F5F3EF;
+      --santorini: #1A1F16;
+      --sand: #C4A67C;
+    }
+    
+    html, body {
+      min-height: 100%;
+      font-family: 'Inter', sans-serif;
+      background: var(--limestone);
+      color: var(--santorini);
+    }
+    
+    .app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    
+    .card {
+      background: var(--alaska);
+      border-radius: 16px;
+      padding: 40px 32px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+    }
+    
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--keswick);
+      text-align: center;
+      letter-spacing: 2px;
+    }
+    
+    .logo span {
+      color: var(--sand);
+    }
+    
+    .tagline {
+      text-align: center;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--coniston);
+      margin-top: 4px;
+      margin-bottom: 32px;
+    }
+    
+    .input-group {
+      margin-bottom: 16px;
+    }
+    
+    .label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--coniston);
+      margin-bottom: 6px;
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid var(--limestone);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 16px;
+      background: white;
+      transition: border-color 0.2s;
+    }
+    
+    .input:focus {
+      outline: none;
+      border-color: var(--keswick);
+    }
+    
+    .input::placeholder {
+      color: #aaa;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--keswick);
+      color: var(--alaska);
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    
+    .btn:hover {
+      background: var(--coniston);
+    }
+    
+    .btn:active {
+      transform: scale(0.98);
+    }
+    
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 24px 0;
+      color: var(--coniston);
+      font-size: 12px;
+    }
+    
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--limestone);
+    }
+    
+    .divider span {
+      padding: 0 12px;
+    }
+    
+    .login-link {
+      text-align: center;
+      font-size: 14px;
+      color: var(--coniston);
+    }
+    
+    .login-link a {
+      color: var(--keswick);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--coniston);
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <div class="card">
+    <img src="/logo-v3.png" alt="Nosara Go" style="height: 90px; margin-bottom: 16px; display: block; margin-left: auto; margin-right: auto;">
+    <div class="tagline">Dejamos la moto en casa</div>
+    
+    <form id="registerForm">
+      <div class="input-group">
+        <label class="label">Name</label>
+        <input type="text" class="input" id="nameInput" placeholder="Your name" required>
+      </div>
+      
+      <div class="input-group">
+        <label class="label">Email</label>
+        <input type="email" class="input" id="emailInput" placeholder="email@example.com" required>
+      </div>
+      
+      <div class="input-group">
+        <label class="label">Phone</label>
+        <input type="tel" class="input" id="phoneInput" placeholder="+506 8888 8888" required>
+      </div>
+      
+      <button type="submit" class="btn">Create Account</button>
+    </form>
+    
+    <div class="divider"><span>or</span></div>
+    
+    <div class="login-link">
+      Already have an account? <a href="/login">Sign in</a>
+    </div>
+  </div>
+  
+  <div class="footer">
+    By signing up you agree to our Terms of Service
+  </div>
+</div>
+
+<script>
+  document.getElementById('registerForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const user = {
+      name: document.getElementById('nameInput').value,
+      email: document.getElementById('emailInput').value,
+      phone: document.getElementById('phoneInput').value,
+      created: new Date().toISOString()
+    };
+    
+    // Store locally for now
+    localStorage.setItem('nosara_go_user', JSON.stringify(user));
+    
+    // Go to home/map
+    window.location.href = '/home';
+  });
+</script>
+
+</body>
+</html>

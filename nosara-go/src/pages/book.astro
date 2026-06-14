@@ -1,0 +1,372 @@
+---
+// Nosara Go - Book a Ride
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Reservar - Nosara Go</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --green: #2E7D32;
+      --green-light: #4CAF50;
+      --green-dark: #1B5E20;
+      --sand: #F5E6D3;
+      --text: #333;
+      --text-light: #666;
+    }
+    
+    html, body {
+      min-height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: var(--sand);
+      color: var(--text);
+    }
+    
+    .app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: white;
+    }
+    
+    .back-btn {
+      width: 36px;
+      height: 36px;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    
+    .header-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    
+    /* Content */
+    .content {
+      flex: 1;
+      padding: 20px;
+    }
+    
+    .section {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-light);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .select-wrapper {
+      position: relative;
+    }
+    
+    .select-wrapper::after {
+      content: "▼";
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      color: var(--text-light);
+      pointer-events: none;
+    }
+    
+    select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #eee;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 16px;
+      background: white;
+      appearance: none;
+      cursor: pointer;
+    }
+    
+    select:focus {
+      outline: none;
+      border-color: var(--green);
+    }
+    
+    /* Time slots */
+    .time-slots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    
+    .time-slot {
+      padding: 12px;
+      border: 2px solid #eee;
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .time-slot.active {
+      border-color: var(--green);
+      background: rgba(46, 125, 50, 0.1);
+    }
+    
+    .time-slot .time {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    
+    .time-slot .seats {
+      font-size: 12px;
+      color: var(--text-light);
+    }
+    
+    /* Passengers */
+    .passenger-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+    
+    .passenger-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid var(--green);
+      background: white;
+      font-size: 24px;
+      color: var(--green);
+      cursor: pointer;
+    }
+    
+    .passenger-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    
+    .passenger-count {
+      font-size: 32px;
+      font-weight: 700;
+      min-width: 60px;
+      text-align: center;
+    }
+    
+    /* Summary */
+    .summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-top: 1px solid #eee;
+      margin-top: 12px;
+    }
+    
+    .summary-label {
+      color: var(--text-light);
+    }
+    
+    .summary-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--green);
+    }
+    
+    /* Bottom button */
+    .bottom-action {
+      padding: 20px;
+      background: white;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 16px 24px;
+      border-radius: 12px;
+      border: none;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+    }
+    
+    .btn:active {
+      transform: scale(0.98);
+    }
+    
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <div class="header">
+    <button class="back-btn" onclick="history.back()">←</button>
+    <div class="header-title">Reservar Viaje</div>
+  </div>
+  
+  <div class="content">
+    <div class="section">
+      <div class="section-title">📍 Ruta</div>
+      <div class="select-wrapper">
+        <select id="routeSelect">
+          <option value="playas">🏖️ Línea Playas</option>
+          <option value="centro">🏘️ Línea Centro</option>
+          <option value="conexion">🔄 Conexión</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">🚏 Parada de Origen</div>
+      <div class="select-wrapper">
+        <select id="fromSelect">
+          <option value="guiones-sur">Guiones Sur</option>
+          <option value="guiones-centro">Guiones Centro</option>
+          <option value="guiones-norte">Guiones Norte</option>
+          <option value="pelada">Pelada</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">🏁 Parada de Destino</div>
+      <div class="select-wrapper">
+        <select id="toSelect">
+          <option value="guiones-centro">Guiones Centro</option>
+          <option value="guiones-norte">Guiones Norte</option>
+          <option value="pelada">Pelada</option>
+          <option value="guiones-sur">Guiones Sur</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">🕐 Hora de Salida</div>
+      <div class="time-slots">
+        <div class="time-slot" onclick="selectTime(this)">
+          <div class="time">10:00</div>
+          <div class="seats">8 asientos</div>
+        </div>
+        <div class="time-slot active" onclick="selectTime(this)">
+          <div class="time">10:30</div>
+          <div class="seats">5 asientos</div>
+        </div>
+        <div class="time-slot" onclick="selectTime(this)">
+          <div class="time">11:00</div>
+          <div class="seats">12 asientos</div>
+        </div>
+        <div class="time-slot" onclick="selectTime(this)">
+          <div class="time">11:30</div>
+          <div class="seats">10 asientos</div>
+        </div>
+        <div class="time-slot" onclick="selectTime(this)">
+          <div class="time">12:00</div>
+          <div class="seats">6 asientos</div>
+        </div>
+        <div class="time-slot" onclick="selectTime(this)">
+          <div class="time">12:30</div>
+          <div class="seats">12 asientos</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">👥 Pasajeros</div>
+      <div class="passenger-control">
+        <button class="passenger-btn" id="minusBtn" onclick="changePassengers(-1)">−</button>
+        <div class="passenger-count" id="passengerCount">1</div>
+        <button class="passenger-btn" id="plusBtn" onclick="changePassengers(1)">+</button>
+      </div>
+      
+      <div class="summary">
+        <div class="summary-label">Total</div>
+        <div class="summary-value" id="totalPrice">$2.00</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="bottom-action">
+    <button class="btn" onclick="confirmBooking()">
+      ✓ Confirmar Reserva
+    </button>
+  </div>
+</div>
+
+<script>
+  const PRICE_PER_PERSON = 2.00;
+  let passengers = 1;
+  
+  function selectTime(el) {
+    document.querySelectorAll('.time-slot').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+  
+  function changePassengers(delta) {
+    passengers = Math.max(1, Math.min(10, passengers + delta));
+    document.getElementById('passengerCount').textContent = passengers;
+    document.getElementById('totalPrice').textContent = `$${(passengers * PRICE_PER_PERSON).toFixed(2)}`;
+    document.getElementById('minusBtn').disabled = passengers <= 1;
+    document.getElementById('plusBtn').disabled = passengers >= 10;
+  }
+  
+  function confirmBooking() {
+    const route = document.getElementById('routeSelect').value;
+    const from = document.getElementById('fromSelect').value;
+    const to = document.getElementById('toSelect').value;
+    const time = document.querySelector('.time-slot.active .time').textContent;
+    
+    // Store booking data
+    const booking = {
+      id: Date.now().toString(36),
+      route,
+      from,
+      to,
+      time,
+      passengers,
+      total: passengers * PRICE_PER_PERSON,
+      created: new Date().toISOString()
+    };
+    
+    localStorage.setItem('nosara_go_booking', JSON.stringify(booking));
+    window.location.href = '/ticket';
+  }
+</script>
+
+</body>
+</html>

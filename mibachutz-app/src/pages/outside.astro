@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#4CAF50">
   <title>בחוץ - מי בחוץ</title>
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
@@ -28,7 +28,7 @@
     
     html, body {
       height: 100%;
-      font-family: 'Heebo', sans-serif;
+      font-family: 'Varela Round', 'Heebo', sans-serif;
       background: var(--bg);
       color: var(--text);
     }
@@ -159,24 +159,51 @@
       background: var(--green);
     }
     
+    /* Drag handle - always grabbable */
+    .drag-handle {
+      height: 32px;
+      min-height: 32px;
+      background: linear-gradient(180deg, #f0f0f0 0%, #e0e0e0 100%);
+      border-radius: 16px 16px 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: ns-resize;
+      touch-action: none;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 100;
+    }
+    
+    .drag-pill {
+      width: 50px;
+      height: 6px;
+      background: #aaa;
+      border-radius: 3px;
+    }
+    
     /* Chat Section - with wallpaper */
     .chat-section {
       background: url('/baby-doodles.jpg') repeat;
       background-size: cover;
-      border-radius: 20px 20px 0 0;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
-      max-height: 45%;
+      flex: 0 0 auto;
+      height: 45%;
+      min-height: 150px;
+      max-height: 75%;
     }
     
     .chat-header {
-      padding: 12px 16px;
+      padding: 10px 16px;
       background: rgba(255,255,255,0.95);
       border-bottom: 1px solid #eee;
       font-weight: 600;
       text-align: center;
-      border-radius: 20px 20px 0 0;
+      font-size: 14px;
+      position: relative;
+      z-index: 50;
     }
     
 
@@ -191,56 +218,51 @@
     
     .chat-msg {
       margin-bottom: 12px;
-      display: flex;
-      flex-direction: column;
-      max-width: 85%;
+      display: block;
+      width: 100%;
+      clear: both;
     }
     
-    .chat-msg.me {
-      align-items: flex-start;
-      align-self: flex-start;
+    .chat-msg.me .chat-msg-bubble {
+      float: left;
+      background: linear-gradient(145deg, #E8F5E9 0%, #C8E6C9 50%, #A5D6A7 100%);
+      color: #2E5D32;
+      border-radius: 22px 22px 22px 6px;
+      border: 2px solid rgba(255,255,255,0.8);
     }
     
-    .chat-msg.other {
-      align-items: flex-end;
-      align-self: flex-end;
-    }
-    
-    .chat-msg-name {
-      font-size: 10px;
-      color: #888;
-      margin-bottom: 2px;
-      padding: 0 10px;
-      font-weight: 600;
+    .chat-msg.other .chat-msg-bubble {
+      float: right;
+      background: linear-gradient(145deg, #FFF5F5 0%, #FFE8EC 100%);
+      color: #5D4954;
+      border-radius: 22px 22px 6px 22px;
+      border: 2px solid rgba(255,255,255,0.9);
     }
     
     .chat-msg-bubble {
       display: inline-block;
-      padding: 10px 14px;
-      border-radius: 18px;
-      font-size: 14px;
-      line-height: 1.4;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-      word-wrap: break-word;
-      max-width: 100%;
+      padding: 12px 18px;
+      font-size: 15px;
+      line-height: 1.6;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+      max-width: 82%;
+      font-family: 'Varela Round', sans-serif;
     }
     
-    .chat-msg.me .chat-msg-bubble {
-      background: #DCF8C6;
-      color: #303030;
-      border-top-left-radius: 18px;
-      border-top-right-radius: 18px;
-      border-bottom-right-radius: 18px;
-      border-bottom-left-radius: 4px;
+    .chat-msg-time {
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      margin-left: 8px;
     }
     
-    .chat-msg.other .chat-msg-bubble {
-      background: white;
-      color: #303030;
-      border-top-left-radius: 18px;
-      border-top-right-radius: 18px;
-      border-bottom-left-radius: 18px;
-      border-bottom-right-radius: 4px;
+    .chat-msg-name {
+      font-weight: 700;
+      color: #FF6B8A;
+      font-size: 13px;
+    }
+    
+    .chat-msg.me .chat-msg-name {
+      color: #4CAF50;
     }
     
     .chat-messages {
@@ -248,8 +270,12 @@
       overflow-y: auto;
       padding: 12px;
       min-height: 150px;
-      display: flex;
-      flex-direction: column;
+    }
+    
+    .chat-messages::after {
+      content: '';
+      display: table;
+      clear: both;
     }
     
     .chat-input-row {
@@ -309,8 +335,13 @@
       <button class="center-btn" id="centerBtn" title="מרכזי עליי">📍</button>
     </div>
     
+    <!-- Drag handle -->
+    <div class="drag-handle" id="dragHandle">
+      <div class="drag-pill"></div>
+    </div>
+    
     <!-- Chat with wallpaper -->
-    <div class="chat-section">
+    <div class="chat-section" id="chatSection">
       <div class="chat-header">צ'אט קבוצתי 💬</div>
       <div class="chat-messages" id="chatMessages">
         <div class="chat-empty">היי לאמהות האחרות! 👋</div>
@@ -386,26 +417,60 @@
       }
     });
     
+    // Drag handle for resizing chat
+    const dragHandle = document.getElementById('dragHandle');
+    const chatSection = document.getElementById('chatSection');
+    let dragStartY = 0;
+    let dragStartHeight = 0;
+    let isDraggingChat = false;
+    
+    dragHandle.addEventListener('touchstart', (e) => {
+      dragStartY = e.touches[0].clientY;
+      dragStartHeight = chatSection.offsetHeight;
+      isDraggingChat = true;
+      e.preventDefault();
+    });
+    
+    document.addEventListener('touchmove', (e) => {
+      if (!isDraggingChat) return;
+      const currentY = e.touches[0].clientY;
+      const diff = dragStartY - currentY;
+      const newHeight = Math.min(Math.max(dragStartHeight + diff, 150), window.innerHeight * 0.75);
+      chatSection.style.height = newHeight + 'px';
+      map.invalidateSize();
+    });
+    
+    document.addEventListener('touchend', () => {
+      isDraggingChat = false;
+    });
+    
     // Initialize map - COLORFUL tiles
     const map = L.map('map', { zoomControl: false }).setView([32.052, 34.752], 14);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+    // Clean, minimal map style (CartoDB Positron)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19,
+      attribution: ''
+    }).addTo(map);
     
     let markers = [];
     let myMarker = null;
     let myLatLng = null;
     
     function createMomIcon(name, isMe = false) {
-      const size = isMe ? 52 : 44;
-      const bgColor = isMe ? '#FF6B6B' : '#4CAF50';  // Pink for me, Green for others
+      const size = isMe ? 52 : 48;
+      const bgColor = isMe ? '#FF6B6B' : '#2E7D32';  // Pink for me, Darker green for others
+      const borderWidth = isMe ? '4px' : '3px';
+      const labelBg = isMe ? '#FF6B6B' : '#2E7D32';
+      const labelColor = 'white';
       return L.divIcon({
         className: 'custom-marker',
         html: `
-          <div class="mom-marker ${isMe ? 'me' : 'other'}">
-            <img src="/stroller-cute.svg" style="width:${isMe ? 28 : 24}px;height:${isMe ? 28 : 24}px;">
+          <div style="background:${bgColor};border:${borderWidth} solid white;border-radius:50%;width:${size}px;height:${size}px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(0,0,0,0.3);">
+            <img src="/stroller-cute.svg" style="width:${isMe ? 28 : 26}px;height:${isMe ? 28 : 26}px;filter:brightness(0) invert(1);">
           </div>
-          <div style="position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);background:${isMe ? '#FF6B6B' : 'white'};color:${isMe ? 'white' : '#4A4A4A'};padding:2px 8px;border-radius:8px;font-size:11px;font-weight:600;white-space:nowrap;box-shadow:0 2px 4px rgba(0,0,0,0.15);">${isMe ? 'את!' : name}</div>
+          <div style="position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);background:${labelBg};color:${labelColor};padding:3px 10px;border-radius:10px;font-size:12px;font-weight:700;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.2);font-family:'Varela Round',sans-serif;">${isMe ? 'את!' : name}</div>
         `,
-        iconSize: [size, size + 20],
+        iconSize: [size, size + 24],
         iconAnchor: [size/2, size/2]
       });
     }
@@ -414,7 +479,7 @@
       if (!user.group_id) return;
       
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?group_id=eq.${user.group_id}&is_available=eq.true&select=id,first_name`, {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?group_id=eq.${user.group_id}&is_available=eq.true&select=id,first_name,lat,lng`, {
           headers: { 'apikey': SUPABASE_KEY }
         });
         const moms = await res.json();
@@ -427,8 +492,16 @@
         
         moms.forEach(mom => {
           const isMe = mom.id === user.id;
-          const lat = 32.052 + (Math.random() - 0.5) * 0.002;  // ~100m offset
-          const lng = 34.752 + (Math.random() - 0.5) * 0.002;
+          // Use real location if available, otherwise fallback with offset
+          let lat, lng;
+          if (mom.lat && mom.lng) {
+            // Add ~100m privacy offset
+            lat = mom.lat + (Math.random() - 0.5) * 0.001;
+            lng = mom.lng + (Math.random() - 0.5) * 0.001;
+          } else {
+            lat = 32.08 + (Math.random() - 0.5) * 0.01;
+            lng = 34.78 + (Math.random() - 0.5) * 0.01;
+          }
           
           const marker = L.marker([lat, lng], { icon: createMomIcon(mom.first_name, isMe) }).addTo(map);
           markers.push(marker);
@@ -462,12 +535,22 @@
           return;
         }
         
-        document.getElementById('chatMessages').innerHTML = msgs.map(m => `
-          <div class="chat-msg ${m.sender_id === user.id ? 'me' : 'other'}">
-            <div class="chat-msg-name">${m.sender_name || 'אמא'}</div>
-            <div class="chat-msg-bubble">${escapeHtml(m.text)}</div>
+        document.getElementById('chatMessages').innerHTML = msgs.map(m => {
+          const time = timeAgo(m.created_at);
+          const isMe = m.sender_id === user.id;
+          const bubbleBg = isMe ? '#D4EDDA' : '#FCE4EC';
+          const bubbleColor = isMe ? '#1B5E20' : '#4A2C3D';
+          const nameColor = isMe ? '#1B5E20' : '#C2185B';
+          const bubbleRadius = isMe ? '18px 18px 4px 18px' : '18px 18px 18px 4px';
+          const bubbleFloat = isMe ? 'right' : 'left';
+          return `
+          <div style="margin-bottom:12px;clear:both;width:100%;overflow:hidden;">
+            <div style="float:${bubbleFloat};background:${bubbleBg};color:${bubbleColor};padding:14px 18px;border-radius:${bubbleRadius};box-shadow:0 2px 6px rgba(0,0,0,0.12);max-width:78%;font-family:'Varela Round',sans-serif;font-size:18px;line-height:1.5;font-weight:700;">
+              <div style="font-size:13px;margin-bottom:5px;font-weight:800;"><span style="color:${nameColor};">${m.sender_name || 'אמא'}</span> <span style="color:#888;margin-right:4px;font-weight:600;">· ${time}</span></div>
+              <div style="font-weight:700;">${escapeHtml(m.text)}</div>
+            </div>
           </div>
-        `).join('');
+        `}).join('');
         
         document.getElementById('chatMessages').scrollTop = 99999;
       } catch (e) {}
@@ -477,6 +560,22 @@
       const d = document.createElement('div');
       d.textContent = t;
       return d.innerHTML;
+    }
+    
+    function timeAgo(dateStr) {
+      const now = new Date();
+      const date = new Date(dateStr);
+      const seconds = Math.floor((now - date) / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+      
+      if (seconds < 60) return 'עכשיו';
+      if (minutes < 60) return `לפני ${minutes} דק'`;
+      if (hours < 24) return `לפני ${hours} שע'`;
+      if (days === 1) return 'אתמול';
+      if (days < 7) return `לפני ${days} ימים`;
+      return date.toLocaleDateString('he-IL', {day: 'numeric', month: 'short'});
     }
     
     async function sendMessage() {
@@ -517,11 +616,39 @@
       if (e.key === 'Enter') sendMessage();
     });
     
+    // Get GPS location and save to database
+    async function updateMyLocation() {
+      if (!navigator.geolocation) return;
+      
+      navigator.geolocation.getCurrentPosition(async (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        
+        try {
+          await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?id=eq.${user.id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`
+            },
+            body: JSON.stringify({ lat, lng })
+          });
+          user.lat = lat;
+          user.lng = lng;
+          localStorage.setItem('mibachutz_user', JSON.stringify(user));
+          loadMoms();
+        } catch (e) {}
+      }, () => {}, { enableHighAccuracy: true, timeout: 10000 });
+    }
+    
     // Init
+    updateMyLocation();
     loadMoms();
     loadMessages();
     
-    // Refresh
+    // Refresh location every 2 minutes
+    setInterval(updateMyLocation, 120000);
     setInterval(loadMoms, 30000);
     setInterval(loadMessages, 5000);
   </script>

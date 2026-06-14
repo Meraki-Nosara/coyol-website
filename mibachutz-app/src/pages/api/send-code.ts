@@ -23,10 +23,11 @@ export const POST: APIRoute = async ({ request }) => {
             <div style="max-width: 400px; margin: 0 auto; background: white; border-radius: 20px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
               <h1 style="color: #FF6B6B; margin-bottom: 10px;">מי בחוץ</h1>
               <p style="color: #666; margin-bottom: 30px;">הקוד שלך להתחברות:</p>
-              <div style="font-size: 36px; font-weight: bold; letter-spacing: 8px; padding: 20px; background: #FFF0F0; border-radius: 12px; color: #FF6B6B; margin-bottom: 20px;">
+              <div style="font-size: 36px; font-weight: bold; letter-spacing: 8px; padding: 20px; background: #FFF0F0; border-radius: 12px; color: #FF6B6B; margin-bottom: 15px; user-select: all; cursor: pointer;" title="לחצי להעתקה">
                 ${code}
               </div>
-              <p style="color: #999; font-size: 14px;">הקוד בתוקף ל-10 דקות</p>
+              <p style="color: #666; font-size: 14px; margin-bottom: 15px;">👆 לחצי על הקוד להעתקה</p>
+              <p style="color: #999; font-size: 12px;">הקוד בתוקף ל-10 דקות</p>
             </div>
           </div>
         `

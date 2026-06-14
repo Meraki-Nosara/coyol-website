@@ -1,6 +1,6 @@
 ---
-// Mibachutz - Waiting/Standby Screen with Map
-// Shows waiting moms on a map while waiting for 8 to form a group
+// Mibachutz - Waiting Room (Map + Chat)
+// Shows waiting moms on map while waiting for group to form
 ---
 
 <!DOCTYPE html>
@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#FF6B6B">
   <title>ממתינה - מי בחוץ</title>
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
@@ -19,8 +19,8 @@
     
     :root {
       --coral: #FF6B6B;
-      --coral-light: #FF8E8E;
       --green: #4CAF50;
+      --green-dark: #388E3C;
       --text: #4A4A4A;
       --text-light: #888;
       --bg: #FFF9F9;
@@ -28,7 +28,7 @@
     
     html, body {
       height: 100%;
-      font-family: 'Heebo', sans-serif;
+      font-family: 'Varela Round', 'Heebo', sans-serif;
       background: var(--bg);
       color: var(--text);
     }
@@ -39,69 +39,59 @@
       flex-direction: column;
     }
     
-    .header {
-      padding: 16px 20px;
-      text-align: center;
-      background: white;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    /* Waiting header */
+    .waiting-header {
+      background: var(--coral);
+      padding: 16px;
+      flex-shrink: 0;
     }
     
-    .title {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--text);
-    }
-    
-    .subtitle {
-      font-size: 13px;
-      color: var(--text-light);
-      margin-top: 4px;
-    }
-    
-    /* Progress bar */
-    .progress-bar {
-      padding: 16px 20px;
-      background: white;
-      border-bottom: 1px solid #eee;
-    }
-    
-    .progress-info {
+    .waiting-status {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      justify-content: center;
+      gap: 10px;
+      color: white;
+      font-size: 16px;
+      margin-bottom: 12px;
     }
     
-    .progress-count {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--coral);
+    .waiting-icon {
+      font-size: 20px;
+      animation: pulse 2s ease-in-out infinite;
     }
     
-    .progress-label {
-      font-size: 13px;
-      color: var(--text-light);
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
     
-    .progress-track {
+    .waiting-count {
+      background: rgba(255,255,255,0.25);
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+    
+    .waiting-progress {
+      background: rgba(255,255,255,0.3);
+      border-radius: 10px;
       height: 8px;
-      background: #f0e0e0;
-      border-radius: 4px;
       overflow: hidden;
     }
     
-    .progress-fill {
+    .progress-bar {
+      background: white;
       height: 100%;
-      background: linear-gradient(90deg, var(--coral), var(--coral-light));
-      border-radius: 4px;
+      border-radius: 10px;
       transition: width 0.5s ease;
     }
     
-    /* Map */
+    /* Map - colorful tiles */
     .map-container {
       flex: 1;
+      min-height: 200px;
       position: relative;
-      min-height: 300px;
     }
     
     #map {
@@ -109,9 +99,30 @@
       height: 100%;
     }
     
-    /* Custom markers */
+    .center-btn {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      z-index: 1000;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: white;
+      border: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    
+    .center-btn:active {
+      background: #f0f0f0;
+    }
+    
+    /* Mom markers */
     .mom-marker {
-      background: var(--coral);
       border: 3px solid white;
       border-radius: 50%;
       width: 44px;
@@ -119,625 +130,482 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-weight: 600;
-      font-size: 16px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.2);
-      font-family: 'Heebo', sans-serif;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.25);
     }
     
     .mom-marker.me {
-      background: var(--green);
+      background: var(--coral);
       width: 52px;
       height: 52px;
-      font-size: 18px;
       border-width: 4px;
-      animation: pulse-marker 2s infinite;
     }
     
-    @keyframes pulse-marker {
-      0%, 100% { box-shadow: 0 3px 12px rgba(76, 175, 80, 0.4); }
-      50% { box-shadow: 0 3px 20px rgba(76, 175, 80, 0.6); }
+    .mom-marker.other {
+      background: var(--green);
     }
     
-    .marker-label {
-      position: absolute;
-      bottom: -24px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: white;
-      padding: 3px 10px;
-      border-radius: 10px;
-      font-size: 11px;
-      font-weight: 600;
-      white-space: nowrap;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    
-    /* Bottom panel */
-    .bottom-panel {
-      background: white;
-      padding: 20px;
-      border-radius: 24px 24px 0 0;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
-    }
-    
-    .waiting-list {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 12px;
-      margin-bottom: 16px;
-    }
-    
-    .waiting-list::-webkit-scrollbar {
-      display: none;
-    }
-    
-    .waiting-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: var(--coral);
-      color: white;
+    /* Drag handle - always grabbable */
+    .drag-handle {
+      height: 32px;
+      min-height: 32px;
+      background: linear-gradient(180deg, #f0f0f0 0%, #e0e0e0 100%);
+      border-radius: 16px 16px 0 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 600;
-      font-size: 18px;
+      cursor: ns-resize;
+      touch-action: none;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
       flex-shrink: 0;
+      position: relative;
+      z-index: 100;
     }
     
-    .waiting-avatar.me {
-      background: var(--green);
-      border: 3px solid #8BC34A;
+    .drag-pill {
+      width: 50px;
+      height: 6px;
+      background: #aaa;
+      border-radius: 3px;
     }
     
-    .waiting-avatar.empty {
-      background: #f0e0e0;
-      color: #ccc;
-      border: 2px dashed #ddd;
-    }
-    
-    .share-btn {
-      width: 100%;
-      padding: 14px;
-      background: var(--coral);
-      color: white;
-      border: none;
-      border-radius: 14px;
-      font-family: inherit;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 4px 16px rgba(255, 107, 107, 0.3);
-    }
-    
-    .share-btn:active {
-      transform: scale(0.98);
-    }
-    
-    .info-text {
-      text-align: center;
-      font-size: 12px;
-      color: var(--text-light);
-      margin-top: 12px;
-    }
-    
-    /* Leaflet overrides */
-    .leaflet-control-attribution {
-      display: none;
-    }
-    
-    /* Chat Section */
+    /* Chat Section - with wallpaper */
     .chat-section {
-      background: #f8f8f8;
-      border-radius: 16px;
-      margin-bottom: 12px;
-      overflow: hidden;
+      background: url('/baby-doodles.jpg') repeat;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      flex: 0 0 auto;
+      height: 45%;
+      min-height: 150px;
+      max-height: 75%;
     }
     
     .chat-header {
-      padding: 12px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
+      padding: 10px 16px;
+      background: rgba(255,255,255,0.95);
+      border-bottom: 1px solid #eee;
       font-weight: 600;
-      color: var(--text);
+      text-align: center;
+      font-size: 14px;
+      position: relative;
+      z-index: 50;
     }
     
-    .chat-toggle-icon {
-      transition: transform 0.3s;
-    }
-    
-    .chat-toggle-icon.open {
-      transform: rotate(180deg);
-    }
-    
-    .chat-body {
-      display: none;
-      border-top: 1px solid #eee;
-    }
-    
-    .chat-body.open {
-      display: block;
-    }
-    
-    .chat-messages {
-      height: 200px;
-      overflow-y: auto;
-      padding: 12px;
-    }
+
     
     .chat-empty {
       text-align: center;
-      color: var(--text-light);
-      padding: 40px 20px;
-      font-size: 14px;
+      color: var(--text);
+      padding: 30px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 16px;
     }
     
     .chat-msg {
-      margin-bottom: 10px;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .chat-msg.me {
-      align-items: flex-start;
-    }
-    
-    .chat-msg.other {
-      align-items: flex-end;
-    }
-    
-    .chat-msg-name {
-      font-size: 11px;
-      color: var(--text-light);
-      margin-bottom: 2px;
-    }
-    
-    .chat-msg-bubble {
-      max-width: 80%;
-      padding: 10px 14px;
-      border-radius: 16px;
-      font-size: 14px;
-      line-height: 1.4;
+      margin-bottom: 12px;
+      display: block;
+      width: 100%;
+      clear: both;
     }
     
     .chat-msg.me .chat-msg-bubble {
-      background: var(--coral);
-      color: white;
-      border-bottom-right-radius: 4px;
+      float: left;
+      background: linear-gradient(145deg, #E8F5E9 0%, #C8E6C9 50%, #A5D6A7 100%);
+      color: #2E5D32;
+      border-radius: 22px 22px 22px 6px;
+      border: 2px solid rgba(255,255,255,0.8);
     }
     
     .chat-msg.other .chat-msg-bubble {
-      background: white;
-      color: var(--text);
-      border-bottom-left-radius: 4px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      float: right;
+      background: linear-gradient(145deg, #FFF5F5 0%, #FFE8EC 100%);
+      color: #5D4954;
+      border-radius: 22px 22px 6px 22px;
+      border: 2px solid rgba(255,255,255,0.9);
+    }
+    
+    .chat-msg-bubble {
+      display: inline-block;
+      padding: 12px 18px;
+      font-size: 15px;
+      line-height: 1.6;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+      max-width: 82%;
+      font-family: 'Varela Round', sans-serif;
+    }
+    
+    .chat-msg-time {
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      margin-left: 8px;
+    }
+    
+    .chat-msg-name {
+      font-weight: 700;
+      color: #FF6B8A;
+      font-size: 13px;
+    }
+    
+    .chat-msg.me .chat-msg-name {
+      color: #4CAF50;
+    }
+    
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      min-height: 150px;
+    }
+    
+    .chat-messages::after {
+      content: '';
+      display: table;
+      clear: both;
     }
     
     .chat-input-row {
       display: flex;
       gap: 8px;
       padding: 12px;
-      background: white;
+      background: rgba(255,255,255,0.95);
     }
     
     .chat-input-row input {
       flex: 1;
-      padding: 10px 14px;
+      padding: 12px 16px;
       border: 1px solid #ddd;
-      border-radius: 20px;
+      border-radius: 24px;
       font-family: inherit;
       font-size: 14px;
       outline: none;
+      background: white;
     }
     
     .chat-input-row input:focus {
-      border-color: var(--coral);
+      border-color: var(--green);
     }
     
     .chat-input-row button {
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       border: none;
-      background: var(--coral);
+      background: var(--green);
       color: white;
-      font-size: 16px;
+      font-size: 18px;
       cursor: pointer;
     }
     
-    .chat-input-row button:active {
-      transform: scale(0.95);
-    }
+    /* Leaflet overrides */
+    .leaflet-control-attribution { display: none; }
   </style>
 </head>
 <body>
+
   <div class="app">
-    <header class="header">
-      <h1 class="title">ממתינה לקבוצה</h1>
-      <p class="subtitle" id="neighborhoodName">טוען...</p>
-    </header>
-    
-    <div class="progress-bar">
-      <div class="progress-info">
-        <span class="progress-count"><span id="countNumber">0</span>/8 אמהות</span>
-        <span class="progress-label">חסרות <span id="remaining">8</span> להקמת הקבוצה</span>
+    <!-- Waiting status header -->
+    <div class="waiting-header">
+      <div class="waiting-status">
+        <span class="waiting-icon">⏳</span>
+        <span class="waiting-text">ממתינות לקבוצה...</span>
+        <span class="waiting-count" id="countBadge">1/8 אמהות</span>
       </div>
-      <div class="progress-track">
-        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      <div class="waiting-progress">
+        <div class="progress-bar" id="progressBar" style="width: 12.5%;"></div>
       </div>
     </div>
     
+    <!-- Colorful map -->
     <div class="map-container">
       <div id="map"></div>
+      <button class="center-btn" id="centerBtn" title="מרכזי עליי">📍</button>
     </div>
     
-    <div class="bottom-panel">
-      <div class="waiting-list" id="waitingList">
-        <!-- Avatars will be populated here -->
+    <!-- Drag handle -->
+    <div class="drag-handle" id="dragHandle">
+      <div class="drag-pill"></div>
+    </div>
+    
+    <!-- Chat with wallpaper -->
+    <div class="chat-section" id="chatSection">
+      <div class="chat-header">צ'אט קבוצתי 💬</div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-empty">היי לאמהות האחרות! 👋</div>
       </div>
-      
-      <!-- Chat Section -->
-      <div class="chat-section" id="chatSection">
-        <div class="chat-header" id="chatToggle">
-          <span>צ'אט עם האמהות הממתינות</span>
-          <span class="chat-toggle-icon" id="chatIcon">▼</span>
-        </div>
-        <div class="chat-body" id="chatBody">
-          <div class="chat-messages" id="chatMessages">
-            <div class="chat-empty">היי לאמהות האחרות! תתחילי שיחה 👋</div>
-          </div>
-          <div class="chat-input-row">
-            <input type="text" id="chatInput" placeholder="כתבי הודעה..." />
-            <button id="sendBtn">◀</button>
-          </div>
-        </div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="כתבי הודעה..." />
+        <button id="sendBtn">◀</button>
       </div>
-      
-      <button class="share-btn" id="shareBtn">
-        שתפי חברה להצטרף
-      </button>
-      
-      <p class="info-text">
-        ברגע שתהיינה 8 אמהות, הקבוצה תיפתח!
-      </p>
     </div>
   </div>
-  
+
   <script>
     const SUPABASE_URL = 'https://fkikzryelozciailbryh.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
     
     const user = JSON.parse(localStorage.getItem('mibachutz_user') || 'null');
+    if (!user) window.location.href = '/app';
     
-    if (!user) {
-      window.location.href = '/register';
-    }
+    // Waiting room - no slide to go home
     
-    // Initialize map centered on Israel
-    const map = L.map('map', {
-      zoomControl: false,
-      attributionControl: false
-    }).setView([32.08, 34.78], 14); // Default Tel Aviv area
+    // Drag handle for resizing chat
+    const dragHandle = document.getElementById('dragHandle');
+    const chatSection = document.getElementById('chatSection');
+    let dragStartY = 0;
+    let dragStartHeight = 0;
+    let isDraggingChat = false;
     
-    // Add tile layer (CartoDB Positron - light style)
+    dragHandle.addEventListener('touchstart', (e) => {
+      dragStartY = e.touches[0].clientY;
+      dragStartHeight = chatSection.offsetHeight;
+      isDraggingChat = true;
+      e.preventDefault();
+    });
+    
+    document.addEventListener('touchmove', (e) => {
+      if (!isDraggingChat) return;
+      const currentY = e.touches[0].clientY;
+      const diff = dragStartY - currentY;
+      const newHeight = Math.min(Math.max(dragStartHeight + diff, 150), window.innerHeight * 0.75);
+      chatSection.style.height = newHeight + 'px';
+      map.invalidateSize();
+    });
+    
+    document.addEventListener('touchend', () => {
+      isDraggingChat = false;
+    });
+    
+    // Initialize map - COLORFUL tiles
+    const map = L.map('map', { zoomControl: false }).setView([32.052, 34.752], 14);
+    // Clean, minimal map style (CartoDB Positron)
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      maxZoom: 19
+      maxZoom: 19,
+      attribution: ''
     }).addTo(map);
     
-    // Store markers for updates
     let markers = [];
+    let myMarker = null;
+    let myLatLng = null;
     
-    // Custom icon factory - stroller with name
     function createMomIcon(name, isMe = false) {
-      const size = isMe ? 60 : 50;
+      const size = isMe ? 52 : 48;
+      const bgColor = isMe ? '#FF6B6B' : '#2E7D32';  // Pink for me, Darker green for others
+      const borderWidth = isMe ? '4px' : '3px';
+      const labelBg = isMe ? '#FF6B6B' : '#2E7D32';
+      const labelColor = 'white';
       return L.divIcon({
         className: 'custom-marker',
         html: `
-          <div class="mom-marker ${isMe ? 'me' : ''}">
-            <img src="/stroller-icon.svg" alt="" style="width:${isMe ? 28 : 24}px;height:${isMe ? 28 : 24}px;">
+          <div style="background:${bgColor};border:${borderWidth} solid white;border-radius:50%;width:${size}px;height:${size}px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(0,0,0,0.3);">
+            <img src="/stroller-cute.svg" style="width:${isMe ? 28 : 26}px;height:${isMe ? 28 : 26}px;filter:brightness(0) invert(1);">
           </div>
-          <div class="marker-name" style="
-            position:absolute;
-            bottom:-22px;
-            left:50%;
-            transform:translateX(-50%);
-            background:${isMe ? '#4CAF50' : 'white'};
-            color:${isMe ? 'white' : '#4A4A4A'};
-            padding:3px 10px;
-            border-radius:10px;
-            font-size:12px;
-            font-weight:600;
-            white-space:nowrap;
-            box-shadow:0 2px 6px rgba(0,0,0,0.15);
-            font-family:'Heebo',sans-serif;
-          ">${isMe ? 'את!' : name}</div>
+          <div style="position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);background:${labelBg};color:${labelColor};padding:3px 10px;border-radius:10px;font-size:12px;font-weight:700;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.2);font-family:'Varela Round',sans-serif;">${isMe ? 'את!' : name}</div>
         `,
-        iconSize: [size, size + 25],
+        iconSize: [size, size + 24],
         iconAnchor: [size/2, size/2]
       });
     }
     
-    // Generate random offset for privacy (within ~500m)
-    function addRandomOffset(baseLat, baseLng) {
-      const offsetLat = (Math.random() - 0.5) * 0.008; // ~400m
-      const offsetLng = (Math.random() - 0.5) * 0.008;
-      return [baseLat + offsetLat, baseLng + offsetLng];
-    }
-    
-    // Neighborhood centers (approximate)
-    const neighborhoodCenters = {
-      'raanana': [32.184, 34.871],
-      'tel aviv': [32.08, 34.78],
-      'herzliya': [32.166, 34.843],
-      'jaffa': [32.052, 34.752],
-      'florentin': [32.058, 34.77],
-      'neve tzedek': [32.06, 34.765],
-      'ramat aviv': [32.113, 34.804],
-      'default': [32.08, 34.78]
-    };
-    
-    async function loadWaitingMoms() {
+    async function loadMoms() {
+      if (!user.neighborhood_id) return;
+      
       try {
-        // Check if our status changed
-        const userRes = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?id=eq.${user.id}&select=*`, {
+        // Load waiting moms in same neighborhood
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?neighborhood_id=eq.${user.neighborhood_id}&status=eq.standby&select=id,first_name,group_id,lat,lng`, {
           headers: { 'apikey': SUPABASE_KEY }
         });
-        const userData = await userRes.json();
+        const moms = await res.json();
+        if (!Array.isArray(moms)) return;
         
-        if (userData[0]?.status === 'in_group' || userData[0]?.group_id) {
-          localStorage.setItem('mibachutz_user', JSON.stringify(userData[0]));
-          window.location.href = '/home?group_formed=true';
+        // Update count badge and progress bar
+        const count = moms.length;
+        document.getElementById('countBadge').textContent = `${count}/8 אמהות`;
+        document.getElementById('progressBar').style.width = `${(count / 8) * 100}%`;
+        
+        // Check if group formed
+        const me = moms.find(m => m.id === user.id);
+        if (me && me.group_id) {
+          // Group formed! Redirect to home
+          user.group_id = me.group_id;
+          user.status = 'in_group';
+          localStorage.setItem('mibachutz_user', JSON.stringify(user));
+          window.location.href = '/home';
           return;
         }
         
-        // Get neighborhood info
-        const nRes = await fetch(`${SUPABASE_URL}/rest/v1/neighborhoods?id=eq.${user.neighborhood_id}&select=*`, {
-          headers: { 'apikey': SUPABASE_KEY }
-        });
-        const nData = await nRes.json();
-        if (nData[0]) {
-          document.getElementById('neighborhoodName').textContent = nData[0].name_he || nData[0].name_en || 'השכונה שלך';
-        }
-        
-        // Get all waiting moms in same neighborhood
-        const momsRes = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?neighborhood_id=eq.${user.neighborhood_id}&status=eq.standby&select=id,first_name`, {
-          headers: { 'apikey': SUPABASE_KEY }
-        });
-        const moms = await momsRes.json();
-        
-        // Update progress
-        const count = moms.length;
-        document.getElementById('countNumber').textContent = count;
-        document.getElementById('remaining').textContent = Math.max(0, 8 - count);
-        document.getElementById('progressFill').style.width = `${(count / 8) * 100}%`;
-        
-        // Clear existing markers
         markers.forEach(m => map.removeLayer(m));
         markers = [];
         
-        // Get neighborhood center
-        const neighborhoodName = (nData[0]?.name_en || '').toLowerCase();
-        let center = neighborhoodCenters['default'];
-        for (const [key, coords] of Object.entries(neighborhoodCenters)) {
-          if (neighborhoodName.includes(key)) {
-            center = coords;
-            break;
-          }
-        }
-        
-        // Add markers for each mom
         moms.forEach(mom => {
           const isMe = mom.id === user.id;
-          let pos;
-          
-          if (isMe && userLocation) {
-            // Use real GPS for current user
-            pos = userLocation;
+          // Use real location if available, otherwise neighborhood center with offset
+          let lat, lng;
+          if (mom.lat && mom.lng) {
+            // Add ~100m privacy offset to real location
+            lat = mom.lat + (Math.random() - 0.5) * 0.001;
+            lng = mom.lng + (Math.random() - 0.5) * 0.001;
           } else {
-            // Random offset from neighborhood center for others
-            pos = addRandomOffset(center[0], center[1]);
+            // Fallback to Tel Aviv center
+            lat = 32.08 + (Math.random() - 0.5) * 0.01;
+            lng = 34.78 + (Math.random() - 0.5) * 0.01;
           }
           
-          const marker = L.marker(pos, {
-            icon: createMomIcon(mom.first_name, isMe)
-          }).addTo(map);
-          
+          const marker = L.marker([lat, lng], { icon: createMomIcon(mom.first_name, isMe) }).addTo(map);
           markers.push(marker);
+          
+          if (isMe) {
+            myMarker = marker;
+            myLatLng = [lat, lng];
+          }
         });
         
-        // Fit map to show all markers
         if (markers.length > 0) {
-          const group = L.featureGroup(markers);
-          map.fitBounds(group.getBounds().pad(0.3));
+          map.fitBounds(L.featureGroup(markers).getBounds().pad(0.3));
         }
-        
-        // Update avatar list
-        updateWaitingList(moms);
-        
-      } catch (err) {
-        console.error('Failed to load moms:', err);
+      } catch (e) {
+        console.log('Load error:', e);
       }
     }
     
-    function updateWaitingList(moms) {
-      const list = document.getElementById('waitingList');
-      list.innerHTML = '';
-      
-      // Add registered moms
-      moms.forEach(mom => {
-        const isMe = mom.id === user.id;
-        const initial = mom.first_name?.charAt(0)?.toUpperCase() || '?';
-        const avatar = document.createElement('div');
-        avatar.className = `waiting-avatar ${isMe ? 'me' : ''}`;
-        avatar.textContent = initial;
-        avatar.title = mom.first_name;
-        list.appendChild(avatar);
-      });
-      
-      // Add empty slots
-      for (let i = moms.length; i < 8; i++) {
-        const empty = document.createElement('div');
-        empty.className = 'waiting-avatar empty';
-        empty.textContent = '?';
-        list.appendChild(empty);
-      }
-    }
-    
-    // Share functionality - native share with WhatsApp priority
-    document.getElementById('shareBtn').addEventListener('click', async () => {
-      const userName = user.first_name || '';
-      const shareText = `היי ❤️
-
-הצטרפתי לאפליקציה חדשה לאמהות בשכונה - מי בחוץ!
-בואי להצטרף לקבוצה שלנו כדי שנוכל לצאת לטיול ביחד \ud83d\udc76\ud83c\udffb
-
-https://mibahutz.com/signup`;
-      
-      const shareData = {
-        title: 'מי בחוץ - אפליקציה לאמהות',
-        text: shareText,
-        url: 'https://mibahutz.com/signup'
-      };
-      
-      if (navigator.share) {
-        try {
-          await navigator.share(shareData);
-        } catch (err) {
-          console.log('Share cancelled');
-        }
-      } else {
-        // Fallback - open WhatsApp directly
-        const waUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-        window.open(waUrl, '_blank');
-      }
-    });
-    
-    // Get user's real location
-    let userLocation = null;
-    
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          userLocation = [position.coords.latitude, position.coords.longitude];
-          console.log('Got location:', userLocation);
-          loadWaitingMoms();
-        },
-        (error) => {
-          console.log('Location denied, using neighborhood center');
-          loadWaitingMoms();
-        },
-        { enableHighAccuracy: true, timeout: 10000 }
-      );
-    } else {
-      loadWaitingMoms();
-    }
-    
-    // Refresh every 30 seconds
-    setInterval(loadWaitingMoms, 30000);
-    
-    // Chat functionality
-    const chatToggle = document.getElementById('chatToggle');
-    const chatBody = document.getElementById('chatBody');
-    const chatIcon = document.getElementById('chatIcon');
-    const chatMessages = document.getElementById('chatMessages');
-    const chatInput = document.getElementById('chatInput');
-    const sendBtn = document.getElementById('sendBtn');
-    
-    chatToggle.addEventListener('click', () => {
-      chatBody.classList.toggle('open');
-      chatIcon.classList.toggle('open');
-      if (chatBody.classList.contains('open')) {
-        loadMessages();
-      }
-    });
-    
+    // Chat - use neighborhood_id for waiting room
     async function loadMessages() {
+      if (!user.neighborhood_id) return;
+      
       try {
-        // Get messages for this neighborhood (using neighborhood_id as group identifier for waiting room)
-        const res = await fetch(
-          `${SUPABASE_URL}/rest/v1/neighborhood_messages?neighborhood_id=eq.${user.neighborhood_id}&order=created_at.asc&limit=50`,
-          { headers: { 'apikey': SUPABASE_KEY } }
-        );
+        // Use neighborhood as chat room while waiting
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/group_messages?group_id=eq.${user.neighborhood_id}&order=created_at.asc&limit=50`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const msgs = await res.json();
         
-        if (!res.ok) {
-          // Table might not exist yet, show empty
+        if (!Array.isArray(msgs) || msgs.length === 0) {
+          document.getElementById('chatMessages').innerHTML = '<div class="chat-empty">היי לאמהות האחרות! 👋</div>';
           return;
         }
         
-        const messages = await res.json();
-        
-        if (messages.length === 0) {
-          chatMessages.innerHTML = '<div class="chat-empty">היי לאמהות האחרות! תתחילי שיחה 👋</div>';
-          return;
-        }
-        
-        chatMessages.innerHTML = messages.map(msg => {
-          const isMe = msg.sender_id === user.id;
+        document.getElementById('chatMessages').innerHTML = msgs.map(m => {
+          const time = timeAgo(m.created_at);
+          const isMe = m.sender_id === user.id;
+          const bubbleBg = isMe ? '#D4EDDA' : '#FCE4EC';
+          const bubbleColor = isMe ? '#1B5E20' : '#4A2C3D';
+          const nameColor = isMe ? '#1B5E20' : '#C2185B';
+          const bubbleRadius = isMe ? '18px 18px 4px 18px' : '18px 18px 18px 4px';
+          const bubbleFloat = isMe ? 'right' : 'left';
           return `
-            <div class="chat-msg ${isMe ? 'me' : 'other'}">
-              ${!isMe ? `<span class="chat-msg-name">${msg.sender_name || 'אמא'}</span>` : ''}
-              <div class="chat-msg-bubble">${escapeHtml(msg.text)}</div>
+          <div style="margin-bottom:12px;clear:both;width:100%;overflow:hidden;">
+            <div style="float:${bubbleFloat};background:${bubbleBg};color:${bubbleColor};padding:14px 18px;border-radius:${bubbleRadius};box-shadow:0 2px 6px rgba(0,0,0,0.12);max-width:78%;font-family:'Varela Round',sans-serif;font-size:18px;line-height:1.5;font-weight:700;">
+              <div style="font-size:13px;margin-bottom:5px;font-weight:800;"><span style="color:${nameColor};">${m.sender_name || 'אמא'}</span> <span style="color:#888;margin-right:4px;font-weight:600;">· ${time}</span></div>
+              <div style="font-weight:700;">${escapeHtml(m.text)}</div>
             </div>
-          `;
-        }).join('');
+          </div>
+        `}).join('');
         
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      } catch (err) {
-        console.error('Failed to load messages:', err);
-      }
+        document.getElementById('chatMessages').scrollTop = 99999;
+      } catch (e) {}
     }
     
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
+    function escapeHtml(t) {
+      const d = document.createElement('div');
+      d.textContent = t;
+      return d.innerHTML;
+    }
+    
+    function timeAgo(dateStr) {
+      const now = new Date();
+      const date = new Date(dateStr);
+      const seconds = Math.floor((now - date) / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+      
+      if (seconds < 60) return 'עכשיו';
+      if (minutes < 60) return `לפני ${minutes} דק'`;
+      if (hours < 24) return `לפני ${hours} שע'`;
+      if (days === 1) return 'אתמול';
+      if (days < 7) return `לפני ${days} ימים`;
+      return date.toLocaleDateString('he-IL', {day: 'numeric', month: 'short'});
     }
     
     async function sendMessage() {
-      const text = chatInput.value.trim();
-      if (!text) return;
+      const text = document.getElementById('chatInput').value.trim();
+      if (!text || !user.neighborhood_id) return;
       
-      chatInput.value = '';
+      document.getElementById('chatInput').value = '';
       
       try {
-        await fetch(`${SUPABASE_URL}/rest/v1/neighborhood_messages`, {
+        await fetch(`${SUPABASE_URL}/rest/v1/group_messages`, {
           method: 'POST',
           headers: {
+            'Content-Type': 'application/json',
             'apikey': SUPABASE_KEY,
             'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': 'application/json',
             'Prefer': 'return=minimal'
           },
           body: JSON.stringify({
-            neighborhood_id: user.neighborhood_id,
+            group_id: user.neighborhood_id,  // Use neighborhood as chat room
             sender_id: user.id,
             sender_name: user.first_name,
             text: text
           })
         });
-        
         loadMessages();
-      } catch (err) {
-        console.error('Failed to send message:', err);
-      }
+      } catch (e) {}
     }
     
-    sendBtn.addEventListener('click', sendMessage);
-    chatInput.addEventListener('keypress', (e) => {
+    document.getElementById('sendBtn').addEventListener('click', sendMessage);
+    
+    // Center on me button
+    document.getElementById('centerBtn').addEventListener('click', () => {
+      if (myLatLng) {
+        map.setView(myLatLng, 16);
+      }
+    });
+    document.getElementById('chatInput').addEventListener('keypress', e => {
       if (e.key === 'Enter') sendMessage();
     });
     
-    // Refresh messages every 5 seconds when chat is open
-    setInterval(() => {
-      if (chatBody.classList.contains('open')) {
-        loadMessages();
-      }
-    }, 5000);
+    // Get GPS location and save to database
+    async function updateMyLocation() {
+      if (!navigator.geolocation) return;
+      
+      navigator.geolocation.getCurrentPosition(async (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        
+        // Save to database
+        try {
+          await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?id=eq.${user.id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`
+            },
+            body: JSON.stringify({ lat, lng })
+          });
+          // Update local user
+          user.lat = lat;
+          user.lng = lng;
+          localStorage.setItem('mibachutz_user', JSON.stringify(user));
+          // Reload moms to show updated positions
+          loadMoms();
+        } catch (e) {
+          console.log('Location save error:', e);
+        }
+      }, (err) => {
+        console.log('GPS error:', err.message);
+      }, { enableHighAccuracy: true, timeout: 10000 });
+    }
+    
+    // Init
+    updateMyLocation();
+    loadMoms();
+    loadMessages();
+    
+    // Refresh
+    setInterval(loadMoms, 30000);
+    setInterval(loadMessages, 5000);
   </script>
+
 </body>
 </html>

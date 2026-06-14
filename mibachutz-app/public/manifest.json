@@ -1,0 +1,22 @@
+{
+  "name": "מי בחוץ",
+  "short_name": "מי בחוץ",
+  "description": "אפליקציה לאמהות למצוא חברות בחוץ",
+  "start_url": "/app",
+  "display": "standalone",
+  "background_color": "#FFF5F0",
+  "theme_color": "#4CAF50",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

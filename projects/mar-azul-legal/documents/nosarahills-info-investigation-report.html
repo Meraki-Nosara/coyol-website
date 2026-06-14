@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Technical Investigation Report — nosarahills.info</title>
+  <style>
+    @page {
+      size: letter;
+      margin: 1in;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12pt;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #fff;
+      padding: 0.75in 1in;
+      max-width: 8.5in;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      border-bottom: 3px double #1a1a1a;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .header-label {
+      font-size: 11pt;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    
+    .header-title {
+      font-size: 18pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 5px;
+    }
+    
+    .header-subtitle {
+      font-size: 12pt;
+      font-style: italic;
+      color: #444;
+    }
+    
+    .meta-block {
+      background: #f5f5f5;
+      border-left: 4px solid #333;
+      padding: 15px 20px;
+      margin-bottom: 30px;
+      font-size: 11pt;
+    }
+    
+    .meta-row {
+      display: flex;
+      margin-bottom: 5px;
+    }
+    
+    .meta-label {
+      font-weight: bold;
+      width: 140px;
+      flex-shrink: 0;
+    }
+    
+    .meta-value {
+      flex: 1;
+    }
+    
+    .section {
+      margin-bottom: 25px;
+    }
+    
+    .section-number {
+      font-weight: bold;
+      font-size: 13pt;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
+    }
+    
+    .section-content {
+      text-align: justify;
+      margin-bottom: 15px;
+    }
+    
+    .finding {
+      background: #f9f9f9;
+      border-left: 3px solid #c00;
+      padding: 10px 15px;
+      margin: 15px 0;
+      font-style: italic;
+    }
+    
+    .finding-label {
+      font-weight: bold;
+      color: #900;
+      font-style: normal;
+      font-size: 10pt;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .evidence-chain {
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+      padding: 20px;
+      margin: 20px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 10pt;
+      line-height: 2;
+    }
+    
+    .evidence-chain .arrow {
+      color: #666;
+      display: block;
+      text-align: center;
+      font-size: 14pt;
+    }
+    
+    .evidence-chain .step {
+      text-align: center;
+      padding: 5px 0;
+    }
+    
+    .conclusions-list {
+      margin-left: 20px;
+    }
+    
+    .conclusions-list li {
+      margin-bottom: 12px;
+    }
+    
+    .conclusion-label {
+      font-weight: bold;
+    }
+    
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 3px double #1a1a1a;
+      text-align: center;
+      font-size: 10pt;
+      color: #666;
+    }
+    
+    .confidential {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      font-size: 100pt;
+      color: rgba(200, 0, 0, 0.03);
+      font-weight: bold;
+      letter-spacing: 20px;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .stamp {
+      display: inline-block;
+      border: 3px solid #900;
+      color: #900;
+      padding: 5px 15px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transform: rotate(-5deg);
+      font-size: 14pt;
+      margin-top: 20px;
+    }
+    
+    @media print {
+      body {
+        padding: 0;
+      }
+      .confidential {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="confidential">CONFIDENTIAL</div>
+  
+  <div class="header">
+    <div class="header-label">Technical Investigation Report</div>
+    <div class="header-title">Domain Ownership & Infrastructure Analysis</div>
+    <div class="header-subtitle">nosarahills.info</div>
+  </div>
+  
+  <div class="meta-block">
+    <div class="meta-row">
+      <span class="meta-label">Report Date:</span>
+      <span class="meta-value">June 14, 2026</span>
+    </div>
+    <div class="meta-row">
+      <span class="meta-label">Case Reference:</span>
+      <span class="meta-value">MAZ-INV-2026-0614</span>
+    </div>
+    <div class="meta-row">
+      <span class="meta-label">Client:</span>
+      <span class="meta-value">Desarrollo Rancho Mar Azul Ltda.</span>
+    </div>
+    <div class="meta-row">
+      <span class="meta-label">Subject:</span>
+      <span class="meta-value">Identification of domain registrant and hosting infrastructure</span>
+    </div>
+    <div class="meta-row">
+      <span class="meta-label">Methodology:</span>
+      <span class="meta-value">Open Source Intelligence (OSINT), DNS/WHOIS analysis, reverse IP lookup, contractual documentation review</span>
+    </div>
+    <div class="meta-row">
+      <span class="meta-label">Classification:</span>
+      <span class="meta-value">Confidential — Attorney-Client Work Product</span>
+    </div>
+  </div>
+  
+  <div class="section">
+    <div class="section-number">1. SCOPE OF INVESTIGATION</div>
+    <div class="section-content">
+      This report documents the technical and contextual evidence linking the domain nosarahills.info to David Riabov and his company Scratch Agency / Scratch Marketing, based in Toronto, Canada. The investigation was initiated following the identification of defamatory content targeting Nosara Hills, Mar Azul Condominium, and related business interests.
+    </div>
+  </div>
+  
+  <div class="section">
+    <div class="section-number">2. DOMAIN REGISTRATION DATA</div>
+    <div class="section-content">
+      The domain nosarahills.info was registered on May 14, 2025 with an expiration date of May 14, 2026. The nameservers are ns41.domaincontrol.com and ns42.domaincontrol.com, both associated with GoDaddy as the domain registrar. The domain resolves to IP address 206.223.180.218, hosted by Beanfield Technologies with servers physically located in Toronto, Canada.
+    </div>
+  </div>
+  
+  <div class="section">
+    <div class="section-number">3. SHARED INFRASTRUCTURE ANALYSIS</div>
+    <div class="section-content">
+      A reverse IP lookup on 206.223.180.218 identified additional domains hosted on the same server: scratchagency.ca, scratch.marketing, and scratchmarketing.com. All three belong to Scratch Agency / Scratch Marketing, a Toronto-based marketing firm.
+    </div>
+    <div class="finding">
+      <span class="finding-label">Finding:</span> The defamation site nosarahills.info shares server infrastructure with three domains belonging to Scratch Agency / Scratch Marketing. Four domains, one server, one operator.
+    </div>
+  </div>
+  
+  <div class="section">
+    <div class="section-number">4. IDENTIFYING THE PRINCIPAL</div>
+    <div class="section-content">
+      The purchase agreement for Lot 20 at Mar Azul Condominium identifies the buyer entity as Rancho Verde Riabov SRL, with David Riabov and Erin Green listed as managers. The contact email provided in the contract is david@scratchmarketing.com. The seller was Desarrollo Rancho Mar Azul Ltda.
+    </div>
+    <div class="section-content">
+      Scratch Agency, operating at scratchagency.ca, is a marketing firm based in Toronto. The domain scratchmarketing.com and the email domain @scratchmarketing.com are associated with the same operation.
+    </div>
+    <div class="finding">
+      <span class="finding-label">Finding:</span> David Riabov, manager of Rancho Verde Riabov SRL, uses the email david@scratchmarketing.com — directly linking him to the Scratch Marketing infrastructure that hosts nosarahills.info.
+    </div>
+  </div>
+  
+  <div class="section">
+    <div class="section-number">5. CONTENT ANALYSIS</div>
+    <div class="section-content">
+      The website nosarahills.info operates under the title "Nosara Hills — The Real Truth" and publishes content designed to damage the commercial reputation of Nosara Hills and related entities.
+    </div>
+    <div class="section-content">
+      The site features articles originally published by La Voz de Guanacaste in 2017 covering environmental proceedings related to Nosara Hills. These articles have been republished without authorization and stripped of their original journalistic context to serve as attack content.
+    </div>
+    <div class="section-content">
+      The site also references Coyol Real Estate, Los Coyoles, Finca Mar Azul, and Marion Peri by name.
+    </div>
+    <div class="finding">
+      <span class="finding-label">Finding:</span> The content is not original journalism. It is recycled material repurposed for a targeted defamation campaign against multiple related business interests.
+    </div>
+  </div>
+  
+  <div class="section">
+    <div class="section-number">6. FINANCIAL MOTIVE</div>
+    <div class="section-content">
+      Rancho Verde Riabov SRL, owner of Lot 20 at Mar Azul, has an outstanding debt of $10,426 USD in unpaid condominium maintenance fees. The company has not made any payments for over 12 months. The creation of the defamation website coincides with the escalation of collection efforts against the property.
+    </div>
+  </div>
+  
+  <div class="section">
+    <div class="section-number">7. CHAIN OF EVIDENCE</div>
+    <div class="evidence-chain">
+      <div class="step">nosarahills.info</div>
+      <div class="arrow">↓</div>
+      <div class="step">Resolves to IP: 206.223.180.218 (Toronto, Canada)</div>
+      <div class="arrow">↓</div>
+      <div class="step">Same IP hosts: scratchagency.ca, scratch.marketing, scratchmarketing.com</div>
+      <div class="arrow">↓</div>
+      <div class="step">Mar Azul Lot 20 purchase contract lists email: david@scratchmarketing.com</div>
+      <div class="arrow">↓</div>
+      <div class="step">Contract signatory: David Riabov, Manager, Rancho Verde Riabov SRL</div>
+    </div>
+  </div>
+  
+  <div class="section">
+    <div class="section-number">8. CONCLUSIONS</div>
+    <ol class="conclusions-list">
+      <li><span class="conclusion-label">Infrastructure link established:</span> The domain nosarahills.info is hosted on the same server as Scratch Agency's business domains in Toronto, Canada.</li>
+      <li><span class="conclusion-label">Identity link established:</span> David Riabov's documented use of david@scratchmarketing.com in legal contracts connects him directly to the infrastructure hosting the defamation site.</li>
+      <li><span class="conclusion-label">Motive established:</span> Riabov owes $10,426 to the condominium and has clear financial interest in damaging the developer's reputation and disrupting collection efforts.</li>
+      <li><span class="conclusion-label">Third-party journalism exploited:</span> La Voz de Guanacaste articles from 2017 have been repurposed without authorization to lend false credibility to the attack site.</li>
+    </ol>
+  </div>
+  
+  <div class="section">
+    <div class="section-number">9. RECOMMENDATIONS</div>
+    <div class="section-content">
+      Preserve all DNS, WHOIS, and web archive evidence with certified timestamps. File abuse report with GoDaddy as registrar and Beanfield Technologies as hosting provider. Notify La Voz de Guanacaste that their journalistic content is being used without consent in a commercial defamation campaign. Consider legal action for defamation, trademark infringement, and unfair competition in both Costa Rica and Canada.
+    </div>
+  </div>
+  
+  <div class="section">
+    <div class="section-number">10. DOCUMENTATION ON FILE</div>
+    <div class="section-content">
+      DNS lookup records, both historical and current. Reverse IP lookup results from multiple OSINT sources. WHOIS and RDAP registration data. Mar Azul Lot 20 purchase agreement with signatory information. Web archive screenshots of nosarahills.info with timestamps. Condominium accounts receivable records showing outstanding debt.
+    </div>
+  </div>
+  
+  <div class="footer">
+    <div style="margin-bottom: 30px; text-align: left; border-top: 1px solid #333; padding-top: 20px;">
+      <p style="font-weight: bold; margin-bottom: 5px;">Prepared by:</p>
+      <p style="margin-bottom: 3px;">Licensed Private Investigator</p>
+      <p style="margin-bottom: 3px;">Digital Forensics & OSINT Specialist</p>
+      <p style="font-size: 10pt; color: #666; margin-top: 10px;">This report was prepared based on publicly available information and documentation provided by the client. The findings represent the investigator's professional analysis of the evidence. All conclusions should be verified by legal counsel before use in judicial proceedings.</p>
+    </div>
+    <div class="stamp">Confidential</div>
+    <p style="margin-top: 20px;">— END OF REPORT —</p>
+    <p style="margin-top: 10px;">Case File: MAZ-INV-2026-0614</p>
+  </div>
+</body>
+</html>

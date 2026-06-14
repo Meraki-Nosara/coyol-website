@@ -73,6 +73,7 @@
       display: none;
       width: 100%;
       max-width: 360px;
+      margin: 0 auto;
     }
     
     .step.active {
@@ -411,6 +412,10 @@
     let neighborhoods = [];
     let countdownInterval = null;
     
+    // Get language/community from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const lang = urlParams.get('lang') || 'he';
+    
     const data = {
       email: '',
       first_name: '',
@@ -418,7 +423,8 @@
       phone: '',
       baby_birthday: null,
       city_id: null,
-      neighborhood_id: null
+      neighborhood_id: null,
+      community: lang  // he, yi, en, ar
     };
     
     const dots = document.querySelectorAll('.dot');
@@ -743,6 +749,7 @@
             last_name: data.last_name,
             phone: data.phone || null,
             neighborhood_id: data.neighborhood_id,
+            // community: data.community,  // TODO: enable once schema cache refreshes
             status: 'standby'
           })
         });
@@ -755,7 +762,7 @@
         const result = await res.json();
         localStorage.setItem('mibachutz_user', JSON.stringify(result[0]));
         
-        // Check waiting count
+        // Check waiting count (same neighborhood)
         const countRes = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?neighborhood_id=eq.${data.neighborhood_id}&status=eq.standby&select=id`, {
           headers: { 'apikey': SUPABASE_KEY }
         });

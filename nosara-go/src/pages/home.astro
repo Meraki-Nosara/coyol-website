@@ -1,0 +1,769 @@
+---
+// Nosara Go - Simple Home
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#3D4F3D">
+  <title>Nosara Go</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --keswick: #3D4F3D;
+      --coniston: #4A5D4A;
+      --limestone: #D4C9B5;
+      --alaska: #F5F3EF;
+      --santorini: #1A1F16;
+      --sand: #C4A67C;
+    }
+    
+    html, body {
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      background: var(--limestone);
+      color: var(--santorini);
+    }
+    
+    .app {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Header */
+    .header {
+      background: var(--keswick);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--alaska);
+      letter-spacing: 1px;
+    }
+    
+    .logo span {
+      color: var(--sand);
+    }
+    
+    .credits-badge {
+      background: var(--sand);
+      color: var(--santorini);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+    }
+    
+    /* Recharge Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    
+    .modal-overlay.active {
+      display: flex;
+    }
+    
+    .modal {
+      background: var(--alaska);
+      border-radius: 20px 20px 0 0;
+      width: 100%;
+      max-width: 500px;
+      padding: 24px;
+      animation: slideUp 0.3s ease;
+    }
+    
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+    }
+    
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      background: var(--limestone);
+      border: none;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      color: var(--santorini);
+    }
+    
+    .balance-display {
+      text-align: center;
+      padding: 20px;
+      background: var(--limestone);
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .balance-label {
+      font-size: 12px;
+      color: var(--coniston);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .balance-amount {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 600;
+      color: var(--keswick);
+    }
+    
+    .recharge-options {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .recharge-amount {
+      flex: 1;
+      padding: 14px 8px;
+      background: white;
+      border: 2px solid var(--limestone);
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .recharge-amount.selected {
+      border-color: var(--keswick);
+      background: rgba(61,79,61,0.05);
+    }
+    
+    .recharge-amount .amount {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    
+    .recharge-amount .rides {
+      font-size: 11px;
+      color: var(--coniston);
+      margin-top: 2px;
+    }
+    
+    .payment-methods {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .pay-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    
+    .pay-btn:active {
+      transform: scale(0.98);
+    }
+    
+    .pay-btn.apple {
+      background: #000;
+      color: white;
+    }
+    
+    .pay-btn.google {
+      background: #4285f4;
+      color: white;
+    }
+    
+    .pay-btn.sinpe {
+      background: #00a650;
+      color: white;
+    }
+    
+    .pay-btn.card {
+      background: var(--keswick);
+      color: white;
+    }
+    
+    .pay-btn.paypal {
+      background: #003087;
+      color: white;
+    }
+    
+    .pay-btn.cash {
+      background: var(--sand);
+      color: var(--santorini);
+    }
+    
+    .payment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    
+    /* Map - full screen */
+    .map-container {
+      flex: 1;
+      position: relative;
+    }
+    
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+    
+    /* Location card */
+    .location-card {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      background: var(--alaska);
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      z-index: 1000;
+    }
+    
+    .location-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--coniston);
+      margin-bottom: 4px;
+    }
+    
+    .location-name {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .location-distance {
+      font-size: 13px;
+      color: var(--coniston);
+      margin-top: 2px;
+    }
+    
+    /* Book button - big and centered at bottom */
+    .book-section {
+      position: absolute;
+      bottom: 24px;
+      left: 16px;
+      right: 16px;
+      z-index: 1000;
+    }
+    
+    .book-btn {
+      width: 100%;
+      padding: 18px;
+      background: var(--keswick);
+      color: var(--alaska);
+      border: none;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(61,79,61,0.4);
+      transition: all 0.2s;
+    }
+    
+    .book-btn:active {
+      transform: scale(0.98);
+      background: var(--coniston);
+    }
+    
+    /* Plus one toggle */
+    .plus-one {
+      background: var(--alaska);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    
+    .plus-one-label {
+      font-size: 14px;
+    }
+    
+    .plus-one-label small {
+      display: block;
+      font-size: 12px;
+      color: var(--coniston);
+      margin-top: 2px;
+    }
+    
+    .toggle {
+      width: 50px;
+      height: 28px;
+      background: var(--limestone);
+      border-radius: 14px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .toggle.active {
+      background: var(--keswick);
+    }
+    
+    .toggle::after {
+      content: "";
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      background: white;
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    
+    .toggle.active::after {
+      transform: translateX(22px);
+    }
+    
+    /* Markers */
+    .bus-marker {
+      background: var(--keswick);
+      border: 3px solid var(--alaska);
+      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+      font-size: 14px;
+    }
+    
+    .stop-marker {
+      background: var(--alaska);
+      border: 2px solid var(--keswick);
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--keswick);
+    }
+    
+    .you-marker {
+      background: var(--sand);
+      border: 3px solid white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    
+    .leaflet-control-attribution { display: none; }
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <div class="header">
+    <img src="/logo-v3.png" alt="Nosara Go" style="height: 32px;">
+    <button class="credits-badge" id="creditsBadge">₡6,500</button>
+  </div>
+  
+  <div class="map-container">
+    <div id="map"></div>
+    
+    <div class="location-card">
+      <div class="location-label">Nearest Stop</div>
+      <div class="location-name" id="nearestStop">Locating...</div>
+      <div class="location-distance" id="stopDistance"></div>
+    </div>
+    
+    <div class="book-section">
+      <div class="plus-one">
+        <div class="plus-one-label">
+          +1 Guest
+          <small>Bring one person with you</small>
+        </div>
+        <div class="toggle" id="plusOneToggle"></div>
+      </div>
+      
+      <button class="book-btn" id="bookBtn">
+        Book a Ride
+      </button>
+    </div>
+  </div>
+
+<!-- Recharge Modal -->
+<div class="modal-overlay" id="rechargeModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Recargar</div>
+      <button class="modal-close" id="closeBtn">×</button>
+    </div>
+    
+    <div class="balance-display">
+      <div class="balance-label">Balance Actual</div>
+      <div class="balance-amount" id="modalBalance">₡6,500</div>
+    </div>
+    
+    <div class="recharge-options">
+      <div class="recharge-amount" onclick="selectAmount(this, 2500)">
+        <div class="amount">₡2,500</div>
+        <div class="rides">2 viajes</div>
+      </div>
+      <div class="recharge-amount selected" onclick="selectAmount(this, 5000)">
+        <div class="amount">₡5,000</div>
+        <div class="rides">5 viajes</div>
+      </div>
+      <div class="recharge-amount" onclick="selectAmount(this, 10000)">
+        <div class="amount">₡10,000</div>
+        <div class="rides">12 viajes</div>
+      </div>
+      <div class="recharge-amount" onclick="selectAmount(this, 25000)">
+        <div class="amount">₡25,000</div>
+        <div class="rides">30 viajes</div>
+      </div>
+    </div>
+    
+    <button class="pay-btn sinpe" onclick="pay('sinpe')" style="width:100%; margin-bottom:10px;">
+      <img src="https://www.sinpemovil.fi.cr/images/logo-sinpe-movil.png" alt="SINPE" style="height:24px;" onerror="this.style.display='none'; this.nextSibling.style.display='inline';"><span style="display:none;">SINPE Móvil</span>
+    </button>
+    <div class="payment-grid">
+      <button class="pay-btn card" onclick="pay('card')">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+        Tarjeta
+      </button>
+      <button class="pay-btn apple" onclick="pay('apple')">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+        Apple Pay
+      </button>
+      <button class="pay-btn google" onclick="pay('google')">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Google Pay
+      </button>
+      <button class="pay-btn paypal" onclick="pay('paypal')">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/></svg>
+        PayPal
+      </button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+  // Check registration
+  const user = JSON.parse(localStorage.getItem('nosara_go_user') || 'null');
+  if (!user) window.location.href = '/';
+  
+  // Demo credits in colones
+  let credits = parseFloat(localStorage.getItem('nosara_go_balance') || '6500');
+  let selectedRechargeAmount = 5000;
+  
+  function formatColones(amount) {
+    return '₡' + amount.toLocaleString('es-CR');
+  }
+  
+  function updateCreditsDisplay() {
+    document.getElementById('creditsBadge').textContent = formatColones(credits);
+    document.getElementById('modalBalance').textContent = formatColones(credits);
+  }
+  
+  // Credit badge click handler
+  document.getElementById('creditsBadge').addEventListener('click', function() {
+    document.getElementById('rechargeModal').classList.add('active');
+  });
+  
+  function closeRecharge() {
+    document.getElementById('rechargeModal').classList.remove('active');
+  }
+  
+  function selectAmount(el, amount) {
+    document.querySelectorAll('.recharge-amount').forEach(e => e.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedRechargeAmount = amount;
+  }
+  
+  function pay(method) {
+    credits += selectedRechargeAmount;
+    localStorage.setItem('nosara_go_balance', credits.toString());
+    updateCreditsDisplay();
+    closeRecharge();
+    alert('¡Recarga exitosa! +' + formatColones(selectedRechargeAmount));
+  }
+  
+  // Close button
+  document.getElementById('closeBtn').addEventListener('click', function() {
+    closeRecharge();
+  });
+  
+  // Close modal on overlay click
+  document.getElementById('rechargeModal').addEventListener('click', function(e) {
+    if (e.target.id === 'rechargeModal') closeRecharge();
+  });
+  
+  updateCreditsDisplay();
+  
+  // Route 160 - 7 stops positioned ON the KML route
+  const STOPS = [
+    { id: 1, name: "Guiones Main", coords: [9.9422, -85.6600] },           // Start of route
+    { id: 2, name: "Guiones North", coords: [9.9463, -85.6655] },          // Near beach road junction
+    { id: 3, name: "Pelada", coords: [9.9537, -85.6641] },                 // Pelada turnoff
+    { id: 4, name: "Gas Station", coords: [9.9604, -85.6657] },            // Servicentro Nosara
+    { id: 5, name: "Esh Bakery", coords: [9.9712, -85.6618] },             // Your bakery!
+    { id: 6, name: "Esperanza", coords: [9.9748, -85.6546] },              // Esperanza junction
+    { id: 7, name: "Nosara Centro", coords: [9.9815, -85.6510] },          // Downtown
+  ];
+  
+  // Route 160 path - EXACT from your KML
+  const ROUTE_PATH = [
+    [9.942049615590239, -85.65995819370529],
+    [9.942470764345181, -85.6608159537093],
+    [9.943185620636056, -85.66134210870878],
+    [9.944150560772677, -85.6623011836933],
+    [9.944655499443103, -85.66265872559164],
+    [9.94546512855853, -85.6631100222255],
+    [9.945806913141334, -85.66377996096263],
+    [9.946116433745525, -85.66469215054681],
+    [9.946297588347395, -85.6655497255157],
+    [9.947157437825686, -85.66546547471917],
+    [9.94777546513485, -85.66514895636166],
+    [9.948752919357673, -85.66557841294802],
+    [9.949459548181149, -85.66614922899909],
+    [9.950155095922787, -85.66657065041954],
+    [9.951157537395595, -85.66611200702904],
+    [9.951971326406593, -85.66535361502385],
+    [9.95261014869668, -85.66452144350303],
+    [9.953083281167764, -85.66413669298153],
+    [9.953741682648239, -85.66454375057155],
+    [9.953741591293284, -85.66518168460483],
+    [9.954110466907022, -85.66539776505967],
+    [9.954833424880636, -85.66584359737882],
+    [9.955354352962102, -85.66581329475409],
+    [9.955582504010112, -85.66562412345159],
+    [9.955977257734206, -85.66592136998807],
+    [9.956352754675256, -85.66646977791829],
+    [9.956767980654362, -85.66712198408426],
+    [9.957126019598514, -85.66762357277666],
+    [9.957864904849806, -85.66806563837491],
+    [9.958578115850086, -85.66808305601903],
+    [9.959001264475086, -85.66771510634071],
+    [9.959610569576386, -85.66692690340007],
+    [9.960039118037448, -85.6661505761187],
+    [9.960539964667491, -85.66573407682235],
+    [9.961268260584456, -85.66558368139412],
+    [9.961985704274209, -85.6655764976481],
+    [9.963041125580501, -85.66533444560486],
+    [9.963891572624178, -85.66458340347585],
+    [9.964455909719627, -85.66394649146717],
+    [9.965137264971778, -85.663601143265],
+    [9.966319005741273, -85.66320497734243],
+    [9.967420075957445, -85.66290251676915],
+    [9.968841940333224, -85.66225162644334],
+    [9.969655028303908, -85.66181917701979],
+    [9.970577316404567, -85.66062341668058],
+    [9.971155874666461, -85.65967351906809],
+    [9.970984876769087, -85.65850136017272],
+    [9.970922670777538, -85.65732478624956],
+    [9.971063759793612, -85.65653947082446],
+    [9.971828422004481, -85.65616892014359],
+    [9.972758425295176, -85.65581776376304],
+    [9.974722891114345, -85.65459321313234],
+    [9.976235977906642, -85.65434406552673],
+    [9.977843141839497, -85.65405686545698],
+    [9.979549073414727, -85.6540261549416],
+    [9.980530299348809, -85.6536991888717],
+    [9.980890076841682, -85.65274530235007],
+    [9.981107556721378, -85.65200923056284],
+    [9.981538414904835, -85.65096855994932],
+  ];
+  
+  let userLocation = null;
+  let nearestStop = null;
+  let plusOne = false;
+  
+  // Map
+  // Map bounds - restrict to Nosara area
+  const nosaraBounds = L.latLngBounds(
+    [9.935, -85.675],  // Southwest corner
+    [9.990, -85.645]   // Northeast corner
+  );
+  
+  const map = L.map('map', { 
+    zoomControl: false,
+    maxBounds: nosaraBounds,
+    maxBoundsViscosity: 1.0,
+    minZoom: 13,
+    maxZoom: 17
+  }).setView([9.962, -85.658], 14);
+  
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 19
+  }).addTo(map);
+  
+  // Draw stops
+  STOPS.forEach(stop => {
+    const icon = L.divIcon({
+      className: 'custom-marker',
+      html: `<div class="stop-marker">${stop.id}</div>`,
+      iconSize: [28, 28],
+      iconAnchor: [14, 14]
+    });
+    L.marker(stop.coords, { icon }).addTo(map).bindPopup(`<strong>${stop.name}</strong>`);
+  });
+  
+  // Route 160 line
+  L.polyline(ROUTE_PATH, { 
+    color: '#3D4F3D', 
+    weight: 4, 
+    opacity: 0.6
+  }).addTo(map);
+  
+  // 4 Demo buses
+  const busIcon = L.divIcon({
+    className: 'custom-marker',
+    html: '<div class="bus-marker">🚐</div>',
+    iconSize: [32, 32],
+    iconAnchor: [16, 16]
+  });
+  
+  const buses = [
+    { marker: null, progress: 0, direction: 1, speed: 0.008 },
+    { marker: null, progress: 0.25, direction: -1, speed: 0.007 },
+    { marker: null, progress: 0.5, direction: 1, speed: 0.009 },
+    { marker: null, progress: 0.75, direction: -1, speed: 0.006 },
+  ];
+  
+  buses.forEach((bus, i) => {
+    bus.marker = L.marker(ROUTE_PATH[0], { icon: busIcon }).addTo(map);
+  });
+  
+  // Your location marker
+  const youIcon = L.divIcon({
+    className: 'custom-marker',
+    html: '<div class="you-marker"></div>',
+    iconSize: [20, 20],
+    iconAnchor: [10, 10]
+  });
+  let youMarker = null;
+  
+  // Always center on Nosara and show stops
+  // (User location doesn't matter - they'll be in Nosara when using the app)
+  
+  // Default to Guiones Centro
+  nearestStop = STOPS[1];
+  document.getElementById('nearestStop').textContent = nearestStop.name;
+  document.getElementById('stopDistance').textContent = 'Next bus in 3 min';
+  
+  // Fit map to show Route 160
+  const bounds = L.latLngBounds(ROUTE_PATH);
+  map.fitBounds(bounds, { padding: [80, 80] });
+  
+  // Interpolate position along route
+  function getPositionOnRoute(progress) {
+    const totalSegments = ROUTE_PATH.length - 1;
+    const segment = Math.floor(progress * totalSegments);
+    const segmentProgress = (progress * totalSegments) % 1;
+    
+    const start = ROUTE_PATH[Math.min(segment, ROUTE_PATH.length - 1)];
+    const end = ROUTE_PATH[Math.min(segment + 1, ROUTE_PATH.length - 1)];
+    
+    return [
+      start[0] + (end[0] - start[0]) * segmentProgress,
+      start[1] + (end[1] - start[1]) * segmentProgress
+    ];
+  }
+  
+  // Animate 4 buses back and forth
+  setInterval(() => {
+    buses.forEach(bus => {
+      bus.progress += bus.speed * bus.direction;
+      
+      // Bounce at ends
+      if (bus.progress >= 1) {
+        bus.progress = 1;
+        bus.direction = -1;
+      } else if (bus.progress <= 0) {
+        bus.progress = 0;
+        bus.direction = 1;
+      }
+      
+      const pos = getPositionOnRoute(bus.progress);
+      bus.marker.setLatLng(pos);
+    });
+  }, 500);
+  
+  // Plus one toggle
+  document.getElementById('plusOneToggle').addEventListener('click', function() {
+    plusOne = !plusOne;
+    this.classList.toggle('active', plusOne);
+    document.getElementById('bookBtn').textContent = plusOne ? 'Book for 2' : 'Book a Ride';
+  });
+  
+  // Book button
+  document.getElementById('bookBtn').addEventListener('click', () => {
+    const booking = {
+      id: Date.now().toString(36),
+      stop: nearestStop?.name || 'Guiones Centro',
+      stopId: nearestStop?.id || 2,
+      passengers: plusOne ? 2 : 1,
+      time: new Date().toISOString(),
+      status: 'confirmed'
+    };
+    
+    localStorage.setItem('nosara_go_booking', JSON.stringify(booking));
+    window.location.href = '/ticket';
+  });
+</script>
+
+</body>
+</html>

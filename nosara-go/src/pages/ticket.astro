@@ -1,0 +1,226 @@
+---
+// Nosara Go - QR Ticket
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Your Ticket - Nosara Go</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --keswick: #3D4F3D;
+      --coniston: #4A5D4A;
+      --limestone: #D4C9B5;
+      --alaska: #F5F3EF;
+      --santorini: #1A1F16;
+      --sand: #C4A67C;
+    }
+    
+    html, body {
+      min-height: 100%;
+      font-family: 'Inter', sans-serif;
+      background: var(--keswick);
+      color: var(--santorini);
+    }
+    
+    .app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    
+    .ticket {
+      background: var(--alaska);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 340px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    .ticket-header {
+      background: var(--limestone);
+      padding: 24px;
+      text-align: center;
+    }
+    
+    .ticket-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--keswick);
+      letter-spacing: 1px;
+    }
+    
+    .ticket-logo span {
+      color: var(--sand);
+    }
+    
+    .ticket-status {
+      display: inline-block;
+      padding: 6px 14px;
+      background: var(--keswick);
+      color: var(--alaska);
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-top: 12px;
+    }
+    
+    .ticket-qr {
+      padding: 32px;
+      display: flex;
+      justify-content: center;
+      background: white;
+    }
+    
+    #qrCanvas {
+      border-radius: 8px;
+    }
+    
+    .ticket-info {
+      padding: 24px;
+    }
+    
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--limestone);
+    }
+    
+    .info-row:last-child {
+      border-bottom: none;
+    }
+    
+    .info-label {
+      font-size: 12px;
+      color: var(--coniston);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .info-value {
+      font-size: 14px;
+      font-weight: 600;
+      text-align: right;
+    }
+    
+    .ticket-footer {
+      padding: 16px 24px;
+      background: var(--limestone);
+      text-align: center;
+    }
+    
+    .ticket-id {
+      font-family: monospace;
+      font-size: 14px;
+      color: var(--coniston);
+      letter-spacing: 2px;
+    }
+    
+    .ticket-hint {
+      font-size: 11px;
+      color: var(--coniston);
+      margin-top: 6px;
+    }
+    
+    /* Actions */
+    .actions {
+      margin-top: 24px;
+      width: 100%;
+      max-width: 340px;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 10px;
+      border: none;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--alaska);
+      color: var(--keswick);
+    }
+    
+    .btn:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <div class="ticket">
+    <div class="ticket-header">
+      <img src="/logo-v3.png" alt="Nosara Go" style="height: 40px;">
+      <div class="ticket-status">CONFIRMED</div>
+    </div>
+    
+    <div class="ticket-qr">
+      <img id="qrImage" width="180" height="180" alt="QR Code" style="border-radius: 8px;">
+    </div>
+    
+    <div class="ticket-info">
+      <div class="info-row">
+        <span class="info-label">Pickup</span>
+        <span class="info-value" id="stopName">Guiones Centro</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Passengers</span>
+        <span class="info-value" id="passengers">1</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Valid</span>
+        <span class="info-value" id="validTime">Today</span>
+      </div>
+    </div>
+    
+    <div class="ticket-footer">
+      <div class="ticket-id" id="ticketId">NG-000000</div>
+      <div class="ticket-hint">Show this QR to the driver</div>
+    </div>
+  </div>
+  
+  <div class="actions">
+    <button class="btn" onclick="location.href='/home'">
+      Back to Map
+    </button>
+  </div>
+</div>
+
+<script>
+  const booking = JSON.parse(localStorage.getItem('nosara_go_booking') || '{}');
+  
+  if (booking.id) {
+    document.getElementById('ticketId').textContent = `NG-${booking.id.toUpperCase()}`;
+    document.getElementById('stopName').textContent = booking.stop;
+    document.getElementById('passengers').textContent = booking.passengers;
+    
+    const now = new Date();
+    const validUntil = new Date(now.getTime() + 2 * 60 * 60 * 1000); // 2 hours
+    document.getElementById('validTime').textContent = `Until ${validUntil.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+    
+    // Generate QR via API
+    const qrData = `NG-${booking.id}|${booking.stopId}|${booking.passengers}`;
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(qrData)}&color=3D4F3D&bgcolor=FFFFFF`;
+    document.getElementById('qrImage').src = qrUrl;
+  } else {
+    window.location.href = '/home';
+  }
+</script>
+
+</body>
+</html>
