@@ -706,7 +706,7 @@
         neighborhoods.forEach(n => {
           const opt = document.createElement('option');
           opt.value = n.id;
-          opt.textContent = n.name_en; // Hebrew corrupted in DB, using English
+          opt.textContent = n.name_he || n.name_en; // Prefer Hebrew
           neighborhoodSelect.appendChild(opt);
         });
         neighborhoodSelect.disabled = false;

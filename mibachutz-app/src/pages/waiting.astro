@@ -121,6 +121,28 @@
       background: #f0f0f0;
     }
     
+    .share-btn {
+      position: absolute;
+      bottom: 16px;
+      right: 70px;
+      z-index: 1000;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #FF6B6B;
+      border: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    
+    .share-btn:active {
+      background: #E85555;
+    }
+    
     /* Mom markers */
     .mom-marker {
       border: 3px solid white;
@@ -319,6 +341,7 @@
     <div class="map-container">
       <div id="map"></div>
       <button class="center-btn" id="centerBtn" title="מרכזי עליי">📍</button>
+      <button class="share-btn" id="shareBtn" title="שתפי עם חברה">👥</button>
     </div>
     
     <!-- Drag handle -->
@@ -411,7 +434,7 @@
       
       try {
         // Load waiting moms in same neighborhood
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?neighborhood_id=eq.${user.neighborhood_id}&status=eq.standby&select=id,first_name,group_id,lat,lng`, {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?neighborhood_id=eq.${user.neighborhood_id}&status=eq.standby&select=id,first_name,group_id,latitude,longitude`, {
           headers: { 'apikey': SUPABASE_KEY }
         });
         const moms = await res.json();
@@ -438,17 +461,13 @@
         
         moms.forEach(mom => {
           const isMe = mom.id === user.id;
-          // Use real location if available, otherwise neighborhood center with offset
-          let lat, lng;
-          if (mom.lat && mom.lng) {
-            // Add ~100m privacy offset to real location
-            lat = mom.lat + (Math.random() - 0.5) * 0.001;
-            lng = mom.lng + (Math.random() - 0.5) * 0.001;
-          } else {
-            // Fallback to Tel Aviv center
-            lat = 32.08 + (Math.random() - 0.5) * 0.01;
-            lng = 34.78 + (Math.random() - 0.5) * 0.01;
-          }
+          
+          // Only show moms with GPS location
+          if (!mom.latitude || !mom.longitude) return;
+          
+          // Add ~100m privacy offset to real location
+          const lat = mom.latitude + (Math.random() - 0.5) * 0.001;
+          const lng = mom.longitude + (Math.random() - 0.5) * 0.001;
           
           const marker = L.marker([lat, lng], { icon: createMomIcon(mom.first_name, isMe) }).addTo(map);
           markers.push(marker);
@@ -560,6 +579,28 @@
         map.setView(myLatLng, 16);
       }
     });
+    
+    // Share with friend button
+    document.getElementById('shareBtn').addEventListener('click', async () => {
+      const shareText = 'היי, בואי למי בחוץ! אפליקציה לאמהות לצאת ביחד עם התינוקות';
+      const shareUrl = 'https://mibahutz.com';
+      
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: 'מי בחוץ',
+            text: shareText,
+            url: shareUrl
+          });
+        } catch (e) {
+          // User cancelled
+        }
+      } else {
+        // Fallback: copy to clipboard
+        await navigator.clipboard.writeText(shareText + ' ' + shareUrl);
+        alert('הקישור הועתק!');
+      }
+    });
     document.getElementById('chatInput').addEventListener('keypress', e => {
       if (e.key === 'Enter') sendMessage();
     });
@@ -581,11 +622,11 @@
               'apikey': SUPABASE_KEY,
               'Authorization': `Bearer ${SUPABASE_KEY}`
             },
-            body: JSON.stringify({ lat, lng })
+            body: JSON.stringify({ latitude: lat, longitude: lng, last_location_at: new Date().toISOString() })
           });
           // Update local user
-          user.lat = lat;
-          user.lng = lng;
+          user.latitude = lat;
+          user.longitude = lng;
           localStorage.setItem('mibachutz_user', JSON.stringify(user));
           // Reload moms to show updated positions
           loadMoms();

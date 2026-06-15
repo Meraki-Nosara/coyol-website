@@ -1,783 +1,985 @@
 ---
-// Admin Dashboard - Unified Tuscan Coffee Shop Style
-export const prerender = false;
+// Mibachutz Admin - Unified Dashboard
+// All admin functions in one place
 ---
 
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>מי בחוץ - ניהול</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>לוח בקרה - מי בחוץ</title>
+  <link rel="icon" href="/favicon.svg" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     :root {
-      --cream: #F5E6D3;
-      --brown-dark: #2D2016;
-      --brown: #5D3A1A;
+      --coffee-dark: #5D4A3E;
+      --coffee-medium: #8B7355;
+      --coffee-light: #A89070;
+      --cream: #FDF8F3;
+      --cream-dark: #E8DDD0;
+      --cream-50: rgba(93, 74, 62, 0.5);
       --gold: #C9A86C;
-      --terracotta: #A65D3F;
+      --gold-dark: #B8956B;
+      --purple: #6B4C9A;
+      --purple-light: #9B7BC7;
+      --text-dark: #3D2A1E;
     }
     
     body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--cream) 0%, var(--cream-dark) 100%);
+      color: var(--text-dark);
       min-height: 100vh;
-      background: url('/images/cafe-bg.jpg') center/cover fixed;
-      font-family: 'Heebo', sans-serif;
-      color: var(--cream);
     }
     
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(30, 20, 10, 0.4);
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    /* Header */
-    .header {
-      background: rgba(45, 32, 22, 0.6);
-      backdrop-filter: blur(12px);
-      padding: 20px 24px;
-      border-bottom: 2px solid rgba(201, 168, 108, 0.3);
-    }
-
-    .header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      margin-bottom: 16px;
-    }
-
-    /* Tabs */
-    .tabs {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .tab {
-      padding: 10px 20px;
-      background: rgba(245, 230, 211, 0.1);
-      border: 1px solid rgba(245, 230, 211, 0.2);
-      border-radius: 8px;
-      color: var(--cream);
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .tab:hover {
-      background: rgba(245, 230, 211, 0.2);
-    }
-
-    .tab.active {
-      background: var(--cream);
-      color: var(--brown);
-    }
-
-    /* Main Content */
-    .main {
-      padding: 24px;
+    .admin-page {
       max-width: 1400px;
       margin: 0 auto;
-    }
-
-    /* Stats Row */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    @media (max-width: 768px) {
-      .stats-row { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    .stat-card {
-      background: rgba(255, 251, 245, 0.08);
-      backdrop-filter: blur(8px);
       padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      border: 1px solid rgba(201, 168, 108, 0.2);
     }
-
-    .stat-value {
-      font-family: 'Playfair Display', serif;
-      font-size: 36px;
-      font-weight: 600;
-      color: var(--gold);
-    }
-
-    .stat-label {
-      font-size: 13px;
-      opacity: 0.8;
-      margin-top: 4px;
-    }
-
-    /* Panel (each tab content) */
-    .panel {
-      display: none;
-      background: rgba(255, 251, 245, 0.05);
-      backdrop-filter: blur(8px);
-      border-radius: 16px;
-      border: 1px solid rgba(201, 168, 108, 0.2);
-      overflow: hidden;
-    }
-
-    .panel.active {
-      display: block;
-    }
-
-    .panel-header {
-      background: rgba(45, 32, 22, 0.5);
-      padding: 16px 20px;
+    
+    /* Header */
+    .admin-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(201, 168, 108, 0.2);
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(245, 230, 211, 0.1);
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 20px;
     }
-
+    
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .header-brand img {
+      height: 40px;
+    }
+    
+    .header-brand h1 {
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    /* Tabs */
+    .admin-tabs {
+      display: flex;
+      gap: 5px;
+      background: white;
+      padding: 5px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .tab-btn {
+      padding: 10px 20px;
+      background: transparent;
+      border: none;
+      color: var(--coffee-medium);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    
+    .tab-btn:hover {
+      color: var(--coffee-dark);
+      background: var(--cream-dark);
+    }
+    
+    .tab-btn.active {
+      background: var(--gold);
+      color: white;
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .stat-card.highlight {
+      background: linear-gradient(135deg, var(--gold), #D4B87A);
+      color: white;
+    }
+    
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 13px;
+      opacity: 0.8;
+    }
+    
+    /* Tab Content */
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    /* Panels */
+    .panel {
+      background: white;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    
+    .panel-header {
+      padding: 15px 20px;
+      background: var(--cream-dark);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
     .panel-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 20px;
+      font-weight: 600;
+      font-size: 16px;
     }
-
+    
     .panel-body {
       padding: 20px;
-      max-height: 600px;
-      overflow-y: auto;
     }
-
-    /* Table */
+    
+    /* Grid layouts */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    @media (max-width: 900px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+    
+    /* Tables */
     .data-table {
       width: 100%;
       border-collapse: collapse;
     }
-
+    
     .data-table th,
     .data-table td {
-      padding: 12px 16px;
+      padding: 12px 15px;
       text-align: right;
-      border-bottom: 1px solid rgba(245, 230, 211, 0.1);
+      border-bottom: 1px solid var(--cream-dark);
     }
-
+    
     .data-table th {
-      background: rgba(45, 32, 22, 0.3);
+      background: var(--cream-dark);
       font-weight: 600;
       font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      color: var(--coffee-dark);
     }
-
+    
     .data-table tr:hover {
-      background: rgba(245, 230, 211, 0.05);
+      background: var(--cream);
     }
-
-    /* Status badges */
-    .badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 500;
+    
+    /* Messages */
+    .message-list {
+      max-height: 400px;
+      overflow-y: auto;
     }
-
-    .badge-green {
-      background: rgba(76, 175, 80, 0.2);
-      color: #81C784;
-    }
-
-    .badge-gray {
-      background: rgba(158, 158, 158, 0.2);
-      color: #BDBDBD;
-    }
-
-    .badge-gold {
-      background: rgba(201, 168, 108, 0.2);
-      color: var(--gold);
-    }
-
-    /* Button */
-    .btn {
-      padding: 8px 16px;
-      border-radius: 6px;
-      border: none;
-      font-family: inherit;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-gold {
-      background: var(--gold);
-      color: var(--brown-dark);
-    }
-
-    .btn-gold:hover {
-      background: #D4B87A;
-    }
-
-    .btn-outline {
-      background: transparent;
-      border: 1px solid rgba(245, 230, 211, 0.3);
-      color: var(--cream);
-    }
-
-    .btn-outline:hover {
-      background: rgba(245, 230, 211, 0.1);
-    }
-
-    /* Search */
-    .search-box {
+    
+    .message-item {
+      padding: 12px;
+      border-bottom: 1px solid var(--cream-dark);
       display: flex;
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: 10px;
     }
-
-    .search-input {
+    
+    .message-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: white;
+      flex-shrink: 0;
+    }
+    
+    .message-content {
       flex: 1;
-      padding: 10px 16px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(245, 230, 211, 0.2);
-      border-radius: 8px;
-      color: var(--cream);
-      font-family: inherit;
+    }
+    
+    .message-sender {
+      font-weight: 600;
       font-size: 14px;
     }
-
-    .search-input::placeholder {
-      color: rgba(245, 230, 211, 0.5);
+    
+    .message-text {
+      font-size: 13px;
+      opacity: 0.8;
+      margin-top: 4px;
     }
-
-    /* Messages Panel */
-    .message-list {
+    
+    .message-time {
+      font-size: 11px;
+      opacity: 0.5;
+    }
+    
+    /* Intelligence */
+    .intel-stats {
       display: flex;
-      flex-direction: column;
-      gap: 12px;
+      gap: 15px;
+      margin-bottom: 20px;
     }
-
-    .message-item {
-      background: rgba(45, 32, 22, 0.3);
-      padding: 12px 16px;
-      border-radius: 8px;
+    
+    .intel-stat {
+      flex: 1;
+      background: rgba(107, 76, 154, 0.1);
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
     }
-
-    .message-header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 4px;
+    
+    .intel-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--purple-light);
+      display: block;
+    }
+    
+    .intel-label {
       font-size: 12px;
       opacity: 0.7;
     }
-
-    .message-sender {
-      font-weight: 600;
-      color: var(--gold);
+    
+    .intel-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
-
-    .message-text {
+    
+    .intel-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .intel-bar-label {
+      width: 80px;
+      font-size: 13px;
+      text-align: right;
+    }
+    
+    .intel-bar-container {
+      flex: 1;
+      height: 22px;
+      background: var(--cream-dark);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .intel-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--purple), var(--purple-light));
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    
+    /* Broadcast */
+    .broadcast-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 12px;
+      background: white;
+      border: 1px solid var(--cream-dark);
+      border-radius: 8px;
+      color: var(--text-dark);
       font-size: 14px;
     }
-
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+    
+    textarea.form-input {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .btn-primary {
+      background: var(--gold);
+      color: var(--coffee-dark);
+    }
+    
+    .btn-primary:hover {
+      background: #D4B87A;
+    }
+    
+    .btn-secondary {
+      background: var(--cream-dark);
+      color: var(--coffee-dark);
+    }
+    
+    /* Group checkboxes */
+    .group-checks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    
+    .group-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: white;
+      border: 1px solid var(--cream-dark);
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    
+    .group-check input {
+      accent-color: var(--gold);
+    }
+    
+    /* Badge */
+    .badge {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    
+    .badge-gold {
+      background: rgba(201, 168, 108, 0.3);
+      color: var(--gold);
+    }
+    
+    .badge-purple {
+      background: rgba(107, 76, 154, 0.3);
+      color: var(--purple-light);
+    }
+    
+    .badge-green {
+      background: rgba(76, 175, 80, 0.3);
+      color: #81C784;
+    }
+    
     /* Empty state */
     .empty-state {
       text-align: center;
-      padding: 60px 20px;
+      padding: 40px;
       opacity: 0.6;
     }
-
-    .empty-state p {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 18px;
-      font-style: italic;
-    }
-
-    /* Actions row */
-    .actions-row {
+    
+    /* Search */
+    .search-box {
       display: flex;
-      gap: 8px;
+      gap: 10px;
+      margin-bottom: 15px;
     }
-
-    /* Group card */
-    .group-card {
-      background: linear-gradient(135deg, rgba(255,251,245,0.95), rgba(245,230,211,0.9));
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 16px;
-      border: 2px solid rgba(201, 168, 108, 0.4);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    .group-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 22px;
-      font-weight: 600;
-      color: #5D3A1A;
-      margin-bottom: 12px;
-    }
-
-    .group-stats {
-      display: flex;
-      color: #6B5344;
-      gap: 16px;
-      font-size: 13px;
-      opacity: 0.8;
-    }
-
-    /* Broadcast form */
-    .broadcast-form {
-      background: rgba(45, 32, 22, 0.3);
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
-
-    .broadcast-form textarea {
-      width: 100%;
-      padding: 12px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(245, 230, 211, 0.2);
-      border-radius: 8px;
-      color: var(--cream);
-      font-family: inherit;
-      font-size: 14px;
-      resize: vertical;
-      min-height: 80px;
-      margin-bottom: 12px;
-    }
-
-    .broadcast-form textarea::placeholder {
-      color: rgba(245, 230, 211, 0.5);
+    
+    .search-box input {
+      flex: 1;
     }
   </style>
 </head>
 <body>
 
-  <header class="header">
-    <h1>מי בחוץ</h1>
-    <div class="tabs">
-      <button class="tab active" data-tab="overview">סקירה</button>
-      <button class="tab" data-tab="moms">אמהות</button>
-      <button class="tab" data-tab="groups">קבוצות</button>
-      <button class="tab" data-tab="messages">הודעות</button>
+<div class="admin-page">
+  <header class="admin-header">
+    <div class="header-brand">
+      <h1>לוח בקרה</h1>
     </div>
+    
+    <nav class="admin-tabs">
+      <button class="tab-btn active" data-tab="overview">סקירה</button>
+      <button class="tab-btn" data-tab="moms">אמהות</button>
+      <button class="tab-btn" data-tab="groups">קבוצות</button>
+      <button class="tab-btn" data-tab="messages">הודעות</button>
+      <button class="tab-btn" data-tab="broadcast">שליחה</button>
+      <button class="tab-btn" data-tab="intelligence">תובנות</button>
+    </nav>
   </header>
-
-  <main class="main">
-    <!-- Stats Row -->
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-value" id="totalMoms">-</div>
-        <div class="stat-label">אמהות רשומות</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="availableNow">-</div>
-        <div class="stat-label">בחוץ עכשיו</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="totalGroups">-</div>
-        <div class="stat-label">קבוצות פעילות</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="todayMessages">-</div>
-        <div class="stat-label">הודעות היום</div>
-      </div>
+  
+  <!-- Stats (always visible) -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-value" id="totalMoms">--</span>
+      <span class="stat-label">אמהות רשומות</span>
     </div>
-
-    <!-- Overview Panel -->
-    <div class="panel active" id="panel-overview">
-      <div class="panel-header">
-        <span class="panel-title">אמהות בחוץ עכשיו</span>
-        <a href="/map" target="_blank" class="btn btn-outline">פתח מפה</a>
+    <div class="stat-card">
+      <span class="stat-value" id="totalGroups">--</span>
+      <span class="stat-label">קבוצות פעילות</span>
+    </div>
+    <div class="stat-card highlight">
+      <span class="stat-value" id="availableNow">--</span>
+      <span class="stat-label">בחוץ עכשיו</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value" id="todayMessages">--</span>
+      <span class="stat-label">הודעות היום</span>
+    </div>
+  </div>
+  
+  <!-- Tab: Overview -->
+  <div class="tab-content active" id="tab-overview">
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">הודעות אחרונות</span>
+          <span class="badge badge-gold">חי</span>
+        </div>
+        <div class="panel-body">
+          <div class="message-list" id="recentMessages"></div>
+        </div>
       </div>
-      <div class="panel-body">
-        <div id="availableList">
-          <div class="empty-state"><p>טוען...</p></div>
+      
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">תובנות שוק</span>
+          <span class="badge badge-purple">B2B</span>
+        </div>
+        <div class="panel-body">
+          <div class="intel-stats">
+            <div class="intel-stat">
+              <span class="intel-value" id="totalSignals">0</span>
+              <span class="intel-label">אותות</span>
+            </div>
+            <div class="intel-stat">
+              <span class="intel-value" id="purchaseIntents">0</span>
+              <span class="intel-label">כוונת קנייה</span>
+            </div>
+            <div class="intel-stat">
+              <span class="intel-value" id="painPoints">0</span>
+              <span class="intel-label">נקודות כאב</span>
+            </div>
+          </div>
+          <h4 style="margin: 15px 0 10px; font-size: 14px;">קטגוריות מובילות</h4>
+          <div class="intel-bars" id="topCategories"></div>
         </div>
       </div>
     </div>
-
-    <!-- Moms Panel -->
-    <div class="panel" id="panel-moms">
+  </div>
+  
+  <!-- Tab: Moms -->
+  <div class="tab-content" id="tab-moms">
+    <div class="panel">
       <div class="panel-header">
-        <span class="panel-title">ניהול אמהות</span>
-        <button class="btn btn-gold" onclick="exportMoms()">ייצוא CSV</button>
+        <span class="panel-title">רשימת אמהות</span>
+        <button class="btn btn-secondary" onclick="exportMoms()">ייצוא CSV</button>
       </div>
       <div class="panel-body">
         <div class="search-box">
-          <input type="text" class="search-input" id="searchMoms" placeholder="חיפוש לפי שם או טלפון..." />
+          <input type="text" class="form-input" id="searchMoms" placeholder="חיפוש לפי שם או טלפון..." />
         </div>
-        <table class="data-table" id="momsTable">
+        <table class="data-table">
           <thead>
             <tr>
               <th>שם</th>
               <th>טלפון</th>
               <th>שכונה</th>
+              <th>תינוק</th>
               <th>סטטוס</th>
-              <th>זמינות</th>
-              <th>הרשמה</th>
             </tr>
           </thead>
-          <tbody id="momsTableBody">
-          </tbody>
+          <tbody id="momsTable"></tbody>
         </table>
       </div>
     </div>
-
-    <!-- Groups Panel -->
-    <div class="panel" id="panel-groups">
+  </div>
+  
+  <!-- Tab: Groups -->
+  <div class="tab-content" id="tab-groups">
+    <div class="panel">
       <div class="panel-header">
         <span class="panel-title">ניהול קבוצות</span>
       </div>
       <div class="panel-body">
-        <div class="broadcast-form">
-          <textarea id="broadcastMessage" placeholder="כתבי הודעה לשליחה לכל הקבוצות..."></textarea>
-          <button class="btn btn-gold" onclick="sendBroadcast()">שלח לכולן</button>
-        </div>
-        <div id="groupsList">
-        </div>
-      </div>
-    </div>
-
-    <!-- Messages Panel -->
-    <div class="panel" id="panel-messages">
-      <div class="panel-header">
-        <span class="panel-title">הודעות אחרונות</span>
-        <span class="badge badge-gold" id="liveIndicator">חי</span>
-      </div>
-      <div class="panel-body">
-        <div class="message-list" id="messagesList">
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <script>
-    const SUPABASE_URL = 'https://fkikzryelozciailbryh.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
-    
-    let supabase = null;
-    let allMoms = [];
-    let allGroups = [];
-    let allMessages = [];
-    
-    // Fix garbled Hebrew (mojibake from double-encoding)
-    const hebrewFixes = {
-      '◊®◊û◊™ ◊Œ◊«◊´◊«': 'רמת אביב',
-      '◊™◊º ◊Œ◊«◊´◊« ◊û◊®◊œ◊ƒ': 'תל אביב מרכז',
-      '◊´◊§◊ï': 'יפו',
-      '◊§◊º◊ï◊®◊Š◊Œ◊´◊Ÿ': 'פלורנטין',
-      '◊Š◊ï◊ï◊Ÿ ◊Ÿ◊Ÿ◊ß': 'נווה צדק',
-      '◊®◊û◊™ ◊Ÿ◊Œ◊´◊´◊º': 'רמת החייל',
-      '◊Ÿ◊®◊Ÿ◊º◊´◊Ÿ': 'הרצליה',
-      '◊®◊¢◊Š◊Š◊Ÿ': 'רעננה',
-      '◊œ◊§◊® ◊°◊«◊Œ': 'כפר סבא',
-      '◊§◊™◊Œ ◊™◊ß◊ï◊ï◊Ÿ': 'פתח תקווה',
-      '◊®◊Œ◊Š◊ï◊Ÿ ◊º◊Ÿ◊´◊ï◊Ÿ': 'ראשון לציון',
-      '◊Œ◊ï◊º◊ï◊Ÿ': 'חולון',
-      '◊«◊™ ◊´◊ù': 'בת ים',
-      '◊Œ◊«◊¢◊™◊´◊´◊ù': 'גבעתיים',
-      '◊®◊û◊™ ◊Œ◊Ÿ': 'רמת גן',
-      '◊®◊ï◊Š◊´◊™': 'רונית',
-      '◊û◊´◊œ◊º': 'מיכל',
-      '◊Š◊®◊´◊™': 'שרית'
-    };
-    
-    function fixHebrew(text) {
-      if (!text) return text;
-      return hebrewFixes[text] || text;
-    }
-    
-    // Tab switching
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
-      });
-    });
-    
-    async function init() {
-      const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
-      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      
-      await Promise.all([
-        loadStats(),
-        loadMoms(),
-        loadGroups(),
-        loadMessages()
-      ]);
-      
-      // Live updates for messages
-      supabase
-        .channel('admin-messages')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'group_messages' }, payload => {
-          addMessageToList(payload.new);
-        })
-        .subscribe();
-    }
-    
-    async function loadStats() {
-      // Total moms
-      const { count: totalMoms } = await supabase
-        .from('moms_v2')
-        .select('*', { count: 'exact', head: true });
-      document.getElementById('totalMoms').textContent = totalMoms || 0;
-      
-      // Available now
-      const { count: available } = await supabase
-        .from('moms_v2')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_available', true);
-      document.getElementById('availableNow').textContent = available || 0;
-      
-      // Groups
-      const { count: groups } = await supabase
-        .from('groups_v2')
-        .select('*', { count: 'exact', head: true });
-      document.getElementById('totalGroups').textContent = groups || 0;
-      
-      // Today messages
-      const today = new Date().toISOString().split('T')[0];
-      const { count: messages } = await supabase
-        .from('messages')
-        .select('*', { count: 'exact', head: true })
-        .gte('created_at', today);
-      document.getElementById('todayMessages').textContent = messages || 0;
-    }
-    
-    async function loadMoms() {
-      const { data, error } = await supabase
-        .from('moms_v2')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (error) {
-        console.error('Error loading moms:', error);
-        return;
-      }
-      
-      allMoms = data || [];
-      renderMomsTable(allMoms);
-      renderAvailableList(allMoms.filter(m => m.is_available));
-    }
-    
-    function renderMomsTable(moms) {
-      const tbody = document.getElementById('momsTableBody');
-      
-      if (!moms.length) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; opacity:0.6;">אין אמהות רשומות</td></tr>';
-        return;
-      }
-      
-      tbody.innerHTML = moms.map(mom => `
-        <tr style="${mom.is_available ? 'background: rgba(76, 175, 80, 0.2);' : ''}">
-          <td><strong>${mom.first_name} ${mom.last_name || ''}</strong></td>
-          <td dir="ltr">${mom.phone || '-'}</td>
-          <td>${mom.neighborhood_id ? 'Raanana' : '-'}</td>
-          <td>${mom.status || 'standby'}</td>
-          <td>
-            ${mom.is_available 
-              ? '<span class="badge badge-green">בחוץ</span>' 
-              : '<span class="badge badge-gray">ממתינה</span>'}
-          </td>
-          <td>${new Date(mom.created_at).toLocaleDateString('he-IL')}</td>
-        </tr>
-      `).join('');
-    }
-    
-    function renderAvailableList(moms) {
-      const container = document.getElementById('availableList');
-      
-      if (!moms.length) {
-        container.innerHTML = '<div class="empty-state"><p>אין אמהות בחוץ כרגע</p></div>';
-        return;
-      }
-      
-      container.innerHTML = `
         <table class="data-table">
           <thead>
             <tr>
-              <th>שם</th>
+              <th>שם הקבוצה</th>
+              <th>חברות</th>
               <th>שכונה</th>
-              <th>תינוק</th>
-              <th>סוג</th>
+              <th>שפה</th>
+              <th>סטטוס</th>
             </tr>
           </thead>
-          <tbody>
-            ${moms.map(mom => `
-              <tr>
-                <td><strong>${fixHebrew(mom.name)}</strong></td>
-                <td>${fixHebrew(mom.neighborhoods?.name_he) || '-'}</td>
-                <td>${fixHebrew(mom.baby_name) || '-'}</td>
-                <td>${mom.always_available ? '<span class="badge badge-gold">תמיד זמינה</span>' : '<span class="badge badge-green">בחוץ עכשיו</span>'}</td>
-              </tr>
-            `).join('')}
-          </tbody>
+          <tbody id="groupsTable"></tbody>
         </table>
-      `;
-    }
-    
-    async function loadGroups() {
-      const { data, error } = await supabase
-        .from('groups_v2')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (error) {
-        console.error('Error loading groups:', error);
-        return;
-      }
-      
-      allGroups = data || [];
-      
-      // Get member counts
-      for (const group of allGroups) {
-        const { count } = await supabase
-          .from('moms_v2')
-          .select('*', { count: 'exact', head: true })
-          .eq('group_id', group.id);
-        group.memberCount = count || 0;
-      }
-      
-      renderGroupsList(allGroups);
-    }
-    
-    function renderGroupsList(groups) {
-      const container = document.getElementById('groupsList');
-      
-      if (!groups.length) {
-        container.innerHTML = '<div class="empty-state"><p>אין קבוצות עדיין</p></div>';
-        return;
-      }
-      
-      container.innerHTML = groups.map((group, index) => `
-        <div class="group-card">
-          <div class="group-name">רעננה #${groups.length - index}</div>
-          <div class="group-stats">
-            <span><strong>${group.memberCount}</strong> אמהות</span>
-            <span>•</span>
-            <span>נוצרה ${new Date(group.created_at).toLocaleDateString('he-IL')}</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Tab: Messages -->
+  <div class="tab-content" id="tab-messages">
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">כל ההודעות</span>
+      </div>
+      <div class="panel-body">
+        <div class="message-list" id="allMessages" style="max-height: 600px;"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Tab: Broadcast -->
+  <div class="tab-content" id="tab-broadcast">
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">שליחת הודעה לקבוצות</span>
+      </div>
+      <div class="panel-body">
+        <div class="broadcast-form">
+          <div class="form-group">
+            <label>בחרי קבוצות:</label>
+            <div class="group-checks" id="broadcastGroups"></div>
           </div>
-        </div>
-      `).join('');
-    }
-    
-    async function loadMessages() {
-      const { data, error } = await supabase
-        .from('group_messages')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(50);
-      
-      if (error) {
-        console.error('Error loading messages:', error);
-        return;
-      }
-      
-      allMessages = data || [];
-      renderMessagesList(allMessages);
-    }
-    
-    function renderMessagesList(messages) {
-      const container = document.getElementById('messagesList');
-      
-      if (!messages.length) {
-        container.innerHTML = '<div class="empty-state"><p>אין הודעות עדיין</p></div>';
-        return;
-      }
-      
-      container.innerHTML = messages.map(msg => `
-        <div class="message-item">
-          <div class="message-header">
-            <span class="message-sender">${msg.sender_name || 'לא ידוע'}</span>
-            <span>${new Date(msg.created_at).toLocaleString('he-IL', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</span>
+          <div class="form-group">
+            <label>תוכן ההודעה:</label>
+            <textarea class="form-input" id="broadcastText" placeholder="כתבי את ההודעה כאן..."></textarea>
           </div>
-          <div class="message-text">${msg.text || ''}</div>
+          <button class="btn btn-primary" onclick="sendBroadcast()">שלחי הודעה</button>
         </div>
-      `).join('');
-    }
-    
-    function addMessageToList(msg) {
-      // Prepend new message
-      const container = document.getElementById('messagesList');
-      const div = document.createElement('div');
-      div.className = 'message-item';
-      div.innerHTML = `
-        <div class="message-header">
-          <span class="message-sender">הודעה חדשה</span>
-          <span>${new Date().toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Tab: Intelligence -->
+  <div class="tab-content" id="tab-intelligence">
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">קטגוריות מובילות</span>
         </div>
-        <div class="message-text">${msg.text || msg.content || ''}</div>
-      `;
-      container.insertBefore(div, container.firstChild);
+        <div class="panel-body">
+          <div class="intel-bars" id="fullCategories"></div>
+        </div>
+      </div>
       
-      // Update today count
-      const todayEl = document.getElementById('todayMessages');
-      todayEl.textContent = parseInt(todayEl.textContent || 0) + 1;
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">מותגים נזכרים</span>
+        </div>
+        <div class="panel-body">
+          <div class="intel-bars" id="fullBrands"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">אותות אחרונים</span>
+      </div>
+      <div class="panel-body">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>זמן</th>
+              <th>סוג</th>
+              <th>קטגוריה</th>
+              <th>מותג</th>
+              <th>עיר</th>
+            </tr>
+          </thead>
+          <tbody id="signalsTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Supabase config - Mibachutz
+  const SUPABASE_URL = 'https://fkikzryelozciailbryh.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
+  
+  // Intelligence Supabase (Meraki)
+  const INTEL_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+  const INTEL_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ueGp6dnFncnJvZGFsY210bnRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTc5NTM0NTMsImV4cCI6MjAzMzUyOTQ1M30.pGMjmR6RCpoz6b_z0GL9Z0bVnPEgDZSLfgpkCPqjxkA';
+  
+  let moms = [];
+  let groups = [];
+  let messages = [];
+  let signals = [];
+  
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+  
+  // Load all data
+  async function loadData() {
+    await Promise.all([
+      loadMoms(),
+      loadGroups(),
+      loadMessages(),
+      loadIntelligence()
+    ]);
+  }
+  
+  async function loadMoms() {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?select=*&order=created_at.desc`, {
+      headers: { 'apikey': SUPABASE_KEY }
+    });
+    moms = await res.json();
+    if (!Array.isArray(moms)) moms = [];
+    
+    // Load neighborhoods separately
+    const nRes = await fetch(`${SUPABASE_URL}/rest/v1/neighborhoods?select=*`, {
+      headers: { 'apikey': SUPABASE_KEY }
+    });
+    const neighborhoods = await nRes.json();
+    const neighMap = {};
+    if (Array.isArray(neighborhoods)) {
+      neighborhoods.forEach(n => neighMap[n.id] = n);
     }
     
-    // Search moms
-    document.getElementById('searchMoms').addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase();
-      const filtered = allMoms.filter(m => 
-        m.name.toLowerCase().includes(query) || 
-        (m.phone && m.phone.includes(query))
-      );
-      renderMomsTable(filtered);
+    // Attach neighborhood names to moms
+    moms.forEach(m => {
+      m.neighborhood = neighMap[m.neighborhood_id] || null;
     });
     
-    // Export CSV
-    function exportMoms() {
-      const csv = [
-        ['שם', 'טלפון', 'שכונה', 'תינוק', 'גיל', 'סטטוס', 'הרשמה'].join(','),
-        ...allMoms.map(m => [
-          m.name,
-          m.phone || '',
-          m.neighborhoods?.name_he || '',
-          m.baby_name || '',
-          m.baby_age_range || '',
-          m.is_available || m.always_available ? 'זמינה' : 'לא זמינה',
-          new Date(m.created_at).toLocaleDateString('he-IL')
-        ].join(','))
-      ].join('\n');
+    document.getElementById('totalMoms').textContent = moms.length;
+    document.getElementById('availableNow').textContent = moms.filter(m => m.is_available || m.status === 'outside').length;
+    
+    renderMomsTable(moms);
+  }
+  
+  function renderMomsTable(data) {
+    document.getElementById('momsTable').innerHTML = data.slice(0, 100).map(m => {
+      const name = [m.first_name, m.last_name].filter(Boolean).join(' ') || '-';
+      const isOutside = m.is_available || m.status === 'outside';
+      return `
+        <tr>
+          <td>${name}</td>
+          <td dir="ltr">${m.phone || m.email || '-'}</td>
+          <td>${m.neighborhood?.name_en || m.neighborhood?.name_he || '-'}</td>
+          <td>${m.status || 'standby'}</td>
+          <td><span class="badge ${isOutside ? 'badge-green' : ''}">${isOutside ? 'בחוץ!' : 'בבית'}</span></td>
+        </tr>
+      `;
+    }).join('') || '<tr><td colspan="5" class="empty-state">אין אמהות</td></tr>';
+  }
+  
+  async function loadGroups() {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/groups_v2?select=*,neighborhoods(name_he)&order=created_at.desc`, {
+      headers: { 'apikey': SUPABASE_KEY }
+    });
+    groups = await res.json();
+    if (!Array.isArray(groups)) groups = [];
+    
+    document.getElementById('totalGroups').textContent = groups.length;
+    
+    document.getElementById('groupsTable').innerHTML = groups.length ? groups.map(g => `
+      <tr>
+        <td>${g.name || 'קבוצה ' + g.id.slice(0,6)}</td>
+        <td>${g.member_count || '-'}</td>
+        <td>${g.neighborhoods?.name_he || '-'}</td>
+        <td>${g.language || 'עברית'}</td>
+        <td><span class="badge badge-green">פעילה</span></td>
+      </tr>
+    `).join('') : '<tr><td colspan="5" class="empty-state">אין קבוצות עדיין</td></tr>';
+    
+    // Broadcast checkboxes
+    document.getElementById('broadcastGroups').innerHTML = groups.length ? groups.map(g => `
+      <label class="group-check">
+        <input type="checkbox" value="${g.id}" />
+        <span>${g.name || 'קבוצה ' + g.id.slice(0,6)}</span>
+      </label>
+    `).join('') : '<div class="empty-state">אין קבוצות</div>';
+  }
+  
+  async function loadMessages() {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/messages?select=*&order=created_at.desc&limit=100`, {
+      headers: { 'apikey': SUPABASE_KEY }
+    });
+    messages = await res.json();
+    if (!Array.isArray(messages)) messages = [];
+    
+    const today = new Date().toDateString();
+    const todayCount = messages.filter(m => new Date(m.created_at).toDateString() === today).length;
+    document.getElementById('todayMessages').textContent = todayCount;
+    
+    // Get sender names from moms
+    const momNames = {};
+    moms.forEach(m => momNames[m.id] = m.name);
+    
+    const html = messages.slice(0, 30).map(m => {
+      const senderName = momNames[m.sender_id] || 'אנונימי';
+      return `
+        <div class="message-item">
+          <div class="message-avatar">${senderName[0]}</div>
+          <div class="message-content">
+            <div class="message-sender">${senderName}</div>
+            <div class="message-text">${m.text || ''}</div>
+            <div class="message-time">${new Date(m.created_at).toLocaleString('he-IL')}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+    document.getElementById('recentMessages').innerHTML = html || '<div class="empty-state">אין הודעות</div>';
+    document.getElementById('allMessages').innerHTML = html || '<div class="empty-state">אין הודעות</div>';
+  }
+  
+  async function loadIntelligence() {
+    try {
+      const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+      const res = await fetch(`${INTEL_URL}/rest/v1/intent_signals?extracted_at=gte.${since}&select=*&order=extracted_at.desc&limit=500`, {
+        headers: { 'apikey': INTEL_KEY }
+      });
+      signals = await res.json();
       
-      const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = `moms-${new Date().toISOString().split('T')[0]}.csv`;
-      link.click();
+      if (!Array.isArray(signals)) signals = [];
+      
+      // Stats
+      document.getElementById('totalSignals').textContent = signals.length;
+      document.getElementById('purchaseIntents').textContent = signals.filter(s => s.signal_type === 'purchase_intent').length;
+      document.getElementById('painPoints').textContent = signals.filter(s => s.signal_type === 'pain_point').length;
+      
+      // Categories
+      const catCounts = {};
+      signals.forEach(s => { if (s.category) catCounts[s.category] = (catCounts[s.category] || 0) + 1; });
+      const topCats = Object.entries(catCounts).sort((a,b) => b[1] - a[1]).slice(0, 8);
+      const maxCat = topCats[0]?.[1] || 1;
+      
+      const catBars = topCats.length ? topCats.map(([cat, count]) => `
+        <div class="intel-bar-row">
+          <span class="intel-bar-label">${cat}</span>
+          <div class="intel-bar-container">
+            <div class="intel-bar" style="width: ${(count/maxCat)*100}%">${count}</div>
+          </div>
+        </div>
+      `).join('') : '<div class="empty-state">אין נתונים עדיין</div>';
+      
+      document.getElementById('topCategories').innerHTML = catBars;
+      document.getElementById('fullCategories').innerHTML = catBars;
+      
+      // Brands
+      const brandCounts = {};
+      signals.forEach(s => { if (s.brand_mentioned) brandCounts[s.brand_mentioned] = (brandCounts[s.brand_mentioned] || 0) + 1; });
+      const topBrands = Object.entries(brandCounts).sort((a,b) => b[1] - a[1]).slice(0, 8);
+      const maxBrand = topBrands[0]?.[1] || 1;
+      
+      document.getElementById('fullBrands').innerHTML = topBrands.length ? topBrands.map(([brand, count]) => `
+        <div class="intel-bar-row">
+          <span class="intel-bar-label">${brand}</span>
+          <div class="intel-bar-container">
+            <div class="intel-bar" style="width: ${(count/maxBrand)*100}%">${count}</div>
+          </div>
+        </div>
+      `).join('') : '<div class="empty-state">אין מותגים עדיין</div>';
+      
+      // Signals table
+      document.getElementById('signalsTable').innerHTML = signals.slice(0, 20).map(s => `
+        <tr>
+          <td>${new Date(s.extracted_at).toLocaleString('he-IL', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'})}</td>
+          <td>${s.signal_type?.replace('_', ' ') || '-'}</td>
+          <td>${s.category || '-'}</td>
+          <td>${s.brand_mentioned || '-'}</td>
+          <td>${s.city || '-'}</td>
+        </tr>
+      `).join('') || '<tr><td colspan="5" class="empty-state">אין אותות</td></tr>';
+      
+    } catch (e) {
+      console.error('Intelligence load error:', e);
+    }
+  }
+  
+  // Search moms
+  document.getElementById('searchMoms').addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase();
+    const filtered = moms.filter(m => {
+      const name = [m.first_name, m.last_name].filter(Boolean).join(' ').toLowerCase();
+      return name.includes(q) || (m.phone || '').includes(q) || (m.email || '').toLowerCase().includes(q);
+    });
+    renderMomsTable(filtered);
+  });
+  
+  // Export CSV
+  function exportMoms() {
+    const csv = [
+      ['שם', 'טלפון', 'אימייל', 'שכונה', 'סטטוס'].join(','),
+      ...moms.map(m => [
+        [m.first_name, m.last_name].filter(Boolean).join(' '),
+        m.phone || '',
+        m.email || '',
+        m.neighborhoods?.name_he || '',
+        m.status || 'standby'
+      ].join(','))
+    ].join('\n');
+    
+    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `moms-${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+  }
+  
+  // Broadcast
+  async function sendBroadcast() {
+    const text = document.getElementById('broadcastText').value.trim();
+    if (!text) { alert('נא להזין הודעה'); return; }
+    
+    const selected = [...document.querySelectorAll('#broadcastGroups input:checked')].map(c => c.value);
+    if (selected.length === 0) { alert('נא לבחור קבוצות'); return; }
+    
+    for (const groupId of selected) {
+      await fetch(`${SUPABASE_URL}/rest/v1/messages_v2`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`
+        },
+        body: JSON.stringify({
+          group_id: groupId,
+          content: text,
+          sender_id: null
+        })
+      });
     }
     
-    // Broadcast message
-    async function sendBroadcast() {
-      const text = document.getElementById('broadcastMessage').value.trim();
-      if (!text) return;
+    document.getElementById('broadcastText').value = '';
+    alert('ההודעה נשלחה!');
+    loadMessages();
+  }
+  
+  // Init
+  loadData();
+  
+  // Auto refresh every 30 seconds
+  setInterval(loadData, 30000);
+  
+  // Real-time subscriptions with Supabase Realtime
+  async function setupRealtime() {
+    // Load Supabase JS client
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+    script.onload = () => {
+      const { createClient } = supabase;
+      const client = createClient(SUPABASE_URL, SUPABASE_KEY);
       
-      // Insert message to all groups
-      for (const group of allGroups) {
-        await supabase.from('messages').insert({
-          group_id: group.id,
-          sender_id: null, // System message
-          text: text,
-          is_system: true
-        });
-      }
+      // Subscribe to moms_v2 changes
+      client.channel('moms-changes')
+        .on('postgres_changes', { 
+          event: '*', 
+          schema: 'public', 
+          table: 'moms_v2' 
+        }, (payload) => {
+          console.log('Mom change:', payload);
+          loadMoms(); // Refresh moms list
+          // Flash notification
+          if (payload.eventType === 'INSERT') {
+            showNotification('אמא חדשה נרשמה!');
+          } else if (payload.eventType === 'UPDATE' && payload.new?.status === 'outside') {
+            showNotification(`${payload.new?.first_name || 'אמא'} יצאה לבחוץ!`);
+          }
+        })
+        .subscribe();
       
-      document.getElementById('broadcastMessage').value = '';
-      alert('ההודעה נשלחה לכל הקבוצות');
-    }
-    
-    init();
-  </script>
+      // Subscribe to groups_v2 changes
+      client.channel('groups-changes')
+        .on('postgres_changes', { 
+          event: '*', 
+          schema: 'public', 
+          table: 'groups_v2' 
+        }, () => loadGroups())
+        .subscribe();
+        
+      console.log('Realtime subscriptions active');
+    };
+    document.head.appendChild(script);
+  }
+  
+  // Notification helper
+  function showNotification(text) {
+    const div = document.createElement('div');
+    div.style.cssText = `
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 9999;
+      animation: slideDown 0.3s ease;
+    `;
+    div.textContent = text;
+    document.body.appendChild(div);
+    setTimeout(() => div.remove(), 4000);
+  }
+  
+  setupRealtime();
+</script>
+
+<style>
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+</style>
 
 </body>
 </html>
