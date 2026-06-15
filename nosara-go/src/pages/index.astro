@@ -1,15 +1,30 @@
 ---
-// Nosara Go - Registration First
+// Nosara Go - Modern Registration with Slide Steps
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#3D4F3D">
-  <title>Nosara Go</title>
+  <title>Nosara Go - Transporte Verde</title>
+  <meta name="description" content="Dejamos la moto en casa. Transporte eléctrico en Nosara.">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Nosara Go">
+  <meta property="og:description" content="Dejamos la moto en casa. Transporte eléctrico en Nosara.">
+  <meta property="og:image" content="https://nosara-go.vercel.app/og-image.png">
+  <meta property="og:url" content="https://nosara-go.vercel.app">
+  <meta property="og:type" content="website">
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Nosara Go">
+  <meta name="twitter:description" content="Dejamos la moto en casa. Transporte eléctrico en Nosara.">
+  <meta name="twitter:image" content="https://nosara-go.vercel.app/og-image.png">
+  
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -28,70 +43,136 @@
       font-family: 'Inter', sans-serif;
       background: var(--limestone);
       color: var(--santorini);
+      overflow-x: hidden;
     }
     
     .app {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
     }
     
-    .card {
-      background: var(--alaska);
-      border-radius: 16px;
-      padding: 40px 32px;
-      width: 100%;
-      max-width: 380px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+    /* Header */
+    .header {
+      padding: 24px;
+      text-align: center;
     }
     
     .logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 32px;
-      font-weight: 600;
-      color: var(--keswick);
-      text-align: center;
-      letter-spacing: 2px;
+      height: 80px;
+      margin-bottom: 8px;
     }
     
-    .logo span {
-      color: var(--sand);
+    .header.hidden {
+      display: none;
     }
     
     .tagline {
-      text-align: center;
-      font-size: 12px;
+      font-size: 13px;
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--coniston);
-      margin-top: 4px;
-      margin-bottom: 32px;
     }
     
-    .input-group {
+    /* Progress dots */
+    .progress {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px;
+    }
+    
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--limestone);
+      border: 2px solid var(--coniston);
+      transition: all 0.3s;
+    }
+    
+    .dot.active {
+      background: var(--keswick);
+      border-color: var(--keswick);
+      width: 24px;
+      border-radius: 4px;
+    }
+    
+    .dot.done {
+      background: var(--keswick);
+      border-color: var(--keswick);
+    }
+    
+    /* Steps container - full page slides */
+    .steps-container {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .step {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transform: translateY(100%);
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0;
+    }
+    
+    .step.active {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .step.done {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    
+    .step-card {
+      background: var(--alaska);
+      border-radius: 20px;
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    
+    .step-icon {
+      font-size: 48px;
       margin-bottom: 16px;
     }
     
-    .label {
-      font-size: 12px;
-      font-weight: 500;
+    .step-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--santorini);
+      margin-bottom: 8px;
+    }
+    
+    .step-subtitle {
+      font-size: 14px;
       color: var(--coniston);
-      margin-bottom: 6px;
-      display: block;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      margin-bottom: 24px;
     }
     
     .input {
       width: 100%;
-      padding: 14px 16px;
-      border: 1px solid var(--limestone);
-      border-radius: 8px;
+      padding: 16px;
+      border: 2px solid var(--limestone);
+      border-radius: 12px;
       font-family: inherit;
-      font-size: 16px;
+      font-size: 18px;
+      text-align: center;
       background: white;
       transition: border-color 0.2s;
     }
@@ -111,13 +192,13 @@
       background: var(--keswick);
       color: var(--alaska);
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       font-family: inherit;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      margin-top: 8px;
-      transition: background 0.2s;
+      margin-top: 20px;
+      transition: all 0.2s;
     }
     
     .btn:hover {
@@ -128,101 +209,361 @@
       transform: scale(0.98);
     }
     
-    .divider {
-      display: flex;
-      align-items: center;
-      margin: 24px 0;
-      color: var(--coniston);
-      font-size: 12px;
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
     }
     
-    .divider::before,
-    .divider::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: var(--limestone);
+    /* Welcome step */
+    .welcome-card {
+      background: transparent;
+      box-shadow: none;
     }
     
-    .divider span {
-      padding: 0 12px;
+    .welcome-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--keswick);
+      letter-spacing: 1px;
     }
     
-    .login-link {
-      text-align: center;
+    .welcome-route {
       font-size: 14px;
       color: var(--coniston);
+      margin-top: 8px;
+      letter-spacing: 2px;
     }
     
-    .login-link a {
-      color: var(--keswick);
-      font-weight: 600;
-      text-decoration: none;
-    }
-    
-    .footer {
-      margin-top: 24px;
+    /* Swipe hint */
+    .swipe-hint {
+      margin-top: 40px;
       text-align: center;
-      font-size: 11px;
       color: var(--coniston);
+      animation: bounce 2s infinite;
+    }
+    
+    .swipe-arrow {
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+    
+    .swipe-text {
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); opacity: 0.6; }
+      50% { transform: translateY(-10px); opacity: 1; }
+    }
+    
+    /* Free-floating inputs */
+    .step-free {
+      text-align: center;
+      width: 100%;
+      padding: 0 32px;
+    }
+    
+    .input-free {
+      width: 100%;
+      padding: 20px 0;
+      border: none;
+      border-bottom: 2px solid var(--sand);
+      background: transparent;
+      font-family: 'Inter', sans-serif;
+      font-size: 32px;
+      text-align: center;
+      color: var(--coniston);
+    }
+    
+    .input-free:focus {
+      outline: none;
+      color: var(--santorini);
+    }
+    
+    .input-free::placeholder {
+      color: var(--coniston);
+    }
+    
+    .free-hint {
+      margin-top: 48px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--coniston);
+    }
+    
+    .phone-free {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      border-bottom: 2px solid var(--sand);
+    }
+    
+    .phone-free .input-free {
+      border-bottom: none;
+      text-align: left;
+      padding-left: 8px;
+    }
+    
+    .country-free {
+      font-size: 32px;
+      color: var(--coniston);
+    }
+    
+    /* Confirm step */
+    .confirm-icon {
+      width: 80px;
+      height: 80px;
+      border: 3px solid var(--keswick);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      color: var(--keswick);
+      margin: 0 auto 24px;
+    }
+    
+    .confirm-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--keswick);
+      margin-bottom: 16px;
+    }
+    
+    .terms-text {
+      font-size: 14px;
+      color: var(--coniston);
+      line-height: 1.6;
+    }
+    
+    .terms-text a {
+      color: var(--keswick);
+      text-decoration: underline;
+    }
+    
+    /* Back button */
+    .back-btn {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--alaska);
+      border: none;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .back-btn.visible {
+      display: flex;
     }
   </style>
 </head>
 <body>
 
 <div class="app">
-  <div class="card">
-    <img src="/logo-v3.png" alt="Nosara Go" style="height: 90px; margin-bottom: 16px; display: block; margin-left: auto; margin-right: auto;">
+  <button class="back-btn" id="backBtn" onclick="prevStep()">←</button>
+  
+  <div class="header" id="header">
     <div class="tagline">Dejamos la moto en casa</div>
-    
-    <form id="registerForm">
-      <div class="input-group">
-        <label class="label">Name</label>
-        <input type="text" class="input" id="nameInput" placeholder="Your name" required>
-      </div>
-      
-      <div class="input-group">
-        <label class="label">Email</label>
-        <input type="email" class="input" id="emailInput" placeholder="email@example.com" required>
-      </div>
-      
-      <div class="input-group">
-        <label class="label">Phone</label>
-        <input type="tel" class="input" id="phoneInput" placeholder="+506 8888 8888" required>
-      </div>
-      
-      <button type="submit" class="btn">Create Account</button>
-    </form>
-    
-    <div class="divider"><span>or</span></div>
-    
-    <div class="login-link">
-      Already have an account? <a href="/login">Sign in</a>
-    </div>
   </div>
   
-  <div class="footer">
-    By signing up you agree to our Terms of Service
+  <div class="progress">
+    <div class="dot active" id="dot0"></div>
+    <div class="dot" id="dot1"></div>
+    <div class="dot" id="dot2"></div>
+    <div class="dot" id="dot3"></div>
+  </div>
+  
+  <div class="steps-container" id="stepsContainer">
+      
+      <!-- Step 0: Welcome -->
+      <div class="step active" id="step0">
+        <div class="welcome-card">
+          <img src="/logo-v3.png" alt="Nosara Go" style="height: 120px; margin-bottom: 24px;">
+          
+          <div class="welcome-text">100% Eléctrico</div>
+          <div class="welcome-route">Guiones — Nosara Centro</div>
+          
+          <div class="swipe-hint" style="margin-top: 40px;">
+            <div class="swipe-arrow">↑</div>
+            <div class="swipe-text">Desliza hacia arriba</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Step 1: Name -->
+      <div class="step" id="step1">
+        <div class="step-free">
+          <input type="text" class="input-free" id="nameInput" placeholder="Tu nombre" autocomplete="name">
+          <div class="free-hint">Desliza hacia arriba</div>
+        </div>
+      </div>
+      
+      <!-- Step 2: Phone -->
+      <div class="step" id="step2">
+        <div class="step-free">
+          <div class="phone-free">
+            <span class="country-free">+506</span>
+            <input type="tel" class="input-free" id="phoneInput" placeholder="8888 8888" autocomplete="tel" style="flex:1;">
+          </div>
+          <div class="free-hint">Desliza hacia arriba</div>
+        </div>
+      </div>
+      
+      <!-- Step 3: Terms & Confirm -->
+      <div class="step" id="step3">
+        <div class="step-free">
+          <div class="confirm-icon">✓</div>
+          <div class="confirm-title">Listo para viajar</div>
+          <div class="terms-text">
+            Al continuar, aceptas nuestros<br>
+            <a href="#">Términos y Condiciones</a>
+          </div>
+          <button class="btn" id="confirmBtn" onclick="register()" style="margin-top: 32px;">Aceptar y Continuar</button>
+        </div>
+      </div>
   </div>
 </div>
 
 <script>
-  document.getElementById('registerForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
+  let currentStep = 0;
+  const totalSteps = 4;
+  
+  function updateUI() {
+    // Update step visibility
+    for (let i = 0; i < totalSteps; i++) {
+      const step = document.getElementById(`step${i}`);
+      if (step) {
+        step.classList.remove('active', 'done');
+        if (i < currentStep) step.classList.add('done');
+        if (i === currentStep) step.classList.add('active');
+      }
+    }
     
+    // Update dots
+    for (let i = 0; i < totalSteps; i++) {
+      const dot = document.getElementById(`dot${i}`);
+      dot.classList.remove('active', 'done');
+      if (i < currentStep) dot.classList.add('done');
+      if (i === currentStep) dot.classList.add('active');
+    }
+    
+    // Show/hide back button
+    document.getElementById('backBtn').classList.toggle('visible', currentStep > 0);
+  }
+  
+  function nextStep() {
+    if (currentStep < totalSteps - 1) {
+      currentStep++;
+      updateUI();
+      
+      // Focus input on next step
+      setTimeout(() => {
+        const inputs = ['', 'nameInput', 'phoneInput'];
+        if (inputs[currentStep]) {
+          document.getElementById(inputs[currentStep]).focus();
+        }
+      }, 400);
+    }
+  }
+  
+  function prevStep() {
+    if (currentStep > 0) {
+      currentStep--;
+      updateUI();
+    }
+  }
+  
+  function register() {
     const user = {
-      name: document.getElementById('nameInput').value,
-      email: document.getElementById('emailInput').value,
-      phone: document.getElementById('phoneInput').value,
+      name: document.getElementById('nameInput').value.trim(),
+      phone: '+506 ' + document.getElementById('phoneInput').value.trim(),
       created: new Date().toISOString()
     };
     
-    // Store locally for now
     localStorage.setItem('nosara_go_user', JSON.stringify(user));
-    
-    // Go to home/map
     window.location.href = '/home';
+  }
+  
+  // Input validation
+  document.getElementById('nameInput').addEventListener('input', function() {
+    document.getElementById('nameBtn').disabled = this.value.trim().length < 2;
   });
+  
+  document.getElementById('phoneInput').addEventListener('input', function() {
+    // Remove non-digits and format
+    let val = this.value.replace(/\D/g, '');
+    if (val.length > 8) val = val.slice(0, 8);
+    if (val.length > 4) val = val.slice(0, 4) + ' ' + val.slice(4);
+    this.value = val;
+    document.getElementById('phoneBtn').disabled = val.replace(/\s/g, '').length < 8;
+  });
+  
+  // Enter key navigation
+  document.getElementById('nameInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && !document.getElementById('nameBtn').disabled) nextStep();
+  });
+  
+  document.getElementById('phoneInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && !document.getElementById('phoneBtn').disabled) register();
+  });
+  
+  // Check if already registered
+  if (localStorage.getItem('nosara_go_user')) {
+    window.location.href = '/home';
+  }
+  
+  // Swipe gesture support
+  let touchStartY = 0;
+  let touchEndY = 0;
+  
+  document.addEventListener('touchstart', e => {
+    touchStartY = e.changedTouches[0].screenY;
+  });
+  
+  document.addEventListener('touchend', e => {
+    touchEndY = e.changedTouches[0].screenY;
+    handleSwipe();
+  });
+  
+  function handleSwipe() {
+    const diff = touchStartY - touchEndY;
+    console.log('Swipe detected, diff:', diff, 'currentStep:', currentStep);
+    
+    if (diff > 50) {
+      // Swipe up
+      if (currentStep === 0) {
+        nextStep();
+      } else if (currentStep === 1) {
+        // Name step - require at least 1 character
+        const name = document.getElementById('nameInput').value.trim();
+        console.log('Name value:', name);
+        if (name.length >= 1) nextStep();
+      } else if (currentStep === 2) {
+        // Phone step - require 8 digits
+        const phone = document.getElementById('phoneInput').value.replace(/\s/g, '');
+        console.log('Phone value:', phone);
+        if (phone.length >= 8) nextStep();
+      } else if (currentStep === 3) {
+        register();
+      }
+    } else if (diff < -50) {
+      // Swipe down
+      prevStep();
+    }
+  }
 </script>
 
 </body>

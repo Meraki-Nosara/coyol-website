@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-06T03:35:00Z",
+  "lastUpdated": "2026-06-15T06:50:00Z",
   "source": "Anlly QuickBooks Ventas files (converted to NET)",
   "daily": [
     {
@@ -3171,6 +3171,39 @@
       "iva13": 49699,
       "source": "ingrid_email",
       "cashier": "Juan Castillo"
+    },
+    {
+      "date": "2026-06-13",
+      "restaurant": "laluna",
+      "cash": 289650,
+      "card": 4179974,
+      "total": 4369617,
+      "netSales": 3559319,
+      "service10": 347586,
+      "iva13": 462712,
+      "source": "ingrid_email"
+    },
+    {
+      "date": "2026-06-13",
+      "restaurant": "coyol",
+      "cash": 50000,
+      "card": 3163068,
+      "total": 3163068,
+      "netSales": 2571600,
+      "service10": 257160,
+      "iva13": 334308,
+      "source": "ingrid_email"
+    },
+    {
+      "date": "2026-06-13",
+      "restaurant": "esh",
+      "cash": 66240,
+      "card": 592858,
+      "total": 609077,
+      "netSales": 505667,
+      "service10": 37673,
+      "iva13": 65737,
+      "source": "ingrid_email"
     }
   ]
 }

@@ -553,15 +553,17 @@
   
   updateCreditsDisplay();
   
-  // Route 160 - 7 stops positioned ON the KML route
+  // Route 160 - 9 stops including restaurants
   const STOPS = [
-    { id: 1, name: "Guiones Main", coords: [9.9422, -85.6600] },           // Start of route
-    { id: 2, name: "Guiones North", coords: [9.9463, -85.6655] },          // Near beach road junction
-    { id: 3, name: "Pelada", coords: [9.9537, -85.6641] },                 // Pelada turnoff
-    { id: 4, name: "Gas Station", coords: [9.9604, -85.6657] },            // Servicentro Nosara
-    { id: 5, name: "Esh Bakery", coords: [9.9712, -85.6618] },             // Your bakery!
-    { id: 6, name: "Esperanza", coords: [9.9748, -85.6546] },              // Esperanza junction
-    { id: 7, name: "Nosara Centro", coords: [9.9815, -85.6510] },          // Downtown
+    { id: 1, name: "Guiones Main", coords: [9.9422, -85.6600] },
+    { id: 2, name: "Guiones North", coords: [9.9463, -85.6655] },
+    { id: 3, name: "La Luna", coords: [9.9510, -85.6650] },
+    { id: 4, name: "Pelada", coords: [9.9537, -85.6641] },
+    { id: 5, name: "Gas Station", coords: [9.9604, -85.6657] },
+    { id: 6, name: "Esh Bakery", coords: [9.9712, -85.6618] },
+    { id: 7, name: "Coyol Restaurant", coords: [9.9735, -85.6580] },
+    { id: 8, name: "Esperanza", coords: [9.9748, -85.6546] },
+    { id: 9, name: "Nosara Centro", coords: [9.9815, -85.6510] },
   ];
   
   // Route 160 path - EXACT from your KML
