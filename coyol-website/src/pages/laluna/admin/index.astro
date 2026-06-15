@@ -192,6 +192,8 @@ import '../../../styles/laluna-tables.css';
                 <option value="09:30">9:30 AM</option>
                 <option value="10:00">10:00 AM</option>
                 <option value="10:30">10:30 AM</option>
+                <option value="11:00">11:00 AM</option>
+                <option value="11:30">11:30 AM</option>
                 <option value="12:00">12:00 PM</option>
                 <option value="12:30">12:30 PM</option>
                 <option value="13:00">1:00 PM</option>
@@ -220,9 +222,16 @@ import '../../../styles/laluna-tables.css';
             </div>
             <div class="form-group">
               <label>Table</label>
-              <select id="newTable" class="form-input">
-                <option value="">Auto-assign</option>
-              </select>
+              <div class="multi-table-select" id="newTableContainer">
+                <button type="button" class="table-select-btn" onclick="toggleTableDropdown('new')">
+                  <span id="newTableLabel">Select Tables</span>
+                  <span class="dropdown-arrow">▼</span>
+                </button>
+                <div class="table-dropdown" id="newTableDropdown">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+              <input type="hidden" id="newTable" value="" />
             </div>
           </div>
           <div class="form-row">
@@ -2251,6 +2260,21 @@ import '../../../styles/laluna-tables.css';
     .form-group.flex-2 { flex: 2; }
     .form-group label { display: block; font-size: 0.6875rem; color: var(--keswick); margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Inter', sans-serif; }
     .form-input { width: 100%; padding: 0.5rem; border: 1px solid var(--limestone); border-radius: 4px; font-size: 0.875rem; background: var(--cream); color: var(--santorini); }
+    
+    /* Multi-table select */
+    .multi-table-select { position: relative; }
+    .table-select-btn { width: 100%; padding: 0.5rem; border: 1px solid var(--limestone); border-radius: 4px; font-size: 0.875rem; background: var(--cream); color: var(--santorini); display: flex; justify-content: space-between; align-items: center; cursor: pointer; text-align: left; }
+    .table-select-btn:hover { border-color: var(--keswick); }
+    .dropdown-arrow { font-size: 0.6rem; color: #666; }
+    .table-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid var(--limestone); border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 100; max-height: 200px; overflow-y: auto; margin-top: 2px; }
+    .table-dropdown.open { display: block; }
+    .table-option { display: flex; align-items: center; padding: 0.5rem 0.75rem; cursor: pointer; gap: 0.5rem; border-bottom: 1px solid #eee; }
+    .table-option:last-child { border-bottom: none; }
+    .table-option:hover { background: var(--parchment); }
+    .table-option input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--keswick); }
+    .table-option.selected { background: rgba(61, 79, 61, 0.1); }
+    .table-option .table-name { font-weight: 500; }
+    .table-option .table-cap { font-size: 0.75rem; color: #666; }
     .phone-input-group { display: flex; gap: 0.5rem; }
     .country-select { width: 90px; padding: 0.5rem; border: 1px solid var(--limestone); border-radius: 4px; font-size: 0.875rem; background: var(--cream); cursor: pointer; }
     .phone-number { flex: 1; }
@@ -2793,7 +2817,7 @@ import '../../../styles/laluna-tables.css';
                 ${[1,2,3,4,5,6,7,8,9,10,12,15,20].map(n => `<option value="${n}" ${res.guests == n ? 'selected' : ''}>${n}p</option>`).join('')}
               </select>
               <select class="table-select-mobile" data-res-id="${res.id}" onclick="event.stopPropagation();" onchange="quickAssignTable(this)" title="Table">
-                <option value="">${res.tableId ? 'T' + res.tableId.replace('t','').toUpperCase() : 'TBA'}</option>
+                <option value="">${res.tableId ? (res.tableId.includes(',') ? res.tableId.split(',').length + ' tables' : 'T' + res.tableId.replace('t','').toUpperCase()) : 'TBA'}</option>
               </select>
               <div class="res-actions-mini">
                 ${res.guestPhone ? `
@@ -3805,6 +3829,81 @@ import '../../../styles/laluna-tables.css';
     });
 
     // New reservation modal
+    // Track selected tables for multi-select
+    let selectedTables = [];
+    
+    function toggleTableDropdown(prefix) {
+      const dropdown = document.getElementById(prefix + 'TableDropdown');
+      dropdown.classList.toggle('open');
+    }
+    
+    function updateTableSelection(prefix, tableId, tableName, checkbox) {
+      if (checkbox.checked) {
+        if (!selectedTables.includes(tableId)) {
+          selectedTables.push(tableId);
+        }
+      } else {
+        selectedTables = selectedTables.filter(t => t !== tableId);
+      }
+      
+      // Update hidden input with comma-separated values
+      document.getElementById(prefix + 'Table').value = selectedTables.join(',');
+      
+      // Update button label
+      const label = document.getElementById(prefix + 'TableLabel');
+      if (selectedTables.length === 0) {
+        label.textContent = 'Select Tables';
+      } else if (selectedTables.length === 1) {
+        label.textContent = '1 table selected';
+      } else {
+        label.textContent = selectedTables.length + ' tables selected';
+      }
+    }
+    
+    function populateMultiTableDropdown(prefix, preselectedTables = []) {
+      const dropdown = document.getElementById(prefix + 'TableDropdown');
+      const layouts = getLayout();
+      const allTables = [
+        ...(layouts.inside || []),
+        ...(layouts.terraza || []),
+        ...(layouts.jardin || []),
+        ...(layouts.fantasma || [])
+      ];
+      
+      selectedTables = preselectedTables;
+      
+      dropdown.innerHTML = allTables.map(t => {
+        const isSelected = selectedTables.includes(t.id);
+        const cap = t.maxCovers || t.capacity || 4;
+        return `
+          <label class="table-option ${isSelected ? 'selected' : ''}">
+            <input type="checkbox" ${isSelected ? 'checked' : ''} 
+              onchange="updateTableSelection('${prefix}', '${t.id}', '${t.name || t.id}', this); this.parentElement.classList.toggle('selected', this.checked);">
+            <span class="table-name">${t.name || t.id.toUpperCase()}</span>
+            <span class="table-cap">(${cap}p)</span>
+          </label>
+        `;
+      }).join('');
+      
+      // Update label
+      const label = document.getElementById(prefix + 'TableLabel');
+      if (selectedTables.length === 0) {
+        label.textContent = 'Select Tables';
+      } else {
+        label.textContent = selectedTables.length + ' table(s) selected';
+      }
+      
+      // Update hidden input
+      document.getElementById(prefix + 'Table').value = selectedTables.join(',');
+    }
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.multi-table-select')) {
+        document.querySelectorAll('.table-dropdown').forEach(d => d.classList.remove('open'));
+      }
+    });
+    
     function openNewReservation(preselectedTable = null) {
       // CLEAR all form fields first (remove previous client data)
       document.getElementById('newName').value = '';
@@ -3819,28 +3918,9 @@ import '../../../styles/laluna-tables.css';
       
       document.getElementById('newDate').value = getDateString(currentDate);
       
-      // Populate table dropdown
-      const tableSelect = document.getElementById('newTable');
-      const layouts = getLayout();
-      const allTables = [
-        ...(layouts.inside || []),
-        ...(layouts.terraza || []),
-        ...(layouts.jardin || []),
-        ...(layouts.fantasma || [])
-      ];
-      
-      tableSelect.innerHTML = '<option value="">Auto-assign</option>';
-      allTables.forEach(t => {
-        const opt = document.createElement('option');
-        opt.value = t.id;
-        opt.textContent = t.name || t.id.toUpperCase();
-        tableSelect.appendChild(opt);
-      });
-      
-      // Pre-select table if provided
-      if (preselectedTable) {
-        tableSelect.value = preselectedTable;
-      }
+      // Populate multi-table dropdown
+      const preselected = preselectedTable ? [preselectedTable] : [];
+      populateMultiTableDropdown('new', preselected);
       
       document.getElementById('newResModal').classList.add('open');
     }
