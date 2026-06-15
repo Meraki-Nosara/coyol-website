@@ -1,4 +1,8 @@
 {
-  "lastCheck": "2026-06-10T14:00:00Z",
-  "hotLeadsAlerted": []
+  "lastCheck": "2026-06-15T21:08:00Z",
+  "hotLeadsAlerted": ["kailynthenderson@gmail.com", "stefanie.marco@unknown"],
+  "pendingAlerts": [
+    {"name": "Kailyn Henderson", "phone": "16475223180", "email": "kailynthenderson@gmail.com", "source": "Coyol", "market": "Toronto"},
+    {"name": "Stefanie Marco", "phone": "19175430833", "email": "unknown", "source": "La Luna", "market": "NYC"}
+  ]
 }

@@ -2251,7 +2251,7 @@ import '../../../styles/coyol-tables.css';
               <div class="res-time">${formatTime12(res.time)}</div>
               <span class="res-name" title="${res.guestName}">${hasGC ? '<span class="gift-indicator">GC</span> ' : ''}${res.guestName}</span>
               <select class="pax-select-mobile" data-res-id="${res.id}" onclick="event.stopPropagation();" onchange="quickUpdateGuests(this)" title="Guests">
-                ${[1,2,3,4,5,6,7,8,9,10,12,15,20].map(n => `<option value="${n}" ${res.guests == n ? 'selected' : ''}>${n}p</option>`).join('')}
+                ${Array.from({length: 20}, (_, i) => i + 1).map(n => `<option value="${n}" ${res.guests == n ? 'selected' : ''}>${n}p</option>`).join('')}
               </select>
               <select class="table-select-mobile" data-res-id="${res.id}" onclick="event.stopPropagation();" onchange="quickAssignTable(this)" title="Table">
                 <option value="">${res.tableId ? 'T' + res.tableId.replace('t','').toUpperCase() : 'TBA'}</option>
