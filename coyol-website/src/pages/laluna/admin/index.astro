@@ -4054,9 +4054,29 @@ import '../../../styles/laluna-tables.css';
       }
     }
 
+    let isSavingReservation = false;
     async function saveNewReservation() {
+      // Prevent double-click submissions
+      if (isSavingReservation) {
+        console.log('Already saving, ignoring duplicate click');
+        return;
+      }
+      isSavingReservation = true;
+      
+      // Disable save button immediately
+      const saveBtn = document.querySelector('#newResModal .btn-primary');
+      if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving...';
+      }
+      
       const name = document.getElementById('newName').value.trim();
-      if (!name) { alert('Name required'); return; }
+      if (!name) { 
+        alert('Name required'); 
+        isSavingReservation = false;
+        if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'SAVE'; }
+        return; 
+      }
       
       const date = document.getElementById('newDate').value;
       const time = document.getElementById('newTime').value;
@@ -4108,6 +4128,11 @@ import '../../../styles/laluna-tables.css';
       } catch (e) {
         console.error('Save error:', e);
         alert('Failed to save reservation: ' + e.message);
+      } finally {
+        // Reset saving flag and button
+        isSavingReservation = false;
+        const saveBtn = document.querySelector('#newResModal .btn-primary');
+        if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'SAVE'; }
       }
     }
 

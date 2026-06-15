@@ -3232,9 +3232,22 @@ import '../../../styles/coyol-tables.css';
       }
     }
 
+    let isSavingReservation = false;
     async function saveNewReservation() {
+      // Prevent double-click submissions
+      if (isSavingReservation) return;
+      isSavingReservation = true;
+      
+      const saveBtn = document.querySelector('#newResModal .btn-primary');
+      if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = 'Saving...'; }
+      
       const name = document.getElementById('newName').value.trim();
-      if (!name) { alert('Name required'); return; }
+      if (!name) { 
+        alert('Name required'); 
+        isSavingReservation = false;
+        if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Save'; }
+        return; 
+      }
       
       const reservation = {
         date: document.getElementById('newDate').value,
@@ -3255,6 +3268,9 @@ import '../../../styles/coyol-tables.css';
         renderFloor();
       } catch (e) {
         alert('Failed to save reservation');
+      } finally {
+        isSavingReservation = false;
+        if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Save'; }
       }
     }
 
