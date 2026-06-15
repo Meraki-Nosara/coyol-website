@@ -407,7 +407,7 @@
       <div class="step" id="step1">
         <div class="step-free">
           <input type="text" class="input-free" id="nameInput" placeholder="Tu nombre" autocomplete="name">
-          <div class="free-hint">Desliza hacia arriba</div>
+          <button class="btn" id="nameBtn" onclick="validateAndNext(1)" disabled style="margin-top: 24px;">Continuar</button>
         </div>
       </div>
       
@@ -418,7 +418,7 @@
             <span class="country-free">+506</span>
             <input type="tel" class="input-free" id="phoneInput" placeholder="8888 8888" autocomplete="tel" style="flex:1;">
           </div>
-          <div class="free-hint">Desliza hacia arriba</div>
+          <button class="btn" id="phoneBtn" onclick="validateAndNext(2)" disabled style="margin-top: 24px;">Continuar</button>
         </div>
       </div>
       
@@ -462,6 +462,16 @@
     
     // Show/hide back button
     document.getElementById('backBtn').classList.toggle('visible', currentStep > 0);
+  }
+  
+  function validateAndNext(step) {
+    if (step === 1) {
+      const name = document.getElementById('nameInput').value.trim();
+      if (name.length >= 2) nextStep();
+    } else if (step === 2) {
+      const phone = document.getElementById('phoneInput').value.replace(/\s/g, '');
+      if (phone.length >= 8) nextStep();
+    }
   }
   
   function nextStep() {
