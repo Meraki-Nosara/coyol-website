@@ -2160,6 +2160,10 @@ import '../../../styles/coyol-tables.css';
     async function loadReservations() {
       const dateStr = getDateString(currentDate);
       await Promise.all([fetchReservations(dateStr), loadGiftCards()]);
+      renderReservationsList();
+    }
+    
+    function renderReservationsList() {
       const reservations = getReservations();
       
       // Filter by status
@@ -3050,8 +3054,16 @@ import '../../../styles/coyol-tables.css';
       `).join('');
     }
     
-    document.getElementById('searchInput').addEventListener('input', filterAndRenderReservations);
-    document.getElementById('searchInputMiddle').addEventListener('input', filterAndRenderReservations);
+    // Search input handlers - debounce and use cached data
+    let searchTimeout;
+    function handleSearch() {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        renderReservationsList(); // Re-render with search filter using cached data
+      }, 150);
+    }
+    document.getElementById('searchInput').addEventListener('input', handleSearch);
+    document.getElementById('searchInputMiddle').addEventListener('input', handleSearch);
 
     // Populate table dropdown for new reservation modal
     function populateTableDropdown(preselectedTableId = null) {
