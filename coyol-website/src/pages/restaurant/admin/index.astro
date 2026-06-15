@@ -2179,7 +2179,13 @@ import '../../../styles/coyol-tables.css';
       filtered.sort((a, b) => a.time.localeCompare(b.time));
       
       // Filter by search query
-      const searchQuery = (document.getElementById('searchInputMiddle')?.value || document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+      const searchInput1Val = document.getElementById('searchInput')?.value || '';
+      const searchInput2Val = document.getElementById('searchInputMiddle')?.value || '';
+      const searchQuery = (searchInput2Val || searchInput1Val).toLowerCase().trim();
+      
+      console.log('Search query:', searchQuery, 'Input1:', searchInput1Val, 'Input2:', searchInput2Val);
+      console.log('Before filter:', filtered.length);
+      
       if (searchQuery) {
         filtered = filtered.filter(res => {
           const name = (res.guestName || '').toLowerCase();
@@ -2191,6 +2197,7 @@ import '../../../styles/coyol-tables.css';
                  phone.includes(searchQuery.replace(/\D/g, '')) ||
                  email.includes(searchQuery);
         });
+        console.log('After filter:', filtered.length);
       }
       
       // Group by shift
@@ -2201,10 +2208,11 @@ import '../../../styles/coyol-tables.css';
         byShift[shift].push(res);
       });
       
-      // Update counts
-      document.getElementById('resCount').innerHTML = `RESERVATIONS <strong>${reservations.length}</strong>`;
-      document.getElementById('totalCovers').textContent = reservations.reduce((sum, r) => sum + (parseInt(r.guests) || 2), 0);
-      document.getElementById('totalRes').textContent = reservations.length;
+      // Update counts - use filtered results for stats
+      const filteredCovers = filtered.reduce((sum, r) => sum + (parseInt(r.guests) || 2), 0);
+      document.getElementById('resCount').innerHTML = `RESERVATIONS <strong>${filtered.length}</strong>`;
+      document.getElementById('totalCovers').textContent = filteredCovers;
+      document.getElementById('totalRes').textContent = filtered.length;
       document.getElementById('currentDate').textContent = formatDate(currentDate);
       
       // Render list
@@ -3054,16 +3062,49 @@ import '../../../styles/coyol-tables.css';
       `).join('');
     }
     
-    // Search input handlers - debounce and use cached data
-    let searchTimeout;
-    function handleSearch() {
-      clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(() => {
-        renderReservationsList(); // Re-render with search filter using cached data
-      }, 150);
-    }
-    document.getElementById('searchInput').addEventListener('input', handleSearch);
-    document.getElementById('searchInputMiddle').addEventListener('input', handleSearch);
+    // Search - simple hide/show like La Luna (works!)
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      document.querySelectorAll('.res-row').forEach(row => {
+        const text = row.textContent.toLowerCase();
+        const shouldShow = !query || text.includes(query);
+        row.style.display = shouldShow ? '' : 'none';
+        // Also hide the note row if exists
+        const noteRow = row.nextElementSibling;
+        if (noteRow && noteRow.classList.contains('res-note-row')) {
+          noteRow.style.display = shouldShow ? '' : 'none';
+        }
+      });
+      // Update counts
+      const visible = document.querySelectorAll('.res-row:not([style*="display: none"])');
+      document.getElementById('totalRes').textContent = visible.length;
+      const covers = Array.from(visible).reduce((sum, row) => {
+        const pax = row.querySelector('.pax-select-mobile');
+        return sum + (pax ? parseInt(pax.value) || 2 : 2);
+      }, 0);
+      document.getElementById('totalCovers').textContent = covers;
+    });
+    
+    // Also attach to middle search bar
+    document.getElementById('searchInputMiddle').addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      document.querySelectorAll('.res-row').forEach(row => {
+        const text = row.textContent.toLowerCase();
+        const shouldShow = !query || text.includes(query);
+        row.style.display = shouldShow ? '' : 'none';
+        const noteRow = row.nextElementSibling;
+        if (noteRow && noteRow.classList.contains('res-note-row')) {
+          noteRow.style.display = shouldShow ? '' : 'none';
+        }
+      });
+      const visible = document.querySelectorAll('.res-row:not([style*="display: none"])');
+      document.getElementById('totalRes').textContent = visible.length;
+      const covers = Array.from(visible).reduce((sum, row) => {
+        const pax = row.querySelector('.pax-select-mobile');
+        return sum + (pax ? parseInt(pax.value) || 2 : 2);
+      }, 0);
+      document.getElementById('totalCovers').textContent = covers;
+    });
 
     // Populate table dropdown for new reservation modal
     function populateTableDropdown(preselectedTableId = null) {
