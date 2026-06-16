@@ -311,6 +311,8 @@
       <div class="dot" data-step="4"></div>
       <div class="dot" data-step="5"></div>
       <div class="dot" data-step="6"></div>
+      <div class="dot" data-step="7"></div>
+      <div class="dot" data-step="8"></div>
     </div>
     
     <div class="steps-wrapper">
@@ -380,12 +382,32 @@
             <option value="">בחרי שכונה</option>
           </select>
           <p class="hint">הקבוצה תיווצר לפי השכונה שבחרת</p>
-          <button class="btn" id="locationBtn" disabled>סיום הרשמה</button>
+          <button class="btn" id="locationBtn" disabled>המשך</button>
         </div>
       </div>
       
-      <!-- Step 6: Done -->
+      <!-- Step 6: Location Permission -->
       <div class="step" id="step6">
+        <div class="card">
+          <div class="card-title">אפשרי מיקום</div>
+          <p class="card-subtitle">כדי להראות אותך על המפה לאמהות אחרות</p>
+          <button class="btn" id="locationPermBtn" style="background: var(--green);">אפשרי מיקום</button>
+          <button class="btn btn-secondary" id="skipLocationBtn" style="margin-top: 8px;">אולי אחר כך</button>
+        </div>
+      </div>
+      
+      <!-- Step 7: Notification Permission -->
+      <div class="step" id="step7">
+        <div class="card">
+          <div class="card-title">אפשרי התראות</div>
+          <p class="card-subtitle">כדי לקבל עדכונים כשמישהו כותבת לך</p>
+          <button class="btn" id="notificationPermBtn" style="background: var(--coral);">אפשרי התראות</button>
+          <button class="btn btn-secondary" id="skipNotificationBtn" style="margin-top: 8px;">אולי אחר כך</button>
+        </div>
+      </div>
+      
+      <!-- Step 8: Done -->
+      <div class="step" id="step8">
         <div class="card">
           <div class="success-icon"></div>
           <div class="card-title">נרשמת בהצלחה!</div>
@@ -729,11 +751,106 @@
       locationBtn.disabled = !data.neighborhood_id;
     });
     
-    locationBtn.addEventListener('click', async () => {
-      locationBtn.disabled = true;
-      locationBtn.innerHTML = '<span class="spinner"></span>';
+    locationBtn.addEventListener('click', () => goToStep(6));
+    
+    // Step 6: Location Permission
+    const locationPermBtn = document.getElementById('locationPermBtn');
+    const skipLocationBtn = document.getElementById('skipLocationBtn');
+    
+    locationPermBtn.addEventListener('click', async () => {
+      locationPermBtn.disabled = true;
+      locationPermBtn.innerHTML = '<span class="spinner"></span>';
       
       try {
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 10000
+          });
+        });
+        
+        data.latitude = position.coords.latitude;
+        data.longitude = position.coords.longitude;
+        locationPermBtn.innerHTML = 'אושר!';
+        setTimeout(() => goToStep(7), 500);
+      } catch (err) {
+        console.log('Location denied:', err);
+        locationPermBtn.textContent = 'אפשרי מיקום';
+        locationPermBtn.disabled = false;
+        goToStep(7);
+      }
+    });
+    
+    skipLocationBtn.addEventListener('click', () => goToStep(7));
+    
+    // Step 7: Notification Permission
+    const notificationPermBtn = document.getElementById('notificationPermBtn');
+    const skipNotificationBtn = document.getElementById('skipNotificationBtn');
+    
+    notificationPermBtn.addEventListener('click', async () => {
+      notificationPermBtn.disabled = true;
+      notificationPermBtn.innerHTML = '<span class="spinner"></span>';
+      
+      try {
+        const permission = await Notification.requestPermission();
+        
+        if (permission === 'granted') {
+          // Register service worker and get token
+          const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+          
+          const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+          const { getMessaging, getToken } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js');
+          
+          const firebaseConfig = {
+            apiKey: "AIzaSyBuQrhJqCwVrcY9dS4ds9Fh_V44qAl5Kxs",
+            authDomain: "mibahutz-6fe32.firebaseapp.com",
+            projectId: "mibahutz-6fe32",
+            storageBucket: "mibahutz-6fe32.firebasestorage.app",
+            messagingSenderId: "888948498498",
+            appId: "1:888948498498:web:1735dc9b58dc73bf00f81a"
+          };
+          const VAPID_KEY = 'BKThwKsVpMRGIV1OAPaxaERqyzewVWxuLMkfIPXaRyvsUSGEMtLBKonsGc5ojqKJGK9iH2mEd-kOgEQUg21aTsY';
+          
+          const app = initializeApp(firebaseConfig);
+          const messaging = getMessaging(app);
+          
+          const token = await getToken(messaging, {
+            vapidKey: VAPID_KEY,
+            serviceWorkerRegistration: registration
+          });
+          
+          data.push_token = token;
+          data.push_enabled = true;
+          notificationPermBtn.innerHTML = 'אושר!';
+        } else {
+          notificationPermBtn.textContent = 'אפשרי התראות';
+          notificationPermBtn.disabled = false;
+        }
+      } catch (err) {
+        console.error('Notification error:', err);
+        notificationPermBtn.textContent = 'אפשרי התראות';
+        notificationPermBtn.disabled = false;
+      }
+      
+      setTimeout(() => completeRegistration(), 500);
+    });
+    
+    skipNotificationBtn.addEventListener('click', () => completeRegistration());
+    
+    // Complete registration - save to Supabase
+    async function completeRegistration() {
+      try {
+        // Check if email already registered
+        const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?email=eq.${encodeURIComponent(data.email)}&select=id`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const existing = await checkRes.json();
+        if (existing && existing.length > 0) {
+          alert('האימייל הזה כבר רשום. נסי להתחבר');
+          window.location.href = '/app';
+          return;
+        }
+        
         // Create user
         const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2`, {
           method: 'POST',
@@ -749,7 +866,10 @@
             last_name: data.last_name,
             phone: data.phone || null,
             neighborhood_id: data.neighborhood_id,
-            // community: data.community,  // TODO: enable once schema cache refreshes
+            latitude: data.latitude || null,
+            longitude: data.longitude || null,
+            push_token: data.push_token || null,
+            push_enabled: data.push_enabled || false,
             status: 'standby'
           })
         });
@@ -760,7 +880,8 @@
         }
         
         const result = await res.json();
-        localStorage.setItem('mibachutz_user', JSON.stringify(result[0]));
+        const newMom = result[0];
+        localStorage.setItem('mibachutz_user', JSON.stringify(newMom));
         
         // Check waiting count (same neighborhood)
         const countRes = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?neighborhood_id=eq.${data.neighborhood_id}&status=eq.standby&select=id`, {
@@ -768,11 +889,35 @@
         });
         const waiting = await countRes.json();
         
+        // Send auto welcome message to neighborhood chat
+        const momsNeeded = 8 - waiting.length;
+        let welcomeMsg = '';
+        if (momsNeeded > 0) {
+          welcomeMsg = `ברוכה הבאה ${data.first_name}! עוד ${momsNeeded} אמהות ויש לנו קבוצה`;
+        } else {
+          welcomeMsg = `ברוכה הבאה ${data.first_name}! הקבוצה נוצרה!`;
+        }
+        
+        await fetch(`${SUPABASE_URL}/rest/v1/neighborhood_messages`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          },
+          body: JSON.stringify({
+            neighborhood_id: data.neighborhood_id,
+            sender_id: newMom.id,
+            sender_name: 'מיבחוץ',
+            text: welcomeMsg
+          })
+        });
+        
         const waitingEl = document.getElementById('waitingCount');
         
         // If we hit 8, create group!
         if (waiting.length >= 8) {
-          waitingEl.textContent = '🎉 מזל טוב! הקבוצה נוצרה!';
+          waitingEl.textContent = 'מזל טוב! הקבוצה נוצרה!';
           
           // Create group
           const groupRes = await fetch(`${SUPABASE_URL}/rest/v1/groups_v2`, {
@@ -810,15 +955,6 @@
               });
             }
             
-            // Clear old neighborhood chat messages
-            await fetch(`${SUPABASE_URL}/rest/v1/neighborhood_messages?neighborhood_id=eq.${data.neighborhood_id}`, {
-              method: 'DELETE',
-              headers: {
-                'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`
-              }
-            });
-            
             // Update local user
             const updatedUser = { ...result[0], group_id: groupId, status: 'in_group' };
             localStorage.setItem('mibachutz_user', JSON.stringify(updatedUser));
@@ -829,19 +965,23 @@
           waitingEl.textContent = 'את הראשונה בשכונה! כשיצטרפו עוד 7 אמהות, הקבוצה תיפתח';
         }
         
-        goToStep(6);
+        goToStep(8);
         
       } catch (err) {
         console.error(err);
-        locationBtn.disabled = false;
-        locationBtn.textContent = 'סיום הרשמה';
         alert('משהו השתבש, נסי שוב');
+        goToStep(5);
       }
-    });
+    }
     
-    // Step 6: Done
+    // Step 8: Done - redirect based on status
     document.getElementById('doneBtn').addEventListener('click', () => {
-      window.location.href = '/waiting';
+      const user = JSON.parse(localStorage.getItem('mibachutz_user') || '{}');
+      if (user.group_id || user.status === 'in_group') {
+        window.location.href = '/home';
+      } else {
+        window.location.href = '/waiting';
+      }
     });
     
     // Check if already logged in

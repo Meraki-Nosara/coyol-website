@@ -479,7 +479,7 @@
       if (!user.group_id) return;
       
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?group_id=eq.${user.group_id}&is_available=eq.true&select=id,first_name,lat,lng`, {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?group_id=eq.${user.group_id}&is_available=eq.true&select=id,first_name,latitude,longitude`, {
           headers: { 'apikey': SUPABASE_KEY }
         });
         const moms = await res.json();
@@ -492,16 +492,12 @@
         
         moms.forEach(mom => {
           const isMe = mom.id === user.id;
-          // Use real location if available, otherwise fallback with offset
-          let lat, lng;
-          if (mom.lat && mom.lng) {
-            // Add ~100m privacy offset
-            lat = mom.lat + (Math.random() - 0.5) * 0.001;
-            lng = mom.lng + (Math.random() - 0.5) * 0.001;
-          } else {
-            lat = 32.08 + (Math.random() - 0.5) * 0.01;
-            lng = 34.78 + (Math.random() - 0.5) * 0.01;
-          }
+          // Use real location if available, otherwise skip
+          if (!mom.latitude || !mom.longitude) return;
+          
+          // Add ~100m privacy offset
+          const lat = mom.latitude + (Math.random() - 0.5) * 0.001;
+          const lng = mom.longitude + (Math.random() - 0.5) * 0.001;
           
           const marker = L.marker([lat, lng], { icon: createMomIcon(mom.first_name, isMe) }).addTo(map);
           markers.push(marker);

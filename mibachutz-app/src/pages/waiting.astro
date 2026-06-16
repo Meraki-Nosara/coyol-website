@@ -362,12 +362,78 @@
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getMessaging, getToken, onMessage } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js';
+    
     const SUPABASE_URL = 'https://fkikzryelozciailbryh.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_ZOLf9xFyix_92BjpOggZxw_PID3uDli';
     
+    const firebaseConfig = {
+      apiKey: "AIzaSyBuQrhJqCwVrcY9dS4ds9Fh_V44qAl5Kxs",
+      authDomain: "mibahutz-6fe32.firebaseapp.com",
+      projectId: "mibahutz-6fe32",
+      storageBucket: "mibahutz-6fe32.firebasestorage.app",
+      messagingSenderId: "888948498498",
+      appId: "1:888948498498:web:1735dc9b58dc73bf00f81a"
+    };
+    const VAPID_KEY = 'BKThwKsVpMRGIV1OAPaxaERqyzewVWxuLMkfIPXaRyvsUSGEMtLBKonsGc5ojqKJGK9iH2mEd-kOgEQUg21aTsY';
+    
     const user = JSON.parse(localStorage.getItem('mibachutz_user') || 'null');
     if (!user) window.location.href = '/app';
+    
+    // Initialize Firebase & request notifications
+    async function setupNotifications() {
+      if (!('Notification' in window)) return;
+      if (localStorage.getItem('mibachutz_push_asked')) return;
+      
+      // Show notification prompt after 3 seconds
+      setTimeout(async () => {
+        const permission = await Notification.requestPermission();
+        localStorage.setItem('mibachutz_push_asked', 'true');
+        
+        if (permission === 'granted') {
+          try {
+            const app = initializeApp(firebaseConfig);
+            const messaging = getMessaging(app);
+            
+            // Register service worker
+            const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+            
+            const token = await getToken(messaging, { 
+              vapidKey: VAPID_KEY,
+              serviceWorkerRegistration: registration
+            });
+            
+            if (token && user?.id) {
+              // Save token to Supabase
+              await fetch('/api/save-push-token', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ momId: user.id, token })
+              });
+              console.log('Push token saved!');
+            }
+            
+            // Handle foreground messages
+            onMessage(messaging, (payload) => {
+              console.log('Message received:', payload);
+              // Show in-app notification
+              const notifEl = document.createElement('div');
+              notifEl.className = 'in-app-notification';
+              notifEl.innerHTML = `<strong>${payload.notification?.title || 'הודעה חדשה'}</strong><br>${payload.notification?.body || ''}`;
+              notifEl.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#4CAF50;color:white;padding:16px 24px;border-radius:12px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3);animation:slideDown 0.3s ease;';
+              document.body.appendChild(notifEl);
+              setTimeout(() => notifEl.remove(), 5000);
+            });
+          } catch (err) {
+            console.error('Push setup error:', err);
+          }
+        }
+      }, 3000);
+    }
+    
+    setupNotifications();
     
     // Waiting room - no slide to go home
     
@@ -479,7 +545,12 @@
         });
         
         if (markers.length > 0) {
-          map.fitBounds(L.featureGroup(markers).getBounds().pad(0.3));
+          if (markers.length === 1 && myLatLng) {
+            // Single marker - zoom in close
+            map.setView(myLatLng, 15);
+          } else {
+            map.fitBounds(L.featureGroup(markers).getBounds().pad(0.3));
+          }
         }
       } catch (e) {
         console.log('Load error:', e);
@@ -492,7 +563,7 @@
       
       try {
         // Use neighborhood as chat room while waiting
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/group_messages?group_id=eq.${user.neighborhood_id}&order=created_at.asc&limit=50`, {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/neighborhood_messages?neighborhood_id=eq.${user.neighborhood_id}&order=created_at.asc&limit=50`, {
           headers: { 'apikey': SUPABASE_KEY }
         });
         const msgs = await res.json();
@@ -552,7 +623,7 @@
       document.getElementById('chatInput').value = '';
       
       try {
-        await fetch(`${SUPABASE_URL}/rest/v1/group_messages`, {
+        await fetch(`${SUPABASE_URL}/rest/v1/neighborhood_messages`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -561,7 +632,7 @@
             'Prefer': 'return=minimal'
           },
           body: JSON.stringify({
-            group_id: user.neighborhood_id,  // Use neighborhood as chat room
+            neighborhood_id: user.neighborhood_id,
             sender_id: user.id,
             sender_name: user.first_name,
             text: text
@@ -642,6 +713,10 @@
     updateMyLocation();
     loadMoms();
     loadMessages();
+    
+    // Fix map rendering after load
+    setTimeout(() => map.invalidateSize(), 100);
+    setTimeout(() => map.invalidateSize(), 500);
     
     // Refresh
     setInterval(loadMoms, 30000);

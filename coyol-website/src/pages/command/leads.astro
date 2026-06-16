@@ -91,10 +91,10 @@ const allLeads = Array.from(contactMap.values())
   }))
   .sort((a, b) => b.lead_score - a.lead_score);
 
-// Counts for filters
-const score50 = allLeads.filter(g => g.lead_score >= 50);
-const score45 = allLeads.filter(g => g.lead_score >= 45);
-const score40 = allLeads.filter(g => g.lead_score >= 40);
+// Counts for filters - score thresholds
+const score50 = allLeads.filter(g => g.lead_score >= 50).length;
+const score45 = allLeads.filter(g => g.lead_score >= 45).length;
+const score40 = allLeads.filter(g => g.lead_score >= 40).length;
 ---
 
 <CommandLayout title="Leads" active="leads">
@@ -111,9 +111,9 @@ const score40 = allLeads.filter(g => g.lead_score >= 40);
         </div>
         <div class="filters">
           <button class="filter active" data-filter="all">All ({allLeads.length})</button>
-          <button class="filter" data-filter="50">50+ ({score50.length})</button>
-          <button class="filter" data-filter="45">45+ ({score45.length})</button>
-          <button class="filter" data-filter="40">40+ ({score40.length})</button>
+          <button class="filter" data-filter="50">50+ ({score50})</button>
+          <button class="filter" data-filter="45">45+ ({score45})</button>
+          <button class="filter" data-filter="40">40+ ({score40})</button>
         </div>
       </div>
     </header>
