@@ -288,45 +288,43 @@ const restaurantColors: Record<string, string> = {
   </div>
 
   <script>
-    async function assignSupplier(supplierId, supplierName, restaurant, btn) {
+    function assignSupplier(supplierId, supplierName, restaurant, btn) {
       const row = btn.closest('.supplier-row')?.parentElement;
       if (!row) return;
       
-      // Disable all buttons in this row
-      const buttons = row.querySelectorAll('button');
-      buttons.forEach(b => b.disabled = true);
-      btn.textContent = 'Saving...';
+      // Save to localStorage
+      const assignments = JSON.parse(localStorage.getItem('supplier_assignments') || '{}');
+      assignments[supplierId] = { supplierName, restaurant, assignedAt: new Date().toISOString() };
+      localStorage.setItem('supplier_assignments', JSON.stringify(assignments));
       
-      try {
-        const response = await fetch('/api/assign-supplier', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ supplierId, supplierName, restaurant })
-        });
-        
-        if (response.ok) {
-          // Animate out and remove
-          row.style.transition = 'all 0.3s ease';
-          row.style.opacity = '0';
-          row.style.transform = 'translateX(100px)';
-          setTimeout(() => {
-            row.remove();
-            // Update count
-            const countEl = document.querySelector('.unassigned-count');
-            if (countEl) {
-              const current = parseInt(countEl.textContent) || 0;
-              countEl.textContent = Math.max(0, current - 1);
-            }
-          }, 300);
-        } else {
-          alert('Failed to save assignment');
-          buttons.forEach(b => b.disabled = false);
-          btn.textContent = restaurant === 'laluna' ? 'La Luna' : restaurant === 'coyol' ? 'Coyol' : restaurant === 'esh' ? 'Esh' : 'Shared';
-        }
-      } catch (err) {
-        alert('Error: ' + err.message);
-        buttons.forEach(b => b.disabled = false);
-      }
+      // Show success feedback
+      btn.textContent = '✓ Saved';
+      btn.style.backgroundColor = '#22c55e';
+      
+      // Animate out and remove
+      setTimeout(() => {
+        row.style.transition = 'all 0.4s ease';
+        row.style.opacity = '0';
+        row.style.transform = 'translateX(100px)';
+        row.style.height = row.offsetHeight + 'px';
+        setTimeout(() => {
+          row.style.height = '0';
+          row.style.padding = '0';
+          row.style.margin = '0';
+          setTimeout(() => row.remove(), 200);
+        }, 200);
+      }, 500);
     }
+    
+    // On load, hide already assigned suppliers
+    document.addEventListener('DOMContentLoaded', () => {
+      const assignments = JSON.parse(localStorage.getItem('supplier_assignments') || '{}');
+      document.querySelectorAll('.supplier-row').forEach(row => {
+        const supplierId = row.dataset.supplierId;
+        if (assignments[supplierId]) {
+          row.parentElement?.remove();
+        }
+      });
+    });
   </script>
 </Layout>
