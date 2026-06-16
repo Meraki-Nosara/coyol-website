@@ -191,45 +191,39 @@ const restaurantColors: Record<string, string> = {
                     </p>
                   </div>
                   
-                  <form method="POST" class="flex gap-2">
-                    <input type="hidden" name="supplierId" value={supplier.supplierId} />
-                    
+                  <div class="flex gap-2 supplier-row" data-supplier-id={supplier.supplierId} data-supplier-name={supplier.supplierName}>
                     <button 
-                      type="submit" 
-                      name="restaurant" 
-                      value="laluna"
+                      type="button" 
+                      onclick={`assignSupplier('${supplier.supplierId}', '${supplier.supplierName.replace(/'/g, "\\'") }', 'laluna', this)`}
                       class="px-4 py-2 text-sm font-medium rounded transition-colors hover:opacity-80"
                       style="background-color: #A65D3F; color: white;"
                     >
                       La Luna
                     </button>
                     <button 
-                      type="submit" 
-                      name="restaurant" 
-                      value="coyol"
+                      type="button" 
+                      onclick={`assignSupplier('${supplier.supplierId}', '${supplier.supplierName.replace(/'/g, "\\'") }', 'coyol', this)`}
                       class="px-4 py-2 text-sm font-medium rounded transition-colors hover:opacity-80"
                       style="background-color: #3D4F3D; color: white;"
                     >
                       Coyol
                     </button>
                     <button 
-                      type="submit" 
-                      name="restaurant" 
-                      value="esh"
+                      type="button" 
+                      onclick={`assignSupplier('${supplier.supplierId}', '${supplier.supplierName.replace(/'/g, "\\'") }', 'esh', this)`}
                       class="px-4 py-2 text-sm font-medium rounded transition-colors hover:opacity-80"
                       style="background-color: #C4A67C; color: white;"
                     >
                       Esh
                     </button>
                     <button 
-                      type="submit" 
-                      name="restaurant" 
-                      value="shared"
+                      type="button" 
+                      onclick={`assignSupplier('${supplier.supplierId}', '${supplier.supplierName.replace(/'/g, "\\'") }', 'shared', this)`}
                       class="px-4 py-2 text-sm font-medium rounded transition-colors bg-gray-200 text-gray-700 hover:bg-gray-300"
                     >
                       Shared
                     </button>
-                  </form>
+                  </div>
                 </div>
               ))}
             </div>
@@ -292,4 +286,47 @@ const restaurantColors: Record<string, string> = {
       </div>
     </main>
   </div>
+
+  <script>
+    async function assignSupplier(supplierId, supplierName, restaurant, btn) {
+      const row = btn.closest('.supplier-row')?.parentElement;
+      if (!row) return;
+      
+      // Disable all buttons in this row
+      const buttons = row.querySelectorAll('button');
+      buttons.forEach(b => b.disabled = true);
+      btn.textContent = 'Saving...';
+      
+      try {
+        const response = await fetch('/api/assign-supplier', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ supplierId, supplierName, restaurant })
+        });
+        
+        if (response.ok) {
+          // Animate out and remove
+          row.style.transition = 'all 0.3s ease';
+          row.style.opacity = '0';
+          row.style.transform = 'translateX(100px)';
+          setTimeout(() => {
+            row.remove();
+            // Update count
+            const countEl = document.querySelector('.unassigned-count');
+            if (countEl) {
+              const current = parseInt(countEl.textContent) || 0;
+              countEl.textContent = Math.max(0, current - 1);
+            }
+          }, 300);
+        } else {
+          alert('Failed to save assignment');
+          buttons.forEach(b => b.disabled = false);
+          btn.textContent = restaurant === 'laluna' ? 'La Luna' : restaurant === 'coyol' ? 'Coyol' : restaurant === 'esh' ? 'Esh' : 'Shared';
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+        buttons.forEach(b => b.disabled = false);
+      }
+    }
+  </script>
 </Layout>
