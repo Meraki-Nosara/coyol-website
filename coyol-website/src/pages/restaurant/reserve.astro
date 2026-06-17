@@ -815,6 +815,26 @@ import Layout from '../../layouts/Layout.astro';
 
     async function checkAvailability() {
       const selectedDate = dateInput.value;
+      
+      // Check if date is blocked
+      try {
+        const blockRes = await fetch(`/api/blocked-dates?restaurant=coyol`);
+        const blockedDates = await blockRes.json();
+        const isBlocked = blockedDates.some(b => b.date === selectedDate);
+        
+        if (isBlocked) {
+          // Show blocked message and disable all times
+          document.querySelectorAll('.time-btn').forEach(btn => {
+            btn.classList.add('unavailable');
+          });
+          const blockedInfo = blockedDates.find(b => b.date === selectedDate);
+          alert(`Sorry, Coyol Restaurant is closed on this date for a private event${blockedInfo?.reason ? ': ' + blockedInfo.reason : ''}. Please select another date.`);
+          return;
+        }
+      } catch (e) {
+        console.error('Error checking blocked dates:', e);
+      }
+      
       const reservations = await getReservations(selectedDate);
       
       // Reset all buttons

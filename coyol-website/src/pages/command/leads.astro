@@ -1,100 +1,57 @@
 ---
 import CommandLayout from '../../layouts/CommandLayout.astro';
+import guestData from '../../data/guests-enriched.json';
 
 const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+// SSR-only key (never sent to client)
+const SUPABASE_SERVICE_KEY = import.meta.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_KEY || 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng';
 
-// Hot market area codes
-const HOT_CODES = ['212', '917', '646', '718', '310', '323', '213', '818', '415', '650', '408', '305', '786', '416', '647'];
-
-function isHotLead(phone: string | null): boolean {
-  if (!phone) return false;
-  const clean = phone.replace(/\D/g, '');
-  const prefix = clean.slice(0, 6);
-  return HOT_CODES.some(code => prefix.includes(code));
-}
-
-function getMarket(phone: string | null): string {
-  if (!phone) return 'Unknown';
-  const clean = phone.replace(/\D/g, '').slice(0, 6);
-  if (['212', '917', '646', '718'].some(c => clean.includes(c))) return 'NYC';
-  if (['310', '323', '213', '818'].some(c => clean.includes(c))) return 'LA';
-  if (['415', '650', '408'].some(c => clean.includes(c))) return 'SF';
-  if (['305', '786'].some(c => clean.includes(c))) return 'Miami';
-  if (['416', '647'].some(c => clean.includes(c))) return 'Toronto';
-  return 'Other';
-}
-
-// Fetch directly from reservation tables
-const headers = {
-  'apikey': SUPABASE_KEY,
-  'Authorization': `Bearer ${SUPABASE_KEY}`
-};
-
-let coyolRes: any[] = [];
-let lalunaRes: any[] = [];
-
-try {
-  const [coyolResp, lalunaResp] = await Promise.all([
-    fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?select=guest_name,guest_email,guest_phone,guests,date,created_at&order=created_at.desc`, { headers }),
-    fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?select=guest_name,guest_email,guest_phone,guests,date,created_at&order=created_at.desc`, { headers })
-  ]);
-  coyolRes = await coyolResp.json() || [];
-  lalunaRes = await lalunaResp.json() || [];
-} catch (e) {
-  console.error('Failed to fetch reservations:', e);
-}
-
-// Combine and dedupe by email, only hot leads
-const contactMap = new Map<string, any>();
-
-const processReservations = (reservations: any[], source: string) => {
-  reservations.forEach((r: any) => {
-    if (!r.guest_email || r.guest_email === 'null' || !r.guest_phone) return;
-    if (!isHotLead(r.guest_phone)) return;
-    
-    const email = r.guest_email.toLowerCase().trim();
-    
-    if (contactMap.has(email)) {
-      const existing = contactMap.get(email);
-      existing.visits++;
-      existing.totalGuests += (r.guests || 1);
-      if (new Date(r.date) > new Date(existing.lastVisit)) {
-        existing.lastVisit = r.date;
+// Fetch live CRM guests from Supabase using service key
+let crmGuests: any[] = [];
+if (SUPABASE_SERVICE_KEY) {
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/crm_guests?lead_score=gte.40&select=*&order=lead_score.desc&limit=2000`, {
+      headers: {
+        'apikey': SUPABASE_SERVICE_KEY,
+        'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+        'Range': '0-1999'
       }
-    } else {
-      contactMap.set(email, {
-        name: r.guest_name || '',
-        email: email,
-        phone: r.guest_phone || '',
-        source: source,
-        market: getMarket(r.guest_phone),
-        visits: 1,
-        totalGuests: r.guests || 1,
-        lastVisit: r.date,
-        createdAt: r.created_at,
-        lead_score: 50 // All hot leads start at 50
-      });
+    });
+    if (response.ok) {
+      crmGuests = await response.json();
     }
-  });
-};
+  } catch (e) {
+    console.error('Failed to fetch CRM guests:', e);
+  }
+}
 
-processReservations(coyolRes, 'Coyol');
-processReservations(lalunaRes, 'La Luna');
+// Static guests from JSON
+const staticGuests = (guestData.guests || [])
+  .filter((g: any) => g.region !== 'LatAm' && g.segment !== 'local' && g.lead_score >= 40);
 
-// Convert to array and sort by visits (repeat customers = higher value)
-const allLeads = Array.from(contactMap.values())
-  .map(lead => ({
-    ...lead,
-    lead_score: lead.lead_score + (lead.visits * 5) + (lead.totalGuests > 4 ? 10 : 0), // Bonus for repeats and large parties
-    segment: 'hot'
-  }))
-  .sort((a, b) => b.lead_score - a.lead_score);
+// Merge: CRM guests take priority (by email), then add static guests
+const crmEmails = new Set(crmGuests.map((g: any) => g.email?.toLowerCase()));
+const mergedGuests = [
+  ...crmGuests.map((g: any) => ({
+    name: g.name,
+    email: g.email,
+    city: g.city,
+    region: g.region,
+    source: g.source || 'reservation',
+    lead_score: g.lead_score,
+    segment: g.lead_score >= 50 ? 'hot' : g.lead_score >= 40 ? 'warm' : 'cold',
+    is_new: true
+  })),
+  ...staticGuests.filter((g: any) => !crmEmails.has(g.email?.toLowerCase()))
+];
 
-// Counts for filters - score thresholds
-const score50 = allLeads.filter(g => g.lead_score >= 50).length;
-const score45 = allLeads.filter(g => g.lead_score >= 45).length;
-const score40 = allLeads.filter(g => g.lead_score >= 40).length;
+// Sort by score
+const allLeads = mergedGuests.sort((a, b) => b.lead_score - a.lead_score);
+
+// Counts for filters
+const score50 = allLeads.filter(g => g.lead_score >= 50);
+const score45 = allLeads.filter(g => g.lead_score >= 45);
+const score40 = allLeads.filter(g => g.lead_score >= 40);
 ---
 
 <CommandLayout title="Leads" active="leads">
@@ -103,7 +60,7 @@ const score40 = allLeads.filter(g => g.lead_score >= 40).length;
     <header class="page-header">
       <div>
         <h1>All Leads</h1>
-        <span class="subtitle">{allLeads.length} hot leads from restaurant reservations</span>
+        <span class="subtitle">{allLeads.length} leads with score 40+ · US & Canada · <span class="live-indicator">Live from {crmGuests.length} CRM + {staticGuests.length - crmEmails.size} historic</span></span>
       </div>
       <div class="header-controls">
         <div class="search-box">
@@ -111,9 +68,9 @@ const score40 = allLeads.filter(g => g.lead_score >= 40).length;
         </div>
         <div class="filters">
           <button class="filter active" data-filter="all">All ({allLeads.length})</button>
-          <button class="filter" data-filter="50">50+ ({score50})</button>
-          <button class="filter" data-filter="45">45+ ({score45})</button>
-          <button class="filter" data-filter="40">40+ ({score40})</button>
+          <button class="filter" data-filter="50">50+ ({score50.length})</button>
+          <button class="filter" data-filter="45">45+ ({score45.length})</button>
+          <button class="filter" data-filter="40">40+ ({score40.length})</button>
         </div>
       </div>
     </header>

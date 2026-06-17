@@ -499,6 +499,20 @@
       if (!user.neighborhood_id) return;
       
       try {
+        // FIRST: Check if MY status changed (group may have formed)
+        const myRes = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?id=eq.${user.id}&select=id,group_id,status`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const myData = await myRes.json();
+        if (myData[0]?.group_id || myData[0]?.status === 'in_group') {
+          // Group formed! Update localStorage and redirect
+          user.group_id = myData[0].group_id;
+          user.status = 'in_group';
+          localStorage.setItem('mibachutz_user', JSON.stringify(user));
+          window.location.href = '/home';
+          return;
+        }
+        
         // Load waiting moms in same neighborhood
         const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?neighborhood_id=eq.${user.neighborhood_id}&status=eq.standby&select=id,first_name,group_id,latitude,longitude`, {
           headers: { 'apikey': SUPABASE_KEY }
@@ -510,17 +524,6 @@
         const count = moms.length;
         document.getElementById('countBadge').textContent = `${count}/8 אמהות`;
         document.getElementById('progressBar').style.width = `${(count / 8) * 100}%`;
-        
-        // Check if group formed
-        const me = moms.find(m => m.id === user.id);
-        if (me && me.group_id) {
-          // Group formed! Redirect to home
-          user.group_id = me.group_id;
-          user.status = 'in_group';
-          localStorage.setItem('mibachutz_user', JSON.stringify(user));
-          window.location.href = '/home';
-          return;
-        }
         
         markers.forEach(m => map.removeLayer(m));
         markers = [];
@@ -623,7 +626,7 @@
       document.getElementById('chatInput').value = '';
       
       try {
-        await fetch(`${SUPABASE_URL}/rest/v1/neighborhood_messages`, {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/neighborhood_messages`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -638,8 +641,13 @@
             text: text
           })
         });
+        if (!res.ok) {
+          console.error('Send failed:', await res.text());
+        }
         loadMessages();
-      } catch (e) {}
+      } catch (e) {
+        console.error('Send error:', e);
+      }
     }
     
     document.getElementById('sendBtn').addEventListener('click', sendMessage);

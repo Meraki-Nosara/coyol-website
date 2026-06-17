@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 
-const API_KEY = '3MSdVsFOPR-5oFxyGxSuv5P4EU4HvVtp1HxXzjYOeuhsGRuGntpr8CaNGttl9jhk';
+const API_KEY = 'OLHAS1puZW1R8ZKsTpWjESVSaMfXlyAspGOQaOcr7n4MSifl0yUr1LchTsC7FWGW';
 const SITE_ID = 'coyolnosara.com';
 
 export const GET: APIRoute = async ({ url }) => {

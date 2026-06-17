@@ -938,25 +938,23 @@
           const groupId = group[0]?.id;
           
           if (groupId) {
-            // Update all waiting moms to be in this group
-            const momIds = waiting.map(m => m.id);
-            for (const momId of momIds) {
-              await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?id=eq.${momId}`, {
-                method: 'PATCH',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'apikey': SUPABASE_KEY,
-                  'Authorization': `Bearer ${SUPABASE_KEY}`
-                },
-                body: JSON.stringify({
-                  group_id: groupId,
-                  status: 'in_group'
-                })
-              });
-            }
+            // Update ALL waiting moms in this neighborhood in one batch query
+            // This includes the new mom who just registered
+            await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?neighborhood_id=eq.${data.neighborhood_id}&status=eq.standby`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`
+              },
+              body: JSON.stringify({
+                group_id: groupId,
+                status: 'in_group'
+              })
+            });
             
             // Update local user
-            const updatedUser = { ...result[0], group_id: groupId, status: 'in_group' };
+            const updatedUser = { ...newMom, group_id: groupId, status: 'in_group' };
             localStorage.setItem('mibachutz_user', JSON.stringify(updatedUser));
           }
         } else if (waiting.length > 1) {
