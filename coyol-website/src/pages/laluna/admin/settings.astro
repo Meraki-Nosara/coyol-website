@@ -5,7 +5,7 @@ import '../../../styles/laluna-tables.css';
 
 <Layout hideFloatingButtons={true} title="Settings | La Luna Admin" appleTouchIcon="/laluna-apple-touch-icon.png">
   <div class="admin">
-    <!-- Sidebar Icons -->
+    <!-- Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-logo">
         <img src="/images/laluna-moon-white-real.png" alt="La Luna" />
@@ -18,290 +18,124 @@ import '../../../styles/laluna-tables.css';
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
         </a>
         <a href="/laluna/admin/guests" class="nav-icon" title="Guests">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
         </a>
         <a href="/laluna/admin/gifts" class="nav-icon" title="Gift Cards">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v10H4V12"></path><path d="M2 7h20v5H2z"></path><path d="M12 22V7"></path><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v10H4V12"></path><path d="M2 7h20v5H2z"></path><path d="M12 22V7"></path></svg>
         </a>
         <a href="/laluna/admin/settings" class="nav-icon active" title="Settings">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
         </a>
       </nav>
-      <div class="sidebar-footer">
-        <a href="/" class="nav-icon" title="View Site">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-        </a>
-      </div>
     </aside>
 
-    <!-- Main Content -->
-    <main class="main-content" style="padding: 24px;">
-      <h1 style="color: white; margin-bottom: 24px; font-size: 24px;">Settings</h1>
+    <!-- Main -->
+    <main class="main-content">
+      <h1>Settings</h1>
       
-      <!-- Block Dates Section -->
-      <div class="settings-card">
-        <h2>Block Dates</h2>
-        <p style="color: #999; margin-bottom: 16px;">Block specific dates for private events (weddings, parties). Guests won't be able to make reservations on blocked dates.</p>
-        
-        <div class="block-form">
-          <input type="date" id="blockDate" min="" />
-          <input type="text" id="blockReason" placeholder="Reason (e.g., Private Wedding)" />
-          <button onclick="blockDate()" class="btn-block">Block Date</button>
+      <div class="section">
+        <h2>Table Capacities</h2>
+        <div class="tables-row">
+          <div class="table-item">
+            <div class="t-icon square"></div>
+            <span class="t-name">Square</span>
+            <input type="number" id="square-min" value="2" min="1" max="20" /> - <input type="number" id="square-max" value="4" min="1" max="20" />
+          </div>
+          <div class="table-item">
+            <div class="t-icon round"></div>
+            <span class="t-name">Round</span>
+            <input type="number" id="round-min" value="2" min="1" max="20" /> - <input type="number" id="round-max" value="4" min="1" max="20" />
+          </div>
+          <div class="table-item">
+            <div class="t-icon round-lg"></div>
+            <span class="t-name">Lg Round</span>
+            <input type="number" id="round-lg-min" value="4" min="1" max="20" /> - <input type="number" id="round-lg-max" value="6" min="1" max="20" />
+          </div>
+          <div class="table-item">
+            <div class="t-icon sofa"></div>
+            <span class="t-name">Sofa</span>
+            <input type="number" id="sofa-min" value="2" min="1" max="20" /> - <input type="number" id="sofa-max" value="4" min="1" max="20" />
+          </div>
+          <div class="table-item">
+            <div class="t-icon diamond"></div>
+            <span class="t-name">Diamond</span>
+            <input type="number" id="diamond-min" value="2" min="1" max="20" /> - <input type="number" id="diamond-max" value="4" min="1" max="20" />
+          </div>
+          <div class="table-item">
+            <div class="t-icon rect"></div>
+            <span class="t-name">Long</span>
+            <input type="number" id="rect-min" value="4" min="1" max="20" /> - <input type="number" id="rect-max" value="8" min="1" max="20" />
+          </div>
+          <div class="table-item">
+            <div class="t-icon bar"></div>
+            <span class="t-name">Communal</span>
+            <input type="number" id="bar-min" value="6" min="1" max="50" /> - <input type="number" id="bar-max" value="16" min="1" max="50" />
+          </div>
         </div>
-        
-        <div class="blocked-list" id="blockedList">
-          <p style="color: #666;">Loading blocked dates...</p>
-        </div>
+        <button onclick="saveTableTypes()" class="btn-save">Save</button>
       </div>
     </main>
   </div>
 
   <style>
-    .admin {
-      display: flex;
-      min-height: 100vh;
-      background: #1a1a1a;
+    :root {
+      --terracotta: #A65D3F;
+      --santorini: #1A1F16;
+      --cream: #F5F3EF;
+      --sand: #C4A67C;
     }
+    .admin { display: flex; min-height: 100vh; background: var(--cream); }
+    .sidebar { width: 60px; background: var(--santorini); display: flex; flex-direction: column; align-items: center; padding: 16px 0; }
+    .sidebar-logo img { width: 36px; height: 36px; margin-bottom: 24px; }
+    .sidebar-nav { display: flex; flex-direction: column; gap: 8px; }
+    .nav-icon { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 12px; color: rgba(255,255,255,0.6); }
+    .nav-icon:hover, .nav-icon.active { background: rgba(255,255,255,0.15); color: white; }
+    .nav-icon svg { width: 22px; height: 22px; }
     
-    .sidebar {
-      width: 60px;
-      background: #A65D3F;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 16px 0;
-    }
+    .main-content { flex: 1; padding: 24px; }
+    h1 { color: var(--santorini); font-size: 20px; margin-bottom: 20px; }
+    .section { background: white; border-radius: 12px; padding: 20px; }
+    h2 { font-size: 14px; color: #666; margin-bottom: 16px; }
     
-    .sidebar-logo img {
-      width: 36px;
-      height: 36px;
-      margin-bottom: 24px;
-    }
+    .tables-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+    .table-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--cream); border-radius: 8px; }
+    .t-icon { width: 24px; height: 24px; border: 2px solid var(--sand); background: #8B5E3C; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
+    .t-icon.square { border-radius: 3px; }
+    .t-icon.round, .t-icon.round-lg { border-radius: 50%; }
+    .t-icon.round-lg { width: 28px; height: 28px; }
+    .t-icon.sofa { border-radius: 12px 12px 4px 4px; width: 28px; height: 20px; background: #6B8E6B; }
+    .t-icon.diamond { transform: rotate(45deg); width: 20px; height: 20px; }
+    .t-icon.rect { width: 36px; height: 20px; border-radius: 3px; }
+    .t-icon.bar { width: 40px; height: 16px; border-radius: 8px; }
+    .t-name { font-size: 12px; color: var(--santorini); font-weight: 500; min-width: 50px; }
+    .table-item input { width: 40px; padding: 4px; border: 1px solid #ddd; border-radius: 4px; text-align: center; font-size: 13px; }
     
-    .sidebar-nav {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      flex: 1;
-    }
-    
-    .nav-icon {
-      width: 44px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 12px;
-      color: rgba(255,255,255,0.6);
-      transition: all 0.2s;
-    }
-    
-    .nav-icon:hover, .nav-icon.active {
-      background: rgba(255,255,255,0.15);
-      color: white;
-    }
-    
-    .nav-icon svg {
-      width: 22px;
-      height: 22px;
-    }
-    
-    .sidebar-footer {
-      margin-top: auto;
-    }
-    
-    .main-content {
-      flex: 1;
-      overflow-y: auto;
-    }
-    
-    .settings-card {
-      background: #242424;
-      border-radius: 16px;
-      padding: 24px;
-      max-width: 600px;
-    }
-    
-    .settings-card h2 {
-      color: white;
-      font-size: 18px;
-      margin-bottom: 8px;
-    }
-    
-    .block-form {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
-    
-    .block-form input {
-      padding: 12px 16px;
-      border-radius: 8px;
-      border: 1px solid #444;
-      background: #1a1a1a;
-      color: white;
-      font-size: 14px;
-    }
-    
-    .block-form input[type="date"] {
-      width: 160px;
-    }
-    
-    .block-form input[type="text"] {
-      flex: 1;
-      min-width: 200px;
-    }
-    
-    .btn-block {
-      padding: 12px 24px;
-      background: #A65D3F;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    
-    .btn-block:hover {
-      background: #8B4E35;
-    }
-    
-    .blocked-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    
-    .blocked-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 16px;
-      background: #1a1a1a;
-      border-radius: 8px;
-      border-left: 3px solid #A65D3F;
-    }
-    
-    .blocked-item .date {
-      color: white;
-      font-weight: 600;
-    }
-    
-    .blocked-item .reason {
-      color: #999;
-      font-size: 13px;
-    }
-    
-    .blocked-item .btn-unblock {
-      padding: 6px 12px;
-      background: transparent;
-      border: 1px solid #666;
-      color: #999;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-    
-    .blocked-item .btn-unblock:hover {
-      border-color: #ff6b6b;
-      color: #ff6b6b;
-    }
-    
-    .empty-state {
-      color: #666;
-      text-align: center;
-      padding: 24px;
-    }
+    .btn-save { padding: 10px 24px; background: var(--terracotta); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .btn-save:hover { background: #8B4E35; }
   </style>
 
   <script is:inline>
-    // Set min date to today
-    document.getElementById('blockDate').min = new Date().toISOString().split('T')[0];
+    const types = ['square', 'round', 'round-lg', 'sofa', 'diamond', 'rect', 'bar'];
+    const defaults = { 'square': [2,4], 'round': [2,4], 'round-lg': [4,6], 'sofa': [2,4], 'diamond': [2,4], 'rect': [4,8], 'bar': [6,16] };
     
-    async function loadBlockedDates() {
-      try {
-        const res = await fetch('/api/blocked-dates?restaurant=laluna');
-        const dates = await res.json();
-        
-        const list = document.getElementById('blockedList');
-        
-        if (!dates.length) {
-          list.innerHTML = '<p class="empty-state">No blocked dates</p>';
-          return;
-        }
-        
-        list.innerHTML = dates.map(d => `
-          <div class="blocked-item">
-            <div>
-              <div class="date">${formatDate(d.date)}</div>
-              <div class="reason">${d.reason || 'No reason specified'}</div>
-            </div>
-            <button class="btn-unblock" onclick="unblockDate('${d.id}')">Unblock</button>
-          </div>
-        `).join('');
-      } catch (e) {
-        console.error('Error loading blocked dates:', e);
-      }
-    }
-    
-    function formatDate(dateStr) {
-      const date = new Date(dateStr + 'T12:00:00');
-      return date.toLocaleDateString('en-US', { 
-        weekday: 'long',
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
+    function load() {
+      const s = JSON.parse(localStorage.getItem('laluna_table_types') || '{}');
+      types.forEach(t => {
+        const [dMin, dMax] = defaults[t];
+        document.getElementById(`${t}-min`).value = s[t]?.min || dMin;
+        document.getElementById(`${t}-max`).value = s[t]?.max || dMax;
       });
     }
     
-    async function blockDate() {
-      const date = document.getElementById('blockDate').value;
-      const reason = document.getElementById('blockReason').value;
-      
-      if (!date) {
-        alert('Please select a date');
-        return;
-      }
-      
-      try {
-        const res = await fetch('/api/blocked-dates', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            restaurant: 'laluna',
-            date,
-            reason,
-            blocked_by: 'admin'
-          })
-        });
-        
-        if (res.ok) {
-          document.getElementById('blockDate').value = '';
-          document.getElementById('blockReason').value = '';
-          loadBlockedDates();
-        } else {
-          const error = await res.json();
-          alert('Error: ' + (error.error || 'Could not block date'));
-        }
-      } catch (e) {
-        alert('Error blocking date');
-      }
+    function saveTableTypes() {
+      const s = {};
+      types.forEach(t => {
+        s[t] = { min: +document.getElementById(`${t}-min`).value, max: +document.getElementById(`${t}-max`).value };
+      });
+      localStorage.setItem('laluna_table_types', JSON.stringify(s));
+      alert('Saved!');
     }
-    
-    async function unblockDate(id) {
-      if (!confirm('Unblock this date?')) return;
-      
-      try {
-        await fetch(`/api/blocked-dates?id=${id}`, { method: 'DELETE' });
-        loadBlockedDates();
-      } catch (e) {
-        alert('Error unblocking date');
-      }
-    }
-    
-    // Load on page load
-    loadBlockedDates();
+    window.saveTableTypes = saveTableTypes;
+    load();
   </script>
 </Layout>

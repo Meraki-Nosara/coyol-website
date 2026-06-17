@@ -1094,14 +1094,22 @@ import '../../../styles/laluna-tables.css';
 
       const layouts = getLayout();
       const newId = 'new-' + Date.now();
+      
+      // Get capacity from settings
+      const tableSettings = JSON.parse(localStorage.getItem('laluna_table_types') || '{}');
+      const typeKey = type === 'communal' ? 'bar' : type;
+      const defaults = { 'square': [2,4], 'round': [2,4], 'round-lg': [4,6], 'sofa': [2,4], 'diamond': [2,4], 'rect': [4,8], 'bar': [6,16] };
+      const minCovers = tableSettings[typeKey]?.min || defaults[typeKey]?.[0] || 2;
+      const maxCovers = tableSettings[typeKey]?.max || defaults[typeKey]?.[1] || 4;
+      
       layouts[currentZone].push({
         id: newId,
         name: 'New',
         type: type,
         x: x,
         y: y,
-        minCovers: 2,
-        maxCovers: 4
+        minCovers: minCovers,
+        maxCovers: maxCovers
       });
       saveLayout(layouts);
       renderFloor();
@@ -1131,6 +1139,20 @@ import '../../../styles/laluna-tables.css';
     // Expose functions
     window.rotateSelected = rotateSelected;
     window.deleteSelected = deleteSelected;
+
+    // Update palette capacities from settings
+    function updatePaletteCapacities() {
+      const settings = JSON.parse(localStorage.getItem('laluna_table_types') || '{}');
+      const defaults = { 'square': [2,4], 'round': [2,4], 'round-lg': [4,6], 'sofa': [2,4], 'diamond': [2,4], 'rect': [4,8], 'bar': [6,16], 'communal': [6,16] };
+      document.querySelectorAll('.palette-capacity').forEach(el => {
+        const type = el.dataset.type;
+        const key = type === 'communal' ? 'bar' : type;
+        const min = settings[key]?.min || defaults[key]?.[0] || 2;
+        const max = settings[key]?.max || defaults[key]?.[1] || 4;
+        el.textContent = `${min}-${max}`;
+      });
+    }
+    updatePaletteCapacities();
 
     renderFloor();
   </script>

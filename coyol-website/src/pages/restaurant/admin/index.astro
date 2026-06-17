@@ -2961,23 +2961,30 @@ import '../../../styles/coyol-tables.css';
     }
 
     // Date navigation
-    document.getElementById('prevDay').addEventListener('click', async () => {
+    document.getElementById('prevDay').addEventListener('click', async (e) => {
+      e.stopPropagation();
+      document.getElementById('datePicker').style.pointerEvents = 'none';
       currentDate.setDate(currentDate.getDate() - 1);
       await loadReservations();
       renderFloor();
     });
 
-    document.getElementById('nextDay').addEventListener('click', async () => {
+    document.getElementById('nextDay').addEventListener('click', async (e) => {
+      e.stopPropagation();
+      document.getElementById('datePicker').style.pointerEvents = 'none';
       currentDate.setDate(currentDate.getDate() + 1);
       await loadReservations();
       renderFloor();
     });
 
     // Date picker - click on date to jump to any date
+    let datePickerOpen = false;
     function openDatePicker() {
+      if (datePickerOpen) return;
       const picker = document.getElementById('datePicker');
       picker.value = getDateString(currentDate);
       picker.style.pointerEvents = 'auto';
+      datePickerOpen = true;
       picker.showPicker();
     }
 
@@ -2989,6 +2996,13 @@ import '../../../styles/coyol-tables.css';
         renderFloor();
       }
       e.target.style.pointerEvents = 'none';
+      datePickerOpen = false;
+    });
+    
+    // Close picker on blur/cancel
+    document.getElementById('datePicker').addEventListener('blur', () => {
+      document.getElementById('datePicker').style.pointerEvents = 'none';
+      datePickerOpen = false;
     });
 
     // Zone tabs

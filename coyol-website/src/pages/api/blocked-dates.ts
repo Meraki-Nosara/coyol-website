@@ -24,7 +24,7 @@ export const GET: APIRoute = async ({ url }) => {
 
 export const POST: APIRoute = async ({ request }) => {
   const body = await request.json();
-  const { restaurant, date, reason, blocked_by } = body;
+  const { restaurant, date, reason, blocked_by, shift = 'all' } = body;
   
   if (!restaurant || !date) {
     return new Response(JSON.stringify({ error: 'Missing restaurant or date' }), { 
@@ -41,7 +41,7 @@ export const POST: APIRoute = async ({ request }) => {
       'Authorization': `Bearer ${SUPABASE_KEY}`,
       'Prefer': 'return=representation'
     },
-    body: JSON.stringify({ restaurant, date, reason, blocked_by })
+    body: JSON.stringify({ restaurant, date, reason, blocked_by, shift })
   });
   
   if (!res.ok) {

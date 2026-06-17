@@ -96,9 +96,10 @@ import '../../../styles/laluna-tables.css';
       <div class="topbar">
         <div class="date-nav">
           <button id="prevDay">←</button>
-          <span id="currentDate" onclick="openDatePicker()" style="cursor:pointer;" title="Click to pick date">Mon, 4 May</span>
+          <span id="currentDate" onclick="openDatePicker()" style="cursor:pointer;" title="Click to pick date">Loading...</span>
           <input type="date" id="datePicker" style="position:absolute;opacity:0;pointer-events:none;" />
           <button id="nextDay">→</button>
+          <button id="blockDayBtn" onclick="openBlockModal()" style="margin-left:12px;background:#A65D3F;color:white;border:none;padding:10px 20px;border-radius:8px;font-size:14px;cursor:pointer;white-space:nowrap;font-weight:600;min-width:80px;" title="Block this day for private event">Block</button>
         </div>
         <div class="zone-tabs">
           <button class="zone-tab" data-zone="inside">INSIDE</button>
@@ -2628,6 +2629,9 @@ import '../../../styles/laluna-tables.css';
       const day = String(date.getDate()).padStart(2, '0');
       return `${year}-${month}-${day}`;
     }
+    
+    // Expose for modal
+    window.getCurrentDateString = () => getDateString(currentDate);
 
     // Auto-assign tables to unassigned reservations
     // First-come (by created_at) gets best tables
@@ -3775,23 +3779,81 @@ import '../../../styles/laluna-tables.css';
     window.createReservationForTable = createReservationForTable;
 
     // Date navigation
-    document.getElementById('prevDay').addEventListener('click', async () => {
+    document.getElementById('prevDay').addEventListener('click', async (e) => {
+      e.stopPropagation();
+      document.getElementById('datePicker').style.pointerEvents = 'none';
       currentDate.setDate(currentDate.getDate() - 1);
       await loadReservations();
       renderFloor();
+      checkIfDayBlocked();
     });
 
-    document.getElementById('nextDay').addEventListener('click', async () => {
+    document.getElementById('nextDay').addEventListener('click', async (e) => {
+      e.stopPropagation();
+      document.getElementById('datePicker').style.pointerEvents = 'none';
       currentDate.setDate(currentDate.getDate() + 1);
       await loadReservations();
       renderFloor();
+      checkIfDayBlocked();
     });
 
+    // Block current day for private events
+    async function blockCurrentDay() {
+      const reason = prompt('Reason for blocking (e.g., Private Wedding):');
+      if (reason === null) return; // cancelled
+      
+      const dateStr = getDateString(currentDate);
+      try {
+        const res = await fetch('/api/blocked-dates', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            restaurant: 'laluna',
+            date: dateStr,
+            reason: reason || 'Private Event',
+            blocked_by: 'admin'
+          })
+        });
+        if (res.ok) {
+          alert('Day blocked! Guests cannot make reservations for ' + currentDate.toLocaleDateString());
+          document.getElementById('blockDayBtn').style.background = '#666';
+          document.getElementById('blockDayBtn').textContent = 'Blocked';
+        } else {
+          const err = await res.json();
+          alert('Error: ' + (err.error || 'Could not block date'));
+        }
+      } catch (e) {
+        alert('Error blocking date');
+      }
+    }
+    window.blockCurrentDay = blockCurrentDay;
+    
+    // Check if current day is blocked
+    async function checkIfDayBlocked() {
+      try {
+        const res = await fetch('/api/blocked-dates?restaurant=laluna');
+        const blocked = await res.json();
+        const dateStr = getDateString(currentDate);
+        const isBlocked = blocked.some(b => b.date === dateStr);
+        const btn = document.getElementById('blockDayBtn');
+        if (isBlocked) {
+          btn.style.background = '#666';
+          btn.textContent = 'Blocked';
+        } else {
+          btn.style.background = '#A65D3F';
+          btn.textContent = 'Block Day';
+        }
+      } catch (e) {}
+    }
+
     // Date picker - click on date to jump to any date
+    let datePickerOpen = false;
     function openDatePicker() {
+      if (datePickerOpen) return;
       const picker = document.getElementById('datePicker');
       picker.value = getDateString(currentDate);
       picker.style.pointerEvents = 'auto';
+      datePickerOpen = true;
       picker.showPicker();
     }
 
@@ -3801,8 +3863,16 @@ import '../../../styles/laluna-tables.css';
         currentDate = newDate;
         await loadReservations();
         renderFloor();
+        checkIfDayBlocked();
       }
       e.target.style.pointerEvents = 'none';
+      datePickerOpen = false;
+    });
+    
+    // Close picker on blur/cancel
+    document.getElementById('datePicker').addEventListener('blur', () => {
+      document.getElementById('datePicker').style.pointerEvents = 'none';
+      datePickerOpen = false;
     });
 
     // Zone tabs
@@ -4347,6 +4417,7 @@ import '../../../styles/laluna-tables.css';
     // Initial load
     loadShifts();
     loadReservations().then(() => renderFloor());
+    checkIfDayBlocked();
     
     // Event delegation for table clicks (backup in case individual handlers fail)
     document.getElementById('floorGrid').addEventListener('click', (e) => {
@@ -4376,6 +4447,86 @@ import '../../../styles/laluna-tables.css';
           }
         }
       }
+    });
+  </script>
+
+  <!-- Block Day Modal -->
+  <div id="blockModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:#242424;padding:24px;border-radius:16px;max-width:400px;width:90%;">
+      <h3 style="color:white;margin-bottom:16px;">Block Date</h3>
+      <p id="blockModalDate" style="color:#A65D3F;font-weight:600;margin-bottom:16px;"></p>
+      
+      <div style="margin-bottom:16px;">
+        <label style="color:#999;display:block;margin-bottom:8px;">What to block:</label>
+        <select id="blockShift" style="width:100%;padding:12px;border-radius:8px;border:1px solid #444;background:#1a1a1a;color:white;font-size:14px;">
+          <option value="all">Whole Day</option>
+          <option value="lunch">Lunch Only (12:00 - 15:00)</option>
+          <option value="dinner">Dinner Only (18:00 - 22:00)</option>
+        </select>
+      </div>
+      
+      <div style="margin-bottom:20px;">
+        <label style="color:#999;display:block;margin-bottom:8px;">Reason:</label>
+        <input type="text" id="blockReason" placeholder="e.g., Private Wedding" style="width:100%;padding:12px;border-radius:8px;border:1px solid #444;background:#1a1a1a;color:white;font-size:14px;box-sizing:border-box;" />
+      </div>
+      
+      <div style="display:flex;gap:12px;">
+        <button onclick="closeBlockModal()" style="flex:1;padding:12px;background:#333;color:white;border:none;border-radius:8px;cursor:pointer;">Cancel</button>
+        <button onclick="confirmBlock()" style="flex:1;padding:12px;background:#A65D3F;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">Block</button>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    function openBlockModal() {
+      const modal = document.getElementById('blockModal');
+      const dateEl = document.getElementById('blockModalDate');
+      dateEl.textContent = document.getElementById('currentDate').textContent;
+      modal.style.display = 'flex';
+    }
+    
+    function closeBlockModal() {
+      document.getElementById('blockModal').style.display = 'none';
+    }
+    
+    async function confirmBlock() {
+      const shift = document.getElementById('blockShift').value;
+      const reason = document.getElementById('blockReason').value || 'Private Event';
+      const dateText = document.getElementById('currentDate').textContent;
+      
+      // Get the actual date from currentDate variable (set in main script)
+      const dateStr = window.getCurrentDateString ? window.getCurrentDateString() : new Date().toISOString().split('T')[0];
+      
+      try {
+        const res = await fetch('/api/blocked-dates', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            restaurant: 'laluna',
+            date: dateStr,
+            reason: shift === 'all' ? reason : `[${shift.toUpperCase()}] ${reason}`,
+            blocked_by: 'admin',
+            shift: shift
+          })
+        });
+        
+        if (res.ok) {
+          closeBlockModal();
+          const shiftLabel = shift === 'all' ? 'day' : shift;
+          alert(`${shiftLabel.charAt(0).toUpperCase() + shiftLabel.slice(1)} blocked!`);
+          location.reload();
+        } else {
+          const err = await res.json();
+          alert('Error: ' + (err.error || 'Could not block date'));
+        }
+      } catch (e) {
+        alert('Error blocking date');
+      }
+    }
+    
+    // Close on background click
+    document.getElementById('blockModal').addEventListener('click', (e) => {
+      if (e.target.id === 'blockModal') closeBlockModal();
     });
   </script>
 </Layout>
