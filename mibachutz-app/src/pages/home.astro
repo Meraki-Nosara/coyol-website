@@ -158,7 +158,27 @@ export const prerender = false;
     let isAvailable = false;
     
     async function init() {
-      const stored = localStorage.getItem('mibachutz_user');
+      let stored = localStorage.getItem('mibachutz_user');
+      
+      // PWA session recovery from URL
+      if (!stored) {
+        const params = new URLSearchParams(window.location.search);
+        const userId = params.get('uid');
+        if (userId) {
+          try {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?id=eq.${userId}&select=*`, {
+              headers: { 'apikey': SUPABASE_KEY }
+            });
+            const users = await res.json();
+            if (users.length > 0) {
+              user = users[0];
+              localStorage.setItem('mibachutz_user', JSON.stringify(user));
+              stored = JSON.stringify(user);
+            }
+          } catch (e) { console.error('Session recovery failed:', e); }
+        }
+      }
+      
       if (stored) {
         user = JSON.parse(stored);
         

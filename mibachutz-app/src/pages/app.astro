@@ -255,9 +255,9 @@
     
     function redirectBasedOnStatus(user) {
       if (user.status === 'standby') {
-        window.location.href = '/waiting';
+        window.location.href = '/waiting?uid=' + user.id;
       } else {
-        window.location.href = '/home';
+        window.location.href = '/home?uid=' + user.id;
       }
     }
     

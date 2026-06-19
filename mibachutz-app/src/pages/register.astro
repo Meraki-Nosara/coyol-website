@@ -401,7 +401,7 @@
         <div class="card">
           <div class="card-title">אפשרי התראות</div>
           <p class="card-subtitle">כדי לקבל עדכונים כשמישהו כותבת לך</p>
-          <button class="btn" id="notificationPermBtn" style="background: var(--coral);">אפשרי התראות</button>
+          <button class="btn" id="notificationPermBtn" style="background: #7CB67C;">אפשרי התראות</button>
           <button class="btn btn-secondary" id="skipNotificationBtn" style="margin-top: 8px;">אולי אחר כך</button>
         </div>
       </div>
@@ -919,7 +919,21 @@
         if (waiting.length >= 8) {
           waitingEl.textContent = 'מזל טוב! הקבוצה נוצרה!';
           
-          // Create group
+          // Get neighborhood name
+          const hoodRes = await fetch(`${SUPABASE_URL}/rest/v1/neighborhoods?id=eq.${data.neighborhood_id}&select=name_he`, {
+            headers: { 'apikey': SUPABASE_KEY }
+          });
+          const hoodData = await hoodRes.json();
+          const hoodName = hoodData[0]?.name_he || 'שכונה';
+          
+          // Count existing groups in this neighborhood
+          const countRes = await fetch(`${SUPABASE_URL}/rest/v1/groups_v2?neighborhood_id=eq.${data.neighborhood_id}&select=id`, {
+            headers: { 'apikey': SUPABASE_KEY }
+          });
+          const existingGroups = await countRes.json();
+          const groupNumber = (existingGroups?.length || 0) + 1;
+          
+          // Create group with neighborhood name + number
           const groupRes = await fetch(`${SUPABASE_URL}/rest/v1/groups_v2`, {
             method: 'POST',
             headers: {
@@ -930,7 +944,7 @@
             },
             body: JSON.stringify({
               neighborhood_id: data.neighborhood_id,
-              name: 'קבוצת אמהות',
+              name: `${hoodName} ${groupNumber}`,
               status: 'active'
             })
           });
@@ -976,9 +990,9 @@
     document.getElementById('doneBtn').addEventListener('click', () => {
       const user = JSON.parse(localStorage.getItem('mibachutz_user') || '{}');
       if (user.group_id || user.status === 'in_group') {
-        window.location.href = '/home';
+        window.location.href = '/home?uid=' + user.id;
       } else {
-        window.location.href = '/waiting';
+        window.location.href = '/waiting?uid=' + user.id;
       }
     });
     

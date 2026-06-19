@@ -3292,6 +3292,20 @@ import '../../../styles/laluna-tables.css';
       const localNum = document.getElementById('editPhone').value.replace(/[^0-9]/g, '');
       const newPhone = localNum ? (countryCode + localNum) : '';
       
+      // Validate required fields
+      if (!newTime || newTime === '') {
+        alert('Please select a time for the reservation');
+        return;
+      }
+      if (!newDate) {
+        alert('Please select a date for the reservation');
+        return;
+      }
+      if (!newGuestName) {
+        alert('Please enter a guest name');
+        return;
+      }
+      
       try {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${selectedReservationId}`, {
           method: 'PATCH',

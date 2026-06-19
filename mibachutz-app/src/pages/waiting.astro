@@ -379,7 +379,27 @@
     };
     const VAPID_KEY = 'BKThwKsVpMRGIV1OAPaxaERqyzewVWxuLMkfIPXaRyvsUSGEMtLBKonsGc5ojqKJGK9iH2mEd-kOgEQUg21aTsY';
     
-    const user = JSON.parse(localStorage.getItem('mibachutz_user') || 'null');
+    let user = JSON.parse(localStorage.getItem('mibachutz_user') || 'null');
+    
+    // If no user in localStorage, check URL for user ID (PWA session recovery)
+    if (!user) {
+      const params = new URLSearchParams(window.location.search);
+      const userId = params.get('uid');
+      if (userId) {
+        // Fetch user from database
+        try {
+          const res = await fetch(`${SUPABASE_URL}/rest/v1/moms_v2?id=eq.${userId}&select=*`, {
+            headers: { 'apikey': SUPABASE_KEY }
+          });
+          const users = await res.json();
+          if (users.length > 0) {
+            user = users[0];
+            localStorage.setItem('mibachutz_user', JSON.stringify(user));
+          }
+        } catch (e) { console.error('Session recovery failed:', e); }
+      }
+    }
+    
     if (!user) window.location.href = '/app';
     
     // Initialize Firebase & request notifications
