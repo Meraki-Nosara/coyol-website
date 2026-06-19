@@ -2468,11 +2468,12 @@ import '../../../styles/laluna-tables.css';
       
       // Check each table for availability
       for (const table of allTables) {
-        // Check capacity (use defaults if not set: min=1, max=10)
-        const minC = table.minCovers || 1;
-        const maxC = table.maxCovers || 10;
-        // For Jardin, allow smaller parties (seat them even if table is bigger)
-        const effectiveMin = (table.zone === 'jardin') ? 1 : minC;
+        // Check capacity (use defaults if not set: min=2, max=4)
+        const minC = table.minCovers || 2;
+        const maxC = table.maxCovers || 4;
+        // Allow seating parties slightly smaller than min (1 person less), but not on large tables
+        // This prevents 3 people getting a 10-top
+        const effectiveMin = maxC <= 6 ? Math.max(1, minC - 1) : minC;
         if (guests < effectiveMin || guests > maxC) continue;
         
         // Check if table is occupied during this time window
