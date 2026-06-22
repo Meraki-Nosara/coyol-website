@@ -2924,6 +2924,27 @@ import '../../../styles/coyol-tables.css';
     async function assignTableToReservation(tableId) {
       if (!assigningReservationId || !isAssigningTable) return;
       
+      // Get the reservation being assigned
+      const assigningRes = getReservations().find(r => r.id === assigningReservationId);
+      if (!assigningRes) return;
+      
+      // Check for conflicts - same table, same shift, same date
+      const assigningShift = getShiftForTime(assigningRes.time);
+      const conflicts = getReservations().filter(r => 
+        r.id !== assigningReservationId &&
+        r.tableId === tableId &&
+        r.status !== 'cancelled' &&
+        r.status !== 'no-show' &&
+        r.status !== 'completed' &&
+        getShiftForTime(r.time) === assigningShift
+      );
+      
+      if (conflicts.length > 0) {
+        const conflictNames = conflicts.map(c => `${c.guestName} at ${c.time}`).join(', ');
+        alert(`Table already has a reservation in this shift: ${conflictNames}`);
+        return;
+      }
+      
       try {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?id=eq.${assigningReservationId}`, {
           method: 'PATCH',
