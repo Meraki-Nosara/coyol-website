@@ -97,7 +97,7 @@ import '../../../styles/laluna-tables.css';
         <div class="date-nav">
           <button id="prevDay">←</button>
           <span id="currentDate" onclick="openDatePicker()" style="cursor:pointer;" title="Click to pick date">Loading...</span>
-          <input type="date" id="datePicker" style="position:absolute;opacity:0;pointer-events:none;" />
+          <input type="date" id="datePicker" style="position:absolute;left:-9999px;opacity:0;" />
           <button id="nextDay">→</button>
           <button id="blockDayBtn" onclick="openBlockModal()" style="margin-left:12px;background:#A65D3F;color:white;border:none;padding:10px 20px;border-radius:8px;font-size:14px;cursor:pointer;white-space:nowrap;font-weight:600;min-width:80px;" title="Block this day for private event">Block</button>
         </div>
@@ -3906,9 +3906,19 @@ import '../../../styles/laluna-tables.css';
       if (datePickerOpen) return;
       const picker = document.getElementById('datePicker');
       picker.value = getDateString(currentDate);
-      picker.style.pointerEvents = 'auto';
+      picker.style.left = '0';
+      picker.style.opacity = '0.01';
       datePickerOpen = true;
+      picker.focus();
       picker.showPicker();
+    }
+    
+    function closeDatePicker() {
+      const picker = document.getElementById('datePicker');
+      picker.style.left = '-9999px';
+      picker.style.opacity = '0';
+      picker.blur();
+      datePickerOpen = false;
     }
 
     document.getElementById('datePicker').addEventListener('change', async (e) => {
@@ -3919,24 +3929,24 @@ import '../../../styles/laluna-tables.css';
         renderFloor();
         checkIfDayBlocked();
       }
-      e.target.style.pointerEvents = 'none';
-      datePickerOpen = false;
+      closeDatePicker();
     });
     
     // Close picker on blur/cancel
     document.getElementById('datePicker').addEventListener('blur', () => {
-      document.getElementById('datePicker').style.pointerEvents = 'none';
-      datePickerOpen = false;
+      closeDatePicker();
     });
 
-    // Close date picker when clicking outside (iOS fix)
+    // Close date picker on ESC or clicking anywhere
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && datePickerOpen) closeDatePicker();
+    });
+    
     document.addEventListener('click', (e) => {
       if (!datePickerOpen) return;
-      const picker = document.getElementById('datePicker');
       const dateSpan = document.getElementById('currentDate');
-      if (!picker.contains(e.target) && e.target !== dateSpan) {
-        picker.style.pointerEvents = 'none';
-        datePickerOpen = false;
+      if (e.target !== dateSpan) {
+        setTimeout(closeDatePicker, 100);
       }
     });
 
