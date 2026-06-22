@@ -3697,11 +3697,31 @@ import '../../../styles/laluna-tables.css';
         </div>
       `;
       
-      // Position popup near the table
+      // Position popup near the table (smart positioning)
+      const floorGrid = document.getElementById('floorGrid');
+      const gridRect = floorGrid.getBoundingClientRect();
+      const tableRect = tableEl.getBoundingClientRect();
+      
+      // Determine if table is on right side of screen
+      const isRightSide = tableRect.left > gridRect.left + gridRect.width / 2;
+      const isBottomSide = tableRect.top > gridRect.top + gridRect.height / 2;
+      
+      let left, top;
+      if (isRightSide) {
+        left = tableEl.offsetLeft - 190; // Show to the left
+      } else {
+        left = tableEl.offsetLeft + 70; // Show to the right
+      }
+      if (isBottomSide) {
+        top = tableEl.offsetTop - 100; // Show above
+      } else {
+        top = tableEl.offsetTop; // Show below
+      }
+      
       popup.style.cssText = `
         position: absolute;
-        left: ${tableEl.offsetLeft + 70}px;
-        top: ${tableEl.offsetTop}px;
+        left: ${left}px;
+        top: ${top}px;
         background: white;
         border-radius: 8px;
         box-shadow: 0 4px 20px rgba(0,0,0,0.25);
