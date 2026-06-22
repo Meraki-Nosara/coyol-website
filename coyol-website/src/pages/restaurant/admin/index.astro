@@ -3033,7 +3033,9 @@ import '../../../styles/coyol-tables.css';
       
       let filtered = reservations;
       
-      // Filter by status
+      // Filter by status (always exclude cancelled and no-show from counts)
+      filtered = filtered.filter(r => r.status !== 'cancelled' && r.status !== 'no-show');
+      
       if (currentStatusFilter === 'seated') {
         filtered = filtered.filter(r => r.status === 'seated');
       } else {
