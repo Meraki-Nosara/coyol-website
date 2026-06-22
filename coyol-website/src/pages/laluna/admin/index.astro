@@ -3890,6 +3890,17 @@ import '../../../styles/laluna-tables.css';
       datePickerOpen = false;
     });
 
+    // Close date picker when clicking outside (iOS fix)
+    document.addEventListener('click', (e) => {
+      if (!datePickerOpen) return;
+      const picker = document.getElementById('datePicker');
+      const dateSpan = document.getElementById('currentDate');
+      if (!picker.contains(e.target) && e.target !== dateSpan) {
+        picker.style.pointerEvents = 'none';
+        datePickerOpen = false;
+      }
+    });
+
     // Zone tabs
     document.querySelectorAll('.zone-tab').forEach(tab => {
       tab.addEventListener('click', () => {
