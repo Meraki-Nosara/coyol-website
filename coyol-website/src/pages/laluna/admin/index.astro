@@ -2798,10 +2798,11 @@ import '../../../styles/laluna-tables.css';
         byShift[shift].push(res);
       });
       
-      // Update counts
-      document.getElementById('resCount').innerHTML = `RESERVATIONS <strong>${reservations.length}</strong>`;
-      document.getElementById('totalCovers').textContent = reservations.reduce((sum, r) => sum + (parseInt(r.guests) || 2), 0);
-      document.getElementById('totalRes').textContent = reservations.length;
+      // Update counts (exclude cancelled and no-show)
+      const activeRes = reservations.filter(r => r.status !== 'cancelled' && r.status !== 'no-show');
+      document.getElementById('resCount').innerHTML = `RESERVATIONS <strong>${activeRes.length}</strong>`;
+      document.getElementById('totalCovers').textContent = activeRes.reduce((sum, r) => sum + (parseInt(r.guests) || 2), 0);
+      document.getElementById('totalRes').textContent = activeRes.length;
       document.getElementById('currentDate').textContent = formatDate(currentDate);
       
       // Render list
