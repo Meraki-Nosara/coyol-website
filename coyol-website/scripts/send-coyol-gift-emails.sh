@@ -5,7 +5,8 @@ SUPABASE_URL="https://mnxjzvqgrrodalcmtntf.supabase.co"
 SUPABASE_KEY="sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng"
 
 # Get pending gift cards
-PENDING=$(curl -s "${SUPABASE_URL}/rest/v1/coyol_gift_cards?status=eq.pending_email&select=*" \
+# Get pending gift cards (status=pending_email OR status=sent but sent_at is null)
+PENDING=$(curl -s "${SUPABASE_URL}/rest/v1/coyol_gift_cards?or=(status.eq.pending_email,and(status.eq.sent,sent_at.is.null))&select=*" \
   -H "apikey: ${SUPABASE_KEY}" \
   -H "Authorization: Bearer ${SUPABASE_KEY}")
 
