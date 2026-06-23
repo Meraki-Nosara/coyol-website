@@ -1,8 +1,8 @@
 {
-  "lastCheck": "2026-06-15T21:08:00Z",
-  "hotLeadsAlerted": ["kailynthenderson@gmail.com", "stefanie.marco@unknown"],
+  "lastCheck": "2026-06-23T06:40:00Z",
+  "hotLeadsAlerted": ["kailynthenderson@gmail.com", "stefanie.marco@unknown", "dishant.verma01@gmail.com"],
   "pendingAlerts": [
-    {"name": "Kailyn Henderson", "phone": "16475223180", "email": "kailynthenderson@gmail.com", "source": "Coyol", "market": "Toronto"},
-    {"name": "Stefanie Marco", "phone": "19175430833", "email": "unknown", "source": "La Luna", "market": "NYC"}
-  ]
+    {"name": "Dishant Verma", "phone": "6479960151", "email": "dishant.verma01@gmail.com", "source": "La Luna", "market": "Toronto"}
+  ],
+  "notes": "June 20 sales data added to meraki-control. Git push to DO blocked - needs manual deploy or correct remote."
 }

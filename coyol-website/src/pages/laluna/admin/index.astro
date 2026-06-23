@@ -2889,7 +2889,7 @@ import '../../../styles/laluna-tables.css';
       }
       const { table, tableReservations } = data;
       
-      if (isAssigningTable) {
+      if (window.isAssigningTable) {
         // Handle assignment mode
         const resIdToAssign = assigningReservationId;
         window.isAssigningTable = false;
@@ -2913,7 +2913,7 @@ import '../../../styles/laluna-tables.css';
       if (!data) return;
       const { table, tableReservations } = data;
       
-      if (isAssigningTable) {
+      if (window.isAssigningTable) {
         const resIdToAssign = assigningReservationId;
         window.isAssigningTable = false;
         assigningReservationId = null;
@@ -3018,7 +3018,7 @@ import '../../../styles/laluna-tables.css';
       console.log('Table clicked:', tableId);
       
       // If in assignment mode, assign the table
-      if (isAssigningTable) {
+      if (window.isAssigningTable) {
         assignTableToReservation(tableId);
         return;
       }
@@ -3097,7 +3097,7 @@ import '../../../styles/laluna-tables.css';
     });
 
     let selectedReservationId = null;
-    window.window.isAssigningTable = false;
+    window.isAssigningTable = false;
     let assigningReservationId = null;
     
     function selectReservation(id) {
