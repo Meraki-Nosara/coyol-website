@@ -3497,7 +3497,7 @@ import '../../../styles/laluna-tables.css';
     }
     
     async function assignTableToReservation(tableId) {
-      if (!assigningReservationId || !isAssigningTable) return;
+      if (!assigningReservationId || !window.isAssigningTable) return;
       
       // Save the ID before clearing
       const resId = assigningReservationId;
@@ -4526,7 +4526,7 @@ import '../../../styles/laluna-tables.css';
         if (table) {
           const dateStr = getDateString(currentDate);
           const tableReservations = cachedReservations.filter(r => r.date === dateStr && r.tableId === tableId);
-          if (isAssigningTable && !tableEl.classList.contains('occupied')) {
+          if (window.isAssigningTable && !tableEl.classList.contains('occupied')) {
             const resIdToAssign = assigningReservationId;
             window.isAssigningTable = false;
             assigningReservationId = null;
