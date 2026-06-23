@@ -3425,6 +3425,33 @@
       "cashier": "Juan Castillo"
     },
     {
+      "date": "2026-06-20",
+      "restaurant": "laluna",
+      "cash": 338850,
+      "card": 4812857,
+      "total": 5051726,
+      "netSales": 4116242,
+      "source": "ingrid_email"
+    },
+    {
+      "date": "2026-06-20",
+      "restaurant": "coyol",
+      "cash": 50000,
+      "card": 4168088,
+      "total": 4168088,
+      "netSales": 3388689,
+      "source": "ingrid_email"
+    },
+    {
+      "date": "2026-06-20",
+      "restaurant": "esh",
+      "cash": 83800,
+      "card": 478392,
+      "total": 512182,
+      "netSales": 427035,
+      "source": "ingrid_email"
+    },
+    {
       "date": "2026-06-21",
       "restaurant": "laluna",
       "cash": 162900,
