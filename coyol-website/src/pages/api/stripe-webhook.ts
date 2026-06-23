@@ -262,7 +262,7 @@ export const POST: APIRoute = async ({ request }) => {
             isCoyol,
           });
           
-          // Update status to sent
+          // Update status to sent with timestamp
           await fetch(`${SUPABASE_URL}/rest/v1/${tableName}?code=eq.${giftCode}`, {
             method: 'PATCH',
             headers: {
@@ -270,12 +270,14 @@ export const POST: APIRoute = async ({ request }) => {
               'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ status: 'sent' }),
+            body: JSON.stringify({ status: 'sent', sent_at: new Date().toISOString() }),
           });
           console.log('Gift card emails sent:', giftCode);
-        } catch (emailError) {
-          console.error('Failed to send gift card emails:', emailError);
-          // Status remains pending_email for retry via heartbeat
+        } catch (emailError: any) {
+          console.error('Failed to send gift card emails:', emailError?.message || emailError);
+          // Keep status as pending_email - heartbeat will retry
+          // Also log the recipient for debugging
+          console.error('Failed for recipient:', recipientEmail, 'sender:', senderEmail);
         }
       }
     }
