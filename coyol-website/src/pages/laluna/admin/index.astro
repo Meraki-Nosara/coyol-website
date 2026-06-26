@@ -99,7 +99,7 @@ import '../../../styles/laluna-tables.css';
           <span id="currentDate" onclick="openDatePicker()" style="cursor:pointer;" title="Click to pick date">Loading...</span>
           <input type="date" id="datePicker" style="position:absolute;left:-9999px;opacity:0;" />
           <button id="nextDay">→</button>
-          <button id="blockDayBtn" onclick="openBlockModal()" style="margin-left:12px;background:#A65D3F;color:white;border:none;padding:10px 20px;border-radius:8px;font-size:14px;cursor:pointer;white-space:nowrap;font-weight:600;min-width:80px;" title="Block this day for private event">Block</button>
+          <button id="blockDayBtn" class="zone-tab" onclick="openBlockModal()" title="Block this day for private event">BLOCK</button>
         </div>
         <div class="zone-tabs">
           <button class="zone-tab" data-zone="inside">INSIDE</button>
@@ -3927,8 +3927,8 @@ import '../../../styles/laluna-tables.css';
         });
         if (res.ok) {
           alert('Day blocked! Guests cannot make reservations for ' + currentDate.toLocaleDateString());
-          document.getElementById('blockDayBtn').style.background = '#666';
-          document.getElementById('blockDayBtn').textContent = 'Blocked';
+          document.getElementById('blockDayBtn').classList.add('active');
+          document.getElementById('blockDayBtn').textContent = 'BLOCKED';
         } else {
           const err = await res.json();
           alert('Error: ' + (err.error || 'Could not block date'));
@@ -3948,11 +3948,11 @@ import '../../../styles/laluna-tables.css';
         const isBlocked = blocked.some(b => b.date === dateStr);
         const btn = document.getElementById('blockDayBtn');
         if (isBlocked) {
-          btn.style.background = '#666';
-          btn.textContent = 'Blocked';
+          btn.classList.add('active');
+          btn.textContent = 'BLOCKED';
         } else {
-          btn.style.background = '#A65D3F';
-          btn.textContent = 'Block Day';
+          btn.classList.remove('active');
+          btn.textContent = 'BLOCK';
         }
       } catch (e) {}
     }
