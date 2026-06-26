@@ -1493,10 +1493,10 @@ import '../../../styles/laluna-tables.css';
       50% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); transform: scale(1.05); }
     }
     
-    /* Occupied tables during assignment - dimmed */
+    /* Occupied tables during assignment - dimmed but clickable for feedback */
     :global(.table-btn.occupied) {
       opacity: 0.4;
-      pointer-events: none;
+      cursor: not-allowed;
     }
     
     /* Flash when table is successfully assigned */
@@ -3019,6 +3019,28 @@ import '../../../styles/laluna-tables.css';
       
       // If in assignment mode, assign the table
       if (window.isAssigningTable) {
+        // Check if table is occupied (has conflict)
+        const tableEl = document.querySelector(`.table-btn[data-table="${tableId}"]`);
+        if (tableEl && tableEl.classList.contains('occupied')) {
+          // Show why it's blocked
+          const dateStr = getDateString(currentDate);
+          const assigningRes = cachedReservations.find(r => r.id === assigningReservationId);
+          const assigningShift = getShiftForTime(assigningRes?.time);
+          const conflicts = cachedReservations.filter(r => 
+            r.tableId === tableId && 
+            r.date === dateStr &&
+            r.id !== assigningReservationId &&
+            r.status !== 'cancelled' && 
+            r.status !== 'no-show' && 
+            r.status !== 'completed' &&
+            getShiftForTime(r.time) === assigningShift
+          );
+          if (conflicts.length > 0) {
+            const conflictNames = conflicts.map(c => `${c.guestName} (${formatTime12(c.time)})`).join(', ');
+            alert(`This table is occupied in this shift by: ${conflictNames}`);
+          }
+          return;
+        }
         assignTableToReservation(tableId);
         return;
       }
@@ -3435,10 +3457,19 @@ import '../../../styles/laluna-tables.css';
     function applyAssignmentFlash() {
       const assigningRes = cachedReservations.find(r => r.id === assigningReservationId);
       const assigningShift = getShiftForTime(assigningRes?.time);
+      const dateStr = getDateString(currentDate);
       
       document.querySelectorAll('.floor-grid .table-btn').forEach(el => {
         const tableId = el.dataset.table;
-        const tableRes = cachedReservations.filter(r => r.tableId === tableId);
+        // Only check ACTIVE reservations on the SAME DATE and SAME SHIFT
+        const tableRes = cachedReservations.filter(r => 
+          r.tableId === tableId && 
+          r.date === dateStr &&
+          r.id !== assigningReservationId && // Don't count the reservation we're moving
+          r.status !== 'cancelled' && 
+          r.status !== 'no-show' && 
+          r.status !== 'completed'
+        );
         const hasConflict = tableRes.some(r => getShiftForTime(r.time) === assigningShift);
         
         if (hasConflict) {
