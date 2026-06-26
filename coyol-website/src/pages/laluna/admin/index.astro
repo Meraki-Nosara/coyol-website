@@ -3534,14 +3534,20 @@ import '../../../styles/laluna-tables.css';
       const resId = assigningReservationId;
       
       // Get the reservation being assigned
-      const assigningRes = reservations.find(r => r.id === resId);
-      if (!assigningRes) return;
+      const assigningRes = cachedReservations.find(r => r.id === resId);
+      if (!assigningRes) {
+        console.error('Could not find reservation to assign:', resId);
+        cancelAssignment();
+        return;
+      }
       
       // Check for conflicts - same table, same shift, same date
+      const dateStr = getDateString(currentDate);
       const assigningShift = getShiftForTime(assigningRes.time);
-      const conflicts = reservations.filter(r => 
+      const conflicts = cachedReservations.filter(r => 
         r.id !== resId &&
         r.tableId === tableId &&
+        r.date === dateStr &&
         r.status !== 'cancelled' &&
         r.status !== 'no-show' &&
         r.status !== 'completed' &&
