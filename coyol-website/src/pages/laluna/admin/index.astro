@@ -3963,14 +3963,20 @@ import '../../../styles/laluna-tables.css';
     // Date picker - click on date to jump to any date
     let datePickerOpen = false;
     window.openDatePicker = function() {
-      if (datePickerOpen) return;
       const picker = document.getElementById('datePicker');
-      picker.value = getDateString(currentDate);
-      picker.style.left = '0';
-      picker.style.opacity = '0.01';
-      datePickerOpen = true;
-      picker.focus();
-      picker.showPicker();
+      if (!picker) return;
+      try {
+        picker.value = getDateString(currentDate);
+        picker.style.left = '0';
+        picker.style.opacity = '0.01';
+        picker.style.pointerEvents = 'auto';
+        datePickerOpen = true;
+        picker.focus();
+        picker.showPicker();
+      } catch(e) {
+        console.error('Date picker error:', e);
+        picker.click();
+      }
     }
     
     function closeDatePicker() {
