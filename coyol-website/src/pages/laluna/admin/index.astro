@@ -973,7 +973,7 @@ import '../../../styles/laluna-tables.css';
     /* Reservation Rows - Clean Aligned Columns */
     :global(.res-row) {
       display: grid;
-      grid-template-columns: 70px minmax(100px, 1fr) 42px 58px 32px;
+      grid-template-columns: 55px 70px minmax(80px, 1fr) 42px 58px 32px;
       gap: 0.5rem;
       padding: 0.75rem 0.75rem;
       margin: 0.375rem 0.5rem;
@@ -1009,6 +1009,15 @@ import '../../../styles/laluna-tables.css';
 
     :global(.res-row.seated) {
       background: rgba(61, 79, 61, 0.08);
+    }
+
+    :global(.res-code) {
+      font-family: monospace;
+      font-size: 11px;
+      color: #888;
+      background: #f5f5f5;
+      padding: 2px 4px;
+      border-radius: 3px;
     }
 
     :global(.res-row.cancelled) {
@@ -2851,6 +2860,7 @@ import '../../../styles/laluna-tables.css';
             return `
             <div class="res-row ${res.status} ${res.specialRequests ? 'has-note' : ''} ${hasGiftCard ? 'has-gift' : ''}" onclick="selectReservation('${res.id}')">
               <div class="res-time">${formatTime12(res.time)}</div>
+              <span class="res-code" title="Confirmation code">${res.id.slice(0,8).toUpperCase()}</span>
               <span class="res-name" title="${res.guestName}">${hasGiftCard ? '<span class="gift-indicator">🎁</span>' : ''}${res.guestName}</span>
               <select class="pax-select-mobile" data-res-id="${res.id}" onclick="event.stopPropagation();" onchange="quickUpdateGuests(this)" title="Guests">
                 ${Array.from({length: 20}, (_, i) => i + 1).map(n => `<option value="${n}" ${res.guests == n ? 'selected' : ''}>${n}p</option>`).join('')}
