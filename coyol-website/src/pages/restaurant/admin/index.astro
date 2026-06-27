@@ -59,8 +59,7 @@ import '../../../styles/coyol-tables.css';
       <div class="topbar">
         <div class="date-nav">
           <button id="prevDay">←</button>
-          <span id="currentDate" onclick="openDatePicker()" style="cursor:pointer;" title="Click to pick date">Loading...</span>
-          <input type="date" id="datePicker" style="position:absolute;opacity:0;pointer-events:none;" />
+          <input type="date" id="datePicker" title="Pick a date" />
           <button id="nextDay">→</button>
         </div>
         <div class="zone-tabs">
@@ -920,13 +919,20 @@ import '../../../styles/coyol-tables.css';
 
     .date-nav button:hover { background: var(--parchment); }
 
-    .date-nav span {
+    .date-nav input[type="date"] {
       font-size: 0.875rem;
       font-weight: 500;
-      min-width: 100px;
-      text-align: center;
+      padding: 6px 12px;
+      border: 1px solid var(--limestone);
+      border-radius: 4px;
+      background: var(--cream);
       color: var(--santorini);
       font-family: 'Playfair Display', serif;
+      cursor: pointer;
+    }
+    
+    .date-nav input[type="date"]:hover {
+      background: var(--parchment);
     }
 
     .zone-tabs {
@@ -3007,29 +3013,24 @@ import '../../../styles/coyol-tables.css';
     // Date navigation
     document.getElementById('prevDay').addEventListener('click', async (e) => {
       e.stopPropagation();
-      document.getElementById('datePicker').style.pointerEvents = 'none';
       currentDate.setDate(currentDate.getDate() - 1);
+      document.getElementById('datePicker').value = getDateString(currentDate);
       await loadReservations();
       renderFloor();
     });
 
     document.getElementById('nextDay').addEventListener('click', async (e) => {
       e.stopPropagation();
-      document.getElementById('datePicker').style.pointerEvents = 'none';
       currentDate.setDate(currentDate.getDate() + 1);
+      document.getElementById('datePicker').value = getDateString(currentDate);
       await loadReservations();
       renderFloor();
     });
 
-    // Date picker - click on date to jump to any date
-    let datePickerOpen = false;
-    window.openDatePicker = function() {
-      if (datePickerOpen) return;
+    // Date picker - simple visible input
+    function initDatePicker() {
       const picker = document.getElementById('datePicker');
       picker.value = getDateString(currentDate);
-      picker.style.pointerEvents = 'auto';
-      datePickerOpen = true;
-      picker.showPicker();
     }
 
     document.getElementById('datePicker').addEventListener('change', async (e) => {
@@ -3039,14 +3040,6 @@ import '../../../styles/coyol-tables.css';
         await loadReservations();
         renderFloor();
       }
-      e.target.style.pointerEvents = 'none';
-      datePickerOpen = false;
-    });
-    
-    // Close picker on blur/cancel
-    document.getElementById('datePicker').addEventListener('blur', () => {
-      document.getElementById('datePicker').style.pointerEvents = 'none';
-      datePickerOpen = false;
     });
 
     // Zone tabs
@@ -3500,6 +3493,7 @@ import '../../../styles/coyol-tables.css';
 
     // Initial load
     loadShifts();
+    initDatePicker();
     loadLayoutFromSupabase(); // Load floor layout from Supabase
     loadReservations().then(async () => { await autoAssignTables(); renderFloor(); });
   </script>
