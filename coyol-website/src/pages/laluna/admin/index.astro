@@ -96,8 +96,7 @@ import '../../../styles/laluna-tables.css';
       <div class="topbar">
         <div class="date-nav">
           <button id="prevDay">←</button>
-          <span id="currentDate">Loading...</span>
-          <input type="date" id="datePicker" onchange="window.onDateChange && window.onDateChange(this.value)" style="padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;cursor:pointer;" />
+          <input type="date" id="datePicker" onchange="window.onDateChange && window.onDateChange(this.value)" style="padding:6px 12px;border:1px solid var(--limestone);border-radius:4px;font-size:14px;cursor:pointer;background:var(--cream);" />
           <button id="nextDay">→</button>
           <button id="blockDayBtn" class="zone-tab active" onclick="openBlockModal()" title="Block this day for private event">BLOCK</button>
         </div>
@@ -2823,7 +2822,7 @@ import '../../../styles/laluna-tables.css';
       document.getElementById('resCount').innerHTML = `RESERVATIONS <strong>${activeRes.length}</strong>`;
       document.getElementById('totalCovers').textContent = activeRes.reduce((sum, r) => sum + (parseInt(r.guests) || 2), 0);
       document.getElementById('totalRes').textContent = activeRes.length;
-      document.getElementById('currentDate').textContent = formatDate(currentDate);
+      document.getElementById('datePicker').value = getDateString(currentDate);
       
       // Render list
       const list = document.getElementById('resList');
@@ -3965,7 +3964,6 @@ import '../../../styles/laluna-tables.css';
       const newDate = new Date(value + 'T12:00:00');
       if (!isNaN(newDate.getTime())) {
         currentDate = newDate;
-        document.getElementById('currentDate').textContent = formatDate(currentDate);
         await loadReservations();
         renderFloor();
         checkIfDayBlocked();
@@ -4581,7 +4579,9 @@ import '../../../styles/laluna-tables.css';
     function openBlockModal() {
       const modal = document.getElementById('blockModal');
       const dateEl = document.getElementById('blockModalDate');
-      dateEl.textContent = document.getElementById('currentDate').textContent;
+      const pickerVal = document.getElementById('datePicker').value;
+      const d = new Date(pickerVal + 'T12:00:00');
+      dateEl.textContent = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
       modal.style.display = 'flex';
     }
     
@@ -4592,10 +4592,9 @@ import '../../../styles/laluna-tables.css';
     async function confirmBlock() {
       const shift = document.getElementById('blockShift').value;
       const reason = document.getElementById('blockReason').value || 'Private Event';
-      const dateText = document.getElementById('currentDate').textContent;
       
-      // Get the actual date from currentDate variable (set in main script)
-      const dateStr = window.getCurrentDateString ? window.getCurrentDateString() : new Date().toISOString().split('T')[0];
+      // Get the date from picker
+      const dateStr = document.getElementById('datePicker').value;
       
       try {
         const res = await fetch('/api/blocked-dates', {
