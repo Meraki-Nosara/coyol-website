@@ -661,7 +661,7 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
     
     // Auto-adjust: don't apply more than the bill
     const actualApply = Math.min(apply, bill);
-    const rem = orig - actualApply;
+    const rem = Math.round(orig - actualApply); // Round to integer for DB
     let name = sel.options[sel.selectedIndex].dataset?.name;
     if (sel.value === 'walkin') {
       const walkinName = document.getElementById('walkinName').value.trim();
