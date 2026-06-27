@@ -40,7 +40,7 @@ function formatTime(timeStr) {
 
 function generateEmailHtml(reservation) {
   const confirmationCode = reservation.id.slice(0, 8).toUpperCase();
-  const cancelUrl = `https://lalunanosara.com/laluna/cancel?token=${reservation.cancel_token}`;
+  const cancelUrl = `https://coyolnosara.com/laluna/cancel?token=${reservation.cancel_token}`;
   
   return `<!DOCTYPE html>
 <html>
