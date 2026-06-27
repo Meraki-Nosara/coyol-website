@@ -29,15 +29,18 @@ export const GET: APIRoute = async ({ request }) => {
 export const PATCH: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
-    const { code, ...updates } = body;
+    const { code, table, ...updates } = body;
     
     if (!code) {
       return new Response(JSON.stringify({ error: 'Code required' }), { status: 400 });
     }
     
-    console.log('Updating gift card:', code, updates);
+    // Determine table: Coyol cards start with CYL-, otherwise La Luna
+    const tableName = table || (code.startsWith('CYL-') ? 'coyol_gift_cards' : 'laluna_gift_cards');
     
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/laluna_gift_cards?code=eq.${code}`, {
+    console.log('Updating gift card:', code, 'table:', tableName, updates);
+    
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${tableName}?code=eq.${code}`, {
       method: 'PATCH',
       headers: {
         'apikey': SUPABASE_KEY,
