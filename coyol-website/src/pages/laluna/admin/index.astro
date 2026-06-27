@@ -2831,6 +2831,30 @@ import '../../../styles/laluna-tables.css';
         return;
       }
       
+      // If searching, show flat list without shift headers
+      const searchQuery = document.getElementById('searchInput')?.value?.toLowerCase().trim();
+      if (searchQuery) {
+        list.innerHTML = filtered.map(res => {
+          const hasGiftCard = giftCardsCache.some(g => {
+            if (g.status === 'redeemed' || !g.recipient_name || !res.guestName) return false;
+            return g.recipient_name.toLowerCase().trim() === res.guestName.toLowerCase().trim();
+          });
+          return `
+          <div class="res-row ${res.status} ${res.specialRequests ? 'has-note' : ''} ${hasGiftCard ? 'has-gift' : ''}" onclick="selectReservation('${res.id}')">
+            <div class="res-time">${formatTime12(res.time)}</div>
+            <span class="res-name" title="${res.guestName}">${hasGiftCard ? '<span class="gift-indicator">🎁</span>' : ''}${res.guestName}</span>
+            <select class="pax-select-mobile" data-res-id="${res.id}" onclick="event.stopPropagation();" onchange="quickUpdateGuests(this)" title="Guests">
+              ${Array.from({length: 20}, (_, i) => i + 1).map(n => `<option value="${n}" ${res.guests == n ? 'selected' : ''}>${n}p</option>`).join('')}
+            </select>
+            <select class="table-select-mobile" data-res-id="${res.id}" onclick="event.stopPropagation();" onchange="quickAssignTable(this)" title="Table">
+              <option value="">${res.tableId ? (res.tableId.includes(',') ? res.tableId.split(',').length + ' tables' : 'T' + res.tableId.replace('t','').toUpperCase()) : 'TBA'}</option>
+            </select>
+          </div>
+          ${res.specialRequests ? `<div class="res-note-row"><span class="res-note">📝 ${res.specialRequests}</span></div>` : ''}
+        `}).join('');
+        return;
+      }
+      
       list.innerHTML = Object.entries(byShift).map(([shift, items]) => `
         <div class="shift-group">
           <div class="shift-header">
