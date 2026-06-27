@@ -41,6 +41,22 @@ import '../../../styles/laluna-tables.css';
         <button onclick="saveShifts()" class="btn-save" style="margin-top:12px;margin-left:8px;">Save Shifts</button>
       </div>
 
+      <!-- Block Dates Section -->
+      <div class="section" style="margin-top:20px;">
+        <h2>Block Dates</h2>
+        <p style="font-size:12px;color:#666;margin-bottom:16px;">Block specific dates for private events (weddings, parties). Guests won't be able to make reservations on blocked dates.</p>
+        
+        <div class="block-form">
+          <input type="date" id="blockDate" min="" />
+          <input type="text" id="blockReason" placeholder="Reason (e.g., Private Wedding)" style="flex:1;min-width:200px;" />
+          <button onclick="blockDate()" class="btn-save">Block Date</button>
+        </div>
+        
+        <div class="blocked-list" id="blockedList">
+          <p style="color:#666;">Loading blocked dates...</p>
+        </div>
+      </div>
+
       <div class="section" style="margin-top:20px;">
         <h2>Table Capacities</h2>
         <div class="tables-row">
@@ -120,6 +136,19 @@ import '../../../styles/laluna-tables.css';
     
     .btn-save { padding: 10px 24px; background: var(--terracotta); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
     .btn-save:hover { background: #8B4E35; }
+    
+    /* Block Dates */
+    .block-form { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+    .block-form input { padding: 10px 14px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; }
+    .block-form input[type="date"] { width: 160px; }
+    
+    .blocked-list { display: flex; flex-direction: column; gap: 8px; }
+    .blocked-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--cream); border-radius: 8px; border-left: 3px solid var(--terracotta); }
+    .blocked-item .date { color: var(--santorini); font-weight: 600; }
+    .blocked-item .reason { color: #666; font-size: 13px; }
+    .blocked-item .btn-unblock { padding: 6px 12px; background: transparent; border: 1px solid #ccc; color: #666; border-radius: 6px; cursor: pointer; font-size: 12px; }
+    .blocked-item .btn-unblock:hover { border-color: #dc3545; color: #dc3545; }
+    .empty-state { color: #666; text-align: center; padding: 16px; }
   </style>
 
   <script is:inline>
@@ -203,8 +232,76 @@ import '../../../styles/laluna-tables.css';
     }
     window.saveShifts = saveShifts;
 
+    // Block Dates
+    document.getElementById('blockDate').min = new Date().toISOString().split('T')[0];
+    
+    async function loadBlockedDates() {
+      try {
+        const res = await fetch('/api/blocked-dates?restaurant=laluna');
+        const dates = await res.json();
+        const list = document.getElementById('blockedList');
+        
+        if (!dates.length) {
+          list.innerHTML = '<p class="empty-state">No blocked dates</p>';
+          return;
+        }
+        
+        list.innerHTML = dates.map(d => `
+          <div class="blocked-item">
+            <div>
+              <div class="date">${formatBlockDate(d.date)}</div>
+              <div class="reason">${d.reason || 'No reason specified'}</div>
+            </div>
+            <button class="btn-unblock" onclick="unblockDate('${d.id}')">Unblock</button>
+          </div>
+        `).join('');
+      } catch (e) {
+        console.error('Error loading blocked dates:', e);
+      }
+    }
+    
+    function formatBlockDate(dateStr) {
+      const date = new Date(dateStr + 'T12:00:00');
+      return date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    
+    async function blockDate() {
+      const date = document.getElementById('blockDate').value;
+      const reason = document.getElementById('blockReason').value;
+      
+      if (!date) { alert('Please select a date'); return; }
+      
+      try {
+        const res = await fetch('/api/blocked-dates', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ restaurant: 'laluna', date, reason, blocked_by: 'admin' })
+        });
+        
+        if (res.ok) {
+          document.getElementById('blockDate').value = '';
+          document.getElementById('blockReason').value = '';
+          loadBlockedDates();
+        } else {
+          const error = await res.json();
+          alert('Error: ' + (error.error || 'Could not block date'));
+        }
+      } catch (e) { alert('Error blocking date'); }
+    }
+    window.blockDate = blockDate;
+    
+    async function unblockDate(id) {
+      if (!confirm('Unblock this date?')) return;
+      try {
+        await fetch(`/api/blocked-dates?id=${id}`, { method: 'DELETE' });
+        loadBlockedDates();
+      } catch (e) { alert('Error unblocking date'); }
+    }
+    window.unblockDate = unblockDate;
+
     // Init
     loadTableTypes();
     loadShifts();
+    loadBlockedDates();
   </script>
 </Layout>
