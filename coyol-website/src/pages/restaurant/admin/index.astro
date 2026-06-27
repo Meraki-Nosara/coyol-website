@@ -59,7 +59,8 @@ import '../../../styles/coyol-tables.css';
       <div class="topbar">
         <div class="date-nav">
           <button id="prevDay">←</button>
-          <input type="date" id="datePicker" title="Pick a date" />
+          <span id="currentDate" onclick="openDatePicker()" style="cursor:pointer;" title="Click to pick date">Loading...</span>
+          <input type="date" id="datePicker" style="position:absolute;opacity:0;pointer-events:none;" />
           <button id="nextDay">→</button>
         </div>
         <div class="zone-tabs">
@@ -919,26 +920,13 @@ import '../../../styles/coyol-tables.css';
 
     .date-nav button:hover { background: var(--parchment); }
 
-    .date-nav input[type="date"] {
-      display: inline-block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      position: static !important;
-      width: auto;
-      min-width: 140px;
+    .date-nav span {
       font-size: 0.875rem;
       font-weight: 500;
-      padding: 6px 12px;
-      border: 1px solid var(--limestone);
-      border-radius: 4px;
-      background: var(--cream);
+      min-width: 100px;
+      text-align: center;
       color: var(--santorini);
       font-family: 'Playfair Display', serif;
-      cursor: pointer;
-    }
-    
-    .date-nav input[type="date"]:hover {
-      background: var(--parchment);
     }
 
     .zone-tabs {
@@ -2252,8 +2240,7 @@ import '../../../styles/coyol-tables.css';
       document.getElementById('resCount').innerHTML = `RESERVATIONS <strong>${filtered.length}</strong>`;
       document.getElementById('totalCovers').textContent = filteredCovers;
       document.getElementById('totalRes').textContent = filtered.length;
-      // Update date picker value
-      document.getElementById('datePicker').value = getDateString(currentDate);
+      document.getElementById('currentDate').textContent = formatDate(currentDate);
       
       // Render list
       const list = document.getElementById('resList');
@@ -3020,24 +3007,29 @@ import '../../../styles/coyol-tables.css';
     // Date navigation
     document.getElementById('prevDay').addEventListener('click', async (e) => {
       e.stopPropagation();
+      document.getElementById('datePicker').style.pointerEvents = 'none';
       currentDate.setDate(currentDate.getDate() - 1);
-      document.getElementById('datePicker').value = getDateString(currentDate);
       await loadReservations();
       renderFloor();
     });
 
     document.getElementById('nextDay').addEventListener('click', async (e) => {
       e.stopPropagation();
+      document.getElementById('datePicker').style.pointerEvents = 'none';
       currentDate.setDate(currentDate.getDate() + 1);
-      document.getElementById('datePicker').value = getDateString(currentDate);
       await loadReservations();
       renderFloor();
     });
 
-    // Date picker - simple visible input
-    function initDatePicker() {
+    // Date picker - click on date to jump to any date
+    let datePickerOpen = false;
+    function openDatePicker() {
+      if (datePickerOpen) return;
       const picker = document.getElementById('datePicker');
       picker.value = getDateString(currentDate);
+      picker.style.pointerEvents = 'auto';
+      datePickerOpen = true;
+      picker.showPicker();
     }
 
     document.getElementById('datePicker').addEventListener('change', async (e) => {
@@ -3047,6 +3039,14 @@ import '../../../styles/coyol-tables.css';
         await loadReservations();
         renderFloor();
       }
+      e.target.style.pointerEvents = 'none';
+      datePickerOpen = false;
+    });
+    
+    // Close picker on blur/cancel
+    document.getElementById('datePicker').addEventListener('blur', () => {
+      document.getElementById('datePicker').style.pointerEvents = 'none';
+      datePickerOpen = false;
     });
 
     // Zone tabs
@@ -3500,7 +3500,6 @@ import '../../../styles/coyol-tables.css';
 
     // Initial load
     loadShifts();
-    initDatePicker();
     loadLayoutFromSupabase(); // Load floor layout from Supabase
     loadReservations().then(async () => { await autoAssignTables(); renderFloor(); });
   </script>

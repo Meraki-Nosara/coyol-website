@@ -96,7 +96,8 @@ import '../../../styles/laluna-tables.css';
       <div class="topbar">
         <div class="date-nav">
           <button id="prevDay">←</button>
-          <input type="date" id="datePicker" title="Pick a date" />
+          <span id="currentDate" onclick="openDatePicker()" style="cursor:pointer;" title="Click to pick date">Loading...</span>
+          <input type="date" id="datePicker" style="position:absolute;left:-9999px;opacity:0;" />
           <button id="nextDay">→</button>
           <button id="blockDayBtn" class="zone-tab active" onclick="openBlockModal()" title="Block this day for private event">BLOCK</button>
         </div>
@@ -1152,26 +1153,13 @@ import '../../../styles/laluna-tables.css';
 
     .date-nav button:hover { background: var(--parchment); }
 
-    .date-nav input[type="date"] {
-      display: inline-block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      position: static !important;
-      width: auto;
-      min-width: 140px;
+    .date-nav span {
       font-size: 0.875rem;
       font-weight: 500;
-      padding: 6px 12px;
-      border: 1px solid var(--limestone);
-      border-radius: 4px;
-      background: var(--cream);
+      min-width: 100px;
+      text-align: center;
       color: var(--santorini);
       font-family: 'Playfair Display', serif;
-      cursor: pointer;
-    }
-    
-    .date-nav input[type="date"]:hover {
-      background: var(--parchment);
     }
 
     .zone-tabs {
@@ -2832,8 +2820,7 @@ import '../../../styles/laluna-tables.css';
       document.getElementById('resCount').innerHTML = `RESERVATIONS <strong>${activeRes.length}</strong>`;
       document.getElementById('totalCovers').textContent = activeRes.reduce((sum, r) => sum + (parseInt(r.guests) || 2), 0);
       document.getElementById('totalRes').textContent = activeRes.length;
-      // Update date picker value
-      document.getElementById('datePicker').value = getDateString(currentDate);
+      document.getElementById('currentDate').textContent = formatDate(currentDate);
       
       // Render list
       const list = document.getElementById('resList');
@@ -3905,8 +3892,8 @@ import '../../../styles/laluna-tables.css';
     // Date navigation
     document.getElementById('prevDay').addEventListener('click', async (e) => {
       e.stopPropagation();
+      document.getElementById('datePicker').style.pointerEvents = 'none';
       currentDate.setDate(currentDate.getDate() - 1);
-      document.getElementById('datePicker').value = getDateString(currentDate);
       await loadReservations();
       renderFloor();
       checkIfDayBlocked();
@@ -3914,8 +3901,8 @@ import '../../../styles/laluna-tables.css';
 
     document.getElementById('nextDay').addEventListener('click', async (e) => {
       e.stopPropagation();
+      document.getElementById('datePicker').style.pointerEvents = 'none';
       currentDate.setDate(currentDate.getDate() + 1);
-      document.getElementById('datePicker').value = getDateString(currentDate);
       await loadReservations();
       renderFloor();
       checkIfDayBlocked();
@@ -3970,12 +3957,27 @@ import '../../../styles/laluna-tables.css';
       } catch (e) {}
     }
 
-    // Date picker - simple visible input
-    function initDatePicker() {
+    // Date picker - click on date to jump to any date
+    let datePickerOpen = false;
+    window.openDatePicker = function() {
+      if (datePickerOpen) return;
       const picker = document.getElementById('datePicker');
       picker.value = getDateString(currentDate);
+      picker.style.left = '0';
+      picker.style.opacity = '0.01';
+      datePickerOpen = true;
+      picker.focus();
+      picker.showPicker();
     }
     
+    function closeDatePicker() {
+      const picker = document.getElementById('datePicker');
+      picker.style.left = '-9999px';
+      picker.style.opacity = '0';
+      picker.blur();
+      datePickerOpen = false;
+    }
+
     document.getElementById('datePicker').addEventListener('change', async (e) => {
       const newDate = new Date(e.target.value + 'T12:00:00');
       if (!isNaN(newDate.getTime())) {
@@ -3983,6 +3985,25 @@ import '../../../styles/laluna-tables.css';
         await loadReservations();
         renderFloor();
         checkIfDayBlocked();
+      }
+      closeDatePicker();
+    });
+    
+    // Close picker on blur/cancel
+    document.getElementById('datePicker').addEventListener('blur', () => {
+      closeDatePicker();
+    });
+
+    // Close date picker on ESC or clicking anywhere
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && datePickerOpen) closeDatePicker();
+    });
+    
+    document.addEventListener('click', (e) => {
+      if (!datePickerOpen) return;
+      const dateSpan = document.getElementById('currentDate');
+      if (e.target !== dateSpan) {
+        setTimeout(closeDatePicker, 100);
       }
     });
 
@@ -4527,7 +4548,6 @@ import '../../../styles/laluna-tables.css';
     
     // Initial load
     loadShifts();
-    initDatePicker();
     loadReservations().then(() => renderFloor());
     checkIfDayBlocked();
     
@@ -4593,9 +4613,7 @@ import '../../../styles/laluna-tables.css';
     function openBlockModal() {
       const modal = document.getElementById('blockModal');
       const dateEl = document.getElementById('blockModalDate');
-      const picker = document.getElementById('datePicker');
-      const d = new Date(picker.value + 'T12:00:00');
-      dateEl.textContent = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+      dateEl.textContent = document.getElementById('currentDate').textContent;
       modal.style.display = 'flex';
     }
     
@@ -4606,7 +4624,7 @@ import '../../../styles/laluna-tables.css';
     async function confirmBlock() {
       const shift = document.getElementById('blockShift').value;
       const reason = document.getElementById('blockReason').value || 'Private Event';
-      const dateText = document.getElementById('datePicker').value;
+      const dateText = document.getElementById('currentDate').textContent;
       
       // Get the actual date from currentDate variable (set in main script)
       const dateStr = window.getCurrentDateString ? window.getCurrentDateString() : new Date().toISOString().split('T')[0];
