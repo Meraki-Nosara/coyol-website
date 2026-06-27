@@ -2252,7 +2252,8 @@ import '../../../styles/coyol-tables.css';
       document.getElementById('resCount').innerHTML = `RESERVATIONS <strong>${filtered.length}</strong>`;
       document.getElementById('totalCovers').textContent = filteredCovers;
       document.getElementById('totalRes').textContent = filtered.length;
-      document.getElementById('currentDate').textContent = formatDate(currentDate);
+      // Update date picker value
+      document.getElementById('datePicker').value = getDateString(currentDate);
       
       // Render list
       const list = document.getElementById('resList');
