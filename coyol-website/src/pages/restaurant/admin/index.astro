@@ -3023,7 +3023,7 @@ import '../../../styles/coyol-tables.css';
 
     // Date picker - click on date to jump to any date
     let datePickerOpen = false;
-    function openDatePicker() {
+    window.openDatePicker = function() {
       if (datePickerOpen) return;
       const picker = document.getElementById('datePicker');
       picker.value = getDateString(currentDate);
