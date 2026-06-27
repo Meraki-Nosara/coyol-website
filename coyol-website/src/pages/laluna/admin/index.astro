@@ -96,8 +96,8 @@ import '../../../styles/laluna-tables.css';
       <div class="topbar">
         <div class="date-nav">
           <button id="prevDay">←</button>
-          <span id="currentDate" onclick="openDatePicker()" style="cursor:pointer;" title="Click to pick date">Loading...</span>
-          <input type="date" id="datePicker" style="position:absolute;left:-9999px;opacity:0;" />
+          <span id="currentDate">Loading...</span>
+          <input type="date" id="datePicker" onchange="window.onDateChange && window.onDateChange(this.value)" style="padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;cursor:pointer;" />
           <button id="nextDay">→</button>
           <button id="blockDayBtn" class="zone-tab active" onclick="openBlockModal()" title="Block this day for private event">BLOCK</button>
         </div>
@@ -3960,61 +3960,20 @@ import '../../../styles/laluna-tables.css';
       } catch (e) {}
     }
 
-    // Date picker - click on date to jump to any date
-    let datePickerOpen = false;
-    window.openDatePicker = function() {
-      const picker = document.getElementById('datePicker');
-      if (!picker) return;
-      try {
-        picker.value = getDateString(currentDate);
-        picker.style.left = '0';
-        picker.style.opacity = '0.01';
-        picker.style.pointerEvents = 'auto';
-        datePickerOpen = true;
-        picker.focus();
-        picker.showPicker();
-      } catch(e) {
-        console.error('Date picker error:', e);
-        picker.click();
-      }
-    }
-    
-    function closeDatePicker() {
-      const picker = document.getElementById('datePicker');
-      picker.style.left = '-9999px';
-      picker.style.opacity = '0';
-      picker.blur();
-      datePickerOpen = false;
-    }
-
-    document.getElementById('datePicker').addEventListener('change', async (e) => {
-      const newDate = new Date(e.target.value + 'T12:00:00');
+    // Date picker - simple visible input
+    window.onDateChange = async function(value) {
+      const newDate = new Date(value + 'T12:00:00');
       if (!isNaN(newDate.getTime())) {
         currentDate = newDate;
+        document.getElementById('currentDate').textContent = formatDate(currentDate);
         await loadReservations();
         renderFloor();
         checkIfDayBlocked();
       }
-      closeDatePicker();
-    });
+    };
     
-    // Close picker on blur/cancel
-    document.getElementById('datePicker').addEventListener('blur', () => {
-      closeDatePicker();
-    });
-
-    // Close date picker on ESC or clicking anywhere
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && datePickerOpen) closeDatePicker();
-    });
-    
-    document.addEventListener('click', (e) => {
-      if (!datePickerOpen) return;
-      const dateSpan = document.getElementById('currentDate');
-      if (e.target !== dateSpan) {
-        setTimeout(closeDatePicker, 100);
-      }
-    });
+    // Initialize date picker
+    document.getElementById('datePicker').value = getDateString(currentDate);
 
     // Zone tabs
     document.querySelectorAll('.zone-tab').forEach(tab => {
