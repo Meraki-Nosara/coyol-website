@@ -96,7 +96,7 @@ import '../../../styles/laluna-tables.css';
       <div class="topbar">
         <div class="date-nav">
           <button id="prevDay">←</button>
-          <input type="date" id="datePicker" onchange="window.onDateChange && window.onDateChange(this.value)" style="padding:6px 12px;border:1px solid var(--limestone);border-radius:4px;font-size:14px;cursor:pointer;background:var(--cream);" />
+          <input type="date" id="datePicker" onchange="window.onDateChange && window.onDateChange(this.value)" />
           <button id="nextDay">→</button>
           <button id="blockDayBtn" class="zone-tab active" onclick="openBlockModal()" title="Block this day for private event">BLOCK</button>
         </div>

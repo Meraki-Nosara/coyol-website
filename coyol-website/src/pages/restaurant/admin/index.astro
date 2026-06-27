@@ -59,8 +59,7 @@ import '../../../styles/coyol-tables.css';
       <div class="topbar">
         <div class="date-nav">
           <button id="prevDay">←</button>
-          <span id="currentDate" onclick="openDatePicker()" style="cursor:pointer;" title="Click to pick date">Loading...</span>
-          <input type="date" id="datePicker" style="position:absolute;opacity:0;pointer-events:none;" />
+          <input type="date" id="datePicker" onchange="window.onDateChange && window.onDateChange(this.value)" />
           <button id="nextDay">→</button>
         </div>
         <div class="zone-tabs">
@@ -2243,7 +2242,7 @@ import '../../../styles/coyol-tables.css';
       document.getElementById('resCount').innerHTML = `RESERVATIONS <strong>${filtered.length}</strong>`;
       document.getElementById('totalCovers').textContent = filteredCovers;
       document.getElementById('totalRes').textContent = filtered.length;
-      document.getElementById('currentDate').textContent = formatDate(currentDate);
+      document.getElementById('datePicker').value = getDateString(currentDate);
       
       // Render list
       const list = document.getElementById('resList');
@@ -3024,33 +3023,18 @@ import '../../../styles/coyol-tables.css';
       renderFloor();
     });
 
-    // Date picker - click on date to jump to any date
-    let datePickerOpen = false;
-    window.openDatePicker = function() {
-      if (datePickerOpen) return;
-      const picker = document.getElementById('datePicker');
-      picker.value = getDateString(currentDate);
-      picker.style.pointerEvents = 'auto';
-      datePickerOpen = true;
-      picker.showPicker();
-    }
-
-    document.getElementById('datePicker').addEventListener('change', async (e) => {
-      const newDate = new Date(e.target.value + 'T12:00:00');
+    // Date picker - simple visible input
+    window.onDateChange = async function(value) {
+      const newDate = new Date(value + 'T12:00:00');
       if (!isNaN(newDate.getTime())) {
         currentDate = newDate;
         await loadReservations();
         renderFloor();
       }
-      e.target.style.pointerEvents = 'none';
-      datePickerOpen = false;
-    });
+    };
     
-    // Close picker on blur/cancel
-    document.getElementById('datePicker').addEventListener('blur', () => {
-      document.getElementById('datePicker').style.pointerEvents = 'none';
-      datePickerOpen = false;
-    });
+    // Initialize date picker
+    document.getElementById('datePicker').value = getDateString(currentDate);
 
     // Zone tabs
     document.querySelectorAll('.zone-tab').forEach(tab => {
