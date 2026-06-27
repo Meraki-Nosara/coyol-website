@@ -52,7 +52,7 @@ function formatSeating(zone) {
 
 function generateEmailHtml(reservation) {
   const confirmationCode = reservation.id.slice(0, 8).toUpperCase();
-  const cancelUrl = `https://coyolrealestate.com/restaurant/cancel?token=${reservation.cancel_token}`;
+  const cancelUrl = `https://coyolnosara.com/restaurant/cancel?token=${reservation.cancel_token}`;
   
   return `<!DOCTYPE html>
 <html>
