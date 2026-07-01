@@ -318,15 +318,24 @@ export const prerender = false;
       const contactMap = new Map();
       
       const processReservations = (reservations, source) => {
+        const today = new Date().toISOString().split('T')[0];
         reservations.forEach(r => {
           if (!r.guest_email || r.guest_email === 'null') return;
           const email = r.guest_email.toLowerCase().trim();
+          const isFuture = r.date > today;
           
           if (contactMap.has(email)) {
             const existing = contactMap.get(email);
             existing.visits++;
-            if (new Date(r.date) > new Date(existing.lastVisit)) {
-              existing.lastVisit = r.date;
+            // Track last visit (past) and next visit (future) separately
+            if (isFuture) {
+              if (!existing.nextVisit || r.date < existing.nextVisit) {
+                existing.nextVisit = r.date;
+              }
+            } else {
+              if (!existing.lastVisit || r.date > existing.lastVisit) {
+                existing.lastVisit = r.date;
+              }
             }
           } else {
             contactMap.set(email, {
@@ -335,7 +344,8 @@ export const prerender = false;
               phone: r.guest_phone || '',
               source: source,
               visits: 1,
-              lastVisit: r.date,
+              lastVisit: isFuture ? null : r.date,
+              nextVisit: isFuture ? r.date : null,
               isHot: isHotLead(r.guest_phone),
               createdAt: r.created_at
             });
@@ -400,7 +410,7 @@ export const prerender = false;
           <td>${c.phone}</td>
           <td><span class="badge badge-${c.source}">${c.source === 'coyol' ? 'Coyol' : 'La Luna'}</span></td>
           <td>${c.visits}</td>
-          <td>${new Date(c.lastVisit).toLocaleDateString()}</td>
+          <td>${c.nextVisit ? '<span style="color:#3D4F3D">Next: ' + new Date(c.nextVisit).toLocaleDateString() + '</span>' : (c.lastVisit ? new Date(c.lastVisit).toLocaleDateString() : '-')}</td>
           <td>${c.isHot ? '<span class="badge badge-hot">Hot Lead</span>' : '<span class="badge badge-new">New</span>'}</td>
         </tr>
       `).join('');

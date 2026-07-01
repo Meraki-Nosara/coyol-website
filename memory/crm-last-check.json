@@ -1,8 +1,12 @@
 {
-  "lastCheck": "2026-06-23T06:40:00Z",
-  "hotLeadsAlerted": ["kailynthenderson@gmail.com", "stefanie.marco@unknown", "dishant.verma01@gmail.com"],
-  "pendingAlerts": [
-    {"name": "Dishant Verma", "phone": "6479960151", "email": "dishant.verma01@gmail.com", "source": "La Luna", "market": "Toronto"}
-  ],
-  "notes": "June 20 sales data added to meraki-control. Git push to DO blocked - needs manual deploy or correct remote."
+  "lastCheck": "2026-07-01T10:30:00Z",
+  "hotLeadsCount": 35,
+  "topMarkets": {
+    "nyc": 9,
+    "toronto": 7,
+    "la": 5,
+    "sf": 8,
+    "miami": 2
+  },
+  "notes": "Full sync completed July 1. Meraki deployed to Vercel. Sales data through June 29."
 }
