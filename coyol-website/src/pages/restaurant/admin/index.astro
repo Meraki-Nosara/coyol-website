@@ -3320,14 +3320,38 @@ import '../../../styles/coyol-tables.css';
         return; 
       }
       
+      const date = document.getElementById('newDate').value;
+      const time = document.getElementById('newTime').value;
+      let tableId = document.getElementById('newTable').value || null;
+      
+      // Check for table conflicts if manually selected
+      if (tableId) {
+        const shift = getShiftForTime(time);
+        const conflicts = getReservations().filter(r => 
+          r.tableId === tableId && 
+          r.date === date &&
+          r.status !== 'cancelled' &&
+          r.status !== 'no-show' &&
+          r.status !== 'completed' &&
+          getShiftForTime(r.time) === shift
+        );
+        if (conflicts.length > 0) {
+          const conflictNames = conflicts.map(c => `${c.guestName} at ${formatTime12(c.time)}`).join(', ');
+          alert(`Table conflict! Already booked this shift by: ${conflictNames}`);
+          isSavingReservation = false;
+          if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Save'; }
+          return;
+        }
+      }
+      
       const reservation = {
-        date: document.getElementById('newDate').value,
-        time: document.getElementById('newTime').value,
+        date,
+        time,
         guests: parseInt(document.getElementById('newGuests').value) || 2,
         guestName: name,
         guestPhone: (() => { const cc = document.getElementById('newPhoneCountry').value.replace('+', ''); const ln = document.getElementById('newPhone').value.replace(/[^0-9]/g, ''); return ln ? (cc + ln) : ''; })(),
         guestEmail: document.getElementById('newEmail').value.trim(),
-        tableId: document.getElementById('newTable').value || null,
+        tableId,
         specialRequests: document.getElementById('newNotes').value.trim(),
         status: 'confirmed'
       };

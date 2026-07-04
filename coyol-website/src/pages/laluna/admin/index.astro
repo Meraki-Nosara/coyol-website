@@ -4376,6 +4376,24 @@ import '../../../styles/laluna-tables.css';
       // Auto-assign best available table if none selected
       if (!tableId) {
         tableId = findBestAvailableTable(date, time, guests, null);
+      } else {
+        // Manual table selected - check for conflicts
+        const shift = getShiftForTime(time);
+        const conflicts = getReservations().filter(r => 
+          r.tableId === tableId && 
+          r.date === date &&
+          r.status !== 'cancelled' &&
+          r.status !== 'no-show' &&
+          r.status !== 'completed' &&
+          getShiftForTime(r.time) === shift
+        );
+        if (conflicts.length > 0) {
+          const conflictNames = conflicts.map(c => `${c.guestName} at ${formatTime12(c.time)}`).join(', ');
+          alert(`Table conflict! Already booked this shift by: ${conflictNames}`);
+          isSavingReservation = false;
+          if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'SAVE'; }
+          return;
+        }
       }
       
       const reservation = {
