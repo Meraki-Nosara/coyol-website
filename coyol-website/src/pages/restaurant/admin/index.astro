@@ -3019,16 +3019,16 @@ import '../../../styles/coyol-tables.css';
     // Date navigation
     document.getElementById('prevDay').addEventListener('click', async (e) => {
       e.stopPropagation();
-      document.getElementById('datePicker').style.pointerEvents = 'none';
       currentDate.setDate(currentDate.getDate() - 1);
+      document.getElementById('datePicker').value = getDateString(currentDate);
       await loadReservations();
       renderFloor();
     });
 
     document.getElementById('nextDay').addEventListener('click', async (e) => {
       e.stopPropagation();
-      document.getElementById('datePicker').style.pointerEvents = 'none';
       currentDate.setDate(currentDate.getDate() + 1);
+      document.getElementById('datePicker').value = getDateString(currentDate);
       await loadReservations();
       renderFloor();
     });

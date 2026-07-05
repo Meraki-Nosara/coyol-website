@@ -3904,8 +3904,8 @@ import '../../../styles/laluna-tables.css';
     // Date navigation
     document.getElementById('prevDay').addEventListener('click', async (e) => {
       e.stopPropagation();
-      document.getElementById('datePicker').style.pointerEvents = 'none';
       currentDate.setDate(currentDate.getDate() - 1);
+      document.getElementById('datePicker').value = getDateString(currentDate);
       await loadReservations();
       renderFloor();
       checkIfDayBlocked();
@@ -3913,8 +3913,8 @@ import '../../../styles/laluna-tables.css';
 
     document.getElementById('nextDay').addEventListener('click', async (e) => {
       e.stopPropagation();
-      document.getElementById('datePicker').style.pointerEvents = 'none';
       currentDate.setDate(currentDate.getDate() + 1);
+      document.getElementById('datePicker').value = getDateString(currentDate);
       await loadReservations();
       renderFloor();
       checkIfDayBlocked();
