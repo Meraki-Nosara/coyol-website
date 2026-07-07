@@ -1,5 +1,15 @@
 {
   "framework": "astro",
+  "crons": [
+    {
+      "path": "/api/cron/gift-cards",
+      "schedule": "*/15 * * * *"
+    },
+    {
+      "path": "/api/cron/reservations",
+      "schedule": "*/15 * * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/command/(.*)",
