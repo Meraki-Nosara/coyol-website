@@ -16,8 +16,9 @@ function verifyCron(request: Request): boolean {
 }
 
 async function getPendingGiftCards(table: string) {
+  // Query for pending_email status only (sent_at column may not exist on all tables)
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/${table}?or=(status.eq.pending_email,and(status.eq.sent,sent_at.is.null))&select=*`,
+    `${SUPABASE_URL}/rest/v1/${table}?status=eq.pending_email&select=*`,
     {
       headers: {
         'apikey': SUPABASE_KEY,
@@ -38,7 +39,6 @@ async function markAsSent(table: string, code: string) {
     },
     body: JSON.stringify({
       status: 'sent',
-      sent_at: new Date().toISOString(),
     }),
   });
 }
