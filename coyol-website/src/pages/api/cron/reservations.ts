@@ -15,8 +15,6 @@ function verifyCron(request: Request): boolean {
 }
 
 async function getPendingReservations(table: string) {
-  // Get confirmed reservations from last 16 minutes only
-  // Cron runs every 15 min, so 16 min window catches new ones once only
   const sixteenMinAgo = new Date(Date.now() - 16 * 60 * 1000).toISOString();
   const res = await fetch(
     `${SUPABASE_URL}/rest/v1/${table}?status=eq.confirmed&created_at=gte.${sixteenMinAgo}&select=*`,
@@ -29,22 +27,6 @@ async function getPendingReservations(table: string) {
   );
   const data = await res.json();
   return Array.isArray(data) ? data : [];
-}
-
-// Simple in-memory deduplication using KV or just trusting the time window
-// The 2-hour window + cron running every 15 min means we might send duplicates
-// To prevent this, we'll add a notes field or just accept occasional duplicates
-// TODO: Create reservation_confirmations_sent table in Supabase dashboard
-
-async function wasConfirmationSent(id: string): Promise<boolean> {
-  // For now, return false - rely on time window to limit duplicates
-  // Better: check if email was sent via Resend API logs
-  return false;
-}
-
-async function markConfirmationSent(table: string, id: string) {
-  // No-op for now until we have a tracking table
-  console.log(`Confirmation sent for ${table} ${id}`);
 }
 
 function formatDate(dateStr: string): string {
@@ -68,102 +50,27 @@ function formatTime(timeStr: string): string {
 function getConfirmationEmail(reservation: any, restaurant: 'laluna' | 'coyol') {
   const restaurantName = restaurant === 'laluna' ? 'La Luna' : 'Coyol';
   const restaurantEmail = restaurant === 'laluna' ? 'reservations@lalunanosara.com' : 'reservations@coyolrestaurant.com';
-  const color = restaurant === 'laluna' ? '#C4A67C' : '#3D4F3D';
   const phone = restaurant === 'laluna' ? '+506 8996-8221' : '+506 8632-9590';
-  const domain = restaurant === 'laluna' ? 'lalunanosara.com' : 'coyolrestaurant.com';
-  const cancelPath = restaurant === 'laluna' ? 'coyolnosara.com/laluna/cancel' : 'coyolnosara.com/restaurant/cancel';
+  const waPhone = restaurant === 'laluna' ? '50689968221' : '50686329590';
   const logoUrl = restaurant === 'laluna' 
-    ? 'https://coyolnosara.com/images/laluna-moon-white-real.png' 
-    : 'https://coyolnosara.com/images/coyol-palm-white.png';
-  const mapUrl = restaurant === 'laluna' 
-    ? 'https://maps.app.goo.gl/QFZ9kFPgaHdPWUUU6' 
-    : 'https://maps.app.goo.gl/coyolnosara';
+    ? 'https://coyolnosara.com/images/luna-moon-black.png' 
+    : 'https://coyolnosara.com/images/coyol-restaurant-logo-black.png';
+  const mapsSearch = restaurant === 'laluna' 
+    ? 'La+Luna+Restaurant+Nosara+Costa+Rica' 
+    : 'Coyol+Restaurant+Nosara+Costa+Rica';
+
+  const dateStr = formatDate(reservation.date);
+  const timeStr = formatTime(reservation.time);
+  const waText = encodeURIComponent(`Hi, I need to cancel my reservation. Name: ${reservation.guest_name}, Date: ${dateStr}, Time: ${timeStr}`);
+  const cancelUrl = `https://wa.me/${waPhone}?text=${waText}`;
+
+  const html = `<!DOCTYPE html><html><body style="margin:0;padding:0;background-color:#f5f3ef;font-family:Georgia,serif;"><table width="100%" style="background-color:#f5f3ef;padding:40px 20px;"><tr><td align="center"><table width="500" style="max-width:500px;background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);"><tr><td align="center" style="padding:40px 40px 20px 40px;"><img src="${logoUrl}" alt="${restaurantName}" width="60" height="60" style="margin-bottom:15px;" /><h1 style="color:#1A1F16;font-size:28px;margin:0;font-weight:normal;font-style:italic;">${restaurantName}</h1><p style="color:#666;margin:5px 0 0 0;font-size:14px;">Reservation Confirmed</p></td></tr><tr><td style="padding:20px 40px;"><p style="color:#1A1F16;font-size:16px;margin:0 0 10px 0;">Dear ${reservation.guest_name},</p><p style="color:#444;font-size:15px;line-height:1.6;margin:0;">Your reservation at ${restaurantName} has been confirmed. We look forward to welcoming you!</p></td></tr><tr><td style="padding:0 40px 30px 40px;"><table width="100%" style="background:#f9f8f6;border-radius:8px;"><tr><td style="padding:12px 15px;color:#888;font-size:14px;">Date</td><td style="padding:12px 15px;text-align:right;color:#1A1F16;font-weight:bold;font-size:14px;">${dateStr}</td></tr><tr><td style="padding:12px 15px;color:#888;font-size:14px;">Time</td><td style="padding:12px 15px;text-align:right;color:#1A1F16;font-weight:bold;font-size:14px;">${timeStr}</td></tr><tr><td style="padding:12px 15px;color:#888;font-size:14px;">Party Size</td><td style="padding:12px 15px;text-align:right;color:#1A1F16;font-weight:bold;font-size:14px;">${reservation.guests || reservation.party_size} guests</td></tr></table></td></tr><tr><td align="center" style="padding:0 40px 30px 40px;"><a href="https://www.google.com/maps/search/${mapsSearch}" style="display:inline-block;background-color:#1A1F16;color:white;text-decoration:none;padding:14px 35px;border-radius:6px;font-size:15px;">Get Directions</a></td></tr><tr><td style="padding:20px 40px;border-top:1px solid #eee;"><p style="color:#888;font-size:13px;margin:0 0 10px 0;"><strong>Need to cancel?</strong></p><a href="${cancelUrl}" style="color:#1A1F16;font-size:13px;">Message us on WhatsApp</a></td></tr><tr><td align="center" style="padding:20px 40px 30px 40px;background:#f9f8f6;"><p style="color:#888;font-size:12px;margin:0;">${restaurantName} Restaurant - Guiones, Nosara - ${phone}</p></td></tr></table></td></tr></table></body></html>`;
 
   return {
     from: `${restaurantName} Restaurant <${restaurantEmail}>`,
     to: reservation.guest_email,
     subject: `Reservation Confirmed - ${restaurantName} Restaurant`,
-    html: `<!DOCTYPE html>
-<html>
-<body style="margin: 0; padding: 0; background-color: #1A1F16; font-family: Georgia, serif;">
-  <table width="100%" style="background-color: #1A1F16; padding: 40px 20px;">
-    <tr>
-      <td align="center">
-        <table width="500" style="max-width: 500px;">
-          <tr>
-            <td align="center" style="padding-bottom: 30px;">
-              <img src="${logoUrl}" alt="${restaurantName}" width="60" height="60" style="margin-bottom: 15px;" />
-              <h1 style="color: ${color}; font-size: 28px; margin: 0; font-weight: normal; font-style: italic;">${restaurantName}</h1>
-              <p style="color: #F5F3EF; opacity: 0.7; margin: 5px 0 0 0; font-size: 14px;">Reservation Confirmed</p>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding-bottom: 30px;">
-              <p style="color: #F5F3EF; font-size: 18px; margin: 0 0 10px 0;">Dear ${reservation.guest_name},</p>
-              <p style="color: #F5F3EF; opacity: 0.9; font-size: 16px; line-height: 1.6; margin: 0;">
-                Your reservation at ${restaurantName} has been confirmed. We look forward to welcoming you!
-              </p>
-            </td>
-          </tr>
-          <tr>
-            <td style="background-color: rgba(255,255,255,0.05); border-radius: 12px; padding: 25px;">
-              <table width="100%" style="font-size: 14px; color: #F5F3EF;">
-                <tr>
-                  <td style="padding: 8px 0; opacity: 0.7;">Date</td>
-                  <td style="padding: 8px 0; text-align: right; font-weight: bold;">${formatDate(reservation.date)}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 8px 0; opacity: 0.7;">Time</td>
-                  <td style="padding: 8px 0; text-align: right; font-weight: bold;">${formatTime(reservation.time)}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 8px 0; opacity: 0.7;">Party Size</td>
-                  <td style="padding: 8px 0; text-align: right; font-weight: bold;">${reservation.guests || reservation.party_size} ${(reservation.guests || reservation.party_size) === 1 ? 'guest' : 'guests'}</td>
-                </tr>
-                ${reservation.seating_preference ? `
-                <tr>
-                  <td style="padding: 8px 0; opacity: 0.7;">Seating</td>
-                  <td style="padding: 8px 0; text-align: right;">${reservation.seating_preference}</td>
-                </tr>
-                ` : ''}
-              </table>
-            </td>
-          </tr>
-          ${reservation.special_requests ? `
-          <tr>
-            <td style="padding: 20px 0 0 0;">
-              <p style="color: ${color}; font-size: 14px; margin: 0 0 5px 0;">Special Requests:</p>
-              <p style="color: #F5F3EF; opacity: 0.8; font-size: 14px; margin: 0; font-style: italic;">"${reservation.special_requests}"</p>
-            </td>
-          </tr>
-          ` : ''}
-          <tr>
-            <td align="center" style="padding: 30px 0;">
-              <a href="${mapUrl}" style="display: inline-block; background-color: ${color}; color: #1A1F16; text-decoration: none; padding: 15px 40px; border-radius: 8px; font-size: 16px; font-weight: bold;">Get Directions</a>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding: 20px 0; border-top: 1px solid rgba(255,255,255,0.1);">
-              <p style="color: #F5F3EF; opacity: 0.7; font-size: 13px; line-height: 1.6; margin: 0 0 15px 0;">
-                <strong>Need to modify or cancel?</strong><br>
-                Please contact us at ${phone} or use the link below at least 2 hours before your reservation.
-              </p>
-              <a href="https://${cancelPath}?token=${reservation.cancel_token}" style="color: ${color}; font-size: 13px;">Cancel Reservation</a>
-            </td>
-          </tr>
-          <tr>
-            <td align="center" style="padding-top: 20px;">
-              <p style="color: #F5F3EF; opacity: 0.5; font-size: 12px; margin: 0;">
-                ${restaurantName} Restaurant<br>Guiones, Nosara, Costa Rica<br>${phone}
-              </p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>`,
+    html: html,
   };
 }
 
@@ -185,7 +92,6 @@ export const GET: APIRoute = async ({ request }) => {
     for (const res of lalunaRes) {
       try {
         await resend.emails.send(getConfirmationEmail(res, 'laluna'));
-        await markConfirmationSent('laluna_reservations', res.id);
         results.laluna++;
       } catch (err: any) {
         results.errors.push(`La Luna ${res.id}: ${err.message}`);
@@ -201,7 +107,6 @@ export const GET: APIRoute = async ({ request }) => {
     for (const res of coyolRes) {
       try {
         await resend.emails.send(getConfirmationEmail(res, 'coyol'));
-        await markConfirmationSent('coyol_reservations', res.id);
         results.coyol++;
       } catch (err: any) {
         results.errors.push(`Coyol ${res.id}: ${err.message}`);
