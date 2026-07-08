@@ -72,6 +72,9 @@ function getConfirmationEmail(reservation: any, restaurant: 'laluna' | 'coyol') 
   const phone = restaurant === 'laluna' ? '+506 8996-8221' : '+506 8632-9590';
   const domain = restaurant === 'laluna' ? 'lalunanosara.com' : 'coyolrestaurant.com';
   const cancelPath = restaurant === 'laluna' ? 'coyolnosara.com/laluna/cancel' : 'coyolnosara.com/restaurant/cancel';
+  const logoUrl = restaurant === 'laluna' 
+    ? 'https://coyolnosara.com/images/laluna-moon-white-real.png' 
+    : 'https://coyolnosara.com/images/coyol-palm-white.png';
   const mapUrl = restaurant === 'laluna' 
     ? 'https://maps.app.goo.gl/QFZ9kFPgaHdPWUUU6' 
     : 'https://maps.app.goo.gl/coyolnosara';
@@ -89,6 +92,7 @@ function getConfirmationEmail(reservation: any, restaurant: 'laluna' | 'coyol') 
         <table width="500" style="max-width: 500px;">
           <tr>
             <td align="center" style="padding-bottom: 30px;">
+              <img src="${logoUrl}" alt="${restaurantName}" width="60" height="60" style="margin-bottom: 15px;" />
               <h1 style="color: ${color}; font-size: 28px; margin: 0; font-weight: normal; font-style: italic;">${restaurantName}</h1>
               <p style="color: #F5F3EF; opacity: 0.7; margin: 5px 0 0 0; font-size: 14px;">Reservation Confirmed</p>
             </td>
