@@ -71,6 +71,7 @@ function getConfirmationEmail(reservation: any, restaurant: 'laluna' | 'coyol') 
   const color = restaurant === 'laluna' ? '#C4A67C' : '#3D4F3D';
   const phone = restaurant === 'laluna' ? '+506 8996-8221' : '+506 8632-9590';
   const domain = restaurant === 'laluna' ? 'lalunanosara.com' : 'coyolrestaurant.com';
+  const cancelDomain = restaurant === 'laluna' ? 'reserve.lalunanosara.com' : 'reserve.coyolrestaurant.com';
   const mapUrl = restaurant === 'laluna' 
     ? 'https://maps.app.goo.gl/QFZ9kFPgaHdPWUUU6' 
     : 'https://maps.app.goo.gl/coyolnosara';
@@ -139,10 +140,11 @@ function getConfirmationEmail(reservation: any, restaurant: 'laluna' | 'coyol') 
           </tr>
           <tr>
             <td style="padding: 20px 0; border-top: 1px solid rgba(255,255,255,0.1);">
-              <p style="color: #F5F3EF; opacity: 0.7; font-size: 13px; line-height: 1.6; margin: 0;">
+              <p style="color: #F5F3EF; opacity: 0.7; font-size: 13px; line-height: 1.6; margin: 0 0 15px 0;">
                 <strong>Need to modify or cancel?</strong><br>
-                Please contact us at ${phone} or reply to this email at least 2 hours before your reservation.
+                Please contact us at ${phone} or use the link below at least 2 hours before your reservation.
               </p>
+              <a href="https://${cancelDomain}/cancel?token=${reservation.cancel_token}" style="color: ${color}; font-size: 13px;">Cancel Reservation</a>
             </td>
           </tr>
           <tr>
