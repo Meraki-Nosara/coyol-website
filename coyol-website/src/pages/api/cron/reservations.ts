@@ -15,11 +15,11 @@ function verifyCron(request: Request): boolean {
 }
 
 async function getPendingReservations(table: string) {
-  // Get confirmed reservations from last 20 minutes only
-  // Cron runs every 15 min, so 20 min window catches new ones without duplicates
-  const twentyMinAgo = new Date(Date.now() - 20 * 60 * 1000).toISOString();
+  // Get confirmed reservations from last 16 minutes only
+  // Cron runs every 15 min, so 16 min window catches new ones once only
+  const sixteenMinAgo = new Date(Date.now() - 16 * 60 * 1000).toISOString();
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/${table}?status=eq.confirmed&created_at=gte.${twentyMinAgo}&select=*`,
+    `${SUPABASE_URL}/rest/v1/${table}?status=eq.confirmed&created_at=gte.${sixteenMinAgo}&select=*`,
     {
       headers: {
         'apikey': SUPABASE_KEY,
