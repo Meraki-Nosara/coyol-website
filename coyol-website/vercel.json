@@ -51,6 +51,18 @@
       "destination": "/laluna/admin",
       "has": [{ "type": "host", "value": "reserve.lalunanosara.com" }],
       "permanent": false
+    },
+    {
+      "source": "/cancel",
+      "destination": "/laluna/cancel",
+      "has": [{ "type": "host", "value": "reserve.lalunanosara.com" }],
+      "permanent": false
+    },
+    {
+      "source": "/cancel",
+      "destination": "/laluna/cancel",
+      "has": [{ "type": "host", "value": "lalunanosara.com" }],
+      "permanent": false
     }
   ]
 }
