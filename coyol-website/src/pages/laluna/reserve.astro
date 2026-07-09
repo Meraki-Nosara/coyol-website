@@ -111,7 +111,24 @@ import Layout from '../../layouts/Layout.astro';
           <div class="input-row">
             <div class="input-group">
               <label>Phone *</label>
-              <input type="tel" id="phone" placeholder="+506" class="text-input" required />
+              <div class="phone-input-wrapper">
+                <select id="countryCode" class="country-code-select">
+                  <option value="+506">+506 CR</option>
+                  <option value="+1">+1 US/CA</option>
+                  <option value="+53">+53 Cuba</option>
+                  <option value="+52">+52 MX</option>
+                  <option value="+44">+44 UK</option>
+                  <option value="+49">+49 DE</option>
+                  <option value="+33">+33 FR</option>
+                  <option value="+34">+34 ES</option>
+                  <option value="+39">+39 IT</option>
+                  <option value="+31">+31 NL</option>
+                  <option value="+41">+41 CH</option>
+                  <option value="+61">+61 AU</option>
+                  <option value="+972">+972 IL</option>
+                </select>
+                <input type="tel" id="phone" placeholder="8888-8888" class="text-input phone-number" required />
+              </div>
             </div>
             <div class="input-group">
               <label>Email *</label>
@@ -440,6 +457,25 @@ import Layout from '../../layouts/Layout.astro';
       outline: none;
       transition: border-color 0.2s;
       border-radius: 4px;
+    }
+
+    .phone-input-wrapper {
+      display: flex;
+      gap: 8px;
+    }
+
+    .country-code-select {
+      width: 100px;
+      padding: 0.875rem 0.5rem;
+      border: 1px solid #d6d3d1;
+      font-size: 0.875rem;
+      background: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .phone-number {
+      flex: 1;
     }
 
     .text-input:focus {
@@ -898,7 +934,9 @@ import Layout from '../../layouts/Layout.astro';
 
     async function submitReservation() {
       const name = document.getElementById('name').value.trim();
-      const phone = document.getElementById('phone').value.trim();
+      const countryCode = document.getElementById('countryCode').value;
+      const phoneNumber = document.getElementById('phone').value.trim();
+      const phone = countryCode + ' ' + phoneNumber;
       const email = document.getElementById('email').value.trim();
       const notes = document.getElementById('notes').value.trim();
       
@@ -911,7 +949,7 @@ import Layout from '../../layouts/Layout.astro';
         document.getElementById('name').classList.remove('error');
       }
       
-      if (!phone) {
+      if (!phoneNumber) {
         document.getElementById('phone').classList.add('error');
         valid = false;
       } else {
