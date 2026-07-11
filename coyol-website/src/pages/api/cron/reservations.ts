@@ -68,7 +68,7 @@ function getConfirmationEmail(reservation: any, restaurant: 'laluna' | 'coyol') 
   const waPhone = restaurant === 'laluna' ? '50689968221' : '50688187775';
   const logoUrl = restaurant === 'laluna' 
     ? 'https://coyolnosara.com/images/logos/laluna-moon-email.jpg' 
-    : 'https://coyolnosara.com/images/logos/coyol-palm-email.png';
+    : 'https://coyolnosara.com/images/logos/coyol-email-header.jpg';
   const mapsSearch = restaurant === 'laluna' 
     ? 'La+Luna+Restaurant+Nosara+Costa+Rica' 
     : 'Coyol+Restaurant+Mar+Azul+Nosara';
