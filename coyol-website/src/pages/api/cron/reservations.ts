@@ -139,7 +139,7 @@ function getConfirmationEmail(reservation: any, restaurant: 'laluna' | 'coyol') 
           <!-- Gift a Friend button -->
           <tr>
             <td align="center" style="padding:0 40px 30px 40px;">
-              <a href="${giftUrl}" style="display:inline-block;background-color:#C4A67C;color:#1A1F16;text-decoration:none;padding:12px 30px;border-radius:6px;font-size:14px;">🎁 Gift a Friend</a>
+              <a href="${giftUrl}" style="display:inline-block;background-color:#C4A67C;color:#1A1F16;text-decoration:none;padding:12px 30px;border-radius:6px;font-size:14px;">Gift a Friend</a>
             </td>
           </tr>
           <!-- Cancel section -->
