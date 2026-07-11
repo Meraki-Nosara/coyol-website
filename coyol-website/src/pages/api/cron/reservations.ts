@@ -15,9 +15,8 @@ function verifyCron(request: Request): boolean {
 }
 
 async function getPendingReservations(table: string) {
-  const sixteenMinAgo = new Date(Date.now() - 16 * 60 * 1000).toISOString();
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/${table}?status=eq.confirmed&created_at=gte.${sixteenMinAgo}&select=*`,
+    `${SUPABASE_URL}/rest/v1/${table}?status=eq.confirmed&email_sent=eq.false&select=*`,
     {
       headers: {
         'apikey': SUPABASE_KEY,
@@ -27,6 +26,21 @@ async function getPendingReservations(table: string) {
   );
   const data = await res.json();
   return Array.isArray(data) ? data : [];
+}
+
+async function markEmailSent(table: string, id: string) {
+  await fetch(
+    `${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`,
+    {
+      method: 'PATCH',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email_sent: true }),
+    }
+  );
 }
 
 function formatDate(dateStr: string): string {
@@ -92,6 +106,7 @@ export const GET: APIRoute = async ({ request }) => {
     for (const res of lalunaRes) {
       try {
         await resend.emails.send(getConfirmationEmail(res, 'laluna'));
+        await markEmailSent('laluna_reservations', res.id);
         results.laluna++;
       } catch (err: any) {
         results.errors.push(`La Luna ${res.id}: ${err.message}`);
@@ -107,6 +122,7 @@ export const GET: APIRoute = async ({ request }) => {
     for (const res of coyolRes) {
       try {
         await resend.emails.send(getConfirmationEmail(res, 'coyol'));
+        await markEmailSent('coyol_reservations', res.id);
         results.coyol++;
       } catch (err: any) {
         results.errors.push(`Coyol ${res.id}: ${err.message}`);

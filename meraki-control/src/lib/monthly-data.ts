@@ -149,7 +149,7 @@ export function loadDailySales(): DailySale[] {
   try {
     const raw = fs.readFileSync(SALES_PATH, 'utf-8');
     const data = JSON.parse(raw);
-    return data.daily2026 || [];
+    return data.daily || [];
   } catch {
     return [];
   }
