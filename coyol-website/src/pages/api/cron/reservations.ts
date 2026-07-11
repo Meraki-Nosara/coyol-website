@@ -87,6 +87,8 @@ export const GET: APIRoute = async ({ request }) => {
   const results = { laluna: 0, coyol: 0, errors: [] as string[] };
 
   // Process La Luna reservations
+  // Temporarily disabled email sending by cron for debugging duplicate sends
+  /*
   try {
     const lalunaRes = await getPendingReservations('laluna_reservations');
     for (const res of lalunaRes) {
@@ -100,8 +102,11 @@ export const GET: APIRoute = async ({ request }) => {
   } catch (err: any) {
     results.errors.push(`La Luna fetch error: ${err.message}`);
   }
+  */
 
   // Process Coyol reservations
+  // Temporarily disabled email sending by cron for debugging duplicate sends
+  /*
   try {
     const coyolRes = await getPendingReservations('coyol_reservations');
     for (const res of coyolRes) {
@@ -115,6 +120,7 @@ export const GET: APIRoute = async ({ request }) => {
   } catch (err: any) {
     results.errors.push(`Coyol fetch error: ${err.message}`);
   }
+  */
 
   return new Response(JSON.stringify({
     success: true,
