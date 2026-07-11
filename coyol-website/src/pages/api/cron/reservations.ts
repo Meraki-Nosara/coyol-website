@@ -64,26 +64,108 @@ function formatTime(timeStr: string): string {
 function getConfirmationEmail(reservation: any, restaurant: 'laluna' | 'coyol') {
   const restaurantName = restaurant === 'laluna' ? 'La Luna' : 'Coyol';
   const restaurantEmail = restaurant === 'laluna' ? 'reservations@lalunanosara.com' : 'reservations@coyolrestaurant.com';
-  const phone = restaurant === 'laluna' ? '+506 8996-8221' : '+506 8632-9590';
-  const waPhone = restaurant === 'laluna' ? '50689968221' : '50686329590';
+  const phone = restaurant === 'laluna' ? '+506 8996-8221' : '+506 8818-7775';
+  const waPhone = restaurant === 'laluna' ? '50689968221' : '50688187775';
   const logoUrl = restaurant === 'laluna' 
-    ? 'https://coyolnosara.com/images/luna-moon-black.png' 
-    : 'https://coyolnosara.com/images/coyol-restaurant-logo-black.png';
+    ? 'https://coyolnosara.com/images/logos/laluna-text-logo.png' 
+    : 'https://coyolnosara.com/images/logos/coyol-restaurant-text-logo-green.png';
   const mapsSearch = restaurant === 'laluna' 
     ? 'La+Luna+Restaurant+Nosara+Costa+Rica' 
-    : 'Coyol+Restaurant+Nosara+Costa+Rica';
+    : 'Coyol+Restaurant+Mar+Azul+Nosara';
+  const location = restaurant === 'laluna' ? 'Guiones, Nosara' : 'Mar Azul, Nosara';
+  const brandColor = restaurant === 'laluna' ? '#A65D3F' : '#3D4F3D';
+  const giftUrl = restaurant === 'laluna' 
+    ? 'https://coyolnosara.com/laluna/gift' 
+    : 'https://coyolnosara.com/coyol/gift';
 
   const dateStr = formatDate(reservation.date);
   const timeStr = formatTime(reservation.time);
-  const waText = encodeURIComponent(`Hi, I need to cancel my reservation. Name: ${reservation.guest_name}, Date: ${dateStr}, Time: ${timeStr}`);
+  const confirmationCode = reservation.id ? reservation.id.slice(0, 8).toUpperCase() : 'RES-' + Date.now().toString(36).toUpperCase();
+  const waText = encodeURIComponent(`Hi, I need to cancel my reservation. Name: ${reservation.guest_name}, Date: ${dateStr}, Time: ${timeStr}, Code: ${confirmationCode}`);
   const cancelUrl = `https://wa.me/${waPhone}?text=${waText}`;
 
-  const html = `<!DOCTYPE html><html><body style="margin:0;padding:0;background-color:#f5f3ef;font-family:Georgia,serif;"><table width="100%" style="background-color:#f5f3ef;padding:40px 20px;"><tr><td align="center"><table width="500" style="max-width:500px;background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);"><tr><td align="center" style="padding:40px 40px 20px 40px;"><img src="${logoUrl}" alt="${restaurantName}" width="60" height="60" style="margin-bottom:15px;" /><h1 style="color:#1A1F16;font-size:28px;margin:0;font-weight:normal;font-style:italic;">${restaurantName}</h1><p style="color:#666;margin:5px 0 0 0;font-size:14px;">Reservation Confirmed</p></td></tr><tr><td style="padding:20px 40px;"><p style="color:#1A1F16;font-size:16px;margin:0 0 10px 0;">Dear ${reservation.guest_name},</p><p style="color:#444;font-size:15px;line-height:1.6;margin:0;">Your reservation at ${restaurantName} has been confirmed. We look forward to welcoming you!</p></td></tr><tr><td style="padding:0 40px 30px 40px;"><table width="100%" style="background:#f9f8f6;border-radius:8px;"><tr><td style="padding:12px 15px;color:#888;font-size:14px;">Date</td><td style="padding:12px 15px;text-align:right;color:#1A1F16;font-weight:bold;font-size:14px;">${dateStr}</td></tr><tr><td style="padding:12px 15px;color:#888;font-size:14px;">Time</td><td style="padding:12px 15px;text-align:right;color:#1A1F16;font-weight:bold;font-size:14px;">${timeStr}</td></tr><tr><td style="padding:12px 15px;color:#888;font-size:14px;">Party Size</td><td style="padding:12px 15px;text-align:right;color:#1A1F16;font-weight:bold;font-size:14px;">${reservation.guests || reservation.party_size} guests</td></tr></table></td></tr><tr><td align="center" style="padding:0 40px 30px 40px;"><a href="https://www.google.com/maps/search/${mapsSearch}" style="display:inline-block;background-color:#1A1F16;color:white;text-decoration:none;padding:14px 35px;border-radius:6px;font-size:15px;">Get Directions</a></td></tr><tr><td style="padding:20px 40px;border-top:1px solid #eee;"><p style="color:#888;font-size:13px;margin:0 0 10px 0;"><strong>Need to cancel?</strong></p><a href="${cancelUrl}" style="color:#1A1F16;font-size:13px;">Message us on WhatsApp</a></td></tr><tr><td align="center" style="padding:20px 40px 30px 40px;background:#f9f8f6;"><p style="color:#888;font-size:12px;margin:0;">${restaurantName} Restaurant - Guiones, Nosara - ${phone}</p></td></tr></table></td></tr></table></body></html>`;
+  const html = `<!DOCTYPE html>
+<html>
+<body style="margin:0;padding:0;background-color:#f5f3ef;font-family:Georgia,serif;">
+  <table width="100%" style="background-color:#f5f3ef;padding:40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="500" style="max-width:500px;background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);">
+          <!-- Header with logo -->
+          <tr>
+            <td align="center" style="padding:40px 40px 10px 40px;">
+              <img src="${logoUrl}" alt="${restaurantName}" width="140" style="margin-bottom:20px;" />
+            </td>
+          </tr>
+          <!-- RESERVATION CONFIRMED banner -->
+          <tr>
+            <td align="center" style="padding:0 40px 20px 40px;">
+              <p style="color:${brandColor};font-size:12px;letter-spacing:3px;margin:0;font-weight:bold;">RESERVATION CONFIRMED</p>
+              <p style="color:#888;font-size:11px;margin:8px 0 0 0;">Confirmation Code <strong style="color:#1A1F16;">${confirmationCode}</strong></p>
+            </td>
+          </tr>
+          <!-- Greeting -->
+          <tr>
+            <td style="padding:10px 40px 20px 40px;">
+              <p style="color:#1A1F16;font-size:16px;margin:0 0 10px 0;">Dear ${reservation.guest_name},</p>
+              <p style="color:#444;font-size:15px;line-height:1.6;margin:0;">Your reservation at ${restaurantName} has been confirmed. We look forward to welcoming you!</p>
+            </td>
+          </tr>
+          <!-- Details table -->
+          <tr>
+            <td style="padding:0 40px 30px 40px;">
+              <table width="100%" style="background:#f9f8f6;border-radius:8px;">
+                <tr>
+                  <td style="padding:15px;color:#888;font-size:14px;">Date</td>
+                  <td style="padding:15px;text-align:right;color:#1A1F16;font-weight:bold;font-size:14px;">${dateStr}</td>
+                </tr>
+                <tr>
+                  <td style="padding:15px;color:#888;font-size:14px;border-top:1px solid #eee;">Time</td>
+                  <td style="padding:15px;text-align:right;color:#1A1F16;font-weight:bold;font-size:14px;border-top:1px solid #eee;">${timeStr}</td>
+                </tr>
+                <tr>
+                  <td style="padding:15px;color:#888;font-size:14px;border-top:1px solid #eee;">Party Size</td>
+                  <td style="padding:15px;text-align:right;color:#1A1F16;font-weight:bold;font-size:14px;border-top:1px solid #eee;">${reservation.guests || reservation.party_size} guests</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Get Directions button -->
+          <tr>
+            <td align="center" style="padding:0 40px 20px 40px;">
+              <a href="https://www.google.com/maps/search/${mapsSearch}" style="display:inline-block;background-color:${brandColor};color:white;text-decoration:none;padding:14px 35px;border-radius:6px;font-size:15px;">Get Directions</a>
+            </td>
+          </tr>
+          <!-- Gift a Friend button -->
+          <tr>
+            <td align="center" style="padding:0 40px 30px 40px;">
+              <a href="${giftUrl}" style="display:inline-block;background-color:#C4A67C;color:#1A1F16;text-decoration:none;padding:12px 30px;border-radius:6px;font-size:14px;">🎁 Gift a Friend</a>
+            </td>
+          </tr>
+          <!-- Cancel section -->
+          <tr>
+            <td style="padding:20px 40px;border-top:1px solid #eee;">
+              <p style="color:#888;font-size:13px;margin:0 0 8px 0;"><strong>Need to cancel?</strong></p>
+              <a href="${cancelUrl}" style="color:${brandColor};font-size:13px;text-decoration:none;">Message us on WhatsApp →</a>
+            </td>
+          </tr>
+          <!-- Footer -->
+          <tr>
+            <td align="center" style="padding:20px 40px 30px 40px;background:#f9f8f6;">
+              <p style="color:#888;font-size:12px;margin:0;">${restaurantName} Restaurant • ${location} • ${phone}</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
 
   return {
     from: `${restaurantName} Restaurant <${restaurantEmail}>`,
     to: reservation.guest_email,
-    subject: `Reservation Confirmed - ${restaurantName} Restaurant`,
+    subject: `Your Reservation at ${restaurantName} Restaurant`,
     html: html,
   };
 }
