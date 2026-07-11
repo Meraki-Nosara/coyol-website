@@ -187,8 +187,8 @@ export const GET: APIRoute = async ({ request }) => {
     const lalunaRes = await getPendingReservations('laluna_reservations');
     for (const res of lalunaRes) {
       try {
-        await resend.emails.send(getConfirmationEmail(res, 'laluna'));
         await markEmailSent('laluna_reservations', res.id);
+        await resend.emails.send(getConfirmationEmail(res, 'laluna'));
         results.laluna++;
       } catch (err: any) {
         results.errors.push(`La Luna ${res.id}: ${err.message}`);
@@ -203,8 +203,8 @@ export const GET: APIRoute = async ({ request }) => {
     const coyolRes = await getPendingReservations('coyol_reservations');
     for (const res of coyolRes) {
       try {
-        await resend.emails.send(getConfirmationEmail(res, 'coyol'));
         await markEmailSent('coyol_reservations', res.id);
+        await resend.emails.send(getConfirmationEmail(res, 'coyol'));
         results.coyol++;
       } catch (err: any) {
         results.errors.push(`Coyol ${res.id}: ${err.message}`);
