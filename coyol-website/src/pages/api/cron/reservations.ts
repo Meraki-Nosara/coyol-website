@@ -67,8 +67,8 @@ function getConfirmationEmail(reservation: any, restaurant: 'laluna' | 'coyol') 
   const phone = restaurant === 'laluna' ? '+506 8996-8221' : '+506 8818-7775';
   const waPhone = restaurant === 'laluna' ? '50689968221' : '50688187775';
   const logoUrl = restaurant === 'laluna' 
-    ? 'https://coyolnosara.com/images/logos/laluna-text-logo.png' 
-    : 'https://coyolnosara.com/images/logos/coyol-restaurant-text-logo-green.png';
+    ? 'https://coyolnosara.com/images/logos/laluna-logo-black.png' 
+    : 'https://coyolnosara.com/images/logos/coyol-palm-email.png';
   const mapsSearch = restaurant === 'laluna' 
     ? 'La+Luna+Restaurant+Nosara+Costa+Rica' 
     : 'Coyol+Restaurant+Mar+Azul+Nosara';
