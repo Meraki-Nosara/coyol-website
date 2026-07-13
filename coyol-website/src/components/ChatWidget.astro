@@ -14,7 +14,7 @@ const restaurantName = restaurant === 'laluna' ? 'La Luna' : 'Coyol';
 <!-- Chat Toggle Button (inline with search) -->
 {position === 'search' && (
   <button 
-    id="chatToggle" 
+    id="aiChatToggle" 
     class="chat-toggle-inline"
     title="Ayuda"
     aria-label="Abrir chat de ayuda"
@@ -28,7 +28,7 @@ const restaurantName = restaurant === 'laluna' ? 'La Luna' : 'Coyol';
 <!-- Floating Chat Button -->
 {position === 'floating' && (
   <button 
-    id="chatToggle" 
+    id="aiChatToggle" 
     class="chat-toggle-floating"
     title="¿Necesitas ayuda?"
     aria-label="Abrir chat de ayuda"
@@ -40,12 +40,12 @@ const restaurantName = restaurant === 'laluna' ? 'La Luna' : 'Coyol';
 )}
 
 <!-- Chat Window -->
-<div id="chatWindow" class="chat-window hidden">
+<div id="aiChatWindow" class="chat-window hidden">
   <div class="chat-header">
     <span class="chat-title">💬 Ayuda - {restaurantName}</span>
-    <button id="chatClose" class="chat-close" aria-label="Cerrar chat">✕</button>
+    <button id="aiChatClose" class="chat-close" aria-label="Cerrar chat">✕</button>
   </div>
-  <div class="chat-messages" id="chatMessages">
+  <div class="chat-messages" id="aiChatMessages">
     <div class="chat-message bot">
       <p>¡Hola! Soy el asistente del sistema de reservas. ¿En qué puedo ayudarte?</p>
       <p class="hint">Ejemplos: "¿Cómo cancelo una reserva?", "No puedo ver las mesas", "¿Cómo agrego un walk-in?"</p>
@@ -54,11 +54,11 @@ const restaurantName = restaurant === 'laluna' ? 'La Luna' : 'Coyol';
   <div class="chat-input-area">
     <input 
       type="text" 
-      id="chatInput" 
+      id="aiChatInput" 
       placeholder="Escribe tu pregunta..." 
       autocomplete="off"
     />
-    <button id="chatSend" class="chat-send" aria-label="Enviar">
+    <button id="aiChatSend" class="chat-send" aria-label="Enviar">
       <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
         <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
       </svg>
@@ -175,22 +175,26 @@ const restaurantName = restaurant === 'laluna' ? 'La Luna' : 'Coyol';
   .chat-message {
     max-width: 85%;
     padding: 12px 16px;
-    border-radius: 12px;
+    border-radius: 16px;
     font-size: 14px;
     line-height: 1.5;
+    color: #f5f3ef !important;
+    background: rgba(60, 60, 60, 0.9) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
   
   .chat-message.bot {
     align-self: flex-start;
-    background: rgba(196, 166, 124, 0.15);
-    border: 1px solid rgba(196, 166, 124, 0.2);
-    color: #f5f3ef;
+    background: rgba(45, 55, 45, 0.95) !important;
+    border: 1px solid rgba(196, 166, 124, 0.3);
+    border-radius: 16px 16px 16px 4px;
   }
   
   .chat-message.user {
     align-self: flex-end;
-    background: #A65D3F;
-    color: white;
+    background: #A65D3F !important;
+    color: white !important;
+    border-radius: 16px 16px 4px 16px;
   }
   
   .chat-message .hint {
@@ -222,7 +226,7 @@ const restaurantName = restaurant === 'laluna' ? 'La Luna' : 'Coyol';
     border-top: 1px solid rgba(196, 166, 124, 0.2);
   }
   
-  #chatInput {
+  #aiChatInput {
     flex: 1;
     padding: 10px 14px;
     background: rgba(255, 255, 255, 0.05);
@@ -233,11 +237,11 @@ const restaurantName = restaurant === 'laluna' ? 'La Luna' : 'Coyol';
     outline: none;
   }
   
-  #chatInput::placeholder {
+  #aiChatInput::placeholder {
     color: rgba(255, 255, 255, 0.4);
   }
   
-  #chatInput:focus {
+  #aiChatInput:focus {
     border-color: #C4A67C;
   }
   
@@ -283,15 +287,29 @@ const restaurantName = restaurant === 'laluna' ? 'La Luna' : 'Coyol';
   }
 </style>
 
-<script define:vars={{ restaurant }}>
-  const chatToggle = document.getElementById('chatToggle');
-  const chatWindow = document.getElementById('chatWindow');
-  const chatClose = document.getElementById('chatClose');
-  const chatInput = document.getElementById('chatInput');
-  const chatSend = document.getElementById('chatSend');
-  const chatMessages = document.getElementById('chatMessages');
-  
-  let conversationHistory = [];
+<script is:inline define:vars={{ restaurant }}>
+  // Wait for DOM to be ready
+  document.addEventListener('DOMContentLoaded', function() {
+    initChat();
+  });
+  // Also try immediately in case DOM is already loaded
+  if (document.readyState !== 'loading') {
+    initChat();
+  }
+
+  let chatInitialized = false;
+  function initChat() {
+    if (chatInitialized) return;
+    chatInitialized = true;
+    
+    const chatToggle = document.getElementById('aiChatToggle');
+    const chatWindow = document.getElementById('aiChatWindow');
+    const chatClose = document.getElementById('aiChatClose');
+    const chatInput = document.getElementById('aiChatInput');
+    const chatSend = document.getElementById('aiChatSend');
+    const chatMessages = document.getElementById('aiChatMessages');
+    
+    let conversationHistory = [];
   
   // Toggle chat window
   chatToggle?.addEventListener('click', () => {
@@ -307,8 +325,10 @@ const restaurantName = restaurant === 'laluna' ? 'La Luna' : 'Coyol';
   
   // Send message
   async function sendMessage() {
-    const message = chatInput?.value.trim();
-    if (!message) return;
+    const message = chatInput?.value?.trim();
+    if (!message) {
+      return;
+    }
     
     // Add user message to UI
     addMessage(message, 'user');
@@ -356,6 +376,22 @@ const restaurantName = restaurant === 'laluna' ? 'La Luna' : 'Coyol';
   function addMessage(text, type) {
     const msg = document.createElement('div');
     msg.className = `chat-message ${type}`;
+    // Force inline styles to override any page CSS
+    msg.style.cssText = `
+      max-width: 85%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #f5f3ef;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      margin-bottom: 8px;
+      word-wrap: break-word;
+      ${type === 'user' 
+        ? 'align-self: flex-end; background: #A65D3F; color: white; border-radius: 16px 16px 4px 16px;'
+        : 'align-self: flex-start; background: rgba(45, 55, 45, 0.95); border: 1px solid rgba(196, 166, 124, 0.3); border-radius: 16px 16px 16px 4px;'
+      }
+    `;
     msg.innerHTML = text.replace(/\n/g, '<br>');
     chatMessages?.appendChild(msg);
     scrollToBottom();
@@ -369,6 +405,7 @@ const restaurantName = restaurant === 'laluna' ? 'La Luna' : 'Coyol';
   
   chatSend?.addEventListener('click', sendMessage);
   chatInput?.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') sendMessage();
-  });
+      if (e.key === 'Enter') sendMessage();
+    });
+  } // end initChat
 </script>

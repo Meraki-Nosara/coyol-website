@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 
-// Use Anthropic Claude Sonnet for cost efficiency
-const ANTHROPIC_API_KEY = import.meta.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY;
+// Use OpenRouter for model access
+const OPENROUTER_API_KEY = import.meta.env.OPENROUTER_API_KEY || process.env.OPENROUTER_API_KEY;
 
 const SYSTEM_PROMPT = `Eres el asistente de soporte del sistema de reservaciones de Meraki Restaurants (La Luna y Coyol) en Nosara, Costa Rica.
 
@@ -83,6 +83,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     // Build messages array
     const messages = [
+      { role: 'system', content: SYSTEM_PROMPT + `\n\nRestaurante actual: ${restaurant === 'laluna' ? 'La Luna' : 'Coyol'}` },
       ...history.map((h: any) => ({
         role: h.role,
         content: h.content
@@ -90,27 +91,27 @@ export const POST: APIRoute = async ({ request }) => {
       { role: 'user', content: message }
     ];
 
-    // Call Anthropic API
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    // Call OpenRouter API (uses Gemini Flash - fast and cheap)
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
+        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+        'HTTP-Referer': 'https://coyolnosara.com',
+        'X-Title': 'Meraki Reservations Support'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'anthropic/claude-3-haiku',
         max_tokens: 500,
-        system: SYSTEM_PROMPT + `\n\nRestaurante actual: ${restaurant === 'laluna' ? 'La Luna' : 'Coyol'}`,
         messages
       })
     });
 
     if (!response.ok) {
       const error = await response.text();
-      console.error('Anthropic API error:', error);
+      console.error('OpenRouter API error:', error);
       return new Response(JSON.stringify({ 
-        reply: 'Lo siento, hay un problema con el servicio. Intenta de nuevo en un momento.' 
+        reply: 'Error: ' + error.substring(0, 150)
       }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' }
@@ -118,7 +119,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const data = await response.json();
-    const reply = data.content?.[0]?.text || 'No pude procesar tu pregunta.';
+    const reply = data.choices?.[0]?.message?.content || 'No pude procesar tu pregunta.';
 
     return new Response(JSON.stringify({ reply }), {
       status: 200,
@@ -128,7 +129,7 @@ export const POST: APIRoute = async ({ request }) => {
   } catch (error) {
     console.error('Chat support error:', error);
     return new Response(JSON.stringify({ 
-      reply: 'Error de conexión. Verifica tu internet e intenta de nuevo.' 
+      reply: 'Error de conexión. Verifica tu internet e intenta de nuevo.'
     }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
