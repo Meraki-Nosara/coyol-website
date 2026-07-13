@@ -823,7 +823,7 @@ import Layout from '../../layouts/Layout.astro';
 
     // Set max date to 30 days out
     const maxDate = new Date();
-    maxDate.setDate(maxDate.getDate() + 30);
+    maxDate.setDate(maxDate.getDate() + 90);
     dateInput.max = maxDate.toISOString().split('T')[0];
 
     // Party size selection
@@ -936,6 +936,12 @@ import Layout from '../../layouts/Layout.astro';
     }
 
     async function submitReservation() {
+      // Prevent double submission - disable immediately
+      const btn = document.getElementById('confirmBtn');
+      if (btn.disabled) return;
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+
       const name = document.getElementById('name').value.trim();
       const countryCode = document.getElementById('countryCode').value;
       const phoneNumber = document.getElementById('phone').value.trim();
@@ -966,7 +972,11 @@ import Layout from '../../layouts/Layout.astro';
         document.getElementById('email').classList.remove('error');
       }
       
-      if (!valid) return;
+      if (!valid) {
+        btn.disabled = false;
+        btn.textContent = 'Confirm Reservation';
+        return;
+      }
 
       const date = dateInput.value;
       const time = document.querySelector('.time-btn.selected')?.dataset.time || '18:30';
@@ -985,10 +995,7 @@ import Layout from '../../layouts/Layout.astro';
         status: 'confirmed'
       };
 
-      // Disable button while saving
-      const btn = document.getElementById('confirmBtn');
-      btn.disabled = true;
-      btn.textContent = 'Saving...';
+      // Button already disabled at function start
 
       try {
         // Save to Supabase

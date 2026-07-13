@@ -67,7 +67,7 @@ function getConfirmationEmail(reservation: any, restaurant: 'laluna' | 'coyol') 
   const phone = restaurant === 'laluna' ? '+506 8996-8221' : '+506 8818-7775';
   const waPhone = restaurant === 'laluna' ? '50689968221' : '50688187775';
   const logoUrl = restaurant === 'laluna' 
-    ? 'https://coyolnosara.com/images/logos/laluna-moon-email.jpg' 
+    ? 'https://coyolnosara.com/images/logos/laluna-email-header.jpg' 
     : 'https://coyolnosara.com/images/logos/coyol-email-header.jpg';
   const mapsSearch = restaurant === 'laluna' 
     ? 'La+Luna+Restaurant+Nosara+Costa+Rica' 
@@ -76,7 +76,7 @@ function getConfirmationEmail(reservation: any, restaurant: 'laluna' | 'coyol') 
   const brandColor = restaurant === 'laluna' ? '#A65D3F' : '#3D4F3D';
   const giftUrl = restaurant === 'laluna' 
     ? 'https://coyolnosara.com/laluna/gift' 
-    : 'https://coyolnosara.com/coyol/gift';
+    : 'https://coyolnosara.com/restaurant/gift';
 
   const dateStr = formatDate(reservation.date);
   const timeStr = formatTime(reservation.time);

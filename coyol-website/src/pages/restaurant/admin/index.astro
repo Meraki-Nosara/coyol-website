@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import CoyolAdminSidebar from '../../../components/CoyolAdminSidebar.astro';
+import ChatWidget from '../../../components/ChatWidget.astro';
 import '../../../styles/coyol-tables.css';
 ---
 
@@ -12,6 +13,7 @@ import '../../../styles/coyol-tables.css';
     <div class="left-panel">
       <!-- Header -->
       <div class="panel-header">
+        <span class="version-badge">v2.2</span>
         <button class="btn-new" onclick="openNewReservation()">+</button>
         <button class="btn-walkin" onclick="openWalkin()">Walk-in</button>
         <button class="btn-send-reminders" onclick="sendDayReminders()" title="Email confirmation reminders">
@@ -23,6 +25,7 @@ import '../../../styles/coyol-tables.css';
           <span class="waitlist-count">WAITLIST <strong>0</strong></span>
         </div>
         <input type="text" class="search-input" id="searchInput" placeholder="Search name or code..." autocomplete="off" />
+        <ChatWidget restaurant="coyol" position="search" />
       </div>
 
       <!-- Filters -->
@@ -496,6 +499,14 @@ import '../../../styles/coyol-tables.css';
       padding: 0.75rem;
       border-bottom: 1px solid var(--limestone);
       background: var(--cream);
+    }
+
+    .version-badge {
+      font-size: 10px;
+      color: rgba(0,0,0,0.4);
+      padding: 2px 6px;
+      background: rgba(0,0,0,0.05);
+      border-radius: 4px;
     }
 
     .btn-new {
@@ -2977,6 +2988,17 @@ import '../../../styles/coyol-tables.css';
       if (conflicts.length > 0) {
         const conflictNames = conflicts.map(c => `${c.guestName} at ${c.time}`).join(', ');
         alert(`Table already has a reservation in this shift: ${conflictNames}`);
+        return;
+      }
+      
+      // Check table capacity
+      const layouts = getLayout();
+      const allTables = [...(layouts.inside||[]), ...(layouts.terraza||[]), ...(layouts.jardin||[]), ...(layouts.terrace||[])];
+      const table = allTables.find(t => t.id === tableId);
+      const partySize = assigningRes.guests || assigningRes.party_size || 2;
+      
+      if (table && partySize > table.maxCovers) {
+        alert(`Table "${table.name}" only fits ${table.maxCovers} guests. This reservation is for ${partySize} guests.`);
         return;
       }
       

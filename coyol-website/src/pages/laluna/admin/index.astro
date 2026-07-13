@@ -1,5 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import ChatWidget from '../../../components/ChatWidget.astro';
 import '../../../styles/laluna-tables.css';
 ---
 
@@ -15,6 +16,7 @@ import '../../../styles/laluna-tables.css';
     <aside class="sidebar">
       <div class="sidebar-logo">
         <img src="/images/laluna-moon-white-real.png" alt="La Luna" />
+        <span class="version-badge">v2.2</span>
       </div>
       <nav class="sidebar-nav">
         <a href="/laluna/admin" class="nav-icon active" title="Dashboard">
@@ -82,6 +84,7 @@ import '../../../styles/laluna-tables.css';
       <div class="search-bar">
         <input type="text" id="searchInput" placeholder="Search name or confirmation #..." autocomplete="off" />
         <button id="clearSearch" class="clear-search" style="display:none;">✕</button>
+        <ChatWidget restaurant="laluna" position="search" />
       </div>
 
       <!-- Reservations List -->
@@ -561,6 +564,14 @@ import '../../../styles/laluna-tables.css';
       height: 2.5rem; width: 2.5rem;
       filter: brightness(0) invert(1);
       opacity: 0.9;
+    }
+
+    .version-badge {
+      display: block;
+      font-size: 10px;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      margin-top: 4px;
     }
 
     .sidebar-nav {
@@ -3569,6 +3580,17 @@ import '../../../styles/laluna-tables.css';
       if (conflicts.length > 0) {
         const conflictNames = conflicts.map(c => `${c.guestName} at ${c.time}`).join(', ');
         alert(`Table already has a reservation in this shift: ${conflictNames}`);
+        return;
+      }
+      
+      // Check table capacity
+      const layouts = getLayout();
+      const allTables = [...(layouts.inside||[]), ...(layouts.terraza||[]), ...(layouts.jardin||[])];
+      const table = allTables.find(t => t.id === tableId);
+      const partySize = assigningRes.guests || assigningRes.party_size || 2;
+      
+      if (table && partySize > table.maxCovers) {
+        alert(`Table "${table.name}" only fits ${table.maxCovers} guests. This reservation is for ${partySize} guests.`);
         return;
       }
       
