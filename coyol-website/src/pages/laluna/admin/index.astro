@@ -84,7 +84,7 @@ import '../../../styles/laluna-tables.css';
       <div class="search-bar">
         <input type="text" id="searchInput" placeholder="Search name or confirmation #..." autocomplete="off" />
         <button id="clearSearch" class="clear-search" style="display:none;">✕</button>
-        <ChatWidget restaurant="laluna" position="search" />
+        
       </div>
 
       <!-- Reservations List -->
@@ -4678,5 +4678,6 @@ import '../../../styles/laluna-tables.css';
       if (e.target.id === 'blockModal') closeBlockModal();
     });
   </script>
+<ChatWidget restaurant="laluna" position="floating" />
 </Layout>
 // Force rebuild Wed May 27 18:30:47 CST 2026

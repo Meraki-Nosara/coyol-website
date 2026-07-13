@@ -25,7 +25,6 @@ import '../../../styles/coyol-tables.css';
           <span class="waitlist-count">WAITLIST <strong>0</strong></span>
         </div>
         <input type="text" class="search-input" id="searchInput" placeholder="Search name or code..." autocomplete="off" />
-        <ChatWidget restaurant="coyol" position="search" />
       </div>
 
       <!-- Filters -->
@@ -3547,4 +3546,5 @@ import '../../../styles/coyol-tables.css';
     loadLayoutFromSupabase(); // Load floor layout from Supabase
     loadReservations().then(async () => { await autoAssignTables(); renderFloor(); });
   </script>
+<ChatWidget restaurant="coyol" position="floating" />
 </Layout>

@@ -1,11 +1,58 @@
 import type { APIRoute } from 'astro';
 
-// Use OpenRouter for model access
+// API Keys
 const OPENROUTER_API_KEY = import.meta.env.OPENROUTER_API_KEY || process.env.OPENROUTER_API_KEY;
+const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+const SUPABASE_KEY = 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng';
+
+// Fetch reservations from database
+async function getReservations(restaurant: string, date?: string) {
+  const table = restaurant === 'laluna' ? 'laluna_reservations' : 'coyol_reservations';
+  const targetDate = date || new Date().toISOString().split('T')[0];
+  
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/${table}?select=*&date=eq.${targetDate}&order=time.asc`,
+      {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+        }
+      }
+    );
+    return await res.json();
+  } catch (e) {
+    return [];
+  }
+}
+
+// Search reservations by name
+async function searchReservations(restaurant: string, searchTerm: string) {
+  const table = restaurant === 'laluna' ? 'laluna_reservations' : 'coyol_reservations';
+  // Both tables use guest_name
+  const nameCol = 'guest_name';
+  
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/${table}?select=*&${nameCol}=ilike.*${searchTerm}*&order=date.desc&limit=10`,
+      {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+        }
+      }
+    );
+    return await res.json();
+  } catch (e) {
+    return [];
+  }
+}
 
 const SYSTEM_PROMPT = `Eres el asistente de soporte del sistema de reservaciones de Meraki Restaurants (La Luna y Coyol) en Nosara, Costa Rica.
 
-Tu trabajo es ayudar al personal (hostess, managers) con preguntas sobre cómo usar el sistema.
+Tu trabajo es ayudar al personal (hostess, managers) con preguntas sobre cómo usar el sistema Y responder consultas sobre reservaciones.
+
+TIENES ACCESO A LA BASE DE DATOS DE RESERVACIONES. Cuando el usuario pregunte sobre reservaciones específicas, busca en los datos proporcionados.
 
 CONOCIMIENTO DEL SISTEMA:
 
@@ -16,8 +63,6 @@ CONOCIMIENTO DEL SISTEMA:
 - Filtro de shift: Dinner 1 (4-7pm), Dinner 2 (7pm+)
 - Botón "+" para nueva reservación
 - Botón "Walk-in" para clientes sin reserva
-- Botón "WhatsApp All" para mensajear a todos
-- Botón "Remind" para enviar recordatorios por email
 
 **Cómo crear una reservación:**
 1. Click en botón "+" (arriba a la izquierda)
@@ -33,42 +78,19 @@ CONOCIMIENTO DEL SISTEMA:
 1. Click en la reservación de la lista
 2. Aparece banner "Click a table to assign"
 3. Click en la mesa deseada en el plano
-4. La reservación queda asignada
 
 **Cómo cancelar:**
 1. Click en la reservación
 2. En el modal, click "Cancel Reservation"
 3. Confirmar
 
-**Cómo cambiar estado:**
-- Click en reservación → cambiar status: Confirmed, Seated, No-Show, Cancelled
-
-**Capacidad de mesas:**
-- Cada mesa tiene capacidad máxima definida en Settings
-- El sistema NO debería asignar más personas que la capacidad
-- Si esto pasa, es un bug - reportar a Marion
-
-**Floor Plan:**
-- Muestra mesas y su estado: disponible (verde), ocupada (rojo), reservada (amarillo)
-- Drag & drop para mover mesas (solo admin)
-
-**Gift Cards (La Luna):**
-- Ver tarjetas vendidas
-- Buscar por código o comprador
-- Marcar como usada/redimida
-
-**Settings:**
-- Horarios de operación
-- Capacidades de mesas
-- Bloquear fechas específicas
-
 REGLAS DE RESPUESTA:
 1. Responde SIEMPRE en español
 2. Sé conciso y directo
-3. Usa pasos numerados cuando expliques procesos
-4. Si no sabes algo, di "No tengo esa información, contacta a Marion"
-5. Si es un bug o error del sistema, di que lo reporten a Marion
-6. Nunca inventes funcionalidades que no existen`;
+3. Cuando muestres datos de reservaciones, incluye: nombre, hora, # personas, mesa asignada, notas especiales
+4. Si buscas un cliente y no lo encuentras, dilo claramente
+5. Para preguntas que no puedas responder, di "Contacta a Marion"
+6. NUNCA inventes reservaciones - solo usa los datos proporcionados`;
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -81,9 +103,84 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
+    const messageLower = message.toLowerCase();
+    let contextData = '';
+    
+    // Detect if user is asking about reservations
+    const isAskingAboutReservations = 
+      messageLower.includes('reserv') ||
+      messageLower.includes('reserva') ||
+      messageLower.includes('hoy') ||
+      messageLower.includes('today') ||
+      messageLower.includes('noche') ||
+      messageLower.includes('cuant') ||
+      messageLower.includes('mesa') ||
+      messageLower.includes('table') ||
+      messageLower.includes('cliente') ||
+      messageLower.includes('guest') ||
+      messageLower.includes('busca') ||
+      messageLower.includes('search') ||
+      messageLower.includes('personas') ||
+      messageLower.includes('pax');
+    
+    // Detect if searching for a specific person
+    const nameMatch = messageLower.match(/(?:busca|encuentra|reserva de|cliente|guest|señor|señora|sr\.|sra\.)\s+([a-záéíóúñ]+)/i);
+    
+    if (nameMatch) {
+      // Search for specific guest
+      const searchResults = await searchReservations(restaurant, nameMatch[1]);
+      if (searchResults && searchResults.length > 0) {
+        contextData = `\n\n📋 RESULTADOS DE BÚSQUEDA para "${nameMatch[1]}":\n`;
+        searchResults.forEach((r: any) => {
+          const guestName = r.name || r.guest_name;
+          const partySize = r.party_size || r.guests;
+          const tableNum = r.table_number || r.table_id;
+          const notes = r.notes || r.special_requests;
+          contextData += `- ${guestName}: ${r.date} a las ${r.time}, ${partySize} personas`;
+          if (tableNum) contextData += `, Mesa ${tableNum}`;
+          if (notes) contextData += ` | Notas: ${notes}`;
+          if (r.status) contextData += ` | Estado: ${r.status}`;
+          contextData += '\n';
+        });
+      } else {
+        contextData = `\n\n⚠️ No encontré reservaciones para "${nameMatch[1]}"`;
+      }
+    } else if (isAskingAboutReservations) {
+      // Get today's reservations
+      const todayReservations = await getReservations(restaurant);
+      const today = new Date().toISOString().split('T')[0];
+      
+      if (todayReservations && todayReservations.length > 0) {
+        const total = todayReservations.length;
+        const totalPax = todayReservations.reduce((sum: number, r: any) => sum + (r.party_size || r.guests || 0), 0);
+        const confirmed = todayReservations.filter((r: any) => r.status === 'confirmed' || !r.status).length;
+        
+        contextData = `\n\n📋 RESERVACIONES PARA HOY (${today}):\n`;
+        contextData += `Total: ${total} reservaciones, ${totalPax} personas\n\n`;
+        
+        todayReservations.forEach((r: any) => {
+          const guestName = r.name || r.guest_name;
+          const partySize = r.party_size || r.guests;
+          const tableNum = r.table_number || r.table_id;
+          const notes = r.notes || r.special_requests;
+          contextData += `• ${r.time} - ${guestName}: ${partySize} pax`;
+          if (tableNum) contextData += `, Mesa ${tableNum}`;
+          if (notes) contextData += ` | "${notes}"`;
+          if (r.status && r.status !== 'confirmed') contextData += ` [${r.status}]`;
+          contextData += '\n';
+        });
+      } else {
+        contextData = `\n\n📋 No hay reservaciones para hoy (${today})`;
+      }
+    }
+
     // Build messages array
+    const systemContent = SYSTEM_PROMPT + 
+      `\n\nRestaurante actual: ${restaurant === 'laluna' ? 'La Luna' : 'Coyol'}` +
+      contextData;
+    
     const messages = [
-      { role: 'system', content: SYSTEM_PROMPT + `\n\nRestaurante actual: ${restaurant === 'laluna' ? 'La Luna' : 'Coyol'}` },
+      { role: 'system', content: systemContent },
       ...history.map((h: any) => ({
         role: h.role,
         content: h.content
@@ -91,7 +188,7 @@ export const POST: APIRoute = async ({ request }) => {
       { role: 'user', content: message }
     ];
 
-    // Call OpenRouter API (uses Gemini Flash - fast and cheap)
+    // Call OpenRouter API
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -102,7 +199,7 @@ export const POST: APIRoute = async ({ request }) => {
       },
       body: JSON.stringify({
         model: 'anthropic/claude-3-haiku',
-        max_tokens: 500,
+        max_tokens: 600,
         messages
       })
     });
