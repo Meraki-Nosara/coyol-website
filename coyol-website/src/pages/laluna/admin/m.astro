@@ -1,5 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import ChatWidget from '../../../components/ChatWidget.astro';
 ---
 
 <Layout hideFloatingButtons={true} title="La Luna Admin" appleTouchIcon="/laluna-apple-touch-icon.png">
@@ -870,4 +871,5 @@ import Layout from '../../../layouts/Layout.astro';
   // Initial load
   loadReservations();
 </script>
+<ChatWidget restaurant="laluna" position="floating" />
 </Layout>

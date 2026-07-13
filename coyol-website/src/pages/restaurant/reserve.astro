@@ -849,6 +849,18 @@ import Layout from '../../layouts/Layout.astro';
 
     // Check availability when date changes
     dateInput.addEventListener('change', () => {
+      // Enforce 90-day limit
+      const maxDate = new Date();
+      maxDate.setDate(maxDate.getDate() + 90);
+      const selectedDateObj = new Date(dateInput.value + 'T12:00:00');
+      
+      if (selectedDateObj > maxDate) {
+        alert('Reservations can only be made up to 90 days (3 months) in advance.');
+        // Reset to today
+        dateInput.valueAsDate = new Date();
+        return;
+      }
+      
       checkAvailability();
     });
 
@@ -958,6 +970,18 @@ import Layout from '../../layouts/Layout.astro';
         document.getElementById('email').classList.remove('error');
       }
       
+      // Check date is within 90 days
+      const selectedDate = new Date(window.selectedDate + 'T12:00:00');
+      const maxAllowedDate = new Date();
+      maxAllowedDate.setDate(maxAllowedDate.getDate() + 90);
+      
+      if (selectedDate > maxAllowedDate) {
+        alert('Reservations can only be made up to 90 days in advance. Please select an earlier date.');
+        btn.disabled = false;
+        btn.textContent = 'Confirm Reservation';
+        return;
+      }
+      
       if (!valid) {
         btn.disabled = false;
         btn.textContent = 'Confirm Reservation';
@@ -986,6 +1010,16 @@ import Layout from '../../layouts/Layout.astro';
       try {
         // Save to Supabase
         const saved = await saveReservation(reservation);
+
+        // Send confirmation email (don't wait for it)
+        fetch('/api/send-confirmation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            reservation: { ...reservation, id: saved.id, cancel_token: saved.cancel_token },
+            restaurant: 'coyol'
+          })
+        }).catch(err => console.error('Email send error:', err));
 
         // Update confirmation
         const dateObj = new Date(date + 'T12:00:00');

@@ -134,6 +134,10 @@ const restaurantName = restaurant === 'laluna' ? 'La Luna' : 'Coyol';
   .chat-window.hidden {
     display: none;
   }
+  
+  .chat-toggle-floating.hidden {
+    display: none !important;
+  }
 
   .chat-header {
     display: flex;
@@ -246,20 +250,24 @@ const restaurantName = restaurant === 'laluna' ? 'La Luna' : 'Coyol';
   }
   
   .chat-send {
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
     background: #A65D3F;
     border: none;
-    border-radius: 8px;
+    border-radius: 50%;
     color: white;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
   
-  .chat-send:hover {
+  .chat-send:hover, .chat-send:active {
     background: #8B4D35;
   }
   
@@ -275,14 +283,36 @@ const restaurantName = restaurant === 'laluna' ? 'La Luna' : 'Coyol';
       right: 0;
       width: 100%;
       max-width: 100%;
-      height: 100%;
-      max-height: 100%;
-      border-radius: 0;
+      height: 45vh;
+      max-height: 45vh;
+      border-radius: 16px 16px 0 0;
     }
     
     .chat-toggle-floating {
-      bottom: 16px;
-      right: 16px;
+      bottom: 80px !important;
+      right: 16px !important;
+      width: 50px !important;
+      height: 50px !important;
+    }
+    
+    .chat-input-area {
+      padding: 8px 10px;
+      gap: 10px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .chat-input {
+      padding: 10px 14px;
+      font-size: 16px;
+      flex: 1;
+    }
+    
+    .chat-send {
+      width: 44px !important;
+      height: 44px !important;
+      min-width: 44px !important;
+      flex-shrink: 0;
     }
   }
 </style>
@@ -313,14 +343,14 @@ const restaurantName = restaurant === 'laluna' ? 'La Luna' : 'Coyol';
   
   // Toggle chat window
   chatToggle?.addEventListener('click', () => {
-    chatWindow?.classList.toggle('hidden');
-    if (!chatWindow?.classList.contains('hidden')) {
-      chatInput?.focus();
-    }
+    chatWindow?.classList.remove('hidden');
+    chatToggle?.classList.add('hidden'); // Hide floating button when chat opens
+    chatInput?.focus();
   });
   
   chatClose?.addEventListener('click', () => {
     chatWindow?.classList.add('hidden');
+    chatToggle?.classList.remove('hidden'); // Show floating button when chat closes
   });
   
   // Send message
@@ -404,8 +434,19 @@ const restaurantName = restaurant === 'laluna' ? 'La Luna' : 'Coyol';
   }
   
   chatSend?.addEventListener('click', sendMessage);
-  chatInput?.addEventListener('keypress', (e) => {
+    chatSend?.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      sendMessage();
+    });
+    chatInput?.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') sendMessage();
+    });
+    // Also handle form submit on Enter for mobile
+    chatInput?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
     });
   } // end initChat
 </script>

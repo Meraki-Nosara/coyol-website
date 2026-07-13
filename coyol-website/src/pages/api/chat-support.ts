@@ -26,6 +26,34 @@ async function getReservations(restaurant: string, date?: string) {
   }
 }
 
+// Get reservations for date range (week)
+async function getWeekReservations(restaurant: string) {
+  const table = restaurant === 'laluna' ? 'laluna_reservations' : 'coyol_reservations';
+  const today = new Date();
+  const startOfWeek = new Date(today);
+  startOfWeek.setDate(today.getDate() - today.getDay()); // Sunday
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 6); // Saturday
+  
+  const startDate = startOfWeek.toISOString().split('T')[0];
+  const endDate = endOfWeek.toISOString().split('T')[0];
+  
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/${table}?select=*&date=gte.${startDate}&date=lte.${endDate}&status=neq.cancelled&order=date.asc,time.asc`,
+      {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+        }
+      }
+    );
+    return await res.json();
+  } catch (e) {
+    return [];
+  }
+}
+
 // Search reservations by name
 async function searchReservations(restaurant: string, searchTerm: string) {
   const table = restaurant === 'laluna' ? 'laluna_reservations' : 'coyol_reservations';
@@ -123,10 +151,39 @@ export const POST: APIRoute = async ({ request }) => {
       messageLower.includes('personas') ||
       messageLower.includes('pax');
     
+    // Detect if asking about the week
+    const isAskingAboutWeek = 
+      messageLower.includes('semana') ||
+      messageLower.includes('week') ||
+      messageLower.includes('semanal') ||
+      messageLower.includes('esta semana') ||
+      messageLower.includes('weekly');
+    
     // Detect if searching for a specific person
     const nameMatch = messageLower.match(/(?:busca|encuentra|reserva de|cliente|guest|señor|señora|sr\.|sra\.)\s+([a-záéíóúñ]+)/i);
     
-    if (nameMatch) {
+    if (isAskingAboutWeek) {
+      // Get week reservations
+      const weekReservations = await getWeekReservations(restaurant);
+      if (weekReservations && weekReservations.length > 0) {
+        const totalPax = weekReservations.reduce((sum: number, r: any) => sum + (r.party_size || r.guests || 0), 0);
+        const byDate: any = {};
+        weekReservations.forEach((r: any) => {
+          if (!byDate[r.date]) byDate[r.date] = { count: 0, pax: 0 };
+          byDate[r.date].count++;
+          byDate[r.date].pax += (r.party_size || r.guests || 0);
+        });
+        
+        contextData = `\n\n📊 RESUMEN SEMANAL:\n`;
+        contextData += `Total: ${weekReservations.length} reservaciones, ${totalPax} personas\n\n`;
+        contextData += `Por día:\n`;
+        for (const [date, stats] of Object.entries(byDate as any)) {
+          contextData += `- ${date}: ${stats.count} reservas, ${stats.pax} personas\n`;
+        }
+      } else {
+        contextData = `\n\n📊 No hay reservaciones para esta semana`;
+      }
+    } else if (nameMatch) {
       // Search for specific guest
       const searchResults = await searchReservations(restaurant, nameMatch[1]);
       if (searchResults && searchResults.length > 0) {

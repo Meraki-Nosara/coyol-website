@@ -4,6 +4,10 @@
     {
       "path": "/api/cron/gift-cards",
       "schedule": "*/15 * * * *"
+    },
+    {
+      "path": "/api/cron/morning-reminders",
+      "schedule": "0 14 * * *"
     }
   ],
   "headers": [
