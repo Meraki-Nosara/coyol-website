@@ -2,7 +2,7 @@ import { defineMiddleware } from 'astro:middleware';
 import { getSessionCookie, validateSession } from './lib/auth';
 
 // Pages that don't require authentication
-const PUBLIC_PATHS = ['/login', '/api/login'];
+const PUBLIC_PATHS = ['/login', '/api/login', '/api/reservations', '/sw.js'];
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const { pathname } = context.url;
