@@ -465,6 +465,19 @@ import '../../../styles/coyol-tables.css';
             <label>Notes</label>
             <textarea id="editNotes" class="form-input" rows="2"></textarea>
           </div>
+          <div class="form-group">
+            <label>Tables (select multiple for large groups)</label>
+            <div class="multi-table-select" id="editTableContainer">
+              <button type="button" class="table-select-btn" onclick="toggleTableDropdown('edit')">
+                <span id="editTableLabel">Select Tables</span>
+                <span class="dropdown-arrow">▼</span>
+              </button>
+              <div class="table-dropdown" id="editTableDropdown">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+            <input type="hidden" id="editTable" value="" />
+          </div>
         </div>
         <div class="modal-footer">
           <button class="btn-secondary" onclick="closeEditModal()">Cancel</button>
@@ -1771,6 +1784,20 @@ import '../../../styles/coyol-tables.css';
     .form-group.flex-2 { flex: 2; }
     .form-group label { display: block; font-size: 0.6875rem; color: var(--keswick); margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Inter', sans-serif; }
     .form-input { width: 100%; padding: 0.5rem; border: 1px solid var(--limestone); border-radius: 4px; font-size: 0.875rem; background: var(--cream); color: var(--santorini); }
+    
+    /* Multi-table select dropdown */
+    .multi-table-select { position: relative; }
+    .table-select-btn { width: 100%; padding: 0.5rem; border: 1px solid var(--limestone); border-radius: 4px; font-size: 0.875rem; background: var(--cream); color: var(--santorini); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .table-select-btn:hover { border-color: var(--keswick); }
+    .dropdown-arrow { font-size: 0.7rem; color: var(--keswick); }
+    .table-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; max-height: 200px; overflow-y: auto; background: var(--cream); border: 1px solid var(--limestone); border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 100; margin-top: 2px; }
+    .table-dropdown.open { display: block; }
+    .table-option { display: flex; align-items: center; gap: 8px; padding: 8px 12px; cursor: pointer; border-bottom: 1px solid var(--limestone); }
+    .table-option:hover { background: var(--limestone); }
+    .table-option.selected { background: rgba(61, 79, 61, 0.1); }
+    .table-option input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--keswick); }
+    .table-name { font-weight: 500; }
+    .table-cap { font-size: 0.75rem; color: #666; }
     .phone-input-group { display: flex; gap: 0.5rem; }
     .country-select { width: 90px; padding: 0.5rem; border: 1px solid var(--limestone); border-radius: 4px; font-size: 0.875rem; background: var(--cream); cursor: pointer; }
     .phone-number { flex: 1; }
@@ -2878,6 +2905,10 @@ import '../../../styles/coyol-tables.css';
       document.getElementById('editPhone').value = res.guestPhone || '';
       document.getElementById('editNotes').value = res.specialRequests || '';
       
+      // Populate multi-table selector with current selection
+      const currentTables = res.tableId ? res.tableId.split(',').map(t => t.trim()) : [];
+      populateMultiTableDropdown('edit', currentTables);
+      
       // Close detail modal and open edit modal
       document.getElementById('resDetailModal')?.classList.remove('open');
       document.getElementById('editResModal')?.classList.add('open');
@@ -2903,6 +2934,7 @@ import '../../../styles/coyol-tables.css';
       const newEmail = document.getElementById('editEmail').value;
       const newPhone = document.getElementById('editPhone').value;
       const newNotes = document.getElementById('editNotes').value;
+      const newTableId = document.getElementById('editTable').value || null;
       
       try {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?id=eq.${selectedReservationId}`, {
@@ -2921,7 +2953,8 @@ import '../../../styles/coyol-tables.css';
             guest_name: newName,
             guest_email: newEmail,
             guest_phone: newPhone,
-            special_requests: newNotes
+            special_requests: newNotes,
+            table_id: newTableId
           })
         });
         
@@ -3352,6 +3385,75 @@ import '../../../styles/coyol-tables.css';
         tableSelect.value = preselectedTableId;
       }
     }
+
+    // Multi-table selection for large groups
+    let selectedTables = [];
+    
+    function toggleTableDropdown(prefix) {
+      const dropdown = document.getElementById(prefix + 'TableDropdown');
+      dropdown.classList.toggle('open');
+    }
+    
+    function updateTableSelection(prefix, tableId, tableName, checkbox) {
+      if (checkbox.checked) {
+        if (!selectedTables.includes(tableId)) {
+          selectedTables.push(tableId);
+        }
+      } else {
+        selectedTables = selectedTables.filter(t => t !== tableId);
+      }
+      
+      document.getElementById(prefix + 'Table').value = selectedTables.join(',');
+      
+      const label = document.getElementById(prefix + 'TableLabel');
+      if (selectedTables.length === 0) {
+        label.textContent = 'Select Tables';
+      } else if (selectedTables.length === 1) {
+        label.textContent = '1 table selected';
+      } else {
+        label.textContent = selectedTables.length + ' tables selected';
+      }
+    }
+    
+    function populateMultiTableDropdown(prefix, preselectedTables = []) {
+      const dropdown = document.getElementById(prefix + 'TableDropdown');
+      const layouts = getLayout();
+      const allTables = [
+        ...(layouts.inside || []),
+        ...(layouts.terraza || []),
+        ...(layouts.jardin || [])
+      ];
+      
+      selectedTables = [...preselectedTables];
+      
+      dropdown.innerHTML = allTables.map(t => {
+        const isSelected = selectedTables.includes(t.id);
+        const cap = t.maxCovers || t.capacity || 4;
+        return `<div class="table-option ${isSelected ? 'selected' : ''}" onclick="this.querySelector('input').click();">
+            <input type="checkbox" ${isSelected ? 'checked' : ''} 
+              onclick="event.stopPropagation();"
+              onchange="updateTableSelection('${prefix}', '${t.id}', '${t.name || t.id}', this); this.parentElement.classList.toggle('selected', this.checked);">
+            <span class="table-name">${t.name || t.id.toUpperCase()}</span>
+            <span class="table-cap">(${cap}p)</span>
+          </div>`;
+      }).join('');
+      
+      const label = document.getElementById(prefix + 'TableLabel');
+      if (selectedTables.length === 0) {
+        label.textContent = 'Select Tables';
+      } else {
+        label.textContent = selectedTables.length + ' table(s) selected';
+      }
+      
+      document.getElementById(prefix + 'Table').value = selectedTables.join(',');
+    }
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.multi-table-select')) {
+        document.querySelectorAll('.table-dropdown').forEach(d => d.classList.remove('open'));
+      }
+    });
 
     // New reservation modal
     function openNewReservation() {

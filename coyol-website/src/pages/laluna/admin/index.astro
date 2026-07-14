@@ -534,6 +534,19 @@ import '../../../styles/laluna-tables.css';
             <label>Notes</label>
             <textarea id="editNotes" class="form-input" rows="2"></textarea>
           </div>
+          <div class="form-group">
+            <label>Tables (select multiple for large groups)</label>
+            <div class="multi-table-select" id="editTableContainer">
+              <button type="button" class="table-select-btn" onclick="toggleTableDropdown('edit')">
+                <span id="editTableLabel">Select Tables</span>
+                <span class="dropdown-arrow">▼</span>
+              </button>
+              <div class="table-dropdown" id="editTableDropdown">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+            <input type="hidden" id="editTable" value="" />
+          </div>
         </div>
         <div class="modal-footer">
           <button class="btn-secondary" onclick="closeEditModal()">Cancel</button>
@@ -3584,6 +3597,10 @@ import '../../../styles/laluna-tables.css';
       document.getElementById('editPhoneCountry').value = countryCode;
       document.getElementById('editPhone').value = localNumber;
       
+      // Populate multi-table selector with current selection
+      const currentTables = res.tableId ? res.tableId.split(',').map(t => t.trim()) : [];
+      populateMultiTableDropdown('edit', currentTables);
+      
       // Close detail modal and open edit modal
       document.getElementById('resDetailModal')?.classList.remove('open');
       document.getElementById('editResModal')?.classList.add('open');
@@ -3611,6 +3628,7 @@ import '../../../styles/laluna-tables.css';
       const countryCode = document.getElementById('editPhoneCountry').value.replace('+', '');
       const localNum = document.getElementById('editPhone').value.replace(/[^0-9]/g, '');
       const newPhone = localNum ? (countryCode + localNum) : '';
+      const newTableId = document.getElementById('editTable').value || null;
       
       // Validate required fields
       if (!newTime || newTime === '') {
@@ -3643,7 +3661,8 @@ import '../../../styles/laluna-tables.css';
             guest_name: newGuestName,
             special_requests: newNotes,
             guest_email: newEmail,
-            guest_phone: newPhone
+            guest_phone: newPhone,
+            table_id: newTableId
           })
         });
         
