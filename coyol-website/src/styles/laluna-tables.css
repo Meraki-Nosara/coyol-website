@@ -120,6 +120,17 @@
   text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
+.tbl-name-small {
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  font-size: 0.5rem;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 .tbl-guest {
   font-weight: 600;
   color: #fff;
