@@ -6,6 +6,17 @@ import '../../../styles/coyol-tables.css';
 ---
 
 <Layout hideFloatingButtons={true} appleTouchIcon="/coyol-restaurant-icon.png" title="Dashboard | Coyol Admin">
+  <!-- Offline Banner -->
+  <div class="offline-banner" id="offlineBanner" style="display:none;position:fixed;top:0;left:0;right:0;background:#A65D3F;color:white;padding:8px 16px;text-align:center;z-index:9999;font-size:14px;">
+    <span style="display:inline-flex;align-items:center;gap:8px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.364 5.636a9 9 0 010 12.728m-3.536-3.536a4 4 0 010-5.656m-7.072 7.072a9 9 0 010-12.728m3.536 3.536a4 4 0 010 5.656"></path></svg>
+      <strong>Sin conexión</strong> — Los cambios se guardan localmente
+    </span>
+  </div>
+  <div class="sync-banner" id="syncBanner" style="display:none;position:fixed;top:0;left:0;right:0;background:#3D4F3D;color:white;padding:8px 16px;text-align:center;z-index:9999;font-size:14px;">
+    <span style="display:inline-flex;align-items:center;gap:8px;">Sincronizando...</span>
+  </div>
+
   <div class="admin">
     <CoyolAdminSidebar active="dashboard" />
 
@@ -13,12 +24,16 @@ import '../../../styles/coyol-tables.css';
     <div class="left-panel">
       <!-- Header -->
       <div class="panel-header">
-        <span class="version-badge">v2.2</span>
+        <span class="version-badge">v2.3</span>
         <button class="btn-new" onclick="openNewReservation()">+</button>
         <button class="btn-walkin" onclick="openWalkin()">Walk-in</button>
         <button class="btn-send-reminders" onclick="sendDayReminders()" title="Email confirmation reminders">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
           Remind
+        </button>
+        <button class="btn-print" onclick="printReservations()" title="Print today's reservations" style="background:#4A5D4A;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;display:flex;align-items:center;gap:6px;color:white;font-size:13px;font-weight:500;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+          Print
         </button>
         <div class="res-tabs">
           <span class="res-count" id="resCount">RESERVATIONS <strong>0</strong></span>
@@ -1823,6 +1838,114 @@ import '../../../styles/coyol-tables.css';
     const LAYOUT_KEY = 'coyol_floor_layout';
     const LAYOUT_VERSION = 'v4-coyol-john-fix'; // Change this to force layout reset
     
+    // ============================================
+    // OFFLINE MODE
+    // ============================================
+    const OFFLINE_DB_NAME = 'coyol-reservations-offline';
+    let offlineDB = null;
+    let isOnline = navigator.onLine;
+    
+    async function initOfflineDB() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(OFFLINE_DB_NAME, 1);
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => { offlineDB = request.result; resolve(offlineDB); };
+        request.onupgradeneeded = (event) => {
+          const db = event.target.result;
+          if (!db.objectStoreNames.contains('reservations')) {
+            const store = db.createObjectStore('reservations', { keyPath: 'id' });
+            store.createIndex('date', 'date');
+          }
+          if (!db.objectStoreNames.contains('syncQueue')) {
+            db.createObjectStore('syncQueue', { keyPath: 'id', autoIncrement: true });
+          }
+        };
+      });
+    }
+    
+    async function saveToOffline(reservation) {
+      if (!offlineDB) return;
+      const tx = offlineDB.transaction('reservations', 'readwrite');
+      await tx.objectStore('reservations').put(reservation);
+    }
+    
+    async function getOfflineReservations(dateStr) {
+      if (!offlineDB) return [];
+      return new Promise((resolve) => {
+        const tx = offlineDB.transaction('reservations', 'readonly');
+        const request = tx.objectStore('reservations').index('date').getAll(dateStr);
+        request.onsuccess = () => resolve(request.result || []);
+        request.onerror = () => resolve([]);
+      });
+    }
+    
+    async function addToSyncQueue(action, data) {
+      if (!offlineDB) return;
+      const tx = offlineDB.transaction('syncQueue', 'readwrite');
+      await tx.objectStore('syncQueue').add({ action, data, timestamp: Date.now() });
+    }
+    
+    async function processSyncQueue() {
+      if (!offlineDB || !isOnline) return;
+      document.getElementById('syncBanner').style.display = 'block';
+      try {
+        const tx = offlineDB.transaction('syncQueue', 'readwrite');
+        const store = tx.objectStore('syncQueue');
+        const items = await new Promise(r => { const req = store.getAll(); req.onsuccess = () => r(req.result); });
+        for (const item of items) {
+          try {
+            if (item.action === 'create') {
+              await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations`, {
+                method: 'POST',
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(item.data)
+              });
+            } else if (item.action === 'update') {
+              await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?id=eq.${item.data.id}`, {
+                method: 'PATCH',
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(item.data)
+              });
+            }
+            const delTx = offlineDB.transaction('syncQueue', 'readwrite');
+            delTx.objectStore('syncQueue').delete(item.id);
+          } catch (e) { console.error('Sync failed:', e); }
+        }
+        await loadReservations();
+      } finally {
+        document.getElementById('syncBanner').style.display = 'none';
+      }
+    }
+    
+    function updateOnlineStatus() {
+      isOnline = navigator.onLine;
+      document.getElementById('offlineBanner').style.display = isOnline ? 'none' : 'block';
+      if (isOnline) processSyncQueue();
+    }
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    initOfflineDB().then(() => { updateOnlineStatus(); console.log('Offline mode ready'); });
+    
+    // ============================================
+    // PRINT RESERVATIONS
+    // ============================================
+    function printReservations() {
+      const reservations = getReservations().filter(r => r.status !== 'cancelled' && r.status !== 'no-show');
+      reservations.sort((a, b) => a.time.localeCompare(b.time));
+      const dateStr = getDateString(currentDate);
+      const dateFormatted = new Date(dateStr + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      const totalPax = reservations.reduce((sum, r) => sum + (parseInt(r.guests) || 2), 0);
+      const byShift = {};
+      reservations.forEach(res => { const shift = getShiftForTime(res.time); if (!byShift[shift]) byShift[shift] = []; byShift[shift].push(res); });
+      const emptyRows = Array(10).fill(null).map(() => '<tr><td style="border:1px solid #ccc;padding:8px;height:28px;"></td><td style="border:1px solid #ccc;padding:8px;"></td><td style="border:1px solid #ccc;padding:8px;text-align:center;"></td><td style="border:1px solid #ccc;padding:8px;"></td><td style="border:1px solid #ccc;padding:8px;"></td></tr>').join('');
+      const printHTML = `<!DOCTYPE html><html><head><title>Reservaciones - Coyol - ${dateStr}</title><style>body{font-family:Arial,sans-serif;padding:20px;font-size:12px;}h1{font-size:20px;margin-bottom:4px;display:flex;align-items:center;gap:10px;}.logo{width:30px;height:30px;}.date{font-size:14px;color:#666;margin-bottom:16px;}.stats{margin-bottom:16px;font-size:13px;background:#f5f5f5;padding:10px;border-radius:4px;}.shift-title{background:#3D4F3D;color:white;padding:8px 12px;margin:16px 0 8px 0;font-weight:bold;}table{width:100%;border-collapse:collapse;margin-bottom:16px;}th{background:#f0f0f0;border:1px solid #ccc;padding:8px;text-align:left;font-size:11px;}td{border:1px solid #ccc;padding:8px;}.time{font-family:monospace;font-weight:bold;}.pax{text-align:center;font-weight:bold;}.walkin-title{margin-top:24px;margin-bottom:8px;font-weight:bold;color:#666;}.footer{margin-top:24px;font-size:10px;color:#999;border-top:1px solid #eee;padding-top:12px;}@media print{body{padding:0;}}</style></head><body><h1><img class="logo" src="/images/coyol-palm-black.png" alt="">Coyol</h1><div class="date">${dateFormatted}</div><div class="stats"><strong>${reservations.length}</strong> reservaciones | <strong>${totalPax}</strong> personas</div>${Object.entries(byShift).map(([shift, items]) => `<div class="shift-title">${shift.toUpperCase()} (${items.length} res, ${items.reduce((s,r) => s + (parseInt(r.guests)||2), 0)} pax)</div><table><thead><tr><th style="width:60px;">Hora</th><th>Nombre</th><th style="width:50px;text-align:center;">Pax</th><th style="width:80px;">Mesa</th><th>Notas</th></tr></thead><tbody>${items.map(r => `<tr><td class="time">${formatTime12(r.time)}</td><td><strong>${r.guestName}</strong>${r.guestPhone ? '<br><small>' + r.guestPhone + '</small>' : ''}</td><td class="pax">${r.guests}</td><td>${r.tableId ? (r.tableId.includes(',') ? r.tableId.split(',').map(t => t.toUpperCase()).join('+') : r.tableId.toUpperCase()) : 'TBA'}</td><td style="font-size:11px;">${r.specialRequests || ''}</td></tr>`).join('')}</tbody></table>`).join('')}<div class="walkin-title">Walk-ins</div><table><thead><tr><th style="width:60px;">Hora</th><th>Nombre</th><th style="width:50px;text-align:center;">Pax</th><th style="width:80px;">Mesa</th><th>Notas</th></tr></thead><tbody>${emptyRows}</tbody></table><div class="footer">Impreso: ${new Date().toLocaleString('es-CR')} | Coyol Restaurant - Guiones, Nosara</div></body></html>`;
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(printHTML);
+      printWindow.document.close();
+      setTimeout(() => printWindow.print(), 250);
+    }
+    window.printReservations = printReservations;
+    
     // Force reset if version mismatch
     if (localStorage.getItem('coyol_layout_version') !== LAYOUT_VERSION) {
       localStorage.removeItem(LAYOUT_KEY);
@@ -1910,35 +2033,47 @@ import '../../../styles/coyol-tables.css';
 
     // Get reservations from Supabase
     async function fetchReservations(date) {
-      try {
-        const dateStr = date || getDateString(currentDate);
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?date=eq.${dateStr}&select=*&order=time.asc`, {
-          headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`
+      const dateStr = date || getDateString(currentDate);
+      
+      // Try online first
+      if (isOnline) {
+        try {
+          const res = await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?date=eq.${dateStr}&select=*&order=time.asc`, {
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`
+            }
+          });
+          const data = await res.json();
+          // Map snake_case to camelCase for compatibility
+          cachedReservations = data.map(r => ({
+            id: r.id,
+            date: r.date,
+            time: r.time,
+            guests: r.guests,
+            guestName: r.guest_name,
+            guestPhone: r.guest_phone,
+            guestEmail: r.guest_email,
+            tableId: r.table_id,
+            zonePreference: r.zone_preference,
+            specialRequests: r.special_requests,
+            status: r.status,
+            cancelToken: r.cancel_token
+          }));
+          // Cache to offline storage
+          for (const r of cachedReservations) {
+            await saveToOffline(r);
           }
-        });
-        const data = await res.json();
-        // Map snake_case to camelCase for compatibility
-        cachedReservations = data.map(r => ({
-          id: r.id,
-          date: r.date,
-          time: r.time,
-          guests: r.guests,
-          guestName: r.guest_name,
-          guestPhone: r.guest_phone,
-          guestEmail: r.guest_email,
-          tableId: r.table_id,
-          zonePreference: r.zone_preference,
-          specialRequests: r.special_requests,
-          status: r.status,
-          cancelToken: r.cancel_token
-        }));
-        return cachedReservations;
-      } catch (e) {
-        console.error('Failed to fetch reservations:', e);
-        return [];
+          return cachedReservations;
+        } catch (e) {
+          console.error('Online fetch failed, trying offline:', e);
+        }
       }
+      
+      // Offline fallback
+      console.log('Loading from offline storage...');
+      cachedReservations = await getOfflineReservations(dateStr);
+      return cachedReservations;
     }
 
     function getReservations() {
