@@ -1,0 +1,57 @@
+{
+  "restaurants": {
+    "laluna": {
+      "name": "La Luna",
+      "tables": [
+        { "id": "13", "capacity": 4, "location": "main" },
+        { "id": "14", "capacity": 4, "location": "main" },
+        { "id": "15", "capacity": 4, "location": "main" },
+        { "id": "16", "capacity": 4, "location": "main" },
+        { "id": "17", "capacity": 6, "location": "main" },
+        { "id": "18", "capacity": 6, "location": "main" },
+        { "id": "19", "capacity": 4, "location": "main" },
+        { "id": "20", "capacity": 4, "location": "main" },
+        { "id": "21", "capacity": 4, "location": "main" },
+        { "id": "22", "capacity": 6, "location": "main" },
+        { "id": "23", "capacity": 4, "location": "main" },
+        { "id": "24", "capacity": 4, "location": "main" },
+        { "id": "25", "capacity": 6, "location": "main" },
+        { "id": "26", "capacity": 4, "location": "main" },
+        { "id": "27", "capacity": 4, "location": "main" },
+        { "id": "28", "capacity": 4, "location": "main" },
+        { "id": "29", "capacity": 4, "location": "main" },
+        { "id": "fantasma-1", "capacity": 8, "location": "fantasma" },
+        { "id": "fantasma-2", "capacity": 8, "location": "fantasma" }
+      ]
+    },
+    "coyol": {
+      "name": "Coyol",
+      "tables": [
+        { "id": "1", "capacity": 4, "location": "main" },
+        { "id": "2", "capacity": 4, "location": "main" },
+        { "id": "3", "capacity": 4, "location": "main" },
+        { "id": "4", "capacity": 6, "location": "main" },
+        { "id": "5", "capacity": 6, "location": "main" },
+        { "id": "6", "capacity": 4, "location": "main" },
+        { "id": "7", "capacity": 4, "location": "main" },
+        { "id": "8", "capacity": 8, "location": "main" },
+        { "id": "9", "capacity": 4, "location": "main" },
+        { "id": "10", "capacity": 4, "location": "main" },
+        { "id": "11", "capacity": 6, "location": "main" },
+        { "id": "12", "capacity": 6, "location": "main" }
+      ]
+    },
+    "esh": {
+      "name": "Esh",
+      "tables": [
+        { "id": "1", "capacity": 4, "location": "main" },
+        { "id": "2", "capacity": 4, "location": "main" },
+        { "id": "3", "capacity": 4, "location": "main" },
+        { "id": "4", "capacity": 6, "location": "main" },
+        { "id": "5", "capacity": 6, "location": "main" },
+        { "id": "6", "capacity": 4, "location": "main" }
+      ]
+    }
+  },
+  "reservations": []
+}

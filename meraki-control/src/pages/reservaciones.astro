@@ -1,0 +1,894 @@
+---
+import Layout from '../layouts/Layout.astro';
+import fs from 'fs';
+import path from 'path';
+
+// Load restaurant config
+const dataFile = path.join(process.cwd(), 'data/reservations.json');
+let restaurantConfig: Record<string, { name: string; tables: Array<{ id: string; capacity: number; location: string }> }> = {};
+
+if (fs.existsSync(dataFile)) {
+  const data = JSON.parse(fs.readFileSync(dataFile, 'utf-8'));
+  restaurantConfig = data.restaurants;
+}
+
+const restaurants = [
+  { code: 'laluna', name: 'La Luna', color: '#A65D3F' },
+  { code: 'coyol', name: 'Coyol', color: '#3D4F3D' },
+  { code: 'esh', name: 'Esh', color: '#C4A67C' }
+];
+---
+
+<Layout title="Reservaciones">
+  <!-- Offline indicator -->
+  <div id="offline-banner" class="hidden fixed top-0 left-0 right-0 bg-landrover-terracotta text-white py-2 px-4 text-center text-sm z-50">
+    <span class="inline-flex items-center gap-2">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m-3.536-3.536a4 4 0 010-5.656m-7.072 7.072a9 9 0 010-12.728m3.536 3.536a4 4 0 010 5.656"></path>
+      </svg>
+      <strong>Sin conexión</strong> — Los cambios se guardarán localmente y sincronizarán cuando vuelva la conexión
+    </span>
+  </div>
+
+  <!-- Sync indicator -->
+  <div id="sync-banner" class="hidden fixed top-0 left-0 right-0 bg-landrover-keswick text-white py-2 px-4 text-center text-sm z-50">
+    <span class="inline-flex items-center gap-2">
+      <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+      </svg>
+      Sincronizando cambios...
+    </span>
+  </div>
+
+  <div class="min-h-screen bg-landrover-alaska" id="app-container">
+    <!-- Header -->
+    <header class="bg-white border-b border-landrover-arles/30 sticky top-0 z-40">
+      <div class="max-w-7xl mx-auto px-4 py-4">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <a href="/mensual" class="text-landrover-marine/60 hover:text-landrover-keswick">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+              </svg>
+            </a>
+            <h1 class="text-xl font-serif text-landrover-santorini">Reservaciones</h1>
+          </div>
+          
+          <!-- Restaurant selector -->
+          <div class="flex gap-2">
+            {restaurants.map(r => (
+              <button 
+                data-restaurant={r.code}
+                class="restaurant-btn px-4 py-2 text-sm font-medium border-2 rounded-lg transition-all"
+                style={`border-color: ${r.color}; color: ${r.color}`}
+              >
+                {r.name}
+              </button>
+            ))}
+          </div>
+          
+          <!-- Date picker -->
+          <div class="flex items-center gap-3">
+            <button id="prev-day" class="p-2 hover:bg-landrover-limestone rounded">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            </button>
+            <input type="date" id="date-picker" class="px-4 py-2 border border-landrover-arles/30 rounded-lg bg-white text-landrover-santorini">
+            <button id="next-day" class="p-2 hover:bg-landrover-limestone rounded">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </button>
+            <button id="today-btn" class="px-3 py-2 text-sm bg-landrover-limestone hover:bg-landrover-arles rounded-lg">
+              Hoy
+            </button>
+          </div>
+          
+          <!-- Actions -->
+          <div class="flex gap-2">
+            <button id="print-btn" class="btn-secondary flex items-center gap-2 !py-2 !px-4">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+              </svg>
+              Imprimir
+            </button>
+            <button id="new-reservation-btn" class="btn-primary flex items-center gap-2 !py-2 !px-4">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+              </svg>
+              Nueva Reservación
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Stats bar -->
+    <div class="bg-white border-b border-landrover-arles/20 py-3">
+      <div class="max-w-7xl mx-auto px-4 flex flex-wrap gap-6 text-sm">
+        <div class="flex items-center gap-2">
+          <span class="text-landrover-marine/60">Total:</span>
+          <span id="stat-total" class="font-semibold">0</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-landrover-marine/60">Personas:</span>
+          <span id="stat-pax" class="font-semibold">0</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-landrover-marine/60">Confirmadas:</span>
+          <span id="stat-confirmed" class="font-semibold text-landrover-keswick">0</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-landrover-marine/60">Pendientes:</span>
+          <span id="stat-pending" class="font-semibold text-landrover-sand">0</span>
+        </div>
+        <div id="sync-status" class="ml-auto flex items-center gap-2 text-landrover-keswick">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span>Sincronizado</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <main class="max-w-7xl mx-auto px-4 py-6">
+      <!-- Reservations list -->
+      <div class="bg-white border border-landrover-arles/30 rounded-lg overflow-hidden">
+        <table class="data-table" id="reservations-table">
+          <thead>
+            <tr>
+              <th class="w-20">Hora</th>
+              <th>Nombre</th>
+              <th class="w-16 text-center">Pax</th>
+              <th class="w-32">Mesa(s)</th>
+              <th>Notas</th>
+              <th class="w-28">Estado</th>
+              <th class="w-24">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="reservations-body">
+            <!-- Filled by JS -->
+          </tbody>
+        </table>
+        
+        <div id="empty-state" class="hidden py-16 text-center text-landrover-marine/50">
+          <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+          </svg>
+          <p class="text-lg mb-2">No hay reservaciones</p>
+          <p class="text-sm">Seleccione un restaurante y fecha para ver las reservaciones</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- New/Edit Reservation Modal -->
+  <div id="reservation-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h2 id="modal-title" class="text-xl font-serif">Nueva Reservación</h2>
+          <button id="close-modal" class="text-landrover-marine/50 hover:text-landrover-santorini">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        
+        <form id="reservation-form" class="space-y-4">
+          <input type="hidden" id="form-id">
+          
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-landrover-marine mb-1">Hora *</label>
+              <input type="time" id="form-time" required class="w-full px-3 py-2 border border-landrover-arles/30 rounded-lg">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-landrover-marine mb-1">Personas *</label>
+              <input type="number" id="form-pax" min="1" max="50" required class="w-full px-3 py-2 border border-landrover-arles/30 rounded-lg">
+            </div>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-landrover-marine mb-1">Nombre del cliente *</label>
+            <input type="text" id="form-name" required class="w-full px-3 py-2 border border-landrover-arles/30 rounded-lg" placeholder="Nombre completo">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-landrover-marine mb-1">Teléfono</label>
+            <input type="tel" id="form-phone" class="w-full px-3 py-2 border border-landrover-arles/30 rounded-lg" placeholder="+506 8888-8888">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-landrover-marine mb-2">
+              Mesa(s) 
+              <span class="text-landrover-marine/50 font-normal">— Selecciona una o más para combinar</span>
+            </label>
+            <div id="table-selector" class="grid grid-cols-5 gap-2">
+              <!-- Filled by JS -->
+            </div>
+            <p id="table-capacity" class="mt-2 text-sm text-landrover-marine/60">
+              Capacidad seleccionada: <span id="selected-capacity">0</span> personas
+            </p>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-landrover-marine mb-1">Notas</label>
+            <textarea id="form-notes" rows="2" class="w-full px-3 py-2 border border-landrover-arles/30 rounded-lg" placeholder="Alergias, celebraciones, preferencias..."></textarea>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-landrover-marine mb-1">Estado</label>
+            <select id="form-status" class="w-full px-3 py-2 border border-landrover-arles/30 rounded-lg">
+              <option value="confirmed">Confirmada</option>
+              <option value="pending">Pendiente</option>
+              <option value="seated">Sentados</option>
+              <option value="completed">Completada</option>
+              <option value="cancelled">Cancelada</option>
+              <option value="no-show">No Show</option>
+            </select>
+          </div>
+          
+          <div class="flex gap-3 pt-4">
+            <button type="button" id="cancel-btn" class="flex-1 btn-secondary">Cancelar</button>
+            <button type="submit" class="flex-1 btn-primary">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Print template (hidden, used for printing) -->
+  <div id="print-template" class="hidden">
+    <style>
+      @media print {
+        body * { visibility: hidden; }
+        #print-content, #print-content * { visibility: visible; }
+        #print-content { position: absolute; left: 0; top: 0; width: 100%; }
+      }
+    </style>
+    <div id="print-content"></div>
+  </div>
+</Layout>
+
+<script define:vars={{ restaurantConfig }}>
+  // ============================================
+  // RESERVATION SYSTEM WITH OFFLINE SUPPORT
+  // ============================================
+  
+  const DB_NAME = 'meraki-reservations';
+  const DB_VERSION = 1;
+  const STORE_NAME = 'reservations';
+  const CONFIG_STORE = 'config';
+  
+  let db = null;
+  let currentRestaurant = 'laluna';
+  let currentDate = new Date().toISOString().split('T')[0];
+  let isOnline = navigator.onLine;
+  let reservations = [];
+  let selectedTables = [];
+  
+  const config = restaurantConfig;
+  
+  // ============================================
+  // IndexedDB Setup (for offline storage)
+  // ============================================
+  
+  async function initDB() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(DB_NAME, DB_VERSION);
+      
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => {
+        db = request.result;
+        resolve(db);
+      };
+      
+      request.onupgradeneeded = (event) => {
+        const database = event.target.result;
+        
+        if (!database.objectStoreNames.contains(STORE_NAME)) {
+          const store = database.createObjectStore(STORE_NAME, { keyPath: 'id' });
+          store.createIndex('restaurant_date', ['restaurant', 'date']);
+          store.createIndex('syncStatus', 'syncStatus');
+        }
+        
+        if (!database.objectStoreNames.contains(CONFIG_STORE)) {
+          database.createObjectStore(CONFIG_STORE, { keyPath: 'key' });
+        }
+      };
+    });
+  }
+  
+  async function saveToLocal(reservation) {
+    if (!db) return;
+    
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    await store.put(reservation);
+  }
+  
+  async function getLocalReservations(restaurant, date) {
+    if (!db) return [];
+    
+    return new Promise((resolve) => {
+      const tx = db.transaction(STORE_NAME, 'readonly');
+      const store = tx.objectStore(STORE_NAME);
+      const index = store.index('restaurant_date');
+      const request = index.getAll([restaurant, date]);
+      
+      request.onsuccess = () => resolve(request.result || []);
+      request.onerror = () => resolve([]);
+    });
+  }
+  
+  async function getPendingSyncReservations() {
+    if (!db) return [];
+    
+    return new Promise((resolve) => {
+      const tx = db.transaction(STORE_NAME, 'readonly');
+      const store = tx.objectStore(STORE_NAME);
+      const index = store.index('syncStatus');
+      const request = index.getAll('pending');
+      
+      request.onsuccess = () => resolve(request.result || []);
+      request.onerror = () => resolve([]);
+    });
+  }
+  
+  async function clearLocalStore() {
+    if (!db) return;
+    
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    await store.clear();
+  }
+  
+  // ============================================
+  // Online/Offline Detection
+  // ============================================
+  
+  function updateOnlineStatus() {
+    isOnline = navigator.onLine;
+    const offlineBanner = document.getElementById('offline-banner');
+    const syncStatus = document.getElementById('sync-status');
+    
+    if (isOnline) {
+      offlineBanner?.classList.add('hidden');
+      syncStatus.innerHTML = `
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span>Sincronizado</span>
+      `;
+      syncStatus.className = 'ml-auto flex items-center gap-2 text-landrover-keswick';
+      
+      // Try to sync pending changes
+      syncPendingChanges();
+    } else {
+      offlineBanner?.classList.remove('hidden');
+      syncStatus.innerHTML = `
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M18.364 5.636a9 9 0 010 12.728m-3.536-3.536a4 4 0 010-5.656"></path>
+        </svg>
+        <span>Modo offline</span>
+      `;
+      syncStatus.className = 'ml-auto flex items-center gap-2 text-landrover-terracotta';
+    }
+  }
+  
+  window.addEventListener('online', updateOnlineStatus);
+  window.addEventListener('offline', updateOnlineStatus);
+  
+  // ============================================
+  // API Functions
+  // ============================================
+  
+  async function fetchReservations() {
+    if (!isOnline) {
+      // Load from local storage
+      reservations = await getLocalReservations(currentRestaurant, currentDate);
+      renderReservations();
+      return;
+    }
+    
+    try {
+      const res = await fetch(`/api/reservations?restaurant=${currentRestaurant}&date=${currentDate}`);
+      const data = await res.json();
+      reservations = data.reservations || [];
+      
+      // Cache locally
+      for (const r of reservations) {
+        await saveToLocal({ ...r, syncStatus: 'synced' });
+      }
+      
+      renderReservations();
+    } catch (error) {
+      console.error('Fetch failed, loading from local:', error);
+      reservations = await getLocalReservations(currentRestaurant, currentDate);
+      renderReservations();
+    }
+  }
+  
+  async function saveReservation(data) {
+    const reservation = {
+      ...data,
+      id: data.id || `local_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      restaurant: currentRestaurant,
+      date: currentDate,
+      createdAt: data.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      syncStatus: isOnline ? 'synced' : 'pending'
+    };
+    
+    // Always save locally first
+    await saveToLocal(reservation);
+    
+    if (isOnline) {
+      try {
+        const method = data.id && !data.id.startsWith('local_') ? 'PUT' : 'POST';
+        const res = await fetch('/api/reservations', {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(reservation)
+        });
+        
+        const result = await res.json();
+        if (result.success && result.reservation) {
+          // Update local with server ID
+          await saveToLocal({ ...result.reservation, syncStatus: 'synced' });
+        }
+      } catch (error) {
+        console.error('Save failed, stored locally:', error);
+        reservation.syncStatus = 'pending';
+        await saveToLocal(reservation);
+      }
+    }
+    
+    await fetchReservations();
+    closeModal();
+  }
+  
+  async function syncPendingChanges() {
+    const pending = await getPendingSyncReservations();
+    if (pending.length === 0) return;
+    
+    const syncBanner = document.getElementById('sync-banner');
+    syncBanner?.classList.remove('hidden');
+    
+    try {
+      const res = await fetch('/api/reservations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sync: true, reservations: pending })
+      });
+      
+      const result = await res.json();
+      if (result.success) {
+        // Update local IDs with server IDs
+        for (const r of result.results) {
+          if (r.localId !== r.serverId) {
+            // Delete old local entry, save new one
+            const oldRes = pending.find(p => p.id === r.localId);
+            if (oldRes) {
+              await saveToLocal({ ...oldRes, id: r.serverId, syncStatus: 'synced' });
+            }
+          }
+        }
+        
+        await fetchReservations();
+      }
+    } catch (error) {
+      console.error('Sync failed:', error);
+    }
+    
+    syncBanner?.classList.add('hidden');
+  }
+  
+  async function deleteReservation(id) {
+    if (!confirm('¿Cancelar esta reservación?')) return;
+    
+    if (isOnline) {
+      try {
+        await fetch(`/api/reservations?id=${id}`, { method: 'DELETE' });
+      } catch (error) {
+        console.error('Delete failed:', error);
+      }
+    }
+    
+    // Update local
+    const res = reservations.find(r => r.id === id);
+    if (res) {
+      res.status = 'cancelled';
+      res.syncStatus = isOnline ? 'synced' : 'pending';
+      await saveToLocal(res);
+    }
+    
+    await fetchReservations();
+  }
+  
+  // ============================================
+  // UI Rendering
+  // ============================================
+  
+  function renderReservations() {
+    const tbody = document.getElementById('reservations-body');
+    const emptyState = document.getElementById('empty-state');
+    
+    // Filter out cancelled for display (unless you want to show them)
+    const activeReservations = reservations.filter(r => r.status !== 'cancelled');
+    
+    if (activeReservations.length === 0) {
+      tbody.innerHTML = '';
+      emptyState?.classList.remove('hidden');
+      updateStats([]);
+      return;
+    }
+    
+    emptyState?.classList.add('hidden');
+    
+    // Sort by time
+    activeReservations.sort((a, b) => a.time.localeCompare(b.time));
+    
+    tbody.innerHTML = activeReservations.map(r => {
+      const statusColors = {
+        confirmed: 'bg-landrover-keswick/10 text-landrover-keswick',
+        pending: 'bg-landrover-sand/20 text-landrover-sand',
+        seated: 'bg-blue-100 text-blue-700',
+        completed: 'bg-landrover-limestone text-landrover-marine',
+        'no-show': 'bg-landrover-terracotta/10 text-landrover-terracotta',
+        cancelled: 'bg-gray-100 text-gray-500'
+      };
+      
+      const statusLabels = {
+        confirmed: 'Confirmada',
+        pending: 'Pendiente',
+        seated: 'Sentados',
+        completed: 'Completada',
+        'no-show': 'No Show',
+        cancelled: 'Cancelada'
+      };
+      
+      const tablesDisplay = r.tables?.length > 0 
+        ? r.tables.join(', ') 
+        : '<span class="text-landrover-marine/40">—</span>';
+      
+      const pendingIcon = r.syncStatus === 'pending' 
+        ? '<span class="inline-block w-2 h-2 bg-landrover-terracotta rounded-full mr-1" title="Pendiente de sincronizar"></span>' 
+        : '';
+      
+      return `
+        <tr class="hover:bg-landrover-limestone/20">
+          <td class="font-mono font-medium">${r.time}</td>
+          <td>
+            ${pendingIcon}
+            <span class="font-medium">${r.guestName}</span>
+            ${r.phone ? `<br><span class="text-xs text-landrover-marine/50">${r.phone}</span>` : ''}
+          </td>
+          <td class="text-center font-semibold">${r.pax}</td>
+          <td class="font-mono text-sm">${tablesDisplay}</td>
+          <td class="text-sm text-landrover-marine/70 max-w-xs truncate">${r.notes || ''}</td>
+          <td>
+            <span class="inline-block px-2 py-1 rounded text-xs font-medium ${statusColors[r.status] || statusColors.pending}">
+              ${statusLabels[r.status] || r.status}
+            </span>
+          </td>
+          <td>
+            <div class="flex gap-1">
+              <button onclick="editReservation('${r.id}')" class="p-1.5 hover:bg-landrover-limestone rounded" title="Editar">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+              </button>
+              <button onclick="deleteReservation('${r.id}')" class="p-1.5 hover:bg-landrover-terracotta/10 rounded text-landrover-terracotta" title="Cancelar">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+    
+    updateStats(activeReservations);
+  }
+  
+  function updateStats(reservations) {
+    document.getElementById('stat-total').textContent = reservations.length;
+    document.getElementById('stat-pax').textContent = reservations.reduce((sum, r) => sum + r.pax, 0);
+    document.getElementById('stat-confirmed').textContent = reservations.filter(r => r.status === 'confirmed').length;
+    document.getElementById('stat-pending').textContent = reservations.filter(r => r.status === 'pending').length;
+  }
+  
+  function renderTableSelector() {
+    const container = document.getElementById('table-selector');
+    const tables = config[currentRestaurant]?.tables || [];
+    
+    container.innerHTML = tables.map(t => {
+      const isSelected = selectedTables.includes(t.id);
+      return `
+        <button type="button" 
+          data-table-id="${t.id}" 
+          data-capacity="${t.capacity}"
+          class="table-btn p-2 border-2 rounded-lg text-center transition-all ${isSelected ? 'border-landrover-keswick bg-landrover-keswick/10' : 'border-landrover-arles/30 hover:border-landrover-keswick'}"
+        >
+          <div class="font-mono font-bold">${t.id}</div>
+          <div class="text-xs text-landrover-marine/50">${t.capacity}p</div>
+        </button>
+      `;
+    }).join('');
+    
+    // Add click handlers
+    container.querySelectorAll('.table-btn').forEach(btn => {
+      btn.addEventListener('click', () => toggleTable(btn.dataset.tableId, parseInt(btn.dataset.capacity)));
+    });
+    
+    updateSelectedCapacity();
+  }
+  
+  function toggleTable(tableId, capacity) {
+    const index = selectedTables.indexOf(tableId);
+    if (index >= 0) {
+      selectedTables.splice(index, 1);
+    } else {
+      selectedTables.push(tableId);
+    }
+    renderTableSelector();
+  }
+  
+  function updateSelectedCapacity() {
+    const tables = config[currentRestaurant]?.tables || [];
+    const totalCapacity = selectedTables.reduce((sum, id) => {
+      const table = tables.find(t => t.id === id);
+      return sum + (table?.capacity || 0);
+    }, 0);
+    document.getElementById('selected-capacity').textContent = totalCapacity;
+  }
+  
+  // ============================================
+  // Modal Functions
+  // ============================================
+  
+  function openModal(reservation = null) {
+    const modal = document.getElementById('reservation-modal');
+    const title = document.getElementById('modal-title');
+    const form = document.getElementById('reservation-form');
+    
+    if (reservation) {
+      title.textContent = 'Editar Reservación';
+      document.getElementById('form-id').value = reservation.id;
+      document.getElementById('form-time').value = reservation.time;
+      document.getElementById('form-pax').value = reservation.pax;
+      document.getElementById('form-name').value = reservation.guestName;
+      document.getElementById('form-phone').value = reservation.phone || '';
+      document.getElementById('form-notes').value = reservation.notes || '';
+      document.getElementById('form-status').value = reservation.status;
+      selectedTables = [...(reservation.tables || [])];
+    } else {
+      title.textContent = 'Nueva Reservación';
+      form.reset();
+      document.getElementById('form-id').value = '';
+      document.getElementById('form-time').value = '18:00';
+      document.getElementById('form-status').value = 'confirmed';
+      selectedTables = [];
+    }
+    
+    renderTableSelector();
+    modal.classList.remove('hidden');
+  }
+  
+  function closeModal() {
+    document.getElementById('reservation-modal').classList.add('hidden');
+    selectedTables = [];
+  }
+  
+  window.editReservation = function(id) {
+    const reservation = reservations.find(r => r.id === id);
+    if (reservation) openModal(reservation);
+  };
+  
+  window.deleteReservation = deleteReservation;
+  
+  // ============================================
+  // Print Function
+  // ============================================
+  
+  function printReservations() {
+    const activeReservations = reservations.filter(r => r.status !== 'cancelled');
+    activeReservations.sort((a, b) => a.time.localeCompare(b.time));
+    
+    const restaurantName = config[currentRestaurant]?.name || currentRestaurant;
+    const dateFormatted = new Date(currentDate).toLocaleDateString('es-CR', { 
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+    });
+    
+    const totalPax = activeReservations.reduce((sum, r) => sum + r.pax, 0);
+    
+    // Generate empty rows for walk-ins
+    const emptyRows = Array(8).fill(null).map(() => `
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 8px; height: 32px;"></td>
+        <td style="border: 1px solid #ccc; padding: 8px;"></td>
+        <td style="border: 1px solid #ccc; padding: 8px; text-align: center;"></td>
+        <td style="border: 1px solid #ccc; padding: 8px;"></td>
+        <td style="border: 1px solid #ccc; padding: 8px;"></td>
+      </tr>
+    `).join('');
+    
+    const printContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Reservaciones - ${restaurantName} - ${currentDate}</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 20px; font-size: 12px; }
+          h1 { font-size: 18px; margin-bottom: 4px; }
+          .date { font-size: 14px; color: #666; margin-bottom: 16px; }
+          .stats { margin-bottom: 16px; font-size: 13px; }
+          table { width: 100%; border-collapse: collapse; }
+          th { background: #f5f5f5; border: 1px solid #ccc; padding: 8px; text-align: left; font-size: 11px; }
+          td { border: 1px solid #ccc; padding: 8px; }
+          .time { font-family: monospace; font-weight: bold; }
+          .pax { text-align: center; font-weight: bold; }
+          .section-title { margin-top: 24px; margin-bottom: 8px; font-weight: bold; color: #666; }
+          @media print {
+            body { padding: 0; }
+          }
+        </style>
+      </head>
+      <body>
+        <h1>${restaurantName}</h1>
+        <div class="date">${dateFormatted}</div>
+        <div class="stats">
+          <strong>${activeReservations.length}</strong> reservaciones | 
+          <strong>${totalPax}</strong> personas esperadas
+        </div>
+        
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 60px;">Hora</th>
+              <th>Nombre</th>
+              <th style="width: 50px; text-align: center;">Pax</th>
+              <th style="width: 80px;">Mesa(s)</th>
+              <th>Notas</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${activeReservations.map(r => `
+              <tr>
+                <td class="time">${r.time}</td>
+                <td><strong>${r.guestName}</strong>${r.phone ? `<br><small>${r.phone}</small>` : ''}</td>
+                <td class="pax">${r.pax}</td>
+                <td>${r.tables?.join(', ') || '—'}</td>
+                <td>${r.notes || ''}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        
+        <div class="section-title">Walk-ins</div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 60px;">Hora</th>
+              <th>Nombre</th>
+              <th style="width: 50px; text-align: center;">Pax</th>
+              <th style="width: 80px;">Mesa</th>
+              <th>Notas</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${emptyRows}
+          </tbody>
+        </table>
+        
+        <div style="margin-top: 24px; font-size: 10px; color: #999;">
+          Impreso: ${new Date().toLocaleString('es-CR')}
+        </div>
+      </body>
+      </html>
+    `;
+    
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    printWindow.print();
+  }
+  
+  // ============================================
+  // Event Listeners & Init
+  // ============================================
+  
+  document.addEventListener('DOMContentLoaded', async () => {
+    await initDB();
+    updateOnlineStatus();
+    
+    // Set initial date
+    document.getElementById('date-picker').value = currentDate;
+    
+    // Restaurant buttons
+    document.querySelectorAll('.restaurant-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentRestaurant = btn.dataset.restaurant;
+        
+        // Update button styles
+        document.querySelectorAll('.restaurant-btn').forEach(b => {
+          const color = b.style.borderColor;
+          if (b.dataset.restaurant === currentRestaurant) {
+            b.style.backgroundColor = color;
+            b.style.color = 'white';
+          } else {
+            b.style.backgroundColor = 'transparent';
+            b.style.color = color;
+          }
+        });
+        
+        fetchReservations();
+      });
+    });
+    
+    // Select first restaurant
+    document.querySelector('.restaurant-btn')?.click();
+    
+    // Date navigation
+    document.getElementById('date-picker').addEventListener('change', (e) => {
+      currentDate = e.target.value;
+      fetchReservations();
+    });
+    
+    document.getElementById('prev-day').addEventListener('click', () => {
+      const d = new Date(currentDate);
+      d.setDate(d.getDate() - 1);
+      currentDate = d.toISOString().split('T')[0];
+      document.getElementById('date-picker').value = currentDate;
+      fetchReservations();
+    });
+    
+    document.getElementById('next-day').addEventListener('click', () => {
+      const d = new Date(currentDate);
+      d.setDate(d.getDate() + 1);
+      currentDate = d.toISOString().split('T')[0];
+      document.getElementById('date-picker').value = currentDate;
+      fetchReservations();
+    });
+    
+    document.getElementById('today-btn').addEventListener('click', () => {
+      currentDate = new Date().toISOString().split('T')[0];
+      document.getElementById('date-picker').value = currentDate;
+      fetchReservations();
+    });
+    
+    // Modal
+    document.getElementById('new-reservation-btn').addEventListener('click', () => openModal());
+    document.getElementById('close-modal').addEventListener('click', closeModal);
+    document.getElementById('cancel-btn').addEventListener('click', closeModal);
+    
+    // Form submit
+    document.getElementById('reservation-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      await saveReservation({
+        id: document.getElementById('form-id').value || null,
+        time: document.getElementById('form-time').value,
+        pax: parseInt(document.getElementById('form-pax').value),
+        guestName: document.getElementById('form-name').value,
+        phone: document.getElementById('form-phone').value,
+        notes: document.getElementById('form-notes').value,
+        status: document.getElementById('form-status').value,
+        tables: selectedTables
+      });
+    });
+    
+    // Print
+    document.getElementById('print-btn').addEventListener('click', printReservations);
+    
+    // Close modal on outside click
+    document.getElementById('reservation-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'reservation-modal') closeModal();
+    });
+  });
+</script>
