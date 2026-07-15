@@ -5,6 +5,45 @@ const OPENROUTER_API_KEY = import.meta.env.OPENROUTER_API_KEY || process.env.OPE
 const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
 const SUPABASE_KEY = 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng';
 
+// Log conversation to Supabase for analysis
+async function logConversation(restaurant: string, userMessage: string, botReply: string, category?: string) {
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/chat_logs`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        restaurant,
+        user_message: userMessage,
+        bot_reply: botReply,
+        category: category || 'general',
+        created_at: new Date().toISOString()
+      })
+    });
+  } catch (e) {
+    // Silent fail - don't break chat if logging fails
+    console.error('Failed to log conversation:', e);
+  }
+}
+
+// Categorize the question for analytics
+function categorizeQuestion(message: string): string {
+  const m = message.toLowerCase();
+  if (m.includes('cómo') || m.includes('como') || m.includes('how')) return 'how-to';
+  if (m.includes('error') || m.includes('no funciona') || m.includes('problema')) return 'issue';
+  if (m.includes('mesa') || m.includes('table') || m.includes('asignar')) return 'table-assign';
+  if (m.includes('cancelar') || m.includes('cancel')) return 'cancellation';
+  if (m.includes('walk-in') || m.includes('walkin')) return 'walk-in';
+  if (m.includes('busca') || m.includes('cliente') || m.includes('reserva de')) return 'search';
+  if (m.includes('cuant') || m.includes('hoy') || m.includes('noche')) return 'stats';
+  if (m.includes('combinar') || m.includes('juntar') || m.includes('grupo grande')) return 'table-combine';
+  return 'general';
+}
+
 // Fetch reservations from database
 async function getReservations(restaurant: string, date?: string) {
   const table = restaurant === 'laluna' ? 'laluna_reservations' : 'coyol_reservations';
@@ -274,6 +313,10 @@ export const POST: APIRoute = async ({ request }) => {
 
     const data = await response.json();
     const reply = data.choices?.[0]?.message?.content || 'No pude procesar tu pregunta.';
+
+    // Log the conversation for analytics
+    const category = categorizeQuestion(message);
+    logConversation(restaurant, message, reply, category);
 
     return new Response(JSON.stringify({ reply }), {
       status: 200,
