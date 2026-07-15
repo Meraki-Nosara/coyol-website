@@ -28,7 +28,7 @@ function getLaLunaEmailHtml(r) {
     <tr><td align="center">
       <table width="500" style="max-width:500px;background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);">
         <tr><td align="center" style="padding:40px 40px 20px 40px;">
-          <img src="https://coyolnosara.com/images/laluna-moon-white-real.png" alt="La Luna" width="60" height="60" style="margin-bottom:15px;" />
+          <img src="https://coyolnosara.com/images/luna-moon-black.png" alt="La Luna" width="60" height="60" style="margin-bottom:15px;" />
           <h1 style="color:${color};font-size:28px;margin:0;font-weight:normal;font-style:italic;">La Luna</h1>
           <p style="color:#666;margin:5px 0 0 0;font-size:14px;">Reminder: Tonight's Reservation</p>
         </td></tr>
