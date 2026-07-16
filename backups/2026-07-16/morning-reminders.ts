@@ -74,7 +74,7 @@ async function sendRemindersForRestaurant(restaurant: 'laluna' | 'coyol', today:
         body: JSON.stringify({
           from: fromEmail,
           to: reservation.guest_email,
-          subject: `Friendly reminder - Your reservation tonight at ${restaurantName}`,
+          subject: `See you tonight! Your reservation at ${restaurantName}`,
           html: `
 <!DOCTYPE html>
 <html>
@@ -98,23 +98,23 @@ async function sendRemindersForRestaurant(restaurant: 'laluna' | 'coyol', today:
     <!-- Content -->
     <div style="padding: 40px 30px;">
       <h2 style="color: #1a1f16; margin: 0 0 20px; font-size: 24px; font-weight: 400;">
-        See you tonight! 🌟
+        ¡Nos vemos esta noche! 🌟
       </h2>
       
       <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6; margin: 0 0 30px;">
-        Hi <strong>${guestName}</strong>,<br><br>
-        Just a friendly reminder about your reservation for <strong>tonight</strong>.
+        Hola <strong>${guestName}</strong>,<br><br>
+        Este es un recordatorio amigable de tu reservación para <strong>hoy</strong>.
       </p>
       
       <!-- Reservation Details Box -->
       <div style="background-color: #f8f7f5; border-radius: 12px; padding: 25px; margin-bottom: 30px;">
         <table style="width: 100%; border-collapse: collapse;">
           <tr>
-            <td style="padding: 8px 0; color: #888; font-size: 14px;">Time</td>
+            <td style="padding: 8px 0; color: #888; font-size: 14px;">Hora</td>
             <td style="padding: 8px 0; color: #1a1f16; font-size: 16px; font-weight: 600; text-align: right;">${time}</td>
           </tr>
           <tr>
-            <td style="padding: 8px 0; color: #888; font-size: 14px;">Party size</td>
+            <td style="padding: 8px 0; color: #888; font-size: 14px;">Personas</td>
             <td style="padding: 8px 0; color: #1a1f16; font-size: 16px; font-weight: 600; text-align: right;">${partySize}</td>
           </tr>
           
@@ -122,19 +122,19 @@ async function sendRemindersForRestaurant(restaurant: 'laluna' | 'coyol', today:
       </div>
       
       <p style="color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 0 0 30px;">
-        If your plans have changed, please let us know as soon as possible.
+        Si necesitas cancelar o modificar tu reservación, por favor avísanos lo antes posible.
       </p>
       
       <!-- Cancel Link -->
       <div style="text-align: center; margin-bottom: 30px;">
         <a href="${cancelLink}" style="color: #888; font-size: 13px; text-decoration: underline;">
-          Cancel reservation
+          Cancelar reservación
         </a>
       </div>
       
       <p style="color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 0;">
-        We look forward to seeing you! 🍽️<br><br>
-        <strong>The ${restaurantName} Team</strong>
+        ¡Te esperamos! 🍽️<br><br>
+        <strong>El equipo de ${restaurantName}</strong>
       </p>
     </div>
     
