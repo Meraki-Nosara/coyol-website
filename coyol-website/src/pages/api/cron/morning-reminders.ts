@@ -63,7 +63,8 @@ async function sendRemindersForRestaurant(restaurant: 'laluna' | 'coyol', today:
       const time = formatTime12(reservation.time);
       const partySize = reservation.guests || reservation.party_size || 2;
       const cancelLink = `${cancelUrl}?token=${reservation.cancel_token}`;
-      const specialRequests = reservation.special_requests || reservation.notes || '';
+      // Only show guest-submitted special requests, NOT staff notes
+      const specialRequests = reservation.special_requests || '';
 
       const emailRes = await fetch('https://api.resend.com/emails', {
         method: 'POST',
