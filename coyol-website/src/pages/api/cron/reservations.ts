@@ -64,8 +64,8 @@ function formatTime(timeStr: string): string {
 function getConfirmationEmail(reservation: any, restaurant: 'laluna' | 'coyol') {
   const restaurantName = restaurant === 'laluna' ? 'La Luna' : 'Coyol';
   const restaurantEmail = restaurant === 'laluna' ? 'reservations@lalunanosara.com' : 'reservations@coyolrestaurant.com';
-  const phone = restaurant === 'laluna' ? '+506 8996-8221' : '+506 8818-7775';
-  const waPhone = restaurant === 'laluna' ? '50689968221' : '50688187775';
+  const phone = restaurant === 'laluna' ? '+506 8996-8221' : '+506 8632-9590';
+  const waPhone = restaurant === 'laluna' ? '50689968221' : '50686329590';
   const logoUrl = restaurant === 'laluna' 
     ? 'https://coyolnosara.com/images/logos/laluna-email-header.jpg' 
     : 'https://coyolnosara.com/images/logos/coyol-email-header.jpg';

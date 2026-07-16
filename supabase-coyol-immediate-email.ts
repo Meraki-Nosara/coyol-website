@@ -25,7 +25,7 @@ serve(async (req) => {
 
     // WhatsApp cancel message
     const waText = encodeURIComponent('Hi, I need to cancel my reservation. Name: ' + record.guest_name + ', Date: ' + dateStr + ', Time: ' + timeStr + ', Code: ' + reservationCode);
-    const cancelUrl = 'https://wa.me/50688187775?text=' + waText; // Coyol's WhatsApp number
+    const cancelUrl = 'https://wa.me/50686329590?text=' + waText; // Coyol's WhatsApp number
 
     // Gift a Friend link
     const giftFriendUrl = 'https://coyolnosara.com/coyol/gift'; // Corrected URL
@@ -75,7 +75,7 @@ serve(async (req) => {
               </tr>
               <tr>
                 <td align="center" style="padding:20px 40px 30px 40px;background:#f9f8f6;">
-                  <p style="color:#888;font-size:12px;margin:0;">Coyol Restaurant - Mar Azul, Nosara - +506 8818-7775</p>
+                  <p style="color:#888;font-size:12px;margin:0;">Coyol Restaurant - Mar Azul, Nosara - +506 8632-9590</p>
                 </td>
               </tr>
             </table>
