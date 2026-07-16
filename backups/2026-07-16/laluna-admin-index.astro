@@ -1,0 +1,4976 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import ChatWidget from '../../../components/ChatWidget.astro';
+import '../../../styles/laluna-tables.css';
+---
+
+<Layout hideFloatingButtons={true} title="Dashboard | La Luna Admin" appleTouchIcon="/laluna-apple-touch-icon.png">
+  <!-- Offline Banner -->
+  <div class="offline-banner" id="offlineBanner" style="display:none;position:fixed;top:0;left:0;right:0;background:#A65D3F;color:white;padding:8px 16px;text-align:center;z-index:9999;font-size:14px;">
+    <span style="display:inline-flex;align-items:center;gap:8px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.364 5.636a9 9 0 010 12.728m-3.536-3.536a4 4 0 010-5.656m-7.072 7.072a9 9 0 010-12.728m3.536 3.536a4 4 0 010 5.656"></path></svg>
+      <strong>Sin conexión</strong> — Los cambios se guardan localmente y se sincronizan cuando vuelva la conexión
+    </span>
+  </div>
+
+  <!-- Sync Banner -->
+  <div class="sync-banner" id="syncBanner" style="display:none;position:fixed;top:0;left:0;right:0;background:#3D4F3D;color:white;padding:8px 16px;text-align:center;z-index:9999;font-size:14px;">
+    <span style="display:inline-flex;align-items:center;gap:8px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+      Sincronizando cambios...
+    </span>
+  </div>
+  <style>.spin{animation:spin 1s linear infinite}@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}</style>
+
+  <!-- Assignment Banner -->
+  <div class="assign-banner" id="assignBanner">
+    <span>Click a table to assign the reservation</span>
+    <button onclick="cancelAssignment()">Cancel</button>
+  </div>
+
+  <div class="admin">
+    <!-- Sidebar Icons -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="/images/laluna-moon-white-real.png" alt="La Luna" />
+        <span class="version-badge">v2.3</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="/laluna/admin" class="nav-icon active" title="Dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </a>
+        <a href="/laluna/admin/floor" class="nav-icon" title="Floor Plan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+        </a>
+        <a href="/laluna/admin/guests" class="nav-icon" title="Guests">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </a>
+        <a href="/laluna/admin/gifts" class="nav-icon" title="Gift Cards">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v10H4V12"></path><path d="M2 7h20v5H2z"></path><path d="M12 22V7"></path><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+        </a>
+        <a href="/laluna/admin/settings" class="nav-icon" title="Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="/" class="nav-icon" title="View Site">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Left Panel: Reservations -->
+    <div class="left-panel">
+      <!-- Header -->
+      <div class="panel-header">
+        <button class="btn-new" onclick="openNewReservation()">+</button>
+        <button class="btn-walkin" onclick="openWalkin()">Walk-in</button>
+        <button class="btn-whatsapp-all" onclick="messageAllReservations()" title="WhatsApp all today's reservations">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          All
+        </button>
+        <button class="btn-send-reminders" onclick="sendDayReminders()" title="Email confirmation reminders to all reservations">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          Remind
+        </button>
+        <button class="btn-print" onclick="printReservations()" title="Print today's reservations" style="background:#4A5D4A;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;display:flex;align-items:center;gap:6px;color:white;font-size:13px;font-weight:500;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+          Print
+        </button>
+        <div class="res-tabs">
+          <span class="res-count" id="resCount">RESERVATIONS <strong>0</strong></span>
+          <span class="waitlist-count">WAITLIST <strong>0</strong></span>
+        </div>
+
+      </div>
+
+      <!-- Filters -->
+      <div class="filters-bar">
+        <div class="status-tabs">
+          <button class="status-tab" data-status="seated">Seated</button>
+          <button class="status-tab active" data-status="coming">Coming</button>
+        </div>
+        <select class="shift-select" id="shiftSelect">
+          <option value="all">All Shifts</option>
+          <option value="dinner1">Dinner 1 (4-7pm)</option>
+          <option value="dinner2">Dinner 2 (7pm+)</option>
+        </select>
+        <div class="stats-mini">
+          <span><span id="totalCovers">0</span> covers</span>
+          <span><span id="totalRes">0</span> res</span>
+        </div>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search name or confirmation #..." autocomplete="off" />
+        <button id="clearSearch" class="clear-search" style="display:none;">✕</button>
+        
+      </div>
+
+      <!-- Reservations List -->
+      <div class="res-list" id="resList">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Right Panel: Floor Plan -->
+    <div class="right-panel">
+      <!-- Top Bar -->
+      <div class="topbar">
+        <div class="date-nav">
+          <button id="prevDay">←</button>
+          <input type="date" id="datePicker" onchange="window.onDateChange && window.onDateChange(this.value)" />
+          <button id="nextDay">→</button>
+
+        </div>
+        <div class="zone-tabs">
+          <button class="zone-tab" data-zone="inside">INSIDE</button>
+          <button class="zone-tab active" data-zone="jardin">JARDIN</button>
+          <button class="zone-tab" data-zone="terraza">TERRAZA</button>
+        </div>
+        <div class="time-filter-dropdown">
+          <button class="time-btn" id="timeBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span id="currentTimeLabel">Current time</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="time-dropdown" id="timeDropdown">
+            <div class="time-section">
+              <div class="time-section-label">LUNCH</div>
+              <button class="time-option" data-time="12:00">12:00 PM</button>
+              <button class="time-option" data-time="12:15">12:15 PM</button>
+              <button class="time-option" data-time="12:30">12:30 PM</button>
+              <button class="time-option" data-time="12:45">12:45 PM</button>
+              <button class="time-option" data-time="13:00">1:00 PM</button>
+              <button class="time-option" data-time="13:15">1:15 PM</button>
+              <button class="time-option" data-time="13:30">1:30 PM</button>
+              <button class="time-option" data-time="13:45">1:45 PM</button>
+              <button class="time-option" data-time="14:00">2:00 PM</button>
+              <button class="time-option" data-time="14:15">2:15 PM</button>
+              <button class="time-option" data-time="14:30">2:30 PM</button>
+              <button class="time-option out-of-shift">OUT OF SHIFT</button>
+            </div>
+            <div class="time-section">
+              <div class="time-section-label">DINNER 1</div>
+              <button class="time-option" data-time="16:45">4:45 PM</button>
+              <button class="time-option" data-time="17:00">5:00 PM</button>
+              <button class="time-option" data-time="17:15">5:15 PM</button>
+              <button class="time-option" data-time="17:30">5:30 PM</button>
+              <button class="time-option" data-time="17:45">5:45 PM</button>
+              <button class="time-option" data-time="18:00">6:00 PM</button>
+              <button class="time-option" data-time="18:15">6:15 PM</button>
+              <button class="time-option out-of-shift">OUT OF SHIFT</button>
+            </div>
+            <div class="time-section">
+              <div class="time-section-label">DINNER 2</div>
+              <button class="time-option" data-time="18:30">6:30 PM</button>
+              <button class="time-option" data-time="18:45">6:45 PM</button>
+              <button class="time-option" data-time="19:00">7:00 PM</button>
+              <button class="time-option" data-time="19:15">7:15 PM</button>
+              <button class="time-option" data-time="19:30">7:30 PM</button>
+              <button class="time-option" data-time="19:45">7:45 PM</button>
+              <button class="time-option" data-time="20:00">8:00 PM</button>
+              <button class="time-option" data-time="20:15">8:15 PM</button>
+              <button class="time-option" data-time="20:30">8:30 PM</button>
+              <button class="time-option" data-time="20:45">8:45 PM</button>
+              <button class="time-option" data-time="21:00">9:00 PM</button>
+              <button class="time-option" data-time="21:30">9:30 PM</button>
+            </div>
+            <div class="time-section-footer">
+              <button class="time-option current" id="currentTimeBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><circle cx="12" cy="12" r="5"/></svg>
+                Current time
+              </button>
+            </div>
+          </div>
+        </div>
+        <a href="/laluna/admin/floor" class="config-btn">Floor configuration</a>
+      </div>
+
+      <!-- Floor Plan -->
+      <div class="floor-area" id="floorArea">
+        <div class="floor-grid" id="floorGrid"></div>
+      </div>
+    </div>
+
+    <!-- New Reservation Modal -->
+    <div class="modal" id="newResModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>New Reservation</h2>
+          <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" id="newDate" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>Time</label>
+              <select id="newTime" class="form-input">
+                <option value="08:00">8:00 AM</option>
+                <option value="08:30">8:30 AM</option>
+                <option value="09:00">9:00 AM</option>
+                <option value="09:30">9:30 AM</option>
+                <option value="10:00">10:00 AM</option>
+                <option value="10:30">10:30 AM</option>
+                <option value="11:00">11:00 AM</option>
+                <option value="11:30">11:30 AM</option>
+                <option value="12:00">12:00 PM</option>
+                <option value="12:30">12:30 PM</option>
+                <option value="13:00">1:00 PM</option>
+                <option value="13:30">1:30 PM</option>
+                <option value="14:00">2:00 PM</option>
+                <option value="14:30">2:30 PM</option>
+                <option value="15:00">3:00 PM</option>
+                <option value="15:30">3:30 PM</option>
+                <option value="16:00">4:00 PM</option>
+                <option value="16:30">4:30 PM</option>
+                <option value="17:00">5:00 PM</option>
+                <option value="17:15">5:15 PM</option>
+                <option value="17:30">5:30 PM</option>
+                <option value="18:00">6:00 PM</option>
+                <option value="18:30" selected>6:30 PM</option>
+                <option value="19:00">7:00 PM</option>
+                <option value="19:30">7:30 PM</option>
+                <option value="20:00">8:00 PM</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Guests</label>
+              <input type="number" id="newGuests" class="form-input" value="2" min="1" max="50" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group flex-2">
+              <label>Guest Name *</label>
+              <input type="text" id="newName" class="form-input" placeholder="Name" oninput="checkNewResGiftCard(this.value)" />
+              <div id="newResGiftMatch" class="gift-match-alert" style="display:none;"></div>
+            </div>
+            <div class="form-group">
+              <label>Table</label>
+              <div class="multi-table-select" id="newTableContainer">
+                <button type="button" class="table-select-btn" onclick="toggleTableDropdown('new')">
+                  <span id="newTableLabel">Select Tables</span>
+                  <span class="dropdown-arrow">▼</span>
+                </button>
+                <div class="table-dropdown" id="newTableDropdown">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+              <input type="hidden" id="newTable" value="" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Phone</label>
+              <div class="phone-input-group">
+                <select id="newPhoneCountry" class="country-select">
+                  <option value="+1" data-flag="🇺🇸">🇺🇸 +1</option>
+                  <option value="+506" data-flag="🇨🇷" selected>🇨🇷 +506</option>
+                  <option value="+52" data-flag="🇲🇽">🇲🇽 +52</option>
+                  <option value="+44" data-flag="🇬🇧">🇬🇧 +44</option>
+                  <option value="+33" data-flag="🇫🇷">🇫🇷 +33</option>
+                  <option value="+49" data-flag="🇩🇪">🇩🇪 +49</option>
+                  <option value="+34" data-flag="🇪🇸">🇪🇸 +34</option>
+                  <option value="+39" data-flag="🇮🇹">🇮🇹 +39</option>
+                  <option value="+55" data-flag="🇧🇷">🇧🇷 +55</option>
+                  <option value="+57" data-flag="🇨🇴">🇨🇴 +57</option>
+                  <option value="+81" data-flag="🇯🇵">🇯🇵 +81</option>
+                  <option value="+82" data-flag="🇰🇷">🇰🇷 +82</option>
+                  <option value="+86" data-flag="🇨🇳">🇨🇳 +86</option>
+                  <option value="+61" data-flag="🇦🇺">🇦🇺 +61</option>
+                  <option value="+31" data-flag="🇳🇱">🇳🇱 +31</option>
+                  <option value="+41" data-flag="🇨🇭">🇨🇭 +41</option>
+                  <option value="+972" data-flag="🇮🇱">🇮🇱 +972</option>
+                </select>
+                <input type="tel" id="newPhone" class="form-input phone-number" placeholder="8888-8888" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="newEmail" class="form-input" placeholder="Email" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Notes</label>
+            <textarea id="newNotes" class="form-input" rows="2" placeholder="Birthday, anniversary, allergies..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+          <button type="button" class="btn-primary" onclick="saveNewReservation(); return false;">SAVE</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Walk-in Modal -->
+    <div class="modal" id="walkinModal">
+      <div class="modal-content walkin-modal">
+        <div class="modal-header">
+          <h2>Quick Walk-in</h2>
+          <button class="modal-close" onclick="closeWalkinModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="walkin-name">
+            <label>Guest Name (optional)</label>
+            <input type="text" id="walkinName" class="form-input" placeholder="Enter name to check for gift cards..." />
+            <div id="walkinGiftMatch" class="gift-match-alert" style="display:none;"></div>
+          </div>
+          <div class="walkin-guests">
+            <label>How many guests?</label>
+            <div class="guest-buttons">
+              <button class="guest-btn" data-guests="1">1</button>
+              <button class="guest-btn" data-guests="2">2</button>
+              <button class="guest-btn" data-guests="3">3</button>
+              <button class="guest-btn active" data-guests="4">4</button>
+              <button class="guest-btn" data-guests="5">5</button>
+              <button class="guest-btn" data-guests="6">6+</button>
+            </div>
+            <input type="number" id="walkinGuestCount" value="4" min="1" max="50" class="form-input" style="display:none;" />
+          </div>
+          <div class="walkin-table">
+            <label>Table (optional)</label>
+            <select id="walkinTable" class="form-input">
+              <option value="">Auto-assign</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeWalkinModal()">Cancel</button>
+          <button class="btn-primary btn-seat" onclick="seatWalkin()">Seat Now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reservation Detail Modal -->
+    <div class="modal" id="resDetailModal">
+      <div class="modal-content detail-modal">
+        <div class="modal-header">
+          <h3 id="detailName">Guest Name</h3>
+          <span id="detailStatus" class="status-badge">confirmed</span>
+          <button class="modal-close" onclick="closeDetailModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label">Party Size</span>
+              <span class="detail-value" id="detailGuests">2 guests</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Time</span>
+              <span class="detail-value" id="detailTime">7:00 PM</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Phone</span>
+              <span class="detail-value">
+                <span id="detailPhone">+506 8888-8888</span>
+                <a id="whatsappBtn" href="#" class="whatsapp-btn" target="_blank" title="WhatsApp">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                </a>
+              </span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Email</span>
+              <span class="detail-value" id="detailEmail">guest@email.com</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Seating</span>
+              <span class="detail-value" id="detailZone">Any</span>
+            </div>
+            <div class="detail-item full-width">
+              <span class="detail-label">Notes</span>
+              <span class="detail-value" id="detailNotes">None</span>
+            </div>
+          </div>
+          
+          <!-- 3-Step Reservation Timeline -->
+          <div class="reservation-timeline" id="resTimeline">
+            <div class="timeline-step completed" id="step1">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <span class="timeline-label">Reserva creada</span>
+                <span class="timeline-meta" id="step1Meta">Website</span>
+                <span class="timeline-time" id="step1Time"></span>
+              </div>
+            </div>
+            <div class="timeline-connector"></div>
+            <div class="timeline-step" id="step2">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <span class="timeline-label">Not Confirmed</span>
+                <span class="timeline-meta" id="step2Meta">Waiting for guest</span>
+              </div>
+            </div>
+            <div class="timeline-connector"></div>
+            <div class="timeline-step" id="step3">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <span class="timeline-label">Confirmed</span>
+                <span class="timeline-time" id="step3Time"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer detail-actions" id="modalActions">
+          <!-- Active reservation buttons -->
+          <div id="activeActions">
+            <button class="btn-edit" onclick="openEditModal()">Edit</button>
+            <button class="btn-assign" id="assignBtn" onclick="startTableAssignment()">Assign Table</button>
+            <button class="btn-seat" id="seatBtn" onclick="toggleSeatStatus()">Seat</button>
+            <button class="btn-cancel" onclick="cancelReservation()">Cancel</button>
+          </div>
+          <!-- Cancelled reservation buttons -->
+          <div id="cancelledActions" style="display:none;">
+            <button class="btn-reactivate" onclick="reactivateReservation()">Reactivar Reservación</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Reservation Modal -->
+    <div class="modal" id="editResModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Edit Reservation</h2>
+          <button class="modal-close" onclick="closeEditModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" id="editDate" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>Time</label>
+              <select id="editTime" class="form-input">
+                <optgroup label="Lunch">
+                  <option value="11:00">11:00 AM</option>
+                  <option value="11:30">11:30 AM</option>
+                  <option value="12:00">12:00 PM</option>
+                  <option value="12:30">12:30 PM</option>
+                  <option value="13:00">1:00 PM</option>
+                  <option value="13:30">1:30 PM</option>
+                  <option value="14:00">2:00 PM</option>
+                  <option value="14:30">2:30 PM</option>
+                  <option value="15:00">3:00 PM</option>
+                  <option value="15:30">3:30 PM</option>
+                </optgroup>
+                <optgroup label="Dinner">
+                  <option value="16:00">4:00 PM</option>
+                  <option value="16:15">4:15 PM</option>
+                  <option value="16:30">4:30 PM</option>
+                  <option value="16:45">4:45 PM</option>
+                  <option value="17:00">5:00 PM</option>
+                  <option value="17:15">5:15 PM</option>
+                  <option value="17:30">5:30 PM</option>
+                  <option value="18:00">6:00 PM</option>
+                  <option value="18:30">6:30 PM</option>
+                  <option value="19:00">7:00 PM</option>
+                  <option value="19:30">7:30 PM</option>
+                  <option value="20:00">8:00 PM</option>
+                  <option value="20:30">8:30 PM</option>
+                  <option value="21:00">9:00 PM</option>
+                  <option value="21:30">9:30 PM</option>
+                </optgroup>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Party Size</label>
+              <input type="number" id="editGuests" class="form-input" min="1" max="50" value="2" />
+            </div>
+            <div class="form-group">
+              <label>Seating Preference</label>
+              <select id="editZone" class="form-input">
+                <option value="any">Any</option>
+                <option value="outdoor">Outdoor</option>
+                <option value="indoor">Indoor</option>
+                <option value="bar">Bar</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Guest Name</label>
+              <input type="text" id="editGuestName" class="form-input" placeholder="Guest name" />
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="editEmail" class="form-input" placeholder="Email" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Phone</label>
+              <div class="phone-input-group">
+                <select id="editPhoneCountry" class="country-select">
+                  <option value="+1" data-flag="🇺🇸">🇺🇸 +1</option>
+                  <option value="+506" data-flag="🇨🇷" selected>🇨🇷 +506</option>
+                  <option value="+52" data-flag="🇲🇽">🇲🇽 +52</option>
+                  <option value="+44" data-flag="🇬🇧">🇬🇧 +44</option>
+                  <option value="+33" data-flag="🇫🇷">🇫🇷 +33</option>
+                  <option value="+49" data-flag="🇩🇪">🇩🇪 +49</option>
+                  <option value="+34" data-flag="🇪🇸">🇪🇸 +34</option>
+                  <option value="+39" data-flag="🇮🇹">🇮🇹 +39</option>
+                  <option value="+55" data-flag="🇧🇷">🇧🇷 +55</option>
+                  <option value="+57" data-flag="🇨🇴">🇨🇴 +57</option>
+                  <option value="+81" data-flag="🇯🇵">🇯🇵 +81</option>
+                  <option value="+82" data-flag="🇰🇷">🇰🇷 +82</option>
+                  <option value="+86" data-flag="🇨🇳">🇨🇳 +86</option>
+                  <option value="+61" data-flag="🇦🇺">🇦🇺 +61</option>
+                  <option value="+31" data-flag="🇳🇱">🇳🇱 +31</option>
+                  <option value="+41" data-flag="🇨🇭">🇨🇭 +41</option>
+                  <option value="+972" data-flag="🇮🇱">🇮🇱 +972</option>
+                </select>
+                <input type="tel" id="editPhone" class="form-input phone-number" placeholder="8888-8888" />
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Notes</label>
+            <textarea id="editNotes" class="form-input" rows="2"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Tables (select multiple for large groups)</label>
+            <div class="multi-table-select" id="editTableContainer">
+              <button type="button" class="table-select-btn" onclick="toggleTableDropdown('edit')">
+                <span id="editTableLabel">Select Tables</span>
+                <span class="dropdown-arrow">▼</span>
+              </button>
+              <div class="table-dropdown" id="editTableDropdown">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+            <input type="hidden" id="editTable" value="" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeEditModal()">Cancel</button>
+          <button class="btn-primary" onclick="saveEditedReservation()">Save Changes</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    /* Land Rover Heritage Palette */
+    :root {
+      --keswick: #A65D3F;
+      --coniston: #B86B4A;
+      --limestone: #D4C9B5;
+      --sand: #C4A67C;
+      --terracotta: #A65D3F;
+      --santorini: #1A1F16;
+      --cream: #F5F3EF;
+      --parchment: #EAE5DA;
+    }
+
+    .admin {
+      display: grid;
+      grid-template-columns: 60px 380px 1fr;
+      min-height: 100vh;
+      background: var(--parchment);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: var(--santorini);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .sidebar-logo {
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--keswick);
+      margin-bottom: 1rem;
+    }
+
+    .sidebar-logo img {
+      height: 2.5rem; width: 2.5rem;
+      filter: brightness(0) invert(1);
+      opacity: 0.9;
+    }
+
+    .version-badge {
+      display: block;
+      font-size: 10px;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .nav-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--limestone);
+      border-radius: 8px;
+      transition: all 0.15s;
+    }
+
+    .nav-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .nav-icon:hover {
+      color: var(--cream);
+      background: var(--keswick);
+    }
+
+    .nav-icon.active {
+      color: var(--cream);
+      background: var(--terracotta);
+    }
+
+    .sidebar-footer {
+      border-top: 1px solid var(--keswick);
+      padding-top: 1rem;
+    }
+
+    /* Left Panel */
+    .left-panel {
+      background: var(--cream);
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--limestone);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--limestone);
+      background: var(--cream);
+    }
+
+    .btn-new {
+      width: 36px;
+      height: 36px;
+      background: var(--terracotta);
+      color: var(--cream);
+      border: none;
+      border-radius: 8px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-new:hover { background: #8B4D33; }
+
+    .btn-walkin {
+      height: 36px;
+      padding: 0 12px;
+      background: var(--keswick);
+      color: var(--cream);
+      border: none;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-walkin:hover { background: #4a5d4a; }
+
+    .walkin-modal {
+      max-width: 360px;
+    }
+
+    .walkin-guests label, .walkin-table label, .walkin-name label {
+      display: block;
+      font-size: 0.8rem;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .walkin-name {
+      margin-bottom: 20px;
+    }
+
+    .walkin-name input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0ddd5;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .gift-match-alert {
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: linear-gradient(135deg, #C4A67C22, #C4A67C11);
+      border: 1px solid #C4A67C;
+      border-radius: 8px;
+      color: #8B7355;
+      font-size: 0.9rem;
+    }
+
+    .gift-match-alert strong {
+      color: #C4A67C;
+    }
+
+    /* Gift card indicator on reservation list */
+    .gift-indicator {
+      display: inline-block;
+      font-size: 1rem;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+
+    :global(.res-row.has-gift) {
+      border-left: 3px solid #C4A67C !important;
+    }
+
+    /* Mobile table selector */
+    :global(.table-select-mobile) {
+      padding: 0.25rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid var(--limestone);
+      background: var(--cream);
+      color: var(--santorini);
+      cursor: pointer;
+      min-width: 55px;
+    }
+    :global(.table-select-mobile:focus) {
+      outline: 2px solid var(--terracotta);
+      outline-offset: 1px;
+    }
+    
+    /* Guest count selector */
+    :global(.pax-select-mobile) {
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid var(--limestone);
+      background: var(--cream);
+      color: var(--santorini);
+      cursor: pointer;
+      min-width: 48px;
+      text-align: center;
+    }
+    :global(.pax-select-mobile:focus) {
+      outline: 2px solid var(--terracotta);
+      outline-offset: 1px;
+    }
+
+    .guest-buttons {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .guest-btn {
+      flex: 1;
+      padding: 16px 0;
+      background: #f5f3ef;
+      border: 2px solid #e0ddd5;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .guest-btn:hover {
+      border-color: var(--keswick);
+    }
+    .guest-btn.active {
+      background: var(--keswick);
+      border-color: var(--keswick);
+      color: white;
+    }
+
+    .btn-seat {
+      background: var(--keswick);
+      font-size: 1rem;
+      padding: 12px 24px;
+    }
+    .btn-seat:hover {
+      background: #4a5d4a;
+    }
+    
+    .btn-whatsapp-all {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #25D366;
+      color: white;
+      border: none;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+    .btn-whatsapp-all:hover { background: #128C7E; }
+    
+    .btn-send-reminders {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #A65D3F;
+      color: white;
+      border: none;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+    .btn-send-reminders:hover { background: #8B4D33; }
+
+    .res-tabs {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .res-count, .waitlist-count {
+      font-size: 0.6875rem;
+      color: var(--keswick);
+      letter-spacing: 0.05em;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .res-count strong, .waitlist-count strong {
+      background: var(--keswick);
+      color: var(--cream);
+      padding: 0.125rem 0.375rem;
+      border-radius: 4px;
+      margin-left: 0.25rem;
+    }
+
+    .waitlist-count strong {
+      background: var(--limestone);
+      color: var(--santorini);
+    }
+
+    .search-input {
+      margin-left: auto;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--limestone);
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      width: 100px;
+      background: var(--parchment);
+    }
+
+    .filters-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--limestone);
+      background: var(--parchment);
+    }
+
+    .status-tabs {
+      display: flex;
+      background: var(--limestone);
+      border-radius: 6px;
+      padding: 2px;
+    }
+
+    .status-tab {
+      padding: 0.375rem 0.75rem;
+      border: none;
+      background: none;
+      font-size: 0.75rem;
+      color: var(--keswick);
+      cursor: pointer;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .status-tab.active {
+      background: var(--cream);
+      color: var(--santorini);
+      font-weight: 500;
+    }
+
+    .shift-select {
+      padding: 0.375rem 0.5rem;
+      border: 1px solid var(--limestone);
+      border-radius: 6px;
+      font-size: 0.75rem;
+      background: var(--cream);
+      color: var(--santorini);
+    }
+
+    .stats-mini {
+      margin-left: auto;
+      display: flex;
+      gap: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--keswick);
+    }
+
+    .stats-mini span {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    /* Search Bar */
+    .search-bar {
+      padding: 0.75rem 1rem;
+      background: var(--cream);
+      border-bottom: 1px solid var(--limestone);
+      position: relative;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 0.6rem 2rem 0.6rem 0.75rem;
+      border: 1px solid var(--limestone);
+      border-radius: 6px;
+      font-size: 0.875rem;
+      background: white;
+    }
+
+    .search-bar input:focus {
+      outline: none;
+      border-color: var(--terracotta);
+    }
+
+    .clear-search {
+      position: absolute;
+      right: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #999;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0.25rem;
+    }
+
+    .clear-search:hover {
+      color: var(--terracotta);
+    }
+
+    /* Reservations List */
+    .res-list {
+      flex: 1;
+      overflow-y: auto;
+      background: var(--cream);
+    }
+
+    .shift-group {
+      border-bottom: 1px solid var(--limestone);
+      margin-bottom: 0.5rem;
+    }
+
+    .shift-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      background: linear-gradient(135deg, #1a1f16 0%, #2d3428 100%);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: 6px 6px 0 0;
+      margin: 0.5rem 0.5rem 0 0.5rem;
+    }
+
+    .shift-header .stats {
+      display: flex;
+      gap: 1rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.85);
+      font-size: 0.8rem;
+    }
+    
+    .shift-header .stats span {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    /* Reservation Rows - Clean Aligned Columns */
+    :global(.res-row) {
+      display: grid;
+      grid-template-columns: 55px 70px minmax(80px, 1fr) 42px 58px 32px;
+      gap: 0.5rem;
+      padding: 0.75rem 0.75rem;
+      margin: 0.375rem 0.5rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      cursor: pointer;
+      align-items: center;
+      transition: all 0.15s;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    :global(.res-row.has-note) {
+      border-radius: 8px 8px 0 0;
+      margin-bottom: 0;
+    }
+    
+    :global(.res-note-row) {
+      padding: 0.375rem 0.75rem 0.625rem;
+      margin: 0 0.5rem 0.375rem;
+      background: white;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border: 1px solid rgba(0,0,0,0.05);
+      border-top: none;
+    }
+
+    :global(.res-row:hover) {
+      background: #faf8f5;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      transform: translateY(-1px);
+    }
+
+    :global(.res-row.seated) {
+      background: rgba(61, 79, 61, 0.08);
+    }
+
+    :global(.res-code) {
+      font-family: monospace;
+      font-size: 11px;
+      color: #888;
+      background: #f5f5f5;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+
+    :global(.res-row.cancelled) {
+      opacity: 0.4;
+      background: #f5f5f5;
+    }
+
+    :global(.res-row.cancelled .res-name) {
+      text-decoration: line-through;
+      color: #999;
+    }
+
+    :global(.res-row.cancelled .res-time) {
+      color: #999;
+    }
+
+    :global(.res-time) {
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 0.8125rem;
+      color: var(--santorini);
+      padding-top: 2px;
+    }
+
+    :global(.res-main) {
+      min-width: 0;
+    }
+
+    :global(.res-name) {
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--santorini);
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    :global(.res-pax) {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.8125rem;
+      color: var(--keswick);
+      font-family: 'Inter', sans-serif;
+      justify-content: center;
+    }
+
+    :global(.res-pax svg) {
+      opacity: 0.7;
+    }
+
+    :global(.table-badge) {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.02em;
+    }
+
+    :global(.table-badge.assigned) {
+      background: var(--keswick);
+      color: white;
+    }
+
+    :global(.table-badge.unassigned) {
+      background: #f3f4f6;
+      color: #666;
+      font-weight: 500;
+    }
+
+    :global(.res-note) {
+      font-size: 0.6875rem;
+      color: #92400e;
+      background: #fef3c7;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      border-left: 2px solid #f59e0b;
+      margin-left: 75px;
+      display: inline-block;
+    }
+
+    :global(.res-actions-mini) {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    :global(.action-icon) {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--limestone);
+      background: var(--cream);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--keswick);
+      transition: all 0.1s;
+    }
+
+    :global(.action-icon:hover) {
+      background: var(--parchment);
+      border-color: var(--sand);
+    }
+
+    /* Right Panel */
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      background: var(--limestone);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.5rem 1rem;
+      background: var(--cream);
+      border-bottom: 1px solid var(--limestone);
+    }
+
+    .date-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .date-nav button {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--limestone);
+      background: var(--cream);
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--santorini);
+    }
+
+    .date-nav button:hover { background: var(--parchment); }
+
+    .date-nav span {
+      font-size: 0.875rem;
+      font-weight: 500;
+      min-width: 100px;
+      text-align: center;
+      color: var(--santorini);
+      font-family: 'Playfair Display', serif;
+    }
+
+    .zone-tabs {
+      display: flex;
+      gap: 0.25rem;
+      margin-left: 1rem;
+    }
+
+    .zone-tab {
+      padding: 0.375rem 0.75rem;
+      border: none;
+      background: none;
+      font-size: 0.6875rem;
+      letter-spacing: 0.05em;
+      color: var(--keswick);
+      cursor: pointer;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .zone-tab:hover { background: var(--parchment); }
+    .zone-tab.active { background: var(--keswick); color: var(--cream); }
+
+    /* Time Filter Dropdown */
+    .time-filter-dropdown {
+      margin-left: auto;
+      position: relative;
+    }
+
+    .time-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--limestone);
+      background: var(--cream);
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      color: var(--santorini);
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.15s;
+    }
+
+    .time-btn:hover {
+      background: var(--parchment);
+      border-color: var(--sand);
+    }
+
+    .time-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 0.5rem;
+      background: white;
+      border: 1px solid var(--limestone);
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      z-index: 100;
+      min-width: 180px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .time-dropdown.open {
+      display: block;
+    }
+
+    .time-section {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--limestone);
+    }
+
+    .time-section:last-of-type {
+      border-bottom: none;
+    }
+
+    .time-section-label {
+      padding: 0.375rem 1rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      color: var(--keswick);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .time-option {
+      display: block;
+      width: 100%;
+      padding: 0.5rem 1rem;
+      border: none;
+      background: none;
+      text-align: left;
+      font-size: 0.8125rem;
+      color: var(--santorini);
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.1s;
+    }
+
+    .time-option:hover {
+      background: var(--parchment);
+    }
+
+    .time-option.active {
+      background: var(--keswick);
+      color: white;
+    }
+
+    .time-option.out-of-shift {
+      color: var(--limestone);
+      font-style: italic;
+      cursor: default;
+      background: #f5f5f5;
+    }
+
+    .time-option.current {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--keswick);
+      font-weight: 500;
+    }
+
+    .time-section-footer {
+      padding: 0.5rem;
+      border-top: 1px solid var(--limestone);
+      background: var(--parchment);
+    }
+
+    .time-section-footer .time-option {
+      border-radius: 4px;
+    }
+
+    .time-section-footer .time-option:hover {
+      background: var(--limestone);
+    }
+
+    .config-btn {
+      font-size: 0.75rem;
+      color: var(--terracotta);
+      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .config-btn:hover { color: #8B4D33; }
+
+    /* Floor Area */
+    .floor-area {
+      flex: 1;
+      padding: 1rem;
+      overflow: auto;
+    }
+
+    .floor-grid {
+      background: var(--cream);
+      border-radius: 8px;
+      min-height: 500px;
+      position: relative;
+      border: 1px solid var(--limestone);
+    }
+
+    /* Tables on floor - 3D realistic style */
+    :global(.floor-grid .table) {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.625rem;
+      text-align: center;
+      z-index: 1;
+    }
+    
+    :global(.floor-grid .table::before),
+    :global(.floor-grid .table::after) {
+      pointer-events: none;
+    }
+    
+    /* Table buttons - floating clickable elements */
+    :global(.table-btn) {
+      position: absolute;
+      border: none;
+      background: #8B5E3C;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.625rem;
+      padding: 8px;
+      transition: all 0.15s;
+      z-index: 1;
+      width: 55px;
+      height: 55px;
+      border-radius: 6px;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 3px 8px rgba(0,0,0,0.2);
+    }
+    
+    :global(.table-btn:hover) {
+      transform: scale(1.08);
+      z-index: 10;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    :global(.table-btn:active) {
+      transform: scale(1.02);
+    }
+    
+    /* Table shapes - colors EXACTLY match Settings page */
+    /* Square (2-top) = Brown #8B5E3C */
+    :global(.table-btn.square) {
+      width: 55px !important;
+      height: 55px !important;
+      border-radius: 6px !important;
+      background: #8B5E3C !important;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 3px 8px rgba(0,0,0,0.2) !important;
+    }
+    
+    /* Round (4-top) = Brown #8B5E3C */
+    :global(.table-btn.round) {
+      width: 50px !important;
+      height: 50px !important;
+      border-radius: 50% !important;
+      background: #8B5E3C !important;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 3px 8px rgba(0,0,0,0.2) !important;
+    }
+    
+    /* Round Large = Brown #8B5E3C */
+    :global(.table-btn.round-lg) {
+      width: 65px !important;
+      height: 65px !important;
+      border-radius: 50% !important;
+      background: #8B5E3C !important;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 3px 8px rgba(0,0,0,0.2) !important;
+    }
+    
+    /* Round XL = Brown #8B5E3C */
+    :global(.table-btn.round-xl) {
+      width: 80px !important;
+      height: 80px !important;
+      border-radius: 50% !important;
+      background: #8B5E3C !important;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 3px 8px rgba(0,0,0,0.2) !important;
+    }
+    
+    /* Sofa/Lounge = Sage Green #6B8E6B */
+    :global(.table-btn.sofa) {
+      width: 70px !important;
+      height: 45px !important;
+      border-radius: 12px 12px 6px 6px !important;
+      background: #6B8E6B !important;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 3px 8px rgba(0,0,0,0.2) !important;
+    }
+    
+    /* Diamond/Fantasma = Brown #8B5E3C (same as tables) */
+    :global(.table-btn.diamond) {
+      width: 50px !important;
+      height: 50px !important;
+      border-radius: 6px !important;
+      background: #8B5E3C !important;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 3px 8px rgba(0,0,0,0.2) !important;
+      transform: rotate(45deg) !important;
+    }
+    
+    :global(.table-btn.diamond .tbl-name),
+    :global(.table-btn.diamond .tbl-guest),
+    :global(.table-btn.diamond .tbl-time),
+    :global(.table-btn.diamond .tbl-pax) {
+      transform: rotate(-45deg);
+    }
+    
+    /* Long/Rect table = Brown #8B5E3C */
+    :global(.table-btn.rect) {
+      width: 90px;
+      height: 45px;
+      border-radius: 6px;
+      background: #8B5E3C;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 3px 8px rgba(0,0,0,0.2);
+    }
+    
+    /* Bar/Communal = Brown #8B5E3C */
+    :global(.table-btn.bar) {
+      width: 100px;
+      height: 35px;
+      border-radius: 4px;
+      background: #8B5E3C;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 3px 8px rgba(0,0,0,0.2);
+    }
+    
+    :global(.table-btn.bar .tbl-name) { color: white; }
+    
+    /* Tree/Palm decorations */
+    :global(.table-btn.tree) {
+      width: 50px !important;
+      height: 50px !important;
+      border-radius: 50% !important;
+      background: radial-gradient(circle at 40% 35%, #5a8f5a 0%, #3d6b3d 40%, #2d4f2d 70%, #1f3d1f 100%) !important;
+      border: 2px solid #2d4f2d !important;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3), inset 0 -4px 8px rgba(0,0,0,0.2) !important;
+      pointer-events: none;
+    }
+    :global(.table-btn.tree .tbl-name) { display: none; }
+    
+    :global(.table-btn.palm) {
+      width: 45px !important;
+      height: 55px !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      font-size: 2.5rem;
+      pointer-events: none;
+    }
+    :global(.table-btn.palm::before) {
+      content: '🌴';
+    }
+    :global(.table-btn.palm .tbl-name) { display: none; }
+    
+    /* Assignment mode - available tables pulse green */
+    :global(.table-btn.available) {
+      animation: pulse-available 0.6s infinite;
+      z-index: 50;
+    }
+    
+    @keyframes pulse-available {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+      50% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); transform: scale(1.05); }
+    }
+    
+    /* Occupied tables during assignment - dimmed but clickable for feedback */
+    :global(.table-btn.occupied) {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    
+    /* Flash when table is successfully assigned */
+    :global(.table-btn.just-assigned) {
+      animation: flash-assigned 0.5s ease-out 3;
+    }
+    
+    @keyframes flash-assigned {
+      0%, 100% { background: inherit; }
+      50% { background: #28a745 !important; box-shadow: 0 0 20px #28a745; }
+    }
+    
+    /* Status colors - BRIGHT for visibility - HIGH SPECIFICITY */
+    :global(.floor-grid .table-btn[data-status="confirmed"]),
+    :global(.table-btn.square[data-status="confirmed"]),
+    :global(.table-btn.round[data-status="confirmed"]),
+    :global(.table-btn.round-lg[data-status="confirmed"]),
+    :global(.table-btn.round-xl[data-status="confirmed"]),
+    :global(.table-btn.sofa[data-status="confirmed"]),
+    :global(.table-btn.diamond[data-status="confirmed"]),
+    :global(.table-btn.rect[data-status="confirmed"]),
+    :global(.table-btn.bar[data-status="confirmed"]) {
+      background: #4CAF50 !important;
+      box-shadow: 0 0 12px rgba(76, 175, 80, 0.6) !important;
+    }
+    
+    :global(.floor-grid .table-btn[data-status="seated"]),
+    :global(.table-btn.square[data-status="seated"]),
+    :global(.table-btn.round[data-status="seated"]),
+    :global(.table-btn.round-lg[data-status="seated"]),
+    :global(.table-btn.round-xl[data-status="seated"]),
+    :global(.table-btn.sofa[data-status="seated"]),
+    :global(.table-btn.diamond[data-status="seated"]),
+    :global(.table-btn.rect[data-status="seated"]),
+    :global(.table-btn.bar[data-status="seated"]) {
+      background: #2196F3 !important;
+      box-shadow: 0 0 12px rgba(33, 150, 243, 0.6) !important;
+    }
+    
+    /* Table content - compact layout */
+    :global(.tbl-name) {
+      font-weight: 700;
+      color: #fff;
+      font-size: 0.5625rem;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      line-height: 1.1;
+    }
+    
+    :global(.tbl-guest) {
+      font-weight: 700;
+      color: #fff;
+      font-size: 0.6875rem;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      line-height: 1.1;
+    }
+    
+    :global(.tbl-time) {
+      font-size: 0.5625rem;
+      color: rgba(255,255,255,0.9);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+      line-height: 1.1;
+    }
+    
+    :global(.tbl-pax) {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      font-size: 0.5rem;
+      color: #333;
+      background: rgba(255,255,255,0.95);
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+    
+    :global(.tbl-multi) {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #0066cc;
+      color: white;
+      font-size: 0.5625rem;
+      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    :global(.floor-grid .table:hover) {
+      transform: scale(1.05);
+      z-index: 10;
+      cursor: pointer;
+    }
+
+    :global(.floor-grid .table:active) {
+      cursor: pointer;
+    }
+
+    :global(.floor-grid .table-label) {
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      z-index: 2;
+    }
+
+    :global(.floor-grid .table-time) {
+      font-size: 0.5625rem;
+      color: var(--cream);
+      background: var(--terracotta);
+      padding: 2px 6px;
+      border-radius: 3px;
+      margin-top: 2px;
+      font-weight: 500;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      z-index: 2;
+    }
+    
+    :global(.floor-grid .table-guest) {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      max-width: 60px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+    
+    :global(.floor-grid .table-pax) {
+      font-size: 0.5625rem;
+      font-weight: 600;
+      color: #666;
+      background: rgba(255,255,255,0.7);
+      padding: 1px 4px;
+      border-radius: 3px;
+      margin-top: 1px;
+    }
+    
+    :global(.floor-grid .table-multi) {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #0066cc;
+      color: white;
+      font-size: 0.625rem;
+      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    /* === SQUARE TABLE (wooden top with legs shadow) === */
+    :global(.floor-grid .table.square) {
+      width: 60px;
+      height: 60px;
+      border-radius: 6px;
+      background: linear-gradient(145deg, #d4a574 0%, #b8956a 50%, #a68558 100%);
+      border: 3px solid #8b6914;
+      box-shadow: 
+        0 4px 8px rgba(0,0,0,0.3),
+        inset 0 2px 4px rgba(255,255,255,0.2),
+        inset 0 -2px 4px rgba(0,0,0,0.1);
+    }
+    :global(.floor-grid .table.square::before) {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 8px;
+      background: rgba(0,0,0,0.15);
+      border-radius: 50%;
+      filter: blur(3px);
+    }
+    :global(.floor-grid .table.square .table-label) { color: #3d2914; }
+
+    /* === ROUND TABLE (elegant with rim) === */
+    :global(.floor-grid .table.round) {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #e8dcc8 0%, #d4c9b5 40%, #c4b8a0 100%);
+      border: 4px solid #a69880;
+      box-shadow: 
+        0 5px 10px rgba(0,0,0,0.25),
+        inset 0 3px 6px rgba(255,255,255,0.4),
+        inset 0 -3px 6px rgba(0,0,0,0.1);
+    }
+    :global(.floor-grid .table.round::before) {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 10px;
+      background: rgba(0,0,0,0.12);
+      border-radius: 50%;
+      filter: blur(4px);
+    }
+    :global(.floor-grid .table.round .table-label) { color: #4a4035; }
+
+    :global(.floor-grid .table.round-lg) {
+      width: 75px;
+      height: 75px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #e8dcc8 0%, #d4c9b5 40%, #c4b8a0 100%);
+      border: 4px solid #a69880;
+      box-shadow: 
+        0 6px 12px rgba(0,0,0,0.25),
+        inset 0 4px 8px rgba(255,255,255,0.4),
+        inset 0 -4px 8px rgba(0,0,0,0.1);
+    }
+    :global(.floor-grid .table.round-lg::before) {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 55px;
+      height: 12px;
+      background: rgba(0,0,0,0.12);
+      border-radius: 50%;
+      filter: blur(5px);
+    }
+    :global(.floor-grid .table.round-lg .table-label) { color: #4a4035; font-size: 0.75rem; }
+
+    :global(.floor-grid .table.round-xl) {
+      width: 95px;
+      height: 95px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #e8dcc8 0%, #d4c9b5 40%, #c4b8a0 100%);
+      border: 5px solid #a69880;
+      box-shadow: 
+        0 8px 16px rgba(0,0,0,0.25),
+        inset 0 5px 10px rgba(255,255,255,0.4),
+        inset 0 -5px 10px rgba(0,0,0,0.1);
+    }
+    :global(.floor-grid .table.round-xl::before) {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70px;
+      height: 14px;
+      background: rgba(0,0,0,0.12);
+      border-radius: 50%;
+      filter: blur(6px);
+    }
+    :global(.floor-grid .table.round-xl .table-label) { color: #4a4035; font-size: 0.875rem; }
+
+    /* === SOFA (cushioned with tufting) === */
+    :global(.floor-grid .table.sofa) {
+      width: 85px;
+      height: 50px;
+      border-radius: 25px;
+      background: linear-gradient(180deg, #6b5b4f 0%, #5a4a3f 50%, #4a3a2f 100%);
+      border: 3px solid #3d2d22;
+      box-shadow: 
+        0 6px 12px rgba(0,0,0,0.35),
+        inset 0 3px 6px rgba(255,255,255,0.15),
+        inset 0 -4px 8px rgba(0,0,0,0.2);
+    }
+    /* Cushion details */
+    :global(.floor-grid .table.sofa::before) {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 10px;
+      right: 10px;
+      height: 20px;
+      background: linear-gradient(180deg, #7d6d5f 0%, #6b5b4f 100%);
+      border-radius: 10px;
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.2);
+    }
+    :global(.floor-grid .table.sofa::after) {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70px;
+      height: 10px;
+      background: rgba(0,0,0,0.15);
+      border-radius: 50%;
+      filter: blur(4px);
+    }
+    :global(.floor-grid .table.sofa .table-label) { color: #e8dcc8; font-size: 0.5625rem; z-index: 3; margin-top: 12px; }
+
+    /* === DIAMOND TABLE (rotated elegant) === */
+    :global(.floor-grid .table.diamond) {
+      width: 55px;
+      height: 55px;
+      border-radius: 6px;
+      transform: rotate(45deg);
+      background: linear-gradient(145deg, #c4a67c 0%, #b8956a 50%, #a68558 100%);
+      border: 3px solid #8b7040;
+      box-shadow: 
+        0 5px 10px rgba(0,0,0,0.3),
+        inset 0 2px 4px rgba(255,255,255,0.25);
+    }
+    :global(.floor-grid .table.diamond .table-label),
+    :global(.floor-grid .table.diamond .table-time) { transform: rotate(-45deg); }
+    :global(.floor-grid .table.diamond .table-label) { color: #3d2914; }
+
+    /* === COMMUNAL/LONG TABLE === */
+    :global(.floor-grid .table.communal) {
+      width: 170px;
+      height: 55px;
+      border-radius: 8px;
+      background: linear-gradient(145deg, #d4a574 0%, #b8956a 50%, #a68558 100%);
+      border: 4px solid #8b6914;
+      box-shadow: 
+        0 5px 10px rgba(0,0,0,0.3),
+        inset 0 3px 6px rgba(255,255,255,0.2),
+        inset 0 -3px 6px rgba(0,0,0,0.1);
+    }
+    :global(.floor-grid .table.communal .table-label) { color: #3d2914; font-size: 0.75rem; }
+
+    /* === TACOY/RECTANGULAR TABLE === */
+    :global(.floor-grid .table.square-xl) {
+      width: 55px;
+      height: 90px;
+      border-radius: 6px;
+      background: linear-gradient(145deg, #d4a574 0%, #b8956a 50%, #a68558 100%);
+      border: 3px solid #8b6914;
+      box-shadow: 
+        0 5px 10px rgba(0,0,0,0.3),
+        inset 0 2px 4px rgba(255,255,255,0.2);
+    }
+    :global(.floor-grid .table.square-xl .table-label) { color: #3d2914; }
+
+    /* === BAR (dark wood counter) === */
+    :global(.floor-grid .table.bar) {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      background: linear-gradient(145deg, #4a3a2f 0%, #3d2d22 50%, #2d1d14 100%);
+      border: 4px solid #1a1008;
+      box-shadow: 
+        0 6px 12px rgba(0,0,0,0.4),
+        inset 0 3px 6px rgba(255,255,255,0.1),
+        inset 0 -4px 8px rgba(0,0,0,0.2);
+    }
+    /* Bar top shine */
+    :global(.floor-grid .table.bar::before) {
+      content: '';
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      right: 6px;
+      bottom: 6px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+      border-radius: 4px;
+    }
+    :global(.floor-grid .table.bar .table-label) { color: #c4a67c; font-size: 0.75rem; font-weight: 700; }
+
+    /* Rectangular / Long Wood Table */
+    :global(.floor-grid .table.rect) {
+      width: 140px; height: 55px; border-radius: 6px;
+      background: linear-gradient(145deg, #d4a574 0%, #b8956a 50%, #a68558 100%);
+      border: 3px solid #8b6914;
+      box-shadow: 
+        0 5px 10px rgba(0,0,0,0.3),
+        inset 0 3px 6px rgba(255,255,255,0.2),
+        inset 0 -3px 6px rgba(0,0,0,0.1);
+    }
+    :global(.floor-grid .table.rect .table-label) { color: #3d2914; font-size: 0.75rem; }
+
+    /* === STATUS OVERLAYS === */
+    :global(.floor-grid .table[data-status="confirmed"]) {
+      outline: 3px solid var(--terracotta);
+      outline-offset: 2px;
+    }
+    :global(.floor-grid .table[data-status="seated"]) {
+      outline: 3px solid var(--keswick) !important;
+      outline-offset: 2px;
+      background: rgba(61, 79, 61, 0.15) !important;
+    }
+    :global(.floor-grid .table[data-status="seated"]::after) {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(61, 79, 61, 0.3);
+      border-radius: inherit;
+      z-index: 1;
+    }
+
+    /* Decorations - Trees & Plants */
+    :global(.floor-grid .table.tree) {
+      width: 65px; height: 65px; border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #5a8f5a 0%, #3d6b3d 40%, #2d4f2d 70%, #1f3d1f 100%);
+      border: 3px solid #2d4f2d;
+      box-shadow: 
+        0 6px 12px rgba(0,0,0,0.3),
+        inset 0 -8px 16px rgba(0,0,0,0.2),
+        inset 0 4px 12px rgba(150,200,150,0.3);
+    }
+    :global(.floor-grid .table.tree .table-label) { display: none; }
+
+    :global(.floor-grid .table.palm) {
+      width: 60px; height: 70px; border-radius: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      font-size: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    :global(.floor-grid .table.palm::before) {
+      content: '🌴';
+      font-size: 3rem;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+    }
+    :global(.floor-grid .table.palm .table-label) { display: none; }
+
+    :global(.floor-grid .table.plant) {
+      width: 45px; height: 45px; border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #7cb87c 0%, #5a9f5a 50%, #3d7d3d 100%);
+      border: 3px solid #4a6b4a;
+      box-shadow: 
+        0 4px 8px rgba(0,0,0,0.25),
+        inset 0 3px 8px rgba(180,220,180,0.4);
+    }
+    :global(.floor-grid .table.plant .table-label) { display: none; }
+
+    :global(.floor-grid .table.flower) {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #f0a0a0 0%, #e07070 50%, #c05050 100%);
+      border: 3px solid #a04040;
+      box-shadow: 
+        0 4px 8px rgba(0,0,0,0.25),
+        inset 0 3px 8px rgba(255,200,200,0.5);
+    }
+    :global(.floor-grid .table.flower .table-label) { display: none; }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 31, 22, 0.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.open { display: flex; }
+
+    .modal-content {
+      background: var(--cream);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 480px;
+      border: 1px solid var(--limestone);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      border-bottom: 1px solid var(--limestone);
+      background: var(--parchment);
+    }
+
+    .modal-header h2 { font-size: 1rem; font-weight: 500; font-family: 'Playfair Display', serif; color: var(--santorini); }
+    .modal-close { background: none; border: none; font-size: 1.5rem; color: var(--keswick); cursor: pointer; }
+
+    .modal-body { padding: 1rem; }
+    .modal-footer { display: flex; gap: 0.5rem; padding: 1rem; border-top: 1px solid var(--limestone); justify-content: flex-end; }
+
+    /* Detail Modal */
+    .detail-modal { max-width: 400px; }
+    .detail-modal .modal-header { display: flex; align-items: center; gap: 1rem; }
+    .detail-modal .modal-header h3 { flex: 1; }
+    .status-badge { padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.75rem; text-transform: uppercase; font-weight: 600; }
+    .status-badge.confirmed { background: #d4edda; color: #155724; }
+    .status-badge.seated { background: #cce5ff; color: #004085; }
+    .status-badge.cancelled { background: #f8d7da; color: #721c24; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    
+    /* 3-Step Reservation Timeline */
+    .reservation-timeline {
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--limestone);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    .timeline-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      flex: 1;
+      position: relative;
+    }
+    .timeline-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--limestone);
+      border: 3px solid var(--limestone);
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 2;
+    }
+    .timeline-step.completed .timeline-dot {
+      background: var(--keswick);
+      border-color: var(--keswick);
+    }
+    .timeline-step.completed .timeline-dot::after {
+      content: '✓';
+      color: white;
+      font-size: 0.75rem;
+      font-weight: bold;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .timeline-step.current .timeline-dot {
+      background: white;
+      border-color: var(--terracotta);
+      box-shadow: 0 0 0 4px rgba(166, 93, 63, 0.2);
+    }
+    .timeline-connector {
+      flex: 0.5;
+      height: 3px;
+      background: var(--limestone);
+      margin-top: 12px;
+    }
+    .timeline-step.completed + .timeline-connector {
+      background: var(--keswick);
+    }
+    .timeline-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.125rem;
+    }
+    .timeline-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--santorini);
+    }
+    .timeline-meta {
+      font-size: 0.625rem;
+      color: var(--keswick);
+    }
+    .timeline-time {
+      font-size: 0.625rem;
+      color: #666;
+    }
+    .detail-item { display: flex; flex-direction: column; gap: 0.25rem; }
+    .detail-item.full-width { grid-column: 1 / -1; }
+    .detail-label { font-size: 0.6875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
+    .detail-value { font-size: 0.9375rem; color: var(--santorini); }
+    .detail-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+    #activeActions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; width: 100%; }
+    .btn-edit { background: var(--sand); color: var(--santorini); border: none; padding: 0.75rem 0.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; font-size: 0.8125rem; }
+    .btn-edit:hover { background: #d4b68c; }
+    .btn-assign { background: #f59e0b; color: white; border: none; padding: 0.75rem 0.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; font-size: 0.8125rem; }
+    .btn-assign:hover { background: #d97706; }
+    .btn-seat { background: var(--terracotta); color: white; border: none; padding: 0.75rem 0.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; font-size: 0.8125rem; }
+    .btn-seat:hover { opacity: 0.9; }
+    .btn-seat.active { background: #0066cc; }
+    .btn-cancel { background: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 0.75rem 0.5rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.8125rem; }
+    .btn-cancel:hover { background: #dc3545; color: white; }
+    .btn-reactivate { background: #10b981; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
+    .btn-reactivate:hover { background: #059669; }
+    
+    .whatsapp-btn { 
+      display: none; /* JS sets to inline-flex when phone exists */
+      align-items: center; 
+      margin-left: 8px; 
+      padding: 6px 10px;
+      background: #25D366; 
+      border-radius: 8px;
+      text-decoration: none;
+      vertical-align: middle;
+      gap: 4px;
+    }
+    .whatsapp-btn::after { content: 'WhatsApp'; font-size: 0.75rem; color: white; font-weight: 500; }
+    .whatsapp-btn:hover { background: #128C7E; }
+    .whatsapp-btn svg { fill: white; width: 18px; height: 18px; }
+    
+    .whatsapp-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: #25D366;
+      border-radius: 50%;
+      text-decoration: none;
+    }
+    .whatsapp-icon:hover { background: #128C7E; transform: scale(1.1); }
+    .whatsapp-icon svg { fill: white; }
+    
+    /* Assignment mode */
+    :global(.floor-grid.assigning .table:not(.occupied)) {
+      cursor: pointer !important;
+      animation: pulse-assign 0.5s infinite;
+      outline: 4px solid #00ff00;
+      outline-offset: 4px;
+    }
+    
+    :global(.floor-grid.assigning .table:not(.occupied):hover) {
+      transform: scale(1.2) !important;
+      box-shadow: 0 0 30px rgba(0, 255, 0, 0.9) !important;
+      outline: 4px solid #00ff00;
+      background: rgba(0, 255, 0, 0.5) !important;
+    }
+    
+    :global(.floor-grid.assigning .table.occupied) {
+      opacity: 0.4;
+      cursor: not-allowed !important;
+    }
+    
+    @keyframes pulse-assign {
+      0%, 100% { 
+        box-shadow: 0 0 15px rgba(0, 255, 0, 0.6); 
+        outline-color: #00ff00; 
+      }
+      50% { 
+        box-shadow: 0 0 40px rgba(0, 255, 0, 1); 
+        outline-color: #80ff80; 
+      }
+    }
+    
+    :global(.floor-grid .table.just-assigned) {
+      animation: assigned-flash 1s ease !important;
+      outline: 4px solid #00ff00 !important;
+      outline-offset: 4px;
+    }
+    
+    @keyframes assigned-flash {
+      0% { transform: scale(1); background: inherit; }
+      25% { transform: scale(1.3); background: #00ff00; }
+      50% { transform: scale(1.15); background: #80ff80; }
+      100% { transform: scale(1); background: inherit; }
+    }
+    .assign-banner { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #0066cc; color: white; padding: 1rem 2rem; text-align: center; z-index: 1000; display: none; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    .assign-banner.show { display: flex; justify-content: center; align-items: center; gap: 1rem; }
+    .assign-banner button { background: white; color: #0066cc; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-weight: 600; }
+    .table.just-assigned { animation: flash-green 0.5s ease-out 3; }
+    @keyframes flash-green { 0%, 100% { background: inherit; } 50% { background: #28a745 !important; } }
+    
+    /* Table popup */
+    #tablePopup { font-size: 0.875rem; }
+    #tablePopup .popup-header { background: var(--santorini); color: white; padding: 0.5rem 0.75rem; font-weight: 600; }
+    #tablePopup .popup-list { padding: 0.5rem; }
+    #tablePopup .popup-res { display: flex; gap: 0.5rem; padding: 0.4rem; border-radius: 4px; margin-bottom: 0.25rem; }
+    #tablePopup .popup-res.confirmed { background: #d4edda; }
+    #tablePopup .popup-res.seated { background: #cce5ff; }
+    #tablePopup .popup-time { font-weight: 600; min-width: 70px; }
+    #tablePopup .popup-name { flex: 1; }
+    #tablePopup .popup-guests { color: #666; }
+    
+    /* Table Action Popup (Eatapp-style) */
+    .table-action-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      z-index: 2000;
+      min-width: 300px;
+      max-width: 90vw;
+      overflow: hidden;
+    }
+    .tap-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #eee;
+    }
+    .tap-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1a1f16;
+    }
+    .tap-close {
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      color: #999;
+      cursor: pointer;
+      padding: 0.25rem;
+    }
+    .tap-close:hover { color: #333; }
+    .tap-body {
+      padding: 1rem 1.25rem;
+    }
+    .tap-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1.5rem;
+      color: #999;
+      font-size: 0.9rem;
+    }
+    .tap-reservations {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .tap-res {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: #f8f6f3;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .tap-res:hover { background: #efe9e1; }
+    .tap-res-time {
+      font-weight: 600;
+      color: var(--terracotta);
+      min-width: 70px;
+    }
+    .tap-res-name {
+      flex: 1;
+      color: #1a1f16;
+    }
+    .tap-res-guests {
+      color: #666;
+      font-size: 0.875rem;
+    }
+    .tap-actions {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid #eee;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .tap-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.875rem 1rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+    }
+    .tap-btn-create {
+      background: #3D4F3D;
+      color: white;
+    }
+    .tap-btn-create:hover { background: #4A5D4A; }
+    .tap-btn-clear {
+      background: #A65D3F;
+      color: white;
+    }
+    .tap-btn-clear:hover { background: #8B4D35; }
+    
+    /* Selected states */
+    .res-row.selected { background: rgba(166, 93, 63, 0.15); border-left: 3px solid var(--terracotta); }
+    .table.selected { box-shadow: 0 0 0 3px var(--terracotta), 0 0 10px rgba(166, 93, 63, 0.4); }
+
+    .form-row { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; }
+    .form-group { flex: 1; }
+    .form-group.flex-2 { flex: 2; }
+    .form-group label { display: block; font-size: 0.6875rem; color: var(--keswick); margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Inter', sans-serif; }
+    .form-input { width: 100%; padding: 0.5rem; border: 1px solid var(--limestone); border-radius: 4px; font-size: 0.875rem; background: var(--cream); color: var(--santorini); }
+    
+    /* Multi-table select */
+    .multi-table-select { position: relative; }
+    .table-select-btn { width: 100%; padding: 0.5rem; border: 1px solid var(--limestone); border-radius: 4px; font-size: 0.875rem; background: var(--cream); color: var(--santorini); display: flex; justify-content: space-between; align-items: center; cursor: pointer; text-align: left; }
+    .table-select-btn:hover { border-color: var(--keswick); }
+    .dropdown-arrow { font-size: 0.6rem; color: #666; }
+    .table-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid var(--limestone); border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 100; max-height: 280px; overflow-y: auto; margin-top: 2px; }
+    .table-dropdown.open { display: flex; flex-direction: column; }
+    .table-option { display: flex !important; flex-direction: row !important; align-items: center; padding: 10px 12px; cursor: pointer; gap: 10px; border-bottom: 1px solid #eee; background: white; width: 100%; box-sizing: border-box; }
+    .table-option:last-child { border-bottom: none; }
+    .table-option:hover { background: #f5f3ef; }
+    .table-option input[type="checkbox"] { width: 18px; height: 18px; min-width: 18px; accent-color: var(--keswick); margin: 0; flex-shrink: 0; cursor: pointer; }
+    .table-option.selected { background: rgba(61, 79, 61, 0.12); }
+    .table-option .table-name { font-weight: 500; flex: 1; }
+    .table-option .table-cap { font-size: 0.8rem; color: #888; white-space: nowrap; }
+    .phone-input-group { display: flex; gap: 0.5rem; }
+    .country-select { width: 90px; padding: 0.5rem; border: 1px solid var(--limestone); border-radius: 4px; font-size: 0.875rem; background: var(--cream); cursor: pointer; }
+    .phone-number { flex: 1; }
+    .form-input:focus { outline: none; border-color: var(--keswick); }
+
+    .btn-primary { padding: 0.5rem 1rem; background: var(--terracotta); color: var(--cream); border: none; border-radius: 4px; font-size: 0.8125rem; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .btn-primary:hover { background: #8B4D33; }
+    .btn-secondary { padding: 0.5rem 1rem; background: var(--cream); color: var(--santorini); border: 1px solid var(--limestone); border-radius: 4px; font-size: 0.8125rem; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .btn-secondary:hover { background: var(--parchment); }
+  </style>
+
+  <script is:inline>
+    // TABLE CLICK - defined first so onclick works
+    window.tableClick = function(id) {
+      console.log('Table clicked:', id);
+      
+      // Assignment mode - assign table to reservation being edited
+      if (window.isAssigningTable) {
+        window.assignTableToReservation && window.assignTableToReservation(id);
+        return;
+      }
+      
+      var d = window.floorTables && window.floorTables[id];
+      console.log('Table data:', d);
+      
+      if (!d) {
+        // Fallback: create minimal table data
+        d = { table: { id: id, name: id.toUpperCase() }, tableReservations: [] };
+      }
+      
+      if (typeof window.showTableActionPopup !== 'function') {
+        console.error('showTableActionPopup not defined yet');
+        // Fallback: open new reservation form directly
+        window.openNewReservation && window.openNewReservation(id);
+        return;
+      }
+      
+      // Show the popup!
+      window.showTableActionPopup(d.table, d.tableReservations);
+    };
+    
+    // Auth check
+    if (localStorage.getItem('laluna_admin_auth') !== 'true') {
+      window.location.href = '/laluna/admin/login';
+    }
+    
+    // Mobile redirect
+    if (window.innerWidth <= 768) {
+      window.location.href = '/laluna/admin/m';
+    }
+
+    // Supabase config
+    const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+    const LAYOUT_KEY = 'laluna_floor_layout';
+    const LAYOUT_VERSION = 'v5-laluna-force-reset';
+    
+    // ============================================
+    // OFFLINE MODE - IndexedDB for local storage
+    // ============================================
+    const OFFLINE_DB_NAME = 'laluna-reservations-offline';
+    const OFFLINE_DB_VERSION = 1;
+    const OFFLINE_STORE = 'reservations';
+    const SYNC_QUEUE_STORE = 'syncQueue';
+    let offlineDB = null;
+    let isOnline = navigator.onLine;
+    
+    // Initialize IndexedDB
+    async function initOfflineDB() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(OFFLINE_DB_NAME, OFFLINE_DB_VERSION);
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => { offlineDB = request.result; resolve(offlineDB); };
+        request.onupgradeneeded = (event) => {
+          const db = event.target.result;
+          if (!db.objectStoreNames.contains(OFFLINE_STORE)) {
+            const store = db.createObjectStore(OFFLINE_STORE, { keyPath: 'id' });
+            store.createIndex('date', 'date');
+          }
+          if (!db.objectStoreNames.contains(SYNC_QUEUE_STORE)) {
+            db.createObjectStore(SYNC_QUEUE_STORE, { keyPath: 'id', autoIncrement: true });
+          }
+        };
+      });
+    }
+    
+    // Save to offline storage
+    async function saveToOffline(reservation) {
+      if (!offlineDB) return;
+      const tx = offlineDB.transaction(OFFLINE_STORE, 'readwrite');
+      const store = tx.objectStore(OFFLINE_STORE);
+      await store.put(reservation);
+    }
+    
+    // Get from offline storage
+    async function getOfflineReservations(dateStr) {
+      if (!offlineDB) return [];
+      return new Promise((resolve) => {
+        const tx = offlineDB.transaction(OFFLINE_STORE, 'readonly');
+        const store = tx.objectStore(OFFLINE_STORE);
+        const index = store.index('date');
+        const request = index.getAll(dateStr);
+        request.onsuccess = () => resolve(request.result || []);
+        request.onerror = () => resolve([]);
+      });
+    }
+    
+    // Add to sync queue
+    async function addToSyncQueue(action, data) {
+      if (!offlineDB) return;
+      const tx = offlineDB.transaction(SYNC_QUEUE_STORE, 'readwrite');
+      const store = tx.objectStore(SYNC_QUEUE_STORE);
+      await store.add({ action, data, timestamp: Date.now() });
+    }
+    
+    // Process sync queue when online
+    async function processSyncQueue() {
+      if (!offlineDB || !isOnline) return;
+      document.getElementById('syncBanner').style.display = 'block';
+      try {
+        const tx = offlineDB.transaction(SYNC_QUEUE_STORE, 'readwrite');
+        const store = tx.objectStore(SYNC_QUEUE_STORE);
+        const items = await new Promise(r => { const req = store.getAll(); req.onsuccess = () => r(req.result); });
+        
+        for (const item of items) {
+          try {
+            if (item.action === 'create') {
+              await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations`, {
+                method: 'POST',
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(item.data)
+              });
+            } else if (item.action === 'update') {
+              await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${item.data.id}`, {
+                method: 'PATCH',
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(item.data)
+              });
+            }
+            // Remove from queue after successful sync
+            const delTx = offlineDB.transaction(SYNC_QUEUE_STORE, 'readwrite');
+            delTx.objectStore(SYNC_QUEUE_STORE).delete(item.id);
+          } catch (e) { console.error('Sync item failed:', e); }
+        }
+        // Reload fresh data
+        await loadReservations();
+      } finally {
+        document.getElementById('syncBanner').style.display = 'none';
+      }
+    }
+    
+    // Online/offline detection
+    function updateOnlineStatus() {
+      isOnline = navigator.onLine;
+      document.getElementById('offlineBanner').style.display = isOnline ? 'none' : 'block';
+      if (isOnline) processSyncQueue();
+    }
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    
+    // Initialize offline DB on load
+    initOfflineDB().then(() => {
+      updateOnlineStatus();
+      console.log('Offline mode ready');
+    });
+    
+    // ============================================
+    // PRINT RESERVATIONS
+    // ============================================
+    function printReservations() {
+      const reservations = getReservations().filter(r => r.status !== 'cancelled' && r.status !== 'no-show');
+      reservations.sort((a, b) => a.time.localeCompare(b.time));
+      
+      const dateStr = getDateString(currentDate);
+      const dateFormatted = new Date(dateStr + 'T12:00:00').toLocaleDateString('en-US', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      });
+      
+      const totalPax = reservations.reduce((sum, r) => sum + (parseInt(r.guests) || 2), 0);
+      
+      // Group by shift
+      const byShift = {};
+      reservations.forEach(res => {
+        const shift = getShiftForTime(res.time);
+        if (!byShift[shift]) byShift[shift] = [];
+        byShift[shift].push(res);
+      });
+      
+      // Empty rows for walk-ins
+      const emptyRows = Array(10).fill(null).map(() => `
+        <tr><td style="border:1px solid #ccc;padding:8px;height:28px;"></td><td style="border:1px solid #ccc;padding:8px;"></td><td style="border:1px solid #ccc;padding:8px;text-align:center;"></td><td style="border:1px solid #ccc;padding:8px;"></td><td style="border:1px solid #ccc;padding:8px;"></td></tr>
+      `).join('');
+      
+      const printHTML = `<!DOCTYPE html><html><head><title>Reservaciones - La Luna - ${dateStr}</title><style>
+        body{font-family:Arial,sans-serif;padding:20px;font-size:12px;}
+        h1{font-size:20px;margin-bottom:4px;display:flex;align-items:center;gap:10px;}
+        .moon{width:30px;height:30px;}
+        .date{font-size:14px;color:#666;margin-bottom:16px;}
+        .stats{margin-bottom:16px;font-size:13px;background:#f5f5f5;padding:10px;border-radius:4px;}
+        .shift-title{background:#A65D3F;color:white;padding:8px 12px;margin:16px 0 8px 0;font-weight:bold;}
+        table{width:100%;border-collapse:collapse;margin-bottom:16px;}
+        th{background:#f0f0f0;border:1px solid #ccc;padding:8px;text-align:left;font-size:11px;}
+        td{border:1px solid #ccc;padding:8px;}
+        .time{font-family:monospace;font-weight:bold;}
+        .pax{text-align:center;font-weight:bold;}
+        .walkin-title{margin-top:24px;margin-bottom:8px;font-weight:bold;color:#666;}
+        .footer{margin-top:24px;font-size:10px;color:#999;border-top:1px solid #eee;padding-top:12px;}
+        @media print{body{padding:0;}}
+      </style></head><body>
+        <h1><img class="moon" src="/images/luna-moon-black.png" alt="">La Luna</h1>
+        <div class="date">${dateFormatted}</div>
+        <div class="stats"><strong>${reservations.length}</strong> reservaciones | <strong>${totalPax}</strong> personas esperadas</div>
+        
+        ${Object.entries(byShift).map(([shift, items]) => `
+          <div class="shift-title">${shift.toUpperCase()} (${items.length} res, ${items.reduce((s,r) => s + (parseInt(r.guests)||2), 0)} pax)</div>
+          <table>
+            <thead><tr><th style="width:60px;">Hora</th><th>Nombre</th><th style="width:50px;text-align:center;">Pax</th><th style="width:80px;">Mesa</th><th>Notas</th></tr></thead>
+            <tbody>${items.map(r => `
+              <tr>
+                <td class="time">${formatTime12(r.time)}</td>
+                <td><strong>${r.guestName}</strong>${r.guestPhone ? '<br><small>' + r.guestPhone + '</small>' : ''}</td>
+                <td class="pax">${r.guests}</td>
+                <td>${r.tableId ? (r.tableId.includes(',') ? r.tableId.split(',').map(t => t.toUpperCase()).join('+') : r.tableId.toUpperCase()) : 'TBA'}</td>
+                <td style="font-size:11px;">${r.specialRequests || ''}</td>
+              </tr>
+            `).join('')}</tbody>
+          </table>
+        `).join('')}
+        
+        <div class="walkin-title">Walk-ins</div>
+        <table>
+          <thead><tr><th style="width:60px;">Hora</th><th>Nombre</th><th style="width:50px;text-align:center;">Pax</th><th style="width:80px;">Mesa</th><th>Notas</th></tr></thead>
+          <tbody>${emptyRows}</tbody>
+        </table>
+        
+        <div class="footer">Impreso: ${new Date().toLocaleString('es-CR')} | La Luna Restaurant - Guiones, Nosara</div>
+      </body></html>`;
+      
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(printHTML);
+      printWindow.document.close();
+      setTimeout(() => printWindow.print(), 250);
+    }
+    window.printReservations = printReservations;
+    
+    // Force reset if version mismatch
+    if (localStorage.getItem('laluna_layout_version') !== LAYOUT_VERSION) {
+      localStorage.removeItem(LAYOUT_KEY);
+      localStorage.setItem('laluna_layout_version', LAYOUT_VERSION);
+      console.log('Layout reset to new version:', LAYOUT_VERSION);
+    }
+    let currentDate = new Date();
+    let currentZone = 'jardin';
+    let currentStatusFilter = 'coming';
+    let cachedReservations = [];
+    
+    // tableClick defined at top of script
+
+    // Get reservations from Supabase (with offline fallback)
+    async function fetchReservations(date) {
+      const dateStr = date || getDateString(currentDate);
+      
+      // Try online first
+      if (isOnline) {
+        try {
+          const res = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?date=eq.${dateStr}&select=*&order=time.asc`, {
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`
+            }
+          });
+          const data = await res.json();
+          // Map snake_case to camelCase for compatibility
+          cachedReservations = data.map(r => ({
+            id: r.id,
+            date: r.date,
+            time: r.time,
+            guests: r.guests,
+            guestName: r.guest_name,
+            guestPhone: r.guest_phone,
+            guestEmail: r.guest_email,
+            tableId: r.table_id,
+            zonePreference: r.zone_preference,
+            specialRequests: r.special_requests,
+            status: r.status,
+            cancelToken: r.cancel_token,
+            created_at: r.created_at,
+            booked_on: r.booked_on || r.created_at
+          }));
+          // Cache to IndexedDB for offline use
+          for (const r of cachedReservations) {
+            await saveToOffline(r);
+          }
+          return cachedReservations;
+        } catch (e) {
+          console.error('Online fetch failed, trying offline:', e);
+        }
+      }
+      
+      // Offline fallback
+      console.log('Loading from offline storage...');
+      cachedReservations = await getOfflineReservations(dateStr);
+      return cachedReservations;
+    }
+
+    function getReservations() {
+      return cachedReservations;
+    }
+
+    // Table priority for auto-assignment
+    // Lower number = better table (assigned first to early reservations)
+    // Priority: Garden close to beach > Garden far > Terraza > Inside
+    function getTablePriority(tableId, zone) {
+      const layout = getLayout();
+      
+      // Zone priority (lower = better)
+      // Priority: Garden ALWAYS first, then Terraza, then Inside
+      const zonePriority = {
+        'jardin': 0,      // Garden = ALWAYS first priority
+        'terraza': 1000,  // Terraza = only when garden full
+        'inside': 2000    // Indoor = last resort
+      };
+      
+      const basePriority = zonePriority[zone] || 300;
+      
+      // Find table in layout
+      const tables = layout[zone] || [];
+      const table = tables.find(t => t.id === tableId);
+      if (!table) return basePriority + 50;
+      
+      // For garden: lower y = closer to beach = better
+      // y ranges roughly 30-260, normalize to 0-50 priority bonus
+      if (zone === 'jardin') {
+        const yPriority = Math.floor(table.y / 5); // 30->6, 260->52
+        return basePriority + yPriority;
+      }
+      
+      // For other zones, use position as tiebreaker
+      return basePriority + Math.floor(table.y / 5);
+    }
+
+    // Find best available table for a reservation
+    function findBestAvailableTable(date, time, guests, zonePreference) {
+      const layout = getLayout();
+      const reservations = getReservations().filter(r => 
+        r.date === date && 
+        r.status !== 'cancelled' &&
+        r.tableId // has a table assigned
+      );
+      
+      // Get all tables with priorities
+      const allTables = [];
+      for (const zone of ['jardin', 'terraza', 'inside']) {
+        const tables = layout[zone] || [];
+        for (const table of tables) {
+          allTables.push({
+            id: table.id,
+            zone,
+            name: table.name,
+            minCovers: table.minCovers,
+            maxCovers: table.maxCovers,
+            priority: getTablePriority(table.id, zone)
+          });
+        }
+      }
+      
+      // Sort by priority (best first)
+      allTables.sort((a, b) => a.priority - b.priority);
+      
+      console.log('Auto-assign searching for', guests, 'guests at', time);
+      console.log('Tables by priority:', allTables.slice(0, 10).map(t => `${t.name}(${t.zone}, min:${t.minCovers}, max:${t.maxCovers}, pri:${t.priority})`));
+      
+      // Parse reservation time to check for conflicts (2-hour window)
+      const [resHour, resMin] = time.split(':').map(Number);
+      const resMinutes = resHour * 60 + resMin;
+      
+      // Check each table for availability
+      for (const table of allTables) {
+        // Check capacity (use defaults if not set: min=2, max=4)
+        const minC = table.minCovers || 2;
+        const maxC = table.maxCovers || 4;
+        // Allow seating parties slightly smaller than min (1 person less), but not on large tables
+        // This prevents 3 people getting a 10-top
+        const effectiveMin = maxC <= 6 ? Math.max(1, minC - 1) : minC;
+        if (guests < effectiveMin || guests > maxC) continue;
+        
+        // Check if table is occupied during this time window
+        const conflicting = reservations.some(r => {
+          if (r.tableId !== table.id) return false;
+          const [h, m] = r.time.split(':').map(Number);
+          const rMinutes = h * 60 + m;
+          // Assume 2-hour dining window
+          return Math.abs(rMinutes - resMinutes) < 120;
+        });
+        
+        if (!conflicting) {
+          return table.id;
+        }
+      }
+      
+      return null; // No table available
+    }
+
+    // Save new reservation to Supabase
+    async function saveReservation(reservation) {
+      const payload = {
+        date: reservation.date,
+        time: reservation.time,
+        guests: reservation.guests,
+        guest_name: reservation.guestName,
+        guest_phone: reservation.guestPhone || '',
+        guest_email: reservation.guestEmail || '',
+        table_id: reservation.tableId || null,
+        zone_preference: reservation.zonePreference || null,
+        special_requests: reservation.specialRequests || '',
+        status: reservation.status || 'confirmed'
+      };
+      
+      // If online, save directly
+      if (isOnline) {
+        try {
+          const res = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations`, {
+            method: 'POST',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=representation'
+            },
+            body: JSON.stringify(payload)
+          });
+          const result = await res.json();
+          // Also save to offline cache
+          if (result && result[0]) {
+            const mapped = {
+              id: result[0].id, date: result[0].date, time: result[0].time,
+              guests: result[0].guests, guestName: result[0].guest_name,
+              guestPhone: result[0].guest_phone, guestEmail: result[0].guest_email,
+              tableId: result[0].table_id, status: result[0].status,
+              specialRequests: result[0].special_requests
+            };
+            await saveToOffline(mapped);
+          }
+          return result;
+        } catch (e) {
+          console.error('Online save failed, queuing for sync:', e);
+        }
+      }
+      
+      // Offline: save locally and queue for sync
+      const tempId = 'offline_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      const localRes = {
+        id: tempId,
+        date: reservation.date,
+        time: reservation.time,
+        guests: reservation.guests,
+        guestName: reservation.guestName,
+        guestPhone: reservation.guestPhone,
+        guestEmail: reservation.guestEmail,
+        tableId: reservation.tableId,
+        specialRequests: reservation.specialRequests,
+        status: reservation.status || 'confirmed',
+        _offline: true
+      };
+      await saveToOffline(localRes);
+      await addToSyncQueue('create', payload);
+      return [localRes];
+    }
+
+    // Update reservation status in Supabase
+    async function updateReservationStatus(id, status) {
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${id}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ status })
+        });
+      } catch (e) {
+        console.error('Failed to update reservation:', e);
+      }
+    }
+
+    function getLayout() {
+      const saved = localStorage.getItem(LAYOUT_KEY);
+      if (saved) return JSON.parse(saved);
+      
+      // La Luna EatApp Layout - Exact Match
+      return {
+        inside: [
+          // High tables (top)
+          { id: 'high-1', name: '2 high', type: 'square', x: 60, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 'high-2', name: '2 high', type: 'square', x: 140, y: 40, minCovers: 2, maxCovers: 4 },
+          // Indoor sofa (top right)
+          { id: 'indoor-sofa-1', name: '1 indoor sofa', type: 'sofa', x: 280, y: 40, minCovers: 2, maxCovers: 4 },
+          // Bar area (center)
+          { id: 'bar', name: 'bar', type: 'bar', x: 180, y: 140, minCovers: 1, maxCovers: 8 },
+          // 2 indoor sofas (middle right)
+          { id: 'indoor-sofa-2', name: '2 indoor sofas', type: 'sofa', x: 320, y: 120, minCovers: 4, maxCovers: 6 },
+          { id: 'indoor-sofa-3', name: '2 indoor sofas', type: 'sofa', x: 320, y: 180, minCovers: 4, maxCovers: 6 },
+          // 1 indoor sofa (bottom left)
+          { id: 'indoor-sof', name: '1 indoor sof', type: 'sofa', x: 60, y: 280, minCovers: 2, maxCovers: 4 },
+          // 3 indoor sofas (bottom right)
+          { id: 'indoor-sofa-4', name: '3 indoor sofas', type: 'sofa', x: 280, y: 260, minCovers: 2, maxCovers: 4 },
+          { id: 'indoor-sofa-5', name: '3 indoor sofas', type: 'sofa', x: 340, y: 260, minCovers: 2, maxCovers: 4 },
+          { id: 'indoor-sofa-6', name: '3 indoor sofas', type: 'sofa', x: 400, y: 260, minCovers: 2, maxCovers: 4 },
+        ],
+        terraza: [
+          // Top row: Tables 7-12 (rectangular)
+          { id: 't7', name: '7', type: 'square', x: 40, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 't8', name: '8', type: 'square', x: 110, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 't9', name: '9', type: 'square', x: 180, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 't10', name: '10', type: 'square', x: 250, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 't11', name: '11', type: 'square', x: 320, y: 40, minCovers: 2, maxCovers: 4 },
+          { id: 't12', name: '12', type: 'square', x: 390, y: 40, minCovers: 2, maxCovers: 4 },
+          // Bottom row: Tables 1-3 (round), 4-6 (rectangular)
+          { id: 't1', name: '1', type: 'round-lg', x: 40, y: 160, minCovers: 4, maxCovers: 6 },
+          { id: 't2', name: '2', type: 'round-lg', x: 130, y: 160, minCovers: 4, maxCovers: 6 },
+          { id: 't3', name: '3', type: 'round-lg', x: 220, y: 160, minCovers: 4, maxCovers: 6 },
+          { id: 't4', name: '4', type: 'square', x: 310, y: 160, minCovers: 2, maxCovers: 4 },
+          { id: 't5', name: '5', type: 'square', x: 380, y: 160, minCovers: 2, maxCovers: 4 },
+          { id: 't6', name: '6', type: 'square', x: 450, y: 160, minCovers: 2, maxCovers: 4 },
+        ],
+        jardin: [
+          // Top row
+          { id: 't17', name: '17', type: 'square', x: 40, y: 30, minCovers: 2, maxCovers: 4 },
+          { id: 't18-1', name: '18-1', type: 'square', x: 120, y: 30, minCovers: 2, maxCovers: 4 },
+          { id: 't18-2', name: '18-2', type: 'square', x: 190, y: 30, minCovers: 2, maxCovers: 4 },
+          { id: 't18-3', name: '18-3', type: 'square', x: 260, y: 30, minCovers: 2, maxCovers: 4 },
+          { id: 't18-4', name: '18-4', type: 'square', x: 330, y: 30, minCovers: 2, maxCovers: 4 },
+          { id: 't20', name: '20', type: 'square', x: 410, y: 30, minCovers: 2, maxCovers: 4 },
+          { id: 'f6', name: 'F6', type: 'square', x: 490, y: 30, minCovers: 2, maxCovers: 4 },
+          // Second row (left side - sofas)
+          { id: 'sofa-16', name: 'sofa 16', type: 'sofa', x: 40, y: 100, minCovers: 2, maxCovers: 4 },
+          // Second row (middle)
+          { id: 'fant-2-izq', name: 'FANT 2 Izqu', type: 'diamond', x: 140, y: 100, minCovers: 2, maxCovers: 4 },
+          { id: 'fan-2', name: 'FAN 2', type: 'diamond', x: 220, y: 100, minCovers: 2, maxCovers: 4 },
+          { id: 't19', name: '19', type: 'square', x: 300, y: 100, minCovers: 2, maxCovers: 4 },
+          { id: 'fan-19', name: 'FAN 19', type: 'diamond', x: 370, y: 100, minCovers: 2, maxCovers: 4 },
+          { id: 't24', name: '24', type: 'round-lg', x: 450, y: 100, minCovers: 4, maxCovers: 6 },
+          { id: 'f5', name: 'F5', type: 'square', x: 530, y: 100, minCovers: 2, maxCovers: 4 },
+          { id: 'sofa-21', name: 'sofa 21', type: 'sofa', x: 600, y: 100, minCovers: 2, maxCovers: 4 },
+          // Third row (left side - sofas)
+          { id: 'sofa-15', name: 'sofa 15', type: 'sofa', x: 40, y: 180, minCovers: 2, maxCovers: 4 },
+          // Third row (middle)
+          { id: 't26', name: '26', type: 'round-xl', x: 160, y: 180, minCovers: 6, maxCovers: 10 },
+          { id: 't25', name: '25', type: 'round-lg', x: 280, y: 180, minCovers: 4, maxCovers: 8 },
+          { id: 'fan-25', name: 'Fan 25', type: 'diamond', x: 370, y: 180, minCovers: 2, maxCovers: 4 },
+          { id: 'fant-4', name: 'Fant 4', type: 'diamond', x: 450, y: 180, minCovers: 2, maxCovers: 4 },
+          { id: 't22', name: '22', type: 'square', x: 530, y: 180, minCovers: 2, maxCovers: 4 },
+          // Bottom row (left side - sofas)
+          { id: 'sofa-14', name: 'sofa14', type: 'sofa', x: 40, y: 260, minCovers: 2, maxCovers: 4 },
+          // Bottom row (middle)
+          { id: 'fant-1', name: 'FANTASMA 1', type: 'diamond', x: 140, y: 260, minCovers: 2, maxCovers: 4 },
+          { id: 'sofa-13', name: 'sofa 13', type: 'sofa', x: 240, y: 260, minCovers: 2, maxCovers: 4 },
+          { id: 'fant-3', name: 'FANTASMA 3', type: 'diamond', x: 340, y: 260, minCovers: 2, maxCovers: 4 },
+          { id: 'sofa-23', name: 'sofa 23', type: 'sofa', x: 440, y: 260, minCovers: 2, maxCovers: 4 },
+          { id: 'f3p', name: 'F3P', type: 'square', x: 540, y: 260, minCovers: 2, maxCovers: 4 },
+        ]
+      };
+    }
+
+    function formatDate(date) {
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
+
+    function getDateString(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+    
+    // Expose for modal
+    window.getCurrentDateString = () => getDateString(currentDate);
+
+    // Auto-assign tables to unassigned reservations
+    // First-come (by created_at) gets best tables
+    async function autoAssignTables() {
+      const reservations = getReservations();
+      
+      // Find unassigned confirmed reservations, sorted by creation time (first booked = first served)
+      const unassigned = reservations
+        .filter(r => !r.tableId && r.status === 'confirmed')
+        .sort((a, b) => (a.id || '').localeCompare(b.id || '')); // UUID v4 is roughly time-ordered
+      
+      if (unassigned.length === 0) return;
+      
+      console.log(`Auto-assigning ${unassigned.length} reservations...`);
+      
+      for (const res of unassigned) {
+        // Find best available table for this reservation
+        const bestTable = findBestAvailableTable(res.date, res.time, res.guests, res.zonePreference);
+        
+        if (bestTable) {
+          // Update in Supabase
+          try {
+            await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${res.id}`, {
+              method: 'PATCH',
+              headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+              },
+              body: JSON.stringify({ table_id: bestTable })
+            });
+            
+            // Update local cache
+            res.tableId = bestTable;
+            console.log(`Auto-assigned table ${bestTable} to ${res.guestName}`);
+          } catch (e) {
+            console.error('Failed to auto-assign:', e);
+          }
+        }
+      }
+      
+      // Refresh cache after assignments
+      if (unassigned.length > 0) {
+        await fetchReservations(getDateString(currentDate));
+      }
+    }
+
+    function getShiftForTime(time) {
+      const [hours] = time.split(':').map(Number);
+      if (hours >= 7 && hours < 10) return 'Breakfast';
+      if (hours >= 10 && hours < 12) return 'Brunch';
+      if (hours >= 12 && hours < 15) return 'Lunch';
+      if (hours >= 16 && hours < 19) return 'Dinner 1';
+      return 'Dinner 2';
+    }
+
+    function formatTime12(time) {
+      const [h, m] = time.split(':');
+      const hour = parseInt(h);
+      const ampm = hour >= 12 ? 'PM' : 'AM';
+      const h12 = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
+      return `${h12}:${m} ${ampm}`;
+    }
+    
+    // Format phone for WhatsApp - only add 506 if no country code exists
+    function formatPhoneForWhatsApp(phone) {
+      if (!phone) return '';
+      // Remove all non-digits AND the + sign
+      let digits = phone.replace(/[^0-9]/g, '');
+      
+      // US/Canada: starts with 1 and has 11 digits
+      if (digits.startsWith('1') && digits.length === 11) return digits;
+      
+      // UK: starts with 44
+      if (digits.startsWith('44') && digits.length >= 10) return digits;
+      
+      // Mexico: starts with 52
+      if (digits.startsWith('52') && digits.length >= 10) return digits;
+      
+      // Costa Rica: starts with 506
+      if (digits.startsWith('506') && digits.length >= 11) return digits;
+      
+      // Panama: starts with 507
+      if (digits.startsWith('507') && digits.length >= 11) return digits;
+      
+      // Other European: 33, 34, 39, 49
+      if (/^(33|34|39|49)/.test(digits) && digits.length >= 10) return digits;
+      
+      // South America: 55, 57
+      if (/^(55|57)/.test(digits) && digits.length >= 10) return digits;
+      
+      // 8-digit number without code = Costa Rica local
+      if (digits.length === 8) return '506' + digits;
+      
+      // 10-digit starting with area code = US without country code
+      if (digits.length === 10 && /^[2-9]/.test(digits)) return '1' + digits;
+      
+      // Otherwise return as-is
+      return digits;
+    }
+
+    async function quickSeat(id) {
+      const reservations = getReservations();
+      const res = reservations.find(r => r.id === id);
+      if (res) {
+        const newStatus = res.status === 'seated' ? 'confirmed' : 'seated';
+        await updateReservationStatus(id, newStatus);
+        await loadReservations();
+        renderFloor();
+      }
+    }
+
+    async function loadReservations() {
+      const dateStr = getDateString(currentDate);
+      await fetchReservations(dateStr);
+      
+      // Auto-assign tables to unassigned reservations (first-come-first-served)
+      await autoAssignTables();
+      
+      const reservations = getReservations();
+      
+      // Filter by status
+      let filtered = reservations;
+      if (currentStatusFilter === 'seated') {
+        filtered = reservations.filter(r => r.status === 'seated');
+      } else {
+        // Coming: show confirmed but also show cancelled (greyed out) for accountability
+        filtered = reservations.filter(r => r.status !== 'seated' && r.status !== 'completed');
+      }
+      
+      // Sort by time
+      filtered.sort((a, b) => a.time.localeCompare(b.time));
+      
+      // Filter by shift if selected
+      if (currentShiftFilter && currentShiftFilter !== 'all') {
+        filtered = filtered.filter(res => {
+          const resShift = getShiftForTime(res.time);
+          return resShift.toLowerCase().replace(' ', '') === currentShiftFilter.toLowerCase().replace(' ', '');
+        });
+      }
+      
+      // Filter by search query
+      const searchQuery = document.getElementById('searchInput')?.value?.toLowerCase().trim();
+      if (searchQuery) {
+        filtered = filtered.filter(res => {
+          const name = (res.guestName || '').toLowerCase();
+          const confCode = res.id.slice(0, 8).toLowerCase();
+          const phone = (res.guestPhone || '').replace(/\D/g, '');
+          const email = (res.guestEmail || '').toLowerCase();
+          return name.includes(searchQuery) || 
+                 confCode.includes(searchQuery) || 
+                 phone.includes(searchQuery.replace(/\D/g, '')) ||
+                 email.includes(searchQuery);
+        });
+      }
+      
+      // Group by shift
+      const byShift = {};
+      filtered.forEach(res => {
+        const shift = getShiftForTime(res.time);
+        if (!byShift[shift]) byShift[shift] = [];
+        byShift[shift].push(res);
+      });
+      
+      // Update counts (exclude cancelled and no-show)
+      const activeRes = reservations.filter(r => r.status !== 'cancelled' && r.status !== 'no-show');
+      document.getElementById('resCount').innerHTML = `RESERVATIONS <strong>${activeRes.length}</strong>`;
+      document.getElementById('totalCovers').textContent = activeRes.reduce((sum, r) => sum + (parseInt(r.guests) || 2), 0);
+      document.getElementById('totalRes').textContent = activeRes.length;
+      document.getElementById('datePicker').value = getDateString(currentDate);
+      
+      // Render list
+      const list = document.getElementById('resList');
+      if (filtered.length === 0) {
+        list.innerHTML = '<div style="padding: 2rem; text-align: center; color: #999;">No reservations</div>';
+        return;
+      }
+      
+      list.innerHTML = Object.entries(byShift).map(([shift, items]) => `
+        <div class="shift-group">
+          <div class="shift-header">
+            <span>${shift.toUpperCase()}</span>
+            <div class="stats">
+              <span>${items.reduce((s, r) => s + (parseInt(r.guests) || 2), 0)} guests</span>
+              <span>${items.length} reservations</span>
+            </div>
+          </div>
+          ${items.map(res => {
+            const hasGiftCard = giftCardsCache.some(g => {
+              if (g.status === 'redeemed' || !g.recipient_name || !res.guestName) return false;
+              const recipientLower = g.recipient_name.toLowerCase().trim();
+              const guestLower = res.guestName.toLowerCase().trim();
+              // STRICT MATCH: Only exact full name match
+              return recipientLower === guestLower;
+            });
+            return `
+            <div class="res-row ${res.status} ${res.specialRequests ? 'has-note' : ''} ${hasGiftCard ? 'has-gift' : ''}" onclick="selectReservation('${res.id}')">
+              <div class="res-time">${formatTime12(res.time)}</div>
+              <span class="res-code" title="Confirmation code">${res.id.slice(0,8).toUpperCase()}</span>
+              <span class="res-name" title="${res.guestName}">${hasGiftCard ? '<span class="gift-indicator">🎁</span>' : ''}${res.guestName}</span>
+              <select class="pax-select-mobile" data-res-id="${res.id}" onclick="event.stopPropagation();" onchange="quickUpdateGuests(this)" title="Guests">
+                ${Array.from({length: 20}, (_, i) => i + 1).map(n => `<option value="${n}" ${res.guests == n ? 'selected' : ''}>${n}p</option>`).join('')}
+              </select>
+              <select class="table-select-mobile" data-res-id="${res.id}" onclick="event.stopPropagation();" onchange="quickAssignTable(this)" title="Table">
+                <option value="">${res.tableId ? (res.tableId.includes(',') ? res.tableId.split(',').length + ' tables' : 'T' + res.tableId.replace('t','').toUpperCase()) : 'TBA'}</option>
+              </select>
+              <div class="res-actions-mini">
+                ${res.guestPhone ? `
+                <a class="whatsapp-icon" href="https://wa.me/${formatPhoneForWhatsApp(res.guestPhone)}?text=${encodeURIComponent(`Good day ${res.guestName.split(' ')[0]}, this is La Luna confirming your table for ${res.guests} on ${new Date(res.date + 'T12:00:00').toLocaleDateString('en-US', {weekday: 'long', month: 'long', day: 'numeric'})} at ${formatTime12(res.time)}. We look forward to welcoming you.`)}" target="_blank" onclick="event.stopPropagation();" title="WhatsApp">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                </a>
+                ` : ''}
+              </div>
+            </div>
+            ${res.specialRequests ? `<div class="res-note-row"><span class="res-note">📝 ${res.specialRequests}</span></div>` : ''}
+          `}).join('')}
+        </div>
+      `).join('');
+    }
+
+    // Drag state
+    let draggedTable = null;
+    let dragOffset = { x: 0, y: 0 };
+    let isDragging = false;
+
+    function saveLayout(layouts) {
+      localStorage.setItem(LAYOUT_KEY, JSON.stringify(layouts));
+    }
+    
+    // Simple global click handler for tables
+    window.handleTableTap = function(tableId) {
+      console.log('TAP:', tableId);
+      const data = window.tableDataStore?.[tableId];
+      if (!data) {
+        alert('No data for ' + tableId);
+        return;
+      }
+      const { table, tableReservations } = data;
+      
+      if (window.isAssigningTable) {
+        // Handle assignment mode
+        const resIdToAssign = assigningReservationId;
+        window.isAssigningTable = false;
+        assigningReservationId = null;
+        document.getElementById('floorGrid').classList.remove('assigning');
+        document.getElementById('assignBanner').classList.remove('show');
+        fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${resIdToAssign}`, {
+          method: 'PATCH',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+          body: JSON.stringify({ table_id: tableId })
+        }).then(() => { loadReservations(); renderFloor(); });
+      } else {
+        // Show popup
+        showTableActionPopup(table, tableReservations);
+      }
+    };
+    
+    // Legacy handler (keep for compatibility)
+    window.onTableClick = async function(tableId) {
+      const data = window['tableData_' + tableId] || window.tableDataStore?.[tableId];
+      if (!data) return;
+      const { table, tableReservations } = data;
+      
+      if (window.isAssigningTable) {
+        const resIdToAssign = assigningReservationId;
+        window.isAssigningTable = false;
+        assigningReservationId = null;
+        document.getElementById('floorGrid').classList.remove('assigning');
+        document.getElementById('assignBanner').classList.remove('show');
+        try {
+          await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${resIdToAssign}`, {
+            method: 'PATCH',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+            body: JSON.stringify({ table_id: table.id })
+          });
+          await loadReservations();
+          renderFloor();
+        } catch (err) { alert('Failed: ' + err.message); }
+      } else {
+        showTableActionPopup(table, tableReservations);
+      }
+    };
+
+    function renderFloor() {
+      const layouts = getLayout();
+      const tables = layouts[currentZone] || [];
+      const dateStr = getDateString(currentDate);
+      const reservations = getReservations().filter(r => r.date === dateStr);
+      
+      const grid = document.getElementById('floorGrid');
+      
+      // Store all table data globally for click handlers
+      window.floorTables = {};
+      
+      // Build HTML string with button elements
+      let html = '';
+      tables.forEach(table => {
+        const tableReservations = reservations.filter(r => r.tableId === table.id && r.status !== 'cancelled');
+        const res = tableReservations[0];
+        const status = res ? res.status : 'available';
+        
+        // Store data for this table
+        window.floorTables[table.id] = { table, tableReservations };
+        
+        // Calculate transform
+        let transform = '';
+        if (table.rotation && table.type !== 'diamond') {
+          transform = `transform:rotate(${table.rotation}deg);`;
+        } else if (table.type === 'diamond' && table.rotation) {
+          transform = `transform:rotate(${45 + table.rotation}deg);`;
+        }
+        
+        // Ensure table type exists, default to 'square'
+        const tableType = table.type || 'square';
+        
+        // Skip decorations (trees, palms, plants) or render them differently
+        const isDecoration = ['tree', 'palm', 'plant'].includes(tableType);
+        
+        if (isDecoration) {
+          // Render decoration without click handler
+          html += `
+            <div class="table-btn ${tableType}" 
+              style="left:${table.x}px;top:${table.y}px;pointer-events:none;">
+              ${tableType === 'palm' ? '🌴' : ''}
+            </div>
+          `;
+        } else {
+          html += `
+            <button type="button" 
+              class="table-btn ${tableType}" 
+              data-table="${table.id}" 
+              data-status="${status}"
+              style="left:${table.x}px;top:${table.y}px;${transform}">
+              ${res ? `
+                <span class="tbl-name-small">${table.name}</span>
+                <span class="tbl-guest">${res.guestName.split(' ')[0]}</span>
+                <span class="tbl-time">${formatTime12(res.time)}</span>
+                <span class="tbl-pax">${res.guests}p</span>
+              ` : `<span class="tbl-name">${table.name}</span>`}
+              ${tableReservations.length > 1 ? `<span class="tbl-multi">+${tableReservations.length - 1}</span>` : ''}
+            </button>
+          `;
+        }
+      });
+      
+      grid.innerHTML = html;
+      
+      // Attach click handlers to all table buttons
+      const buttons = grid.querySelectorAll('.table-btn');
+      console.log('Attaching click handlers to', buttons.length, 'tables');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const tableId = this.dataset.table;
+          console.log('Click event fired for:', tableId);
+          handleTableClick(tableId);
+        });
+      });
+      
+      // Populate table dropdowns for mobile
+      populateTableDropdowns();
+    }
+    
+    // Global function for table button clicks
+    function handleTableClick(tableId) {
+      console.log('Table clicked:', tableId);
+      
+      // If in assignment mode, assign the table
+      if (window.isAssigningTable) {
+        // Check if table is occupied (has conflict)
+        const tableEl = document.querySelector(`.table-btn[data-table="${tableId}"]`);
+        if (tableEl && tableEl.classList.contains('occupied')) {
+          // Show why it's blocked
+          const dateStr = getDateString(currentDate);
+          const assigningRes = cachedReservations.find(r => r.id === assigningReservationId);
+          const assigningShift = getShiftForTime(assigningRes?.time);
+          const conflicts = cachedReservations.filter(r => 
+            r.tableId === tableId && 
+            r.date === dateStr &&
+            r.id !== assigningReservationId &&
+            r.status !== 'cancelled' && 
+            r.status !== 'no-show' && 
+            r.status !== 'completed' &&
+            getShiftForTime(r.time) === assigningShift
+          );
+          if (conflicts.length > 0) {
+            const conflictNames = conflicts.map(c => `${c.guestName} (${formatTime12(c.time)})`).join(', ');
+            alert(`This table is occupied in this shift by: ${conflictNames}`);
+          }
+          return;
+        }
+        assignTableToReservation(tableId);
+        return;
+      }
+      
+      // Get table data
+      const data = window.floorTables?.[tableId];
+      if (!data) {
+        console.error('No data for table:', tableId);
+        return;
+      }
+      
+      // If empty table, open new reservation with this table pre-selected
+      if (!data.tableReservations || data.tableReservations.length === 0) {
+        openNewReservationWithTable(tableId, data.table.name);
+        return;
+      }
+      
+      // If table has ONE reservation, open edit modal directly
+      if (data.tableReservations.length === 1) {
+        const res = data.tableReservations[0];
+        selectReservation(res.id);
+        return;
+      }
+      
+      // If multiple reservations, show popup to choose which one
+      console.log('Multiple reservations detected:', data.tableReservations.length);
+      showTableActionPopup(data.table, data.tableReservations);
+    }
+    window.handleTableClick = handleTableClick;
+
+    // Mouse move for dragging
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging || !draggedTable) return;
+      
+      const grid = document.getElementById('floorGrid');
+      const rect = grid.getBoundingClientRect();
+      
+      let x = e.clientX - rect.left - dragOffset.x;
+      let y = e.clientY - rect.top - dragOffset.y;
+      
+      // Snap to grid (10px)
+      x = Math.round(x / 10) * 10;
+      y = Math.round(y / 10) * 10;
+      
+      // Keep in bounds
+      x = Math.max(0, Math.min(x, rect.width - 60));
+      y = Math.max(0, Math.min(y, rect.height - 60));
+      
+      draggedTable.style.left = x + 'px';
+      draggedTable.style.top = y + 'px';
+    });
+
+    // Mouse up - save position
+    document.addEventListener('mouseup', () => {
+      if (!isDragging || !draggedTable) return;
+      
+      const tableId = draggedTable.dataset.table;
+      const x = parseInt(draggedTable.style.left);
+      const y = parseInt(draggedTable.style.top);
+      
+      // Save to layout
+      const layouts = getLayout();
+      const table = layouts[currentZone].find(t => t.id === tableId);
+      if (table) {
+        table.x = x;
+        table.y = y;
+        saveLayout(layouts);
+      }
+      
+      draggedTable.style.zIndex = '';
+      draggedTable.style.cursor = 'pointer';
+      draggedTable.style.opacity = '';
+      
+      isDragging = false;
+      draggedTable = null;
+    });
+
+    let selectedReservationId = null;
+    window.isAssigningTable = false;
+    let assigningReservationId = null;
+    
+    function selectReservation(id) {
+      selectedReservationId = id;
+      const res = cachedReservations.find(r => r.id === id);
+      if (!res) return;
+      
+      // Highlight the reservation row
+      document.querySelectorAll('.res-row').forEach(row => row.classList.remove('selected'));
+      document.querySelector(`.res-row[onclick*="${id}"]`)?.classList.add('selected');
+      
+      // Highlight the table on floor plan if assigned
+      document.querySelectorAll('.table').forEach(t => t.classList.remove('selected'));
+      if (res.tableId) {
+        document.querySelector(`.table[data-table="${res.tableId}"]`)?.classList.add('selected');
+      }
+      
+      // Open detail modal
+      openReservationDetail(res);
+    }
+    
+    function openReservationDetail(res) {
+      const modal = document.getElementById('resDetailModal');
+      if (!modal) return;
+      
+      document.getElementById('detailName').textContent = res.guestName;
+      document.getElementById('detailGuests').textContent = res.guests + ' guests';
+      document.getElementById('detailTime').textContent = formatTime12(res.time);
+      document.getElementById('detailPhone').textContent = res.guestPhone || 'No phone';
+      
+      // WhatsApp button
+      const whatsappBtn = document.getElementById('whatsappBtn');
+      if (res.guestPhone) {
+        const phoneWithCode = formatPhoneForWhatsApp(res.guestPhone);
+        const date = new Date(res.date + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+        const message = `Good day ${res.guestName.split(' ')[0]}, this is La Luna confirming your table for ${res.guests} on ${date} at ${formatTime12(res.time)}. We look forward to welcoming you.`;
+        whatsappBtn.href = `https://wa.me/${phoneWithCode}?text=${encodeURIComponent(message)}`;
+        whatsappBtn.style.display = 'inline-flex';
+      } else {
+        whatsappBtn.style.display = 'none';
+      }
+      
+      document.getElementById('detailEmail').textContent = res.guestEmail || 'No email';
+      document.getElementById('detailZone').textContent = res.zonePreference || 'Any';
+      document.getElementById('detailNotes').textContent = res.specialRequests || 'None';
+      document.getElementById('detailStatus').textContent = res.status;
+      document.getElementById('detailStatus').className = 'status-badge ' + res.status;
+      
+      // Update 3-step timeline
+      updateReservationTimeline(res);
+      
+      // Show/hide buttons based on cancelled status
+      const activeActions = document.getElementById('activeActions');
+      const cancelledActions = document.getElementById('cancelledActions');
+      
+      if (res.status === 'cancelled') {
+        activeActions.style.display = 'none';
+        cancelledActions.style.display = 'block';
+      } else {
+        activeActions.style.display = 'flex';
+        cancelledActions.style.display = 'none';
+        
+        // Update button states
+        const seatBtn = document.getElementById('seatBtn');
+        const assignBtn = document.getElementById('assignBtn');
+        
+        if (res.status === 'seated') {
+          seatBtn.textContent = 'Unseat';
+          seatBtn.classList.add('active');
+        } else {
+          seatBtn.textContent = 'Seat';
+          seatBtn.classList.remove('active');
+        }
+        
+        // Update assign button based on table assignment
+        if (res.tableId) {
+          assignBtn.textContent = 'Change Table';
+          assignBtn.classList.add('reassign');
+        } else {
+          assignBtn.textContent = 'Assign Table';
+          assignBtn.classList.remove('reassign');
+        }
+      }
+      
+      modal.classList.add('open');
+    }
+    
+    function updateReservationTimeline(res) {
+      const step1 = document.getElementById('step1');
+      const step2 = document.getElementById('step2');
+      const step3 = document.getElementById('step3');
+      const step1Meta = document.getElementById('step1Meta');
+      const step1Time = document.getElementById('step1Time');
+      const step3Time = document.getElementById('step3Time');
+      
+      // Reset all steps
+      [step1, step2, step3].forEach(s => {
+        s.classList.remove('completed', 'current');
+      });
+      
+      // Step 1: Always completed (reservation was created)
+      step1.classList.add('completed');
+      
+      // Determine source from special_requests or default
+      const source = res.source || (res.specialRequests?.includes('Walk-in') ? 'En Casa' : 'Website');
+      step1Meta.textContent = source;
+      
+      // Format created_at timestamp if available
+      if (res.created_at) {
+        const created = new Date(res.created_at);
+        step1Time.textContent = created.toLocaleString('es-CR', { 
+          month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
+        });
+      } else {
+        step1Time.textContent = '';
+      }
+      
+      // Step 2 & 3 based on status
+      if (res.status === 'confirmed' || res.status === 'seated') {
+        // Fully confirmed
+        step2.classList.add('completed');
+        step3.classList.add('completed');
+        if (res.confirmed_at) {
+          const confirmed = new Date(res.confirmed_at);
+          step3Time.textContent = confirmed.toLocaleString('es-CR', {
+            month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
+          });
+        } else {
+          step3Time.textContent = '';
+        }
+      } else if (res.status === 'pending') {
+        // Waiting for confirmation
+        step2.classList.add('current');
+      } else if (res.status === 'cancelled') {
+        // Show cancelled state
+        step2.classList.add('completed');
+        document.querySelector('#step2 .timeline-label').textContent = 'Cancelled';
+      }
+    }
+    
+    function closeDetailModal() {
+      document.getElementById('resDetailModal')?.classList.remove('open');
+      selectedReservationId = null;
+    }
+    
+    function openEditModal() {
+      if (!selectedReservationId) return;
+      const res = cachedReservations.find(r => r.id === selectedReservationId);
+      if (!res) return;
+      
+      // Populate edit form with current values
+      document.getElementById('editDate').value = res.date;
+      // Strip seconds from time (DB stores HH:MM:SS, dropdown uses HH:MM)
+      const timeForDropdown = res.time ? res.time.slice(0, 5) : '';
+      document.getElementById('editTime').value = timeForDropdown;
+      document.getElementById('editGuests').value = res.guests;
+      document.getElementById('editZone').value = res.zonePreference || 'any';
+      document.getElementById('editGuestName').value = res.guestName || '';
+      document.getElementById('editNotes').value = res.specialRequests || '';
+      document.getElementById('editEmail').value = res.guestEmail || '';
+      
+      // Parse phone - detect country code and split
+      const phone = res.guestPhone || '';
+      const phoneDigits = phone.replace(/[^0-9]/g, '');
+      let countryCode = '+506';
+      let localNumber = phoneDigits;
+      
+      // Detect country code
+      if (phoneDigits.startsWith('1') && phoneDigits.length > 10) {
+        countryCode = '+1';
+        localNumber = phoneDigits.slice(1);
+      } else if (phoneDigits.startsWith('44')) {
+        countryCode = '+44';
+        localNumber = phoneDigits.slice(2);
+      } else if (phoneDigits.startsWith('52')) {
+        countryCode = '+52';
+        localNumber = phoneDigits.slice(2);
+      } else if (phoneDigits.startsWith('506')) {
+        countryCode = '+506';
+        localNumber = phoneDigits.slice(3);
+      }
+      
+      document.getElementById('editPhoneCountry').value = countryCode;
+      document.getElementById('editPhone').value = localNumber;
+      
+      // Populate multi-table selector with current selection
+      const currentTables = res.tableId ? res.tableId.split(',').map(t => t.trim()) : [];
+      populateMultiTableDropdown('edit', currentTables);
+      
+      // Close detail modal and open edit modal
+      document.getElementById('resDetailModal')?.classList.remove('open');
+      document.getElementById('editResModal')?.classList.add('open');
+    }
+    
+    function closeEditModal() {
+      document.getElementById('editResModal')?.classList.remove('open');
+      // Reopen detail modal
+      if (selectedReservationId) {
+        const res = cachedReservations.find(r => r.id === selectedReservationId);
+        if (res) openReservationDetail(res);
+      }
+    }
+    
+    async function saveEditedReservation() {
+      if (!selectedReservationId) return;
+      
+      const newDate = document.getElementById('editDate').value;
+      const newTime = document.getElementById('editTime').value;
+      const newGuests = parseInt(document.getElementById('editGuests').value);
+      const newZone = document.getElementById('editZone').value;
+      const newGuestName = document.getElementById('editGuestName').value.trim();
+      const newNotes = document.getElementById('editNotes').value;
+      const newEmail = document.getElementById('editEmail').value.trim();
+      const countryCode = document.getElementById('editPhoneCountry').value.replace('+', '');
+      const localNum = document.getElementById('editPhone').value.replace(/[^0-9]/g, '');
+      const newPhone = localNum ? (countryCode + localNum) : '';
+      const newTableId = document.getElementById('editTable').value || null;
+      
+      // Validate required fields
+      if (!newTime || newTime === '') {
+        alert('Please select a time for the reservation');
+        return;
+      }
+      if (!newDate) {
+        alert('Please select a date for the reservation');
+        return;
+      }
+      if (!newGuestName) {
+        alert('Please enter a guest name');
+        return;
+      }
+      
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${selectedReservationId}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({
+            date: newDate,
+            time: newTime,
+            guests: newGuests,
+            zone_preference: newZone,
+            guest_name: newGuestName,
+            special_requests: newNotes,
+            guest_email: newEmail,
+            guest_phone: newPhone,
+            table_id: newTableId
+          })
+        });
+        
+        if (!response.ok) {
+          const errText = await response.text();
+          console.error('Update failed:', response.status, errText);
+          throw new Error(`Failed: ${response.status} - ${errText}`);
+        }
+        
+        // Close edit modal and refresh
+        document.getElementById('editResModal')?.classList.remove('open');
+        // Clear cache and force full reload
+        cachedReservations = [];
+        await loadReservations();
+        loadReservations();
+        renderFloor();
+        console.log('Reservation saved, floor refreshed for date:', getDateString(currentDate));
+        
+        // Show success and reopen detail
+        const updatedRes = cachedReservations.find(r => r.id === selectedReservationId);
+        if (updatedRes) openReservationDetail(updatedRes);
+        
+      } catch (err) {
+        console.error('Failed to save:', err);
+        alert('Failed to save: ' + err.message);
+      }
+    }
+    
+    async function toggleSeatStatus() {
+      if (!selectedReservationId) return;
+      const res = cachedReservations.find(r => r.id === selectedReservationId);
+      if (!res) return;
+      
+      const newStatus = res.status === 'seated' ? 'confirmed' : 'seated';
+      await updateReservationStatus(selectedReservationId, newStatus);
+      await loadReservations();
+      renderFloor();
+      
+      // Refresh modal
+      const updatedRes = cachedReservations.find(r => r.id === selectedReservationId);
+      if (updatedRes) openReservationDetail(updatedRes);
+    }
+    
+    async function cancelReservation() {
+      if (!selectedReservationId) return;
+      if (!confirm('Cancel this reservation?')) return;
+      
+      // Cancel and clear table assignment
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${selectedReservationId}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ status: 'cancelled', table_id: null })
+        });
+      } catch (err) {
+        console.error('Failed to cancel:', err);
+      }
+      closeDetailModal();
+      await loadReservations();
+      renderFloor();
+    }
+    
+    async function reactivateReservation() {
+      if (!selectedReservationId) return;
+      
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${selectedReservationId}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ status: 'confirmed' })
+        });
+      } catch (err) {
+        console.error('Failed to reactivate:', err);
+      }
+      closeDetailModal();
+      await loadReservations();
+      renderFloor();
+    }
+    
+    // Table assignment
+    // Apply flash effect to available tables (used by zone change too)
+    function applyAssignmentFlash() {
+      const assigningRes = cachedReservations.find(r => r.id === assigningReservationId);
+      const assigningShift = getShiftForTime(assigningRes?.time);
+      const guestCount = parseInt(assigningRes?.guests) || 2;
+      const dateStr = getDateString(currentDate);
+      const layouts = getLayout();
+      
+      document.querySelectorAll('.floor-grid .table-btn').forEach(el => {
+        const tableId = el.dataset.table;
+        
+        // Get table capacity from layout
+        let tableCapacity = 4; // Default
+        for (const zone of Object.values(layouts)) {
+          const tableData = zone?.find(t => t.id === tableId);
+          if (tableData) {
+            tableCapacity = tableData.maxCovers || tableData.capacity || 4;
+            break;
+          }
+        }
+        
+        // Check 1: Does table fit the party size?
+        const fitsPax = tableCapacity >= guestCount;
+        
+        // Check 2: Only check ACTIVE reservations on the SAME DATE and SAME SHIFT
+        const tableRes = cachedReservations.filter(r => 
+          r.tableId === tableId && 
+          r.date === dateStr &&
+          r.id !== assigningReservationId && // Don't count the reservation we're moving
+          r.status !== 'cancelled' && 
+          r.status !== 'no-show' && 
+          r.status !== 'completed'
+        );
+        const hasTimeConflict = tableRes.some(r => getShiftForTime(r.time) === assigningShift);
+        
+        // Table is available ONLY if it fits the party AND has no time conflict
+        if (!fitsPax || hasTimeConflict) {
+          el.classList.add('occupied');
+          el.classList.remove('available');
+        } else {
+          el.classList.add('available');
+          el.classList.remove('occupied');
+        }
+      });
+    }
+    
+    function startTableAssignment() {
+      if (!selectedReservationId) return;
+      
+      // Check if reservation is cancelled
+      const res = cachedReservations.find(r => r.id === selectedReservationId);
+      if (res && res.status === 'cancelled') {
+        alert('No se puede asignar mesa a una reservación cancelada');
+        return;
+      }
+      
+      window.isAssigningTable = true;
+      assigningReservationId = selectedReservationId;
+      
+      // Close the modal
+      closeDetailModal();
+      
+      // Show assignment banner
+      document.getElementById('assignBanner').classList.add('show');
+      
+      // Add assigning class to floor grid
+      document.getElementById('floorGrid').classList.add('assigning');
+      
+      // Apply flash effect
+      applyAssignmentFlash();
+    }
+    
+    function getShiftForTime(time) {
+      if (!time) return 'dinner1';
+      const hour = parseInt(time.split(':')[0]);
+      if (hour < 15) return 'lunch';
+      if (hour < 19) return 'dinner1';
+      return 'dinner2';
+    }
+    
+    function cancelAssignment() {
+      window.isAssigningTable = false;
+      assigningReservationId = null;
+      document.getElementById('floorGrid').classList.remove('assigning');
+      document.getElementById('assignBanner').classList.remove('show');
+      document.querySelectorAll('.table-btn').forEach(t => {
+        t.classList.remove('available');
+        t.classList.remove('occupied');
+      });
+    }
+    
+    async function assignTableToReservation(tableId) {
+      if (!assigningReservationId || !window.isAssigningTable) return;
+      
+      // Save the ID before clearing
+      const resId = assigningReservationId;
+      
+      // Get the reservation being assigned
+      const assigningRes = cachedReservations.find(r => r.id === resId);
+      if (!assigningRes) {
+        console.error('Could not find reservation to assign:', resId);
+        cancelAssignment();
+        return;
+      }
+      
+      // Check for conflicts - same table, same shift, same date
+      const dateStr = getDateString(currentDate);
+      const assigningShift = getShiftForTime(assigningRes.time);
+      const conflicts = cachedReservations.filter(r => 
+        r.id !== resId &&
+        r.tableId === tableId &&
+        r.date === dateStr &&
+        r.status !== 'cancelled' &&
+        r.status !== 'no-show' &&
+        r.status !== 'completed' &&
+        getShiftForTime(r.time) === assigningShift
+      );
+      
+      if (conflicts.length > 0) {
+        const conflictNames = conflicts.map(c => `${c.guestName} at ${c.time}`).join(', ');
+        alert(`Table already has a reservation in this shift: ${conflictNames}`);
+        return;
+      }
+      
+      // Check table capacity
+      const layouts = getLayout();
+      const allTables = [...(layouts.inside||[]), ...(layouts.terraza||[]), ...(layouts.jardin||[])];
+      const table = allTables.find(t => t.id === tableId);
+      const partySize = assigningRes.guests || assigningRes.party_size || 2;
+      
+      if (table && partySize > table.maxCovers) {
+        alert(`Table "${table.name}" only fits ${table.maxCovers} guests. This reservation is for ${partySize} guests.`);
+        return;
+      }
+      
+      // Stop glow immediately
+      cancelAssignment();
+      
+      try {
+        console.log('Assigning table', tableId, 'to reservation', resId);
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${resId}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({ table_id: tableId })
+        });
+        
+        console.log('Response status:', response.status, response.ok);
+        if (!response.ok) throw new Error('Failed to save: ' + response.status);
+        
+        // Reload and render
+        await loadReservations();
+        renderFloor();
+        
+        // Show success flash on the table
+        const table = document.querySelector(`.table[data-table="${tableId}"]`);
+        if (table) {
+          table.classList.add('just-assigned');
+          setTimeout(() => table.classList.remove('just-assigned'), 2000);
+        }
+      } catch (e) {
+        console.error('Failed to assign table:', e);
+        alert('Failed to assign table. Please try again.');
+      }
+    }
+    
+    // Quick guest count update from mobile dropdown
+    async function quickUpdateGuests(selectEl) {
+      const resId = selectEl.dataset.resId;
+      const guests = parseInt(selectEl.value);
+      if (!guests || !resId) return;
+      
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${resId}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({ guests: guests })
+        });
+        
+        if (!response.ok) throw new Error('Failed to save');
+        await loadReservations();
+        renderFloor();
+      } catch (e) {
+        alert('Failed to update guests');
+      }
+    }
+
+    // Quick table assignment from mobile dropdown
+    async function quickAssignTable(selectEl) {
+      const resId = selectEl.dataset.resId;
+      const tableId = selectEl.value || null; // Allow setting to null (TBA)
+      if (!resId) return;
+      
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${resId}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({ table_id: tableId })
+        });
+        
+        if (!response.ok) throw new Error('Failed to save');
+        await loadReservations();
+        renderFloor();
+      } catch (e) {
+        alert('Failed to assign table');
+        selectEl.value = '';
+      }
+    }
+
+    // Populate table dropdowns after rendering
+    function populateTableDropdowns() {
+      const layouts = getLayout();
+      // Flatten all zones (inside, terraza, jardin, fantasma) into one array
+      const allTables = [
+        ...(layouts.inside || []),
+        ...(layouts.terraza || []),
+        ...(layouts.jardin || []),
+        ...(layouts.fantasma || [])
+      ];
+      const dateStr = getDateString(currentDate);
+      const dayReservations = cachedReservations.filter(r => r.date === dateStr && r.status !== 'cancelled' && r.status !== 'no-show');
+      
+      document.querySelectorAll('.table-select-mobile').forEach(select => {
+        const resId = select.dataset.resId;
+        const res = cachedReservations.find(r => r.id === resId);
+        if (!res) return;
+        
+        const guestCount = parseInt(res.guests) || 2;
+        const resTime = res.time;
+        
+        // Filter tables: fits guests AND (not reserved at same time OR is current table)
+        const availableTables = allTables.filter(t => {
+          // Check capacity using maxCovers field
+          const capacity = t.maxCovers || t.capacity || 4;
+          if (capacity < guestCount) return false;
+          
+          // Check if table is taken at this time (allow if it's this reservation's current table)
+          if (t.id === res.tableId) return true;
+          const conflict = dayReservations.find(r => 
+            r.tableId === t.id && 
+            r.id !== resId &&
+            Math.abs(timeToMinutes(r.time) - timeToMinutes(resTime)) < 90
+          );
+          return !conflict;
+        });
+        
+        // Build options: TBA first, then all available tables
+        select.innerHTML = '<option value="">TBA</option>';
+        availableTables.forEach(t => {
+          const opt = document.createElement('option');
+          opt.value = t.id;
+          // Add prefix: T for Table, S for Sofa to distinguish from pax
+          let label = t.name || t.id.toUpperCase();
+          if (t.type === 'sofa') {
+            label = 'S: ' + label;
+          } else if (/^\d+$/.test(label)) {
+            // If it's just a number, prefix with T:
+            label = 'T' + label;
+          }
+          opt.textContent = label;
+          if (res?.tableId === t.id) opt.selected = true;
+          select.appendChild(opt);
+        });
+        // If current table not in list (edge case), still select TBA
+        if (res?.tableId && !availableTables.find(t => t.id === res.tableId)) {
+          select.value = '';
+        }
+      });
+    }
+    
+    function timeToMinutes(timeStr) {
+      if (!timeStr) return 0;
+      const [h, m] = timeStr.split(':').map(Number);
+      return h * 60 + m;
+    }
+
+    // Table popup for multiple reservations
+    function showTablePopup(tableEl, reservations) {
+      hideTablePopup();
+      
+      const popup = document.createElement('div');
+      popup.id = 'tablePopup';
+      popup.innerHTML = `
+        <div class="popup-header">Table ${tableEl.querySelector('.table-label').textContent}</div>
+        <div class="popup-list">
+          ${reservations.map(r => `
+            <div class="popup-res ${r.status}">
+              <span class="popup-time">${formatTime12(r.time)}</span>
+              <span class="popup-name">${r.guestName}</span>
+              <span class="popup-guests">${r.guests}p</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      
+      // Position popup near the table (smart positioning)
+      const floorGrid = document.getElementById('floorGrid');
+      const gridRect = floorGrid.getBoundingClientRect();
+      const tableRect = tableEl.getBoundingClientRect();
+      
+      // Determine if table is on right side of screen
+      const isRightSide = tableRect.left > gridRect.left + gridRect.width / 2;
+      const isBottomSide = tableRect.top > gridRect.top + gridRect.height / 2;
+      
+      let left, top;
+      if (isRightSide) {
+        left = tableEl.offsetLeft - 190; // Show to the left
+      } else {
+        left = tableEl.offsetLeft + 70; // Show to the right
+      }
+      if (isBottomSide) {
+        top = tableEl.offsetTop - 100; // Show above
+      } else {
+        top = tableEl.offsetTop; // Show below
+      }
+      
+      popup.style.cssText = `
+        position: absolute;
+        left: ${left}px;
+        top: ${top}px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        z-index: 1000;
+        min-width: 180px;
+        overflow: hidden;
+        pointer-events: none;
+      `;
+      
+      document.getElementById('floorGrid').appendChild(popup);
+    }
+    
+    function hideTablePopup() {
+      const popup = document.getElementById('tablePopup');
+      if (popup) popup.remove();
+    }
+    
+    // Table action popup (Eatapp-style)
+    function showTableActionPopup(table, tableReservations) {
+      console.log('showTableActionPopup called:', table, tableReservations);
+      hideTableActionPopup();
+      
+      const popup = document.createElement('div');
+      popup.id = 'tableActionPopup';
+      popup.className = 'table-action-popup';
+      popup.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.3);z-index:9999;min-width:320px;max-width:90vw;display:block !important;';
+      
+      const hasReservations = tableReservations.length > 0;
+      
+      popup.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #e5e5e5;background:#fafafa;border-radius:16px 16px 0 0;">
+          <span style="font-size:1.1rem;font-weight:600;color:#1a1f16;">🪑 ${table.name || table.id.toUpperCase()}</span>
+          <button onclick="hideTableActionPopup()" style="background:none;border:none;font-size:1.5rem;color:#999;cursor:pointer;padding:4px 8px;border-radius:4px;" onmouseover="this.style.background='#eee'" onmouseout="this.style.background='none'">✕</button>
+        </div>
+        <div style="padding:12px 16px;">
+          ${hasReservations ? `
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              ${tableReservations.map(r => `
+                <div onclick="selectReservation('${r.id}'); hideTableActionPopup();" 
+                     style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#f8f6f3;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:all 0.15s;"
+                     onmouseover="this.style.background='#efe9e1';this.style.borderColor='#3D4F3D';"
+                     onmouseout="this.style.background='#f8f6f3';this.style.borderColor='transparent';">
+                  <div style="width:56px;height:56px;background:linear-gradient(135deg,#3D4F3D,#4A5D4A);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:0.85rem;">${formatTime12(r.time)}</div>
+                  <div style="flex:1;">
+                    <div style="font-weight:600;color:#1a1f16;font-size:1rem;">${r.guestName}</div>
+                    <div style="color:#666;font-size:0.85rem;margin-top:2px;">${r.guests} ${r.guests === 1 ? 'guest' : 'guests'}</div>
+                  </div>
+                  <div style="color:#3D4F3D;">→</div>
+                </div>
+              `).join('')}
+            </div>
+          ` : `
+            <div style="text-align:center;padding:24px;color:#999;">
+              <div style="font-size:2rem;margin-bottom:8px;">📅</div>
+              <span>No reservations today</span>
+            </div>
+          `}
+        </div>
+        <div style="padding:12px 16px 16px;border-top:1px solid #eee;">
+          <button onclick="createReservationForTable('${table.id}')" 
+                  style="width:100%;padding:12px;background:#A65D3F;color:white;border:none;border-radius:8px;font-size:0.95rem;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;"
+                  onmouseover="this.style.background='#8B4D33'"
+                  onmouseout="this.style.background='#A65D3F'">
+            <span style="font-size:1.1rem;">+</span> New Reservation
+          </button>
+        </div>
+      `;
+      
+      document.body.appendChild(popup);
+      console.log('Popup appended to body');
+      
+      // Close when clicking outside - longer delay to prevent immediate close
+      setTimeout(() => {
+        document.addEventListener('click', closeTableActionOnOutsideClick);
+      }, 300);
+    }
+    
+    function closeTableActionOnOutsideClick(e) {
+      const popup = document.getElementById('tableActionPopup');
+      if (popup && !popup.contains(e.target) && !e.target.closest('.table')) {
+        hideTableActionPopup();
+      }
+    }
+    
+    function hideTableActionPopup() {
+      const popup = document.getElementById('tableActionPopup');
+      if (popup) popup.remove();
+      document.removeEventListener('click', closeTableActionOnOutsideClick);
+    }
+    window.hideTableActionPopup = hideTableActionPopup;
+    window.showTableActionPopup = showTableActionPopup;
+    
+    function createReservationForTable(tableId) {
+      hideTableActionPopup();
+      openNewReservation(tableId);
+    }
+    window.createReservationForTable = createReservationForTable;
+    
+    // Clear table - mark reservation as completed
+    async function clearTable(tableId, reservationId) {
+      if (!confirm('Clear this table? The reservation will be marked as completed.')) return;
+      
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${reservationId}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({ status: 'completed' })
+        });
+        
+        hideTableActionPopup();
+        await loadReservations();
+        renderFloor();
+        
+        // Toast notification
+        const toast = document.createElement('div');
+        toast.textContent = 'Table cleared';
+        toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 24px;border-radius:8px;z-index:9999;';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+      } catch (err) {
+        alert('Failed to clear table: ' + err.message);
+      }
+    }
+    window.createReservationForTable = createReservationForTable;
+
+    // Date navigation
+    document.getElementById('prevDay').addEventListener('click', async (e) => {
+      e.stopPropagation();
+      currentDate.setDate(currentDate.getDate() - 1);
+      document.getElementById('datePicker').value = getDateString(currentDate);
+      await loadReservations();
+      renderFloor();
+      checkIfDayBlocked();
+    });
+
+    document.getElementById('nextDay').addEventListener('click', async (e) => {
+      e.stopPropagation();
+      currentDate.setDate(currentDate.getDate() + 1);
+      document.getElementById('datePicker').value = getDateString(currentDate);
+      await loadReservations();
+      renderFloor();
+      checkIfDayBlocked();
+    });
+
+    // Block current day for private events
+    async function blockCurrentDay() {
+      const reason = prompt('Reason for blocking (e.g., Private Wedding):');
+      if (reason === null) return; // cancelled
+      
+      const dateStr = getDateString(currentDate);
+      try {
+        const res = await fetch('/api/blocked-dates', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            restaurant: 'laluna',
+            date: dateStr,
+            reason: reason || 'Private Event',
+            blocked_by: 'admin'
+          })
+        });
+        if (res.ok) {
+          alert('Day blocked! Guests cannot make reservations for ' + currentDate.toLocaleDateString());
+          document.getElementById('blockDayBtn').classList.add('active');
+          document.getElementById('blockDayBtn').textContent = 'BLOCKED';
+        } else {
+          const err = await res.json();
+          alert('Error: ' + (err.error || 'Could not block date'));
+        }
+      } catch (e) {
+        alert('Error blocking date');
+      }
+    }
+    window.blockCurrentDay = blockCurrentDay;
+    
+    // Check if current day is blocked
+    async function checkIfDayBlocked() {
+      try {
+        const res = await fetch('/api/blocked-dates?restaurant=laluna');
+        const blocked = await res.json();
+        const dateStr = getDateString(currentDate);
+        const isBlocked = blocked.some(b => b.date === dateStr);
+        const btn = document.getElementById('blockDayBtn');
+        if (isBlocked) {
+          btn.classList.add('active');
+          btn.textContent = 'BLOCKED';
+        } else {
+          btn.classList.remove('active');
+          btn.textContent = 'BLOCK';
+        }
+      } catch (e) {}
+    }
+
+    // Date picker - simple visible input
+    window.onDateChange = async function(value) {
+      const newDate = new Date(value + 'T12:00:00');
+      if (!isNaN(newDate.getTime())) {
+        currentDate = newDate;
+        await loadReservations();
+        renderFloor();
+        checkIfDayBlocked();
+      }
+    };
+    
+    // Initialize date picker
+    document.getElementById('datePicker').value = getDateString(currentDate);
+
+    // Zone tabs
+    document.querySelectorAll('.zone-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.zone-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentZone = tab.dataset.zone;
+        renderFloor();
+        // Re-apply assignment mode flash if active
+        if (window.isAssigningTable) {
+          applyAssignmentFlash();
+        }
+      });
+    });
+
+    // Status tabs
+    document.querySelectorAll('.status-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.status-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentStatusFilter = tab.dataset.status;
+        loadReservations();
+      });
+    });
+
+    // Search
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      document.querySelectorAll('.res-row').forEach(row => {
+        const text = row.textContent.toLowerCase();
+        const shouldShow = !query || text.includes(query);
+        row.style.display = shouldShow ? '' : 'none';
+        // Also hide the note row if exists
+        const noteRow = row.nextElementSibling;
+        if (noteRow && noteRow.classList.contains('res-note-row')) {
+          noteRow.style.display = shouldShow ? '' : 'none';
+        }
+      });
+      // Update count
+      const visible = document.querySelectorAll('.res-row:not([style*="display: none"])');
+      document.getElementById('totalRes').textContent = visible.length;
+    });
+
+    // New reservation modal
+    // Track selected tables for multi-select
+    let selectedTables = [];
+    
+    function toggleTableDropdown(prefix) {
+      const dropdown = document.getElementById(prefix + 'TableDropdown');
+      dropdown.classList.toggle('open');
+    }
+    
+    function updateTableSelection(prefix, tableId, tableName, checkbox) {
+      if (checkbox.checked) {
+        if (!selectedTables.includes(tableId)) {
+          selectedTables.push(tableId);
+        }
+      } else {
+        selectedTables = selectedTables.filter(t => t !== tableId);
+      }
+      
+      // Update hidden input with comma-separated values
+      document.getElementById(prefix + 'Table').value = selectedTables.join(',');
+      
+      // Update button label
+      const label = document.getElementById(prefix + 'TableLabel');
+      if (selectedTables.length === 0) {
+        label.textContent = 'Select Tables';
+      } else if (selectedTables.length === 1) {
+        label.textContent = '1 table selected';
+      } else {
+        label.textContent = selectedTables.length + ' tables selected';
+      }
+    }
+    
+    function populateMultiTableDropdown(prefix, preselectedTables = []) {
+      const dropdown = document.getElementById(prefix + 'TableDropdown');
+      const layouts = getLayout();
+      const allTables = [
+        ...(layouts.inside || []),
+        ...(layouts.terraza || []),
+        ...(layouts.jardin || []),
+        ...(layouts.fantasma || [])
+      ];
+      
+      selectedTables = preselectedTables;
+      
+      dropdown.innerHTML = allTables.map(t => {
+        const isSelected = selectedTables.includes(t.id);
+        const cap = t.maxCovers || t.capacity || 4;
+        return `<div class="table-option ${isSelected ? 'selected' : ''}" onclick="this.querySelector('input').click();">
+            <input type="checkbox" ${isSelected ? 'checked' : ''} 
+              onclick="event.stopPropagation();"
+              onchange="updateTableSelection('${prefix}', '${t.id}', '${t.name || t.id}', this); this.parentElement.classList.toggle('selected', this.checked);">
+            <span class="table-name">${t.name || t.id.toUpperCase()}</span>
+            <span class="table-cap">(${cap}p)</span>
+          </div>`;
+      }).join('');
+      
+      // Update label
+      const label = document.getElementById(prefix + 'TableLabel');
+      if (selectedTables.length === 0) {
+        label.textContent = 'Select Tables';
+      } else {
+        label.textContent = selectedTables.length + ' table(s) selected';
+      }
+      
+      // Update hidden input
+      document.getElementById(prefix + 'Table').value = selectedTables.join(',');
+    }
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.multi-table-select')) {
+        document.querySelectorAll('.table-dropdown').forEach(d => d.classList.remove('open'));
+      }
+    });
+    
+    function openNewReservation(preselectedTable = null) {
+      // CLEAR all form fields first (remove previous client data)
+      document.getElementById('newName').value = '';
+      document.getElementById('newPhone').value = '';
+      document.getElementById('newEmail').value = '';
+      document.getElementById('newNotes').value = '';
+      document.getElementById('newGuests').value = '2';
+      document.getElementById('newTime').value = '18:00';
+      // Hide any gift card match alerts
+      const giftMatch = document.getElementById('newResGiftMatch');
+      if (giftMatch) giftMatch.style.display = 'none';
+      
+      document.getElementById('newDate').value = getDateString(currentDate);
+      
+      // Populate multi-table dropdown
+      const preselected = preselectedTable ? [preselectedTable] : [];
+      populateMultiTableDropdown('new', preselected);
+      
+      document.getElementById('newResModal').classList.add('open');
+    }
+
+    function openNewReservationWithTable(tableId, tableName) {
+      openNewReservation(tableId);
+    }
+    
+    function messageAllReservations() {
+      const todayRes = cachedReservations.filter(r => r.guestPhone && r.status !== 'cancelled');
+      
+      if (todayRes.length === 0) {
+        alert('No reservations with phone numbers for today');
+        return;
+      }
+      
+      // Open each WhatsApp in sequence with small delay
+      let index = 0;
+      const openNext = () => {
+        if (index >= todayRes.length) return;
+        const res = todayRes[index];
+        const phoneWithCode = formatPhoneForWhatsApp(res.guestPhone);
+        const date = new Date(res.date + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+        const message = `Good day ${res.guestName.split(' ')[0]}, this is La Luna confirming your table for ${res.guests} on ${date} at ${formatTime12(res.time)}. We look forward to welcoming you.`;
+        window.open(`https://wa.me/${phoneWithCode}?text=${encodeURIComponent(message)}`, '_blank');
+        index++;
+        if (index < todayRes.length) {
+          setTimeout(openNext, 1500); // 1.5 second delay between each
+        }
+      };
+      
+      if (confirm(`Send WhatsApp to ${todayRes.length} reservation(s)?`)) {
+        openNext();
+      }
+    }
+    
+    async function sendDayReminders() {
+      const dateStr = getDateString(currentDate);
+      const todayRes = cachedReservations.filter(r => 
+        r.date === dateStr && 
+        r.guestEmail && 
+        r.status === 'confirmed'
+      );
+      
+      if (todayRes.length === 0) {
+        alert('No reservations with email addresses for this date');
+        return;
+      }
+      
+      if (!confirm(`Send confirmation reminder emails to ${todayRes.length} reservation(s)?`)) {
+        return;
+      }
+      
+      const btn = document.querySelector('.btn-send-reminders');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = 'Sending...';
+      btn.disabled = true;
+      
+      try {
+        const res = await fetch('/api/send-reminders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ restaurant: 'laluna', date: dateStr })
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+          alert(`Sent ${data.sent} reminder email(s)!${data.errors ? '\n\nErrors:\n' + data.errors.join('\n') : ''}`);
+        } else {
+          alert('Failed to send reminders: ' + (data.error || 'Unknown error'));
+        }
+      } catch (e) {
+        alert('Failed to send reminders: ' + e.message);
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('newResModal').classList.remove('open');
+      // Clear form fields when closing (privacy + clean slate)
+      document.getElementById('newName').value = '';
+      document.getElementById('newPhone').value = '';
+      document.getElementById('newEmail').value = '';
+      document.getElementById('newNotes').value = '';
+      document.getElementById('newGuests').value = '2';
+      const giftMatch = document.getElementById('newResGiftMatch');
+      if (giftMatch) giftMatch.style.display = 'none';
+    }
+
+    // Walk-in functions
+    let walkinGuests = 4;
+
+    let giftCardsCache = [];
+
+    async function loadGiftCards() {
+      try {
+        const res = await fetch('/api/gift-cards');
+        giftCardsCache = await res.json();
+        if (!Array.isArray(giftCardsCache)) giftCardsCache = [];
+      } catch (e) {
+        giftCardsCache = [];
+      }
+    }
+
+    function checkGiftCardMatch(name) {
+      const matchAlert = document.getElementById('walkinGiftMatch');
+      checkGiftCardForElement(name, matchAlert);
+    }
+
+    function checkNewResGiftCard(name) {
+      const matchAlert = document.getElementById('newResGiftMatch');
+      checkGiftCardForElement(name, matchAlert);
+    }
+
+    function checkGiftCardForElement(name, matchAlert) {
+      if (!matchAlert) return;
+      if (!name || name.trim().length < 3) {
+        matchAlert.style.display = 'none';
+        return;
+      }
+      const nameLower = name.toLowerCase().trim();
+      const firstName = nameLower.split(' ')[0];
+      const matches = giftCardsCache.filter(g => {
+        if (g.status === 'redeemed' || !g.recipient_name) return false;
+        const cardName = g.recipient_name.toLowerCase().trim();
+        // STRICT MATCH: Only exact full name match (prevents wrong person getting gift)
+        return cardName === nameLower;
+      });
+      if (matches.length > 0) {
+        const total = matches.reduce((sum, g) => sum + (g.remaining_balance ?? g.amount), 0);
+        matchAlert.innerHTML = `<strong>Gift card found!</strong> ${matches[0].recipient_name} has <strong>$${total}</strong> available.`;
+        matchAlert.style.display = 'block';
+      } else {
+        matchAlert.style.display = 'none';
+      }
+    }
+
+    function openWalkin() {
+      walkinGuests = 4;
+      document.querySelectorAll('.guest-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.guests === '4');
+      });
+      document.getElementById('walkinGuestCount').value = 4;
+      document.getElementById('walkinName').value = '';
+      document.getElementById('walkinGiftMatch').style.display = 'none';
+      // Populate tables from current zone layout
+      const tableSelect = document.getElementById('walkinTable');
+      tableSelect.innerHTML = '<option value="">Auto-assign</option>';
+      const layouts = getLayout();
+      const allTables = [...(layouts.terraza || []), ...(layouts.lounge || []), ...(layouts.jardin || [])];
+      allTables.forEach(t => {
+        const capacity = t.maxCovers || 4;
+        tableSelect.innerHTML += `<option value="${t.id}">${t.name} (${capacity}p)</option>`;
+      });
+      loadGiftCards();
+      document.getElementById('walkinModal').classList.add('open');
+    }
+
+    function closeWalkinModal() {
+      document.getElementById('walkinModal').classList.remove('open');
+    }
+
+    // Name input - check for gift card matches
+    document.getElementById('walkinName')?.addEventListener('input', (e) => {
+      checkGiftCardMatch(e.target.value);
+    });
+
+    // Guest button clicks
+    document.querySelectorAll('.guest-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.guest-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const g = btn.dataset.guests;
+        if (g === '6+') {
+          const custom = prompt('How many guests?', '6');
+          walkinGuests = parseInt(custom) || 6;
+        } else {
+          walkinGuests = parseInt(g);
+        }
+        document.getElementById('walkinGuestCount').value = walkinGuests;
+      });
+    });
+
+    async function seatWalkin() {
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+      
+      const walkinNameValue = document.getElementById('walkinName').value.trim();
+      const reservation = {
+        date: getDateString(currentDate),
+        time: timeStr,
+        guests: walkinGuests,
+        guestName: walkinNameValue || `Walk-in (${walkinGuests})`,
+        guestPhone: '',
+        guestEmail: '',
+        tableId: document.getElementById('walkinTable').value || null,
+        specialRequests: walkinNameValue ? '' : 'Walk-in',
+        status: 'seated'
+      };
+      
+      try {
+        await saveReservation(reservation);
+        closeWalkinModal();
+        await loadReservations();
+        renderFloor();
+      } catch (e) {
+        alert('Failed to save walk-in');
+      }
+    }
+
+    let isSavingReservation = false;
+    async function saveNewReservation() {
+      // Prevent double-click submissions
+      if (isSavingReservation) {
+        console.log('Already saving, ignoring duplicate click');
+        return;
+      }
+      isSavingReservation = true;
+      
+      // Disable save button immediately
+      const saveBtn = document.querySelector('#newResModal .btn-primary');
+      if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving...';
+      }
+      
+      const name = document.getElementById('newName').value.trim();
+      if (!name) { 
+        alert('Name required'); 
+        isSavingReservation = false;
+        if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'SAVE'; }
+        return; 
+      }
+      
+      const date = document.getElementById('newDate').value;
+      const time = document.getElementById('newTime').value;
+      const guests = parseInt(document.getElementById('newGuests').value) || 2;
+      let tableId = document.getElementById('newTable').value || null;
+      
+      // Check for duplicate reservation (same name, same date)
+      const nameLower = name.toLowerCase();
+      const allReservations = getReservations();
+      const duplicate = allReservations.find(r => 
+        r.date === date && 
+        r.guestName?.toLowerCase() === nameLower &&
+        r.status !== 'cancelled' && r.status !== 'no-show'
+      );
+      
+      if (duplicate) {
+        const proceed = confirm(`⚠️ Duplicate reservation detected!\n\n"${name}" already has a reservation at ${formatTime12(duplicate.time)} on this date.\n\nCreate another reservation anyway?`);
+        if (!proceed) return;
+      }
+      
+      // Auto-assign best available table if none selected
+      if (!tableId) {
+        tableId = findBestAvailableTable(date, time, guests, null);
+      } else {
+        // Manual table selected - check for conflicts
+        const shift = getShiftForTime(time);
+        const conflicts = getReservations().filter(r => 
+          r.tableId === tableId && 
+          r.date === date &&
+          r.status !== 'cancelled' &&
+          r.status !== 'no-show' &&
+          r.status !== 'completed' &&
+          getShiftForTime(r.time) === shift
+        );
+        if (conflicts.length > 0) {
+          const conflictNames = conflicts.map(c => `${c.guestName} at ${formatTime12(c.time)}`).join(', ');
+          alert(`Table conflict! Already booked this shift by: ${conflictNames}`);
+          isSavingReservation = false;
+          if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'SAVE'; }
+          return;
+        }
+      }
+      
+      const reservation = {
+        date,
+        time,
+        guests,
+        guestName: name,
+        guestPhone: (() => { const cc = document.getElementById('newPhoneCountry').value.replace('+', ''); const ln = document.getElementById('newPhone').value.replace(/[^0-9]/g, ''); return ln ? (cc + ln) : ''; })(),
+        guestEmail: document.getElementById('newEmail').value.trim(),
+        tableId,
+        specialRequests: document.getElementById('newNotes').value.trim(),
+        status: 'confirmed'
+      };
+      
+      try {
+        console.log('Saving reservation:', reservation);
+        const result = await saveReservation(reservation);
+        console.log('Save result:', result);
+        if (result && result.error) {
+          alert('Error: ' + (result.message || JSON.stringify(result)));
+          return;
+        }
+        closeModal();
+        await loadReservations();
+        renderFloor();
+      } catch (e) {
+        console.error('Save error:', e);
+        alert('Failed to save reservation: ' + e.message);
+      } finally {
+        // Reset saving flag and button
+        isSavingReservation = false;
+        const saveBtn = document.querySelector('#newResModal .btn-primary');
+        if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'SAVE'; }
+      }
+    }
+
+    // Time dropdown
+    let selectedTime = null; // null = current time
+    const timeBtn = document.getElementById('timeBtn');
+    const timeDropdown = document.getElementById('timeDropdown');
+    const timeLabel = document.getElementById('currentTimeLabel');
+    const currentTimeBtn = document.getElementById('currentTimeBtn');
+
+    timeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      timeDropdown.classList.toggle('open');
+    });
+
+    document.addEventListener('click', () => {
+      timeDropdown.classList.remove('open');
+    });
+
+    timeDropdown.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    // Handle time selection
+    document.querySelectorAll('.time-option[data-time]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const time = btn.dataset.time;
+        selectedTime = time;
+        timeLabel.textContent = formatTime12(time);
+        timeDropdown.classList.remove('open');
+        
+        // Remove active from all, add to selected
+        document.querySelectorAll('.time-option').forEach(o => o.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // Filter/highlight based on selected time
+        highlightTimeSlot(time);
+      });
+    });
+
+    currentTimeBtn.addEventListener('click', () => {
+      selectedTime = null;
+      updateCurrentTimeDisplay();
+      timeDropdown.classList.remove('open');
+      document.querySelectorAll('.time-option').forEach(o => o.classList.remove('active'));
+    });
+
+    function updateCurrentTimeDisplay() {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+      if (selectedTime === null) {
+        timeLabel.textContent = 'Current time';
+      }
+    }
+
+    function highlightTimeSlot(time) {
+      // Could be used to scroll reservation list to that time, etc.
+      console.log('Selected time:', time);
+    }
+
+    // Update current time display every minute
+    setInterval(updateCurrentTimeDisplay, 60000);
+    updateCurrentTimeDisplay();
+
+    // Load shifts from Supabase (uses SUPABASE_URL and SUPABASE_KEY from above)
+
+    async function loadShifts() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/laluna_shifts?active=eq.true&order=start_time.asc`, {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          }
+        });
+        const shifts = await res.json();
+        
+        const select = document.getElementById('shiftSelect');
+        // Keep first two options (All Shifts, Upcoming)
+        const keepOptions = select.innerHTML;
+        
+        shifts.forEach(shift => {
+          const opt = document.createElement('option');
+          opt.value = shift.id;
+          opt.textContent = shift.name;
+          select.appendChild(opt);
+        });
+      } catch (err) {
+        console.error('Failed to load shifts:', err);
+      }
+    }
+
+    // Shift filter
+    let currentShiftFilter = 'all';
+    document.getElementById('shiftSelect').addEventListener('change', (e) => {
+      currentShiftFilter = e.target.value;
+      loadReservations();
+    });
+    
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    const clearSearchBtn = document.getElementById('clearSearch');
+    
+    searchInput.addEventListener('input', () => {
+      clearSearchBtn.style.display = searchInput.value ? 'block' : 'none';
+      renderFloor();
+    });
+    
+    clearSearchBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      clearSearchBtn.style.display = 'none';
+      renderFloor();
+    });
+    
+    // Initial load
+    loadShifts();
+    loadReservations().then(() => renderFloor());
+    checkIfDayBlocked();
+    
+    // Event delegation for table clicks (backup in case individual handlers fail)
+    document.getElementById('floorGrid').addEventListener('click', (e) => {
+      const tableEl = e.target.closest('.table');
+      if (tableEl) {
+        console.log('Grid delegation caught click on:', tableEl.dataset.table);
+        const tableId = tableEl.dataset.table;
+        const layouts = getLayout();
+        const allTables = [...(layouts.inside || []), ...(layouts.terraza || []), ...(layouts.jardin || []), ...(layouts.fantasma || [])];
+        const table = allTables.find(t => t.id === tableId);
+        if (table) {
+          const dateStr = getDateString(currentDate);
+          const tableReservations = cachedReservations.filter(r => r.date === dateStr && r.tableId === tableId);
+          if (window.isAssigningTable && !tableEl.classList.contains('occupied')) {
+            const resIdToAssign = assigningReservationId;
+            window.isAssigningTable = false;
+            assigningReservationId = null;
+            document.getElementById('floorGrid').classList.remove('assigning');
+            document.getElementById('assignBanner').classList.remove('show');
+            fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${resIdToAssign}`, {
+              method: 'PATCH',
+              headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+              body: JSON.stringify({ table_id: tableId })
+            }).then(() => { loadReservations(); renderFloor(); });
+          } else {
+            showTableActionPopup(table, tableReservations);
+          }
+        }
+      }
+    });
+  </script>
+
+  <!-- Block Day Modal -->
+  <div id="blockModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:#242424;padding:24px;border-radius:16px;max-width:400px;width:90%;">
+      <h3 style="color:white;margin-bottom:16px;">Block Date</h3>
+      <p id="blockModalDate" style="color:#A65D3F;font-weight:600;margin-bottom:16px;"></p>
+      
+      <div style="margin-bottom:16px;">
+        <label style="color:#999;display:block;margin-bottom:8px;">What to block:</label>
+        <select id="blockShift" style="width:100%;padding:12px;border-radius:8px;border:1px solid #444;background:#1a1a1a;color:white;font-size:14px;">
+          <option value="all">Whole Day</option>
+          <option value="lunch">Lunch Only (12:00 - 15:00)</option>
+          <option value="dinner">Dinner Only (18:00 - 22:00)</option>
+        </select>
+      </div>
+      
+      <div style="margin-bottom:20px;">
+        <label style="color:#999;display:block;margin-bottom:8px;">Reason:</label>
+        <input type="text" id="blockReason" placeholder="e.g., Private Wedding" style="width:100%;padding:12px;border-radius:8px;border:1px solid #444;background:#1a1a1a;color:white;font-size:14px;box-sizing:border-box;" />
+      </div>
+      
+      <div style="display:flex;gap:12px;">
+        <button onclick="closeBlockModal()" style="flex:1;padding:12px;background:#333;color:white;border:none;border-radius:8px;cursor:pointer;">Cancel</button>
+        <button onclick="confirmBlock()" style="flex:1;padding:12px;background:#A65D3F;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">Block</button>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    function openBlockModal() {
+      const modal = document.getElementById('blockModal');
+      const dateEl = document.getElementById('blockModalDate');
+      const pickerVal = document.getElementById('datePicker').value;
+      const d = new Date(pickerVal + 'T12:00:00');
+      dateEl.textContent = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+      modal.style.display = 'flex';
+    }
+    
+    function closeBlockModal() {
+      document.getElementById('blockModal').style.display = 'none';
+    }
+    
+    async function confirmBlock() {
+      const shift = document.getElementById('blockShift').value;
+      const reason = document.getElementById('blockReason').value || 'Private Event';
+      
+      // Get the date from picker
+      const dateStr = document.getElementById('datePicker').value;
+      
+      try {
+        const res = await fetch('/api/blocked-dates', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            restaurant: 'laluna',
+            date: dateStr,
+            reason: shift === 'all' ? reason : `[${shift.toUpperCase()}] ${reason}`,
+            blocked_by: 'admin',
+            shift: shift
+          })
+        });
+        
+        if (res.ok) {
+          closeBlockModal();
+          const shiftLabel = shift === 'all' ? 'day' : shift;
+          alert(`${shiftLabel.charAt(0).toUpperCase() + shiftLabel.slice(1)} blocked!`);
+          location.reload();
+        } else {
+          const err = await res.json();
+          alert('Error: ' + (err.error || 'Could not block date'));
+        }
+      } catch (e) {
+        alert('Error blocking date');
+      }
+    }
+    
+    // Close on background click
+    document.getElementById('blockModal').addEventListener('click', (e) => {
+      if (e.target.id === 'blockModal') closeBlockModal();
+    });
+  </script>
+<ChatWidget restaurant="laluna" position="floating" />
+</Layout>
+// Force rebuild Wed May 27 18:30:47 CST 2026
