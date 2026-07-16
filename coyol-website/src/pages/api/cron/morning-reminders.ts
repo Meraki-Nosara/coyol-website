@@ -63,8 +63,7 @@ async function sendRemindersForRestaurant(restaurant: 'laluna' | 'coyol', today:
       const time = formatTime12(reservation.time);
       const partySize = reservation.guests || reservation.party_size || 2;
       const cancelLink = `${cancelUrl}?token=${reservation.cancel_token}`;
-      // Only show guest-submitted special requests, NOT staff notes
-      const specialRequests = reservation.special_requests || '';
+      // Don't include notes in morning reminders - they already know their request
 
       const emailRes = await fetch('https://api.resend.com/emails', {
         method: 'POST',
@@ -118,12 +117,7 @@ async function sendRemindersForRestaurant(restaurant: 'laluna' | 'coyol', today:
             <td style="padding: 8px 0; color: #888; font-size: 14px;">Personas</td>
             <td style="padding: 8px 0; color: #1a1f16; font-size: 16px; font-weight: 600; text-align: right;">${partySize}</td>
           </tr>
-          ${specialRequests ? `
-          <tr>
-            <td style="padding: 8px 0; color: #888; font-size: 14px;">Notas</td>
-            <td style="padding: 8px 0; color: #1a1f16; font-size: 14px; text-align: right;">${specialRequests}</td>
-          </tr>
-          ` : ''}
+          
         </table>
       </div>
       
