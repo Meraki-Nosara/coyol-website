@@ -54,7 +54,7 @@ function getLaLunaEmailHtml(r) {
           </table>
         </td></tr>
         <tr><td align="center" style="padding:0 40px 15px 40px;">
-          <a href="https://maps.app.goo.gl/QFZ9kFPgaHdPWUUU6" style="display:inline-block;background-color:${color};color:white;text-decoration:none;padding:14px 35px;border-radius:6px;font-size:15px;">Get Directions</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=La+Luna+Restaurant+Nosara+Costa+Rica" style="display:inline-block;background-color:${color};color:white;text-decoration:none;padding:14px 35px;border-radius:6px;font-size:15px;">Get Directions</a>
         </td></tr>
         <tr><td align="center" style="padding:0 40px 30px 40px;">
           <a href="${waCancel}" style="display:inline-block;background-color:#f5f3ef;color:#666;text-decoration:none;padding:12px 30px;border-radius:6px;font-size:14px;border:1px solid #ddd;">Can't make it? Let us know</a>
