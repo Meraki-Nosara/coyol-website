@@ -3756,11 +3756,27 @@ import '../../../styles/laluna-tables.css';
     function applyAssignmentFlash() {
       const assigningRes = cachedReservations.find(r => r.id === assigningReservationId);
       const assigningShift = getShiftForTime(assigningRes?.time);
+      const guestCount = parseInt(assigningRes?.guests) || 2;
       const dateStr = getDateString(currentDate);
+      const layouts = getLayout();
       
       document.querySelectorAll('.floor-grid .table-btn').forEach(el => {
         const tableId = el.dataset.table;
-        // Only check ACTIVE reservations on the SAME DATE and SAME SHIFT
+        
+        // Get table capacity from layout
+        let tableCapacity = 4; // Default
+        for (const zone of Object.values(layouts)) {
+          const tableData = zone?.find(t => t.id === tableId);
+          if (tableData) {
+            tableCapacity = tableData.maxCovers || tableData.capacity || 4;
+            break;
+          }
+        }
+        
+        // Check 1: Does table fit the party size?
+        const fitsPax = tableCapacity >= guestCount;
+        
+        // Check 2: Only check ACTIVE reservations on the SAME DATE and SAME SHIFT
         const tableRes = cachedReservations.filter(r => 
           r.tableId === tableId && 
           r.date === dateStr &&
@@ -3769,9 +3785,10 @@ import '../../../styles/laluna-tables.css';
           r.status !== 'no-show' && 
           r.status !== 'completed'
         );
-        const hasConflict = tableRes.some(r => getShiftForTime(r.time) === assigningShift);
+        const hasTimeConflict = tableRes.some(r => getShiftForTime(r.time) === assigningShift);
         
-        if (hasConflict) {
+        // Table is available ONLY if it fits the party AND has no time conflict
+        if (!fitsPax || hasTimeConflict) {
           el.classList.add('occupied');
           el.classList.remove('available');
         } else {

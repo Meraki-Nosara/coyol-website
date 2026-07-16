@@ -2484,7 +2484,32 @@ import '../../../styles/coyol-tables.css';
         const tableReservationsAll = reservations.filter(r => r.tableId === table.id && r.status !== 'cancelled');
         const res = tableReservationsAll[0];
         const status = res ? res.status : 'available';
-        const isAvailable = tableReservationsAll.length === 0;
+        
+        // Determine availability - different logic when assigning vs normal view
+        let isAvailable = tableReservationsAll.length === 0;
+        
+        // When in assignment mode, check if table can fit the reservation being assigned
+        if (isAssigningTable && assigningReservationId) {
+          const assigningRes = getReservations().find(r => r.id === assigningReservationId);
+          if (assigningRes) {
+            const guestCount = parseInt(assigningRes.guests) || 2;
+            const tableCapacity = table.maxCovers || table.capacity || 4;
+            const assigningTime = assigningRes.time;
+            
+            // Check 1: Table must fit the party size
+            const fitsPax = tableCapacity >= guestCount;
+            
+            // Check 2: No time conflict (within 90 min window)
+            const hasTimeConflict = tableReservationsAll.some(r => {
+              if (r.id === assigningReservationId) return false; // Ignore self
+              const rMinutes = timeToMinutes(r.time);
+              const aMinutes = timeToMinutes(assigningTime);
+              return Math.abs(rMinutes - aMinutes) < 90;
+            });
+            
+            isAvailable = fitsPax && !hasTimeConflict;
+          }
+        }
         
         const el = document.createElement('div');
         el.className = `table ${table.type}${isAvailable ? ' available' : ''}`;
