@@ -5,10 +5,15 @@
 ### Primary Method: Himalaya CLI
 Use Himalaya for all email operations — reading, attachments, marking read.
 
-- **Account:** `meraki` (default)
+**Meraki (restaurants):**
+- **Account:** `meraki`
 - **Email:** marionnosara@gmail.com
-- **Connected to:** Gmail IMAP/SMTP
-- **Receives:** All Meraki emails (cierres, facturas, supplier lists, etc.)
+- **Use for:** Restaurant operations, cierres, facturas, Angelina reports
+
+**Coyol (real estate):**
+- **Account:** `coyol`
+- **Email:** coyolcontrol@gmail.com
+- **Use for:** Mar Azul, Nosara Hills, Los Coyoles, team communication (Milagro, Alessia, Anlly, Olger, Ruth)
 
 **Common commands:**
 ```bash

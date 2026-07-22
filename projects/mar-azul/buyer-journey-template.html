@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mar Azul — Your Journey Home</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1a1f16 0%, #2a3020 100%);
+      color: #f5f3ef;
+      min-height: 100vh;
+      padding: 40px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid rgba(196, 166, 124, 0.3);
+    }
+    
+    .logo-img {
+      width: 120px;
+      height: auto;
+      margin-bottom: 15px;
+      filter: invert(1) brightness(0.85) sepia(0.3) hue-rotate(10deg) saturate(0.8);
+    }
+    
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      color: #C4A67C;
+      margin-bottom: 8px;
+    }
+    
+    .tagline {
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: #888;
+      text-transform: uppercase;
+    }
+    
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 400;
+      text-align: center;
+      margin: 30px 0 10px;
+      color: #f5f3ef;
+    }
+    
+    .subtitle {
+      text-align: center;
+      font-size: 14px;
+      color: #999;
+      margin-bottom: 40px;
+    }
+    
+    /* Investment Summary Box */
+    .investment-summary {
+      background: rgba(196, 166, 124, 0.1);
+      border: 1px solid rgba(196, 166, 124, 0.4);
+      border-radius: 12px;
+      padding: 25px 30px;
+      margin-bottom: 40px;
+    }
+    
+    .investment-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: #C4A67C;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .investment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      text-align: center;
+    }
+    
+    .investment-item {
+      padding: 15px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+    }
+    
+    .investment-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+    
+    .investment-value {
+      font-size: 24px;
+      font-weight: 300;
+      color: #C4A67C;
+    }
+    
+    .investment-value.blank {
+      border-bottom: 2px dashed rgba(196, 166, 124, 0.5);
+      min-width: 120px;
+      display: inline-block;
+      height: 30px;
+    }
+    
+    .investment-note {
+      font-size: 11px;
+      color: #666;
+      margin-top: 5px;
+    }
+    
+    /* Timeline Steps */
+    .timeline {
+      position: relative;
+      padding-left: 40px;
+    }
+    
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, #C4A67C, rgba(196, 166, 124, 0.2));
+    }
+    
+    .step {
+      position: relative;
+      margin-bottom: 30px;
+      padding: 20px 25px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+    
+    .step:hover {
+      border-color: rgba(196, 166, 124, 0.3);
+      background: rgba(255,255,255,0.05);
+    }
+    
+    .step-number {
+      position: absolute;
+      left: -40px;
+      top: 20px;
+      width: 30px;
+      height: 30px;
+      background: #3D4F3D;
+      border: 2px solid #C4A67C;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: #C4A67C;
+    }
+    
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    
+    .step-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: #f5f3ef;
+    }
+    
+    .step-timing {
+      font-size: 11px;
+      color: #C4A67C;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      background: rgba(196, 166, 124, 0.15);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    
+    .step-content {
+      color: #bbb;
+      font-size: 13px;
+    }
+    
+    .step-content ul {
+      margin: 10px 0 0 20px;
+    }
+    
+    .step-content li {
+      margin-bottom: 5px;
+    }
+    
+    .step-highlight {
+      display: inline-block;
+      background: rgba(196, 166, 124, 0.2);
+      color: #C4A67C;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    
+    /* Milestones Table */
+    .milestones-table {
+      width: 100%;
+      margin-top: 15px;
+      border-collapse: collapse;
+    }
+    
+    .milestones-table th {
+      text-align: left;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .milestones-table td {
+      padding: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 13px;
+    }
+    
+    .milestones-table td:first-child {
+      color: #f5f3ef;
+    }
+    
+    .milestones-table td:nth-child(2) {
+      color: #C4A67C;
+      text-align: center;
+    }
+    
+    .milestones-table td:nth-child(3) {
+      color: #888;
+      font-size: 12px;
+    }
+    
+    /* Portal Section */
+    .portal-box {
+      background: rgba(61, 79, 61, 0.3);
+      border: 1px solid rgba(61, 79, 61, 0.5);
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 15px;
+    }
+    
+    .portal-title {
+      color: #C4A67C;
+      font-weight: 500;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    
+    .portal-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    
+    .portal-feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #bbb;
+    }
+    
+    .portal-feature::before {
+      content: '✓';
+      color: #C4A67C;
+      font-weight: bold;
+    }
+    
+    /* Footer */
+    .footer {
+      margin-top: 50px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      text-align: center;
+    }
+    
+    .contact-prompt {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: #f5f3ef;
+      margin-bottom: 15px;
+    }
+    
+    .contact-info {
+      color: #888;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+    
+    .contact-email {
+      color: #C4A67C;
+      text-decoration: none;
+      font-size: 16px;
+    }
+    
+    .disclaimer {
+      margin-top: 30px;
+      font-size: 10px;
+      color: #555;
+      line-height: 1.5;
+    }
+    
+    /* Print Styles */
+    @media print {
+      body {
+        background: white;
+        color: #1a1f16;
+        padding: 20px;
+        font-size: 12px;
+      }
+      
+      .container {
+        max-width: 100%;
+      }
+      
+      .logo, .investment-value, .step-highlight, .contact-email, .portal-title {
+        color: #3D4F3D;
+      }
+      
+      .step-title, .contact-prompt {
+        color: #1a1f16;
+      }
+      
+      .step {
+        border: 1px solid #ddd;
+        background: #fafafa;
+      }
+      
+      .investment-summary {
+        border: 1px solid #C4A67C;
+        background: #fdf9f3;
+      }
+      
+      .investment-item {
+        background: white;
+        border: 1px solid #eee;
+      }
+      
+      .timeline::before {
+        background: #C4A67C;
+      }
+      
+      .step-number {
+        background: white;
+        border-color: #3D4F3D;
+        color: #3D4F3D;
+      }
+      
+      .portal-box {
+        background: #f5f5f0;
+        border-color: #3D4F3D;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <div class="header">
+      <img src="https://coyolrealestate.com/images/logo-black.png" alt="Coyol Group" class="logo-img">
+      <div class="logo">COYOL GROUP</div>
+      <div class="tagline">Nosara, Costa Rica</div>
+    </div>
+    
+    <h1 class="title">Your Journey Home</h1>
+    <p class="subtitle">From dream to keys — a step-by-step guide to your Mar Azul residence</p>
+    
+    <!-- Investment Summary -->
+    <div class="investment-summary">
+      <h2 class="investment-title">Your Investment Summary</h2>
+      <div class="investment-grid">
+        <div class="investment-item">
+          <div class="investment-label">Lot</div>
+          <div class="investment-value blank"></div>
+          <div class="investment-note">Paid before construction</div>
+        </div>
+        <div class="investment-item">
+          <div class="investment-label">Construction</div>
+          <div class="investment-value blank"></div>
+          <div class="investment-note">6 milestone payments</div>
+        </div>
+        <div class="investment-item">
+          <div class="investment-label">Total Investment</div>
+          <div class="investment-value blank"></div>
+          <div class="investment-note">Lot + Construction</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Timeline -->
+    <div class="timeline">
+      
+      <!-- Step 1: Reserve -->
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-header">
+          <h3 class="step-title">Reserve Your Lot</h3>
+          <span class="step-timing">Day 1</span>
+        </div>
+        <div class="step-content">
+          <p>Secure your chosen lot with a <span class="step-highlight">$10,000 reservation deposit</span>.</p>
+          <ul>
+            <li>Deposit is applied toward your lot purchase</li>
+            <li>Lot is held exclusively for you while we prepare documents</li>
+            <li>You'll receive access to your personal client portal</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Step 2: Lot Purchase -->
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-header">
+          <h3 class="step-title">Complete Lot Purchase</h3>
+          <span class="step-timing">Within 30 days</span>
+        </div>
+        <div class="step-content">
+          <p>Pay the remaining lot balance to take ownership.</p>
+          <ul>
+            <li>Title transfer handled by our legal team</li>
+            <li>All permits and water rights included</li>
+            <li>You become the registered owner of your lot</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Step 3: Design & Contract -->
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-header">
+          <h3 class="step-title">Finalize Design & Sign Contract</h3>
+          <span class="step-timing">Week 2-4</span>
+        </div>
+        <div class="step-content">
+          <p>Work with our architect to finalize your home design and sign the construction contract with Nosara Construction.</p>
+          <ul>
+            <li>Review and customize your chosen house model</li>
+            <li>Select finishes, materials, and upgrades</li>
+            <li>Fixed-price construction contract — no surprises</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Step 4: Construction -->
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-header">
+          <h3 class="step-title">Construction Begins</h3>
+          <span class="step-timing">12-18 months</span>
+        </div>
+        <div class="step-content">
+          <p>Your home is built in <span class="step-highlight">6 milestone phases</span>, with payments due at each stage:</p>
+          
+          <table class="milestones-table">
+            <thead>
+              <tr>
+                <th>Milestone</th>
+                <th>Payment</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1. Contract Signing</td>
+                <td>16.67%</td>
+                <td>Mobilization & site preparation</td>
+              </tr>
+              <tr>
+                <td>2. Foundation</td>
+                <td>16.67%</td>
+                <td>Foundation & ground floor slab</td>
+              </tr>
+              <tr>
+                <td>3. Structure</td>
+                <td>16.67%</td>
+                <td>Walls, columns & structural frame</td>
+              </tr>
+              <tr>
+                <td>4. Roof & Enclosure</td>
+                <td>16.67%</td>
+                <td>Roof, windows & doors installed</td>
+              </tr>
+              <tr>
+                <td>5. Finishes</td>
+                <td>16.67%</td>
+                <td>Interior finishes, fixtures & systems</td>
+              </tr>
+              <tr>
+                <td>6. Handover</td>
+                <td>16.65%</td>
+                <td>Final inspection & key delivery</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Step 5: Track Progress -->
+      <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-header">
+          <h3 class="step-title">Track Your Progress</h3>
+          <span class="step-timing">Ongoing</span>
+        </div>
+        <div class="step-content">
+          <p>Stay connected to your build from anywhere in the world through your personal client portal.</p>
+          
+          <div class="portal-box">
+            <div class="portal-title">Coyol Control — Your Client Portal</div>
+            <div class="portal-features">
+              <div class="portal-feature">Construction photo updates</div>
+              <div class="portal-feature">Milestone progress tracking</div>
+              <div class="portal-feature">Document repository</div>
+              <div class="portal-feature">Payment history</div>
+              <div class="portal-feature">Direct messaging</div>
+              <div class="portal-feature">Drone footage</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Step 6: Handover -->
+      <div class="step">
+        <div class="step-number">6</div>
+        <div class="step-header">
+          <h3 class="step-title">Welcome Home</h3>
+          <span class="step-timing">Move-in day</span>
+        </div>
+        <div class="step-content">
+          <p>Final walkthrough, key handover, and welcome to the Mar Azul community.</p>
+          <ul>
+            <li>Detailed home orientation & systems training</li>
+            <li>HOA introduction & community guidelines</li>
+            <li>Local contacts & property management options</li>
+            <li>Celebration dinner at La Luna 🌙</li>
+          </ul>
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+      <p class="contact-prompt">Ready to begin?</p>
+      <p class="contact-info">Contact your Mar Azul representative</p>
+      <a href="mailto:info@coyolrealestate.com" class="contact-email">info@coyolrealestate.com</a>
+      
+      <p class="disclaimer">
+        Mar Azul is developed by Coyol Development S.A. Construction services provided by Nosara Construction S.A. 
+        All prices are estimates and subject to final contract terms. Timeline estimates based on typical project progression 
+        and may vary based on design complexity and external factors. This document is for informational purposes only 
+        and does not constitute a purchase agreement. © 2026 Coyol Real Estate.
+      </p>
+    </div>
+    
+  </div>
+</body>
+</html>
