@@ -6,6 +6,10 @@
       "schedule": "*/15 * * * *"
     },
     {
+      "path": "/api/cron/reservations",
+      "schedule": "*/15 * * * *"
+    },
+    {
       "path": "/api/cron/morning-reminders",
       "schedule": "0 14 * * *"
     }
