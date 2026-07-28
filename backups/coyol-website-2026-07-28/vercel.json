@@ -1,0 +1,72 @@
+{
+  "framework": "astro",
+  "crons": [
+    {
+      "path": "/api/cron/gift-cards",
+      "schedule": "*/15 * * * *"
+    },
+    {
+      "path": "/api/cron/reservations",
+      "schedule": "*/15 * * * *"
+    },
+    {
+      "path": "/api/cron/morning-reminders",
+      "schedule": "0 14 * * *"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/command/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    }
+  ],
+  "installCommand": "npm install",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/restaurant/reserve",
+      "has": [{ "type": "host", "value": "reserve.coyolrestaurant.com" }],
+      "permanent": false
+    },
+    {
+      "source": "/admin",
+      "destination": "/restaurant/admin",
+      "has": [{ "type": "host", "value": "reserve.coyolrestaurant.com" }],
+      "permanent": false
+    },
+    {
+      "source": "/cancel",
+      "destination": "/restaurant/cancel",
+      "has": [{ "type": "host", "value": "reserve.coyolrestaurant.com" }],
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "destination": "/laluna/reserve",
+      "has": [{ "type": "host", "value": "reserve.lalunanosara.com" }],
+      "permanent": false
+    },
+    {
+      "source": "/admin",
+      "destination": "/laluna/admin",
+      "has": [{ "type": "host", "value": "reserve.lalunanosara.com" }],
+      "permanent": false
+    },
+    {
+      "source": "/cancel",
+      "destination": "/laluna/cancel",
+      "has": [{ "type": "host", "value": "reserve.lalunanosara.com" }],
+      "permanent": false
+    },
+    {
+      "source": "/cancel",
+      "destination": "/laluna/cancel",
+      "has": [{ "type": "host", "value": "lalunanosara.com" }],
+      "permanent": false
+    }
+  ]
+}
