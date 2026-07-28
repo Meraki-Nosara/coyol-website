@@ -1,0 +1,39 @@
+---
+import '../styles/global.css'
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <style>
+      html { scroll-behavior: smooth; }
+    </style>
+  </head>
+  <body class="min-h-screen pb-16">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--color-bg)]/95 backdrop-blur border-b border-[var(--color-border)]">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="font-semibold">
+          <span class="text-[var(--color-accent)]">MAR AZUL</span> Legal — David
+        </div>
+        <div class="text-xs text-[var(--color-text-muted)]">
+          Internal • Confidential
+        </div>
+      </div>
+    </nav>
+    
+    <main class="pt-14">
+      <slot />
+    </main>
+  </body>
+</html>

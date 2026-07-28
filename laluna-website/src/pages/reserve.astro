@@ -580,6 +580,124 @@ import Layout from '../layouts/Layout.astro';
     const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
 
+    // ==========================================
+    // TABLE ASSIGNMENT LOGIC
+    // Fixes: Table mismatch + TBA problem
+    // ==========================================
+    
+    // Parse time string to minutes since midnight
+    function parseTime(timeStr) {
+      if (!timeStr) return 0;
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      return hours * 60 + minutes;
+    }
+
+    // Find best available table based on guest count & zone preference
+    async function findBestTable(date, time, guestCount, zonePreference = 'any') {
+      // Get all tables with zones
+      const tablesRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/tables?is_active=eq.true&select=*,zones(name)`,
+        {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          }
+        }
+      );
+      
+      if (!tablesRes.ok) return null;
+      const allTables = await tablesRes.json();
+      
+      // Get existing reservations for this date
+      const reservationsRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/reservations?date=eq.${date}&status=in.(confirmed,pending,seated)&select=table_id,time`,
+        {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          }
+        }
+      );
+      
+      const reservations = reservationsRes.ok ? await reservationsRes.json() : [];
+      
+      // Find booked tables during requested time (2.5hr window)
+      const requestedTime = parseTime(time);
+      const bookedTableIds = new Set();
+      
+      reservations.forEach(res => {
+        if (!res.table_id) return;
+        const resTime = parseTime(res.time);
+        if (Math.abs(requestedTime - resTime) < 150) {
+          bookedTableIds.add(res.table_id);
+        }
+      });
+      
+      // Filter: capacity >= guests, not booked, zone match
+      let available = allTables.filter(t => {
+        if (t.capacity < guestCount) return false;
+        if (bookedTableIds.has(t.id)) return false;
+        if (zonePreference !== 'any') {
+          const zoneName = (t.zones?.name || '').toLowerCase();
+          if (zonePreference === 'indoor' && !zoneName.includes('indoor')) return false;
+          if (zonePreference === 'patio' && !zoneName.includes('patio')) return false;
+          if (zonePreference === 'garden' && !zoneName.includes('garden')) return false;
+        }
+        return true;
+      });
+      
+      // Fallback: any zone if preferred zone full
+      if (available.length === 0 && zonePreference !== 'any') {
+        available = allTables.filter(t => 
+          t.capacity >= guestCount && !bookedTableIds.has(t.id)
+        );
+      }
+      
+      if (available.length === 0) return null;
+      
+      // Sort: smallest fitting table first (optimize table usage)
+      available.sort((a, b) => a.capacity - b.capacity);
+      
+      // For large groups, prefer communal/large tables
+      if (guestCount >= 7) {
+        const large = available.find(t => t.type === 'communal' || t.capacity >= 8);
+        if (large) return large;
+      }
+      
+      return available[0];
+    }
+
+    // Validate reservation before confirming
+    async function validateReservation(date, time, guestCount, zonePreference) {
+      // Large parties must call
+      if (guestCount >= 10) {
+        return {
+          valid: false,
+          error: 'For parties of 10 or more, please call us at +506 2682-0122 to arrange your reservation.',
+          requiresCall: true
+        };
+      }
+      
+      const table = await findBestTable(date, time, guestCount, zonePreference);
+      
+      if (!table) {
+        return {
+          valid: true,
+          warning: 'No specific table available at this time. Staff will assign your table on arrival.',
+          tableId: null,
+          tba: true
+        };
+      }
+      
+      return {
+        valid: true,
+        tableId: table.id,
+        tableName: table.name,
+        tableCapacity: table.capacity,
+        zone: table.zones?.name || 'TBD'
+      };
+    }
+
     // Save reservation to Supabase
     async function saveReservation(reservation) {
       const response = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations`, {
@@ -734,23 +852,47 @@ import Layout from '../layouts/Layout.astro';
       // Disable button while submitting
       const submitBtn = document.getElementById('confirmBtn');
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Confirming...';
+      submitBtn.textContent = 'Checking availability...';
 
       const date = dateInput.value;
       const time = document.querySelector('.time-btn.selected')?.dataset.time || '18:30';
       const guests = document.querySelector('.party-btn.selected')?.dataset.guests || '2';
+      const guestCount = guests === '7+' ? 7 : parseInt(guests) || 2;
       const zone = document.querySelector('.seating-btn.selected')?.dataset.zone || 'any';
+
+      // VALIDATE & FIND TABLE
+      const validation = await validateReservation(date, time, guestCount, zone);
+      
+      if (!validation.valid) {
+        alert(validation.error);
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Confirm Reservation';
+        return;
+      }
+      
+      // Show warning if TBA
+      if (validation.tba && validation.warning) {
+        const proceed = confirm(validation.warning + '\n\nProceed with reservation?');
+        if (!proceed) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Confirm Reservation';
+          return;
+        }
+      }
+
+      submitBtn.textContent = 'Confirming...';
 
       const reservation = {
         date: date,
         time: time,
-        guests: parseInt(guests) || 7,
+        guests: guestCount,
         guest_name: name,
         guest_phone: phone,
         guest_email: email || null,
         zone_preference: zone,
         special_requests: notes || null,
-        status: 'confirmed'
+        status: 'confirmed',
+        table_id: validation.tableId || null
       };
 
       try {

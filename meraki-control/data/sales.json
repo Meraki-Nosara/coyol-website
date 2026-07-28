@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-07-11T10:15:00Z",
+  "lastUpdated": "2026-07-27T19:10:00Z",
   "source": "Anlly QuickBooks + Ingrid cierres OCR",
   "daily": [
     {
@@ -2413,7 +2413,7 @@
       "service10": 155460,
       "iva13": 208738,
       "source": "ingrid_email",
-      "cashier": "Carmen Muñoz"
+      "cashier": "Carmen Mu\u00f1oz"
     },
     {
       "date": "2026-05-20",
@@ -2533,7 +2533,7 @@
       "service10": 236442,
       "iva13": 320916,
       "source": "ingrid_email",
-      "cashier": "Carmen Muñoz"
+      "cashier": "Carmen Mu\u00f1oz"
     },
     {
       "date": "2026-05-23",
@@ -2635,7 +2635,7 @@
       "service10": 183707,
       "iva13": 239370,
       "source": "ingrid_email",
-      "cashier": "Carmen Muñoz"
+      "cashier": "Carmen Mu\u00f1oz"
     },
     {
       "date": "2026-05-26",
@@ -2906,7 +2906,7 @@
       "service10": 56770,
       "iva13": 73801,
       "source": "ingrid_email",
-      "cashier": "Yordany Díaz"
+      "cashier": "Yordany D\u00edaz"
     },
     {
       "date": "2026-06-02",
@@ -3389,6 +3389,42 @@
       "cashier": "Juan Castillo"
     },
     {
+      "date": "2026-06-18",
+      "restaurant": "laluna",
+      "cash": 412325,
+      "card": 3103149,
+      "total": 3515474,
+      "netSales": 2863105,
+      "service10": 280165,
+      "iva13": 372204,
+      "source": "ingrid_email",
+      "cashier": "Julio/Rosi Castillo"
+    },
+    {
+      "date": "2026-06-18",
+      "restaurant": "coyol",
+      "cash": 0,
+      "card": 1394943,
+      "total": 1394943,
+      "netSales": 1134100,
+      "service10": 113410,
+      "iva13": 147433,
+      "source": "ingrid_email",
+      "cashier": "George Lopez"
+    },
+    {
+      "date": "2026-06-18",
+      "restaurant": "esh",
+      "cash": 63900,
+      "card": 530147,
+      "total": 593644,
+      "netSales": 493560,
+      "service10": 35921,
+      "iva13": 64163,
+      "source": "ingrid_email",
+      "cashier": "Juan Castillo"
+    },
+    {
       "date": "2026-06-19",
       "restaurant": "laluna",
       "cash": 48710,
@@ -3461,7 +3497,7 @@
       "service10": 391927,
       "iva13": 516332,
       "source": "ingrid_email",
-      "cashier": "Carmen Muñoz"
+      "cashier": "Carmen Mu\u00f1oz"
     },
     {
       "date": "2026-06-21",
@@ -3484,42 +3520,6 @@
       "netSales": 126186,
       "service10": 9495,
       "iva13": 16404,
-      "source": "ingrid_email",
-      "cashier": "Juan Castillo"
-    },
-    {
-      "date": "2026-06-18",
-      "restaurant": "laluna",
-      "cash": 412325,
-      "card": 3103149,
-      "total": 3515474,
-      "netSales": 2863105,
-      "service10": 280165,
-      "iva13": 372204,
-      "source": "ingrid_email",
-      "cashier": "Julio/Rosi Castillo"
-    },
-    {
-      "date": "2026-06-18",
-      "restaurant": "coyol",
-      "cash": 0,
-      "card": 1394943,
-      "total": 1394943,
-      "netSales": 1134100,
-      "service10": 113410,
-      "iva13": 147433,
-      "source": "ingrid_email",
-      "cashier": "George Lopez"
-    },
-    {
-      "date": "2026-06-18",
-      "restaurant": "esh",
-      "cash": 63900,
-      "card": 530147,
-      "total": 593644,
-      "netSales": 493560,
-      "service10": 35921,
-      "iva13": 64163,
       "source": "ingrid_email",
       "cashier": "Juan Castillo"
     },
@@ -3560,6 +3560,45 @@
       "cashier": "Raul Rodriguez"
     },
     {
+      "date": "2026-06-23",
+      "laluna": {
+        "cash": 381920,
+        "card": 3855505,
+        "total": 4136804
+      },
+      "coyol": {
+        "cash": 0,
+        "card": 939843,
+        "total": 939843
+      },
+      "esh": {
+        "cash": 105475,
+        "card": 428033,
+        "total": 483485
+      }
+    },
+    {
+      "date": "2026-06-24",
+      "restaurant": "laluna",
+      "cash": 240575,
+      "card": 3813182,
+      "total": 3953701
+    },
+    {
+      "date": "2026-06-24",
+      "restaurant": "coyol",
+      "cash": 0,
+      "card": 1676060,
+      "total": 1676060
+    },
+    {
+      "date": "2026-06-24",
+      "restaurant": "esh",
+      "cash": 83400,
+      "card": 705849,
+      "total": 779239
+    },
+    {
       "date": "2026-06-25",
       "restaurant": "laluna",
       "cash": 197450,
@@ -3569,7 +3608,7 @@
       "service10": 295636,
       "iva13": 400309,
       "source": "ingrid_email",
-      "cashier": "Julia/Carmen Muñoz"
+      "cashier": "Julia/Carmen Mu\u00f1oz"
     },
     {
       "date": "2026-06-25",
@@ -3596,46 +3635,25 @@
       "cashier": "Juan Castillo"
     },
     {
-      "date": "2026-06-29",
+      "date": "2026-06-26",
       "restaurant": "laluna",
-      "cash": 1198833,
-      "card": 3300029,
-      "total": 4398802
+      "cash": 281218,
+      "card": 3860439,
+      "total": 4141639
     },
     {
-      "date": "2026-06-29",
-      "restaurant": "coyol",
-      "cash": 52000,
-      "card": 1421142,
-      "total": 1423122
-    },
-    {
-      "date": "2026-06-29",
-      "restaurant": "esh",
-      "cash": 90000,
-      "card": 373953,
-      "total": 413932
-    },
-    {
-      "date": "2026-06-28",
-      "restaurant": "laluna",
-      "cash": 346400,
-      "card": 5690105,
-      "total": 5936366
-    },
-    {
-      "date": "2026-06-28",
+      "date": "2026-06-26",
       "restaurant": "coyol",
       "cash": 50000,
-      "card": 1538523,
-      "total": 1476431
+      "card": 1283505,
+      "total": 1333505
     },
     {
-      "date": "2026-06-28",
+      "date": "2026-06-26",
       "restaurant": "esh",
-      "cash": 62825,
-      "card": 159705,
-      "total": 222530
+      "cash": 94225,
+      "card": 592125,
+      "total": 686341
     },
     {
       "date": "2026-06-27",
@@ -3659,64 +3677,46 @@
       "total": 568685
     },
     {
-      "date": "2026-06-26",
+      "date": "2026-06-28",
       "restaurant": "laluna",
-      "cash": 281218,
-      "card": 3860439,
-      "total": 4141639
+      "cash": 346400,
+      "card": 5690105,
+      "total": 5936366
     },
     {
-      "date": "2026-06-26",
+      "date": "2026-06-28",
       "restaurant": "coyol",
       "cash": 50000,
-      "card": 1283505,
-      "total": 1333505
+      "card": 1538523,
+      "total": 1476431
     },
     {
-      "date": "2026-06-26",
+      "date": "2026-06-28",
       "restaurant": "esh",
-      "cash": 94225,
-      "card": 592125,
-      "total": 686341
+      "cash": 62825,
+      "card": 159705,
+      "total": 222530
     },
     {
-      "date": "2026-06-24",
+      "date": "2026-06-29",
       "restaurant": "laluna",
-      "cash": 240575,
-      "card": 3813182,
-      "total": 3953701
+      "cash": 1198833,
+      "card": 3300029,
+      "total": 4398802
     },
     {
-      "date": "2026-06-24",
+      "date": "2026-06-29",
       "restaurant": "coyol",
-      "cash": 0,
-      "card": 1676060,
-      "total": 1676060
+      "cash": 52000,
+      "card": 1421142,
+      "total": 1423122
     },
     {
-      "date": "2026-06-24",
+      "date": "2026-06-29",
       "restaurant": "esh",
-      "cash": 83400,
-      "card": 705849,
-      "total": 779239
-    },
-    {
-      "date": "2026-06-23",
-      "laluna": {
-        "cash": 381920,
-        "card": 3855505,
-        "total": 4136804
-      },
-      "coyol": {
-        "cash": 0,
-        "card": 939843,
-        "total": 939843
-      },
-      "esh": {
-        "cash": 105475,
-        "card": 428033,
-        "total": 483485
-      }
+      "cash": 90000,
+      "card": 373953,
+      "total": 413932
     },
     {
       "date": "2026-06-30",
@@ -3896,6 +3896,60 @@
         "cash": 156650,
         "card": 449875,
         "total": 690134
+      }
+    },
+    {
+      "date": "2026-07-24",
+      "laluna": {
+        "cash": 281250,
+        "card": 5598232,
+        "total": 5776991
+      },
+      "coyol": {
+        "cash": 89000,
+        "card": 1838441,
+        "total": 1877595
+      },
+      "esh": {
+        "cash": 97105,
+        "card": 519410,
+        "total": 566509
+      }
+    },
+    {
+      "date": "2026-07-25",
+      "laluna": {
+        "cash": 561490,
+        "card": 5677812,
+        "total": 6139186
+      },
+      "coyol": {
+        "cash": 94000,
+        "card": 1646143,
+        "total": 1690143
+      },
+      "esh": {
+        "cash": 70035,
+        "card": 488061,
+        "total": 510087
+      }
+    },
+    {
+      "date": "2026-07-26",
+      "laluna": {
+        "cash": 360450,
+        "card": 5053316,
+        "total": 5313580
+      },
+      "coyol": {
+        "cash": 50000,
+        "card": 2433803,
+        "total": 2167506
+      },
+      "esh": {
+        "cash": 58925,
+        "card": 53100,
+        "total": 62015
       }
     }
   ]

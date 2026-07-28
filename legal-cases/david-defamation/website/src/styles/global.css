@@ -1,0 +1,172 @@
+@import "tailwindcss";
+
+:root {
+  --color-bg: #0a0a0a;
+  --color-surface: #141414;
+  --color-surface-2: #1a1a1a;
+  --color-border: #262626;
+  --color-text: #e5e5e5;
+  --color-text-muted: #737373;
+  --color-accent: #dc2626;
+  --color-accent-green: #22c55e;
+  --color-accent-amber: #f59e0b;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Timeline styles */
+.timeline-line {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--color-border), var(--color-accent), var(--color-border));
+}
+
+.timeline-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--color-accent);
+  background: var(--color-bg);
+}
+
+.timeline-dot.positive {
+  border-color: var(--color-accent-green);
+  background: var(--color-accent-green);
+}
+
+.timeline-dot.negative {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+}
+
+.timeline-dot.warning {
+  border-color: var(--color-accent-amber);
+  background: var(--color-accent-amber);
+}
+
+/* Email card styles */
+.email-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: all 0.2s ease;
+}
+
+.email-card:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+}
+
+.email-quote {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 1rem;
+  font-style: italic;
+  color: var(--color-text);
+  background: var(--color-surface-2);
+  padding: 1rem;
+  border-radius: 0 4px 4px 0;
+}
+
+.email-quote.positive {
+  border-left-color: var(--color-accent-green);
+}
+
+/* Phase badges */
+.phase-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.phase-badge.honeymoon {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.phase-badge.trojan {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+.phase-badge.attack {
+  background: rgba(220, 38, 38, 0.2);
+  color: #dc2626;
+}
+
+/* Contradiction highlight */
+.contradiction {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.contradiction .then {
+  border-left: 3px solid var(--color-accent-green);
+}
+
+.contradiction .now {
+  border-left: 3px solid var(--color-accent);
+}
+
+/* Smoking gun highlight */
+.smoking-gun {
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.1), transparent);
+  border: 1px solid var(--color-accent);
+  border-radius: 8px;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.smoking-gun::before {
+  content: '🔥';
+  position: absolute;
+  top: -12px;
+  left: 1rem;
+  background: var(--color-bg);
+  padding: 0 0.5rem;
+}
+
+/* Document viewer */
+.document-preview {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 1rem;
+  font-family: monospace;
+  font-size: 0.875rem;
+  overflow-x: auto;
+}
+
+/* Navigation */
+.nav-link {
+  color: var(--color-text-muted);
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--color-text);
+}
+
+/* Responsive timeline */
+@media (max-width: 768px) {
+  .timeline-line {
+    left: 20px;
+  }
+  
+  .contradiction {
+    grid-template-columns: 1fr;
+  }
+}

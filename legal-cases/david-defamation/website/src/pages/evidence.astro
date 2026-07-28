@@ -1,0 +1,248 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const emails = [
+  {
+    id: "46130",
+    date: "October 26, 2021",
+    subject: "RE: Costa Rica Residency Procedure...",
+    from: "David Riabov",
+    to: "Marion Peri",
+    category: "Water Rights",
+    smoking: true,
+    excerpt: "Water rights? 1. Connection to AyA network. 2. Connection to Asada. 3. A valid water concession...",
+    file: "2021-10-26-water-rights-question.txt"
+  },
+  {
+    id: "46323",
+    date: "November 4, 2021",
+    subject: "RE: Costa Rica Residency Procedure...",
+    from: "David Riabov",
+    to: "Andrea Bonilla, Marion Peri",
+    category: "Water Rights",
+    smoking: true,
+    excerpt: "Marion sent me the documents regarding water rights. How are these addressed in document?",
+    file: "2021-11-04-water-docs-received.txt"
+  },
+  {
+    id: "46550",
+    date: "November 7, 2021",
+    subject: "RE: Costa Rica Residency Procedure...",
+    from: "David Riabov",
+    to: "Andrea Bonilla",
+    category: "Due Diligence",
+    excerpt: "We have reviewed the 2 purchase docs...contracts look clean and very straightforward...",
+    file: "2021-11-07-corporate-due-diligence.txt"
+  },
+  {
+    id: "46545",
+    date: "November 13, 2021",
+    subject: "Quick feedback on what was just sent",
+    from: "David Riabov",
+    to: "Marion Peri",
+    category: "Satisfaction",
+    excerpt: "Looks amazing! Again we love everything!!! Can't wait to come down...",
+    file: "2021-11-13-we-love-everything.txt"
+  },
+  {
+    id: "46547",
+    date: "November 14, 2021",
+    subject: "Re: Quick feedback on what was just sent",
+    from: "David Riabov",
+    to: "Marion Peri",
+    category: "Satisfaction",
+    smoking: true,
+    excerpt: "You are the best!! Now stop working!",
+    file: "2021-11-14-you-are-the-best.txt"
+  },
+  {
+    id: "51430",
+    date: "June 17, 2022",
+    subject: "Anti-Mold Product",
+    from: "David Riabov",
+    to: "Marion Peri",
+    category: "Trust",
+    excerpt: "I am shipping down to your Miami company a skid of anti-mold product...",
+    file: "2022-06-17-shipping-supplies-trust.txt"
+  },
+  {
+    id: "53810",
+    date: "December 12, 2022",
+    subject: "RE: Invoice Instalacion de medidor...",
+    from: "David Riabov",
+    to: "info@nosaraconstruction.com",
+    category: "Satisfaction",
+    excerpt: "¡Hola! Pura Vida 😊",
+    file: null
+  },
+  {
+    id: "54415",
+    date: "January 19, 2023",
+    subject: "Re: Update on Condominio Mar Azul",
+    from: "David Riabov",
+    to: "Andrea Bonilla",
+    category: "INVU Update",
+    smoking: true,
+    excerpt: "That's great news. Is there anything else we need to do...?",
+    file: "2023-01-19-invu-update-great-news.txt"
+  },
+  {
+    id: "56886",
+    date: "May 12, 2023",
+    subject: "Re: Costa Rica Residency Procedure...",
+    from: "David Riabov",
+    to: "Andrea Bonilla",
+    category: "Sfera Switch",
+    smoking: true,
+    excerpt: "We need to do few things so we are going to need you transfer our corporate books to Robert... rjr@sferalegal.com",
+    file: "2023-05-12-switch-to-sfera-legal.txt"
+  },
+  {
+    id: "56900",
+    date: "May 13, 2023",
+    subject: "The List! ;) Some things I am not mentioning...",
+    from: "David Riabov",
+    to: "Marion Peri",
+    category: "Punch List",
+    excerpt: "That's it! Feel free to make fun as you choose ;)",
+    file: null
+  },
+  {
+    id: "57112",
+    date: "May 25, 2023",
+    subject: "RE: Invoice Decimo pago de contrato",
+    from: "David Riabov",
+    to: "info@nosaraconstruction.com",
+    category: "Satisfaction",
+    smoking: true,
+    excerpt: "¡Eress el mejor! Esperaremos algunas actualizaciones. ¡Gracias de nuevo!",
+    file: "2023-05-25-eres-el-mejor.txt"
+  },
+  {
+    id: "59761",
+    date: "October 20, 2023",
+    subject: "Re: Damaged item",
+    from: "David Riabov",
+    to: "Marion Peri",
+    category: "Personal",
+    excerpt: "Any word on this? Hope all well with father in law",
+    file: "2023-10-20-friendly-followup.txt"
+  },
+  {
+    id: "62386",
+    date: "March 25, 2024",
+    subject: "Re: Documentos Mar Azul",
+    from: "David Riabov",
+    to: "info@nosaraconstruction.com",
+    category: "Permits",
+    smoking: true,
+    excerpt: "Gracias!",
+    attachments: ["USO DE SUELO OCTUBRE 2022.pdf", "DA-0080-2022 PERMISO PERFORACIÓN.pdf"],
+    file: "2024-03-25-permits-received-gracias.txt"
+  },
+];
+
+const categories = [...new Set(emails.map(e => e.category))];
+---
+
+<Layout title="Evidence Archive — Mar Azul Legal">
+  <section class="max-w-5xl mx-auto px-4 py-16">
+    <h1 class="text-4xl font-bold mb-4 text-center">
+      Evidence <span class="text-[var(--color-accent)]">Archive</span>
+    </h1>
+    <p class="text-xl text-[var(--color-text-muted)] text-center mb-8 max-w-2xl mx-auto">
+      All emails are archived with message IDs and can be retrieved from marion@nosaraconstruction.com via Himalaya CLI
+    </p>
+
+    <!-- Filters -->
+    <div class="flex flex-wrap gap-2 mb-8 justify-center">
+      <button class="phase-badge honeymoon">All ({emails.length})</button>
+      {categories.map(cat => (
+        <button class="px-3 py-1 rounded-full text-sm border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-colors">
+          {cat}
+        </button>
+      ))}
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+      <div class="email-card text-center">
+        <div class="text-2xl font-bold">{emails.length}</div>
+        <div class="text-sm text-[var(--color-text-muted)]">Total Emails</div>
+      </div>
+      <div class="email-card text-center">
+        <div class="text-2xl font-bold text-[var(--color-accent)]">{emails.filter(e => e.smoking).length}</div>
+        <div class="text-sm text-[var(--color-text-muted)]">Smoking Guns</div>
+      </div>
+      <div class="email-card text-center">
+        <div class="text-2xl font-bold">2021-2024</div>
+        <div class="text-sm text-[var(--color-text-muted)]">Date Range</div>
+      </div>
+      <div class="email-card text-center">
+        <div class="text-2xl font-bold text-[var(--color-accent-green)]">{emails.filter(e => e.file).length}</div>
+        <div class="text-sm text-[var(--color-text-muted)]">Archived Files</div>
+      </div>
+    </div>
+
+    <!-- Email List -->
+    <div class="space-y-4">
+      {emails.map((email, index) => (
+        <div class={`email-card ${email.smoking ? 'border-[var(--color-accent)]' : ''}`}>
+          <div class="flex items-start justify-between gap-4 mb-3">
+            <div class="flex items-center gap-3">
+              <span class="text-lg font-mono text-[var(--color-text-muted)]">#{index + 1}</span>
+              {email.smoking && (
+                <span class="text-xs bg-[var(--color-accent)] text-white px-2 py-0.5 rounded">🔥 SMOKING GUN</span>
+              )}
+              <span class="text-xs bg-[var(--color-surface-2)] px-2 py-1 rounded">{email.category}</span>
+            </div>
+            <span class="text-sm text-[var(--color-text-muted)] font-mono">{email.date}</span>
+          </div>
+          
+          <h3 class="font-semibold mb-2">{email.subject}</h3>
+          
+          <div class="text-sm text-[var(--color-text-muted)] mb-3">
+            <span class="text-[var(--color-accent-green)]">From:</span> {email.from} → 
+            <span class="text-[var(--color-accent)]">To:</span> {email.to}
+          </div>
+          
+          <blockquote class="email-quote positive">
+            "{email.excerpt}"
+          </blockquote>
+          
+          {email.attachments && (
+            <div class="mt-3 flex flex-wrap gap-2">
+              {email.attachments.map(att => (
+                <span class="text-xs bg-[var(--color-surface-2)] px-2 py-1 rounded flex items-center gap-1">
+                  📎 {att}
+                </span>
+              ))}
+            </div>
+          )}
+          
+          <div class="mt-4 flex items-center justify-between text-xs text-[var(--color-text-muted)]">
+            <span>Message ID: {email.id}</span>
+            {email.file && (
+              <span class="text-[var(--color-accent-green)]">✓ Archived: evidence/emails/{email.file}</span>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Retrieval Instructions -->
+    <div class="mt-12 email-card">
+      <h2 class="text-xl font-bold mb-4">How to Retrieve Original Emails</h2>
+      <div class="document-preview">
+        <p class="text-[var(--color-text-muted)] mb-2"># Using Himalaya CLI</p>
+        <p class="mb-4">himalaya message read --account nc --folder "[Gmail]/All Mail" &lt;MESSAGE_ID&gt;</p>
+        
+        <p class="text-[var(--color-text-muted)] mb-2"># Example: Retrieve "You are the best" email</p>
+        <p>himalaya message read --account nc --folder "[Gmail]/All Mail" 46547</p>
+      </div>
+      <p class="mt-4 text-sm text-[var(--color-text-muted)]">
+        Account: marion@nosaraconstruction.com (Himalaya account name: nc)
+      </p>
+    </div>
+  </section>
+</Layout>

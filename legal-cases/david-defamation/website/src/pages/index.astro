@@ -1,0 +1,381 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// The complete chronological evidence
+const timeline = [
+  // 2021 - THE BEGINNING
+  { id: 1, date: "Jul 2021", month: "2021", type: "milestone", title: "First Contact", desc: "David & Erin reach out about Mar Azul property" },
+  
+  { id: 2, date: "Sep 14, 2021", month: "2021", type: "legal", title: "Lawyer Engaged", quote: "Congratulations on your investment in Nosara, it's a beautiful place to be.", author: "Andrea Bonilla (Lawyer)", desc: "Attorney begins LLC setup and residency procedure" },
+  
+  { id: 3, date: "Oct 26, 2021", month: "2021", type: "smoking", title: "Water Rights Question", quote: "Water rights?\n1. Connection to AyA network\n2. Connection to Asada\n3. A valid water concession", author: "David Riabov", desc: "David does due diligence on water BEFORE buying", emailId: "46130" },
+  
+  { id: 4, date: "Oct 26, 2021", month: "2021", type: "legal", title: "Contracts Received", quote: "Sale and Purchase Agreement\nConstruction Agreement\nCompany Deed", author: "Andrea Bonilla", desc: "David receives all legal documents for review" },
+  
+  { id: 5, date: "Nov 4, 2021", month: "2021", type: "smoking", title: "Water Docs Received", quote: "Marion sent me the documents regarding water rights. How are these addressed?", author: "David Riabov", desc: "Confirms receipt of water documentation", emailId: "46323" },
+  
+  { id: 6, date: "Nov 7, 2021", month: "2021", type: "legal", title: "Corporate Due Diligence", quote: "Contracts look clean and very straightforward — thank you!", author: "David Riabov", desc: "Reviews shareholder agreements, negotiates death clauses, compares to Canadian law", emailId: "46550" },
+  
+  { id: 7, date: "Nov 13, 2021", month: "2021", type: "positive", title: "Design Approval", quote: "Looks amazing! Again we love everything!!! Can't wait to come down!", author: "David Riabov", desc: "Full enthusiasm for house design", emailId: "46545" },
+  
+  { id: 8, date: "Nov 14, 2021", month: "2021", type: "smoking", title: "\"You Are The Best\"", quote: "You are the best!! Now stop working!", author: "David Riabov", desc: "Clear expression of satisfaction", emailId: "46547" },
+  
+  { id: 9, date: "Nov 2021", month: "2021", type: "payment", title: "Down Payment", amount: "$92,250", desc: "First construction payment — Earth Movement & Foundation" },
+  
+  { id: 10, date: "Nov 2021", month: "2021", type: "legal", title: "LLC Registered", desc: "Costa Rica corporation established for property purchase" },
+
+  // 2022 - CONSTRUCTION
+  { id: 11, date: "Jan 2022", month: "2022", type: "milestone", title: "Construction Begins", desc: "House construction starts on Lot 20" },
+  
+  { id: 12, date: "Feb 2022", month: "2022", type: "payment", title: "Payment #2", amount: "$92,250", desc: "Second construction payment" },
+  
+  { id: 13, date: "Jun 2022", month: "2022", type: "condo", title: "Bylaws Drafted", quote: "Reglamento de Condominio Mar Azul", desc: "Condominium bylaws being prepared — shared with owners" },
+  
+  { id: 14, date: "Jun 17, 2022", month: "2022", type: "positive", title: "Shipping Supplies", quote: "I am shipping down to your Miami company a skid of anti-mold product... We can play with it when we are down there!", author: "David Riabov", desc: "Trusts Marion's logistics — collaborative relationship", emailId: "51430" },
+  
+  { id: 15, date: "Aug 2022", month: "2022", type: "payment", title: "Payment #4", amount: "$99,100", quote: "My half 😊", author: "David Riabov", desc: "Roof, electrical, walls progressing", emailId: "52153" },
+  
+  { id: 16, date: "Oct 2022", month: "2022", type: "condo", title: "Land Use Permit", quote: "USO DE SUELO OCTUBRE 2022", desc: "Municipality grants land use permit for Mar Azul" },
+  
+  { id: 17, date: "Oct 2022", month: "2022", type: "payment", title: "Payment #5", amount: "$92,250", desc: "Construction continues on schedule" },
+  
+  { id: 18, date: "Dec 12, 2022", month: "2022", type: "positive", title: "Pura Vida", quote: "¡Hola! Pura Vida 😊", author: "David Riabov", desc: "Using Costa Rican slang warmly", emailId: "53810" },
+
+  // 2023 - THE TURN
+  { id: 19, date: "Jan 19, 2023", month: "2023", type: "smoking", title: "INVU Update Received", quote: "That's great news.", author: "David Riabov", original: "The Constitution of the Condominium is advancing correctly and almost ready. INVU is asking a few more details...", originalAuthor: "Andrea Bonilla", desc: "David is INFORMED about condominium progress — responds positively", emailId: "54415" },
+  
+  { id: 20, date: "Feb 2023", month: "2023", type: "condo", title: "Condo Plans Filed", desc: "Condominium Mar Azul plans submitted to authorities" },
+  
+  { id: 21, date: "May 2023", month: "2023", type: "milestone", title: "House Nearing Completion", desc: "Final construction phase — interior finishes" },
+  
+  { id: 22, date: "May 12, 2023", month: "2023", type: "trojan", title: "🐴 SECRET: Sfera Switch", quote: "Transfer our corporate books to Robert... rjr@sferalegal.com", author: "David Riabov", desc: "While still paying invoices, David SECRETLY moves legal representation to SFERA — the firm that will later sue the condominium", emailId: "56886" },
+  
+  { id: 23, date: "May 13, 2023", month: "2023", type: "positive", title: "Friendly Punch List", quote: "The List! ;) Some things I am not mentioning as obvious (like drawers lol!) ... Feel free to make fun as you choose ;)", author: "David Riabov", desc: "ONE DAY after Sfera switch — joking tone, minor items only", emailId: "56900" },
+  
+  { id: 24, date: "May 25, 2023", month: "2023", type: "smoking", title: "\"Eres El Mejor\"", quote: "¡Eress el mejor! ¡Gracias de nuevo!", author: "David Riabov", desc: "13 DAYS after secretly switching to Sfera — still saying 'You're the best!'", emailId: "57112" },
+  
+  { id: 25, date: "May 30, 2023", month: "2023", type: "payment", title: "Final Payment", amount: "$61,325", quote: "Thanks so much!", author: "David Riabov", desc: "Last construction invoice paid", emailId: "57188" },
+  
+  { id: 26, date: "Oct 20, 2023", month: "2023", type: "positive", title: "Still Friendly", quote: "Hope all well with father in law", author: "David Riabov", desc: "5 months after Sfera switch — personal, caring tone", emailId: "59761" },
+
+  // 2024 - PERMITS & REGISTRATION
+  { id: 27, date: "Mar 2024", month: "2024", type: "condo", title: "Condominium Registered", desc: "Mar Azul officially registered as Costa Rican condominium with INVU" },
+  
+  { id: 28, date: "Mar 25, 2024", month: "2024", type: "smoking", title: "Permits Sent to David", quote: "Gracias!", author: "David Riabov", attachments: ["USO DE SUELO OCTUBRE 2022.pdf", "PERMISO PERFORACIÓN SIPECO.pdf"], desc: "David receives land use permit + well drilling permit — acknowledges receipt", emailId: "62386" },
+  
+  { id: 29, date: "Sep 12, 2024", month: "2024", type: "condo", title: "Water Concession Granted", quote: "R-2133-2024-AGUAS-MINAE | Expediente 22563-P", desc: "MINAE Dirección de Agua grants official water concession to Condominio Mar Azul for well CJ-135: 2 liters/second for self-supply", agency: "MINAE" },
+
+  // 2025 - THE ATTACK BEGINS
+  { id: 30, date: "Feb 2025", month: "2025", type: "attack", title: "Assembly Impugnación", quote: "Expediente 25-000060-2018-CI", desc: "Sfera Legal files lawsuit on behalf of David, Rachele, Matthew, Nigel against condominium assembly" },
+  
+  { id: 31, date: "Mar 24, 2025", month: "2025", type: "attack", title: "Denuncia Ley Forestal", quote: "Infracción a la Ley Forestal - Rancho Verde Riabov Limitada", desc: "David files CRIMINAL complaint via SFERA claiming illegal deforestation, unauthorized earthworks, invasion of protected areas — the SAME earthworks done to build HIS house", agency: "Fiscalía Nicoya", file: "2025-03-24 Denuncia SFERA Ley Forestal - Rancho Verde (David).pdf" },
+  
+  { id: 32, date: "Mar 24, 2025", month: "2025", type: "attack", title: "Denuncia Usurpación", quote: "Usurpación y Extorsión vs Marion & Catalina", desc: "SFERA files CRIMINAL complaint claiming usurpation and extortion against Marion Peri and Catalina Castro", agency: "Fiscalía Nicoya", file: "2025-03-24 Denuncia SFERA - Usurpacion y Extorsion vs Marion Catalina.pdf" },
+  
+  { id: 33, date: "2025", month: "2025", type: "attack", title: "nosarahills.info Website", quote: "Defamatory website with fake logos and fabricated quotes", desc: "David creates nosarahills.info website attacking Mar Azul development with fake media logos, fabricated quotes, and false claims", url: "nosarahills.info" },
+  
+  // 2026 - LEGAL BATTLES & MEDIA CAMPAIGN
+  { id: 34, date: "Jan 8, 2026", month: "2026", type: "legal", title: "Cease & Desist Sent", quote: "Cease and Desist Order / Formal Warning of Legal Action", desc: "Jonathan Picado sends formal cease & desist to David regarding property disputes and threatening behavior", file: "20260108. Cease an Desist and Warning Letter - Rancho Verde Riabov SRL.pdf" },
+  
+  { id: 35, date: "Jan 2026", month: "2026", type: "attack", title: "Ignores Cease & Desist", desc: "David ignores legal warning, keeps nosarahills.info website active, continues defamation campaign" },
+  
+  { id: 36, date: "Jan 2026", month: "2026", type: "attack", title: "Medidas Cautelares", quote: "Expediente 25-000060-2018-CI", desc: "Court issues provisional injunction — condominium complies IMMEDIATELY on Feb 1" },
+  
+  { id: 37, date: "Mar 2026", month: "2026", type: "condo", title: "New Assembly", quote: "83.49% approval | 100% quorum", desc: "New general assembly approves budget — completely independent of suspended 2025 assembly" },
+  
+  { id: 38, date: "Jun 5, 2026", month: "2026", type: "attack", title: "Puma Harassment Email", quote: "Endangered species (Puma concolor) within Condominio Mar Azul", desc: "David mass-emails SINAC, MINAE, wildlife orgs, and lawyers claiming puma sighting requires halting construction — pumas roam ALL of rural Guanacaste", agency: "SINAC/MINAE" },
+  
+  { id: 39, date: "Jul 2026", month: "2026", type: "attack", title: "Facebook Campaign", quote: "Por indicación de su abogado, La Nación no consignó el nombre del proyecto Mar Azul", source: "Nosara Info and Outreach", desc: "David posts on Facebook linking La Nación article 'Cuando el Estado deja de hacer cumplir la ley' about Mar Azul" },
+  
+  { id: 40, date: "Jul 2026", month: "2026", type: "attack", title: "La Esquina 506 Article", quote: "Juzgado ordena a administración de Mar Azul cumplir medida cautelar", source: "laesquina506.com", desc: "Press coverage of court order — but omits that condominium had already complied on Feb 1" },
+  
+  { id: 41, date: "Jul 2026", month: "2026", type: "attack", title: "Voice of Guanacaste", quote: "Mar Azul: the condominium in Nosara built on irregularities", source: "vozdeguanacaste.com", desc: "Press article repeats David's claims about water, permits, electricity — all contradicted by documents" },
+  
+  { id: 42, date: "Jul 2026", month: "2026", type: "smoking", title: "THE LIE", quote: "Homeowners were unaware of the irregularities when they purchased", source: "Voice of Guanacaste", desc: "David claims to press he 'had no idea' — DIRECTLY CONTRADICTED by his own emails asking about water rights, receiving permits, saying 'great news' to INVU updates" },
+];
+
+const years = [...new Set(timeline.map(e => e.month))];
+---
+
+<Layout title="Mar Azul Legal — David Riabov Timeline">
+  <!-- Sticky Header -->
+  <header class="sticky top-16 z-40 bg-[var(--color-bg)]/95 backdrop-blur border-b border-[var(--color-border)] py-3 px-4">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-4 overflow-x-auto pb-1 scrollbar-hide">
+        {years.map(year => (
+          <a href={`#year-${year}`} class="text-sm font-mono text-[var(--color-text-muted)] hover:text-white whitespace-nowrap">{year}</a>
+        ))}
+      </div>
+      <div class="flex gap-2 text-xs">
+        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#22c55e]"></span> Positive</span>
+        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span> Trojan</span>
+        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#dc2626]"></span> Attack</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="px-4 py-8 text-center max-w-3xl mx-auto">
+    <h1 class="text-2xl md:text-4xl font-bold mb-3">
+      The Complete <span class="text-[var(--color-accent)]">David Riabov</span> Timeline
+    </h1>
+    <p class="text-[var(--color-text-muted)]">
+      Contracts signed → Payments made → Bylaws reviewed → INVU updates acknowledged → Then claims "no idea"
+    </p>
+  </section>
+
+  <!-- Timeline Grid -->
+  <section class="px-4 pb-20 max-w-6xl mx-auto">
+    {years.map(year => (
+      <div id={`year-${year}`} class="mb-8">
+        <div class="sticky top-32 z-30 bg-[var(--color-bg)] py-2 mb-4">
+          <h2 class="text-xl font-bold text-[var(--color-accent)]">{year}</h2>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {timeline.filter(e => e.month === year).map(event => (
+            <div 
+              class={`timeline-card ${event.type}`}
+              data-id={event.id}
+              onclick={`openEvent(${event.id})`}
+            >
+              {event.type === 'smoking' && <div class="card-badge fire">🔥 KEY</div>}
+              {event.type === 'trojan' && <div class="card-badge trojan">🐴 TROJAN</div>}
+              {event.type === 'attack' && <div class="card-badge attack">⚔️</div>}
+              {event.type === 'payment' && <div class="card-badge payment">💰</div>}
+              {event.type === 'condo' && <div class="card-badge condo">📋</div>}
+              {event.type === 'legal' && <div class="card-badge legal">⚖️</div>}
+              
+              <div class="card-date">{event.date}</div>
+              <div class="card-title">{event.title}</div>
+              
+              {event.quote && (
+                <div class="card-quote">"{event.quote.length > 80 ? event.quote.substring(0, 80) + '...' : event.quote}"</div>
+              )}
+              
+              {event.amount && (
+                <div class="card-amount">{event.amount}</div>
+              )}
+              
+              {event.author && (
+                <div class="card-author">— {event.author}</div>
+              )}
+              
+              <div class="card-desc">{event.desc}</div>
+              
+              {event.attachments && (
+                <div class="card-files">📎 {event.attachments.length} files</div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+
+  <!-- Summary Bar -->
+  <div class="fixed bottom-0 left-0 right-0 bg-[var(--color-surface)] border-t border-[var(--color-border)] py-3 px-4 z-50">
+    <div class="max-w-6xl mx-auto flex items-center justify-between text-sm">
+      <div class="flex gap-4">
+        <span><strong class="text-[#22c55e]">11</strong> positive</span>
+        <span><strong class="text-[#f59e0b]">7</strong> smoking guns</span>
+        <span><strong class="text-[#dc2626]">10+</strong> attacks</span>
+        <span><strong>$900K+</strong> paid</span>
+      </div>
+      <div class="text-[var(--color-text-muted)]">
+        Scroll to explore • Tap cards for details
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal-overlay" onclick="closeEvent()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeEvent()">×</button>
+      <div id="modal-inner"></div>
+    </div>
+  </div>
+
+  <script define:vars={{ timeline }}>
+    window.timelineData = timeline;
+  </script>
+
+  <script>
+    function openEvent(id) {
+      const e = window.timelineData.find(x => x.id === id);
+      if (!e) return;
+
+      let html = `
+        <div class="modal-date">${e.date}</div>
+        <h2 class="modal-title">${e.title}</h2>
+      `;
+
+      if (e.original) {
+        html += `
+          <div class="modal-original">
+            <div class="original-label">Message received from ${e.originalAuthor || 'sender'}:</div>
+            <div class="original-text">"${e.original}"</div>
+          </div>
+        `;
+      }
+
+      if (e.quote) {
+        html += `<blockquote class="modal-quote">"${e.quote}"</blockquote>`;
+        if (e.author) {
+          html += `<div class="modal-author">— ${e.author}</div>`;
+        }
+      }
+
+      if (e.amount) {
+        html += `<div class="modal-amount">${e.amount}</div>`;
+      }
+
+      html += `<p class="modal-desc">${e.desc}</p>`;
+
+      if (e.attachments) {
+        html += `<div class="modal-attachments">
+          <div class="att-title">📎 Attachments received:</div>
+          ${e.attachments.map(a => `<div class="att-item">${a}</div>`).join('')}
+        </div>`;
+      }
+
+      if (e.emailId) {
+        html += `<div class="modal-meta">
+          <span>Email ID: ${e.emailId}</span>
+          <span>Source: marion@nosaraconstruction.com</span>
+        </div>`;
+      }
+
+      if (e.source) {
+        html += `<div class="modal-meta"><span>Source: ${e.source}</span></div>`;
+      }
+
+      document.getElementById('modal-inner').innerHTML = html;
+      document.getElementById('modal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeEvent() {
+      document.getElementById('modal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeEvent(); });
+  </script>
+
+  <style>
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .timeline-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .timeline-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--color-text-muted);
+    }
+
+    .timeline-card.positive { border-left: 3px solid #22c55e; }
+    .timeline-card.smoking { border-left: 3px solid #dc2626; background: linear-gradient(135deg, rgba(220,38,38,0.08), transparent); }
+    .timeline-card.trojan { border-left: 3px solid #f59e0b; background: linear-gradient(135deg, rgba(245,158,11,0.08), transparent); }
+    .timeline-card.attack { border-left: 3px solid #dc2626; }
+    .timeline-card.payment { border-left: 3px solid #22c55e; }
+    .timeline-card.condo { border-left: 3px solid #3b82f6; }
+    .timeline-card.legal { border-left: 3px solid #8b5cf6; }
+    .timeline-card.milestone { border-left: 3px solid #6b7280; }
+
+    .card-badge {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      font-size: 0.65rem;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .card-badge.fire { background: rgba(220,38,38,0.2); color: #dc2626; }
+    .card-badge.trojan { background: rgba(245,158,11,0.2); color: #f59e0b; }
+    .card-badge.attack { background: rgba(220,38,38,0.2); color: #dc2626; }
+    .card-badge.payment { background: rgba(34,197,94,0.2); color: #22c55e; }
+    .card-badge.condo { background: rgba(59,130,246,0.2); color: #3b82f6; }
+    .card-badge.legal { background: rgba(139,92,246,0.2); color: #8b5cf6; }
+
+    .card-date { font-size: 0.7rem; color: var(--color-text-muted); font-family: monospace; }
+    .card-title { font-weight: 600; font-size: 0.95rem; margin: 0.25rem 0; padding-right: 3rem; }
+    .card-quote { font-size: 0.8rem; color: var(--color-text); margin: 0.5rem 0; line-height: 1.4; font-style: italic; }
+    .card-amount { font-size: 1.1rem; font-weight: bold; color: #22c55e; }
+    .card-author { font-size: 0.7rem; color: var(--color-text-muted); }
+    .card-desc { font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.5rem; line-height: 1.4; }
+    .card-files { font-size: 0.7rem; color: #f59e0b; margin-top: 0.5rem; }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 100;
+      display: flex; align-items: center; justify-content: center; padding: 1rem;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+    .modal-content {
+      background: var(--color-surface); border: 1px solid var(--color-border);
+      border-radius: 16px; max-width: 550px; width: 100%; max-height: 80vh;
+      overflow-y: auto; padding: 1.5rem; position: relative;
+    }
+
+    .modal-close {
+      position: absolute; top: 1rem; right: 1rem; width: 32px; height: 32px;
+      border-radius: 50%; background: var(--color-surface-2); border: 1px solid var(--color-border);
+      color: var(--color-text); font-size: 1.25rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-close:hover { background: var(--color-accent); }
+
+    .modal-date { font-size: 0.8rem; color: var(--color-text-muted); font-family: monospace; }
+    .modal-title { font-size: 1.5rem; font-weight: bold; margin: 0.5rem 0 1rem; padding-right: 2rem; }
+    
+    .modal-original {
+      background: var(--color-surface-2); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;
+    }
+    .original-label { font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 0.5rem; }
+    .original-text { font-style: italic; color: var(--color-text-muted); }
+
+    .modal-quote {
+      font-size: 1.2rem; line-height: 1.5; border-left: 3px solid #22c55e;
+      padding-left: 1rem; margin: 1rem 0; white-space: pre-line;
+    }
+    .modal-author { font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 1rem; }
+    .modal-amount { font-size: 1.5rem; font-weight: bold; color: #22c55e; margin: 1rem 0; }
+    .modal-desc { color: var(--color-text-muted); margin: 1rem 0; }
+
+    .modal-attachments {
+      background: var(--color-surface-2); border-radius: 8px; padding: 1rem; margin: 1rem 0;
+    }
+    .att-title { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .att-item {
+      font-size: 0.8rem; color: #f59e0b; padding: 0.5rem;
+      background: var(--color-bg); border-radius: 4px; margin-top: 0.5rem; font-family: monospace;
+    }
+
+    .modal-meta {
+      display: flex; flex-wrap: wrap; gap: 1rem; font-size: 0.75rem;
+      color: var(--color-text-muted); padding-top: 1rem; border-top: 1px solid var(--color-border);
+    }
+
+    /* Mobile */
+    @media (max-width: 640px) {
+      .timeline-card { padding: 0.75rem; }
+      .card-title { font-size: 0.85rem; }
+      .modal-title { font-size: 1.25rem; }
+    }
+
+    /* Bottom padding for fixed bar */
+    section:last-of-type { padding-bottom: 5rem; }
+  </style>
+</Layout>

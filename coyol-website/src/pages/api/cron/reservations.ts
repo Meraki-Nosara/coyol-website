@@ -94,7 +94,7 @@ function getConfirmationEmail(reservation: any, restaurant: 'laluna' | 'coyol') 
           <!-- Header with logo -->
           <tr>
             <td align="center" style="padding:40px 40px 10px 40px;">
-              <img src="${logoUrl}" alt="${restaurantName}" width="140" style="margin-bottom:20px;" />
+              <img src="${logoUrl}" alt="${restaurantName}" width="300" style="margin-bottom:20px;max-width:100%;height:auto;" />
             </td>
           </tr>
           <!-- RESERVATION CONFIRMED banner -->

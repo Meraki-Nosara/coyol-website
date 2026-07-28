@@ -1,0 +1,150 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const contradictions = [
+  {
+    topic: "Water Infrastructure",
+    then: {
+      date: "October 26, 2021",
+      quote: "Water rights? 1. Connection to AyA network. 2. Connection to rural water association (Asada). 3. A valid water concession specific to your property.",
+      context: "David asked detailed questions about water rights"
+    },
+    now: {
+      date: "July 2026",
+      quote: "The development has no legal water access",
+      context: "Claims to press / through Sfera Legal"
+    }
+  },
+  {
+    topic: "Water Documentation",
+    then: {
+      date: "November 4, 2021",
+      quote: "Marion sent me the documents regarding water rights.",
+      context: "Confirms receipt of water documentation"
+    },
+    now: {
+      date: "2026",
+      quote: "We were unaware of the situation",
+      context: "Claims ignorance to press"
+    }
+  },
+  {
+    topic: "INVU / Condominium Status",
+    then: {
+      date: "January 19, 2023",
+      quote: "That's great news.",
+      context: "Response to INVU progress update"
+    },
+    now: {
+      date: "2026",
+      quote: "Homeowners stated they were unaware of the irregularities",
+      context: "Voice of Guanacaste article"
+    }
+  },
+  {
+    topic: "Permits & Land Use",
+    then: {
+      date: "March 25, 2024",
+      quote: "Gracias!",
+      context: "After receiving USO DE SUELO and well drilling permits"
+    },
+    now: {
+      date: "2026",
+      quote: "The development was built without permits",
+      context: "Claims to press / legal filings"
+    }
+  },
+  {
+    topic: "Satisfaction with Developer",
+    then: {
+      date: "November 14, 2021",
+      quote: "You are the best!! Now stop working!",
+      context: "Email to Marion"
+    },
+    now: {
+      date: "2026",
+      quote: "[Filing lawsuit against developer and condominium]",
+      context: "Through Sfera Legal"
+    }
+  },
+  {
+    topic: "Quality of Work",
+    then: {
+      date: "November 13, 2021",
+      quote: "Looks amazing! Again we love everything!!!",
+      context: "Design review email"
+    },
+    now: {
+      date: "2026",
+      quote: "Construction irregularities",
+      context: "Press statements"
+    }
+  },
+  {
+    topic: "Relationship with Developer",
+    then: {
+      date: "May 25, 2023",
+      quote: "¡Eress el mejor!",
+      context: "13 days AFTER switching to Sfera Legal"
+    },
+    now: {
+      date: "2026",
+      quote: "[Hostile legal campaign]",
+      context: "Through Sfera Legal"
+    }
+  },
+];
+---
+
+<Layout title="Contradictions — Mar Azul Legal">
+  <section class="max-w-5xl mx-auto px-4 py-16">
+    <h1 class="text-4xl font-bold mb-4 text-center">
+      Then vs. <span class="text-[var(--color-accent)]">Now</span>
+    </h1>
+    <p class="text-xl text-[var(--color-text-muted)] text-center mb-12 max-w-2xl mx-auto">
+      Side-by-side comparison of what David said in emails versus what he claims today
+    </p>
+
+    <div class="space-y-8">
+      {contradictions.map((item, index) => (
+        <div class="email-card">
+          <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+            <span class="text-2xl">#{index + 1}</span>
+            {item.topic}
+          </h3>
+          
+          <div class="grid md:grid-cols-2 gap-4">
+            <!-- THEN -->
+            <div class="bg-[var(--color-surface-2)] rounded-lg p-4 border-l-4 border-[var(--color-accent-green)]">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-[var(--color-accent-green)] font-semibold">THEN</span>
+                <span class="text-xs text-[var(--color-text-muted)]">{item.then.date}</span>
+              </div>
+              <blockquote class="text-lg mb-2">"{item.then.quote}"</blockquote>
+              <p class="text-sm text-[var(--color-text-muted)]">{item.then.context}</p>
+            </div>
+            
+            <!-- NOW -->
+            <div class="bg-[var(--color-surface-2)] rounded-lg p-4 border-l-4 border-[var(--color-accent)]">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-[var(--color-accent)] font-semibold">NOW</span>
+                <span class="text-xs text-[var(--color-text-muted)]">{item.now.date}</span>
+              </div>
+              <blockquote class="text-lg mb-2">"{item.now.quote}"</blockquote>
+              <p class="text-sm text-[var(--color-text-muted)]">{item.now.context}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Summary -->
+    <div class="mt-16 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-8 text-center">
+      <h2 class="text-2xl font-bold mb-4">7 Direct Contradictions</h2>
+      <p class="text-[var(--color-text-muted)] max-w-2xl mx-auto">
+        Each contradiction is documented with email evidence including message IDs, dates, and full context. 
+        These emails can be produced as evidence in legal proceedings.
+      </p>
+    </div>
+  </section>
+</Layout>
