@@ -80,54 +80,7 @@ import Footer from '../components/Footer.astro';
       </div>
     </section>
 
-    <!-- Lifestyle Grid - Like Zapotal -->
-    <section class="bg-landrover-santorini">
-      <div class="grid md:grid-cols-2">
-        <!-- Surfing -->
-        <div class="aspect-square md:aspect-auto md:h-[80vh] relative overflow-hidden">
-          <img 
-            src="/images/real/estate-ocean-view.jpg" 
-            alt="Luxury estate with ocean view"
-            class="w-full h-full object-cover"
-          />
-        </div>
-        <div class="flex items-center justify-center p-12 lg:p-20">
-          <div class="max-w-md">
-            <p class="scroll-fade text-landrover-limestone/60 text-xs tracking-[0.3em] uppercase mb-4" data-delay="0">The Life</p>
-            <h2 class="scroll-fade font-serif text-3xl md:text-4xl lg:text-5xl text-white mb-6 leading-tight" data-delay="100">
-              Surf before breakfast
-            </h2>
-            <p class="scroll-fade text-landrover-limestone/70 text-lg leading-relaxed" data-delay="200">
-              World-class waves just minutes away. Start your day in the water, 
-              end it watching the sunset from your terrace.
-            </p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="grid md:grid-cols-2">
-        <div class="flex items-center justify-center p-12 lg:p-20 order-2 md:order-1">
-          <div class="max-w-md">
-            <p class="scroll-fade text-landrover-limestone/60 text-xs tracking-[0.3em] uppercase mb-4" data-delay="0">The Wild</p>
-            <h2 class="scroll-fade font-serif text-3xl md:text-4xl lg:text-5xl text-white mb-6 leading-tight" data-delay="100">
-              Where the howlers call at dawn
-            </h2>
-            <p class="scroll-fade text-landrover-limestone/70 text-lg leading-relaxed" data-delay="200">
-              Here, the forest is not a backdrop. It is your companion. 
-              Birdsong greets the dawn; troops of monkeys pass through the canopy above.
-            </p>
-          </div>
-        </div>
-        <!-- Jungle/Nature -->
-        <div class="aspect-square md:aspect-auto md:h-[80vh] relative overflow-hidden order-1 md:order-2">
-          <img 
-            src="/images/real/tennis-court.jpg" 
-            alt="Gazebo by the lagoon with egret"
-            class="w-full h-full object-cover object-[center_60%]"
-          />
-        </div>
-      </div>
-    </section>
+    <!-- Lifestyle Grid - REMOVED -->
 
     <!-- Drone Aerial -->
     <section class="relative h-screen">
@@ -275,6 +228,15 @@ import Footer from '../components/Footer.astro';
 </style>
 
 <style is:global>
+  /* Hide default video play button/controls while allowing playback */
+  video::-webkit-media-controls-overlay-play-button {
+    display: none !important;
+  }
+  video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+    -webkit-appearance: none !important;
+  }
+  
   html {
     scroll-behavior: smooth;
   }
