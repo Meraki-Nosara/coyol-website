@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scratch Agency - The Real Story</title>
+  <meta name="description" content="The documented truth about David Riabov and Scratch Agency's campaign against a Costa Rica development.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --red: #E63946;
+      --dark-red: #9D0208;
+      --black: #0D0D0D;
+      --dark-gray: #1A1A1A;
+      --gray: #2D2D2D;
+      --light-gray: #888;
+      --white: #F5F5F5;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+    }
+    
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      background: linear-gradient(135deg, var(--black) 0%, var(--dark-gray) 100%);
+      border-bottom: 4px solid var(--red);
+    }
+    
+    .hero h1 {
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      letter-spacing: -2px;
+    }
+    
+    .hero h1 span {
+      color: var(--red);
+    }
+    
+    .hero .subtitle {
+      font-size: 1.25rem;
+      color: var(--light-gray);
+      max-width: 600px;
+      margin-bottom: 2rem;
+    }
+    
+    .hero .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      animation: bounce 2s infinite;
+      color: var(--red);
+      font-size: 2rem;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
+    }
+    
+    /* Sections */
+    section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+    
+    section h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: var(--red);
+      border-left: 4px solid var(--red);
+      padding-left: 1rem;
+    }
+    
+    section p {
+      margin-bottom: 1.5rem;
+      color: var(--white);
+      opacity: 0.9;
+    }
+    
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+      border-left: 2px solid var(--gray);
+    }
+    
+    .timeline-item {
+      position: relative;
+      margin-bottom: 2.5rem;
+      padding-left: 1.5rem;
+    }
+    
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2.35rem;
+      top: 0.5rem;
+      width: 12px;
+      height: 12px;
+      background: var(--red);
+      border-radius: 50%;
+    }
+    
+    .timeline-item .date {
+      font-size: 0.875rem;
+      color: var(--red);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .timeline-item h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .timeline-item p {
+      color: var(--light-gray);
+      font-size: 0.95rem;
+    }
+    
+    /* Evidence Cards */
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .evidence-card {
+      background: var(--dark-gray);
+      border: 1px solid var(--gray);
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: border-color 0.3s;
+    }
+    
+    .evidence-card:hover {
+      border-color: var(--red);
+    }
+    
+    .evidence-card h4 {
+      color: var(--red);
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+    }
+    
+    .evidence-card p {
+      font-size: 0.9rem;
+      color: var(--light-gray);
+      margin-bottom: 0;
+    }
+    
+    .evidence-card .source {
+      font-size: 0.75rem;
+      color: var(--light-gray);
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--gray);
+    }
+    
+    /* Quote block */
+    .quote-block {
+      background: var(--dark-gray);
+      border-left: 4px solid var(--red);
+      padding: 1.5rem 2rem;
+      margin: 2rem 0;
+      font-style: italic;
+    }
+    
+    .quote-block cite {
+      display: block;
+      margin-top: 1rem;
+      font-style: normal;
+      color: var(--light-gray);
+      font-size: 0.9rem;
+    }
+    
+    /* Stats */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    .stat {
+      text-align: center;
+      padding: 1.5rem;
+      background: var(--dark-gray);
+      border-radius: 8px;
+    }
+    
+    .stat .number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--red);
+    }
+    
+    .stat .label {
+      font-size: 0.875rem;
+      color: var(--light-gray);
+      margin-top: 0.5rem;
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--gray);
+      color: var(--light-gray);
+      font-size: 0.875rem;
+    }
+    
+    footer p {
+      margin-bottom: 0.5rem;
+    }
+    
+    ul {
+      margin-left: 1.5rem;
+      color: var(--light-gray);
+    }
+    
+    ul li {
+      margin-bottom: 0.75rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 600px) {
+      section { padding: 3rem 1.5rem; }
+      .timeline { padding-left: 1.5rem; }
+      .timeline-item { padding-left: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <header class="hero">
+    <h1>Scratch <span>Agency</span></h1>
+    <p class="subtitle">The documented story of a Toronto marketing agency owner who bought a home in Costa Rica, then launched a campaign to destroy the development.</p>
+    <div class="scroll-hint">↓</div>
+  </header>
+
+  <!-- The Story -->
+  <section>
+    <h2>The Story</h2>
+    <p>In 2021, a Toronto-based marketing executive purchased a lot in Mar Azul, a private residential community in Nosara, Costa Rica. He selected a home design from the developer's catalog and signed contracts acknowledging all existing conditions.</p>
+    <p>After his home was built, he began a systematic campaign to halt further development in the community — apparently wanting no neighbors.</p>
+    <p>This page documents the facts, supported by contracts, government findings, and public records.</p>
+  </section>
+
+  <!-- Timeline -->
+  <section>
+    <h2>Timeline of Events</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="date">November 25, 2021</div>
+        <h3>Purchase Agreement Signed</h3>
+        <p>Signed Sale & Purchase Agreement for Lot 20, Mar Azul. Contract acknowledged all existing conditions including water and electrical arrangements.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="date">November 25, 2021</div>
+        <h3>Construction Contract Signed</h3>
+        <p>Selected "Coyol XL" design from the developer's catalog of homes. 507 m² home at fixed price.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="date">November 25, 2022</div>
+        <h3>Title Transfer Completed</h3>
+        <p>Property transferred and notarized by Sfera Legal — the same law firm that would later file complaints against the development.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="date">May 14, 2025</div>
+        <h3>Defamation Website Registered</h3>
+        <p>Domain "nosarahills.info" registered. Technical investigation revealed it shared the same server IP (206.223.180.218) as scratchagency.ca, scratch.marketing, and scratchmarketing.com.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="date">March 24, 2025</div>
+        <h3>Criminal Complaint Filed</h3>
+        <p>Filed criminal complaint alleging environmental violations against the development and its principals.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="date">January 20, 2026</div>
+        <h3>OIJ Investigation Concludes</h3>
+        <p>Costa Rica's Judicial Investigation Agency (OIJ) completed their investigation and found: <strong>"NO environmental damages, NOR crimes committed."</strong></p>
+      </div>
+      <div class="timeline-item">
+        <div class="date">2026</div>
+        <h3>MINAE Water Complaint Dismissed</h3>
+        <p>Filed complaint with MINAE (Ministry of Environment) challenging the development's water rights. Result: MINAE confirmed the <strong>legal water concession exists</strong> and granted a <strong>10-year extension</strong>.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="date">July 2026</div>
+        <h3>Escalation Campaign</h3>
+        <p>Filed complaints with consumer protection agencies, sent legal threats, announced "public notice campaign" against the developer.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Evidence -->
+  <section>
+    <h2>Documented Facts</h2>
+    
+    <div class="evidence-grid">
+      <div class="evidence-card">
+        <h4> Catalog Home Design</h4>
+        <p>The "Coyol XL" was a pre-existing catalog design, not custom. The developer retains rights to market and build this design for other clients.</p>
+        <div class="source">Source: Construction Agreement, Nov 2021</div>
+      </div>
+      
+      <div class="evidence-card">
+        <h4> Water Infrastructure</h4>
+        <p>Development received legitimate water letters from ASADA Santa Marta Beach (Feb 2024). Previous developer donated a well now serving ~250 families in Nosara.</p>
+        <div class="source">Source: ASADA Water Letters, Well Permit DA-0080-2022</div>
+      </div>
+      
+      <div class="evidence-card">
+        <h4> Valid Permits</h4>
+        <p>Construction permit PC-333-2024 exists and was paid (₡2.78M). All permits were properly issued by municipal authorities.</p>
+        <div class="source">Source: Municipal Records, Payment Receipt June 2024</div>
+      </div>
+      
+      <div class="evidence-card">
+        <h4> OIJ Finding</h4>
+        <p>After thorough investigation, Costa Rica's OIJ concluded: "NO environmental damages, NOR crimes committed."</p>
+        <div class="source">Source: OIJ Investigation Report, Jan 20, 2026</div>
+      </div>
+      
+      <div class="evidence-card">
+        <h4> IP Address Link</h4>
+        <p>Technical investigation found nosarahills.info shared IP 206.223.180.218 with scratchagency.ca and related domains — hosted by Beanfield Technologies, Toronto.</p>
+        <div class="source">Source: OSINT/DNS Investigation Report, June 2026</div>
+      </div>
+      
+      <div class="evidence-card">
+        <h4> Unpaid HOA Dues</h4>
+        <p>While filing complaints, maintained ₡3,143,689 (~$6,200 USD) in unpaid HOA fees. Voted with minority bloc of largest delinquents.</p>
+        <div class="source">Source: HOA Financial Records, 2026</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Contradiction -->
+  <section>
+    <h2>The Contradictions</h2>
+    
+    <div class="quote-block">
+      "The same law firm (Sfera Legal) that notarized the property transfer in 2022 — certifying the property was clean and all conditions were acceptable — later filed criminal complaints claiming violations."
+      <cite>— Documented in public records</cite>
+    </div>
+    
+    <div class="stats-row">
+      <div class="stat">
+        <div class="number">47</div>
+        <div class="label">Contract pages signed acknowledging conditions</div>
+      </div>
+      <div class="stat">
+        <div class="number">0</div>
+        <div class="label">Crimes found by OIJ investigation</div>
+      </div>
+      <div class="stat">
+        <div class="number">10</div>
+        <div class="label">Years water concession extended by MINAE</div>
+      </div>
+      <div class="stat">
+        <div class="number">$6,200</div>
+        <div class="label">Unpaid HOA fees while filing complaints</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Media Manipulation -->
+  <section>
+    <h2>Media Manipulation</h2>
+    <p>False claims fed to regional and national media:</p>
+    
+    <div class="evidence-grid">
+      <div class="evidence-card">
+        <h4> False Claim #1</h4>
+        <p>"Was not aware the development was ongoing while building his house."</p>
+        <div class="source" style="color: var(--red);">THE TRUTH: He purchased Lot 20 in a development called "Mar Azul" — a planned residential community. His own construction contract (Nov 2021) references the development's infrastructure, roads, and common areas. Construction was visibly active throughout.</div>
+      </div>
+      
+      <div class="evidence-card">
+        <h4> False Claim #2</h4>
+        <p>"Construction permits were issued with a water letter from a source that was not connected at the time."</p>
+        <div class="source" style="color: var(--red);">THE TRUTH: Water letters were issued by ASADA Santa Marta Beach (Feb 2024) — a legally constituted public water authority. The development's previous owner donated a well that now serves approximately 250 families in Nosara. Well permit DA-0080-2022 documents the legal water source.</div>
+      </div>
+    </div>
+    
+    <p style="margin-top: 2rem;">These false claims were published by Voice of Guanacaste and other media outlets without verification — damaging the development's reputation and misleading potential buyers.</p>
+  </section>
+
+  <!-- The Pattern -->
+  <section>
+    <h2>The Pattern</h2>
+    <p>A consistent pattern emerges from the documented record:</p>
+    <ul>
+      <li>Lost democratic votes at HOA assemblies</li>
+      <li>Attempted to invalidate assemblies when votes didn't go his way</li>
+      <li>Filed criminal complaints — all cleared by authorities</li>
+      <li>Created website using development's name with satirical/negative content</li>
+      <li>Refuses to pay HOA dues while demanding services</li>
+      <li>Threatened "public notice campaign" and legal action</li>
+    </ul>
+    <p style="margin-top: 2rem;">The apparent goal: Stop any further homes from being built in the development. A classic case of "got mine, pull up the ladder."</p>
+    
+    <div class="quote-block">
+      "Every complaint he files damages the very community he lives in. If successful, his actions would destroy property values — including his own. This isn't about protecting the environment or consumers. It's about ensuring no one else gets to live there."
+    </div>
+    
+    <p><strong>Think about it:</strong> He filed complaints to revoke the development's water concession — the same water that supplies <em>his own house</em>. He attacks the permits that legitimize <em>his own property</em>. He damages the reputation of the development where <em>he is a resident</em>.</p>
+    
+    <p>This is not the behavior of someone seeking justice. This is sabotage from within.</p>
+  </section>
+
+  <!-- The Cost to Costa Rica -->
+  <section>
+    <h2>The Cost to Costa Rica</h2>
+    <p>While grinding down Costa Rica's legal system for personal benefit, consider what this individual contributes to the country he chose to call home:</p>
+    
+    <div class="stats-row">
+      <div class="stat">
+        <div class="number">$0</div>
+        <div class="label">Income taxes paid to Costa Rica</div>
+      </div>
+      <div class="stat">
+        <div class="number">$0</div>
+        <div class="label">Local jobs created</div>
+      </div>
+      <div class="stat">
+        <div class="number">$6,200</div>
+        <div class="label">Owed in unpaid HOA fees</div>
+      </div>
+    </div>
+    
+    <p>Yet he has consumed countless hours of:</p>
+    <ul>
+      <li><strong>OIJ investigators</strong> — who found no crimes</li>
+      <li><strong>SINAC officials</strong> — environmental complaints dismissed</li>
+      <li><strong>Municipal resources</strong> — permit challenges rejected</li>
+      <li><strong>Court system</strong> — frivolous filings</li>
+      <li><strong>Consumer protection agencies</strong> — meritless complaints</li>
+    </ul>
+    
+    <p style="margin-top: 2rem;">A foreign resident using Costa Rica's institutions as weapons against the very community that welcomed him — while contributing nothing in return.</p>
+  </section>
+
+  <!-- The Professional Connection -->
+  <section>
+    <h2>The Professional Connection</h2>
+    <p>Scratch Agency is a Toronto-based marketing firm that proudly serves major brands:</p>
+    
+    <div class="stats-row">
+      <div class="stat">
+        <div class="number" style="font-size: 1.5rem;">Bosch</div>
+        <div class="label">BSH Home Appliances</div>
+      </div>
+      <div class="stat">
+        <div class="number" style="font-size: 1.5rem;">Electrolux</div>
+        <div class="label">Major Appliances Canada</div>
+      </div>
+      <div class="stat">
+        <div class="number" style="font-size: 1.5rem;">Etsy</div>
+        <div class="label">Global Marketplace</div>
+      </div>
+      <div class="stat">
+        <div class="number" style="font-size: 1.5rem;">LMN</div>
+        <div class="label">Landscape Management Network</div>
+      </div>
+    </div>
+    
+    <div class="quote-block">
+      "Technical investigation revealed that the defamation website nosarahills.info was hosted on the same IP address (206.223.180.218) as scratchagency.ca, scratch.marketing, and scratchmarketing.com."
+      <cite>— OSINT/DNS Investigation Report, June 2026</cite>
+    </div>
+    
+    <p><strong>The same infrastructure</strong> used to serve these respected brands was also used to host a website designed to destroy a Costa Rica real estate development.</p>
+    
+    <p>By day: Professional marketing for Fortune 500 companies.<br>
+    After hours: Anonymous defamation campaigns against neighbors.</p>
+    
+    <p>These companies trust Scratch Agency with their brand reputation. Do they know how the agency's founder treats his own community?</p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>All information on this page is based on documented contracts, government findings, and public records.</p>
+    <p>Truth is an absolute defense.</p>
+  </footer>
+
+</body>
+</html>
