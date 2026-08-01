@@ -4,7 +4,7 @@ const BAD_BOTS = /semrushbot|ahrefsbot|dotbot|petalbot|mj12bot|dataforseo|serpst
 
 // Block specific hostile parties
 const BLOCKED_IPS = new Set([
-  // Add David's IPs here when identified
+  '206.223.180.218', // David Riabov / Scratch Agency infrastructure (from architect report)
 ]);
 
 const BLOCKED_REFERRERS = /scratchagency\.ca/i;
