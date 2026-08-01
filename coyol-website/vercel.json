@@ -1,5 +1,18 @@
 {
   "framework": "astro",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(bot|crawler|spider|scraper|curl|wget|python|java|go-http|libwww|httpclient|httpunit|nutch|phpcrawl|msnbot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|sogou|exabot|facebot|ia_archiver|semrushbot|ahrefsbot|dotbot|petalbot|mj12bot|dataforseo|serpstat|seokicks|blexbot|linkfluence|megaindex|majestic|rogerbot|domaincrawler|netcraft|censys|zgrab).*"
+        }
+      ],
+      "destination": "/api/blocked"
+    }
+  ],
   "crons": [
     {
       "path": "/api/cron/gift-cards",
