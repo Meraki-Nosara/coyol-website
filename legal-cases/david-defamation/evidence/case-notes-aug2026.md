@@ -174,3 +174,32 @@ David formally demanded preservation of:
 
 **STATUS: DOCUMENT EVERYTHING, KEEP BUILDING**
 
+
+---
+
+## August 1, 2026 — NEW EMAILS ARCHIVED
+
+### David Riabov (67734)
+**Subject:** "Retiro parcial constatado — se exige el retiro INMEDIATO del video"
+**Date:** Aug 1, 2026 10:26 UTC
+**Demand:** Remove opening video within 24 hours or edit out Lot 20 footage
+**Notes:**
+- Acknowledges you removed "Built & Sold" section (partial compliance)
+- Now demanding video removal
+- Claims registrar abuse reports filed
+- MEIC complaint "continues its course"
+- Still preservation demand in effect
+
+### Nigel Churcher (67733)
+**Subject:** "Re: Objeción — Well Electrification"
+**Date:** Aug 1, 2026 12:11+04:00
+**Demand:** Response by Aug 5, 2026
+**Notes:**
+- Second request (first was July 18)
+- Demanding developer pay for well electrification
+- Threatening legal proceedings
+- CC'd David Riabov and Sfera Legal
+- Claims pattern of "developer obligations transferred to owners"
+
+**COORDINATED:** Both Churcher and Riabov communicating and CC'ing each other. This is a coordinated campaign, not independent complaints.
+

@@ -1,0 +1,744 @@
+---
+const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>New Lead — Coyol Command</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <style>
+    body { background-color: #f5f5f4 !important; color: #1c1917 !important; }
+    select, input, textarea { color: #1c1917 !important; }
+    option { color: #1c1917 !important; background: white !important; }
+  </style>
+  <div class="min-h-screen bg-stone-100 py-8 px-4">
+    <div class="max-w-2xl mx-auto">
+      
+      <!-- Header -->
+      <div class="bg-[#3D4F3D] text-white p-6 rounded-t-lg">
+        <div class="flex items-center gap-4">
+          <img src="/images/coyol-logo.png" alt="Coyol" class="h-12 w-auto brightness-0 invert">
+          <div>
+            <h1 class="text-2xl font-serif">Mar Azul — Lead Qualification</h1>
+            <p class="text-stone-300 mt-1">Fill in as you learn more about the client</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <form id="leadForm" class="bg-white shadow-lg rounded-b-lg">
+        <input type="hidden" name="id" id="leadId">
+        
+        <!-- Progress Bar -->
+        <div class="p-4 border-b bg-stone-50">
+          <div class="flex justify-between text-sm text-stone-500 mb-2">
+            <span>Progress</span>
+            <span id="progressText">0% complete</span>
+          </div>
+          <div class="w-full bg-stone-200 rounded-full h-2">
+            <div id="progressBar" class="bg-[#3D4F3D] h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Section 1: Contact Info -->
+        <div class="p-6 border-b">
+          <h2 class="text-lg font-semibold text-[#3D4F3D] mb-4 flex items-center gap-2">
+            Contact Information
+            <span class="text-xs font-normal text-stone-400">Meeting 1</span>
+          </h2>
+          
+          <div class="grid gap-4">
+            <div>
+              <label class="block text-sm font-medium text-stone-700 mb-1">Full Name *</label>
+              <input type="text" name="full_name" required
+                class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D] focus:border-transparent"
+                placeholder="Client's full name">
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1">Email</label>
+                <input type="email" name="email"
+                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]"
+                  placeholder="email@example.com">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1">Phone / WhatsApp</label>
+                <input type="tel" name="phone"
+                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]"
+                  placeholder="+1 555 123 4567">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1">Country</label>
+                <input type="text" name="country"
+                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]"
+                  placeholder="USA, Canada, etc.">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1">How did they find us?</label>
+                <select name="referral_source"
+                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
+                  <option value="">Select...</option>
+                  <option value="website">Website</option>
+                  <option value="instagram">Instagram</option>
+                  <option value="referral">Referral</option>
+                  <option value="driveby">Drive-by visit</option>
+                  <option value="broker">Broker</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-stone-700 mb-1">Referred by (if applicable)</label>
+              <input type="text" name="referred_by"
+                class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]"
+                placeholder="Name of person who referred them">
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Timeline & Motivation -->
+        <div class="p-6 border-b">
+          <h2 class="text-lg font-semibold text-[#3D4F3D] mb-4 flex items-center gap-2">
+            Timeline & Motivation
+            <span class="text-xs font-normal text-stone-400">Meeting 1-2</span>
+          </h2>
+          
+          <div class="grid gap-4">
+            <div>
+              <label class="block text-sm font-medium text-stone-700 mb-2">Purpose (select all that apply)</label>
+              <div class="flex flex-wrap gap-2">
+                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200">
+                  <input type="checkbox" name="purpose" value="primary" class="mr-2"> Primary Home
+                </label>
+                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200">
+                  <input type="checkbox" name="purpose" value="vacation" class="mr-2"> Vacation Home
+                </label>
+                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200">
+                  <input type="checkbox" name="purpose" value="rental" class="mr-2"> Rental Investment
+                </label>
+                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200">
+                  <input type="checkbox" name="purpose" value="retirement" class="mr-2"> Retirement
+                </label>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1">Visited Nosara before?</label>
+                <select name="visited_nosara"
+                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
+                  <option value="">Select...</option>
+                  <option value="multiple">Yes - multiple times</option>
+                  <option value="once">Yes - once</option>
+                  <option value="planning">No - planning first visit</option>
+                  <option value="sightunseen">No - buying sight unseen</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1">Timeline to Purchase</label>
+                <select name="timeline_to_buy"
+                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
+                  <option value="">Select...</option>
+                  <option value="ready">Ready now (1-3 months)</option>
+                  <option value="thisyear">This year (3-6 months)</option>
+                  <option value="nextyear">Next year</option>
+                  <option value="exploring">Just exploring</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-stone-700 mb-1">When do they want to move in / use it?</label>
+              <select name="timeline_to_move"
+                class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
+                <option value="">Select...</option>
+                <option value="asap">ASAP - want turnkey</option>
+                <option value="1year">Within 1 year</option>
+                <option value="2years">Within 2 years</option>
+                <option value="flexible">Flexible</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-stone-700 mb-1">Notes from conversation</label>
+              <textarea name="motivation_notes" rows="2"
+                class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]"
+                placeholder="What brings them to Nosara? Any personal details..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Budget -->
+        <div class="p-6 border-b">
+          <h2 class="text-lg font-semibold text-[#3D4F3D] mb-4 flex items-center gap-2">
+            Budget & Financing
+            <span class="text-xs font-normal text-stone-400">Meeting 2-3</span>
+          </h2>
+          
+          <div class="grid gap-4">
+            <div>
+              <label class="block text-sm font-medium text-stone-700 mb-1">Total Budget (lot + construction)</label>
+              <select name="total_budget"
+                class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
+                <option value="">Select...</option>
+                <option value="under500">Under $500K</option>
+                <option value="500-750">$500K - $750K</option>
+                <option value="750-1m">$750K - $1M</option>
+                <option value="1m-1.5m">$1M - $1.5M</option>
+                <option value="1.5m-2m">$1.5M - $2M</option>
+                <option value="2m+">$2M+</option>
+                <option value="notdisclosed">Not disclosed yet</option>
+              </select>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1">Payment Method</label>
+                <select name="payment_method"
+                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
+                  <option value="">Select...</option>
+                  <option value="cash">Cash</option>
+                  <option value="financing">Needs financing</option>
+                  <option value="partial">Partial financing</option>
+                  <option value="undecided">Undecided</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1">International property experience?</label>
+                <select name="international_exp"
+                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
+                  <option value="">Select...</option>
+                  <option value="cr">Yes - in Costa Rica</option>
+                  <option value="other">Yes - other country</option>
+                  <option value="first">No - first time</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: Property Preferences -->
+        <div class="p-6 border-b">
+          <h2 class="text-lg font-semibold text-[#3D4F3D] mb-4 flex items-center gap-2">
+            Property Preferences
+            <span class="text-xs font-normal text-stone-400">Meeting 2-3</span>
+          </h2>
+          
+          <div class="grid gap-4">
+            <div class="grid grid-cols-3 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1">Bedrooms</label>
+                <select name="bedrooms"
+                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
+                  <option value="">Select...</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5+">5+</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1">Bathrooms</label>
+                <select name="bathrooms"
+                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
+                  <option value="">Select...</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5+">5+</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1">Stories</label>
+                <select name="stories"
+                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
+                  <option value="">Select...</option>
+                  <option value="1">Single story</option>
+                  <option value="2">Two stories</option>
+                  <option value="any">No preference</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1">Preferred Lot Size</label>
+                <select name="lot_size"
+                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
+                  <option value="">Select...</option>
+                  <option value="small">Smaller / easy maintain (&lt;2,000 m²)</option>
+                  <option value="medium">Medium (2,000 - 4,000 m²)</option>
+                  <option value="large">Large / privacy (4,000+ m²)</option>
+                  <option value="any">No preference</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1">Pool Required?</label>
+                <select name="pool"
+                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
+                  <option value="">Select...</option>
+                  <option value="must">Must have</option>
+                  <option value="nice">Nice to have</option>
+                  <option value="no">Not important</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-stone-700 mb-2">View Priority</label>
+              <div class="grid grid-cols-2 gap-2">
+                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100 border border-transparent has-[:checked]:border-[#3D4F3D] has-[:checked]:bg-green-50">
+                  <input type="radio" name="view_priority" value="ocean" class="mr-3"> 
+                  <span>Ocean view (premium)</span>
+                </label>
+                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100 border border-transparent has-[:checked]:border-[#3D4F3D] has-[:checked]:bg-green-50">
+                  <input type="radio" name="view_priority" value="jungle" class="mr-3">
+                  <span>Jungle / nature</span>
+                </label>
+                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100 border border-transparent has-[:checked]:border-[#3D4F3D] has-[:checked]:bg-green-50">
+                  <input type="radio" name="view_priority" value="mountain" class="mr-3">
+                  <span>Mountain view</span>
+                </label>
+                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100 border border-transparent has-[:checked]:border-[#3D4F3D] has-[:checked]:bg-green-50">
+                  <input type="radio" name="view_priority" value="privacy" class="mr-3">
+                  <span>Privacy over view</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 5: House Style -->
+        <div class="p-6 border-b">
+          <h2 class="text-lg font-semibold text-[#3D4F3D] mb-4 flex items-center gap-2">
+            House Style
+            <span class="text-xs font-normal text-stone-400">Meeting 3-4</span>
+          </h2>
+          
+          <p class="text-sm text-stone-500 mb-4">
+            Have them browse <a href="https://coyolrealestate.com" target="_blank" class="text-[#3D4F3D] underline">coyolrealestate.com</a> first
+          </p>
+
+          <div class="grid gap-4">
+            <div>
+              <label class="block text-sm font-medium text-stone-700 mb-2">Preferred House Models (select all they like)</label>
+              <div class="grid grid-cols-2 gap-2">
+                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100">
+                  <input type="checkbox" name="preferred_models" value="cacao" class="mr-3"> Casa Cacao
+                </label>
+                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100">
+                  <input type="checkbox" name="preferred_models" value="luz" class="mr-3"> Casa Luz
+                </label>
+                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100">
+                  <input type="checkbox" name="preferred_models" value="umi" class="mr-3"> Casa Umi
+                </label>
+                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100">
+                  <input type="checkbox" name="preferred_models" value="perch" class="mr-3"> Casa Perch
+                </label>
+                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100">
+                  <input type="checkbox" name="preferred_models" value="elle" class="mr-3"> Casa Elle
+                </label>
+                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100">
+                  <input type="checkbox" name="preferred_models" value="lefki" class="mr-3"> Casa Lefki
+                </label>
+                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100 col-span-2">
+                  <input type="checkbox" name="preferred_models" value="custom" class="mr-3"> Custom design
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-stone-700 mb-1">Custom vs Model</label>
+              <select name="custom_vs_model"
+                class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
+                <option value="">Select...</option>
+                <option value="model">Want a proven model (faster, predictable cost)</option>
+                <option value="semicustom">Semi-custom (model with modifications)</option>
+                <option value="custom">Fully custom design</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 6: Lifestyle -->
+        <div class="p-6 border-b">
+          <h2 class="text-lg font-semibold text-[#3D4F3D] mb-4 flex items-center gap-2">
+            Lifestyle & Special Needs
+            <span class="text-xs font-normal text-stone-400">Meeting 3-5</span>
+          </h2>
+          
+          <div class="grid gap-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1">Guest Accommodation</label>
+                <select name="guest_accom"
+                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
+                  <option value="">Select...</option>
+                  <option value="casita">Separate guest casita</option>
+                  <option value="rooms">Guest rooms in main house</option>
+                  <option value="minimal">Minimal guest space</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1">Home Office</label>
+                <select name="home_office"
+                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
+                  <option value="">Select...</option>
+                  <option value="yes">Yes - dedicated space</option>
+                  <option value="nice">Nice to have</option>
+                  <option value="no">Not needed</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1">Rental Income Interest?</label>
+                <select name="rental_interest"
+                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
+                  <option value="">Select...</option>
+                  <option value="yes">Yes - rent when not using</option>
+                  <option value="maybe">Maybe in the future</option>
+                  <option value="no">No - personal use only</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1">Accessibility Needs</label>
+                <select name="accessibility"
+                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
+                  <option value="">Select...</option>
+                  <option value="required">Required - single level</option>
+                  <option value="preferred">Preferred but not required</option>
+                  <option value="no">Not a concern</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-stone-700 mb-1">Special Requests</label>
+              <textarea name="special_requests" rows="2"
+                class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]"
+                placeholder="Outdoor kitchen, yoga deck, surf storage, EV charging, etc."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 7: Decision Making -->
+        <div class="p-6 border-b">
+          <h2 class="text-lg font-semibold text-[#3D4F3D] mb-4 flex items-center gap-2">
+            Decision Making
+            <span class="text-xs font-normal text-stone-400">Meeting 2-3</span>
+          </h2>
+          
+          <div class="grid gap-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1">Who decides?</label>
+                <select name="decision_makers"
+                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
+                  <option value="">Select...</option>
+                  <option value="solo">Just them</option>
+                  <option value="spouse">With spouse/partner</option>
+                  <option value="family">Family decision</option>
+                  <option value="business">Business partners</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1">Other decision maker</label>
+                <input type="text" name="other_decision_maker"
+                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]"
+                  placeholder="Name">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-stone-700 mb-2">Main Concerns (select all)</label>
+              <div class="flex flex-wrap gap-2">
+                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200 text-sm">
+                  <input type="checkbox" name="concerns" value="budget" class="mr-2"> Budget
+                </label>
+                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200 text-sm">
+                  <input type="checkbox" name="concerns" value="timeline" class="mr-2"> Timeline
+                </label>
+                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200 text-sm">
+                  <input type="checkbox" name="concerns" value="remote" class="mr-2"> Managing remotely
+                </label>
+                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200 text-sm">
+                  <input type="checkbox" name="concerns" value="legal" class="mr-2"> Legal process
+                </label>
+                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200 text-sm">
+                  <input type="checkbox" name="concerns" value="resale" class="mr-2"> Resale value
+                </label>
+                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200 text-sm">
+                  <input type="checkbox" name="concerns" value="hoa" class="mr-2"> HOA rules
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-stone-700 mb-1">Looking at other developments?</label>
+              <input type="text" name="competitors"
+                class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]"
+                placeholder="Nantipa, Las Mariposas, Garza, etc.">
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-stone-700 mb-1">What would make them say yes?</label>
+              <textarea name="close_notes" rows="2"
+                class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]"
+                placeholder="Key motivators, hot buttons..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lot Suggestions -->
+        <div class="p-6 border-b bg-green-50">
+          <h2 class="text-lg font-semibold text-[#3D4F3D] mb-4">Suggested Lots</h2>
+          <div id="lotSuggestions" class="text-stone-600">
+            Fill in preferences above to see lot recommendations
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="p-6 flex gap-4">
+          <button type="submit" id="saveBtn"
+            class="flex-1 bg-[#3D4F3D] text-white py-3 px-6 rounded-md hover:bg-[#4A5D4A] transition font-medium">
+            Save Lead
+          </button>
+          <a href="/leads" 
+            class="px-6 py-3 border border-[#3D4F3D] text-[#3D4F3D] rounded-md hover:bg-stone-50 transition text-center">
+            All Leads
+          </a>
+        </div>
+
+      </form>
+
+      <!-- Toast -->
+      <div id="savedToast" class="hidden fixed bottom-4 right-4 bg-[#3D4F3D] text-white px-6 py-3 rounded-lg shadow-lg">
+        Lead saved!
+      </div>
+      
+      <!-- Loading overlay -->
+      <div id="loadingOverlay" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-xl">
+          <p class="text-stone-700">Saving...</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script define:vars={{ SUPABASE_URL, SUPABASE_KEY }}>
+    const form = document.getElementById('leadForm');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const toast = document.getElementById('savedToast');
+    
+    // Check if editing existing lead
+    const urlParams = new URLSearchParams(window.location.search);
+    const editId = urlParams.get('id');
+    
+    // Load existing lead if editing
+    async function loadLead(id) {
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/mar_azul_leads?id=eq.${id}&select=*`, {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+          },
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data[0]) {
+            populateForm(data[0]);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load lead:', error);
+      }
+    }
+    
+    // Populate form with data
+    function populateForm(data) {
+      document.getElementById('leadId').value = data.id;
+      
+      Object.keys(data).forEach(key => {
+        const input = form.querySelector(`[name="${key}"]`);
+        if (!input) return;
+        
+        if (input.type === 'checkbox') {
+          // Handle checkbox arrays
+          const values = Array.isArray(data[key]) ? data[key] : [];
+          form.querySelectorAll(`[name="${key}"]`).forEach(cb => {
+            cb.checked = values.includes(cb.value);
+          });
+        } else if (input.type === 'radio') {
+          const radio = form.querySelector(`[name="${key}"][value="${data[key]}"]`);
+          if (radio) radio.checked = true;
+        } else {
+          input.value = data[key] || '';
+        }
+      });
+      
+      updateProgress();
+      updateLotSuggestions();
+    }
+    
+    // Save lead
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      loadingOverlay.classList.remove('hidden');
+      
+      const formData = new FormData(form);
+      const leadData = {};
+      
+      // Collect checkbox arrays
+      const checkboxNames = new Set();
+      form.querySelectorAll('input[type="checkbox"]').forEach(cb => checkboxNames.add(cb.name));
+      
+      checkboxNames.forEach(name => {
+        leadData[name] = [];
+        form.querySelectorAll(`[name="${name}"]:checked`).forEach(cb => {
+          leadData[name].push(cb.value);
+        });
+      });
+      
+      // Collect other fields
+      formData.forEach((value, key) => {
+        if (!checkboxNames.has(key) && key !== 'id') {
+          leadData[key] = value || null;
+        }
+      });
+      
+      const existingId = document.getElementById('leadId').value;
+      
+      try {
+        let response;
+        
+        if (existingId) {
+          // Update existing
+          response = await fetch(`${SUPABASE_URL}/rest/v1/mar_azul_leads?id=eq.${existingId}`, {
+            method: 'PATCH',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=representation',
+            },
+            body: JSON.stringify({
+              ...leadData,
+              updated_at: new Date().toISOString(),
+            }),
+          });
+        } else {
+          // Create new
+          response = await fetch(`${SUPABASE_URL}/rest/v1/mar_azul_leads`, {
+            method: 'POST',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=representation',
+            },
+            body: JSON.stringify({
+              ...leadData,
+              status: 'new',
+              assigned_to: 'ruth',
+            }),
+          });
+        }
+        
+        if (response.ok) {
+          const result = await response.json();
+          const savedId = result[0]?.id;
+          
+          if (savedId && !existingId) {
+            // Redirect to edit URL for new lead
+            window.history.replaceState(null, '', `?id=${savedId}`);
+            document.getElementById('leadId').value = savedId;
+          }
+          
+          toast.classList.remove('hidden');
+          setTimeout(() => toast.classList.add('hidden'), 2000);
+        } else {
+          const error = await response.text();
+          alert('Failed to save: ' + error);
+        }
+      } catch (error) {
+        alert('Error saving lead: ' + error.message);
+      } finally {
+        loadingOverlay.classList.add('hidden');
+      }
+    });
+    
+    // Progress calculation
+    function updateProgress() {
+      const requiredFields = ['full_name', 'timeline_to_buy', 'total_budget', 'bedrooms', 'view_priority', 'custom_vs_model'];
+      let filled = 0;
+      requiredFields.forEach(name => {
+        const input = form.querySelector(`[name="${name}"]`);
+        if (input) {
+          if (input.type === 'radio') {
+            if (form.querySelector(`[name="${name}"]:checked`)) filled++;
+          } else if (input.value) {
+            filled++;
+          }
+        }
+      });
+      const percent = Math.round((filled / requiredFields.length) * 100);
+      document.getElementById('progressBar').style.width = `${percent}%`;
+      document.getElementById('progressText').textContent = `${percent}% complete`;
+    }
+    
+    // Lot suggestions
+    function updateLotSuggestions() {
+      const view = form.querySelector('[name="view_priority"]:checked')?.value;
+      const lotSize = form.querySelector('[name="lot_size"]')?.value;
+      const budget = form.querySelector('[name="total_budget"]')?.value;
+      
+      let suggestions = [];
+      
+      if (view === 'ocean') suggestions.push('14 (Casa Elle)', '25', '33', '34 (Casa Umi)');
+      if (view === 'jungle' || view === 'privacy') suggestions.push('8', '9', '23', '29');
+      if (lotSize === 'small') suggestions.push('6', '7', '22', '26', '27');
+      if (lotSize === 'large') suggestions.push('8', '14', '29', '32');
+      if (budget === 'under500' || budget === '500-750') suggestions.push('6', '7', '19', '36');
+      
+      const el = document.getElementById('lotSuggestions');
+      if (suggestions.length > 0) {
+        const unique = [...new Set(suggestions)];
+        el.innerHTML = `<strong>Recommended lots:</strong> ${unique.join(', ')}`;
+      } else {
+        el.textContent = 'Fill in preferences above to see lot recommendations';
+      }
+    }
+    
+    // Event listeners
+    form.querySelectorAll('input, select, textarea').forEach(input => {
+      input.addEventListener('change', () => {
+        updateProgress();
+        updateLotSuggestions();
+      });
+    });
+    
+    // Load existing lead if editing
+    if (editId) {
+      loadLead(editId);
+    }
+    
+    updateProgress();
+  </script>
+</body>
+</html>

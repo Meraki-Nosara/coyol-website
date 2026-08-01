@@ -1,0 +1,300 @@
+---
+import CommandLayout from '../../../layouts/CommandLayout.astro';
+
+const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+const SUPABASE_KEY = import.meta.env.SUPABASE_SERVICE_KEY || 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng';
+
+// Fetch leads from Supabase
+let leads: any[] = [];
+try {
+  const response = await fetch(`${SUPABASE_URL}/rest/v1/mar_azul_leads?select=*&order=created_at.desc`, {
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+    }
+  });
+  if (response.ok) {
+    leads = await response.json();
+  }
+} catch (e) {
+  console.error('Failed to fetch leads:', e);
+}
+
+// Status colors
+const statusColors: Record<string, string> = {
+  'new': '#22c55e',
+  'contacted': '#3b82f6',
+  'toured': '#8b5cf6',
+  'negotiating': '#f59e0b',
+  'closed': '#10b981',
+  'lost': '#6b7280',
+};
+
+// Purpose labels
+const purposeLabels: Record<string, string> = {
+  'primary': 'Primary Home',
+  'vacation': 'Vacation Home',
+  'investment': 'Investment',
+  'retirement': 'Retirement',
+};
+---
+
+<CommandLayout title="Qualified Leads" active="qualified">
+  <div class="header">
+    <div>
+      <h1>Qualified Leads</h1>
+      <span class="subtitle">{leads.length} leads from Mar Azul qualification forms</span>
+    </div>
+    <a href="/command/qualified/new" class="new-btn">+ New Lead</a>
+  </div>
+
+  <div class="filters">
+    <select id="statusFilter">
+      <option value="">All Status</option>
+      <option value="new">New</option>
+      <option value="contacted">Contacted</option>
+      <option value="toured">Toured</option>
+      <option value="negotiating">Negotiating</option>
+      <option value="closed">Closed</option>
+      <option value="lost">Lost</option>
+    </select>
+    <select id="budgetFilter">
+      <option value="">All Budgets</option>
+      <option value="under500">Under $500K</option>
+      <option value="500-750">$500K - $750K</option>
+      <option value="750-1m">$750K - $1M</option>
+      <option value="1m-1.5m">$1M - $1.5M</option>
+      <option value="1.5m-2m">$1.5M - $2M</option>
+      <option value="2m+">$2M+</option>
+    </select>
+    <input type="text" id="searchInput" placeholder="Search by name..." />
+  </div>
+
+  <table class="leads-table" id="leadsTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Contact</th>
+        <th>Purpose</th>
+        <th>Budget</th>
+        <th>Timeline</th>
+        <th>Status</th>
+        <th>Created</th>
+      </tr>
+    </thead>
+    <tbody>
+      {leads.map((lead) => (
+        <tr data-status={lead.status || 'new'} data-budget={lead.total_budget || ''}>
+          <td class="col-name">
+            <a href={`/command/qualified/${lead.id}`}>{lead.full_name}</a>
+            {lead.country && <span class="country">{lead.country}</span>}
+          </td>
+          <td class="col-contact">
+            {lead.email && <div class="email">{lead.email}</div>}
+            {lead.phone && <div class="phone">{lead.phone}</div>}
+          </td>
+          <td class="col-purpose">
+            {lead.purpose?.map((p: string) => (
+              <span class="tag">{purposeLabels[p] || p}</span>
+            ))}
+          </td>
+          <td class="col-budget">{lead.total_budget || '—'}</td>
+          <td class="col-timeline">{lead.timeline_to_buy || '—'}</td>
+          <td class="col-status">
+            <span class="status-badge" style={`background: ${statusColors[lead.status] || statusColors.new}`}>
+              {lead.status || 'new'}
+            </span>
+          </td>
+          <td class="col-date">
+            {new Date(lead.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+
+  {leads.length === 0 && (
+    <div class="empty-state">
+      <p>No qualified leads yet</p>
+      <a href="/command/qualified/new" class="new-btn">Add First Lead</a>
+    </div>
+  )}
+
+  <script is:inline>
+    const statusFilter = document.getElementById('statusFilter');
+    const budgetFilter = document.getElementById('budgetFilter');
+    const searchInput = document.getElementById('searchInput');
+    const rows = document.querySelectorAll('#leadsTable tbody tr');
+
+    function filterRows() {
+      const status = statusFilter.value.toLowerCase();
+      const budget = budgetFilter.value;
+      const search = searchInput.value.toLowerCase();
+
+      rows.forEach(row => {
+        const rowStatus = row.dataset.status || '';
+        const rowBudget = row.dataset.budget || '';
+        const name = row.querySelector('.col-name a')?.textContent?.toLowerCase() || '';
+
+        const matchStatus = !status || rowStatus === status;
+        const matchBudget = !budget || rowBudget === budget;
+        const matchSearch = !search || name.includes(search);
+
+        row.style.display = (matchStatus && matchBudget && matchSearch) ? '' : 'none';
+      });
+    }
+
+    statusFilter.addEventListener('change', filterRows);
+    budgetFilter.addEventListener('change', filterRows);
+    searchInput.addEventListener('input', filterRows);
+  </script>
+
+  <style>
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 300;
+      color: #C4A67C;
+      margin: 0;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .new-btn {
+      background: #3D4F3D;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    .new-btn:hover {
+      background: #4a5f4a;
+    }
+
+    .filters {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .filters select, .filters input {
+      background: #1a1d17;
+      border: 1px solid #2a2d26;
+      color: #ddd;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    .filters input {
+      flex: 1;
+      max-width: 250px;
+    }
+
+    .leads-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .leads-table th {
+      text-align: left;
+      padding: 12px;
+      color: #888;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid #2a2d26;
+    }
+
+    .leads-table td {
+      padding: 14px 12px;
+      border-bottom: 1px solid #1a1d17;
+      font-size: 13px;
+      vertical-align: top;
+    }
+
+    .leads-table tr:hover td {
+      background: rgba(196, 166, 124, 0.03);
+    }
+
+    .col-name a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .col-name a:hover {
+      color: #C4A67C;
+    }
+
+    .country {
+      display: block;
+      color: #666;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .col-contact {
+      color: #888;
+      font-size: 12px;
+    }
+
+    .email, .phone {
+      margin-bottom: 2px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #2a2d26;
+      color: #C4A67C;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      margin-right: 4px;
+      margin-bottom: 4px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    .col-budget, .col-timeline {
+      color: #aaa;
+    }
+
+    .col-date {
+      color: #666;
+      font-size: 12px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #666;
+    }
+
+    .empty-state .new-btn {
+      margin-top: 16px;
+      display: inline-block;
+    }
+  </style>
+</CommandLayout>
