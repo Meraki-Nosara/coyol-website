@@ -45,7 +45,10 @@ const purposeLabels: Record<string, string> = {
       <h1>Qualified Leads</h1>
       <span class="subtitle">{leads.length} leads from Mar Azul qualification forms</span>
     </div>
-    <a href="/command/qualified/new" class="new-btn">+ New Lead</a>
+    <div class="header-actions">
+      <input type="text" id="searchInput" placeholder="🔍 Search by name..." class="search-main" autofocus />
+      <a href="/command/qualified/new" class="new-btn">+ New Lead</a>
+    </div>
   </div>
 
   <div class="filters">
@@ -67,7 +70,6 @@ const purposeLabels: Record<string, string> = {
       <option value="1.5m-2m">$1.5M - $2M</option>
       <option value="2m+">$2M+</option>
     </select>
-    <input type="text" id="searchInput" placeholder="Search by name..." />
   </div>
 
   <table class="leads-table" id="leadsTable">
@@ -155,6 +157,34 @@ const purposeLabels: Record<string, string> = {
       justify-content: space-between;
       align-items: center;
       margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    
+    .header-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    
+    .search-main {
+      background: #1a1d17;
+      border: 2px solid #2a2d26;
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      width: 250px;
+      transition: border-color 0.2s;
+    }
+    
+    .search-main:focus {
+      outline: none;
+      border-color: #C4A67C;
+    }
+    
+    .search-main::placeholder {
+      color: #666;
     }
 
     h1 {

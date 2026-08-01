@@ -77,9 +77,8 @@ const { title, active } = Astro.props;
           <span class="nav-icon">✉</span>
           <span>Email Pipeline</span>
         </a>
-        <a href="/command/qualified" class={`nav-item ${active === 'qualified' ? 'active' : ''}`}>
-          <span class="nav-icon">★</span>
-          <span>Qualified Leads</span>
+        <a href="/command/qualified" class={`nav-item ql-btn ${active === 'qualified' ? 'active' : ''}`}>
+          <span class="ql-badge">QL</span>
         </a>
       </nav>
       
@@ -360,6 +359,33 @@ const { title, active } = Astro.props;
       font-size: 16px;
       width: 24px;
       text-align: center;
+    }
+    
+    /* QL Button */
+    .nav-item.ql-btn {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #1a1d17;
+      justify-content: center;
+    }
+    
+    .ql-badge {
+      background: linear-gradient(135deg, #3D4F3D, #2a3d2a);
+      color: #C4A67C;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      letter-spacing: 1px;
+    }
+    
+    .nav-item.ql-btn:hover .ql-badge {
+      background: linear-gradient(135deg, #4a5f4a, #3D4F3D);
+    }
+    
+    .nav-item.ql-btn.active .ql-badge {
+      background: #C4A67C;
+      color: #0a0c08;
     }
     
     .sidebar-footer {
