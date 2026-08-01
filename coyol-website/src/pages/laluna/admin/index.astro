@@ -2702,7 +2702,7 @@ import '../../../styles/laluna-tables.css';
     }
 
     // Find best available table for a reservation
-    function findBestAvailableTable(date, time, guests, zonePreference) {
+    function findBestAvailableTable(date, time, guests, zonePreference, excludeTables = new Set()) {
       const layout = getLayout();
       const reservations = getReservations().filter(r => 
         r.date === date && 
@@ -2745,6 +2745,9 @@ import '../../../styles/laluna-tables.css';
         // This prevents 3 people getting a 10-top
         const effectiveMin = maxC <= 6 ? Math.max(1, minC - 1) : minC;
         if (guests < effectiveMin || guests > maxC) continue;
+        
+        // Skip tables already assigned in this batch
+        if (excludeTables.has(table.id)) continue;
         
         // Check if table is occupied during this time window
         const conflicting = reservations.some(r => {
@@ -2956,9 +2959,27 @@ import '../../../styles/laluna-tables.css';
       
       console.log(`Auto-assigning ${unassigned.length} reservations...`);
       
+      // Track tables we're assigning in THIS batch to prevent double-booking
+      const assignedInBatch = new Map(); // tableId -> {date, time} for conflict checking
+      
       for (const res of unassigned) {
+        // Build exclusion set: tables already assigned to same time slot in this batch
+        const excludeTables = new Set();
+        const [resHour, resMin] = res.time.split(':').map(Number);
+        const resMinutes = resHour * 60 + resMin;
+        
+        for (const [tableId, assigned] of assignedInBatch.entries()) {
+          if (assigned.date === res.date) {
+            const [h, m] = assigned.time.split(':').map(Number);
+            const assignedMinutes = h * 60 + m;
+            if (Math.abs(assignedMinutes - resMinutes) < 120) { // 2-hour window for La Luna
+              excludeTables.add(tableId);
+            }
+          }
+        }
+        
         // Find best available table for this reservation
-        const bestTable = findBestAvailableTable(res.date, res.time, res.guests, res.zonePreference);
+        const bestTable = findBestAvailableTable(res.date, res.time, res.guests, res.zonePreference, excludeTables);
         
         if (bestTable) {
           // Update in Supabase
@@ -2976,6 +2997,8 @@ import '../../../styles/laluna-tables.css';
             
             // Update local cache
             res.tableId = bestTable;
+            // Track this assignment for the rest of the batch
+            assignedInBatch.set(bestTable, { date: res.date, time: res.time });
             console.log(`Auto-assigned table ${bestTable} to ${res.guestName}`);
           } catch (e) {
             console.error('Failed to auto-assign:', e);

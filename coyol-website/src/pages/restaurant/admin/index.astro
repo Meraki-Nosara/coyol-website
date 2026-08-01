@@ -2108,7 +2108,7 @@ import '../../../styles/coyol-tables.css';
     }
 
     // Find best available table for auto-assignment
-    function findBestAvailableTable(date, time, guests, zonePreference) {
+    function findBestAvailableTable(date, time, guests, zonePreference, excludeTables = new Set()) {
       const layout = getLayout();
       const reservations = getReservations().filter(r => 
         r.date === date && 
@@ -2140,6 +2140,9 @@ import '../../../styles/coyol-tables.css';
       for (const table of allTables) {
         if (guests < table.minCovers || guests > table.maxCovers) continue;
         
+        // Skip tables already assigned in this batch
+        if (excludeTables.has(table.id)) continue;
+        
         const conflicting = reservations.some(r => {
           if (r.tableId !== table.id) return false;
           const [h, m] = r.time.split(':').map(Number);
@@ -2161,8 +2164,26 @@ import '../../../styles/coyol-tables.css';
       
       if (unassigned.length === 0) return;
       
+      // Track tables we're assigning in THIS batch to prevent double-booking
+      const assignedInBatch = new Map(); // tableId -> {date, time} for conflict checking
+      
       for (const res of unassigned) {
-        const bestTable = findBestAvailableTable(res.date, res.time, res.guests, res.zonePreference);
+        // Build exclusion set: tables already assigned to same time slot in this batch
+        const excludeTables = new Set();
+        const [resHour, resMin] = res.time.split(':').map(Number);
+        const resMinutes = resHour * 60 + resMin;
+        
+        for (const [tableId, assigned] of assignedInBatch.entries()) {
+          if (assigned.date === res.date) {
+            const [h, m] = assigned.time.split(':').map(Number);
+            const assignedMinutes = h * 60 + m;
+            if (Math.abs(assignedMinutes - resMinutes) < 90) {
+              excludeTables.add(tableId);
+            }
+          }
+        }
+        
+        const bestTable = findBestAvailableTable(res.date, res.time, res.guests, res.zonePreference, excludeTables);
         
         if (bestTable) {
           try {
@@ -2177,6 +2198,8 @@ import '../../../styles/coyol-tables.css';
               body: JSON.stringify({ table_id: bestTable })
             });
             res.tableId = bestTable;
+            // Track this assignment for the rest of the batch
+            assignedInBatch.set(bestTable, { date: res.date, time: res.time });
           } catch (e) {
             console.error('Auto-assign failed:', e);
           }
