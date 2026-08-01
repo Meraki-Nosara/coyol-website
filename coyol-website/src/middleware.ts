@@ -2,6 +2,13 @@ import { defineMiddleware } from 'astro:middleware';
 
 const BAD_BOTS = /semrushbot|ahrefsbot|dotbot|petalbot|mj12bot|dataforseo|serpstat|seokicks|blexbot|linkfluence|megaindex|majestic|rogerbot|domaincrawler|netcraft|censys|zgrab|screaming frog|sitebulb/i;
 
+// Block specific hostile parties
+const BLOCKED_IPS = new Set([
+  // Add David's IPs here when identified
+]);
+
+const BLOCKED_REFERRERS = /scratchagency\.ca/i;
+
 // Simple rate limiting (in-memory, resets on deploy)
 const requestCounts = new Map<string, { count: number; resetTime: number }>();
 const RATE_LIMIT = 100; // requests per minute
@@ -29,6 +36,17 @@ function isRateLimited(ip: string): boolean {
 export const onRequest = defineMiddleware(async (context, next) => {
   const userAgent = context.request.headers.get('user-agent') || '';
   const clientIP = getClientIP(context.request);
+  const referer = context.request.headers.get('referer') || '';
+  
+  // Block specific IPs
+  if (BLOCKED_IPS.has(clientIP)) {
+    return new Response('Access denied', { status: 403 });
+  }
+  
+  // Block hostile referrers
+  if (BLOCKED_REFERRERS.test(referer)) {
+    return new Response('Access denied', { status: 403 });
+  }
   
   // Block known bad bots
   if (BAD_BOTS.test(userAgent)) {
