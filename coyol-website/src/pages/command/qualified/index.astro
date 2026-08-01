@@ -47,6 +47,7 @@ const purposeLabels: Record<string, string> = {
     </div>
     <div class="header-actions">
       <input type="text" id="searchInput" placeholder="🔍 Search by name..." class="search-main" autofocus />
+      <a href="/command/qualified/map" class="map-btn">🗺️ Lot Map</a>
       <a href="/command/qualified/new" class="new-btn">+ New Lead</a>
     </div>
   </div>
@@ -211,6 +212,22 @@ const purposeLabels: Record<string, string> = {
 
     .new-btn:hover {
       background: #4a5f4a;
+    }
+    
+    .map-btn {
+      background: #1a1d17;
+      border: 1px solid #2a2d26;
+      color: #C4A67C;
+      padding: 10px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    
+    .map-btn:hover {
+      background: #2a2d26;
+      border-color: #C4A67C;
     }
 
     .filters {

@@ -1,0 +1,438 @@
+---
+import CommandLayout from '../../../layouts/CommandLayout.astro';
+
+// Load lot data from JSON
+const lotDataResponse = await fetch('https://coyolnosara.com/data/mar-azul-structured.json');
+let lots: any[] = [];
+try {
+  const data = await lotDataResponse.json();
+  lots = data.lots || [];
+} catch (e) {
+  console.error('Failed to load lot data');
+}
+
+// TODO: Merge with Supabase lot status/pricing when we add that table
+---
+
+<CommandLayout title="Mar Azul Lots" active="qualified">
+  <div class="header">
+    <div>
+      <h1>Mar Azul — Lot Map</h1>
+      <span class="subtitle">{lots.length} lots · Click to see details</span>
+    </div>
+    <div class="legend">
+      <span class="legend-item"><span class="dot available"></span> Available</span>
+      <span class="legend-item"><span class="dot reserved"></span> Reserved</span>
+      <span class="legend-item"><span class="dot sold"></span> Sold</span>
+    </div>
+  </div>
+
+  <div class="map-container">
+    <div id="map"></div>
+  </div>
+
+  <!-- Lot Detail Panel -->
+  <div id="lotPanel" class="lot-panel hidden">
+    <button class="close-btn" onclick="closeLotPanel()">×</button>
+    <h2 id="lotTitle">Lot --</h2>
+    <div class="lot-details">
+      <div class="detail-row">
+        <span class="label">Area</span>
+        <span class="value" id="lotArea">-- m²</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Status</span>
+        <span class="value" id="lotStatus">--</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">View</span>
+        <span class="value" id="lotView">--</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Price</span>
+        <span class="value" id="lotPrice">--</span>
+      </div>
+    </div>
+    <div class="lot-actions">
+      <button class="action-btn" onclick="assignToLead()">Assign to Lead</button>
+    </div>
+  </div>
+
+  <!-- Lot List (Mobile/Alternative View) -->
+  <div class="lot-grid">
+    {lots.map((lot) => (
+      <div class={`lot-card ${lot.status || 'available'}`} data-lot={lot.lotNumber}>
+        <div class="lot-number">Lot {lot.lotNumber}</div>
+        <div class="lot-area">{lot.areaM2?.toLocaleString()} m²</div>
+        <div class="lot-status">{lot.status || 'available'}</div>
+      </div>
+    ))}
+  </div>
+
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" />
+  <script is:inline src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+  
+  <script is:inline>
+    // Lot data embedded
+    const LOTS_DATA = JSON.parse(document.getElementById('lotsData')?.textContent || '[]');
+    
+    // Initialize map
+    const map = new maplibregl.Map({
+      container: 'map',
+      style: {
+        version: 8,
+        sources: {
+          'satellite': {
+            type: 'raster',
+            tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+            tileSize: 256,
+            attribution: '© Esri'
+          }
+        },
+        layers: [{
+          id: 'satellite-layer',
+          type: 'raster',
+          source: 'satellite'
+        }]
+      },
+      center: [-85.632, 10.008],
+      zoom: 15.5,
+      pitch: 0
+    });
+
+    map.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+    // Load lots from JSON
+    map.on('load', async () => {
+      try {
+        const response = await fetch('/data/mar-azul-structured.json');
+        const data = await response.json();
+        const lots = data.lots || [];
+        
+        // Convert to GeoJSON
+        const geojson = {
+          type: 'FeatureCollection',
+          features: lots.map(lot => ({
+            type: 'Feature',
+            properties: {
+              lotNumber: lot.lotNumber,
+              area: lot.areaM2,
+              status: lot.status || 'available',
+              id: lot.id
+            },
+            geometry: {
+              type: 'Polygon',
+              coordinates: [lot.coordinates]
+            }
+          }))
+        };
+
+        // Add source
+        map.addSource('lots', {
+          type: 'geojson',
+          data: geojson
+        });
+
+        // Lot fills
+        map.addLayer({
+          id: 'lot-fills',
+          type: 'fill',
+          source: 'lots',
+          paint: {
+            'fill-color': [
+              'match',
+              ['get', 'status'],
+              'sold', '#ef4444',
+              'reserved', '#f59e0b',
+              '#22c55e' // available
+            ],
+            'fill-opacity': 0.4
+          }
+        });
+
+        // Lot borders
+        map.addLayer({
+          id: 'lot-borders',
+          type: 'line',
+          source: 'lots',
+          paint: {
+            'line-color': '#C4A67C',
+            'line-width': 2
+          }
+        });
+
+        // Lot labels
+        map.addLayer({
+          id: 'lot-labels',
+          type: 'symbol',
+          source: 'lots',
+          layout: {
+            'text-field': ['get', 'lotNumber'],
+            'text-size': 14,
+            'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold']
+          },
+          paint: {
+            'text-color': '#ffffff',
+            'text-halo-color': '#000000',
+            'text-halo-width': 2
+          }
+        });
+
+        // Click handler
+        map.on('click', 'lot-fills', (e) => {
+          const props = e.features[0].properties;
+          showLotPanel(props);
+        });
+
+        // Hover cursor
+        map.on('mouseenter', 'lot-fills', () => {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseleave', 'lot-fills', () => {
+          map.getCanvas().style.cursor = '';
+        });
+
+      } catch (error) {
+        console.error('Failed to load lots:', error);
+      }
+    });
+
+    function showLotPanel(props) {
+      const panel = document.getElementById('lotPanel');
+      document.getElementById('lotTitle').textContent = `Lot ${props.lotNumber}`;
+      document.getElementById('lotArea').textContent = `${props.area?.toLocaleString()} m²`;
+      document.getElementById('lotStatus').textContent = props.status || 'available';
+      document.getElementById('lotStatus').className = `value status-${props.status || 'available'}`;
+      document.getElementById('lotView').textContent = props.view || 'Ocean + Jungle';
+      document.getElementById('lotPrice').textContent = props.price || 'Contact for pricing';
+      panel.classList.remove('hidden');
+    }
+
+    function closeLotPanel() {
+      document.getElementById('lotPanel').classList.add('hidden');
+    }
+
+    function assignToLead() {
+      // TODO: Open modal to select lead and assign lot
+      alert('Coming soon: Assign lot to qualified lead');
+    }
+
+    // Lot card clicks
+    document.querySelectorAll('.lot-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const lotNum = card.dataset.lot;
+        showLotPanel({
+          lotNumber: lotNum,
+          area: card.querySelector('.lot-area')?.textContent?.replace(' m²', '').replace(',', ''),
+          status: card.querySelector('.lot-status')?.textContent
+        });
+      });
+    });
+  </script>
+
+  <style>
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 300;
+      color: #C4A67C;
+      margin: 0;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .legend {
+      display: flex;
+      gap: 20px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #888;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .dot.available { background: #22c55e; }
+    .dot.reserved { background: #f59e0b; }
+    .dot.sold { background: #ef4444; }
+
+    .map-container {
+      height: 500px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+
+    .lot-panel {
+      position: fixed;
+      top: 100px;
+      right: 40px;
+      width: 300px;
+      background: #141714;
+      border: 1px solid #2a2d26;
+      border-radius: 12px;
+      padding: 24px;
+      z-index: 100;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    .lot-panel.hidden {
+      display: none;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #666;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .lot-panel h2 {
+      color: #C4A67C;
+      font-size: 24px;
+      font-weight: 400;
+      margin: 0 0 20px 0;
+    }
+
+    .lot-details {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .detail-row .label {
+      color: #666;
+      font-size: 13px;
+    }
+
+    .detail-row .value {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .status-available { color: #22c55e; }
+    .status-reserved { color: #f59e0b; }
+    .status-sold { color: #ef4444; }
+
+    .lot-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .action-btn {
+      flex: 1;
+      background: #3D4F3D;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .action-btn:hover {
+      background: #4a5f4a;
+    }
+
+    /* Lot Grid (below map) */
+    .lot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 12px;
+    }
+
+    .lot-card {
+      background: #141714;
+      border: 1px solid #2a2d26;
+      border-radius: 8px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .lot-card:hover {
+      border-color: #C4A67C;
+      transform: translateY(-2px);
+    }
+
+    .lot-card.sold {
+      opacity: 0.5;
+    }
+
+    .lot-card.reserved {
+      border-left: 3px solid #f59e0b;
+    }
+
+    .lot-number {
+      font-weight: 600;
+      color: #fff;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .lot-area {
+      color: #888;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .lot-status {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .lot-card.available .lot-status { color: #22c55e; }
+    .lot-card.reserved .lot-status { color: #f59e0b; }
+    .lot-card.sold .lot-status { color: #ef4444; }
+
+    @media (max-width: 900px) {
+      .map-container {
+        height: 350px;
+      }
+      
+      .lot-panel {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto;
+        width: 100%;
+        border-radius: 16px 16px 0 0;
+      }
+    }
+  </style>
+</CommandLayout>
