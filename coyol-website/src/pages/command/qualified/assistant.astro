@@ -1,0 +1,477 @@
+---
+import CommandLayout from '../../../layouts/CommandLayout.astro';
+
+const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+const SUPABASE_KEY = import.meta.env.SUPABASE_SERVICE_KEY || 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng';
+
+// Fetch all leads for context
+let leads: any[] = [];
+try {
+  const response = await fetch(`${SUPABASE_URL}/rest/v1/mar_azul_leads?select=*&order=created_at.desc`, {
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+    }
+  });
+  if (response.ok) {
+    leads = await response.json();
+  }
+} catch (e) {
+  console.error('Failed to fetch leads:', e);
+}
+
+// Prepare context summary
+const leadsContext = leads.map(l => ({
+  name: l.full_name,
+  email: l.email,
+  phone: l.phone,
+  country: l.country,
+  status: l.status,
+  budget: l.total_budget,
+  purpose: l.purpose,
+  timeline: l.timeline_to_buy,
+  view: l.view_priority,
+  models: l.preferred_models,
+  notes: l.motivation_notes,
+  concerns: l.concerns,
+  competitors: l.competitors
+}));
+---
+
+<CommandLayout title="QL Assistant" active="qualified">
+  <div class="assistant-container">
+    <div class="header">
+      <div>
+        <h1>🤖 QL Assistant</h1>
+        <span class="subtitle">Ask me anything about leads, lots, or Mar Azul</span>
+      </div>
+      <a href="/command/qualified" class="back-link">← Back to Leads</a>
+    </div>
+
+    <div class="chat-container">
+      <div class="chat-messages" id="chatMessages">
+        <div class="message assistant">
+          <div class="message-content">
+            <p>Hi Ruth! 👋 I'm your QL assistant. I have access to all {leads.length} qualified leads.</p>
+            <p>Try asking me:</p>
+            <ul>
+              <li>"Who's interested in ocean views?"</li>
+              <li>"Show leads with $2M+ budget"</li>
+              <li>"Draft a follow-up for Casey"</li>
+              <li>"Which lots are under 2000m²?"</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input-container">
+        <input 
+          type="text" 
+          id="chatInput" 
+          placeholder="Ask about leads, lots, or get help drafting emails..." 
+          autofocus
+        />
+        <button id="sendBtn" onclick="sendMessage()">
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <button onclick="askQuestion('Who are the hottest leads right now?')">🔥 Hot leads</button>
+      <button onclick="askQuestion('Show me leads interested in Casa Cacao')">🏠 Casa Cacao interest</button>
+      <button onclick="askQuestion('Who needs follow-up this week?')">📅 Need follow-up</button>
+      <button onclick="askQuestion('Draft a tour invitation email')">✉️ Tour invite</button>
+    </div>
+  </div>
+
+  <!-- Hidden data for JS -->
+  <script id="leadsData" type="application/json" set:html={JSON.stringify(leadsContext)}></script>
+
+  <script is:inline>
+    const leadsData = JSON.parse(document.getElementById('leadsData').textContent);
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+
+    // Process user question locally (smart search)
+    function processQuestion(question) {
+      const q = question.toLowerCase();
+      let results = [];
+      let response = '';
+
+      // Ocean view queries
+      if (q.includes('ocean') && (q.includes('view') || q.includes('interest'))) {
+        results = leadsData.filter(l => l.view === 'ocean' || l.view?.includes('ocean'));
+        if (results.length > 0) {
+          response = `Found ${results.length} leads interested in ocean views:\n\n`;
+          results.forEach(l => {
+            response += `• **${l.name}** (${l.country || 'N/A'}) - Budget: ${l.budget || 'N/A'}\n`;
+          });
+        } else {
+          response = "No leads specifically tagged with ocean view preference, but most Mar Azul lots have ocean views!";
+        }
+      }
+      
+      // Budget queries
+      else if (q.includes('budget') || q.includes('$2m') || q.includes('2m+') || q.includes('million')) {
+        results = leadsData.filter(l => l.budget === '2m+' || l.budget === '1.5m-2m');
+        if (results.length > 0) {
+          response = `Found ${results.length} high-budget leads ($1.5M+):\n\n`;
+          results.forEach(l => {
+            response += `• **${l.name}** - ${l.budget} - ${l.status || 'new'}\n`;
+            if (l.notes) response += `  _${l.notes.substring(0, 100)}..._\n`;
+          });
+        } else {
+          response = "No leads with $1.5M+ budget found.";
+        }
+      }
+
+      // Hot leads / best prospects
+      else if (q.includes('hot') || q.includes('best') || q.includes('top') || q.includes('priority')) {
+        results = leadsData.filter(l => 
+          l.status === 'toured' || 
+          l.status === 'negotiating' || 
+          l.budget === '2m+' ||
+          l.timeline === 'now' || 
+          l.timeline === '3months'
+        );
+        if (results.length > 0) {
+          response = `🔥 Top ${Math.min(results.length, 5)} hot leads:\n\n`;
+          results.slice(0, 5).forEach(l => {
+            response += `• **${l.name}** - ${l.budget || 'N/A'} - ${l.timeline || 'N/A'} timeline\n`;
+            response += `  Status: ${l.status || 'new'}, Interested in: ${l.models?.join(', ') || 'TBD'}\n`;
+          });
+        } else {
+          response = "Looking at all leads for hot prospects...";
+        }
+      }
+
+      // Casa Cacao / specific model
+      else if (q.includes('cacao') || q.includes('elle') || q.includes('luz') || q.includes('umi')) {
+        const model = q.includes('cacao') ? 'cacao' : 
+                      q.includes('elle') ? 'elle' : 
+                      q.includes('luz') ? 'luz' : 'umi';
+        results = leadsData.filter(l => l.models?.some(m => m.toLowerCase().includes(model)));
+        if (results.length > 0) {
+          response = `Found ${results.length} leads interested in Casa ${model.charAt(0).toUpperCase() + model.slice(1)}:\n\n`;
+          results.forEach(l => {
+            response += `• **${l.name}** - ${l.budget || 'N/A'} - ${l.email || 'No email'}\n`;
+          });
+        } else {
+          response = `No leads have specifically selected Casa ${model.charAt(0).toUpperCase() + model.slice(1)} yet.`;
+        }
+      }
+
+      // Follow-up needed
+      else if (q.includes('follow') || q.includes('contact') || q.includes('reach out')) {
+        results = leadsData.filter(l => l.status === 'new' || l.status === 'contacted');
+        if (results.length > 0) {
+          response = `📅 ${results.length} leads that could use follow-up:\n\n`;
+          results.slice(0, 5).forEach(l => {
+            response += `• **${l.name}** (${l.status}) - ${l.email || l.phone || 'No contact'}\n`;
+          });
+          if (results.length > 5) response += `\n...and ${results.length - 5} more`;
+        } else {
+          response = "All leads have been followed up! 🎉";
+        }
+      }
+
+      // Draft email
+      else if (q.includes('draft') || q.includes('email') || q.includes('write')) {
+        if (q.includes('tour') || q.includes('visit') || q.includes('invitation')) {
+          response = `Here's a tour invitation draft:\n\n---\n\n**Subject:** Visit Mar Azul - Your Private Tour\n\nHi [Name],\n\nI hope this finds you well! I wanted to follow up on your interest in Mar Azul.\n\nWe'd love to invite you for a private tour of the development. You'll get to:\n• Walk the lots and experience the views firsthand\n• See the model home designs in detail\n• Meet the team and ask any questions\n\nAre you available [suggest 2-3 dates]? We can arrange transportation from Nosara.\n\nLooking forward to showing you around!\n\nBest,\nRuth\nCoyol Real Estate`;
+        } else if (q.includes('follow')) {
+          response = `Here's a follow-up draft:\n\n---\n\n**Subject:** Following up - Mar Azul\n\nHi [Name],\n\nI wanted to check in since our last conversation about Mar Azul.\n\nHave you had any more thoughts about [mention their interests]? I'm happy to answer any questions or provide more details on specific lots.\n\n[If applicable: We also have some new availability that might interest you.]\n\nLet me know if you'd like to chat!\n\nBest,\nRuth`;
+        } else {
+          response = `What type of email would you like me to draft?\n\n• Tour invitation\n• Follow-up message\n• New listing alert\n• Price update\n\nJust ask!`;
+        }
+      }
+
+      // Specific lead lookup
+      else if (leadsData.some(l => q.includes(l.name?.toLowerCase().split(' ')[0]))) {
+        const firstName = leadsData.find(l => q.includes(l.name?.toLowerCase().split(' ')[0]))?.name?.split(' ')[0];
+        const lead = leadsData.find(l => l.name?.toLowerCase().startsWith(firstName.toLowerCase()));
+        if (lead) {
+          response = `**${lead.name}**\n\n`;
+          response += `📧 ${lead.email || 'No email'}\n`;
+          response += `📱 ${lead.phone || 'No phone'}\n`;
+          response += `🌍 ${lead.country || 'N/A'}\n`;
+          response += `💰 Budget: ${lead.budget || 'N/A'}\n`;
+          response += `⏰ Timeline: ${lead.timeline || 'N/A'}\n`;
+          response += `🏠 Interested in: ${lead.models?.join(', ') || 'TBD'}\n`;
+          response += `👁️ View priority: ${lead.view || 'N/A'}\n`;
+          response += `📊 Status: ${lead.status || 'new'}\n`;
+          if (lead.notes) response += `\n📝 Notes: ${lead.notes}`;
+          if (lead.concerns?.length) response += `\n⚠️ Concerns: ${lead.concerns.join(', ')}`;
+          if (lead.competitors) response += `\n🏁 Also considering: ${lead.competitors}`;
+        }
+      }
+
+      // Summary / stats
+      else if (q.includes('summary') || q.includes('stats') || q.includes('overview') || q.includes('how many')) {
+        const byStatus = {};
+        const byBudget = {};
+        leadsData.forEach(l => {
+          byStatus[l.status || 'new'] = (byStatus[l.status || 'new'] || 0) + 1;
+          if (l.budget) byBudget[l.budget] = (byBudget[l.budget] || 0) + 1;
+        });
+        
+        response = `📊 **Lead Summary** (${leadsData.length} total)\n\n`;
+        response += `**By Status:**\n`;
+        Object.entries(byStatus).forEach(([k, v]) => {
+          response += `• ${k}: ${v}\n`;
+        });
+        response += `\n**By Budget:**\n`;
+        Object.entries(byBudget).forEach(([k, v]) => {
+          response += `• ${k}: ${v}\n`;
+        });
+      }
+
+      // Default response
+      else {
+        response = `I searched through ${leadsData.length} leads but didn't find a specific match for "${question}".\n\nTry asking about:\n• Ocean views, jungle views\n• Budget ranges ($2M+, $1.5M)\n• Specific models (Casa Cacao, Elle, Luz)\n• Lead names (Casey, Ryan, Amanda)\n• Hot leads, follow-ups needed\n• Draft emails`;
+      }
+
+      return response;
+    }
+
+    function addMessage(content, isUser = false) {
+      const div = document.createElement('div');
+      div.className = `message ${isUser ? 'user' : 'assistant'}`;
+      
+      // Parse markdown-like formatting
+      let html = content
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/_(.*?)_/g, '<em>$1</em>')
+        .replace(/\n/g, '<br>')
+        .replace(/• /g, '&bull; ');
+      
+      div.innerHTML = `<div class="message-content">${html}</div>`;
+      chatMessages.appendChild(div);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function sendMessage() {
+      const question = chatInput.value.trim();
+      if (!question) return;
+      
+      addMessage(question, true);
+      chatInput.value = '';
+      
+      // Show typing indicator
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'message assistant typing';
+      typingDiv.innerHTML = '<div class="message-content">Thinking...</div>';
+      chatMessages.appendChild(typingDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      
+      // Process and respond
+      setTimeout(() => {
+        typingDiv.remove();
+        const response = processQuestion(question);
+        addMessage(response);
+      }, 500);
+    }
+
+    function askQuestion(q) {
+      chatInput.value = q;
+      sendMessage();
+    }
+
+    // Enter to send
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+  </script>
+
+  <style>
+    .assistant-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 300;
+      color: #C4A67C;
+      margin: 0;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .back-link {
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .back-link:hover {
+      color: #C4A67C;
+    }
+
+    .chat-container {
+      background: #141714;
+      border: 1px solid #1a1d17;
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 500px;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .message {
+      display: flex;
+      max-width: 85%;
+    }
+
+    .message.user {
+      align-self: flex-end;
+    }
+
+    .message.assistant {
+      align-self: flex-start;
+    }
+
+    .message-content {
+      padding: 14px 18px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .message.user .message-content {
+      background: #3D4F3D;
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message.assistant .message-content {
+      background: #1a1d17;
+      color: #ddd;
+      border-bottom-left-radius: 4px;
+    }
+
+    .message-content p {
+      margin: 0 0 12px 0;
+    }
+
+    .message-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .message-content ul {
+      margin: 8px 0;
+      padding-left: 20px;
+    }
+
+    .message-content li {
+      margin: 4px 0;
+    }
+
+    .message.typing .message-content {
+      color: #666;
+      font-style: italic;
+    }
+
+    .chat-input-container {
+      display: flex;
+      gap: 12px;
+      padding: 16px 24px;
+      background: #0f1210;
+      border-top: 1px solid #1a1d17;
+    }
+
+    #chatInput {
+      flex: 1;
+      background: #1a1d17;
+      border: 1px solid #2a2d26;
+      color: #fff;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    #chatInput:focus {
+      border-color: #C4A67C;
+    }
+
+    #chatInput::placeholder {
+      color: #555;
+    }
+
+    #sendBtn {
+      background: #C4A67C;
+      border: none;
+      color: #0a0c08;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    #sendBtn:hover {
+      background: #d4b68c;
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .quick-actions button {
+      background: #1a1d17;
+      border: 1px solid #2a2d26;
+      color: #888;
+      padding: 10px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quick-actions button:hover {
+      background: #2a2d26;
+      color: #fff;
+      border-color: #C4A67C;
+    }
+
+    @media (max-width: 600px) {
+      .chat-container {
+        height: 60vh;
+      }
+      
+      .quick-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</CommandLayout>

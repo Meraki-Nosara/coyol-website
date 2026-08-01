@@ -47,6 +47,7 @@ const purposeLabels: Record<string, string> = {
     </div>
     <div class="header-actions">
       <input type="text" id="searchInput" placeholder="🔍 Search by name..." class="search-main" autofocus />
+      <a href="/command/qualified/assistant" class="ai-btn">🤖 Ask AI</a>
       <a href="/command/qualified/map" class="map-btn">🗺️ Lots</a>
       <a href="/command/qualified/campaigns" class="map-btn">✉️ Campaigns</a>
       <a href="/command/qualified/new" class="new-btn">+ New Lead</a>
@@ -228,6 +229,23 @@ const purposeLabels: Record<string, string> = {
     
     .map-btn:hover {
       background: #2a2d26;
+      border-color: #C4A67C;
+    }
+    
+    .ai-btn {
+      background: linear-gradient(135deg, #3D4F3D, #2a3d2a);
+      border: 1px solid #4a5f4a;
+      color: #C4A67C;
+      padding: 10px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    
+    .ai-btn:hover {
+      background: linear-gradient(135deg, #4a5f4a, #3D4F3D);
       border-color: #C4A67C;
     }
 
