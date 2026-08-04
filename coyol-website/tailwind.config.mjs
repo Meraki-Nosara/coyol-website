@@ -4,6 +4,16 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Land Rover Heritage - lr- prefix (matches Coyol Control)
+        'lr-moss': '#5C6B5C',
+        'lr-keswick': '#3D4F3D',
+        'lr-coniston': '#4A5D4A',
+        'lr-limestone': '#D4C9B5',
+        'lr-alaska': '#F5F3EF',
+        'lr-sand': '#C4A67C',
+        'lr-terracotta': '#A65D3F',
+        'lr-santorini': '#1A1F16',
+        
         // Classic Land Rover Heritage Palette
         landrover: {
           // Greens

@@ -1,7 +1,7 @@
 ---
 interface Props {
   title: string;
-  active: 'dashboard' | 'analytics' | 'campaigns' | 'leads' | 'qualified';
+  active?: 'dashboard' | 'analytics' | 'campaigns' | 'leads' | 'qualified' | 'lots';
 }
 
 const { title, active } = Astro.props;
@@ -76,6 +76,10 @@ const { title, active } = Astro.props;
         <a href="/command/email-campaigns" class={`nav-item ${active === 'email' ? 'active' : ''}`}>
           <span class="nav-icon">✉</span>
           <span>Email Pipeline</span>
+        </a>
+        <a href="/command/lots" class={`nav-item ${active === 'lots' ? 'active' : ''}`}>
+          <span class="nav-icon">🏝</span>
+          <span>Mar Azul</span>
         </a>
         <a href="/command/qualified" class={`nav-item ql-btn ${active === 'qualified' ? 'active' : ''}`}>
           <span class="ql-badge">QL</span>

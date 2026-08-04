@@ -1,744 +1,716 @@
 ---
+import CommandLayout from '../../../layouts/CommandLayout.astro';
+
 const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex, nofollow">
-  <title>New Lead — Coyol Command</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body>
-  <style>
-    body { background-color: #f5f5f4 !important; color: #1c1917 !important; }
-    select, input, textarea { color: #1c1917 !important; }
-    option { color: #1c1917 !important; background: white !important; }
-  </style>
-  <div class="min-h-screen bg-stone-100 py-8 px-4">
-    <div class="max-w-2xl mx-auto">
-      
-      <!-- Header -->
-      <div class="bg-[#3D4F3D] text-white p-6 rounded-t-lg">
-        <div class="flex items-center gap-4">
-          <img src="/images/coyol-logo.png" alt="Coyol" class="h-12 w-auto brightness-0 invert">
-          <div>
-            <h1 class="text-2xl font-serif">Mar Azul — Lead Qualification</h1>
-            <p class="text-stone-300 mt-1">Fill in as you learn more about the client</p>
-          </div>
+<CommandLayout title="New Lead" active="qualified">
+  <div class="lead-form-container">
+    
+    <!-- Header -->
+    <div class="form-header">
+      <a href="/command/qualified" class="back-link">← Back to Leads</a>
+      <div class="header-content">
+        <img src="/images/coyol-logo.png" alt="Coyol" class="form-logo">
+        <div>
+          <h1>Mar Azul — Lead Qualification</h1>
+          <p>Fill in as you learn more about the client</p>
         </div>
       </div>
-
-      <!-- Form -->
-      <form id="leadForm" class="bg-white shadow-lg rounded-b-lg">
-        <input type="hidden" name="id" id="leadId">
-        
-        <!-- Progress Bar -->
-        <div class="p-4 border-b bg-stone-50">
-          <div class="flex justify-between text-sm text-stone-500 mb-2">
-            <span>Progress</span>
-            <span id="progressText">0% complete</span>
-          </div>
-          <div class="w-full bg-stone-200 rounded-full h-2">
-            <div id="progressBar" class="bg-[#3D4F3D] h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
-          </div>
-        </div>
-
-        <!-- Section 1: Contact Info -->
-        <div class="p-6 border-b">
-          <h2 class="text-lg font-semibold text-[#3D4F3D] mb-4 flex items-center gap-2">
-            Contact Information
-            <span class="text-xs font-normal text-stone-400">Meeting 1</span>
-          </h2>
-          
-          <div class="grid gap-4">
-            <div>
-              <label class="block text-sm font-medium text-stone-700 mb-1">Full Name *</label>
-              <input type="text" name="full_name" required
-                class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D] focus:border-transparent"
-                placeholder="Client's full name">
-            </div>
-            
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1">Email</label>
-                <input type="email" name="email"
-                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]"
-                  placeholder="email@example.com">
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1">Phone / WhatsApp</label>
-                <input type="tel" name="phone"
-                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]"
-                  placeholder="+1 555 123 4567">
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1">Country</label>
-                <input type="text" name="country"
-                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]"
-                  placeholder="USA, Canada, etc.">
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1">How did they find us?</label>
-                <select name="referral_source"
-                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
-                  <option value="">Select...</option>
-                  <option value="website">Website</option>
-                  <option value="instagram">Instagram</option>
-                  <option value="referral">Referral</option>
-                  <option value="driveby">Drive-by visit</option>
-                  <option value="broker">Broker</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-stone-700 mb-1">Referred by (if applicable)</label>
-              <input type="text" name="referred_by"
-                class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]"
-                placeholder="Name of person who referred them">
-            </div>
-          </div>
-        </div>
-
-        <!-- Section 2: Timeline & Motivation -->
-        <div class="p-6 border-b">
-          <h2 class="text-lg font-semibold text-[#3D4F3D] mb-4 flex items-center gap-2">
-            Timeline & Motivation
-            <span class="text-xs font-normal text-stone-400">Meeting 1-2</span>
-          </h2>
-          
-          <div class="grid gap-4">
-            <div>
-              <label class="block text-sm font-medium text-stone-700 mb-2">Purpose (select all that apply)</label>
-              <div class="flex flex-wrap gap-2">
-                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200">
-                  <input type="checkbox" name="purpose" value="primary" class="mr-2"> Primary Home
-                </label>
-                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200">
-                  <input type="checkbox" name="purpose" value="vacation" class="mr-2"> Vacation Home
-                </label>
-                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200">
-                  <input type="checkbox" name="purpose" value="rental" class="mr-2"> Rental Investment
-                </label>
-                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200">
-                  <input type="checkbox" name="purpose" value="retirement" class="mr-2"> Retirement
-                </label>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1">Visited Nosara before?</label>
-                <select name="visited_nosara"
-                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
-                  <option value="">Select...</option>
-                  <option value="multiple">Yes - multiple times</option>
-                  <option value="once">Yes - once</option>
-                  <option value="planning">No - planning first visit</option>
-                  <option value="sightunseen">No - buying sight unseen</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1">Timeline to Purchase</label>
-                <select name="timeline_to_buy"
-                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
-                  <option value="">Select...</option>
-                  <option value="ready">Ready now (1-3 months)</option>
-                  <option value="thisyear">This year (3-6 months)</option>
-                  <option value="nextyear">Next year</option>
-                  <option value="exploring">Just exploring</option>
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-stone-700 mb-1">When do they want to move in / use it?</label>
-              <select name="timeline_to_move"
-                class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
-                <option value="">Select...</option>
-                <option value="asap">ASAP - want turnkey</option>
-                <option value="1year">Within 1 year</option>
-                <option value="2years">Within 2 years</option>
-                <option value="flexible">Flexible</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-stone-700 mb-1">Notes from conversation</label>
-              <textarea name="motivation_notes" rows="2"
-                class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]"
-                placeholder="What brings them to Nosara? Any personal details..."></textarea>
-            </div>
-          </div>
-        </div>
-
-        <!-- Section 3: Budget -->
-        <div class="p-6 border-b">
-          <h2 class="text-lg font-semibold text-[#3D4F3D] mb-4 flex items-center gap-2">
-            Budget & Financing
-            <span class="text-xs font-normal text-stone-400">Meeting 2-3</span>
-          </h2>
-          
-          <div class="grid gap-4">
-            <div>
-              <label class="block text-sm font-medium text-stone-700 mb-1">Total Budget (lot + construction)</label>
-              <select name="total_budget"
-                class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
-                <option value="">Select...</option>
-                <option value="under500">Under $500K</option>
-                <option value="500-750">$500K - $750K</option>
-                <option value="750-1m">$750K - $1M</option>
-                <option value="1m-1.5m">$1M - $1.5M</option>
-                <option value="1.5m-2m">$1.5M - $2M</option>
-                <option value="2m+">$2M+</option>
-                <option value="notdisclosed">Not disclosed yet</option>
-              </select>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1">Payment Method</label>
-                <select name="payment_method"
-                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
-                  <option value="">Select...</option>
-                  <option value="cash">Cash</option>
-                  <option value="financing">Needs financing</option>
-                  <option value="partial">Partial financing</option>
-                  <option value="undecided">Undecided</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1">International property experience?</label>
-                <select name="international_exp"
-                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
-                  <option value="">Select...</option>
-                  <option value="cr">Yes - in Costa Rica</option>
-                  <option value="other">Yes - other country</option>
-                  <option value="first">No - first time</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Section 4: Property Preferences -->
-        <div class="p-6 border-b">
-          <h2 class="text-lg font-semibold text-[#3D4F3D] mb-4 flex items-center gap-2">
-            Property Preferences
-            <span class="text-xs font-normal text-stone-400">Meeting 2-3</span>
-          </h2>
-          
-          <div class="grid gap-4">
-            <div class="grid grid-cols-3 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1">Bedrooms</label>
-                <select name="bedrooms"
-                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
-                  <option value="">Select...</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5+">5+</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1">Bathrooms</label>
-                <select name="bathrooms"
-                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
-                  <option value="">Select...</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5+">5+</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1">Stories</label>
-                <select name="stories"
-                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
-                  <option value="">Select...</option>
-                  <option value="1">Single story</option>
-                  <option value="2">Two stories</option>
-                  <option value="any">No preference</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1">Preferred Lot Size</label>
-                <select name="lot_size"
-                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
-                  <option value="">Select...</option>
-                  <option value="small">Smaller / easy maintain (&lt;2,000 m²)</option>
-                  <option value="medium">Medium (2,000 - 4,000 m²)</option>
-                  <option value="large">Large / privacy (4,000+ m²)</option>
-                  <option value="any">No preference</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1">Pool Required?</label>
-                <select name="pool"
-                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
-                  <option value="">Select...</option>
-                  <option value="must">Must have</option>
-                  <option value="nice">Nice to have</option>
-                  <option value="no">Not important</option>
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-stone-700 mb-2">View Priority</label>
-              <div class="grid grid-cols-2 gap-2">
-                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100 border border-transparent has-[:checked]:border-[#3D4F3D] has-[:checked]:bg-green-50">
-                  <input type="radio" name="view_priority" value="ocean" class="mr-3"> 
-                  <span>Ocean view (premium)</span>
-                </label>
-                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100 border border-transparent has-[:checked]:border-[#3D4F3D] has-[:checked]:bg-green-50">
-                  <input type="radio" name="view_priority" value="jungle" class="mr-3">
-                  <span>Jungle / nature</span>
-                </label>
-                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100 border border-transparent has-[:checked]:border-[#3D4F3D] has-[:checked]:bg-green-50">
-                  <input type="radio" name="view_priority" value="mountain" class="mr-3">
-                  <span>Mountain view</span>
-                </label>
-                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100 border border-transparent has-[:checked]:border-[#3D4F3D] has-[:checked]:bg-green-50">
-                  <input type="radio" name="view_priority" value="privacy" class="mr-3">
-                  <span>Privacy over view</span>
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Section 5: House Style -->
-        <div class="p-6 border-b">
-          <h2 class="text-lg font-semibold text-[#3D4F3D] mb-4 flex items-center gap-2">
-            House Style
-            <span class="text-xs font-normal text-stone-400">Meeting 3-4</span>
-          </h2>
-          
-          <p class="text-sm text-stone-500 mb-4">
-            Have them browse <a href="https://coyolrealestate.com" target="_blank" class="text-[#3D4F3D] underline">coyolrealestate.com</a> first
-          </p>
-
-          <div class="grid gap-4">
-            <div>
-              <label class="block text-sm font-medium text-stone-700 mb-2">Preferred House Models (select all they like)</label>
-              <div class="grid grid-cols-2 gap-2">
-                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100">
-                  <input type="checkbox" name="preferred_models" value="cacao" class="mr-3"> Casa Cacao
-                </label>
-                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100">
-                  <input type="checkbox" name="preferred_models" value="luz" class="mr-3"> Casa Luz
-                </label>
-                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100">
-                  <input type="checkbox" name="preferred_models" value="umi" class="mr-3"> Casa Umi
-                </label>
-                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100">
-                  <input type="checkbox" name="preferred_models" value="perch" class="mr-3"> Casa Perch
-                </label>
-                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100">
-                  <input type="checkbox" name="preferred_models" value="elle" class="mr-3"> Casa Elle
-                </label>
-                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100">
-                  <input type="checkbox" name="preferred_models" value="lefki" class="mr-3"> Casa Lefki
-                </label>
-                <label class="flex items-center p-3 bg-stone-50 rounded-md cursor-pointer hover:bg-stone-100 col-span-2">
-                  <input type="checkbox" name="preferred_models" value="custom" class="mr-3"> Custom design
-                </label>
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-stone-700 mb-1">Custom vs Model</label>
-              <select name="custom_vs_model"
-                class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
-                <option value="">Select...</option>
-                <option value="model">Want a proven model (faster, predictable cost)</option>
-                <option value="semicustom">Semi-custom (model with modifications)</option>
-                <option value="custom">Fully custom design</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Section 6: Lifestyle -->
-        <div class="p-6 border-b">
-          <h2 class="text-lg font-semibold text-[#3D4F3D] mb-4 flex items-center gap-2">
-            Lifestyle & Special Needs
-            <span class="text-xs font-normal text-stone-400">Meeting 3-5</span>
-          </h2>
-          
-          <div class="grid gap-4">
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1">Guest Accommodation</label>
-                <select name="guest_accom"
-                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
-                  <option value="">Select...</option>
-                  <option value="casita">Separate guest casita</option>
-                  <option value="rooms">Guest rooms in main house</option>
-                  <option value="minimal">Minimal guest space</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1">Home Office</label>
-                <select name="home_office"
-                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
-                  <option value="">Select...</option>
-                  <option value="yes">Yes - dedicated space</option>
-                  <option value="nice">Nice to have</option>
-                  <option value="no">Not needed</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1">Rental Income Interest?</label>
-                <select name="rental_interest"
-                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
-                  <option value="">Select...</option>
-                  <option value="yes">Yes - rent when not using</option>
-                  <option value="maybe">Maybe in the future</option>
-                  <option value="no">No - personal use only</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1">Accessibility Needs</label>
-                <select name="accessibility"
-                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
-                  <option value="">Select...</option>
-                  <option value="required">Required - single level</option>
-                  <option value="preferred">Preferred but not required</option>
-                  <option value="no">Not a concern</option>
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-stone-700 mb-1">Special Requests</label>
-              <textarea name="special_requests" rows="2"
-                class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]"
-                placeholder="Outdoor kitchen, yoga deck, surf storage, EV charging, etc."></textarea>
-            </div>
-          </div>
-        </div>
-
-        <!-- Section 7: Decision Making -->
-        <div class="p-6 border-b">
-          <h2 class="text-lg font-semibold text-[#3D4F3D] mb-4 flex items-center gap-2">
-            Decision Making
-            <span class="text-xs font-normal text-stone-400">Meeting 2-3</span>
-          </h2>
-          
-          <div class="grid gap-4">
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1">Who decides?</label>
-                <select name="decision_makers"
-                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]">
-                  <option value="">Select...</option>
-                  <option value="solo">Just them</option>
-                  <option value="spouse">With spouse/partner</option>
-                  <option value="family">Family decision</option>
-                  <option value="business">Business partners</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1">Other decision maker</label>
-                <input type="text" name="other_decision_maker"
-                  class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]"
-                  placeholder="Name">
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-stone-700 mb-2">Main Concerns (select all)</label>
-              <div class="flex flex-wrap gap-2">
-                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200 text-sm">
-                  <input type="checkbox" name="concerns" value="budget" class="mr-2"> Budget
-                </label>
-                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200 text-sm">
-                  <input type="checkbox" name="concerns" value="timeline" class="mr-2"> Timeline
-                </label>
-                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200 text-sm">
-                  <input type="checkbox" name="concerns" value="remote" class="mr-2"> Managing remotely
-                </label>
-                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200 text-sm">
-                  <input type="checkbox" name="concerns" value="legal" class="mr-2"> Legal process
-                </label>
-                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200 text-sm">
-                  <input type="checkbox" name="concerns" value="resale" class="mr-2"> Resale value
-                </label>
-                <label class="inline-flex items-center px-3 py-2 bg-stone-100 rounded-md cursor-pointer hover:bg-stone-200 text-sm">
-                  <input type="checkbox" name="concerns" value="hoa" class="mr-2"> HOA rules
-                </label>
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-stone-700 mb-1">Looking at other developments?</label>
-              <input type="text" name="competitors"
-                class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]"
-                placeholder="Nantipa, Las Mariposas, Garza, etc.">
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-stone-700 mb-1">What would make them say yes?</label>
-              <textarea name="close_notes" rows="2"
-                class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-[#3D4F3D]"
-                placeholder="Key motivators, hot buttons..."></textarea>
-            </div>
-          </div>
-        </div>
-
-        <!-- Lot Suggestions -->
-        <div class="p-6 border-b bg-green-50">
-          <h2 class="text-lg font-semibold text-[#3D4F3D] mb-4">Suggested Lots</h2>
-          <div id="lotSuggestions" class="text-stone-600">
-            Fill in preferences above to see lot recommendations
-          </div>
-        </div>
-
-        <!-- Actions -->
-        <div class="p-6 flex gap-4">
-          <button type="submit" id="saveBtn"
-            class="flex-1 bg-[#3D4F3D] text-white py-3 px-6 rounded-md hover:bg-[#4A5D4A] transition font-medium">
-            Save Lead
-          </button>
-          <a href="/leads" 
-            class="px-6 py-3 border border-[#3D4F3D] text-[#3D4F3D] rounded-md hover:bg-stone-50 transition text-center">
-            All Leads
-          </a>
-        </div>
-
-      </form>
-
-      <!-- Toast -->
-      <div id="savedToast" class="hidden fixed bottom-4 right-4 bg-[#3D4F3D] text-white px-6 py-3 rounded-lg shadow-lg">
-        Lead saved!
-      </div>
-      
-      <!-- Loading overlay -->
-      <div id="loadingOverlay" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-        <div class="bg-white p-6 rounded-lg shadow-xl">
-          <p class="text-stone-700">Saving...</p>
-        </div>
-      </div>
-
     </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-section">
+      <div class="progress-header">
+        <span>Progress</span>
+        <span id="progressText">0% complete</span>
+      </div>
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <form id="leadForm">
+      <input type="hidden" name="id" id="leadId">
+      
+      <!-- Section 1: Contact Info -->
+      <div class="form-section">
+        <h2>Contact Information <span class="meeting-badge">Meeting 1</span></h2>
+        
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>Full Name *</label>
+            <input type="text" name="full_name" required placeholder="Client's full name">
+          </div>
+          
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="email@example.com">
+          </div>
+          
+          <div class="form-group">
+            <label>Phone / WhatsApp</label>
+            <input type="tel" name="phone" placeholder="+1 555 123 4567">
+          </div>
+          
+          <div class="form-group">
+            <label>Country</label>
+            <input type="text" name="country" placeholder="USA, Canada, etc.">
+          </div>
+          
+          <div class="form-group">
+            <label>How did they find us?</label>
+            <select name="referral_source">
+              <option value="">Select...</option>
+              <option value="website">Website</option>
+              <option value="instagram">Instagram</option>
+              <option value="facebook">Facebook</option>
+              <option value="google">Google</option>
+              <option value="referral">Referral</option>
+              <option value="event">Event</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          
+          <div class="form-group full-width">
+            <label>Referred by (if applicable)</label>
+            <input type="text" name="referred_by" placeholder="Name of person who referred">
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Timeline & Motivation -->
+      <div class="form-section">
+        <h2>Timeline & Motivation <span class="meeting-badge">Meeting 1-2</span></h2>
+        
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>Purpose (select all that apply)</label>
+            <div class="checkbox-grid">
+              <label class="checkbox-item">
+                <input type="checkbox" name="purpose" value="primary_home"> Primary Home
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="purpose" value="vacation_home"> Vacation Home
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="purpose" value="rental_investment"> Rental Investment
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="purpose" value="retirement"> Retirement
+              </label>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Visited Nosara before?</label>
+            <select name="visited_nosara">
+              <option value="">Select...</option>
+              <option value="never">Never</option>
+              <option value="once">Once</option>
+              <option value="few_times">A few times</option>
+              <option value="many_times">Many times</option>
+              <option value="lives_here">Lives here</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Timeline to Purchase</label>
+            <select name="timeline">
+              <option value="">Select...</option>
+              <option value="asap">ASAP (0-3 months)</option>
+              <option value="soon">Soon (3-6 months)</option>
+              <option value="this_year">This year</option>
+              <option value="next_year">Next year</option>
+              <option value="exploring">Just exploring</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>When do they want to move in / use it?</label>
+            <select name="move_in_timeline">
+              <option value="">Select...</option>
+              <option value="immediate">Immediately</option>
+              <option value="6_months">Within 6 months</option>
+              <option value="1_year">Within 1 year</option>
+              <option value="2_years">1-2 years</option>
+              <option value="flexible">Flexible</option>
+            </select>
+          </div>
+          
+          <div class="form-group full-width">
+            <label>Notes from conversation</label>
+            <textarea name="motivation_notes" rows="3" placeholder="What brings them to Nosara? Any personal connection?"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Budget & Financing -->
+      <div class="form-section">
+        <h2>Budget & Financing <span class="meeting-badge">Meeting 2-3</span></h2>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Total Budget (lot + construction)</label>
+            <select name="budget_range">
+              <option value="">Select...</option>
+              <option value="under_500k">Under $500K</option>
+              <option value="500k_750k">$500K - $750K</option>
+              <option value="750k_1m">$750K - $1M</option>
+              <option value="1m_1.5m">$1M - $1.5M</option>
+              <option value="1.5m_2m">$1.5M - $2M</option>
+              <option value="over_2m">Over $2M</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Payment Method</label>
+            <select name="payment_method">
+              <option value="">Select...</option>
+              <option value="cash">All Cash</option>
+              <option value="financing_us">Financing (US/Canada)</option>
+              <option value="financing_cr">Financing (Costa Rica)</option>
+              <option value="mixed">Mixed (Cash + Financing)</option>
+              <option value="undecided">Undecided</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>International property experience?</label>
+            <select name="intl_experience">
+              <option value="">Select...</option>
+              <option value="first_time">First time</option>
+              <option value="owns_abroad">Owns property abroad</option>
+              <option value="experienced">Experienced investor</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Property Preferences -->
+      <div class="form-section">
+        <h2>Property Preferences <span class="meeting-badge">Meeting 2-3</span></h2>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Bedrooms</label>
+            <select name="bedrooms">
+              <option value="">Select...</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5+">5+</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Bathrooms</label>
+            <select name="bathrooms">
+              <option value="">Select...</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5+">5+</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Stories</label>
+            <select name="stories">
+              <option value="">Select...</option>
+              <option value="1">Single Story</option>
+              <option value="2">Two Story</option>
+              <option value="flexible">Flexible</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Preferred Lot Size</label>
+            <select name="lot_size_pref">
+              <option value="">Select...</option>
+              <option value="small">Small (&lt;2,000 m²)</option>
+              <option value="medium">Medium (2,000-3,500 m²)</option>
+              <option value="large">Large (3,500-5,000 m²)</option>
+              <option value="xlarge">Extra Large (&gt;5,000 m²)</option>
+            </select>
+          </div>
+          
+          <div class="form-group full-width">
+            <label>Must-haves (select all that apply)</label>
+            <div class="checkbox-grid">
+              <label class="checkbox-item">
+                <input type="checkbox" name="must_have" value="ocean_view"> Ocean View
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="must_have" value="pool"> Pool
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="must_have" value="privacy"> Privacy
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="must_have" value="flat_lot"> Flat Lot
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="must_have" value="guest_house"> Guest House
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="must_have" value="garage"> Garage
+              </label>
+            </div>
+          </div>
+          
+          <div class="form-group full-width">
+            <label>Additional notes</label>
+            <textarea name="property_notes" rows="3" placeholder="Any specific requirements or preferences"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: Qualification Score -->
+      <div class="form-section score-section">
+        <h2>Lead Score</h2>
+        
+        <div class="score-display">
+          <div class="score-number" id="scoreDisplay">--</div>
+          <div class="score-label">/ 100</div>
+        </div>
+        
+        <div class="score-bar">
+          <div id="scoreFill" class="score-fill"></div>
+        </div>
+        
+        <div class="score-legend">
+          <span class="cold">0-40 Cold</span>
+          <span class="warm">41-70 Warm</span>
+          <span class="hot">71-100 Hot</span>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" onclick="window.location='/command/qualified'">Cancel</button>
+        <button type="submit" class="btn-primary">Save Lead</button>
+      </div>
+    </form>
   </div>
 
-  <script define:vars={{ SUPABASE_URL, SUPABASE_KEY }}>
-    const form = document.getElementById('leadForm');
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    const toast = document.getElementById('savedToast');
-    
-    // Check if editing existing lead
-    const urlParams = new URLSearchParams(window.location.search);
-    const editId = urlParams.get('id');
-    
-    // Load existing lead if editing
-    async function loadLead(id) {
-      try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/mar_azul_leads?id=eq.${id}&select=*`, {
-          headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-          },
-        });
-        
-        if (response.ok) {
-          const data = await response.json();
-          if (data[0]) {
-            populateForm(data[0]);
-          }
-        }
-      } catch (error) {
-        console.error('Failed to load lead:', error);
-      }
+  <style>
+    .lead-form-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 32px;
     }
     
-    // Populate form with data
-    function populateForm(data) {
-      document.getElementById('leadId').value = data.id;
+    .form-header {
+      margin-bottom: 24px;
+    }
+    
+    .back-link {
+      color: #666;
+      font-size: 14px;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+    
+    .back-link:hover {
+      color: #C4A67C;
+    }
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: linear-gradient(135deg, #3D4F3D, #2a3d2a);
+      padding: 24px;
+      border-radius: 12px;
+    }
+    
+    .form-logo {
+      height: 48px;
+      width: auto;
+      filter: brightness(0) invert(1);
+    }
+    
+    .header-content h1 {
+      font-size: 22px;
+      font-weight: 600;
+      color: #fff;
+      margin: 0;
+    }
+    
+    .header-content p {
+      color: rgba(255,255,255,0.7);
+      font-size: 14px;
+      margin: 4px 0 0;
+    }
+    
+    /* Progress */
+    .progress-section {
+      background: #0f1210;
+      border: 1px solid #1a1d17;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+    
+    .progress-bar {
+      height: 8px;
+      background: #1a1d17;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #3D4F3D, #C4A67C);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    
+    /* Form Sections */
+    .form-section {
+      background: #0f1210;
+      border: 1px solid #1a1d17;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    
+    .form-section h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #C4A67C;
+      margin: 0 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .meeting-badge {
+      font-size: 11px;
+      font-weight: 400;
+      color: #666;
+      background: #1a1d17;
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    
+    .form-group label {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 12px 14px;
+      background: #1a1d17;
+      border: 1px solid #2a3024;
+      border-radius: 8px;
+      color: #e8e6e1;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #C4A67C;
+    }
+    
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: #555;
+    }
+    
+    .form-group select option {
+      background: #1a1d17;
+      color: #e8e6e1;
+    }
+    
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    
+    /* Checkboxes */
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+    }
+    
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: #1a1d17;
+      border: 1px solid #2a3024;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 13px;
+      color: #e8e6e1;
+    }
+    
+    .checkbox-item:hover {
+      border-color: #3D4F3D;
+    }
+    
+    .checkbox-item input {
+      width: 16px;
+      height: 16px;
+      accent-color: #C4A67C;
+    }
+    
+    /* Score Section */
+    .score-section {
+      text-align: center;
+    }
+    
+    .score-display {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    
+    .score-number {
+      font-size: 48px;
+      font-weight: 700;
+      color: #C4A67C;
+    }
+    
+    .score-label {
+      font-size: 18px;
+      color: #666;
+    }
+    
+    .score-bar {
+      height: 12px;
+      background: linear-gradient(90deg, #666 0%, #C4A67C 50%, #22c55e 100%);
+      border-radius: 6px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    
+    .score-fill {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      background: #1a1d17;
+      border-radius: 0 6px 6px 0;
+      width: 100%;
+      transition: width 0.3s ease;
+    }
+    
+    .score-legend {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+    }
+    
+    .score-legend .cold { color: #666; }
+    .score-legend .warm { color: #C4A67C; }
+    .score-legend .hot { color: #22c55e; }
+    
+    /* Actions */
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #C4A67C, #a8905f);
+      border: none;
+      color: #0a0c08;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(196, 166, 124, 0.3);
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid #2a3024;
+      color: #888;
+    }
+    
+    .btn-secondary:hover {
+      border-color: #C4A67C;
+      color: #C4A67C;
+    }
+    
+    /* Responsive */
+    @media (max-width: 600px) {
+      .lead-form-container {
+        padding: 16px;
+      }
       
-      Object.keys(data).forEach(key => {
-        const input = form.querySelector(`[name="${key}"]`);
-        if (!input) return;
-        
-        if (input.type === 'checkbox') {
-          // Handle checkbox arrays
-          const values = Array.isArray(data[key]) ? data[key] : [];
-          form.querySelectorAll(`[name="${key}"]`).forEach(cb => {
-            cb.checked = values.includes(cb.value);
-          });
-        } else if (input.type === 'radio') {
-          const radio = form.querySelector(`[name="${key}"][value="${data[key]}"]`);
-          if (radio) radio.checked = true;
-        } else {
-          input.value = data[key] || '';
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .checkbox-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script is:inline>
+    // Calculate score and progress
+    const form = document.getElementById('leadForm');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const scoreFill = document.getElementById('scoreFill');
+    
+    function updateProgress() {
+      const inputs = form.querySelectorAll('input:not([type="hidden"]):not([type="checkbox"]), select, textarea');
+      let filled = 0;
+      let total = inputs.length;
+      
+      inputs.forEach(input => {
+        if (input.value && input.value.trim() !== '') {
+          filled++;
         }
       });
       
-      updateProgress();
-      updateLotSuggestions();
+      const progress = Math.round((filled / total) * 100);
+      progressFill.style.width = progress + '%';
+      progressText.textContent = progress + '% complete';
+      
+      // Calculate score
+      let score = 0;
+      
+      // Has name (+10)
+      if (form.full_name?.value) score += 10;
+      
+      // Has contact info (+15)
+      if (form.email?.value || form.phone?.value) score += 15;
+      
+      // Timeline (+20)
+      const timeline = form.timeline?.value;
+      if (timeline === 'asap') score += 20;
+      else if (timeline === 'soon') score += 15;
+      else if (timeline === 'this_year') score += 10;
+      else if (timeline) score += 5;
+      
+      // Budget (+20)
+      const budget = form.budget_range?.value;
+      if (budget === 'over_2m') score += 20;
+      else if (budget === '1.5m_2m') score += 18;
+      else if (budget === '1m_1.5m') score += 15;
+      else if (budget === '750k_1m') score += 12;
+      else if (budget) score += 8;
+      
+      // Payment method (+10)
+      if (form.payment_method?.value === 'cash') score += 10;
+      else if (form.payment_method?.value) score += 5;
+      
+      // Visited Nosara (+10)
+      const visited = form.visited_nosara?.value;
+      if (visited === 'lives_here' || visited === 'many_times') score += 10;
+      else if (visited === 'few_times') score += 7;
+      else if (visited === 'once') score += 4;
+      
+      // Has preferences (+10)
+      if (form.bedrooms?.value || form.lot_size_pref?.value) score += 10;
+      
+      // Referral (+5)
+      if (form.referral_source?.value === 'referral') score += 5;
+      
+      scoreDisplay.textContent = score;
+      scoreFill.style.width = (100 - score) + '%';
     }
     
-    // Save lead
+    form.addEventListener('input', updateProgress);
+    form.addEventListener('change', updateProgress);
+    
+    // Form submission
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      loadingOverlay.classList.remove('hidden');
       
       const formData = new FormData(form);
-      const leadData = {};
+      const data = Object.fromEntries(formData.entries());
       
-      // Collect checkbox arrays
-      const checkboxNames = new Set();
-      form.querySelectorAll('input[type="checkbox"]').forEach(cb => checkboxNames.add(cb.name));
-      
-      checkboxNames.forEach(name => {
-        leadData[name] = [];
-        form.querySelectorAll(`[name="${name}"]:checked`).forEach(cb => {
-          leadData[name].push(cb.value);
-        });
-      });
-      
-      // Collect other fields
-      formData.forEach((value, key) => {
-        if (!checkboxNames.has(key) && key !== 'id') {
-          leadData[key] = value || null;
-        }
-      });
-      
-      const existingId = document.getElementById('leadId').value;
+      // Collect checkboxes
+      data.purpose = Array.from(form.querySelectorAll('input[name="purpose"]:checked')).map(cb => cb.value);
+      data.must_have = Array.from(form.querySelectorAll('input[name="must_have"]:checked')).map(cb => cb.value);
+      data.score = parseInt(scoreDisplay.textContent) || 0;
+      data.created_at = new Date().toISOString();
       
       try {
-        let response;
+        const res = await fetch('https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/coyol_qualified_leads', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD',
+            'Authorization': 'Bearer sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify(data)
+        });
         
-        if (existingId) {
-          // Update existing
-          response = await fetch(`${SUPABASE_URL}/rest/v1/mar_azul_leads?id=eq.${existingId}`, {
-            method: 'PATCH',
-            headers: {
-              'apikey': SUPABASE_KEY,
-              'Authorization': `Bearer ${SUPABASE_KEY}`,
-              'Content-Type': 'application/json',
-              'Prefer': 'return=representation',
-            },
-            body: JSON.stringify({
-              ...leadData,
-              updated_at: new Date().toISOString(),
-            }),
-          });
+        if (res.ok) {
+          window.location.href = '/command/qualified?saved=1';
         } else {
-          // Create new
-          response = await fetch(`${SUPABASE_URL}/rest/v1/mar_azul_leads`, {
-            method: 'POST',
-            headers: {
-              'apikey': SUPABASE_KEY,
-              'Authorization': `Bearer ${SUPABASE_KEY}`,
-              'Content-Type': 'application/json',
-              'Prefer': 'return=representation',
-            },
-            body: JSON.stringify({
-              ...leadData,
-              status: 'new',
-              assigned_to: 'ruth',
-            }),
-          });
+          alert('Error saving lead. Please try again.');
         }
-        
-        if (response.ok) {
-          const result = await response.json();
-          const savedId = result[0]?.id;
-          
-          if (savedId && !existingId) {
-            // Redirect to edit URL for new lead
-            window.history.replaceState(null, '', `?id=${savedId}`);
-            document.getElementById('leadId').value = savedId;
-          }
-          
-          toast.classList.remove('hidden');
-          setTimeout(() => toast.classList.add('hidden'), 2000);
-        } else {
-          const error = await response.text();
-          alert('Failed to save: ' + error);
-        }
-      } catch (error) {
-        alert('Error saving lead: ' + error.message);
-      } finally {
-        loadingOverlay.classList.add('hidden');
+      } catch (err) {
+        console.error(err);
+        alert('Error saving lead. Please try again.');
       }
     });
-    
-    // Progress calculation
-    function updateProgress() {
-      const requiredFields = ['full_name', 'timeline_to_buy', 'total_budget', 'bedrooms', 'view_priority', 'custom_vs_model'];
-      let filled = 0;
-      requiredFields.forEach(name => {
-        const input = form.querySelector(`[name="${name}"]`);
-        if (input) {
-          if (input.type === 'radio') {
-            if (form.querySelector(`[name="${name}"]:checked`)) filled++;
-          } else if (input.value) {
-            filled++;
-          }
-        }
-      });
-      const percent = Math.round((filled / requiredFields.length) * 100);
-      document.getElementById('progressBar').style.width = `${percent}%`;
-      document.getElementById('progressText').textContent = `${percent}% complete`;
-    }
-    
-    // Lot suggestions
-    function updateLotSuggestions() {
-      const view = form.querySelector('[name="view_priority"]:checked')?.value;
-      const lotSize = form.querySelector('[name="lot_size"]')?.value;
-      const budget = form.querySelector('[name="total_budget"]')?.value;
-      
-      let suggestions = [];
-      
-      if (view === 'ocean') suggestions.push('14 (Casa Elle)', '25', '33', '34 (Casa Umi)');
-      if (view === 'jungle' || view === 'privacy') suggestions.push('8', '9', '23', '29');
-      if (lotSize === 'small') suggestions.push('6', '7', '22', '26', '27');
-      if (lotSize === 'large') suggestions.push('8', '14', '29', '32');
-      if (budget === 'under500' || budget === '500-750') suggestions.push('6', '7', '19', '36');
-      
-      const el = document.getElementById('lotSuggestions');
-      if (suggestions.length > 0) {
-        const unique = [...new Set(suggestions)];
-        el.innerHTML = `<strong>Recommended lots:</strong> ${unique.join(', ')}`;
-      } else {
-        el.textContent = 'Fill in preferences above to see lot recommendations';
-      }
-    }
-    
-    // Event listeners
-    form.querySelectorAll('input, select, textarea').forEach(input => {
-      input.addEventListener('change', () => {
-        updateProgress();
-        updateLotSuggestions();
-      });
-    });
-    
-    // Load existing lead if editing
-    if (editId) {
-      loadLead(editId);
-    }
-    
-    updateProgress();
   </script>
-</body>
-</html>
+</CommandLayout>
