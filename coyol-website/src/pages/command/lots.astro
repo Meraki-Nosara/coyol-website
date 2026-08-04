@@ -2,6 +2,9 @@
 import Layout from '../../layouts/Layout.astro';
 import lotsData from '../../data/mar-azul-lots.json';
 
+// Hide floating buttons on admin page
+const hideFloatingButtons = true;
+
 const lots = lotsData.lots;
 
 // Status colors - Land Rover Heritage palette
@@ -78,7 +81,7 @@ function formatPrice(price: number | null | undefined) {
 }
 ---
 
-<Layout title="Mar Azul — Master Plan">
+<Layout title="Mar Azul — Master Plan" hideFloatingButtons={true}>
   <div class="min-h-screen bg-lr-santorini">
     
     <!-- Header -->
