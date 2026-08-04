@@ -2,7 +2,7 @@
 import CommandLayout from '../../../layouts/CommandLayout.astro';
 
 const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ueGp6dnFncnJvZGFsY210bnRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMxMjMzMDUsImV4cCI6MjA1ODY5OTMwNX0.Gf0gYB3HT4qSYHlYmTTvYvdxWXK3J4bXcaIH0r9Psws';
+const SUPABASE_KEY = import.meta.env.SUPABASE_SERVICE_KEY;
 
 // Fetch leads from Supabase
 let leads: any[] = [];
