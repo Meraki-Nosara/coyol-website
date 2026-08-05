@@ -1,0 +1,297 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Lot positions on the master plan (percentage-based)
+const lotPositions: Record<number, { x: number; y: number }> = {
+  1: { x: 31, y: 85 },
+  2: { x: 32, y: 92 },
+  3: { x: 36, y: 90 },
+  4: { x: 37, y: 81 },
+  5: { x: 44, y: 81 },
+  6: { x: 42, y: 87 },
+  7: { x: 47, y: 87 },
+  8: { x: 46, y: 93 },
+  9: { x: 61, y: 87 },
+  10: { x: 54, y: 81 },
+  11: { x: 61, y: 81 },
+  12: { x: 60, y: 71 },
+  14: { x: 47, y: 69 },
+  15: { x: 72, y: 71 },
+  16: { x: 79, y: 52 },
+  17: { x: 72, y: 45 },
+  18: { x: 69, y: 19 },
+  19: { x: 73, y: 15 },
+  20: { x: 63, y: 25 },
+  21: { x: 60, y: 30 },
+  22: { x: 53, y: 36 },
+  23: { x: 60, y: 39 },
+  24: { x: 64, y: 43 },
+  25: { x: 55, y: 43 },
+  26: { x: 41, y: 44 },
+  27: { x: 39, y: 47 },
+  28: { x: 38, y: 50 },
+  29: { x: 28, y: 43 },
+  30: { x: 24, y: 50 },
+  31: { x: 22, y: 57 },
+  32: { x: 24, y: 63 },
+  33: { x: 20, y: 67 },
+  34: { x: 14, y: 67 },
+  35: { x: 10, y: 70 },
+  36: { x: 79, y: 17 }
+};
+
+// Read lot data from GeoJSON (has status synced from coyol-control)
+import fs from 'fs';
+const geojsonPath = new URL('../../public/data/mar-azul-lots-clean.geojson', import.meta.url);
+const geojson = JSON.parse(fs.readFileSync(geojsonPath, 'utf-8'));
+
+// Build lots array
+const lots = geojson.features.map((f: any) => ({
+  number: f.properties.lotNumber,
+  area: f.properties.areaM2,
+  status: f.properties.status || 'available',
+  price: f.properties.price,
+  houseName: f.properties.houseName
+}));
+
+// Summary
+const summary = {
+  total: lots.length,
+  available: lots.filter((l: any) => l.status === 'available').length,
+  sold: lots.filter((l: any) => ['sold', 'habitada'].includes(l.status)).length
+};
+---
+
+<Layout title="Mar Azul Lots Map | Coyol Real Estate">
+  <div class="min-h-screen bg-[#1A1F16]">
+    
+    <!-- Header -->
+    <header class="border-b border-[#3D4F3D]/30 bg-[#1A1F16]/95 backdrop-blur sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div>
+          <a href="/" class="text-sm text-[#D4C9B5] hover:text-[#C4A67C] transition flex items-center gap-2">
+            <img src="/images/logo.png" alt="Coyol" class="h-6 invert opacity-90" />
+          </a>
+        </div>
+        <div>
+          <h1 class="text-xl font-serif text-[#F5F3EF]">Mar Azul — Lot Map</h1>
+          <p class="text-xs text-[#D4C9B5]/60 text-right">{summary.total} lots · Click to see details</p>
+        </div>
+        <div class="hidden md:flex items-center gap-4 text-xs text-[#D4C9B5]">
+          <span class="flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded-full bg-[#4a7c4a]"></span>
+            Available ({summary.available})
+          </span>
+          <span class="flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded-full bg-[#8B4513]"></span>
+            Sold ({summary.sold})
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-6">
+      
+      <div class="grid lg:grid-cols-3 gap-6">
+        
+        <!-- Master Plan with Lot Markers -->
+        <div class="lg:col-span-2">
+          <div class="bg-[#3D4F3D]/10 rounded-xl border border-[#3D4F3D]/30 overflow-hidden">
+            <div class="relative" id="masterplan-container">
+              <img 
+                src="/images/mar-azul-masterplan.png" 
+                alt="Mar Azul Master Plan"
+                class="w-full h-auto"
+              />
+              
+              <!-- Lot Markers -->
+              {lots.map((lot: any) => {
+                const pos = lotPositions[lot.number];
+                if (!pos) return null;
+                const isSold = ['sold', 'habitada'].includes(lot.status);
+                const bgColor = isSold ? '#8B4513' : '#4a7c4a';
+                const borderColor = isSold ? '#5a2d0a' : '#2d4a2d';
+                return (
+                  <button
+                    class="lot-marker absolute transform -translate-x-1/2 -translate-y-1/2 
+                           w-8 h-8 md:w-7 md:h-7 rounded-full flex items-center justify-center
+                           text-xs font-bold cursor-pointer transition-all duration-200
+                           hover:scale-150 hover:z-30 active:scale-125
+                           shadow-lg hover:shadow-xl text-white"
+                    style={`left: ${pos.x}%; top: ${pos.y}%; 
+                           background-color: ${bgColor}; 
+                           border: 3px solid ${borderColor};
+                           box-shadow: 0 2px 8px rgba(0,0,0,0.4);`}
+                    data-lot={lot.number}
+                    data-area={lot.area}
+                    data-status={lot.status}
+                    data-price={lot.price || ''}
+                    data-house={lot.houseName || ''}
+                  >
+                    {lot.number}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          
+          <!-- Mobile Legend -->
+          <div class="md:hidden mt-3 flex flex-wrap justify-center gap-3 text-xs text-[#D4C9B5]">
+            <span class="flex items-center gap-1">
+              <span class="w-3 h-3 rounded-full bg-[#4a7c4a]"></span> Available
+            </span>
+            <span class="flex items-center gap-1">
+              <span class="w-3 h-3 rounded-full bg-[#8B4513]"></span> Sold
+            </span>
+          </div>
+          <p class="text-xs text-[#D4C9B5]/50 mt-2 text-center">
+            Tap any lot number for details
+          </p>
+        </div>
+
+        <!-- Lot Details Panel -->
+        <div class="lg:col-span-1">
+          <div class="bg-[#3D4F3D]/10 rounded-xl border border-[#3D4F3D]/30 p-6 sticky top-24" id="lot-details">
+            
+            <div class="text-center py-12" id="no-selection">
+              <div class="text-4xl mb-3">🏡</div>
+              <h3 class="text-lg font-serif text-[#F5F3EF]">Select a Lot</h3>
+              <p class="text-sm text-[#D4C9B5]/60 mt-2">
+                Click on any lot number to see details
+              </p>
+            </div>
+            
+            <div class="hidden" id="lot-info">
+              <div class="flex items-center justify-between mb-4">
+                <h2 class="text-3xl font-serif text-[#F5F3EF]">
+                  Lot <span id="detail-number">-</span>
+                </h2>
+                <span 
+                  id="detail-status"
+                  class="px-4 py-1.5 rounded-full text-sm font-medium"
+                >
+                  -
+                </span>
+              </div>
+              
+              <div id="detail-house" class="text-xl text-[#C4A67C] mb-4 font-serif hidden"></div>
+              
+              <div id="detail-price" class="text-3xl font-serif text-[#C4A67C] mb-6 hidden"></div>
+              
+              <div class="space-y-3 mb-6">
+                <div class="flex justify-between py-3 border-b border-[#3D4F3D]/30">
+                  <span class="text-[#D4C9B5]">Area</span>
+                  <span id="detail-area" class="text-[#F5F3EF] font-semibold">-</span>
+                </div>
+              </div>
+              
+              <a 
+                href="/#contact"
+                id="inquire-btn"
+                class="block w-full py-3 px-6 bg-[#3D4F3D] hover:bg-[#4A5D4A] 
+                       text-[#F5F3EF] text-center rounded-lg transition font-medium"
+              >
+                Inquire About This Lot
+              </a>
+            </div>
+          </div>
+          
+          <!-- Quick Stats -->
+          <div class="mt-4 grid grid-cols-3 gap-2">
+            <div class="bg-[#3D4F3D]/10 rounded-lg p-3 text-center border border-[#3D4F3D]/30">
+              <div class="text-xl font-serif text-[#F5F3EF]">{summary.total}</div>
+              <div class="text-xs text-[#D4C9B5]/70">Total</div>
+            </div>
+            <div class="bg-[#4a7c4a]/20 rounded-lg p-3 text-center border border-[#4a7c4a]/30">
+              <div class="text-xl font-serif text-[#8fbc8f]">{summary.available}</div>
+              <div class="text-xs text-[#D4C9B5]/70">Available</div>
+            </div>
+            <div class="bg-[#8B4513]/20 rounded-lg p-3 text-center border border-[#8B4513]/30">
+              <div class="text-xl font-serif text-[#cd853f]">{summary.sold}</div>
+              <div class="text-xs text-[#D4C9B5]/70">Sold</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </main>
+  </div>
+</Layout>
+
+<style>
+  .lot-marker:hover {
+    animation: pulse 0.3s ease-out;
+  }
+  
+  @keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.6); }
+    100% { transform: translate(-50%, -50%) scale(1.5); }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const markers = document.querySelectorAll('.lot-marker');
+    const noSelection = document.getElementById('no-selection');
+    const lotInfo = document.getElementById('lot-info');
+    const detailNumber = document.getElementById('detail-number');
+    const detailStatus = document.getElementById('detail-status');
+    const detailArea = document.getElementById('detail-area');
+    const detailPrice = document.getElementById('detail-price');
+    const detailHouse = document.getElementById('detail-house');
+    const inquireBtn = document.getElementById('inquire-btn');
+    
+    markers.forEach(marker => {
+      marker.addEventListener('click', () => {
+        const lot = marker.getAttribute('data-lot');
+        const area = marker.getAttribute('data-area');
+        const status = marker.getAttribute('data-status') || 'available';
+        const price = marker.getAttribute('data-price');
+        const house = marker.getAttribute('data-house');
+        
+        // Update panel
+        detailNumber!.textContent = lot;
+        detailArea!.textContent = Number(area).toLocaleString() + ' m²';
+        
+        // Status badge
+        const isSold = ['sold', 'habitada'].includes(status);
+        detailStatus!.textContent = isSold ? 'Sold' : 'Available';
+        detailStatus!.className = isSold 
+          ? 'px-4 py-1.5 rounded-full text-sm font-medium bg-[#8B4513]/30 text-[#cd853f]'
+          : 'px-4 py-1.5 rounded-full text-sm font-medium bg-[#4a7c4a]/30 text-[#8fbc8f]';
+        
+        // Price
+        if (price && !isSold) {
+          detailPrice!.textContent = '$' + Number(price).toLocaleString();
+          detailPrice!.classList.remove('hidden');
+        } else {
+          detailPrice!.classList.add('hidden');
+        }
+        
+        // House name
+        if (house) {
+          detailHouse!.textContent = house;
+          detailHouse!.classList.remove('hidden');
+        } else {
+          detailHouse!.classList.add('hidden');
+        }
+        
+        // Update inquire button
+        if (isSold) {
+          inquireBtn!.textContent = 'View Similar Lots';
+        } else {
+          inquireBtn!.textContent = 'Inquire About This Lot';
+        }
+        
+        // Show panel
+        noSelection!.classList.add('hidden');
+        lotInfo!.classList.remove('hidden');
+        
+        // Highlight selected marker
+        markers.forEach(m => m.classList.remove('ring-4', 'ring-white/50'));
+        marker.classList.add('ring-4', 'ring-white/50');
+      });
+    });
+  });
+</script>

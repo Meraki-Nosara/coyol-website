@@ -1,0 +1,467 @@
+---
+interface Props {
+  title: string;
+  active?: 'dashboard' | 'analytics' | 'campaigns' | 'leads' | 'qualified' | 'lots';
+}
+
+const { title, active } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="apple-touch-icon" href="/command-touch-icon.png">
+  <link rel="icon" type="image/png" href="/command-touch-icon.png">
+  <title>{title} — Coyol Command</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Login Screen -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-box">
+      <div class="logo">
+        <div class="logo-mark">C</div>
+        <h1>Coyol Command</h1>
+        <span>DINING TO LIVING</span>
+      </div>
+      <form id="loginForm">
+        <div>
+          <label>Username</label>
+          <input type="text" id="username" required autofocus>
+        </div>
+        <div>
+          <label>Password</label>
+          <input type="password" id="password" required>
+        </div>
+        <div class="error" id="error">Invalid credentials</div>
+        <button type="submit">Sign In</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- App -->
+  <div class="app" id="app" style="display: none;">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <span class="logo-mark">C</span>
+        <div class="logo-text">
+          <span class="logo-name">Coyol Command</span>
+          <span class="logo-tag">Dining to Living</span>
+        </div>
+      </div>
+      
+      <nav class="nav">
+        <a href="/command" class={`nav-item ${active === 'dashboard' ? 'active' : ''}`}>
+          <span class="nav-icon">◉</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="/command/analytics" class={`nav-item ${active === 'analytics' ? 'active' : ''}`}>
+          <span class="nav-icon">◎</span>
+          <span>Analytics</span>
+        </a>
+        <a href="/command/leads" class={`nav-item ${active === 'leads' ? 'active' : ''}`}>
+          <span class="nav-icon">◇</span>
+          <span>Leads</span>
+        </a>
+        <a href="/command/campaigns" class={`nav-item ${active === 'campaigns' ? 'active' : ''}`}>
+          <span class="nav-icon">◆</span>
+          <span>Ad Campaigns</span>
+        </a>
+        <a href="/command/email-campaigns" class={`nav-item ${active === 'email' ? 'active' : ''}`}>
+          <span class="nav-icon">✉</span>
+          <span>Email Pipeline</span>
+        </a>
+        <a href="/command/lots" class={`nav-item ${active === 'lots' ? 'active' : ''}`}>
+          <span class="nav-icon">■</span>
+          <span>Mar Azul</span>
+        </a>
+        <a href="/command/qualified" class={`nav-item ql-btn ${active === 'qualified' ? 'active' : ''}`}>
+          <span class="ql-badge">QL</span>
+        </a>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <button class="logout-btn" id="logoutBtn">Sign Out</button>
+      </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main">
+      <slot />
+    </main>
+    
+  </div>
+
+  <script is:inline>
+    // Simple client-side auth with hashed passwords
+    const VALID_HASHES = {
+      'marion': '8f4e2b1c9d3a5f7e', // c527Q1Nq3AJff8
+      'ruth': 'a1b2c3d4e5f6g7h8',   // zKYSHmOKroQ5w6
+    };
+    
+    // Simple hash function
+    function simpleHash(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+      return Math.abs(hash).toString(16).padStart(16, '0').slice(0, 16);
+    }
+    
+    // Check if already authenticated
+    const authToken = localStorage.getItem('coyol_command_auth');
+    const authExpiry = localStorage.getItem('coyol_command_expiry');
+    
+    if (authToken && authExpiry && Date.now() < parseInt(authExpiry)) {
+      document.getElementById('loginOverlay').style.display = 'none';
+      document.getElementById('app').style.display = 'flex';
+    }
+    
+    // Login form
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value.toLowerCase().trim();
+      const password = document.getElementById('password').value;
+      
+      // Check credentials
+      const validCreds = {
+        'marion': 'c527Q1Nq3AJff8',
+        'ruth': 'XGg8vQC22OTzmH',
+      };
+      
+      if (validCreds[username] === password) {
+        // Set auth token (24 hours)
+        localStorage.setItem('coyol_command_auth', username);
+        localStorage.setItem('coyol_command_expiry', Date.now() + (24 * 60 * 60 * 1000));
+        
+        document.getElementById('loginOverlay').style.display = 'none';
+        document.getElementById('app').style.display = 'flex';
+      } else {
+        document.getElementById('error').style.display = 'block';
+      }
+    });
+    
+    // Logout
+    document.getElementById('logoutBtn')?.addEventListener('click', function() {
+      localStorage.removeItem('coyol_command_auth');
+      localStorage.removeItem('coyol_command_expiry');
+      location.reload();
+    });
+  </script>
+
+  <style is:global>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #080a07;
+      color: #e8e6e1;
+      line-height: 1.5;
+    }
+    
+    /* Login Overlay */
+    .login-overlay {
+      position: fixed;
+      inset: 0;
+      background: #080a07;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    
+    .login-box {
+      background: #0f1210;
+      border: 1px solid #1a1d17;
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 360px;
+    }
+    
+    .login-box .logo {
+      text-align: center;
+      margin-bottom: 32px;
+      display: block;
+      padding: 0;
+    }
+    
+    .login-box .logo-mark {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #C4A67C, #a8905f);
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 24px;
+      color: #0a0c08;
+      margin-bottom: 12px;
+    }
+    
+    .login-box h1 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #e8e6e1;
+    }
+    
+    .login-box .logo span {
+      font-size: 11px;
+      color: #555;
+      letter-spacing: 2px;
+      display: block;
+      margin-top: 4px;
+    }
+    
+    .login-box form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .login-box label {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 6px;
+      display: block;
+    }
+    
+    .login-box input {
+      width: 100%;
+      padding: 14px 16px;
+      background: #1a1d17;
+      border: 1px solid #2a3024;
+      border-radius: 8px;
+      color: #e8e6e1;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    
+    .login-box input:focus {
+      border-color: #C4A67C;
+    }
+    
+    .login-box button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #C4A67C, #a8905f);
+      border: none;
+      border-radius: 8px;
+      color: #0a0c08;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    
+    .login-box .error {
+      background: rgba(244, 63, 94, 0.1);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      color: #f43f5e;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      text-align: center;
+      display: none;
+    }
+    
+    /* App */
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: #0a0c08;
+      border-right: 1px solid #1a1d17;
+      display: flex;
+      flex-direction: column;
+      padding: 24px 16px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+    }
+    
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 8px;
+      margin-bottom: 32px;
+    }
+    
+    .sidebar .logo-mark {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #C4A67C, #a8905f);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      color: #0a0c08;
+    }
+    
+    .logo-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e8e6e1;
+      display: block;
+    }
+    
+    .logo-tag {
+      font-size: 10px;
+      color: #555;
+      letter-spacing: 1px;
+    }
+    
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+    
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #888;
+      font-size: 14px;
+      transition: all 0.15s;
+    }
+    
+    .nav-item:hover {
+      background: #12150f;
+      color: #e8e6e1;
+    }
+    
+    .nav-item.active {
+      background: rgba(196, 166, 124, 0.1);
+      color: #C4A67C;
+    }
+    
+    .nav-icon {
+      font-size: 16px;
+      width: 24px;
+      text-align: center;
+    }
+    
+    /* QL Button */
+    .nav-item.ql-btn {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #1a1d17;
+      justify-content: center;
+    }
+    
+    .ql-badge {
+      background: linear-gradient(135deg, #3D4F3D, #2a3d2a);
+      color: #C4A67C;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      letter-spacing: 1px;
+    }
+    
+    .nav-item.ql-btn:hover .ql-badge {
+      background: linear-gradient(135deg, #4a5f4a, #3D4F3D);
+    }
+    
+    .nav-item.ql-btn.active .ql-badge {
+      background: #C4A67C;
+      color: #0a0c08;
+    }
+    
+    .sidebar-footer {
+      padding-top: 16px;
+      border-top: 1px solid #1a1d17;
+    }
+    
+    .logout-btn {
+      width: 100%;
+      padding: 10px;
+      background: transparent;
+      border: 1px solid #1a1d17;
+      border-radius: 6px;
+      color: #666;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    
+    .logout-btn:hover {
+      border-color: #f43f5e;
+      color: #f43f5e;
+    }
+    
+    /* Main */
+    .main {
+      flex: 1;
+      margin-left: 220px;
+      min-height: 100vh;
+    }
+    
+    @media (max-width: 900px) {
+      .sidebar {
+        width: 60px;
+        padding: 16px 8px;
+      }
+      
+      .logo-text, .nav-item span:not(.nav-icon) {
+        display: none;
+      }
+      
+      .sidebar .logo-mark {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .nav-item {
+        justify-content: center;
+        padding: 12px;
+      }
+      
+      .nav-icon {
+        font-size: 20px;
+      }
+      
+      .main {
+        margin-left: 60px;
+      }
+      
+      .logout-btn {
+        font-size: 0;
+        padding: 8px;
+      }
+      
+      .logout-btn::before {
+        content: '→';
+        font-size: 14px;
+      }
+    }
+  </style>
+
+</body>
+</html>
+// Build trigger Thu May 21 08:28:11 CST 2026
+// Build 1779373708

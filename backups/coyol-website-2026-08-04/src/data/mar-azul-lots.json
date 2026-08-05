@@ -1,0 +1,646 @@
+{
+  "development": "mar-azul",
+  "name": "Mar Azul",
+  "type": "Condominio",
+  "totalLots": 35,
+  "owner": "Desarrollo Rancho Mar Azul Ltda",
+  "lots": [
+    {
+      "number": 1,
+      "area": 5000.01,
+      "houseName": "Casa Churcher",
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "complete",
+      "status": "Habitada",
+      "image": "https://mnxjzvqgrrodalcmtntf.supabase.co/storage/v1/object/public/order-files/coyol-control/mar-azul/lot-1/render.jpg"
+    },
+    {
+      "number": 2,
+      "area": 2081.24,
+      "houseName": "Casa Nispero",
+      "owner": "3-102-861529 S.R.L.",
+      "documents": [
+        {
+          "type": "plano",
+          "name": "Plano Lote 2",
+          "url": "https://drive.google.com/open?id=16ffnHFRQH8WKewIJlE8MBXGIZPISg3p4",
+          "uploadedBy": "anlly",
+          "uploadedAt": "2026-04-10"
+        },
+        {
+          "type": "escritura",
+          "name": "Escritura Venta Desarrollo Rancho Mar Azul a Holding",
+          "url": "https://drive.google.com/open?id=1UvTuLUoLAsrHXvc7hMR-qU_N497rVjKq",
+          "uploadedBy": "anlly",
+          "uploadedAt": "2026-04-10"
+        },
+        {
+          "type": "permiso",
+          "name": "Permiso Construcción Casa Nispero",
+          "url": "https://mnxjzvqgrrodalcmtntf.supabase.co/storage/v1/object/public/order-files/coyol-control/mar-azul/lot-2/permiso.pdf",
+          "uploadedBy": "milagro",
+          "uploadedAt": "2026-04-14"
+        }
+      ],
+      "preparation": {},
+      "hoaPago": 0.75,
+      "pipelineStep": "listo-venta",
+      "status": "Available",
+      "cedulaJuridica": "3-102-861529",
+      "planoCatastrado": "G-5375-2025",
+      "fincaFilial": "231596-F-000",
+      "purchasePrice": 25035000,
+      "purchaseDate": "2025-03-19",
+      "image": "https://mnxjzvqgrrodalcmtntf.supabase.co/storage/v1/object/public/order-files/coyol-control/mar-azul/lot-2/casa-nispero-render.jpg",
+      "price": 275000
+    },
+    {
+      "number": 3,
+      "area": 2955.87,
+      "houseName": null,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "plano-catastrado",
+      "pipelinePriority": "urgent",
+      "pipelineNotes": "HIGH RISK - borders plaintiff properties"
+    },
+    {
+      "number": 4,
+      "area": 2900.12,
+      "houseName": "Casa Vida",
+      "owner": null,
+      "documents": [
+        {
+          "type": "plano",
+          "name": "Plano Catastro Lote 4",
+          "url": "https://drive.google.com/open?id=1WCrpZqYuWCFuX4GTwcL9Xu6JfcoT8tcS",
+          "uploadedBy": "anlly",
+          "uploadedAt": "2026-04-13"
+        }
+      ],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "complete",
+      "status": "Habitada",
+      "planoCatastrado": "G-2043984-2018",
+      "image": "/images/lots/ma-4-aerial.jpg"
+    },
+    {
+      "number": 5,
+      "area": 3614.68,
+      "houseName": null,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "plano-catastrado",
+      "pipelinePriority": "urgent",
+      "pipelineNotes": "HIGH RISK - borders plaintiff properties"
+    },
+    {
+      "number": 6,
+      "area": 1622.96,
+      "houseName": null,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "plano",
+      "pipelineStarted": "2026-07-20",
+      "assignedTo": "olger",
+      "status": "Available"
+    },
+    {
+      "number": 7,
+      "area": 1606.56,
+      "houseName": null,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "plano",
+      "pipelineStarted": "2026-07-20",
+      "assignedTo": "olger",
+      "status": "Available"
+    },
+    {
+      "number": 8,
+      "area": 5391.44,
+      "houseName": null,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "plano-catastrado"
+    },
+    {
+      "number": 9,
+      "area": 4353.06,
+      "houseName": null,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "plano-catastrado"
+    },
+    {
+      "number": 10,
+      "area": 2366.98,
+      "houseName": null,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "plano-catastrado"
+    },
+    {
+      "number": 11,
+      "area": 2764.79,
+      "houseName": null,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "plano-catastrado"
+    },
+    {
+      "number": 12,
+      "area": 3073.81,
+      "houseName": "Casa Eclipse",
+      "owner": null,
+      "documents": [
+        {
+          "type": "plano",
+          "name": "Plano Catastro Lote 12",
+          "url": "https://drive.google.com/open?id=1qbxBWxau_pCwkGFxBYz5GOeTruN4Tgfi",
+          "uploadedBy": "anlly",
+          "uploadedAt": "2026-04-13"
+        },
+        {
+          "type": "permiso",
+          "name": "Permiso de Construcción Lote 12",
+          "url": "https://drive.google.com/open?id=1uynnXyMKiTwLTFLhjYGqgHbyj5oWpa3m",
+          "uploadedBy": "anlly",
+          "uploadedAt": "2026-04-13"
+        }
+      ],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": null,
+      "pipelineComplete": false,
+      "status": "Habitada",
+      "image": "/images/lots/ma-12-casa-eclipse.jpg"
+    },
+    {
+      "number": 14,
+      "area": 8261.27,
+      "houseName": "Casa Elle",
+      "owner": "Holding",
+      "documents": [
+        {
+          "type": "plano",
+          "name": "Plano Catastro Lote 14",
+          "url": "https://drive.google.com/file/d/1hbrAdsnVhKTqkYDuZQs50h7s1JVXPaM-/view?usp=drivesdk",
+          "uploadedBy": "anlly",
+          "uploadedAt": "2026-04-14"
+        },
+        {
+          "type": "escritura",
+          "name": "Escritura Lote 14",
+          "url": "https://drive.google.com/file/d/13R0zobCXfVx0tnnvB9f8mXFEPECywL_Z/view?usp=drivesdk",
+          "uploadedBy": "marion",
+          "uploadedAt": "2026-04-14"
+        }
+      ],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "permiso-construccion",
+      "status": "Available",
+      "image": "https://mnxjzvqgrrodalcmtntf.supabase.co/storage/v1/object/public/order-files/coyol-control/mar-azul/lot-14/casa-elle.jpg",
+      "price": 350000
+    },
+    {
+      "number": 15,
+      "area": 3632.08,
+      "houseName": null,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "plano-catastrado"
+    },
+    {
+      "number": 16,
+      "area": 2294.41,
+      "houseName": null,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "plano-catastrado"
+    },
+    {
+      "number": 17,
+      "area": 2234.72,
+      "houseName": null,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "plano-catastrado",
+      "price": 550000
+    },
+    {
+      "number": 18,
+      "area": 1744.3,
+      "houseName": "Casa Cacao",
+      "owner": "Holding Company",
+      "documents": [
+        {
+          "type": "cartaAgua",
+          "name": "Carta AyA Lote 18",
+          "url": null,
+          "uploadedBy": null,
+          "uploadedAt": null,
+          "status": "pending-upload",
+          "note": "Confirmed complete by Marion 2026-07-20 - Anlly to upload"
+        },
+        {
+          "type": "escritura",
+          "name": "Escritura Lote 18",
+          "url": null,
+          "uploadedBy": null,
+          "uploadedAt": null,
+          "status": "pending-upload",
+          "note": "Confirmed complete by Marion 2026-07-20 - Alessia to upload"
+        }
+      ],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "listo-venta",
+      "pipelineStarted": "2026-04-15",
+      "pipelineCompleted": "2026-07-20",
+      "assignedTo": "olger",
+      "status": "Available",
+      "referredBy": "Ruth Tal",
+      "priority": 2,
+      "pipelinePriority": null,
+      "pipelineNotes": "Ready for sale. Water letter and escritura complete.",
+      "image": "https://coyolrealestate.com/images/properties/casa-cacao.jpg",
+      "price": 420000,
+      "currency": "USD",
+      "constructionPrice": 1530000,
+      "totalInvestment": 1950000,
+      "reservationDeposit": 10000,
+      "paymentTerms": {
+        "lotPayment": "100% before construction",
+        "constructionMilestones": 6,
+        "milestonePercent": 16.67
+      },
+      "houseModel": "Casa Cacao (Smaller)",
+      "houseSpecs": {
+        "indoorSpace": 215,
+        "coveredTerraces": 63,
+        "openTerraces": 102,
+        "swimmingPool": 40,
+        "unit": "sqm"
+      },
+      "interestedBuyer": "Amanda",
+      "legalPartner": "ICS"
+    },
+    {
+      "number": 19,
+      "area": 2713.56,
+      "houseName": null,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "plano",
+      "pipelineStarted": "2026-07-20",
+      "assignedTo": "olger",
+      "status": "Available",
+      "price": 550000
+    },
+    {
+      "number": 20,
+      "area": 2741,
+      "houseName": "Coyol XL",
+      "owner": "Rancho Verde Riabov S.R.L.",
+      "documents": [
+        {
+          "type": "plano",
+          "name": "Plano Catastro Lote 20",
+          "url": "https://mnxjzvqgrrodalcmtntf.supabase.co/storage/v1/object/public/order-files/coyol-control/mar-azul/lot-20/plano.pdf",
+          "uploadedBy": "anlly",
+          "uploadedAt": "2026-04-14"
+        },
+        {
+          "type": "escritura",
+          "name": "Escritura Lote 20",
+          "url": "https://mnxjzvqgrrodalcmtntf.supabase.co/storage/v1/object/public/order-files/coyol-control/mar-azul/lot-20/escritura.pdf",
+          "uploadedBy": "anlly",
+          "uploadedAt": "2026-04-14"
+        }
+      ],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "plano-catastrado",
+      "status": "Habitada",
+      "cedulaJuridica": "3-102-839355",
+      "image": "/images/lots/ma-20-coyol-xl.jpg",
+      "pipelineComplete": true,
+      "price": 450000
+    },
+    {
+      "number": 21,
+      "area": 1646.08,
+      "houseName": "Casa Luz",
+      "owner": "Holding Company",
+      "documents": [
+        {
+          "type": "cartaAgua",
+          "name": "Carta AyA Lote 21",
+          "url": null,
+          "uploadedBy": null,
+          "uploadedAt": null,
+          "status": "pending-upload",
+          "note": "Confirmed complete by Marion 2026-07-20 - Anlly to upload"
+        },
+        {
+          "type": "escritura",
+          "name": "Escritura Lote 21",
+          "url": null,
+          "uploadedBy": null,
+          "uploadedAt": null,
+          "status": "pending-upload",
+          "note": "Confirmed complete by Marion 2026-07-20 - Alessia to upload"
+        }
+      ],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "listo-venta",
+      "pipelineStarted": "2026-04-10",
+      "pipelineCompleted": "2026-07-20",
+      "image": "https://mnxjzvqgrrodalcmtntf.supabase.co/storage/v1/object/public/order-files/coyol-control/mar-azul/lot-21/casa-luz.jpg",
+      "priority": 3,
+      "pipelinePriority": null,
+      "pipelineNotes": "Ready for sale. Water letter and escritura complete.",
+      "status": "Available",
+      "price": 410000
+    },
+    {
+      "number": 22,
+      "area": 1101.88,
+      "houseName": null,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "plano-catastrado",
+      "price": 375000
+    },
+    {
+      "number": 23,
+      "area": 4220.37,
+      "houseName": null,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "plano-catastrado",
+      "price": 400000
+    },
+    {
+      "number": 24,
+      "area": 1582.84,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "complete",
+      "status": "Built",
+      "houseName": "Casa Lefki",
+      "priority": 4,
+      "price": 350000
+    },
+    {
+      "number": 25,
+      "area": 1448.27,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "plano-catastrado",
+      "image": "https://mnxjzvqgrrodalcmtntf.supabase.co/storage/v1/object/public/order-files/coyol-control/mar-azul/lot-25/render.jpg"
+    },
+    {
+      "number": 26,
+      "area": 362.62,
+      "houseName": "Casa Perch",
+      "owner": "Holding Company",
+      "documents": [
+        {
+          "type": "plano",
+          "name": "Plano Lote 26",
+          "uploadedBy": "anlly",
+          "uploadedAt": "2026-04-15"
+        },
+        {
+          "type": "escritura",
+          "name": "Escritura Lote 26",
+          "uploadedBy": "anlly",
+          "uploadedAt": "2026-04-15"
+        }
+      ],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "listo-venta",
+      "status": "Available",
+      "assignedTo": "anlly",
+      "pipelineComplete": true,
+      "image": "https://coyolrealestate.com/images/properties/casa-perch.jpg"
+    },
+    {
+      "number": 27,
+      "area": 458.49,
+      "houseName": "Casa Perch",
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "complete",
+      "status": "Built",
+      "priority": 5
+    },
+    {
+      "number": 28,
+      "area": 522,
+      "houseName": "Casa Nest",
+      "owner": "Francisco",
+      "documents": [
+        {
+          "type": "plano",
+          "name": "Plano Catastro Lote 28",
+          "url": "https://mnxjzvqgrrodalcmtntf.supabase.co/storage/v1/object/public/order-files/coyol-control/mar-azul/lot-28/plano.pdf",
+          "uploadedBy": "anlly",
+          "uploadedAt": "2026-04-14"
+        },
+        {
+          "type": "escritura",
+          "name": "Escritura Lote 28",
+          "url": "https://mnxjzvqgrrodalcmtntf.supabase.co/storage/v1/object/public/order-files/coyol-control/mar-azul/lot-28/escritura.pdf",
+          "uploadedBy": "anlly",
+          "uploadedAt": "2026-04-14"
+        }
+      ],
+      "preparation": {},
+      "hoaPago": 1,
+      "notes": "Tax adviser and friend. Docs contact: Anlly",
+      "pipelineStep": "complete",
+      "status": "Sold",
+      "image": "https://mnxjzvqgrrodalcmtntf.supabase.co/storage/v1/object/public/order-files/coyol-control/mar-azul/lot-28/render.jpg",
+      "priority": 1
+    },
+    {
+      "number": 29,
+      "area": 9285.6,
+      "houseName": null,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "plano-catastrado",
+      "price": 525000
+    },
+    {
+      "number": 30,
+      "area": 1987.77,
+      "houseName": "Villa Cazulini",
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "complete",
+      "status": "Habitada"
+    },
+    {
+      "number": 31,
+      "area": 4498,
+      "houseName": "Casa Beauty",
+      "owner": null,
+      "documents": [
+        {
+          "type": "plano",
+          "name": "Plano Catastro Lote 31",
+          "url": "https://mnxjzvqgrrodalcmtntf.supabase.co/storage/v1/object/public/order-files/coyol-control/mar-azul/lot-31/plano.pdf",
+          "uploadedBy": "anlly",
+          "uploadedAt": "2026-04-15"
+        }
+      ],
+      "preparation": {},
+      "hoaPago": 1,
+      "status": "Habitada",
+      "assignedTo": "alessia",
+      "name": "Casa Beautie",
+      "images": [
+        "/images/lots/ma-31-aerial.jpg"
+      ],
+      "pipelineStep": "plano-catastrado"
+    },
+    {
+      "number": 32,
+      "area": 7007.41,
+      "houseName": "Modern Barn",
+      "owner": null,
+      "documents": [
+        {
+          "type": "plano",
+          "name": "Plano Catastro Lote 32",
+          "url": "https://mnxjzvqgrrodalcmtntf.supabase.co/storage/v1/object/public/order-files/coyol-control/mar-azul/lot-32/plano.pdf",
+          "uploadedBy": "anlly",
+          "uploadedAt": "2026-04-15"
+        },
+        {
+          "type": "escritura",
+          "name": "Escritura Lote 32",
+          "url": "https://mnxjzvqgrrodalcmtntf.supabase.co/storage/v1/object/public/order-files/coyol-control/mar-azul/lot-32/escritura.pdf",
+          "uploadedBy": "anlly",
+          "uploadedAt": "2026-04-15"
+        }
+      ],
+      "preparation": {},
+      "hoaPago": 1,
+      "pipelineStep": "plano-catastrado",
+      "status": "Habitada",
+      "image": "/images/lots/ma-32-render.jpg",
+      "pipelineComplete": false
+    },
+    {
+      "number": 33,
+      "area": 2332.27,
+      "houseName": null,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 0.2,
+      "pipelineStep": "plano",
+      "pipelineStarted": "2026-04-15",
+      "assignedTo": "olger",
+      "image": "/images/lots/ma-33-view.jpg",
+      "pipelinePriority": "urgent",
+      "pipelineNotes": "HIGH RISK - borders plaintiff properties"
+    },
+    {
+      "number": 34,
+      "area": 2756.11,
+      "houseName": "Casa Umi",
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 0.2,
+      "pipelineStep": "plano",
+      "image": "https://mnxjzvqgrrodalcmtntf.supabase.co/storage/v1/object/public/order-files/coyol-control/mar-azul/lot-34/render.jpg",
+      "pipelineStarted": "2026-04-15",
+      "assignedTo": "olger",
+      "priority": 6,
+      "pipelinePriority": "urgent",
+      "pipelineNotes": "HIGH RISK - borders plaintiff properties"
+    },
+    {
+      "number": 35,
+      "area": 3759.59,
+      "houseName": null,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 0.2,
+      "pipelineStep": "plano-catastrado",
+      "pipelinePriority": "urgent",
+      "pipelineNotes": "HIGH RISK - borders plaintiff properties",
+      "price": 550000
+    },
+    {
+      "number": 36,
+      "area": 2623.97,
+      "houseName": null,
+      "owner": null,
+      "documents": [],
+      "preparation": {},
+      "hoaPago": 0.2,
+      "pipelineStep": "plano",
+      "pipelineStarted": "2026-07-20",
+      "assignedTo": "olger",
+      "status": "Available",
+      "price": 550000
+    }
+  ],
+  "condominiumSince": 2024,
+  "previousStatus": "Single finca (farm)",
+  "parentCompany": "Desarrollo Rancho Mar Azul Ltda"
+}

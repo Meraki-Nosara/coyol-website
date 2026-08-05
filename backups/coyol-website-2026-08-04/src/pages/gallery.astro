@@ -1,0 +1,151 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+
+const images = [
+  // Mix of real photos - lifestyle, activities, homes
+  { src: '/images/gallery/land-rover-vintage.jpg', title: 'Vintage Land Rover', category: 'lifestyle' },
+  { src: '/images/gallery/clay-court-aerial.jpg', title: 'Clay Court Aerial', category: 'activities' },
+  { src: '/images/gallery/lifestyle-1.jpg', title: 'Modern Living', category: 'homes' },
+  { src: '/images/gallery/saddle-detail.jpg', title: 'English Saddle', category: 'activities' },
+  
+  { src: '/images/gallery/lifestyle-2.jpg', title: 'Jungle Setting', category: 'lifestyle' },
+  { src: '/images/gallery/equestrian-training.jpg', title: 'Equestrian Training', category: 'activities' },
+  { src: '/images/gallery/firepit-friends.jpg', title: 'Evening Firepit', category: 'lifestyle' },
+  { src: '/images/gallery/lifestyle-3.jpg', title: 'Tropical Life', category: 'lifestyle' },
+  { src: '/images/gallery/farrier-horseshoe.jpg', title: 'Master Farrier', category: 'activities' },
+  
+  { src: '/images/gallery/lifestyle-5.jpg', title: 'Horseback Riding', category: 'activities' },
+  
+  { src: '/images/gallery/lifestyle-6.jpg', title: 'Family Time', category: 'lifestyle' },
+  
+  
+  { src: '/images/gallery/tennis-aerial.jpg', title: 'Tennis Aerial', category: 'activities' },
+  
+  
+  
+  
+  { src: '/images/gallery/lifestyle-10.jpg', title: 'Morning Ritual', category: 'lifestyle' },
+  { src: '/images/gallery/construction-frame.jpg', title: 'Building Dreams', category: 'homes' },
+  
+  
+  
+  { src: '/images/gallery/DJI_20250326172126_0411_D.jpg', title: 'Beach Aerial', category: 'lifestyle' },
+  
+  
+  { src: '/images/gallery/brass-hardware.jpg', title: 'Brass Detail', category: 'homes' },
+  { src: '/images/gallery/coyol-sunset.jpg', title: 'Coyol Sunset', category: 'dining' },
+  
+  { src: '/images/gallery/jungle-waterfall.jpg', title: 'Jungle Waterfall', category: 'lifestyle' },
+  { src: '/images/gallery/montecito-style.jpg', title: 'Montecito Style Home', category: 'homes' },
+  { src: '/images/gallery/modern-country-living.jpg', title: 'Modern Country Living', category: 'homes' },
+  { src: '/images/gallery/gazebo-floating.jpg', title: 'Gazebo Floating Over the Water', category: 'lifestyle' },
+  { src: '/images/gallery/mar-azul-entrance.jpg', title: 'Mar Azul Entrance', category: 'lifestyle' },
+];
+---
+
+<Layout title="Gallery — Coyol Nosara">
+  <Navigation />
+  
+  <!-- Hero -->
+  <section class="relative h-[50vh] flex items-center justify-center bg-landrover-keswick">
+    <div class="absolute inset-0 bg-gradient-to-b from-black/50 to-black/30"></div>
+    <div class="relative text-center z-10 px-6">
+      <h1 class="text-5xl md:text-6xl font-serif text-white mb-4">Gallery</h1>
+      <p class="text-lg text-white/80 max-w-2xl mx-auto">
+        Life in Nosara, where jungle meets the sea
+      </p>
+    </div>
+  </section>
+  
+  <!-- Filter Tabs -->
+  <section class="bg-landrover-limestone py-6 sticky top-20 z-40">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-wrap gap-4 justify-center">
+        <button class="filter-btn active px-6 py-2 rounded-full text-sm font-medium tracking-wider uppercase transition-all" data-filter="all">
+          All
+        </button>
+        <button class="filter-btn px-6 py-2 rounded-full text-sm font-medium tracking-wider uppercase transition-all" data-filter="homes">
+          Homes
+        </button>
+        <button class="filter-btn px-6 py-2 rounded-full text-sm font-medium tracking-wider uppercase transition-all" data-filter="activities">
+          Activities
+        </button>
+        <button class="filter-btn px-6 py-2 rounded-full text-sm font-medium tracking-wider uppercase transition-all" data-filter="dining">
+          Dining
+        </button>
+        <button class="filter-btn px-6 py-2 rounded-full text-sm font-medium tracking-wider uppercase transition-all" data-filter="lifestyle">
+          Lifestyle
+        </button>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Gallery Grid -->
+  <section class="bg-white py-16">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="gallery-grid">
+        {images.map((img, i) => (
+          <div 
+            class="gallery-item group relative aspect-[4/3] overflow-hidden rounded-lg"
+            data-category={img.category}
+          >
+            <img 
+              src={img.src} 
+              alt={img.title}
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div class="absolute bottom-0 left-0 right-0 p-6">
+                <h3 class="text-white text-xl font-serif">{img.title}</h3>
+                <p class="text-white/70 text-sm uppercase tracking-wider">{img.category}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+  
+  
+  
+  <Footer />
+</Layout>
+
+<style>
+  .filter-btn {
+    background: transparent;
+    color: theme('colors.landrover.keswick');
+    border: 1px solid theme('colors.landrover.keswick');
+  }
+  
+  .filter-btn:hover, .filter-btn.active {
+    background: theme('colors.landrover.keswick');
+    color: white;
+  }
+  
+  .gallery-item.hidden {
+    display: none;
+  }
+</style>
+
+<script>
+  // Filter functionality only
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.gallery-item').forEach(item => {
+        if (filter === 'all' || item.dataset.category === filter) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>

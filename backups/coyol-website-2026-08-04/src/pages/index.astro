@@ -1,0 +1,319 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import RealEstate from '../components/RealEstate.astro';
+import FamilyBrands from '../components/FamilyBrands.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Coyol | A Way of Life in Nosara">
+  <Navigation />
+  
+  <main>
+    <!-- Hero - Full Screen Video Background with Parallax -->
+    <section id="home" class="relative h-[150vh] overflow-hidden">
+      <!-- Video background - fixed for parallax -->
+      <div class="fixed inset-0 -z-10">
+        <!-- Desktop video (landscape) -->
+        <video 
+          id="hero-video"
+          autoplay 
+          muted 
+          playsinline
+          class="hidden md:block w-full h-full object-cover transition-opacity duration-[2000ms] ease-in-out"
+        >
+          <source src="/videos/hero-desktop.mp4" type="video/mp4" />
+        </video>
+        <!-- Mobile video (portrait) -->
+        <video 
+          id="hero-video-mobile"
+          autoplay 
+          muted 
+          loop
+          playsinline
+          class="md:hidden w-full h-full object-cover"
+        >
+          <source src="/videos/hero-video.mp4" type="video/mp4" />
+        </video>
+        <div class="absolute inset-0 bg-black/30"></div>
+      </div>
+      
+      <!-- Floating text container -->
+      <div class="sticky top-0 h-screen flex flex-col items-center justify-center text-center px-8">
+        <h1 class="hero-title font-serif text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-white max-w-5xl leading-tight drop-shadow-2xl">
+          A way of life
+        </h1>
+        <p class="hero-subtitle text-white/90 text-lg md:text-xl mt-6 tracking-wide drop-shadow-lg">
+          Nosara, Costa Rica
+        </p>
+        
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 mt-10">
+          <a href="/homesites" class="px-8 py-4 bg-landrover-sand text-landrover-santorini font-medium tracking-wider text-sm uppercase hover:bg-white transition-all duration-300 rounded">
+            View Homesites
+          </a>
+          <a href="#family" class="px-8 py-4 border-2 border-white/70 text-white font-medium tracking-wider text-sm uppercase hover:bg-white/10 transition-all duration-300 rounded">
+            Our Restaurants
+          </a>
+        </div>
+        
+        <!-- Price hint -->
+        <p class="text-white/60 text-sm mt-6 tracking-wide">
+          Homesites from $180K · Turnkey homes from $1.2M
+        </p>
+      </div>
+      
+      <a href="#story" class="absolute bottom-12 left-1/2 -translate-x-1/2 z-10">
+        <div class="w-8 h-14 border-2 border-white/40 rounded-full flex items-start justify-center p-2">
+          <div class="w-1.5 h-3 bg-white/60 rounded-full animate-bounce"></div>
+        </div>
+      </a>
+    </section>
+
+    <!-- Opening Story -->
+    <section id="story" class="relative z-20 py-24 lg:py-40 bg-landrover-limestone shadow-2xl">
+      <div class="max-w-4xl mx-auto px-8 text-center">
+        <p class="scroll-fade font-serif text-2xl md:text-3xl lg:text-4xl text-landrover-santorini leading-relaxed" data-delay="0">
+          Shaped by decades of dining and hospitality, and grounded in years of bespoke home design and building, the Coyol Group brings a new way of living to the hills above Nosara.
+        </p>
+      </div>
+    </section>
+
+    <!-- Lifestyle Grid - REMOVED -->
+
+    <!-- Drone Aerial -->
+    <section class="relative h-screen">
+      <img 
+        src="/images/DJI_20250326172126_0411_D.jpg" 
+        alt="Aerial view of Nosara coastline"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-black/20"></div>
+      <div class="relative z-20 h-full flex items-center justify-center">
+        <div class="max-w-4xl text-center px-8">
+          <p class="scroll-fade font-serif text-3xl md:text-4xl lg:text-5xl text-white leading-tight" data-delay="100">
+            Set within Nicoya's Blue Zone, between forest and ocean
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Real Estate - Residences -->
+    <RealEstate />
+
+    <!-- More lifestyle -->
+    <section class="bg-landrover-moss">
+      <div class="grid md:grid-cols-3">
+        <div class="aspect-[4/5] relative overflow-hidden">
+          <img 
+            src="/images/architecture/casa-elle-interior.jpg" 
+            alt="Casa Elle - Double-height living room"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="aspect-[4/5] relative overflow-hidden">
+          <img 
+            src="/images/architecture/hacienda-pool-dusk.jpg" 
+            alt="Casa Elle - Pool at dusk"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="aspect-[4/5] relative overflow-hidden">
+          <img 
+            src="/images/architecture/living-room-fireplace.jpg" 
+            alt="Living room with fireplace and jungle views"
+            class="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Blue Zone -->
+    <section class="py-24 lg:py-40 bg-landrover-moss text-white">
+      <div class="max-w-5xl mx-auto px-8 text-center">
+        <p class="scroll-fade text-landrover-limestone/60 text-xs tracking-[0.3em] uppercase mb-6" data-delay="0">Nicoya Peninsula</p>
+        <h2 class="scroll-fade font-serif text-4xl md:text-5xl lg:text-6xl mb-8" data-delay="100">
+          One of Five Blue Zones
+        </h2>
+        <p class="scroll-fade text-landrover-limestone/70 text-lg md:text-xl leading-relaxed max-w-3xl mx-auto" data-delay="200">
+          The Nicoya Peninsula is one of only five Blue Zones on Earth, regions where 
+          people live measurably longer, healthier lives. Here, the pace slows, 
+          the air is pure, and the ocean heals.
+        </p>
+      </div>
+    </section>
+
+    <!-- Final Story -->
+    <section class="py-24 lg:py-40 bg-landrover-limestone">
+      <div class="max-w-4xl mx-auto px-8 text-center">
+        <p class="scroll-fade font-serif text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-landrover-santorini leading-relaxed" data-delay="0">
+          More than real estate, this is a continuation of a legacy. Quietly crafted, 
+          deeply human, and meant to be lived.
+        </p>
+      </div>
+    </section>
+
+    <!-- Find Your Place section removed - too much info -->
+      </div>
+    </section>
+
+    <!-- Family Brands - The Legacy -->
+    <FamilyBrands />
+
+    <!-- Final CTA -->
+    <section class="relative h-[70vh]">
+      <img 
+        src="/images/firepit-conversation.jpg" 
+        alt="Friends around the firepit"
+        class="absolute inset-0 w-full h-full object-contain sm:object-cover object-center bg-landrover-limestone"
+      />
+      <div class="absolute inset-0 bg-black/40"></div>
+      <div class="relative z-20 h-full flex items-center justify-center">
+        <div class="text-center px-8">
+          <p class="scroll-fade text-white/80 text-sm tracking-[0.2em] uppercase mb-4" data-delay="0">Moving to Nosara?</p>
+          <p class="scroll-fade font-serif text-3xl md:text-4xl lg:text-5xl text-white leading-tight mb-8" data-delay="100">
+            Begin the conversation
+          </p>
+          <a 
+            href="#contact" 
+            class="scroll-fade inline-block bg-white/10 backdrop-blur border border-white/40 text-white px-10 py-4 text-xs tracking-[0.2em] uppercase hover:bg-white hover:text-landrover-keswick transition-colors"
+            data-delay="200"
+          >
+            Get in Touch
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <Contact />
+  </main>
+  
+  <Footer />
+</Layout>
+
+<style>
+  .hero-slideshow .slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+  }
+  
+  .hero-slideshow .slide.active {
+    opacity: 1;
+  }
+  
+  .hero-title {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 1.2s ease-out 0.3s forwards;
+  }
+  
+  .hero-subtitle {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1.2s ease-out 0.6s forwards;
+  }
+  
+  @keyframes fadeUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<style is:global>
+  /* Hide default video play button/controls while allowing playback */
+  video::-webkit-media-controls-overlay-play-button {
+    display: none !important;
+  }
+  video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+    -webkit-appearance: none !important;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #E8E2D6;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #4A5D4A;
+  }
+  
+  .scroll-fade {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  
+  .scroll-fade.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  // Hero slideshow
+  const slides = document.querySelectorAll('.hero-slideshow .slide');
+  let currentSlide = 0;
+  
+  setInterval(() => {
+    slides[currentSlide].classList.remove('active');
+    currentSlide = (currentSlide + 1) % slides.length;
+    slides[currentSlide].classList.add('active');
+  }, 5000);
+  
+  // Scroll animations
+  const scrollFade = document.querySelectorAll('.scroll-fade');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target as HTMLElement;
+        const delay = parseInt(el.dataset.delay || '0');
+        
+        setTimeout(() => {
+          el.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+          el.classList.add('visible');
+        }, delay);
+        
+        observer.unobserve(el);
+      }
+    });
+  }, { threshold: 0.1 });
+  
+  scrollFade.forEach(el => observer.observe(el));
+
+  // Video fade loop
+  const heroVideo = document.getElementById('hero-video');
+  if (heroVideo) {
+    heroVideo.addEventListener('timeupdate', () => {
+      const timeLeft = heroVideo.duration - heroVideo.currentTime;
+      if (timeLeft < 2.5) {
+        heroVideo.style.opacity = '0';
+      }
+    });
+    
+    heroVideo.addEventListener('ended', () => {
+      setTimeout(() => {
+        heroVideo.currentTime = 0;
+        heroVideo.play();
+        setTimeout(() => {
+          heroVideo.style.opacity = '1';
+        }, 100);
+      }, 800);
+    });
+  }
+</script>

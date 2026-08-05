@@ -1,0 +1,364 @@
+---
+import CommandLayout from '../../layouts/CommandLayout.astro';
+import guestData from '../../data/guests-enriched.json';
+
+// Static data fallback
+const guests = guestData.guests || [];
+
+// Calculate from static data
+const hot = guests.filter((g: any) => g.lead_score >= 40);
+const targetMarkets = guests.filter((g: any) => ['US-East', 'US-West', 'US-Central', 'Canada', 'Europe', 'Corporate'].includes(g.region));
+const corporate = guests.filter((g: any) => g.is_corporate_email);
+
+let hotCount = hot.length;
+let totalCount = guests.length;
+
+// Top cities
+const cityMap: Record<string, number> = {};
+guests.forEach((g: any) => {
+  if (g.city && g.city !== 'Costa Rica' && g.region !== 'LatAm') {
+    cityMap[g.city] = (cityMap[g.city] || 0) + 1;
+  }
+});
+const topCities = Object.entries(cityMap)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 8);
+
+// Top sources
+const sourceMap: Record<string, number> = {};
+guests.forEach((g: any) => {
+  const src = g.source || 'Unknown';
+  sourceMap[src] = (sourceMap[src] || 0) + 1;
+});
+const topSources = Object.entries(sourceMap)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 4);
+
+// Top hot leads
+const topHot = hot.sort((a: any, b: any) => b.lead_score - a.lead_score).slice(0, 10);
+---
+
+<CommandLayout title="Dashboard" active="dashboard">
+  <div class="dashboard-page">
+    <header class="page-header">
+      <h1>Dashboard</h1>
+      <p class="source">CRM Data: <span id="totalGuests">{totalCount.toLocaleString()}</span> guests</p>
+    </header>
+
+    <!-- Stats Row -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value" id="hotCount">{hotCount.toLocaleString()}</div>
+        <div class="stat-label">Hot Leads</div>
+        <div class="stat-sub">Score 40+</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{targetMarkets.length.toLocaleString()}</div>
+        <div class="stat-label">Target Markets</div>
+        <div class="stat-sub">US, CA, EU</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{corporate.length.toLocaleString()}</div>
+        <div class="stat-label">Corporate</div>
+        <div class="stat-sub">Business emails</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="newToday">0</div>
+        <div class="stat-label">New Today</div>
+        <div class="stat-sub">Hot leads</div>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="grid">
+      <!-- Top Markets -->
+      <div class="card">
+        <h2>Top Markets</h2>
+        <div class="list">
+          {topCities.map(([city, count], i) => (
+            <div class="list-row">
+              <span class="rank">{i + 1}</span>
+              <span class="name">{city}</span>
+              <span class="value">{count.toLocaleString()}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Sources -->
+      <div class="card">
+        <h2>Lead Sources</h2>
+        <div class="sources">
+          {topSources.map(([source, count]) => {
+            const pct = Math.round((count / totalCount) * 100);
+            return (
+              <div class="source-card">
+                <div class="source-pct">{pct}%</div>
+                <div class="source-name">{source}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+
+    <!-- Hot Leads -->
+    <div class="card wide">
+      <h2>Top Hot Leads</h2>
+      <div class="leads-grid">
+        {topHot.map((lead: any, i: number) => (
+          <div class="lead-row">
+            <span class="rank">{i + 1}</span>
+            <div class="lead-info">
+              <span class="lead-name">{lead.name}</span>
+              <span class="lead-city">{lead.city || 'Unknown'}</span>
+            </div>
+            <span class="lead-score">{lead.lead_score}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</CommandLayout>
+
+<style>
+  .dashboard-page {
+    padding: 32px 40px;
+    max-width: 1200px;
+  }
+
+  .page-header {
+    margin-bottom: 32px;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #c4a67c;
+    margin-bottom: 4px;
+  }
+
+  .source {
+    font-size: 12px;
+    color: #666;
+  }
+
+  /* Stats Row - matches Analytics */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card {
+    background: #0a0c09;
+    border: 1px solid #1a1d17;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 28px;
+    font-weight: 300;
+    color: #c4a67c;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 6px;
+  }
+
+  .stat-sub {
+    font-size: 10px;
+    color: #555;
+    margin-top: 4px;
+  }
+
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  /* Cards - matches Analytics */
+  .card {
+    background: #0a0c09;
+    border: 1px solid #1a1d17;
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .card.wide {
+    grid-column: span 2;
+  }
+
+  .card h2 {
+    font-size: 11px;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+
+  /* List rows - matches Analytics */
+  .list-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #1a1d17;
+  }
+
+  .list-row:last-child {
+    border-bottom: none;
+  }
+
+  .rank {
+    width: 24px;
+    font-size: 11px;
+    color: #666;
+    text-align: center;
+  }
+
+  .name {
+    flex: 1;
+    font-size: 13px;
+    color: #aaa;
+  }
+
+  .value {
+    font-size: 13px;
+    font-weight: 500;
+    color: #c4a67c;
+  }
+
+  /* Sources - matches Analytics */
+  .sources {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 12px;
+  }
+
+  .source-card {
+    background: #3d4f3d26;
+    border: 1px solid #1a1d17;
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .source-pct {
+    font-size: 22px;
+    font-weight: 500;
+    color: #c4a67c;
+  }
+
+  .source-name {
+    font-size: 10px;
+    color: #888;
+    margin-top: 4px;
+    text-transform: capitalize;
+  }
+
+  /* Leads grid */
+  .leads-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .lead-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: #0f1210;
+    border: 1px solid #1a1d17;
+    border-radius: 8px;
+  }
+
+  .lead-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .lead-name {
+    font-size: 13px;
+    color: #e8e6e1;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .lead-city {
+    font-size: 11px;
+    color: #666;
+  }
+
+  .lead-score {
+    background: linear-gradient(135deg, #3d4f3d, #4a5d4a);
+    color: #e8e6e1;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .dashboard-page {
+      padding: 20px;
+    }
+    .stats-row {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .grid {
+      grid-template-columns: 1fr;
+    }
+    .card.wide {
+      grid-column: span 1;
+    }
+    .leads-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  // Fetch live counts from API (uses service key server-side)
+  async function updateLiveCounts() {
+    try {
+      const res = await fetch('/api/crm-stats');
+      if (res.ok) {
+        const data = await res.json();
+        
+        const hotEl = document.getElementById('hotCount');
+        if (hotEl) hotEl.textContent = data.hotLeads.toLocaleString();
+        
+        const todayEl = document.getElementById('newToday');
+        if (todayEl) todayEl.textContent = data.newToday.toLocaleString();
+        
+        const totalEl = document.getElementById('totalGuests');
+        if (totalEl) totalEl.textContent = data.totalGuests.toLocaleString();
+        
+        const targetEl = document.getElementById('targetMarkets');
+        if (targetEl) targetEl.textContent = data.targetMarkets.toLocaleString();
+        
+        const corpEl = document.getElementById('corpEmails');
+        if (corpEl) corpEl.textContent = data.corporateEmails.toLocaleString();
+      }
+    } catch (e) {
+      console.log('Live count fetch failed, using cached data');
+    }
+  }
+  
+  updateLiveCounts();
+</script>

@@ -1,0 +1,689 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
+---
+
+<Layout hideFloatingButtons={true} title="Gift Cards | La Luna Admin" appleTouchIcon="/laluna-apple-touch-icon.png">
+  <div class="admin">
+    <LaLunaAdminSidebar active="gifts" />
+
+    <div class="gifts-content">
+      <header class="gifts-header">
+        <h1>Gift Cards</h1>
+        <div class="header-stats">
+          <div class="stat active">
+            <span class="stat-value" id="pendingCount">0</span>
+            <span class="stat-label">Active</span>
+          </div>
+          <div class="stat redeemed">
+            <span class="stat-value" id="redeemedCount">0</span>
+            <span class="stat-label">Redeemed</span>
+          </div>
+          <div class="stat outstanding">
+            <span class="stat-value" id="totalValue">$0</span>
+            <span class="stat-label">Outstanding</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Search Bar -->
+      <div class="search-bar">
+        <input type="text" id="giftSearch" placeholder="Search by code or name..." oninput="filterGiftCards()" />
+      </div>
+
+      <div class="alerts-section" id="alertsSection"></div>
+
+      <div class="cards-grid" id="giftsList">
+        <div class="loading">Loading gift cards...</div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style is:global>
+  .admin {
+    display: flex;
+    min-height: 100vh;
+    background: #1a1a1a;
+    color: #fff;
+  }
+
+  .gifts-content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+  }
+
+  .search-bar {
+    margin-bottom: 1.5rem;
+  }
+
+  .search-bar input {
+    width: 100%;
+    max-width: 400px;
+    padding: 0.75rem 1rem;
+    background: #222;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+  }
+
+  .search-bar input:focus {
+    outline: none;
+    border-color: #C4A67C;
+  }
+
+  .search-bar input::placeholder {
+    color: #666;
+  }
+
+  .gifts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .gifts-header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #C4A67C;
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .stat {
+    text-align: center;
+    padding: 0.75rem 1.5rem;
+    background: #222;
+    border-radius: 8px;
+  }
+
+  .stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: #888;
+    text-transform: uppercase;
+  }
+
+  .stat.active .stat-value { color: #C4A67C; }
+  .stat.redeemed .stat-value { color: #10b981; }
+  .stat.outstanding .stat-value { color: #fff; }
+
+  .alerts-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .alert-card {
+    background: linear-gradient(135deg, #C4A67C22, #C4A67C11);
+    border: 1px solid #C4A67C;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .alert-icon { font-size: 1.5rem; }
+  .alert-content { flex: 1; }
+  .alert-title { font-weight: 600; color: #C4A67C; }
+  .alert-details { font-size: 0.875rem; color: #aaa; }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2rem;
+  }
+
+  .loading {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+  }
+
+  /* EXACT card styles from purchase page */
+  .card-visual {
+    background: linear-gradient(145deg, #A65D3F 0%, #8B4532 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    aspect-ratio: 1.6;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .card-visual:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+  }
+
+  .card-visual.classic {
+    background: linear-gradient(145deg, #A65D3F 0%, #8B4532 100%);
+  }
+
+  .card-visual.silver {
+    background: linear-gradient(145deg, #8E9196 0%, #B8BCC2 30%, #6B7075 70%, #A8ACB2 100%);
+  }
+
+  .card-visual.gold {
+    background: linear-gradient(145deg, #C4A67C 0%, #D4B896 30%, #A68A5B 70%, #E5CFA9 100%);
+  }
+
+  .card-visual.platinum {
+    background: linear-gradient(145deg, #1A1F16 0%, #3D4F3D 30%, #1A1F16 70%, #4A5D4A 100%);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+
+  .card-visual.used {
+    opacity: 0.5;
+    filter: grayscale(40%);
+  }
+
+  .card-visual.used::after {
+    content: 'REDEEMED';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 4px;
+  }
+
+  .card-center {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-logo-big {
+    height: 100px;
+    width: auto;
+    object-fit: contain;
+    opacity: 0.95;
+    filter: brightness(0) invert(1) drop-shadow(1px 1px 0 rgba(0,0,0,0.3)) drop-shadow(-1px -1px 0 rgba(255,255,255,0.1));
+  }
+
+  /* Platinum gold logo */
+  .card-visual.platinum .card-logo-big {
+    filter: brightness(0) saturate(100%) invert(72%) sepia(29%) saturate(456%) hue-rotate(357deg) brightness(91%) contrast(89%) drop-shadow(1px 1px 0 rgba(0,0,0,0.4)) drop-shadow(-1px -1px 0 rgba(196,166,124,0.3));
+  }
+
+  .card-owner {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 2rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.95);
+    text-shadow: 
+      1px 1px 1px rgba(0,0,0,0.4),
+      -1px -1px 1px rgba(255,255,255,0.15),
+      0 2px 3px rgba(0,0,0,0.2);
+  }
+  
+  .card-code {
+    position: absolute;
+    bottom: 1rem;
+    left: 2rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.6);
+    font-family: monospace;
+  }
+
+  .card-left {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Platinum gold text - all elements */
+  .card-visual.platinum .card-owner,
+  .card-visual.platinum .card-amount,
+  .card-visual.platinum .card-tier,
+  .card-visual.platinum .card-text {
+    color: #C4A67C;
+    text-shadow: 
+      1px 1px 2px rgba(0,0,0,0.5),
+      -1px -1px 1px rgba(196,166,124,0.3),
+      0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .card-bottom {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding-bottom: 2rem;
+  }
+
+  .card-amount {
+    position: absolute;
+    top: 50%;
+    left: 2rem;
+    transform: translateY(-50%);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #F5F3EF;
+    text-shadow: 
+      2px 2px 2px rgba(0,0,0,0.4),
+      -1px -1px 1px rgba(255,255,255,0.2),
+      0 3px 6px rgba(0,0,0,0.3);
+    letter-spacing: 2px;
+  }
+
+  .card-right {
+    text-align: right;
+  }
+
+  .card-text {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.8);
+    text-shadow: 
+      1px 1px 1px rgba(0,0,0,0.3),
+      -1px -1px 0 rgba(255,255,255,0.1);
+  }
+
+  .card-tier {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.95);
+    margin-top: 0.15rem;
+    text-shadow: 
+      1px 1px 1px rgba(0,0,0,0.4),
+      -1px -1px 1px rgba(255,255,255,0.15);
+  }
+
+  /* Use button */
+  .card-action {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.4rem 0.8rem;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+
+  .card-action:hover {
+    background: rgba(255,255,255,0.2);
+  }
+
+  /* Modal styles */
+  .apply-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .apply-modal-content {
+    background: #222;
+    border-radius: 16px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 450px;
+  }
+
+  .apply-modal-content h2 {
+    color: #C4A67C;
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-subtitle {
+    color: #888;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #aaa;
+    font-size: 0.875rem;
+  }
+
+  .form-group select,
+  .form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    background: #333;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+  }
+
+  .form-group small {
+    color: #666;
+    font-size: 0.75rem;
+  }
+
+  .calc-result {
+    background: #333;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    min-height: 60px;
+  }
+
+  .calc-result p { margin: 0.25rem 0; color: #aaa; }
+  .calc-result .text-green { color: #10b981; }
+
+  .modal-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .btn-cancel {
+    flex: 1;
+    padding: 0.75rem;
+    background: #444;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .btn-apply {
+    flex: 1;
+    padding: 0.75rem;
+    background: #C4A67C;
+    color: #111;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .btn-apply:hover {
+    background: #b8956e;
+  }
+</style>
+
+<script>
+  let giftCards = [];
+  let reservations = [];
+  let searchQuery = '';
+
+  window.filterGiftCards = function() {
+    searchQuery = document.getElementById('giftSearch').value.toLowerCase().trim();
+    renderGiftCards();
+  };
+
+  async function loadData() {
+    try {
+      const giftsRes = await fetch('/api/gift-cards');
+      giftCards = await giftsRes.json();
+      if (!Array.isArray(giftCards)) giftCards = [];
+
+      const resRes = await fetch('/api/laluna-reservations?today=true');
+      reservations = await resRes.json();
+      if (!Array.isArray(reservations)) reservations = [];
+
+      renderStats();
+      checkMatches();
+      renderGiftCards();
+    } catch (e) {
+      console.error('Error:', e);
+      document.getElementById('giftsList').innerHTML = '<div class="loading">Error loading</div>';
+    }
+  }
+
+  function renderStats() {
+    const pending = giftCards.filter(g => g.status !== 'redeemed');
+    const redeemed = giftCards.filter(g => g.status === 'redeemed');
+    const total = pending.reduce((sum, g) => {
+      return sum + (g.remaining_balance ?? g.amount);
+    }, 0);
+
+    document.getElementById('pendingCount').textContent = pending.length;
+    document.getElementById('redeemedCount').textContent = redeemed.length;
+    document.getElementById('totalValue').textContent = `$${total}`;
+  }
+
+  function checkMatches() {
+    const alertsSection = document.getElementById('alertsSection');
+    alertsSection.innerHTML = '';
+
+    giftCards.filter(g => g.status !== 'redeemed').forEach(gift => {
+      const name = (gift.recipient_name || '').toLowerCase();
+      const email = (gift.recipient_email || '').toLowerCase();
+      const balance = gift.remaining_balance ?? gift.amount;
+      
+      reservations.forEach(res => {
+        const rName = (res.guest_name || res.name || '').toLowerCase();
+        const rEmail = (res.guest_email || res.email || '').toLowerCase();
+        
+        if ((name && rName && (name.includes(rName) || rName.includes(name))) ||
+            (email && rEmail && email === rEmail)) {
+          alertsSection.innerHTML += `
+            <div class="alert-card">
+              <div class="alert-icon">🎁</div>
+              <div class="alert-content">
+                <div class="alert-title">Reservation Match!</div>
+                <div class="alert-details">
+                  <strong>${res.guest_name || res.name}</strong> at <strong>${res.time}</strong> has a <strong>$${balance}</strong> gift card.
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      });
+    });
+  }
+
+  function getTier(amount) {
+    if (amount >= 200) return { tier: 'platinum', label: 'Platinum' };
+    if (amount >= 150) return { tier: 'gold', label: 'Gold' };
+    if (amount >= 100) return { tier: 'silver', label: 'Silver' };
+    return { tier: 'classic', label: 'Classic' };
+  }
+
+  function renderGiftCards() {
+    const list = document.getElementById('giftsList');
+    
+    if (!giftCards.length) {
+      list.innerHTML = '<div class="loading">No gift cards yet</div>';
+      return;
+    }
+
+    // Filter by search query
+    let filtered = giftCards;
+    if (searchQuery) {
+      filtered = giftCards.filter(g => {
+        const code = (g.code || '').toLowerCase();
+        const name = (g.recipient_name || '').toLowerCase();
+        const email = (g.recipient_email || '').toLowerCase();
+        return code.includes(searchQuery) || name.includes(searchQuery) || email.includes(searchQuery);
+      });
+    }
+
+    if (!filtered.length) {
+      list.innerHTML = '<div class="loading">No gift cards match your search</div>';
+      return;
+    }
+
+    list.innerHTML = filtered.map(g => {
+      const balance = g.remaining_balance ?? g.amount;
+      const isUsed = g.status === 'redeemed' || balance <= 0;
+      const { tier, label } = getTier(g.amount);
+      const ownerName = (g.recipient_name || 'Guest').toUpperCase();
+      
+      return `
+        <div class="card-visual ${tier} ${isUsed ? 'used' : ''}" data-code="${g.code}">
+          <div class="card-center">
+            <img src="/images/logos/laluna-icon-transparent.png" class="card-logo-big" alt="La Luna" />
+          </div>
+          <div class="card-bottom">
+            <div class="card-left">
+              <div class="card-amount">$${balance}</div>
+            </div>
+            <div class="card-right">
+              <div class="card-text">GIFT CARD</div>
+              <div class="card-tier">${label}</div>
+            </div>
+          </div>
+          <div class="card-owner">${ownerName}</div>
+          <div class="card-code">${g.code}</div>
+          ${!isUsed ? `<button class="card-action" onclick="applyToReservation('${g.code}', ${balance}, '${(g.recipient_name || '').replace(/'/g, "\\'")}')">Use</button>` : ''}
+        </div>
+      `;
+    }).join('');
+  }
+
+  window.applyToReservation = function(code, amount, name) {
+    const modal = document.createElement('div');
+    modal.className = 'apply-modal';
+    modal.innerHTML = `
+      <div class="apply-modal-content">
+        <h2>Apply Gift Card</h2>
+        <p class="modal-subtitle"><strong>${code}</strong> — $${amount} available</p>
+        
+        <div class="form-group">
+          <label>Reservation</label>
+          <select id="resSelect" onchange="toggleWalkinName()">
+            <option value="">Select...</option>
+            ${reservations.map(r => `<option value="${r.id}" data-name="${r.guest_name || r.name}">${r.time} — ${r.guest_name || r.name}</option>`).join('')}
+            <option value="walkin">Walk-in</option>
+          </select>
+        </div>
+        
+        <div class="form-group" id="walkinNameGroup" style="display:none">
+          <label>Guest Name (optional)</label>
+          <input type="text" id="walkinName" placeholder="Enter name..." />
+        </div>
+        
+        <div class="form-group">
+          <label>Bill Total ($)</label>
+          <input type="number" id="billAmount" min="0" step="0.01" />
+        </div>
+        
+        <div class="form-group">
+          <label>Apply Amount ($)</label>
+          <input type="number" id="applyAmount" value="${amount}" min="0" max="${amount}" step="0.01" />
+        </div>
+        
+        <div class="calc-result" id="calcResult"></div>
+        
+        <div class="modal-buttons">
+          <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+          <button class="btn-apply" onclick="confirmApply('${code}', ${amount})">Apply</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    
+    document.getElementById('billAmount').addEventListener('input', updateCalc);
+    document.getElementById('applyAmount').addEventListener('input', updateCalc);
+    
+    function updateCalc() {
+      const bill = parseFloat(document.getElementById('billAmount').value) || 0;
+      let apply = parseFloat(document.getElementById('applyAmount').value) || 0;
+      
+      // Auto-adjust: can't apply more than the bill
+      const actualApply = Math.min(apply, bill, amount);
+      
+      let html = '';
+      if (bill > 0) {
+        const due = bill - actualApply;
+        html = due > 0 
+          ? `<p>Customer pays: <strong>$${due.toFixed(2)}</strong></p>`
+          : `<p class="text-green">Bill fully covered!</p>`;
+        
+        const rem = amount - actualApply;
+        html += rem > 0 
+          ? `<p class="text-green">Remaining credit: <strong>$${rem.toFixed(2)}</strong></p>`
+          : `<p>Card fully used</p>`;
+        
+        // Show suggestion if apply > bill
+        if (apply > bill) {
+          html += `<p style="color:#C4A67C;font-size:0.85rem;">💡 Only $${bill.toFixed(2)} needed for this bill</p>`;
+        }
+      }
+      document.getElementById('calcResult').innerHTML = html;
+    }
+  };
+
+  window.closeModal = () => document.querySelector('.apply-modal')?.remove();
+
+  window.toggleWalkinName = function() {
+    const sel = document.getElementById('resSelect');
+    const group = document.getElementById('walkinNameGroup');
+    group.style.display = sel.value === 'walkin' ? 'block' : 'none';
+  };
+
+  window.confirmApply = async function(code, orig) {
+    const sel = document.getElementById('resSelect');
+    let apply = parseFloat(document.getElementById('applyAmount').value) || 0;
+    const bill = parseFloat(document.getElementById('billAmount').value) || 0;
+    
+    if (!sel.value || apply <= 0 || apply > orig) {
+      alert('Invalid selection');
+      return;
+    }
+    
+    // Auto-adjust: don't apply more than the bill
+    const actualApply = Math.min(apply, bill);
+    const rem = Math.round(orig - actualApply); // Round to integer for DB
+    let name = sel.options[sel.selectedIndex].dataset?.name;
+    if (sel.value === 'walkin') {
+      const walkinName = document.getElementById('walkinName').value.trim();
+      name = walkinName || 'Walk-in';
+    }
+    
+    await fetch('/api/gift-cards', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        code,
+        status: rem <= 0 ? 'redeemed' : 'partial',
+        remaining_balance: rem,
+        redeemed_at: rem <= 0 ? new Date().toISOString() : null,
+        notes: `$${actualApply} applied to ${name} (bill: $${bill})${rem > 0 ? ` — $${rem} remaining` : ''}`
+      }),
+    });
+    
+    closeModal();
+    loadData();
+  };
+
+  loadData();
+  setInterval(loadData, 30000);
+</script>

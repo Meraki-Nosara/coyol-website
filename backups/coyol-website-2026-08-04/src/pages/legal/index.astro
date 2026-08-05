@@ -1,0 +1,219 @@
+---
+// Read cases from the projects folder
+import fs from 'fs';
+import path from 'path';
+
+let allCases: any[] = [];
+try {
+  const casesPath = '/Users/Coyol/.openclaw/workspace/projects/mar-azul-legal/cases.json';
+  const data = fs.readFileSync(casesPath, 'utf-8');
+  allCases = JSON.parse(data).cases || [];
+} catch (e) {
+  console.error('Failed to load cases:', e);
+}
+
+function getStatusColor(status: string): string {
+  if (status.includes('RESUELTO') || status.includes('CON LUGAR') || status.includes('WON')) return '#22c55e';
+  if (status.includes('AUDIENCIA') || status.includes('PENDIENTE') || status.includes('FILED')) return '#f59e0b';
+  if (status.includes('DEFENSA')) return '#60a5fa';
+  return '#888';
+}
+
+const won = allCases.filter(c => c.status.includes('RESUELTO') || c.status.includes('CON LUGAR')).length;
+const active = allCases.length - won;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mar Azul Legal</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      min-height: 100vh;
+    }
+    .header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      padding: 20px 24px;
+      border-bottom: 1px solid #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header h1 { font-size: 18px; font-weight: 600; }
+    .header-sub { font-size: 11px; color: #888; margin-top: 2px; }
+    .back-link { color: #60a5fa; text-decoration: none; font-size: 12px; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .summary-card {
+      background: #151515;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .summary-num { font-size: 28px; font-weight: 700; }
+    .summary-num.won { color: #22c55e; }
+    .summary-num.pending { color: #f59e0b; }
+    .summary-num.total { color: #60a5fa; }
+    .summary-label { font-size: 11px; color: #888; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+    .section-title {
+      font-size: 12px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #333;
+    }
+    .cases { display: flex; flex-direction: column; gap: 12px; }
+    .case-card {
+      background: #151515;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .case-card:hover { border-color: #555; }
+    .case-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .case-id { font-family: monospace; font-size: 13px; color: #60a5fa; }
+    .case-status {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .case-type { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+    .case-court { font-size: 11px; color: #888; margin-bottom: 10px; }
+    .case-meta { display: flex; gap: 16px; font-size: 11px; color: #666; flex-wrap: wrap; }
+    .case-meta span { display: flex; align-items: center; gap: 4px; }
+    .case-details {
+      display: none;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid #333;
+      font-size: 12px;
+    }
+    .case-card.expanded .case-details { display: block; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .detail-item { padding: 8px 0; border-bottom: 1px solid #222; }
+    .detail-label { color: #666; font-size: 10px; text-transform: uppercase; }
+    .detail-value { color: #ccc; margin-top: 2px; }
+    .notes-box {
+      background: #1a1a1a;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-top: 12px;
+      color: #aaa;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+    .next-action {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-top: 12px;
+    }
+    .next-label { font-size: 9px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+    .next-text { font-size: 12px; color: #f59e0b; font-weight: 500; margin-top: 2px; }
+    @media (max-width: 600px) {
+      .summary { grid-template-columns: 1fr; }
+      .detail-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div>
+      <h1>Mar Azul Legal</h1>
+      <div class="header-sub">Case Dashboard</div>
+    </div>
+    <a href="/command" class="back-link">Back to Command</a>
+  </div>
+
+  <div class="container">
+    <div class="summary">
+      <div class="summary-card">
+        <div class="summary-num won">{won}</div>
+        <div class="summary-label">Won</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-num pending">{active}</div>
+        <div class="summary-label">Active</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-num total">{allCases.length}</div>
+        <div class="summary-label">Total</div>
+      </div>
+    </div>
+
+    <div class="section-title">Cases</div>
+    
+    <div class="cases">
+      {allCases.map(c => (
+        <div class="case-card" onclick="this.classList.toggle('expanded')">
+          <div class="case-header">
+            <div class="case-id">{c.id}</div>
+            <div class="case-status" style={`background: ${getStatusColor(c.status)}22; color: ${getStatusColor(c.status)};`}>
+              {c.status.length > 25 ? c.status.substring(0, 25) + '...' : c.status}
+            </div>
+          </div>
+          <div class="case-type">{c.type}</div>
+          <div class="case-court">{c.court?.substring(0, 60)}{c.court?.length > 60 ? '...' : ''}</div>
+          <div class="case-meta">
+            <span>Filed: {c.filed}</span>
+            {c.plaintiff_lawyer?.firm && <span>vs {c.plaintiff_lawyer.firm}</span>}
+          </div>
+          
+          <div class="case-details">
+            <div class="detail-grid">
+              {c.judge && (
+                <div class="detail-item">
+                  <div class="detail-label">Judge</div>
+                  <div class="detail-value">{c.judge}</div>
+                </div>
+              )}
+              {c.defendant && (
+                <div class="detail-item">
+                  <div class="detail-label">Defendant</div>
+                  <div class="detail-value">{c.defendant}</div>
+                </div>
+              )}
+              {c.plaintiffs && (
+                <div class="detail-item">
+                  <div class="detail-label">Plaintiffs</div>
+                  <div class="detail-value">{c.plaintiffs.join(', ')}</div>
+                </div>
+              )}
+            </div>
+            
+            {c.audiencia_cautelar && (
+              <div class="next-action">
+                <div class="next-label">Next Action</div>
+                <div class="next-text">{c.audiencia_cautelar.type} - {c.audiencia_cautelar.date}</div>
+              </div>
+            )}
+            
+            {c.notes && <div class="notes-box">{c.notes}</div>}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+</body>
+</html>

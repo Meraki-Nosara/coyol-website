@@ -1,0 +1,578 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export function getStaticPaths() {
+  return [
+    { params: { id: 'casa-elle' } },
+    { params: { id: 'casa-nest' } },
+    { params: { id: 'casa-lefki' } },
+    { params: { id: 'casa-umi' } },
+    { params: { id: 'casa-cacao' } },
+    { params: { id: 'casa-luz' } },
+    { params: { id: 'casa-perch' } },
+    { params: { id: 'coyol-xl' } },
+    { params: { id: 'modern-barn' } },
+    { params: { id: 'casa-nispero' } },
+    { params: { id: 'casa-eclipse' } },
+  ];
+}
+
+const { id } = Astro.params;
+
+const properties: Record<string, any> = {
+  'casa-elle': {
+    name: 'Casa Elle',
+    tagline: 'Classic hacienda architecture with clay tile roof',
+    location: 'Lot 14, Mar Azul',
+    status: 'Completed',
+    price: 4800000,
+    image: '/images/properties/casa-elle.jpg',
+    features: ['Hacienda Style', 'Clay Tile Roof', 'Completed', 'Covered Terraces']
+  },
+  'casa-nest': {
+    name: 'Casa Nest',
+    tagline: 'A dramatic cantilevered design floating above the landscape',
+    location: 'Lot 28, Mar Azul',
+    status: 'Design',
+    price: 920000,
+    image: '/images/properties/casa-nest.jpg',
+    features: ['Cantilevered Design', 'Infinity Pool', 'Ocean Views', 'Fire Pit Deck']
+  },
+  'casa-lefki': {
+    name: 'Casa Lefki',
+    tagline: 'Modern glass pavilion among mature Guanacaste trees',
+    location: 'Lot 25, Mar Azul',
+    status: 'Design',
+    price: 2300000,
+    image: '/images/properties/casa-lefki.jpg',
+    features: ['Modern Glass', 'Guanacaste Trees', 'Pool Terrace', 'Jungle Canopy Views']
+  },
+  'casa-umi': {
+    name: 'Casa Umi',
+    tagline: 'Bold contemporary design in harmony with the forest',
+    location: 'Lot 34, Mar Azul',
+    status: 'Design',
+    price: 5500000,
+    image: '/images/properties/casa-umi.jpg',
+    features: ['Black Charred Wood', 'Gabion Stone Walls', 'Forest Setting', 'Contemporary Design']
+  },
+  'casa-cacao': {
+    name: 'Casa Cacao',
+    tagline: 'Modern farmhouse with sweeping mountain views',
+    location: 'Lot 18, Mar Azul',
+    status: 'Design',
+    price: 2300000,
+    image: '/images/properties/casa-cacao.jpg',
+    features: ['Stone & Wood', 'Mountain Views', 'Modern Farmhouse', 'Open Floor Plan']
+  },
+  'casa-luz': {
+    name: 'Casa Luz',
+    tagline: 'Connected pavilions with jungle courtyards',
+    location: 'Lot 21, Mar Azul',
+    status: 'Design',
+    price: 2400000,
+    image: '/images/properties/casa-luz.jpg',
+    features: ['Pavilion Style', 'Stone Details', 'Jungle Compound', 'Indoor-Outdoor Living']
+  },
+  'casa-perch': {
+    name: 'Casa Perch',
+    tagline: 'Compact modern living with panoramic views',
+    location: 'Lot 26, Mar Azul',
+    status: 'Design',
+    price: 960000,
+    image: '/images/properties/casa-perch.jpg',
+    features: ['Modern Design', 'Compact Living', 'Ocean Views', 'Efficient Layout']
+  },
+  'coyol-xl': {
+    name: 'Coyol XL',
+    tagline: 'Expansive luxury residence with infinity pool',
+    location: 'Lot 20, Mar Azul',
+    status: 'Sold & Built',
+    image: '/images/properties/coyol-xl.jpg',
+    features: ['Infinity Pool', 'Mountain Views', 'Completed', 'Indoor-Outdoor Living']
+  },
+  'modern-barn': {
+    name: 'Modern Barn',
+    tagline: 'Contemporary barn architecture with charred wood cladding',
+    location: 'Lot 32, Mar Azul',
+    status: 'Sold & Built',
+    image: '/images/properties/modern-barn.jpg',
+    features: ['Black Wood', 'Mountain Views', 'Completed', 'Bold Design']
+  },
+  'casa-nispero': {
+    name: 'Casa Níspero',
+    tagline: 'Stone walls and black metal roofing create a striking farmhouse',
+    location: 'Lot 2, Mar Azul',
+    status: 'Under Construction',
+    price: 3900000,
+    image: '/images/properties/casa-nispero.jpg',
+    features: ['Stone Walls', 'Fire Pit', 'Reflecting Pool', 'Mountain Views']
+  },
+  'casa-eclipse': {
+    name: 'Casa Eclipse',
+    tagline: 'Twin pavilions with infinity pool and mountain views',
+    location: 'Lot 12, Mar Azul',
+    status: 'Sold & Built',
+    image: '/images/properties/casa-eclipse.jpg',
+    features: ['Twin Pavilions', 'Infinity Pool', 'Black Metal Roof', 'Garden Level']
+  }
+};
+
+const property = properties[id as string];
+---
+
+<Layout title={`${property.name} | Coyol Real Estate`}>
+  <section class="hero">
+    <img src={property.image} alt={property.name} />
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <span class="status">{property.status}</span>
+      <h1>{property.name}</h1>
+      <p class="tagline">{property.tagline}</p>
+      <p class="location">{property.location}</p>
+    </div>
+  </section>
+
+  {/* Features section hidden - keeping hero + investment only
+  <section class="content">
+    ...
+  </section>
+  */}
+
+  {/* Investment/financing section hidden while rethinking prices
+  {property.price && (
+    <section class="financing-section">
+      <div class="container">
+        <h2>Investment Overview</h2>
+        <div class="price-display">
+          <span class="price-label">Price</span>
+          <span class="price-value">${property.price.toLocaleString()}</span>
+        </div>
+        
+        <div class="financing-card">
+          <h3>Developer Financing Available</h3>
+          <p class="financing-subtitle">No bank required • Close in 30 days • 8% interest</p>
+          
+          <div class="financing-breakdown">
+            <div class="financing-row">
+              <span>Down Payment (50%)</span>
+              <span class="amount">${(property.price * 0.5).toLocaleString()}</span>
+            </div>
+            <div class="financing-row">
+              <span>Financed Amount</span>
+              <span class="amount">${(property.price * 0.5).toLocaleString()}</span>
+            </div>
+            <div class="financing-row highlight">
+              <span>Monthly Payment (48 mo)</span>
+              <span class="amount monthly">${Math.round((property.price * 0.5) * (0.08/12) * Math.pow(1 + 0.08/12, 48) / (Math.pow(1 + 0.08/12, 48) - 1)).toLocaleString()}/mo</span>
+            </div>
+          </div>
+          
+          <div class="financing-note">
+            <p>Better than bank rates • No CR residency required • Property as collateral</p>
+          </div>
+          
+          <a href="/financing" class="financing-link">View All Financing Options →</a>
+        </div>
+      </div>
+    </section>
+  )}
+  */}
+
+  {property.floorplan && (
+    <section class="floorplan-section">
+      <div class="container">
+        <h2>Floor Plan</h2>
+        <img src={property.floorplan} alt={`${property.name} Floor Plan`} class="floorplan-image" />
+      </div>
+    </section>
+  )}
+
+  <section class="back-section">
+    <a href="/homesites" class="back-link">← Back to All Properties</a>
+  </section>
+</Layout>
+
+<style>
+  .hero {
+    position: relative;
+    height: 60vh;
+    min-height: 400px;
+    overflow: hidden;
+  }
+
+  .hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(26,31,22,0.8) 0%, rgba(26,31,22,0.2) 50%);
+  }
+
+  .hero-content {
+    position: absolute;
+    bottom: 48px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #F5F3EF;
+    padding: 0 24px;
+  }
+
+  .status {
+    display: inline-block;
+    background: #C4A67C;
+    color: #1A1F16;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+
+  .hero-content h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(36px, 6vw, 60px);
+    font-weight: 400;
+    margin: 0 0 12px 0;
+  }
+
+  .tagline {
+    font-size: 18px;
+    opacity: 0.9;
+    margin: 0 0 8px 0;
+  }
+
+  .location {
+    font-size: 14px;
+    opacity: 0.7;
+  }
+
+  .content {
+    padding: 100px 24px;
+    background: #1A1F16;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .features-showcase {
+    text-align: center;
+  }
+
+  .section-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #C4A67C;
+    margin-bottom: 16px;
+  }
+
+  .features-header h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 400;
+    color: #F5F3EF;
+    margin: 0 0 16px 0;
+  }
+
+  .features-intro {
+    font-size: 18px;
+    color: rgba(245, 243, 239, 0.7);
+    max-width: 600px;
+    margin: 0 auto 60px auto;
+    line-height: 1.6;
+  }
+
+  .features-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-bottom: 60px;
+    text-align: left;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 20px 24px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(196, 166, 124, 0.15);
+    transition: all 0.3s ease;
+  }
+
+  .feature-item:hover {
+    background: rgba(196, 166, 124, 0.08);
+    border-color: rgba(196, 166, 124, 0.3);
+  }
+
+  .feature-number {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 14px;
+    color: #C4A67C;
+    opacity: 0.6;
+  }
+
+  .feature-text {
+    font-size: 15px;
+    color: #F5F3EF;
+    letter-spacing: 0.5px;
+  }
+
+  .inquiry-minimal {
+    padding-top: 40px;
+    border-top: 1px solid rgba(196, 166, 124, 0.15);
+  }
+
+  .inquiry-minimal p {
+    font-size: 14px;
+    color: rgba(245, 243, 239, 0.5);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 0 0 24px 0;
+  }
+
+  .cta-button-dark {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: transparent;
+    border: 1px solid #C4A67C;
+    color: #C4A67C;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .cta-button-dark:hover {
+    background: #C4A67C;
+    color: #1A1F16;
+  }
+
+  .cta-button-dark svg {
+    transition: transform 0.3s ease;
+  }
+
+  .cta-button-dark:hover svg {
+    transform: translateX(4px);
+  }
+
+  /* Legacy styles kept for compatibility */
+  .inquiry p.legacy {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.7;
+    margin: 0 0 24px 0;
+  }
+
+  .cta-button {
+    display: inline-block;
+    background: #3D4F3D;
+    color: #F5F3EF;
+    padding: 16px 32px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.3s;
+  }
+
+  .cta-button:hover {
+    background: #4A5D4A;
+  }
+
+  .floorplan-section {
+    padding: 60px 24px;
+    background: #1A1F16;
+    text-align: center;
+  }
+
+  .floorplan-section h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: #F5F3EF;
+    margin: 0 0 32px 0;
+  }
+
+  .floorplan-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .back-section {
+    padding: 40px 24px;
+    background: #fff;
+    text-align: center;
+  }
+
+  .back-link {
+    font-size: 14px;
+    color: #3D4F3D;
+    text-decoration: none;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
+  }
+
+  /* Financing Section */
+  .financing-section {
+    padding: 80px 24px;
+    background: #1A1F16;
+  }
+
+  .financing-section h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: #F5F3EF;
+    text-align: center;
+    margin: 0 0 40px 0;
+  }
+
+  .price-display {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .price-label {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #C4A67C;
+    margin-bottom: 8px;
+  }
+
+  .price-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 48px;
+    font-weight: 400;
+    color: #F5F3EF;
+  }
+
+  .financing-card {
+    background: rgba(61, 79, 61, 0.3);
+    border: 1px solid rgba(196, 166, 124, 0.2);
+    border-radius: 12px;
+    padding: 40px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .financing-card h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: #C4A67C;
+    margin: 0 0 8px 0;
+    text-align: center;
+  }
+
+  .financing-subtitle {
+    font-size: 13px;
+    color: rgba(245, 243, 239, 0.6);
+    text-align: center;
+    margin: 0 0 32px 0;
+  }
+
+  .financing-breakdown {
+    border-top: 1px solid rgba(196, 166, 124, 0.2);
+    padding-top: 24px;
+  }
+
+  .financing-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(196, 166, 124, 0.1);
+    color: #F5F3EF;
+    font-size: 15px;
+  }
+
+  .financing-row.highlight {
+    background: rgba(196, 166, 124, 0.1);
+    margin: 16px -20px 0;
+    padding: 20px;
+    border-radius: 8px;
+    border-bottom: none;
+  }
+
+  .financing-row .amount {
+    font-weight: 500;
+    color: #C4A67C;
+  }
+
+  .financing-row .amount.monthly {
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  .financing-note {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(196, 166, 124, 0.2);
+  }
+
+  .financing-note p {
+    font-size: 12px;
+    color: rgba(245, 243, 239, 0.5);
+    text-align: center;
+    margin: 0;
+  }
+
+  .financing-link {
+    display: block;
+    text-align: center;
+    margin-top: 24px;
+    font-size: 14px;
+    color: #C4A67C;
+    text-decoration: none;
+  }
+
+  .financing-link:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 700px) {
+    .features-list {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    
+    .feature-item {
+      padding: 16px 20px;
+    }
+    
+    .price-value {
+      font-size: 36px;
+    }
+    
+    .financing-card {
+      padding: 24px;
+    }
+    
+    .cta-button-dark {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>

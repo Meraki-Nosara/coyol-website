@@ -1,0 +1,177 @@
+---
+const properties = [
+  {
+    name: 'Casa Nest',
+    slug: 'casa-nest',
+    lot: 'Lot 28',
+    development: 'Mar Azul',
+    price: 920000,
+    image: '/images/properties/casa-nest.jpg',
+    status: 'Design',
+    tags: ['Cantilevered Design', 'Infinity Pool', 'Ocean Views']
+  },
+  {
+    name: 'Casa Lefki',
+    slug: 'casa-lefki',
+    lot: 'Lot 25',
+    development: 'Mar Azul',
+    price: 2300000,
+    image: '/images/properties/casa-lefki.jpg',
+    status: 'Design',
+    tags: ['Modern Glass', 'Guanacaste Trees', 'Pool Terrace']
+  },
+  {
+    name: 'Casa Perch',
+    slug: 'casa-perch',
+    lot: 'Lot 26',
+    development: 'Mar Azul',
+    price: 960000,
+    image: '/images/properties/casa-perch.jpg',
+    status: 'Design',
+    tags: ['Compact Living', 'Ocean Views', 'Modern Design']
+  },
+  {
+    name: 'Casa Níspero',
+    slug: 'casa-nispero',
+    lot: 'Lot 2',
+    development: 'Mar Azul',
+    price: 3900000,
+    image: '/images/properties/casa-nispero.jpg',
+    status: 'Under Construction',
+    tags: ['Stone Walls', 'Fire Pit', 'Mountain Views']
+  },
+  {
+    name: 'Casa Umi',
+    slug: 'casa-umi',
+    lot: 'Lot 34',
+    development: 'Mar Azul',
+    price: 5500000,
+    image: '/images/properties/casa-umi.jpg',
+    status: 'Design',
+    tags: ['Black Wood', 'Gabion Walls', 'Forest Setting']
+  },
+  {
+    name: 'Casa Cacao',
+    slug: 'casa-cacao',
+    lot: 'Lot 18',
+    development: 'Mar Azul',
+    price: 2300000,
+    image: '/images/properties/casa-cacao.jpg',
+    status: 'Design',
+    tags: ['Stone & Wood', 'Mountain Views', 'Modern Farmhouse']
+  },
+  {
+    name: 'Casa Luz',
+    slug: 'casa-luz',
+    lot: 'Lot 21',
+    development: 'Mar Azul',
+    price: 2400000,
+    image: '/images/properties/casa-luz.jpg',
+    status: 'Design',
+    tags: ['Pavilion Style', 'Stone Details', 'Jungle Compound']
+  },
+  {
+    name: 'Casa Elle',
+    slug: 'casa-elle',
+    lot: 'Lot 14',
+    development: 'Mar Azul',
+    price: 4800000,
+    image: '/images/properties/casa-elle.jpg',
+    status: 'Completed',
+    tags: ['Hacienda Style', 'Clay Tile Roof', 'Colonial Architecture']
+  }
+];
+---
+
+<section id="real-estate" class="py-24 lg:py-32 bg-landrover-santorini">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <p class="scroll-fade text-landrover-sand/60 text-xs tracking-[0.3em] uppercase mb-4" data-delay="0">Portfolio</p>
+      <h2 class="scroll-fade font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-6" data-delay="100">
+        Residences
+      </h2>
+      <p class="scroll-fade text-landrover-limestone/60 text-lg max-w-2xl mx-auto" data-delay="200">
+        Every home is shaped by the land it sits on, the way the light falls, 
+        the trees that shelter it, the views that unfold.
+      </p>
+    </div>
+
+    <!-- Property Grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {properties.map((property, index) => (
+        <a href={property.slug ? `/homesites/${property.slug}` : '#'} class={`scroll-fade group ${property.slug ? 'cursor-pointer' : 'cursor-default'}`} data-delay={index * 100}>
+          <!-- Image Container -->
+          <div class="relative aspect-[4/3] overflow-hidden mb-6">
+            <img 
+              src={property.image}
+              alt={property.name}
+              class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+            />
+            <!-- Status Badge -->
+            <div class={`absolute top-4 right-4 px-3 py-1 text-xs tracking-wider uppercase ${
+              property.status === 'Completed' 
+                ? 'bg-landrover-keswick text-white' 
+                : 'bg-white/90 text-landrover-santorini'
+            }`}>
+              {property.status}
+            </div>
+            <!-- Hover Overlay -->
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500"></div>
+          </div>
+          
+          <!-- Property Info -->
+          <div class="space-y-3">
+            <div class="flex items-baseline justify-between">
+              <h3 class="font-serif text-2xl text-white group-hover:text-landrover-sand transition-colors">
+                {property.name}
+              </h3>
+              <span class="text-landrover-limestone/50 text-sm">
+                {property.lot}
+              </span>
+            </div>
+            
+            <div class="flex items-baseline justify-between">
+              <p class="text-landrover-sand/80 text-sm tracking-wide">
+                {property.development}
+              </p>
+              {/* Price hidden for now - data preserved in properties array
+              {property.price && (
+                <span class="text-landrover-sand font-medium">
+                  {property.price >= 1000000 
+                    ? `$${(property.price / 1000000).toFixed(1)}M`
+                    : `$${(property.price / 1000).toFixed(0)}K`
+                  }
+                </span>
+              )}
+              */}
+            </div>
+            
+            <!-- Tags -->
+            <div class="flex flex-wrap gap-2 pt-2">
+              {property.tags.map(tag => (
+                <span class="text-xs text-landrover-limestone/40 border border-landrover-limestone/20 px-2 py-1">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <!-- CTA -->
+    <div class="text-center mt-16">
+      <a 
+        href="https://wa.me/13435747238?text=Hello%2C%20I'm%20interested%20in%20learning%20more%20about%20your%20residences"
+        target="_blank"
+        class="scroll-fade inline-block border border-landrover-sand text-landrover-sand px-10 py-4 text-xs tracking-[0.2em] uppercase hover:bg-landrover-sand hover:text-landrover-santorini transition-colors"
+        data-delay="0"
+      >
+        Inquire About Residences
+      </a>
+    </div>
+
+  </div>
+</section>

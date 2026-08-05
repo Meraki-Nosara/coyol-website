@@ -1,0 +1,945 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+
+// Sold & Built - completed homes to showcase
+const soldBuilt = [
+  {
+    id: 'coyol-xl',
+    name: 'Coyol XL',
+    area: '',
+    acres: 'Mar Azul',
+    description: 'Expansive luxury residence with infinity pool overlooking the mountains. A masterpiece of indoor-outdoor living, now complete.',
+    features: ['Infinity Pool', 'Mountain Views', 'Completed'],
+    image: '/images/properties/coyol-xl.jpg',
+    status: 'Sold & Built',
+    specs: {
+      bedrooms: 4,
+      bathrooms: 4.5
+    }
+  },
+  {
+    id: 'modern-barn',
+    name: 'Modern Barn',
+    area: '',
+    acres: 'Mar Azul',
+    description: 'Contemporary barn architecture with charred wood cladding and panoramic mountain views. Bold design that harmonizes with the landscape.',
+    features: ['Black Wood', 'Mountain Views', 'Completed'],
+    image: '/images/properties/modern-barn.jpg',
+    status: 'Sold & Built',
+    specs: {
+      bedrooms: 3,
+      bathrooms: 3.5
+    }
+  },
+  {
+    id: 'casa-eclipse',
+    name: 'Casa Eclipse',
+    area: '',
+    acres: 'Mar Azul',
+    description: 'Twin pavilions with black metal roofing and floor-to-ceiling glass. Infinity pool perched above a lower garden level with spectacular mountain views.',
+    features: ['Twin Pavilions', 'Infinity Pool', 'Completed'],
+    image: '/images/properties/casa-eclipse.jpg',
+    status: 'Sold & Built',
+    specs: {
+      bedrooms: 3,
+      bathrooms: 3.5
+    }
+  }
+];
+
+// Under Construction
+const underConstruction = [
+  {
+    id: 'casa-nispero',
+    name: 'Casa Níspero',
+    area: 'Lot 2',
+    acres: 'Mar Azul',
+    description: 'Stone walls and black metal roofing create a striking contemporary farmhouse. Fire pit terrace and reflecting pool frame mountain views.',
+    features: ['Stone Walls', 'Fire Pit', 'Reflecting Pool'],
+    image: '/images/properties/casa-nispero.jpg',
+    status: 'Under Construction',
+    specs: {
+      indoor: 320,
+      terrace: 80,
+      deck: 120,
+      pool: 60,
+      bedrooms: 3,
+      bathrooms: 3.5
+    }
+  }
+];
+
+// Homes for sale - actual properties with renders/photos
+const homesites = [
+  {
+    id: 'casa-elle',
+    name: 'Casa Elle',
+    area: 'Lot 14',
+    acres: 'Mar Azul',
+    description: 'Classic hacienda architecture with clay tile roof and covered terraces. A completed masterpiece ready for its next chapter.',
+    features: ['Hacienda Style', 'Clay Tile Roof', 'Completed'],
+    image: '/images/properties/casa-elle.jpg',
+    floorplan: '/images/floorplans/casa-elle-floorplan.jpg',
+    status: 'Completed',
+    specs: {
+      indoor: 490,
+      terrace: 130,
+      deck: 185,
+      pool: 110,
+      bedrooms: 4,
+      bathrooms: 4.5
+    }
+  },
+  {
+    id: 'casa-umi',
+    name: 'Casa Umi',
+    area: 'Lot 34',
+    acres: 'Mar Azul',
+    description: 'Contemporary design featuring black charred wood cladding and gabion stone walls. A bold statement in harmony with the forest.',
+    features: ['Black Wood', 'Gabion Walls', 'Forest Setting'],
+    image: '/images/properties/casa-umi.jpg',
+    floorplan: '/images/floorplans/casa-umi-floorplan.jpg',
+    status: 'Design',
+    specs: {
+      indoor: 556,
+      terrace: 121,
+      deck: 175,
+      pool: 62,
+      bedrooms: 5,
+      bathrooms: 5.5
+    }
+  },
+  {
+    id: 'casa-luz',
+    name: 'Casa Luz',
+    area: 'Lot 21',
+    acres: 'Mar Azul',
+    description: 'A compound of connected pavilions with stone details and jungle courtyards. Indoor-outdoor living at its finest.',
+    features: ['Pavilion Style', 'Stone Details', 'Jungle Compound'],
+    image: '/images/properties/casa-luz.jpg',
+    floorplan: '/images/floorplans/casa-luz-floorplan.jpg',
+    status: 'Design',
+    specs: {
+      indoor: 285,
+      terrace: 65,
+      deck: 148,
+      pool: 65,
+      bedrooms: 3,
+      bathrooms: 3.5
+    }
+  },
+  {
+    id: 'casa-cacao',
+    name: 'Casa Cacao',
+    area: 'Lot 18',
+    acres: 'Mar Azul',
+    description: 'Stone and charred wood combine in this modern farmhouse design. Sweeping mountain views from every room.',
+    features: ['Stone & Wood', 'Mountain Views', 'Modern Farmhouse'],
+    image: '/images/properties/casa-cacao.jpg',
+    floorplan: '/images/floorplans/casa-cacao-floorplan.jpg',
+    status: 'Design',
+    specs: {
+      indoor: 285,
+      terrace: 60,
+      deck: 50,
+      pool: 60,
+      bedrooms: 3,
+      bathrooms: 3.5
+    }
+  },
+  {
+    id: 'casa-lefki',
+    name: 'Casa Lefki',
+    area: 'Lot 24',
+    acres: 'Mar Azul',
+    description: 'Modern glass pavilion nestled among mature Guanacaste trees. Floor-to-ceiling windows frame the jungle canopy and distant ocean.',
+    features: ['Modern Glass', 'Guanacaste Trees', 'Pool Terrace'],
+    image: '/images/properties/casa-lefki.jpg',
+    floorplan: '/images/floorplans/casa-lefki-floorplan.jpg',
+    status: 'Design',
+    specs: {
+      indoor: 245,
+      terrace: 60,
+      deck: 90,
+      pool: 75,
+      bedrooms: 3,
+      bathrooms: 3.5
+    }
+  },
+  {
+    id: 'casa-perch',
+    name: 'Casa Perch',
+    area: 'Lot 27',
+    acres: 'Mar Azul',
+    description: 'Intimate jungle retreat with efficient design. Perfect for those seeking a private escape in nature.',
+    features: ['Compact Design', 'Jungle Setting', 'Private'],
+    image: '/images/properties/casa-perch.jpg',
+    status: 'Design',
+    specs: {
+      indoor: 120,
+      terrace: 30,
+      deck: 40,
+      pool: 20,
+      bedrooms: 3,
+      bathrooms: 2
+    }
+  },
+  {
+    id: 'casa-nest',
+    name: 'Casa Nest',
+    area: 'Lot 28',
+    acres: 'Mar Azul',
+    description: 'A dramatic cantilevered design with infinity pool, fire pit deck, and panoramic jungle views. Bold modern architecture that floats above the landscape.',
+    features: ['Cantilevered Design', 'Infinity Pool', 'Ocean Views'],
+    image: '/images/properties/casa-nest.jpg',
+    floorplan: '/images/floorplans/casa-nest-floorplan.jpg',
+    status: 'Design',
+    specs: {
+      indoor: 92,
+      terrace: 20,
+      deck: 20,
+      pool: 16,
+      bedrooms: 2,
+      bathrooms: 2
+    }
+  },
+];
+---
+
+<Layout title="Available Homesites | Mar Azul | Coyol Real Estate">
+  <Navigation />
+  
+  <!-- Hero with aerial -->
+  <section class="hero">
+    <div class="hero-image">
+      <img src="/images/homesites-header.jpg" alt="Luxury home with pool in Nosara" />
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <span class="overline">Mar Azul</span>
+      <h1>Available Homesites</h1>
+      <p>Homesites on a pristine ridgeline, minutes from Playa Guiones</p>
+    </div>
+  </section>
+
+  <!-- Intro -->
+  <section class="intro">
+    <div class="container">
+      <p class="lead">
+        Mar Azul's homesites are positioned to maximize privacy, natural beauty, 
+        and the spectacular views that make this ridgeline one of Nosara's most 
+        coveted locations.
+      </p>
+    </div>
+  </section>
+
+  <!-- Homesites grid -->
+  <section class="homesites">
+    <div class="container">
+      <div class="grid">
+        {homesites.map((site) => (
+          <div class={`homesite-card ${site.floorplan ? 'has-floorplan' : ''} ${site.floorplan2 ? 'has-two-floors' : ''}`} data-floors={site.floorplan2 ? '2' : '1'}>
+            <div class="card-inner">
+              <div class="card-front">
+                <div class="card-image">
+                  <img src={site.image} alt={site.name} />
+                  {site.floorplan && <span class="flip-hint">Tap for floor plan</span>}
+                </div>
+                <div class="card-content">
+                  <h3>{site.name}</h3>
+                  <p class="location">{site.area} · {site.acres}</p>
+                  {site.specs && (
+                    <>
+                      <div class="bedroom-bath">
+                        <span>{site.specs.bedrooms} Bed</span>
+                        <span class="separator">·</span>
+                        <span>{site.specs.bathrooms} Bath</span>
+                        <span class="separator">·</span>
+                        <span>{site.specs.indoor} m²</span>
+                      </div>
+                      <div class="property-specs">
+                        <div class="spec-item">
+                          <span class="spec-value">{site.specs.terrace}</span>
+                          <span class="spec-label">m² Terrace</span>
+                        </div>
+                        <div class="spec-item">
+                          <span class="spec-value">{site.specs.deck}</span>
+                          <span class="spec-label">m² Deck</span>
+                        </div>
+                        <div class="spec-item">
+                          <span class="spec-value">{site.specs.pool}</span>
+                          <span class="spec-label">m² Pool</span>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  <a href={`/homesites/${site.id}`} class="view-details" onclick="event.stopPropagation()">View Details</a>
+                </div>
+              </div>
+              {site.floorplan && (
+                <div class="card-back">
+                  <div class="card-image">
+                    <img src={site.floorplan} alt={`${site.name} Floor Plan`} />
+                    <span class="flip-hint">{site.floorplan2 ? 'Tap for Level 2' : 'Tap to go back'}</span>
+                  </div>
+                  <div class="card-content">
+                    <h3>{site.name}: {site.floorplan2 ? 'Level 1' : 'Floor Plan'}</h3>
+                    <a href={`/homesites/${site.id}`} class="view-details" onclick="event.stopPropagation()">More Info</a>
+                  </div>
+                </div>
+              )}
+              {site.floorplan2 && (
+                <div class="card-third">
+                  <div class="card-image">
+                    <img src={site.floorplan2} alt={`${site.name} Level 2`} />
+                    <span class="flip-hint">Tap to go back</span>
+                  </div>
+                  <div class="card-content">
+                    <h3>{site.name}: Level 2</h3>
+                    <a href={`/homesites/${site.id}`} class="view-details" onclick="event.stopPropagation()">More Info</a>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Under Construction -->
+  {underConstruction.length > 0 && (
+    <section class="under-construction">
+      <div class="container">
+        <h2 class="section-title">Under Construction</h2>
+        <p class="section-subtitle">Coming soon to Mar Azul</p>
+        <div class="grid">
+          {underConstruction.map((site) => (
+            <div class="homesite-card construction">
+              <div class="card-inner">
+                <div class="card-front">
+                  <div class="card-image">
+                    <img src={site.image} alt={site.name} />
+                    <span class="construction-badge">Under Construction</span>
+                  </div>
+                  <div class="card-content">
+                    <h3>{site.name}</h3>
+                    <p class="location">{site.area} · {site.acres}</p>
+                    {site.specs && (
+                      <>
+                        <div class="bedroom-bath">
+                          <span>{site.specs.bedrooms} Bed</span>
+                          <span class="separator">·</span>
+                          <span>{site.specs.bathrooms} Bath</span>
+                          <span class="separator">·</span>
+                          <span>{site.specs.indoor} m²</span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Sold & Built - HIDDEN FOR NOW -->
+  {false && soldBuilt.length > 0 && (
+    <section class="sold-built">
+      <div class="container">
+        <h2 class="section-title">Sold & Built</h2>
+        <p class="section-subtitle">Recent completions in Mar Azul</p>
+        <div class="grid">
+          {soldBuilt.map((site) => (
+            <div class="homesite-card sold">
+              <div class="card-inner">
+                <div class="card-front">
+                  <div class="card-image">
+                    <img src={site.image} alt={site.name} />
+                    <span class="sold-badge">Sold & Built</span>
+                  </div>
+                  <div class="card-content">
+                    <h3>{site.name}</h3>
+                    <p class="location">{site.acres}</p>
+                    {site.specs && (
+                      <>
+                        <div class="bedroom-bath">
+                          <span>{site.specs.bedrooms} Bed</span>
+                          <span class="separator">·</span>
+                          <span>{site.specs.bathrooms} Bath</span>
+                          <span class="separator">·</span>
+                          <span>{site.specs.indoor} m²</span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Find Your Homesite</h2>
+        <p>Schedule a private tour to explore Mar Azul and discover the perfect setting for your Costa Rica home.</p>
+        <a href="/#contact" class="cta-button">Schedule a Tour</a>
+      </div>
+      <div class="cta-image">
+        <img src="/images/lot-markers.jpg" alt="Mar Azul lot markers" />
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Hero */
+  .hero {
+    position: relative;
+    height: 80vh;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      180deg,
+      rgba(26, 31, 22, 0.3) 0%,
+      rgba(26, 31, 22, 0.6) 100%
+    );
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    color: #F5F3EF;
+    padding: 0 24px;
+  }
+
+  .overline {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #C4A67C;
+    margin-bottom: 16px;
+  }
+
+  .hero-content h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 400;
+    margin: 0 0 16px 0;
+    line-height: 1.1;
+  }
+
+  .hero-content p {
+    font-size: 18px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* Intro */
+  .intro {
+    padding: 80px 24px;
+    background: #F5F3EF;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .lead {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(20px, 3vw, 28px);
+    line-height: 1.6;
+    color: #1A1F16;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  /* Homesites grid */
+  .homesites {
+    padding: 80px 24px;
+    background: #fff;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 32px;
+  }
+
+  .homesite-card {
+    display: block;
+    text-decoration: none;
+    background: #F5F3EF;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    perspective: 1000px;
+  }
+
+  .homesite-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Flip card styles */
+  .homesite-card.has-floorplan {
+    cursor: pointer;
+  }
+
+  .homesite-card .card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+
+  .homesite-card.has-floorplan.flipped .card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .homesite-card .card-front,
+  .homesite-card .card-back {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .homesite-card .card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotateY(180deg);
+    background: #1A1F16;
+  }
+
+  .homesite-card .card-back .card-content {
+    background: #1A1F16;
+  }
+
+  .homesite-card .card-back .card-content h3 {
+    color: #F5F3EF;
+  }
+
+  .flip-hint {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .view-details {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 10px 20px;
+    background: #3D4F3D;
+    color: #F5F3EF;
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.3s;
+  }
+
+  .view-details:hover {
+    background: #4A5D4A;
+  }
+
+  .card-image {
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+  }
+
+  /* Floor plan should show full image, not cropped */
+  .card-back .card-image {
+    aspect-ratio: auto;
+    background: #1A1F16;
+    padding: 16px;
+  }
+
+  .card-back .card-image img {
+    object-fit: contain;
+    max-height: 400px;
+  }
+
+  .homesite-card:hover .card-front .card-image img {
+    transform: scale(1.05);
+  }
+
+  .card-content {
+    padding: 24px;
+  }
+
+  .card-content h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: #1A1F16;
+    margin: 0 0 8px 0;
+  }
+
+  .location {
+    font-size: 14px;
+    color: #3D4F3D;
+    margin: 0 0 16px 0;
+    font-weight: 500;
+  }
+
+  .bedroom-bath {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #1A1F16;
+    margin: 12px 0;
+  }
+
+  .bedroom-bath .separator {
+    color: #999;
+  }
+
+  .property-specs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 12px 0 16px;
+    padding: 12px 0;
+    border-top: 1px solid #e0ddd5;
+    border-bottom: 1px solid #e0ddd5;
+  }
+
+  .spec-item {
+    text-align: center;
+  }
+
+  .spec-value {
+    display: block;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: #1A1F16;
+  }
+
+  .spec-label {
+    display: block;
+    font-size: 10px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+
+  .features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .features li {
+    font-size: 12px;
+    color: #666;
+    padding: 4px 12px;
+    background: rgba(61, 79, 61, 0.1);
+    border-radius: 20px;
+  }
+
+  /* CTA Section */
+  .cta-section {
+    background: #1A1F16;
+  }
+
+  .cta-section .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 500px;
+  }
+
+  .cta-content {
+    padding: 80px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .cta-content h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 40px;
+    font-weight: 400;
+    color: #F5F3EF;
+    margin: 0 0 16px 0;
+  }
+
+  .cta-content p {
+    font-size: 16px;
+    color: rgba(212, 201, 181, 0.8);
+    line-height: 1.7;
+    margin: 0 0 32px 0;
+  }
+
+  .cta-button {
+    display: inline-block;
+    padding: 16px 32px;
+    background: #3D4F3D;
+    color: #F5F3EF;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.3s;
+    align-self: flex-start;
+  }
+
+  .cta-button:hover {
+    background: #4A5D4A;
+  }
+
+  .cta-image {
+    overflow: hidden;
+  }
+
+  .cta-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Mobile */
+  @media (max-width: 900px) {
+    .cta-section .container {
+      grid-template-columns: 1fr;
+    }
+
+    .cta-content {
+      padding: 60px 24px;
+    }
+
+    .cta-image {
+      height: 300px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Under Construction Section */
+  .under-construction {
+    padding: 80px 0;
+    background: #3D4F3D;
+  }
+
+  .under-construction .section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: #F5F3EF;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .under-construction .section-subtitle {
+    font-size: 14px;
+    color: rgba(212, 201, 181, 0.7);
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .construction-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: #C4A67C;
+    color: #1A1F16;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 12px;
+    border-radius: 4px;
+  }
+
+  /* Sold & Built Section */
+  .sold-built {
+    padding: 80px 0;
+    background: #1A1F16;
+  }
+
+  .sold-built .section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: #F5F3EF;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .sold-built .section-subtitle {
+    font-size: 14px;
+    color: rgba(212, 201, 181, 0.7);
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .sold-built .homesite-card {
+    opacity: 0.9;
+  }
+
+  .sold-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: #A65D3F;
+    color: #F5F3EF;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 12px;
+    border-radius: 4px;
+  }
+
+  /* Third card face for 2-story homes */
+  .card-third {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    transform: rotateY(180deg);
+    display: none;
+  }
+
+  .card-third .card-image {
+    position: relative;
+    height: 280px;
+    overflow: hidden;
+  }
+
+  .card-third .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .card-third .card-content {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .card-third .card-content h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .card-third .flip-hint {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.6);
+    color: white;
+    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 4px;
+  }
+
+  .homesite-card.show-third .card-back {
+    display: none;
+  }
+
+  .homesite-card.show-third .card-third {
+    display: block;
+  }
+</style>
+
+<script>
+  // Flip card interaction for cards with floor plans
+  document.querySelectorAll('.homesite-card.has-floorplan').forEach(card => {
+    const hasTwoFloors = card.classList.contains('has-two-floors');
+    let state = 0; // 0 = front, 1 = back (level 1), 2 = third (level 2)
+    
+    card.addEventListener('click', (e) => {
+      // Don't flip if clicking on the "View Details" link
+      if ((e.target as HTMLElement).closest('.view-details')) return;
+      
+      if (hasTwoFloors) {
+        state = (state + 1) % 3;
+        if (state === 0) {
+          card.classList.remove('flipped', 'show-third');
+        } else if (state === 1) {
+          card.classList.add('flipped');
+          card.classList.remove('show-third');
+        } else {
+          card.classList.add('flipped', 'show-third');
+        }
+      } else {
+        card.classList.toggle('flipped');
+      }
+    });
+  });
+</script>

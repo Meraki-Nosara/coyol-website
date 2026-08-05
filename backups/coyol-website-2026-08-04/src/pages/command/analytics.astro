@@ -1,0 +1,359 @@
+---
+import CommandLayout from '../../layouts/CommandLayout.astro';
+---
+
+<CommandLayout title="Analytics" active="analytics">
+  <div class="analytics-page">
+    <header class="page-header">
+      <h1>Website Analytics</h1>
+      <p class="source" id="lastUpdate">Loading...</p>
+    </header>
+
+    <div id="content">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Fetching data from Plausible...</p>
+      </div>
+    </div>
+  </div>
+</CommandLayout>
+
+<style is:global>
+  .analytics-page {
+    padding: 32px 40px;
+    max-width: 1200px;
+  }
+  
+  .page-header {
+    margin-bottom: 32px;
+  }
+  
+  .page-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #C4A67C;
+    margin-bottom: 4px;
+  }
+  
+  .source {
+    font-size: 12px;
+    color: #666;
+  }
+  
+  .loading {
+    text-align: center;
+    padding: 80px 20px;
+    color: #888;
+  }
+  
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #1a1d17;
+    border-top-color: #C4A67C;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 16px;
+  }
+  
+  @keyframes spin { to { transform: rotate(360deg); } }
+  
+  /* Stats Grid */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  
+  .stat-card {
+    background: #0a0c09;
+    border: 1px solid #1a1d17;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .stat-value {
+    font-size: 28px;
+    font-weight: 300;
+    color: #C4A67C;
+  }
+  
+  .stat-label {
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 6px;
+  }
+  
+  .stat-sub {
+    font-size: 10px;
+    color: #555;
+    margin-top: 4px;
+  }
+  
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .card {
+    background: #0a0c09;
+    border: 1px solid #1a1d17;
+    border-radius: 12px;
+    padding: 20px;
+  }
+  
+  .card h2 {
+    font-size: 11px;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  
+  /* Bar Chart */
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 100px;
+  }
+  
+  .bar-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+  }
+  
+  .bar {
+    width: 100%;
+    background: linear-gradient(180deg, #C4A67C, #8a7656);
+    border-radius: 2px 2px 0 0;
+    min-height: 2px;
+  }
+  
+  .bar-label {
+    font-size: 7px;
+    color: #555;
+    margin-top: 4px;
+  }
+  
+  /* List */
+  .list-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #1a1d17;
+  }
+  
+  .list-row:last-child { border-bottom: none; }
+  
+  .rank {
+    width: 24px;
+    font-size: 11px;
+    color: #666;
+    text-align: center;
+  }
+  
+  .name {
+    flex: 1;
+    font-size: 13px;
+    color: #aaa;
+    text-transform: capitalize;
+  }
+  
+  .value {
+    font-size: 13px;
+    font-weight: 500;
+    color: #C4A67C;
+  }
+  
+  /* Sources */
+  .sources {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 12px;
+  }
+  
+  .source-card {
+    background: rgba(61, 79, 61, 0.15);
+    border: 1px solid #1a1d17;
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+  }
+  
+  .source-pct {
+    font-size: 22px;
+    font-weight: 500;
+    color: #C4A67C;
+  }
+  
+  .source-name {
+    font-size: 10px;
+    color: #888;
+    margin-top: 4px;
+  }
+  
+  .error {
+    text-align: center;
+    padding: 40px;
+    color: #f43f5e;
+    background: rgba(244, 63, 94, 0.1);
+    border: 1px solid rgba(244, 63, 94, 0.2);
+    border-radius: 12px;
+  }
+  
+  @media (max-width: 900px) {
+    .page { padding: 20px; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script is:inline>
+  async function fetchPlausible(endpoint, params = {}) {
+    const url = new URL('/api/plausible', window.location.origin);
+    url.searchParams.set('endpoint', endpoint);
+    Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+    
+    const res = await fetch(url.toString());
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    return res.json();
+  }
+
+  function formatDuration(seconds) {
+    if (!seconds || seconds < 1) return '0s';
+    if (seconds < 60) return `${Math.round(seconds)}s`;
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.round(seconds % 60);
+    return `${mins}m ${secs}s`;
+  }
+
+  async function loadData() {
+    try {
+      const [monthStats, timeseries, topPages, topSources, devices, countries] = await Promise.all([
+        fetchPlausible('aggregate', { period: '30d', metrics: 'visitors,pageviews,bounce_rate,visit_duration' }),
+        fetchPlausible('timeseries', { period: '30d', metrics: 'visitors' }),
+        fetchPlausible('breakdown', { period: '30d', property: 'event:page', metrics: 'pageviews', limit: '8' }),
+        fetchPlausible('breakdown', { period: '30d', property: 'visit:source', metrics: 'visitors', limit: '5' }),
+        fetchPlausible('breakdown', { period: '30d', property: 'visit:device', metrics: 'visitors' }),
+        fetchPlausible('breakdown', { period: '30d', property: 'visit:country', metrics: 'visitors', limit: '6' }),
+      ]);
+
+      const month = monthStats?.results || { visitors: { value: 0 }, pageviews: { value: 0 }, bounce_rate: { value: 0 }, visit_duration: { value: 0 } };
+      const dailyData = timeseries?.results || [];
+      const pages = topPages?.results || [];
+      const sources = topSources?.results || [];
+      const deviceData = devices?.results || [];
+      const countryData = countries?.results || [];
+      const totalSourceVisitors = sources.reduce((sum, s) => sum + s.visitors, 0) || 1;
+
+      document.getElementById('lastUpdate').textContent = `Live from Plausible — ${new Date().toLocaleTimeString()}`;
+
+      let html = `
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-value">${month.visitors.value.toLocaleString()}</div>
+            <div class="stat-label">Visitors</div>
+            <div class="stat-sub">Last 30 days</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${month.pageviews.value.toLocaleString()}</div>
+            <div class="stat-label">Pageviews</div>
+            <div class="stat-sub">Last 30 days</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${formatDuration(month.visit_duration.value)}</div>
+            <div class="stat-label">Avg Duration</div>
+            <div class="stat-sub">Last 30 days</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${month.bounce_rate.value}%</div>
+            <div class="stat-label">Bounce Rate</div>
+            <div class="stat-sub">Last 30 days</div>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <h2>Visitors — 30 Days</h2>
+            <div class="bar-chart">
+              ${dailyData.map(d => {
+                const max = Math.max(...dailyData.map(x => x.visitors), 1);
+                const height = Math.max((d.visitors / max) * 100, 3);
+                const day = new Date(d.date).getDate();
+                return `<div class="bar-col"><div class="bar" style="height:${height}%"></div><div class="bar-label">${day}</div></div>`;
+              }).join('')}
+            </div>
+          </div>
+          
+          <div class="card">
+            <h2>Top Pages</h2>
+            ${pages.slice(0, 6).map((p, i) => {
+              const name = p.page === '/' ? 'Home' : p.page.replace(/^\//, '').replace(/-/g, ' ').slice(0, 25);
+              return `<div class="list-row"><span class="rank">${i+1}</span><span class="name">${name}</span><span class="value">${p.pageviews}</span></div>`;
+            }).join('')}
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <h2>Traffic Sources</h2>
+            <div class="sources">
+              ${sources.map(s => {
+                const pct = Math.round((s.visitors / totalSourceVisitors) * 100);
+                return `<div class="source-card"><div class="source-pct">${pct}%</div><div class="source-name">${s.source || 'Direct'}</div></div>`;
+              }).join('')}
+            </div>
+          </div>
+          
+          <div class="card">
+            <h2>Countries</h2>
+            ${countryData.slice(0, 5).map((c, i) => {
+              return `<div class="list-row"><span class="rank">${i+1}</span><span class="name">${c.country}</span><span class="value">${c.visitors}</span></div>`;
+            }).join('')}
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <h2>Devices</h2>
+            <div class="sources">
+              ${deviceData.map(d => {
+                const pct = Math.round((d.visitors / month.visitors.value) * 100) || 0;
+                return `<div class="source-card"><div class="source-pct">${pct}%</div><div class="source-name">${d.device}</div></div>`;
+              }).join('')}
+            </div>
+          </div>
+          
+          <div class="card">
+            <h2>Quick Stats</h2>
+            <div class="list-row"><span class="name">Pages per visit</span><span class="value">${(month.pageviews.value / (month.visitors.value || 1)).toFixed(1)}</span></div>
+            <div class="list-row"><span class="name">Mobile</span><span class="value">${deviceData.find(d => d.device === 'Mobile')?.visitors || 0}</span></div>
+            <div class="list-row"><span class="name">Desktop</span><span class="value">${deviceData.find(d => d.device === 'Desktop')?.visitors || 0}</span></div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('content').innerHTML = html;
+
+    } catch (err) {
+      console.error(err);
+      document.getElementById('content').innerHTML = `<div class="error">Failed to load analytics: ${err.message}</div>`;
+    }
+  }
+
+  loadData();
+</script>

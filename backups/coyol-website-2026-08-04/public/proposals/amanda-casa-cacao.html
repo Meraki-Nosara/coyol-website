@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amanda — Casa Cacao at Mar Azul</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1a1f16 0%, #2a3020 100%);
+      color: #f5f3ef;
+      min-height: 100vh;
+      padding: 30px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    /* Header with Logo */
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(196, 166, 124, 0.3);
+    }
+    
+    .logo-img {
+      width: 100px;
+      height: auto;
+      margin-bottom: 10px;
+      filter: invert(1) brightness(0.85) sepia(0.3) hue-rotate(10deg) saturate(0.8);
+    }
+    
+    .logo {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 32px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      color: #C4A67C;
+      margin-bottom: 5px;
+    }
+    
+    .tagline {
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: #888;
+      text-transform: uppercase;
+    }
+    
+    /* Hero Render */
+    .hero {
+      margin-bottom: 25px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    }
+    
+    .hero img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    
+    /* Property Title */
+    .property-title {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    
+    .property-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 36px;
+      color: #C4A67C;
+      margin-bottom: 5px;
+    }
+    
+    .property-lot {
+      font-size: 14px;
+      color: #999;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    
+    /* Investment Summary */
+    .investment-summary {
+      background: rgba(196, 166, 124, 0.1);
+      border: 1px solid rgba(196, 166, 124, 0.4);
+      border-radius: 12px;
+      padding: 20px 25px;
+      margin-bottom: 25px;
+    }
+    
+    .investment-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #C4A67C;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    .investment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 15px;
+      text-align: center;
+    }
+    
+    .investment-item {
+      padding: 12px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+    }
+    
+    .investment-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      margin-bottom: 5px;
+    }
+    
+    .investment-value {
+      font-size: 22px;
+      font-weight: 300;
+      color: #C4A67C;
+    }
+    
+    .investment-note {
+      font-size: 10px;
+      color: #666;
+      margin-top: 3px;
+    }
+    
+    /* Floor Plan */
+    .floorplan-section {
+      margin-bottom: 25px;
+    }
+    
+    .section-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 20px;
+      color: #C4A67C;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    
+    .floorplan {
+      background: linear-gradient(135deg, #f5f3ef 0%, #e8e2d6 100%);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+      border: 1px solid rgba(196, 166, 124, 0.3);
+      padding: 15px;
+    }
+    
+    .floorplan img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 6px;
+      filter: sepia(0.08) contrast(1.05);
+    }
+    
+    /* Specs Grid */
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .spec-item {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+    
+    .spec-value {
+      font-size: 20px;
+      font-weight: 300;
+      color: #C4A67C;
+      margin-bottom: 3px;
+    }
+    
+    .spec-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+    }
+    
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 35px;
+    }
+    
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 12px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, #C4A67C, rgba(196, 166, 124, 0.2));
+    }
+    
+    .step {
+      position: relative;
+      margin-bottom: 18px;
+      padding: 15px 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+    }
+    
+    .step-number {
+      position: absolute;
+      left: -35px;
+      top: 15px;
+      width: 24px;
+      height: 24px;
+      background: #3D4F3D;
+      border: 2px solid #C4A67C;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: #C4A67C;
+    }
+    
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+    
+    .step-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 16px;
+      color: #f5f3ef;
+    }
+    
+    .step-timing {
+      font-size: 9px;
+      color: #C4A67C;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      background: rgba(196, 166, 124, 0.15);
+      padding: 3px 8px;
+      border-radius: 15px;
+    }
+    
+    .step-content {
+      color: #aaa;
+      font-size: 12px;
+    }
+    
+    .step-highlight {
+      display: inline-block;
+      background: rgba(196, 166, 124, 0.2);
+      color: #C4A67C;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-weight: 500;
+    }
+    
+    /* Milestones */
+    .milestones-table {
+      width: 100%;
+      margin-top: 10px;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    
+    .milestones-table th {
+      text-align: left;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      padding: 6px 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .milestones-table td {
+      padding: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .milestones-table td:first-child {
+      color: #f5f3ef;
+    }
+    
+    .milestones-table td:nth-child(2) {
+      color: #C4A67C;
+      text-align: center;
+    }
+    
+    .milestones-table td:nth-child(3) {
+      color: #C4A67C;
+      text-align: right;
+      font-weight: 500;
+    }
+    
+    /* Portal Box */
+    .portal-box {
+      background: rgba(61, 79, 61, 0.3);
+      border: 1px solid rgba(61, 79, 61, 0.5);
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 10px;
+    }
+    
+    .portal-title {
+      color: #C4A67C;
+      font-weight: 500;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+    
+    .portal-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+    }
+    
+    .portal-feature {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #bbb;
+    }
+    
+    .portal-feature::before {
+      content: '✓';
+      color: #C4A67C;
+      font-weight: bold;
+      font-size: 10px;
+    }
+    
+    /* Footer */
+    .footer {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      text-align: center;
+    }
+    
+    .contact-prompt {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #f5f3ef;
+      margin-bottom: 10px;
+    }
+    
+    .contact-info {
+      color: #888;
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+    
+    .contact-email {
+      color: #C4A67C;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    
+    .disclaimer {
+      margin-top: 20px;
+      font-size: 9px;
+      color: #555;
+      line-height: 1.4;
+    }
+    
+    /* Print */
+    @media print {
+      body {
+        background: white;
+        color: #1a1f16;
+        padding: 15px;
+      }
+      .logo, .investment-value, .spec-value, .step-highlight, .contact-email, .section-title, .property-name, .portal-title {
+        color: #3D4F3D;
+      }
+      .step-title, .contact-prompt {
+        color: #1a1f16;
+      }
+      .step, .spec-item {
+        border: 1px solid #ddd;
+        background: #fafafa;
+      }
+      .investment-summary {
+        border: 1px solid #C4A67C;
+        background: #fdf9f3;
+      }
+      .investment-item {
+        background: white;
+        border: 1px solid #eee;
+      }
+      .step-number {
+        background: white;
+        border-color: #3D4F3D;
+        color: #3D4F3D;
+      }
+      .portal-box {
+        background: #f5f5f0;
+        border-color: #3D4F3D;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <!-- Header -->
+    <div class="header">
+      <img src="https://coyolrealestate.com/images/logo-black.png" alt="Coyol Group" class="logo-img">
+      <div class="logo">COYOL GROUP</div>
+      <div class="tagline">Nosara, Costa Rica</div>
+    </div>
+    
+    <!-- Hero Render -->
+    <div class="hero">
+      <img src="casa-cacao-render.jpg" alt="Casa Cacao">
+    </div>
+    
+    <!-- Property Title -->
+    <div class="property-title">
+      <h1 class="property-name">Casa Cacao</h1>
+      <p class="property-lot">Lot 18 · Mar Azul</p>
+    </div>
+    
+    <!-- Investment Summary -->
+    <div class="investment-summary">
+      <h2 class="investment-title">Your Investment</h2>
+      <div class="investment-grid">
+        <div class="investment-item">
+          <div class="investment-label">Lot 18</div>
+          <div class="investment-value">$450,000</div>
+          <div class="investment-note">1,744 m² · Ready to build</div>
+        </div>
+        <div class="investment-item">
+          <div class="investment-label">Construction</div>
+          <div class="investment-value">$1,550,000</div>
+          <div class="investment-note">6 milestone payments</div>
+        </div>
+        <div class="investment-item">
+          <div class="investment-label">Total</div>
+          <div class="investment-value">$2,000,000</div>
+          <div class="investment-note">Turnkey home</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Floor Plan -->
+    <div class="floorplan-section">
+      <h2 class="section-title">Floor Plan</h2>
+      <div class="floorplan">
+        <img src="casa-cacao-floorplan-branded.jpg" alt="Casa Cacao Floor Plan">
+      </div>
+      <div class="specs-grid">
+        <div class="spec-item">
+          <div class="spec-value">215</div>
+          <div class="spec-label">sqm Indoor</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-value">63</div>
+          <div class="spec-label">sqm Covered</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-value">102</div>
+          <div class="spec-label">sqm Terraces</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-value">40</div>
+          <div class="spec-label">sqm Pool</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- What's Included -->
+    <div class="investment-summary" style="margin-bottom: 25px;">
+      <h2 class="investment-title">What's Included</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 12px;">
+        <div>
+          <div style="color: #C4A67C; font-weight: 500; margin-bottom: 8px;">✓ Included</div>
+          <ul style="color: #bbb; margin-left: 15px; line-height: 1.8;">
+            <li>Finished house with high-end finishes</li>
+            <li>Closets & built-ins (similar to Casa Elle & Casa Beauty)</li>
+            <li>Bathrooms fully finished</li>
+            <li>Kitchen with cabinetry, countertops & appliances</li>
+            <li>Equipped laundry room with washer & dryer</li>
+            <li>A/C throughout</li>
+            <li>Ceiling fans indoor & outdoor</li>
+            <li>Overhead interior lighting (pot lights)</li>
+            <li>Rough-ins for feature lighting & wall sconces</li>
+            <li>Pool with finishes</li>
+            <li>Covered & open terraces</li>
+            <li>Basic landscaping with irrigation system</li>
+            <li>Exterior lighting (garden & pathway lights)</li>
+            <li>Custom upholstered built-ins</li>
+
+            <li>Front privacy gate</li>
+            <li>Fire pit</li>
+            <li>Outdoor garden rinse-off shower</li>
+            
+          </ul>
+        </div>
+        <div>
+          <div style="color: #888; font-weight: 500; margin-bottom: 8px;">✗ Not Included</div>
+          <ul style="color: #666; margin-left: 15px; line-height: 1.8;">
+            <li>Feature lighting & wall sconces</li>
+            <li>Covered carport</li>
+            <li>Interior design services</li>
+            <li>Kitchen cutlery, plates & utensils</li>
+            <li>Furniture (beds, tables, chairs, sofas)</li>
+            <li>Garden furniture</li>
+            <li>Pool furniture</li>
+            <li>Solar power backup system</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Journey Title -->
+    <h2 class="section-title" style="margin-bottom: 20px;">Your Journey Home</h2>
+    
+    <!-- Timeline -->
+    <div class="timeline">
+      
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-header">
+          <h3 class="step-title">Reserve Your Lot</h3>
+          <span class="step-timing">Day 1</span>
+        </div>
+        <div class="step-content">
+          Secure Lot 18 with a <span class="step-highlight">$10,000 reservation deposit</span>. Applied toward your purchase.
+        </div>
+      </div>
+      
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-header">
+          <h3 class="step-title">Complete Lot Purchase</h3>
+          <span class="step-timing">Within 30 days</span>
+        </div>
+        <div class="step-content">
+          Pay remaining <span class="step-highlight">$440,000</span> to take ownership. Our recommended legal partner <span class="step-highlight">ICS</span> can assist with forming a Costa Rican company, due diligence, and title transfer.
+        </div>
+      </div>
+      
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-header">
+          <h3 class="step-title">Finalize Design & Sign Contract</h3>
+          <span class="step-timing">Week 2-4</span>
+        </div>
+        <div class="step-content">
+          Work with our architect on final details. Select your finishes from the <a href="https://coyolnosara.com/casa-cacao-finishes.html" style="color: #C4A67C;">Casa Cacao Finishes Presentation</a>. Sign fixed-price construction contract.
+        </div>
+      </div>
+      
+      <!-- Step 4 -->
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-header">
+          <h3 class="step-title">Construction Permit</h3>
+          <span class="step-timing">1-3 months</span>
+        </div>
+        <div class="step-content">
+          We handle the permit process with the municipality. Once approved, construction begins.
+        </div>
+      </div>
+      
+      <!-- Step 5 -->
+      <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-header">
+          <h3 class="step-title">Construction</h3>
+          <span class="step-timing">12-18 months</span>
+        </div>
+        <div class="step-content">
+          <span class="step-highlight">6 milestone payments</span> as your home takes shape:
+          
+          <table class="milestones-table">
+            <thead>
+              <tr>
+                <th>Milestone</th>
+                <th>%</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1. Contract Signing</td>
+                <td>16.67%</td>
+                <td>$258,333</td>
+              </tr>
+              <tr>
+                <td>2. Foundation</td>
+                <td>16.67%</td>
+                <td>$258,333</td>
+              </tr>
+              <tr>
+                <td>3. Structure</td>
+                <td>16.67%</td>
+                <td>$258,333</td>
+              </tr>
+              <tr>
+                <td>4. Roof & Enclosure</td>
+                <td>16.67%</td>
+                <td>$258,333</td>
+              </tr>
+              <tr>
+                <td>5. Finishes</td>
+                <td>16.67%</td>
+                <td>$258,333</td>
+              </tr>
+              <tr>
+                <td>6. Handover</td>
+                <td>16.65%</td>
+                <td>$258,333</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Step 5 -->
+      <div class="step">
+        <div class="step-number">6</div>
+        <div class="step-header">
+          <h3 class="step-title">Track Your Progress</h3>
+          <span class="step-timing">Ongoing</span>
+        </div>
+        <div class="step-content">
+          <div class="portal-box">
+            <div class="portal-title">Coyol Control — Your Client Portal</div>
+            <div class="portal-features">
+              <div class="portal-feature">Construction photos</div>
+              <div class="portal-feature">Milestone tracking</div>
+              <div class="portal-feature">Documents</div>
+              <div class="portal-feature">Direct messaging</div>
+            </div>
+            <div style="margin-top: 10px; font-size: 11px;">
+              <span style="color: #888;">Access your portal:</span> 
+              <a href="https://coyol-portal.vercel.app" style="color: #C4A67C; text-decoration: none;">coyol-portal.vercel.app</a>
+              <span style="color: #888; margin-left: 10px;">Code:</span> 
+              <span style="color: #C4A67C; font-weight: 500;">CC2026</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Step 6 -->
+      <div class="step">
+        <div class="step-number">7</div>
+        <div class="step-header">
+          <h3 class="step-title">Welcome Home</h3>
+          <span class="step-timing">Move-in day</span>
+        </div>
+        <div class="step-content">
+          Final walkthrough, keys, and welcome to the Mar Azul community. 🌴
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- HOA Section -->
+    <div class="investment-summary" style="margin-top: 25px;">
+      <h2 class="investment-title">HOA & Community</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 12px;">
+        <div>
+          <div style="color: #C4A67C; font-weight: 500; margin-bottom: 8px;">Monthly HOA Fees</div>
+          <div style="color: #bbb; line-height: 1.8;">
+            <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+              <span>During construction</span>
+              <span style="color: #C4A67C;">~$390/month</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+              <span>Once moved in</span>
+              <span style="color: #C4A67C;">~$525/month</span>
+            </div>
+          </div>
+          <div style="color: #666; font-size: 10px; margin-top: 8px; font-style: italic;">
+            *Based on lot size and annual budget. Range depends on number of homes under construction at time of move-in.
+          </div>
+          <div style="color: #C4A67C; font-weight: 500; margin-bottom: 8px; margin-top: 15px;">HOA Includes</div>
+          <ul style="color: #bbb; margin-left: 15px; line-height: 1.8;">
+            <li>Water</li>
+            <li>Garbage collection</li>
+            <li>Security (night guard + daytime presence)</li>
+            <li>Gated access</li>
+            <li>Road maintenance</li>
+            <li>Tennis court</li>
+            <li>Common grounds maintenance</li>
+          </ul>
+        </div>
+        <div>
+          <div style="color: #888; font-weight: 500; margin-bottom: 8px;">✗ Not Included in HOA</div>
+          <ul style="color: #666; margin-left: 15px; line-height: 1.8;">
+            <li>Electricity utility</li>
+            <li>Internet</li>
+            <li>Pool cleaning</li>
+            <li>House cleaning</li>
+            <li>Gardening</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p class="contact-prompt">Ready to begin?</p>
+      <p class="contact-info">Ruth Tal · Mar Azul Sales</p>
+      <a href="mailto:info@coyolrealestate.com" class="contact-email">info@coyolrealestate.com</a>
+      
+      <p class="disclaimer">
+        Prepared exclusively for Amanda. Prices valid for 30 days. Construction by Nosara Construction S.A.
+        Timeline estimates based on typical progression. © 2026 Coyol Group.
+      </p>
+    </div>
+    
+  </div>
+</body>
+</html>

@@ -1,0 +1,486 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import lotsData from '../../data/mar-azul-lots.json';
+
+// Hide floating buttons on admin page
+const hideFloatingButtons = true;
+
+const lots = lotsData.lots;
+
+// Status colors - Land Rover Heritage palette
+const statusColors: Record<string, { bg: string; border: string; text: string; label: string }> = {
+  'Habitada': { bg: '#5C6B5C', border: '#4A5D4A', text: '#F5F3EF', label: 'Sold/Built' },
+  'Available': { bg: '#C4A67C', border: '#A65D3F', text: '#1A1F16', label: 'Available' },
+  'Reserved': { bg: '#A65D3F', border: '#8B4513', text: '#F5F3EF', label: 'Reserved' },
+  'In Progress': { bg: '#3D4F3D', border: '#5C6B5C', text: '#F5F3EF', label: 'Under Construction' },
+  'default': { bg: '#D4C9B5', border: '#B8A99A', text: '#1A1F16', label: 'Processing' }
+};
+
+// Lot positions on the master plan (percentage-based for responsiveness)
+// Precisely mapped from Google Drive master plan PDF
+const lotPositions: Record<number, { x: number; y: number }> = {
+  1: { x: 31, y: 85 },
+  2: { x: 32, y: 92 },
+  3: { x: 36, y: 90 },
+  4: { x: 37, y: 81 },
+  5: { x: 44, y: 81 },
+  6: { x: 42, y: 87 },
+  7: { x: 47, y: 87 },
+  8: { x: 46, y: 93 },
+  9: { x: 61, y: 87 },
+  10: { x: 54, y: 81 },
+  11: { x: 61, y: 81 },
+  12: { x: 60, y: 71 },
+  14: { x: 47, y: 69 },
+  15: { x: 72, y: 71 },
+  16: { x: 79, y: 52 },
+  17: { x: 72, y: 45 },
+  18: { x: 69, y: 19 },
+  19: { x: 73, y: 15 },
+  20: { x: 63, y: 25 },
+  21: { x: 60, y: 30 },
+  22: { x: 53, y: 36 },
+  23: { x: 60, y: 39 },
+  24: { x: 64, y: 43 },
+  25: { x: 55, y: 43 },
+  26: { x: 41, y: 44 },
+  27: { x: 39, y: 47 },
+  28: { x: 38, y: 50 },
+  29: { x: 28, y: 43 },
+  30: { x: 24, y: 50 },
+  31: { x: 22, y: 57 },
+  32: { x: 24, y: 63 },
+  33: { x: 20, y: 67 },
+  34: { x: 14, y: 67 },
+  35: { x: 10, y: 70 },
+  36: { x: 79, y: 17 }
+};
+
+// Calculate summary stats
+const summary = {
+  total: lots.length,
+  sold: lots.filter(l => l.status === 'Habitada').length,
+  available: lots.filter(l => l.status === 'Available').length,
+  reserved: lots.filter(l => l.status === 'Reserved').length,
+  inProgress: lots.filter(l => l.status === 'In Progress').length,
+  processing: lots.filter(l => !l.status || !['Habitada', 'Available', 'Reserved', 'In Progress'].includes(l.status)).length
+};
+
+function getStatusStyle(status: string | null | undefined) {
+  const s = statusColors[status || 'default'] || statusColors['default'];
+  return s;
+}
+
+function formatArea(area: number) {
+  return area.toLocaleString('en-US', { maximumFractionDigits: 0 }) + ' m²';
+}
+
+function formatPrice(price: number | null | undefined) {
+  if (!price) return 'Contact for pricing';
+  return '₡' + price.toLocaleString('en-US');
+}
+---
+
+<Layout title="Mar Azul — Master Plan" hideFloatingButtons={true}>
+  <div class="min-h-screen bg-lr-santorini">
+    
+    <!-- Header -->
+    <header class="border-b border-lr-moss/30 bg-lr-santorini/95 backdrop-blur sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div>
+          <a href="/command" class="text-sm text-lr-limestone hover:text-lr-sand transition">← Command</a>
+          <h1 class="text-xl font-serif text-lr-alaska mt-1">Mar Azul Condominium</h1>
+          <p class="text-xs text-lr-limestone/60">{summary.total} lots • Interactive Master Plan</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <!-- Legend -->
+          <div class="hidden md:flex items-center gap-3 text-xs text-lr-limestone">
+            <span class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-full bg-lr-moss"></span>
+              Sold ({summary.sold})
+            </span>
+            <span class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-full bg-lr-sand"></span>
+              Available ({summary.available})
+            </span>
+            <span class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-full bg-lr-terracotta"></span>
+              Reserved ({summary.reserved})
+            </span>
+            <span class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-full bg-lr-keswick"></span>
+              Building ({summary.inProgress})
+            </span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-6">
+      
+      <!-- Summary Cards -->
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
+        <div class="bg-lr-moss/20 rounded-lg p-4 border border-lr-moss/30">
+          <div class="text-2xl font-serif text-lr-sand">{summary.total}</div>
+          <div class="text-xs text-lr-limestone">Total Lots</div>
+        </div>
+        <div class="lot-owned rounded-lg p-4 border">
+          <div class="text-2xl font-serif text-lr-alaska">{summary.sold}</div>
+          <div class="text-xs text-lr-limestone">Sold/Built</div>
+        </div>
+        <div class="lot-reserved rounded-lg p-4 border">
+          <div class="text-2xl font-serif text-lr-sand">{summary.available}</div>
+          <div class="text-xs text-lr-limestone">Available</div>
+        </div>
+        <div class="lot-sold rounded-lg p-4 border">
+          <div class="text-2xl font-serif text-lr-terracotta">{summary.reserved}</div>
+          <div class="text-xs text-lr-limestone">Reserved</div>
+        </div>
+        <div class="bg-lr-keswick/30 rounded-lg p-4 border border-lr-keswick/50">
+          <div class="text-2xl font-serif text-lr-limestone">{summary.inProgress + summary.processing}</div>
+          <div class="text-xs text-lr-limestone">In Progress</div>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-6">
+        
+        <!-- Master Plan Image with Overlays -->
+        <div class="lg:col-span-2">
+          <div class="bg-[#D4C9B5] rounded-xl border border-lr-moss/30 overflow-hidden">
+            <div class="relative" id="masterplan-container" style="background-color: #D4C9B5;">
+              <img 
+                src="/images/mar-azul-masterplan.png" 
+                alt="Mar Azul Master Plan"
+                class="w-full h-auto mix-blend-multiply"
+                id="masterplan-image"
+                style="background-color: #D4C9B5;"
+              />
+              
+              <!-- Lot Markers -->
+              {lots.map(lot => {
+                const pos = lotPositions[lot.number];
+                if (!pos) return null;
+                const style = getStatusStyle(lot.status);
+                return (
+                  <button
+                    class="lot-marker absolute transform -translate-x-1/2 -translate-y-1/2 
+                           w-8 h-8 md:w-7 md:h-7 rounded-full flex items-center justify-center
+                           text-xs font-bold cursor-pointer transition-all duration-200
+                           hover:scale-150 hover:z-30 active:scale-125
+                           shadow-lg hover:shadow-xl"
+                    style={`left: ${pos.x}%; top: ${pos.y}%; 
+                           background-color: ${style.bg}; 
+                           border: 3px solid ${style.border};
+                           color: ${style.text};
+                           box-shadow: 0 2px 8px rgba(0,0,0,0.3);`}
+                    data-lot={lot.number}
+                    data-area={lot.area}
+                    data-status={lot.status || 'Processing'}
+                    data-house={lot.houseName || ''}
+                    data-price={lot.purchasePrice || ''}
+                    data-pipeline={lot.pipelineStep || ''}
+                    title={`Lot ${lot.number}${lot.houseName ? ' - ' + lot.houseName : ''}`}
+                  >
+                    {lot.number}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          
+          <!-- Mobile Legend -->
+          <div class="md:hidden mt-3 flex flex-wrap justify-center gap-2 text-xs text-lr-limestone">
+            <span class="flex items-center gap-1">
+              <span class="w-3 h-3 rounded-full bg-lr-moss"></span> Sold
+            </span>
+            <span class="flex items-center gap-1">
+              <span class="w-3 h-3 rounded-full bg-lr-sand"></span> Available
+            </span>
+            <span class="flex items-center gap-1">
+              <span class="w-3 h-3 rounded-full bg-lr-terracotta"></span> Reserved
+            </span>
+            <span class="flex items-center gap-1">
+              <span class="w-3 h-3 rounded-full bg-lr-keswick"></span> Building
+            </span>
+          </div>
+          <p class="text-xs text-lr-limestone/50 mt-2 text-center">
+            Tap any lot number for details
+          </p>
+        </div>
+
+        <!-- Lot Details Panel -->
+        <div class="lg:col-span-1">
+          <div class="bg-lr-moss/10 rounded-xl border border-lr-moss/30 p-6 sticky top-24" id="lot-details">
+            <div class="text-center py-12" id="no-selection">
+              <div class="text-4xl mb-3">🏡</div>
+              <h3 class="text-lg font-serif text-lr-alaska">Select a Lot</h3>
+              <p class="text-sm text-lr-limestone/60 mt-2">
+                Click on any lot number on the map to see details
+              </p>
+            </div>
+            
+            <div class="hidden" id="lot-info">
+              <div class="flex items-center justify-between mb-3">
+                <h2 class="text-3xl font-serif text-lr-alaska">
+                  Lot <span id="detail-number">-</span>
+                </h2>
+                <span 
+                  id="detail-status-badge"
+                  class="px-4 py-1.5 rounded-full text-sm font-medium"
+                >
+                  -
+                </span>
+              </div>
+              
+              <div id="detail-house" class="text-xl text-lr-sand mb-4 font-serif hidden"></div>
+              
+              <div class="space-y-3">
+                <div class="flex justify-between py-3 border-b border-lr-moss/20">
+                  <span class="text-lr-limestone">Area</span>
+                  <span id="detail-area" class="text-lr-alaska font-semibold text-lg">-</span>
+                </div>
+                <div class="flex justify-between py-3 border-b border-lr-moss/20">
+                  <span class="text-lr-limestone">Price</span>
+                  <span id="detail-price" class="text-lr-sand font-semibold text-lg">-</span>
+                </div>
+                <div class="flex justify-between py-3 border-b border-lr-moss/20">
+                  <span class="text-lr-limestone">Stage</span>
+                  <span id="detail-pipeline" class="text-lr-limestone/80">-</span>
+                </div>
+              </div>
+              
+              <div class="mt-6 space-y-3">
+                <a 
+                  id="detail-link"
+                  href="#"
+                  class="block w-full py-3 bg-lr-sand hover:bg-lr-terracotta text-lr-santorini 
+                         text-center rounded-lg transition font-medium text-lg"
+                >
+                  View Full Details →
+                </a>
+                <button 
+                  id="close-details"
+                  class="block w-full py-2 border border-lr-moss/30 text-lr-limestone 
+                         text-center rounded-lg hover:bg-lr-moss/20 transition text-sm"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Quick Lot List -->
+          <div class="mt-6 bg-lr-moss/10 rounded-xl border border-lr-moss/30 overflow-hidden">
+            <div class="px-4 py-3 border-b border-lr-moss/30">
+              <h3 class="font-medium text-lr-alaska text-sm">Available Lots</h3>
+            </div>
+            <div class="max-h-64 overflow-y-auto">
+              {lots.filter(l => l.status === 'Available').map(lot => (
+                <button 
+                  class="lot-list-item w-full px-4 py-3 flex justify-between items-center 
+                         hover:bg-lr-moss/20 transition border-b border-lr-moss/10 text-left"
+                  data-lot={lot.number}
+                >
+                  <div>
+                    <span class="text-lr-alaska font-medium">Lot {lot.number}</span>
+                    {lot.houseName && (
+                      <span class="text-lr-sand text-sm ml-2">{lot.houseName}</span>
+                    )}
+                  </div>
+                  <span class="text-lr-limestone/60 text-sm">{formatArea(lot.area)}</span>
+                </button>
+              ))}
+              {lots.filter(l => l.status === 'Available').length === 0 && (
+                <div class="px-4 py-6 text-center text-lr-limestone/50 text-sm">
+                  No available lots at the moment
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- All Lots Table -->
+      <div class="mt-8 bg-lr-moss/10 rounded-xl border border-lr-moss/30 overflow-hidden">
+        <div class="px-6 py-4 border-b border-lr-moss/30 flex items-center justify-between">
+          <h3 class="font-medium text-lr-alaska">All Lots</h3>
+          <input 
+            type="text" 
+            placeholder="Search lots..."
+            class="px-3 py-1.5 bg-lr-santorini border border-lr-moss/30 rounded-lg text-sm
+                   text-lr-alaska placeholder:text-lr-limestone/40 focus:outline-none 
+                   focus:border-lr-sand/50"
+            id="lot-search"
+          />
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="bg-lr-moss/20 text-left">
+              <tr>
+                <th class="px-4 py-3 text-lr-limestone/60 font-medium">#</th>
+                <th class="px-4 py-3 text-lr-limestone/60 font-medium">Name</th>
+                <th class="px-4 py-3 text-lr-limestone/60 font-medium">Area</th>
+                <th class="px-4 py-3 text-lr-limestone/60 font-medium">Status</th>
+                <th class="px-4 py-3 text-lr-limestone/60 font-medium">Pipeline</th>
+                <th class="px-4 py-3 text-lr-limestone/60 font-medium">Price</th>
+              </tr>
+            </thead>
+            <tbody id="lots-table-body">
+              {lots.sort((a, b) => a.number - b.number).map(lot => {
+                const style = getStatusStyle(lot.status);
+                return (
+                  <tr 
+                    class="lot-row border-b border-lr-moss/10 hover:bg-lr-moss/10 cursor-pointer transition"
+                    data-lot={lot.number}
+                  >
+                    <td class="px-4 py-3 font-medium text-lr-alaska">{lot.number}</td>
+                    <td class="px-4 py-3 text-lr-sand">{lot.houseName || '-'}</td>
+                    <td class="px-4 py-3 text-lr-limestone">{formatArea(lot.area)}</td>
+                    <td class="px-4 py-3">
+                      <span 
+                        class="px-2 py-0.5 rounded text-xs"
+                        style={`background-color: ${style.bg}30; color: ${style.bg === '#D4C9B5' ? '#1A1F16' : style.bg};`}
+                      >
+                        {style.label}
+                      </span>
+                    </td>
+                    <td class="px-4 py-3 text-lr-limestone/60 text-xs">{lot.pipelineStep || '-'}</td>
+                    <td class="px-4 py-3 text-lr-sand">{formatPrice(lot.purchasePrice)}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // Lot selection functionality
+    const lotMarkers = document.querySelectorAll('.lot-marker');
+    const lotListItems = document.querySelectorAll('.lot-list-item');
+    const lotRows = document.querySelectorAll('.lot-row');
+    const noSelection = document.getElementById('no-selection');
+    const lotInfo = document.getElementById('lot-info');
+    
+    function showLotDetails(lotNumber: string) {
+      const marker = document.querySelector(`.lot-marker[data-lot="${lotNumber}"]`) as HTMLElement;
+      if (!marker) return;
+      
+      const data = {
+        number: marker.dataset.lot,
+        area: parseFloat(marker.dataset.area || '0'),
+        status: marker.dataset.status,
+        house: marker.dataset.house,
+        price: marker.dataset.price,
+        pipeline: marker.dataset.pipeline
+      };
+      
+      // Update panel
+      noSelection?.classList.add('hidden');
+      lotInfo?.classList.remove('hidden');
+      
+      const numberEl = document.getElementById('detail-number');
+      const statusBadge = document.getElementById('detail-status-badge') as HTMLElement;
+      const houseEl = document.getElementById('detail-house');
+      const areaEl = document.getElementById('detail-area');
+      const priceEl = document.getElementById('detail-price');
+      const pipelineEl = document.getElementById('detail-pipeline');
+      const linkEl = document.getElementById('detail-link') as HTMLAnchorElement;
+      
+      if (numberEl) numberEl.textContent = data.number || '-';
+      
+      if (statusBadge) {
+        const colors: Record<string, string> = {
+          'Habitada': '#5C6B5C',
+          'Available': '#C4A67C', 
+          'Reserved': '#A65D3F',
+          'In Progress': '#3D4F3D',
+          'Processing': '#D4C9B5'
+        };
+        const color = colors[data.status || 'Processing'] || '#D4C9B5';
+        statusBadge.style.backgroundColor = color + '30';
+        statusBadge.style.color = color;
+        statusBadge.textContent = data.status || 'Processing';
+      }
+      
+      if (houseEl) {
+        if (data.house) {
+          houseEl.textContent = data.house;
+          houseEl.classList.remove('hidden');
+        } else {
+          houseEl.classList.add('hidden');
+        }
+      }
+      
+      if (areaEl) areaEl.textContent = data.area.toLocaleString('en-US', { maximumFractionDigits: 0 }) + ' m²';
+      if (priceEl) priceEl.textContent = data.price ? '₡' + parseInt(data.price).toLocaleString('en-US') : 'Contact for pricing';
+      if (pipelineEl) pipelineEl.textContent = data.pipeline || 'Not started';
+      if (linkEl) linkEl.href = `/lot/${data.number}`;
+      
+      // Highlight selected marker
+      lotMarkers.forEach(m => m.classList.remove('ring-2', 'ring-white', 'scale-125'));
+      marker.classList.add('ring-2', 'ring-white', 'scale-125');
+    }
+    
+    // Click handlers for list items and table rows
+    lotListItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const lotNumber = (item as HTMLElement).dataset.lot;
+        if (lotNumber) {
+          showLotDetails(lotNumber);
+          scrollToDetails();
+        }
+      });
+    });
+    
+    lotRows.forEach(row => {
+      row.addEventListener('click', () => {
+        const lotNumber = (row as HTMLElement).dataset.lot;
+        if (lotNumber) {
+          showLotDetails(lotNumber);
+          scrollToDetails();
+        }
+      });
+    });
+    
+    // Search functionality
+    const searchInput = document.getElementById('lot-search') as HTMLInputElement;
+    searchInput?.addEventListener('input', () => {
+      const query = searchInput.value.toLowerCase();
+      lotRows.forEach(row => {
+        const text = row.textContent?.toLowerCase() || '';
+        (row as HTMLElement).style.display = text.includes(query) ? '' : 'none';
+      });
+    });
+    
+    // Scroll to details on mobile when lot selected
+    function scrollToDetails() {
+      if (window.innerWidth < 1024) {
+        const detailsPanel = document.getElementById('lot-details');
+        detailsPanel?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+    
+    // Close details panel
+    const closeBtn = document.getElementById('close-details');
+    closeBtn?.addEventListener('click', () => {
+      noSelection?.classList.remove('hidden');
+      lotInfo?.classList.add('hidden');
+      lotMarkers.forEach(m => m.classList.remove('ring-2', 'ring-white', 'scale-125'));
+    });
+    
+    // Click handlers for map markers
+    lotMarkers.forEach(marker => {
+      marker.addEventListener('click', () => {
+        const lotNumber = (marker as HTMLElement).dataset.lot;
+        if (lotNumber) {
+          showLotDetails(lotNumber);
+          scrollToDetails();
+        }
+      });
+    });
+  </script>
+</Layout>

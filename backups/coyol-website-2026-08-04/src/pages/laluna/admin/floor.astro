@@ -1,0 +1,1159 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
+import '../../../styles/laluna-tables.css';
+---
+
+<Layout hideFloatingButtons={true} title="Floor Plan | La Luna Admin" appleTouchIcon="/laluna-apple-touch-icon.png">
+  <div class="admin">
+    <LaLunaAdminSidebar active="floor" />
+
+    <!-- Main Content -->
+    <main class="main">
+      <header class="header">
+        <div class="header-left">
+          <h1>Floor Plan</h1>
+          <span class="subtitle" id="tableCount">0 tables</span>
+        </div>
+        <div class="zone-tabs">
+          <button class="zone-tab" data-zone="inside">Inside</button>
+          <button class="zone-tab" data-zone="terraza">Terraza</button>
+          <button class="zone-tab active" data-zone="jardin">Jardin</button>
+        </div>
+        <div class="header-actions">
+          <button class="btn-secondary" id="resetBtn" title="Reload saved default">Reset Layout</button>
+          <button class="btn-success" id="saveDefaultBtn" title="Save current layout as default">Save as Default</button>
+          <button class="btn-primary" id="addTableBtn">+ Add Table</button>
+        </div>
+      </header>
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="tool-section">
+          <span class="tool-label">Add Table</span>
+          <div class="table-palette">
+            <div class="palette-item" draggable="true" data-type="square" title="Square (2-top)">
+              <div class="palette-preview square"></div>
+              <span class="palette-name">Square</span>
+              <span class="palette-capacity" data-type="square">2-4</span>
+            </div>
+            <div class="palette-item" draggable="true" data-type="round" title="Round (4-top)">
+              <div class="palette-preview round"></div>
+              <span class="palette-name">Round</span>
+              <span class="palette-capacity" data-type="round">2-4</span>
+            </div>
+            <div class="palette-item" draggable="true" data-type="round-lg" title="Large Round">
+              <div class="palette-preview round-lg"></div>
+              <span class="palette-name">Lg Round</span>
+              <span class="palette-capacity" data-type="round-lg">4-6</span>
+            </div>
+            <div class="palette-item" draggable="true" data-type="sofa" title="Sofa/Lounge">
+              <div class="palette-preview sofa"></div>
+              <span class="palette-name">Sofa</span>
+              <span class="palette-capacity" data-type="sofa">2-4</span>
+            </div>
+            <div class="palette-item" draggable="true" data-type="diamond" title="Diamond/Fantasma">
+              <div class="palette-preview diamond"></div>
+              <span class="palette-name">Diamond</span>
+              <span class="palette-capacity" data-type="diamond">2-4</span>
+            </div>
+            <div class="palette-item" draggable="true" data-type="rect" title="Long Table">
+              <div class="palette-preview rect"></div>
+              <span class="palette-name">Long</span>
+              <span class="palette-capacity" data-type="rect">4-8</span>
+            </div>
+            <div class="palette-item" draggable="true" data-type="bar" title="Bar/Communal">
+              <div class="palette-preview bar"></div>
+              <span class="palette-name">Communal</span>
+              <span class="palette-capacity" data-type="communal">6-16</span>
+            </div>
+          </div>
+        </div>
+        <div class="tool-section">
+          <span class="tool-label">Decorations</span>
+          <div class="table-palette">
+            <div class="palette-item" draggable="true" data-type="tree" title="Tree">
+              <div class="palette-preview tree">🌳</div>
+            </div>
+            <div class="palette-item" draggable="true" data-type="palm" title="Palm Tree">
+              <div class="palette-preview palm">🌴</div>
+            </div>
+            <div class="palette-item" draggable="true" data-type="plant" title="Plant">
+              <div class="palette-preview plant">🌿</div>
+            </div>
+            <div class="palette-item" draggable="true" data-type="flower" title="Flowers">
+              <div class="palette-preview flower">🌺</div>
+            </div>
+          </div>
+        </div>
+        <div class="tool-section" id="tableDetailsSection" style="display: none;">
+          <span class="tool-label">Selected Table</span>
+          <div class="table-details" id="tableDetails"></div>
+        </div>
+      </div>
+
+      <!-- Floor Plan -->
+      <div class="floor-wrapper">
+        <div class="floor-container">
+          <div class="floor-grid" id="floorGrid"></div>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="legend">
+        <span class="legend-item"><span class="dot wood"></span> Wood Table</span>
+        <span class="legend-item"><span class="dot round"></span> Round Table</span>
+        <span class="legend-item"><span class="dot sofa"></span> Sofa/Lounge</span>
+        <span class="legend-item"><span class="dot bar"></span> Bar</span>
+        <span class="legend-item"><span class="dot tree"></span> Tree/Plant</span>
+      </div>
+    </main>
+  </div>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --keswick: #A65D3F;
+      --coniston: #B86B4A;
+      --limestone: #D4C9B5;
+      --sand: #C4A67C;
+      --terracotta: #A65D3F;
+      --santorini: #1A1F16;
+      --cream: #F5F3EF;
+      --parchment: #EAE5DA;
+    }
+
+    .admin {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      min-height: 100vh;
+      background: var(--parchment);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: var(--santorini);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .sidebar-logo {
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--keswick);
+      margin-bottom: 1rem;
+    }
+
+    .sidebar-logo img {
+      height: 2.5rem; width: 2.5rem;
+      filter: brightness(0) invert(1);
+      opacity: 0.9;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .nav-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--limestone);
+      border-radius: 8px;
+      transition: all 0.15s;
+    }
+
+    .nav-icon svg { width: 20px; height: 20px; }
+    .nav-icon:hover { color: var(--cream); background: var(--keswick); }
+    .nav-icon.active { color: var(--cream); background: var(--terracotta); }
+
+    .sidebar-footer {
+      border-top: 1px solid var(--keswick);
+      padding-top: 1rem;
+    }
+
+    /* Main */
+    .main {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--santorini);
+    }
+
+    .subtitle {
+      font-size: 0.875rem;
+      color: var(--keswick);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .zone-tabs {
+      display: flex;
+      gap: 0.25rem;
+      background: var(--cream);
+      padding: 0.25rem;
+      border-radius: 8px;
+      border: 1px solid var(--limestone);
+    }
+
+    .zone-tab {
+      padding: 0.5rem 1.25rem;
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      cursor: pointer;
+      color: var(--keswick);
+      font-family: 'Inter', sans-serif;
+      transition: all 0.15s;
+    }
+
+    .zone-tab:hover { background: var(--parchment); }
+    .zone-tab.active { background: var(--keswick); color: var(--cream); }
+
+    .header-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .btn-primary, .btn-secondary {
+      padding: 0.625rem 1.25rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.15s;
+    }
+
+    .btn-primary { background: var(--terracotta); color: var(--cream); }
+    .btn-success { background: #28a745; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.8125rem; }
+    .btn-success:hover { background: #218838; }
+    .btn-primary:hover { background: #8B4D33; }
+    .btn-secondary { background: var(--cream); color: var(--santorini); border: 1px solid var(--limestone); }
+    .btn-secondary:hover { background: var(--parchment); }
+
+    /* Toolbar */
+    .toolbar {
+      background: var(--cream);
+      border: 1px solid var(--limestone);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+      display: flex;
+      gap: 2rem;
+    }
+
+    .tool-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .tool-label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      color: var(--keswick);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .table-palette {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .palette-item {
+      width: 65px;
+      height: 85px;
+      border: 2px dashed var(--limestone);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      cursor: grab;
+      transition: all 0.15s;
+      background: var(--parchment);
+      padding: 4px;
+    }
+
+    .palette-item:hover { 
+      border-color: var(--terracotta); 
+      background: var(--cream);
+    }
+    .palette-item:active { cursor: grabbing; }
+    
+    .palette-name {
+      font-size: 0.5625rem;
+      font-weight: 600;
+      color: var(--santorini);
+      font-family: 'Inter', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    
+    .palette-capacity {
+      font-size: 0.5625rem;
+      font-weight: 500;
+      color: var(--keswick);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .palette-preview {
+      border: 2px solid var(--sand);
+    }
+
+    /* Colors match Settings page: Brown #8B5E3C, Green #6B8E6B */
+    .palette-preview.square { 
+      width: 28px; height: 28px; border-radius: 4px; 
+      background: #8B5E3C;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+    }
+    .palette-preview.round { 
+      width: 28px; height: 28px; border-radius: 50%; 
+      background: #8B5E3C;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+    }
+    .palette-preview.round-lg { 
+      width: 36px; height: 36px; border-radius: 50%; 
+      background: #8B5E3C;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+    }
+    .palette-preview.sofa { 
+      width: 40px; height: 22px; border-radius: 8px 8px 4px 4px; 
+      background: #6B8E6B;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+    }
+    .palette-preview.diamond { 
+      width: 22px; height: 22px; border-radius: 3px; transform: rotate(45deg);
+      background: #8B5E3C;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+    }
+    .palette-preview.rect { 
+      width: 48px; height: 22px; border-radius: 3px; 
+      background: #8B5E3C;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+    }
+    .palette-preview.bar { 
+      width: 32px; height: 32px; border-radius: 4px; 
+      background: #8B5E3C;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+    }
+    .palette-preview.tree,
+    .palette-preview.palm,
+    .palette-preview.plant,
+    .palette-preview.flower { 
+      width: 36px; height: 36px; border: none;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      background: transparent;
+    }
+
+    /* Table Details */
+    .table-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .detail-input {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--limestone);
+      border-radius: 6px;
+      font-size: 0.875rem;
+      background: var(--cream);
+      color: var(--santorini);
+      width: 120px;
+    }
+
+    .detail-input:focus { outline: none; border-color: var(--keswick); }
+
+    .detail-btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--limestone);
+      background: var(--cream);
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      color: var(--santorini);
+    }
+
+    .detail-btn:hover { background: var(--parchment); }
+    .detail-btn.danger { color: var(--terracotta); border-color: var(--terracotta); }
+    .detail-btn.danger:hover { background: #fef2f2; }
+    
+    .covers-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--keswick);
+    }
+    
+    .covers-select {
+      padding: 0.375rem 0.5rem;
+      border: 1px solid var(--limestone);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      background: white;
+      min-width: 50px;
+    }
+
+    /* Floor */
+    .floor-wrapper {
+      flex: 1;
+      overflow: auto;
+      background: var(--cream);
+      border-radius: 12px;
+      border: 1px solid var(--limestone);
+    }
+
+    .floor-container {
+      min-width: 900px;
+      min-height: 500px;
+      position: relative;
+    }
+
+    .floor-grid {
+      position: absolute;
+      inset: 0;
+      background: 
+        linear-gradient(to right, var(--parchment) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--parchment) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    /* Tables - 3D Style */
+    :global(.floor-grid .table) {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: grab;
+      transition: transform 0.15s;
+      font-size: 0.625rem;
+      text-align: center;
+    }
+
+    :global(.floor-grid .table:hover) {
+      transform: scale(1.08);
+      z-index: 10;
+    }
+
+    :global(.floor-grid .table.selected) {
+      outline: 3px solid var(--terracotta);
+      outline-offset: 3px;
+    }
+
+    :global(.floor-grid .table-label) {
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      z-index: 2;
+    }
+
+    /* Square Table */
+    /* UNIFIED COLORS: Brown #8B5E3C, Green #6B8E6B, White text */
+    :global(.floor-grid .table.square) {
+      width: 60px; height: 60px; border-radius: 6px;
+      background: #8B5E3C;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 4px 8px rgba(0,0,0,0.3);
+    }
+    :global(.floor-grid .table.square .table-label) { color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.4); }
+
+    :global(.floor-grid .table.round) {
+      width: 58px; height: 58px; border-radius: 50%;
+      background: #8B5E3C;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 5px 10px rgba(0,0,0,0.25);
+    }
+    :global(.floor-grid .table.round .table-label) { color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.4); }
+
+    :global(.floor-grid .table.round-lg) {
+      width: 75px; height: 75px; border-radius: 50%;
+      background: #8B5E3C;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 6px 12px rgba(0,0,0,0.25);
+    }
+    :global(.floor-grid .table.round-lg .table-label) { color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.4); font-size: 0.75rem; }
+
+    :global(.floor-grid .table.round-xl) {
+      width: 95px; height: 95px; border-radius: 50%;
+      background: #8B5E3C;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 8px 16px rgba(0,0,0,0.25);
+    }
+    :global(.floor-grid .table.round-xl .table-label) { color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.4); font-size: 0.875rem; }
+
+    /* Sofa - GREEN */
+    :global(.floor-grid .table.sofa) {
+      width: 85px; height: 50px; border-radius: 25px;
+      background: #6B8E6B;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 6px 12px rgba(0,0,0,0.35);
+    }
+    :global(.floor-grid .table.sofa .table-label) { color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.4); font-size: 0.5625rem; }
+
+    /* Diamond */
+    :global(.floor-grid .table.diamond) {
+      width: 55px; height: 55px; border-radius: 6px; transform: rotate(45deg);
+      background: #8B5E3C;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 5px 10px rgba(0,0,0,0.3);
+    }
+    :global(.floor-grid .table.diamond .table-label) { transform: rotate(-45deg); color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.4); }
+
+    /* Bar */
+    :global(.floor-grid .table.bar) {
+      width: 80px; height: 80px; border-radius: 8px;
+      background: #8B5E3C;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 6px 12px rgba(0,0,0,0.4);
+    }
+    :global(.floor-grid .table.bar .table-label) { color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.4); font-size: 0.75rem; font-weight: 700; }
+
+    /* Rectangular / Long Wood Table */
+    :global(.floor-grid .table.rect) {
+      width: 140px; height: 55px; border-radius: 6px;
+      background: #8B5E3C;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 5px 10px rgba(0,0,0,0.3);
+    }
+    :global(.floor-grid .table.rect .table-label) { color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.4); font-size: 0.75rem; }
+
+    /* Decorations - Trees & Plants */
+    :global(.floor-grid .table.tree) {
+      width: 70px; height: 70px; border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #5a8f5a 0%, #3d6b3d 40%, #2d4f2d 70%, #1f3d1f 100%);
+      border: none;
+      box-shadow: 
+        0 8px 16px rgba(0,0,0,0.3),
+        inset 0 -10px 20px rgba(0,0,0,0.2),
+        inset 0 5px 15px rgba(150,200,150,0.3);
+    }
+    :global(.floor-grid .table.tree::before) {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 12px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 50%;
+      filter: blur(4px);
+    }
+    :global(.floor-grid .table.tree::after) {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 15px;
+      background: linear-gradient(180deg, #6b4423, #4a2f18);
+      border-radius: 2px;
+    }
+    :global(.floor-grid .table.tree .table-label) { display: none; }
+
+    :global(.floor-grid .table.palm) {
+      width: 60px; height: 80px; border-radius: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+    }
+    :global(.floor-grid .table.palm::before) {
+      content: '🌴';
+      font-size: 3.5rem;
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+    }
+    :global(.floor-grid .table.palm::after) {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 10px;
+      background: rgba(0,0,0,0.15);
+      border-radius: 50%;
+      filter: blur(4px);
+    }
+    :global(.floor-grid .table.palm .table-label) { display: none; }
+
+    :global(.floor-grid .table.plant) {
+      width: 45px; height: 45px; border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #7cb87c 0%, #5a9f5a 50%, #3d7d3d 100%);
+      border: 3px solid #4a6b4a;
+      box-shadow: 
+        0 4px 8px rgba(0,0,0,0.25),
+        inset 0 3px 8px rgba(180,220,180,0.4);
+    }
+    :global(.floor-grid .table.plant::before) {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 8px;
+      background: rgba(0,0,0,0.15);
+      border-radius: 50%;
+      filter: blur(3px);
+    }
+    :global(.floor-grid .table.plant .table-label) { display: none; }
+
+    :global(.floor-grid .table.flower) {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #f0a0a0 0%, #e07070 50%, #c05050 100%);
+      border: 3px solid #a04040;
+      box-shadow: 
+        0 4px 8px rgba(0,0,0,0.25),
+        inset 0 3px 8px rgba(255,200,200,0.5);
+    }
+    :global(.floor-grid .table.flower::before) {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 25px;
+      height: 6px;
+      background: rgba(0,0,0,0.15);
+      border-radius: 50%;
+      filter: blur(3px);
+    }
+    :global(.floor-grid .table.flower .table-label) { display: none; }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1rem;
+      justify-content: center;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8125rem;
+      color: var(--keswick);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+    }
+
+    /* Legend dots match Settings: Brown #8B5E3C, Green #6B8E6B */
+    .dot.wood { background: #8B5E3C; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
+    .dot.round { background: #8B5E3C; border-radius: 50%; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
+    .dot.sofa { background: #6B8E6B; border-radius: 6px; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
+    .dot.bar { background: #8B5E3C; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2); }
+    .dot.tree { background: radial-gradient(circle at 40% 35%, #5a8f5a, #2d4f2d); border-radius: 50%; }
+  </style>
+
+  <script is:inline>
+    const LAYOUT_KEY = 'laluna_floor_layout';
+    const LAYOUT_VERSION = 'v3-eatapp-final';
+    const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+    
+    // Force reset if version mismatch
+    if (localStorage.getItem('laluna_floor_version') !== LAYOUT_VERSION) {
+      localStorage.removeItem(LAYOUT_KEY);
+      localStorage.setItem('laluna_floor_version', LAYOUT_VERSION);
+      console.log('La Luna floor layout reset to:', LAYOUT_VERSION);
+    }
+    
+    let currentZone = 'jardin';
+    let selectedTable = null;
+    let draggedTable = null;
+    let dragOffset = { x: 0, y: 0 };
+
+    // La Luna Restaurant Default Layouts
+    const defaultLayouts = {
+      inside: [
+        // High tables (top)
+        { id: 'high-1', name: '2 high', type: 'square', x: 60, y: 40, minCovers: 2, maxCovers: 4 },
+        { id: 'high-2', name: '2 high', type: 'square', x: 140, y: 40, minCovers: 2, maxCovers: 4 },
+        // Indoor sofa (top right)
+        { id: 'indoor-sofa-1', name: '1 indoor sofa', type: 'sofa', x: 280, y: 40, minCovers: 2, maxCovers: 4 },
+        // Bar area (center)
+        { id: 'bar', name: 'bar', type: 'bar', x: 180, y: 140, minCovers: 1, maxCovers: 8 },
+        // 2 indoor sofas (middle right)
+        { id: 'indoor-sofa-2', name: '2 indoor sofas', type: 'sofa', x: 320, y: 120, minCovers: 4, maxCovers: 6 },
+        { id: 'indoor-sofa-3', name: '2 indoor sofas', type: 'sofa', x: 320, y: 180, minCovers: 4, maxCovers: 6 },
+        // 1 indoor sofa (bottom left)
+        { id: 'indoor-sof', name: '1 indoor sof', type: 'sofa', x: 60, y: 280, minCovers: 2, maxCovers: 4 },
+        // 3 indoor sofas (bottom right)
+        { id: 'indoor-sofa-4', name: '3 indoor sofas', type: 'sofa', x: 280, y: 260, minCovers: 2, maxCovers: 4 },
+        { id: 'indoor-sofa-5', name: '3 indoor sofas', type: 'sofa', x: 340, y: 260, minCovers: 2, maxCovers: 4 },
+        { id: 'indoor-sofa-6', name: '3 indoor sofas', type: 'sofa', x: 400, y: 260, minCovers: 2, maxCovers: 4 },
+      ],
+      terraza: [
+        // Top row: Tables 7-12 (rectangular)
+        { id: 't7', name: '7', type: 'square', x: 40, y: 40, minCovers: 2, maxCovers: 4 },
+        { id: 't8', name: '8', type: 'square', x: 110, y: 40, minCovers: 2, maxCovers: 4 },
+        { id: 't9', name: '9', type: 'square', x: 180, y: 40, minCovers: 2, maxCovers: 4 },
+        { id: 't10', name: '10', type: 'square', x: 250, y: 40, minCovers: 2, maxCovers: 4 },
+        { id: 't11', name: '11', type: 'square', x: 320, y: 40, minCovers: 2, maxCovers: 4 },
+        { id: 't12', name: '12', type: 'square', x: 390, y: 40, minCovers: 2, maxCovers: 4 },
+        // Bottom row: Tables 1-3 (round), 4-6 (rectangular)
+        { id: 't1', name: '1', type: 'round-lg', x: 40, y: 160, minCovers: 4, maxCovers: 6 },
+        { id: 't2', name: '2', type: 'round-lg', x: 130, y: 160, minCovers: 4, maxCovers: 6 },
+        { id: 't3', name: '3', type: 'round-lg', x: 220, y: 160, minCovers: 4, maxCovers: 6 },
+        { id: 't4', name: '4', type: 'square', x: 310, y: 160, minCovers: 2, maxCovers: 4 },
+        { id: 't5', name: '5', type: 'square', x: 380, y: 160, minCovers: 2, maxCovers: 4 },
+        { id: 't6', name: '6', type: 'square', x: 450, y: 160, minCovers: 2, maxCovers: 4 },
+      ],
+      jardin: [
+        // Top row
+        { id: 't17', name: '17', type: 'square', x: 40, y: 30, minCovers: 2, maxCovers: 4 },
+        { id: 't18-1', name: '18-1', type: 'square', x: 120, y: 30, minCovers: 2, maxCovers: 4 },
+        { id: 't18-2', name: '18-2', type: 'square', x: 190, y: 30, minCovers: 2, maxCovers: 4 },
+        { id: 't18-3', name: '18-3', type: 'square', x: 260, y: 30, minCovers: 2, maxCovers: 4 },
+        { id: 't18-4', name: '18-4', type: 'square', x: 330, y: 30, minCovers: 2, maxCovers: 4 },
+        { id: 't20', name: '20', type: 'square', x: 410, y: 30, minCovers: 2, maxCovers: 4 },
+        { id: 'f6', name: 'F6', type: 'square', x: 490, y: 30, minCovers: 2, maxCovers: 4 },
+        // Second row (left side - sofas)
+        { id: 'sofa-16', name: 'sofa 16', type: 'sofa', x: 40, y: 100, minCovers: 2, maxCovers: 4 },
+        // Second row (middle)
+        { id: 'fant-2-izq', name: 'FANT 2 Izqu', type: 'diamond', x: 140, y: 100, minCovers: 2, maxCovers: 4 },
+        { id: 'fan-2', name: 'FAN 2', type: 'diamond', x: 220, y: 100, minCovers: 2, maxCovers: 4 },
+        { id: 't19', name: '19', type: 'square', x: 300, y: 100, minCovers: 2, maxCovers: 4 },
+        { id: 'fan-19', name: 'FAN 19', type: 'diamond', x: 370, y: 100, minCovers: 2, maxCovers: 4 },
+        { id: 't24', name: '24', type: 'round-lg', x: 450, y: 100, minCovers: 4, maxCovers: 6 },
+        { id: 'f5', name: 'F5', type: 'square', x: 530, y: 100, minCovers: 2, maxCovers: 4 },
+        { id: 'sofa-21', name: 'sofa 21', type: 'sofa', x: 600, y: 100, minCovers: 2, maxCovers: 4 },
+        // Third row (left side - sofas)
+        { id: 'sofa-15', name: 'sofa 15', type: 'sofa', x: 40, y: 180, minCovers: 2, maxCovers: 4 },
+        // Third row (middle)
+        { id: 't26', name: '26', type: 'round-xl', x: 160, y: 180, minCovers: 6, maxCovers: 10 },
+        { id: 't25', name: '25', type: 'round-lg', x: 280, y: 180, minCovers: 4, maxCovers: 8 },
+        { id: 'fan-25', name: 'Fan 25', type: 'diamond', x: 370, y: 180, minCovers: 2, maxCovers: 4 },
+        { id: 'fant-4', name: 'Fant 4', type: 'diamond', x: 450, y: 180, minCovers: 2, maxCovers: 4 },
+        { id: 't22', name: '22', type: 'square', x: 530, y: 180, minCovers: 2, maxCovers: 4 },
+        // Bottom row (left side - sofas)
+        { id: 'sofa-14', name: 'sofa14', type: 'sofa', x: 40, y: 260, minCovers: 2, maxCovers: 4 },
+        // Bottom row (middle)
+        { id: 'fant-1', name: 'FANTASMA 1', type: 'diamond', x: 140, y: 260, minCovers: 2, maxCovers: 4 },
+        { id: 'sofa-13', name: 'sofa 13', type: 'sofa', x: 240, y: 260, minCovers: 2, maxCovers: 4 },
+        { id: 'fant-3', name: 'FANTASMA 3', type: 'diamond', x: 340, y: 260, minCovers: 2, maxCovers: 4 },
+        { id: 'sofa-23', name: 'sofa 23', type: 'sofa', x: 440, y: 260, minCovers: 2, maxCovers: 4 },
+        { id: 'f3p', name: 'F3P', type: 'square', x: 540, y: 260, minCovers: 2, maxCovers: 4 },
+      ]
+    };
+
+    function getLayout() {
+      const saved = localStorage.getItem(LAYOUT_KEY);
+      return saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultLayouts));
+    }
+
+    function saveLayout(layouts) {
+      localStorage.setItem(LAYOUT_KEY, JSON.stringify(layouts));
+    }
+    
+    // Save layout to Supabase as default
+    async function saveLayoutToSupabase() {
+      const layouts = getLayout();
+      try {
+        // Check if record exists
+        const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_floor_layout`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const existing = await checkRes.json();
+        
+        if (existing.length > 0) {
+          // Update existing
+          await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_floor_layout`, {
+            method: 'PATCH',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({ value: JSON.stringify(layouts), updated_at: new Date().toISOString() })
+          });
+        } else {
+          // Insert new
+          await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings`, {
+            method: 'POST',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ key: 'laluna_floor_layout', value: JSON.stringify(layouts) })
+          });
+        }
+        alert('Layout saved as default!');
+      } catch (e) {
+        console.error('Save to Supabase failed:', e);
+        alert('Failed to save. Check console.');
+      }
+    }
+    
+    // Load default layout from Supabase
+    async function loadLayoutFromSupabase() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_floor_layout`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const data = await res.json();
+        if (data.length > 0 && data[0].value) {
+          const layouts = JSON.parse(data[0].value);
+          localStorage.setItem(LAYOUT_KEY, JSON.stringify(layouts));
+          renderFloor();
+          updateStats();
+          alert('Default layout loaded!');
+          return true;
+        }
+      } catch (e) {
+        console.error('Load from Supabase failed:', e);
+      }
+      return false;
+    }
+
+    function updateStats() {
+      const layouts = getLayout();
+      const count = (layouts[currentZone] || []).length;
+      document.getElementById('tableCount').textContent = count + ' tables';
+    }
+
+    function renderFloor() {
+      const layouts = getLayout();
+      const tables = layouts[currentZone] || [];
+      const grid = document.getElementById('floorGrid');
+      grid.innerHTML = '';
+
+      tables.forEach(table => {
+        const el = document.createElement('div');
+        el.className = `table ${table.type}`;
+        el.dataset.id = table.id;
+        el.style.left = table.x + 'px';
+        el.style.top = table.y + 'px';
+        if (table.rotation) {
+          const baseRotation = table.type === 'diamond' ? 45 : 0;
+          el.style.transform = `rotate(${baseRotation + table.rotation}deg)`;
+        }
+        el.innerHTML = `<span class="table-label">${table.name}</span>`;
+
+        // Click to select
+        el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          selectTable(table.id);
+        });
+
+        // Drag - mouse
+        el.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          draggedTable = el;
+          const rect = el.getBoundingClientRect();
+          dragOffset.x = e.clientX - rect.left;
+          dragOffset.y = e.clientY - rect.top;
+          el.style.zIndex = '100';
+          el.style.cursor = 'grabbing';
+        });
+        
+        // Drag - touch (iPad)
+        el.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          const touch = e.touches[0];
+          draggedTable = el;
+          const rect = el.getBoundingClientRect();
+          dragOffset.x = touch.clientX - rect.left;
+          dragOffset.y = touch.clientY - rect.top;
+          el.style.zIndex = '100';
+        }, { passive: false });
+
+        grid.appendChild(el);
+      });
+
+      updateStats();
+    }
+
+    function selectTable(id) {
+      document.querySelectorAll('.table.selected').forEach(t => t.classList.remove('selected'));
+      selectedTable = id;
+
+      const el = document.querySelector(`[data-id="${id}"]`);
+      if (el) el.classList.add('selected');
+
+      const layouts = getLayout();
+      const table = layouts[currentZone].find(t => t.id === id);
+      if (!table) return;
+
+      document.getElementById('tableDetailsSection').style.display = 'flex';
+      document.getElementById('tableDetails').innerHTML = `
+        <input type="text" class="detail-input" id="tableName" value="${table.name}" placeholder="Name" />
+        <div class="covers-controls">
+          <label>Min:</label>
+          <select id="tableMinCovers" class="covers-select">
+            ${[1,2,3,4,5,6,7,8].map(n => `<option value="${n}" ${table.minCovers === n ? 'selected' : ''}>${n}</option>`).join('')}
+          </select>
+          <label>Max:</label>
+          <select id="tableMaxCovers" class="covers-select">
+            ${[2,3,4,5,6,7,8,10,12,15,20].map(n => `<option value="${n}" ${table.maxCovers === n ? 'selected' : ''}>${n}</option>`).join('')}
+          </select>
+        </div>
+        <button class="detail-btn" onclick="rotateSelected(-45)">↺</button>
+        <button class="detail-btn" onclick="rotateSelected(45)">↻</button>
+        <button class="detail-btn danger" onclick="deleteSelected()">Delete</button>
+      `;
+
+      document.getElementById('tableName').addEventListener('change', (e) => {
+        const layouts = getLayout();
+        const t = layouts[currentZone].find(t => t.id === selectedTable);
+        if (t) {
+          t.name = e.target.value;
+          saveLayout(layouts);
+          renderFloor();
+          selectTable(selectedTable);
+        }
+      });
+      
+      document.getElementById('tableMinCovers').addEventListener('change', (e) => {
+        const layouts = getLayout();
+        const t = layouts[currentZone].find(t => t.id === selectedTable);
+        if (t) {
+          t.minCovers = parseInt(e.target.value);
+          saveLayout(layouts);
+        }
+      });
+      
+      document.getElementById('tableMaxCovers').addEventListener('change', (e) => {
+        const layouts = getLayout();
+        const t = layouts[currentZone].find(t => t.id === selectedTable);
+        if (t) {
+          t.maxCovers = parseInt(e.target.value);
+          saveLayout(layouts);
+        }
+      });
+    }
+
+    function rotateSelected(deg) {
+      if (!selectedTable) return;
+      const layouts = getLayout();
+      const t = layouts[currentZone].find(t => t.id === selectedTable);
+      if (t) {
+        t.rotation = ((t.rotation || 0) + deg + 360) % 360;
+        saveLayout(layouts);
+        renderFloor();
+        selectTable(selectedTable);
+      }
+    }
+
+    function deleteSelected() {
+      if (!selectedTable || !confirm('Delete this table?')) return;
+      const layouts = getLayout();
+      layouts[currentZone] = layouts[currentZone].filter(t => t.id !== selectedTable);
+      saveLayout(layouts);
+      selectedTable = null;
+      document.getElementById('tableDetailsSection').style.display = 'none';
+      renderFloor();
+    }
+
+    // Mouse move
+    document.addEventListener('mousemove', (e) => {
+      if (!draggedTable) return;
+      const grid = document.getElementById('floorGrid');
+      const rect = grid.getBoundingClientRect();
+      let x = e.clientX - rect.left - dragOffset.x;
+      let y = e.clientY - rect.top - dragOffset.y;
+      x = Math.round(x / 10) * 10;
+      y = Math.round(y / 10) * 10;
+      x = Math.max(0, x);
+      y = Math.max(0, y);
+      draggedTable.style.left = x + 'px';
+      draggedTable.style.top = y + 'px';
+    });
+    
+    // Touch move (iPad)
+    document.addEventListener('touchmove', (e) => {
+      if (!draggedTable) return;
+      e.preventDefault();
+      const touch = e.touches[0];
+      const grid = document.getElementById('floorGrid');
+      const rect = grid.getBoundingClientRect();
+      let x = touch.clientX - rect.left - dragOffset.x;
+      let y = touch.clientY - rect.top - dragOffset.y;
+      x = Math.round(x / 10) * 10;
+      y = Math.round(y / 10) * 10;
+      x = Math.max(0, x);
+      y = Math.max(0, y);
+      draggedTable.style.left = x + 'px';
+      draggedTable.style.top = y + 'px';
+    }, { passive: false });
+
+    // Mouse up
+    document.addEventListener('mouseup', () => {
+      if (!draggedTable) return;
+      const id = draggedTable.dataset.id;
+      const x = parseInt(draggedTable.style.left);
+      const y = parseInt(draggedTable.style.top);
+      const layouts = getLayout();
+      const t = layouts[currentZone].find(t => t.id === id);
+      if (t) {
+        t.x = x;
+        t.y = y;
+        saveLayout(layouts);
+      }
+      draggedTable.style.zIndex = '';
+      draggedTable.style.cursor = 'grab';
+      draggedTable = null;
+    });
+    
+    // Touch end (iPad)
+    document.addEventListener('touchend', () => {
+      if (!draggedTable) return;
+      const id = draggedTable.dataset.id;
+      const x = parseInt(draggedTable.style.left);
+      const y = parseInt(draggedTable.style.top);
+      const layouts = getLayout();
+      const t = layouts[currentZone].find(t => t.id === id);
+      if (t) {
+        t.x = x;
+        t.y = y;
+        saveLayout(layouts);
+      }
+      draggedTable.style.zIndex = '';
+      draggedTable = null;
+    });
+
+    // Deselect on grid click
+    document.getElementById('floorGrid').addEventListener('click', () => {
+      document.querySelectorAll('.table.selected').forEach(t => t.classList.remove('selected'));
+      selectedTable = null;
+      document.getElementById('tableDetailsSection').style.display = 'none';
+    });
+
+    // Zone tabs
+    document.querySelectorAll('.zone-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.zone-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentZone = tab.dataset.zone;
+        selectedTable = null;
+        document.getElementById('tableDetailsSection').style.display = 'none';
+        renderFloor();
+      });
+    });
+
+    // Drag from palette
+    document.querySelectorAll('.palette-item').forEach(item => {
+      item.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('tableType', item.dataset.type);
+      });
+    });
+
+    document.getElementById('floorGrid').addEventListener('dragover', (e) => e.preventDefault());
+    document.getElementById('floorGrid').addEventListener('drop', (e) => {
+      e.preventDefault();
+      const type = e.dataTransfer.getData('tableType');
+      if (!type) return;
+
+      const rect = document.getElementById('floorGrid').getBoundingClientRect();
+      let x = e.clientX - rect.left - 30;
+      let y = e.clientY - rect.top - 30;
+      x = Math.round(x / 10) * 10;
+      y = Math.round(y / 10) * 10;
+
+      const layouts = getLayout();
+      const newId = 'new-' + Date.now();
+      
+      // Get capacity from settings
+      const tableSettings = JSON.parse(localStorage.getItem('laluna_table_types') || '{}');
+      const typeKey = type === 'communal' ? 'bar' : type;
+      const defaults = { 'square': [2,4], 'round': [2,4], 'round-lg': [4,6], 'sofa': [2,4], 'diamond': [2,4], 'rect': [4,8], 'bar': [6,16] };
+      const minCovers = tableSettings[typeKey]?.min || defaults[typeKey]?.[0] || 2;
+      const maxCovers = tableSettings[typeKey]?.max || defaults[typeKey]?.[1] || 4;
+      
+      layouts[currentZone].push({
+        id: newId,
+        name: 'New',
+        type: type,
+        x: x,
+        y: y,
+        minCovers: minCovers,
+        maxCovers: maxCovers
+      });
+      saveLayout(layouts);
+      renderFloor();
+      selectTable(newId);
+    });
+
+    // Reset - load from Supabase or fallback to hardcoded default
+    document.getElementById('resetBtn').addEventListener('click', async () => {
+      if (!confirm('Reset layout to saved default?')) return;
+      const loaded = await loadLayoutFromSupabase();
+      if (!loaded) {
+        // Fallback to hardcoded default
+        const layouts = JSON.parse(JSON.stringify(defaultLayouts));
+        saveLayout(layouts);
+        renderFloor();
+        updateStats();
+        alert('Reset to built-in default (no saved default found)');
+      }
+    });
+    
+    // Save as Default - persist to Supabase
+    document.getElementById('saveDefaultBtn').addEventListener('click', async () => {
+      if (!confirm('Save current layout as the new default for all devices?')) return;
+      await saveLayoutToSupabase();
+    });
+
+    // Expose functions
+    window.rotateSelected = rotateSelected;
+    window.deleteSelected = deleteSelected;
+
+    // Update palette capacities from settings
+    function updatePaletteCapacities() {
+      const settings = JSON.parse(localStorage.getItem('laluna_table_types') || '{}');
+      const defaults = { 'square': [2,4], 'round': [2,4], 'round-lg': [4,6], 'sofa': [2,4], 'diamond': [2,4], 'rect': [4,8], 'bar': [6,16], 'communal': [6,16] };
+      document.querySelectorAll('.palette-capacity').forEach(el => {
+        const type = el.dataset.type;
+        const key = type === 'communal' ? 'bar' : type;
+        const min = settings[key]?.min || defaults[key]?.[0] || 2;
+        const max = settings[key]?.max || defaults[key]?.[1] || 4;
+        el.textContent = `${min}-${max}`;
+      });
+    }
+    updatePaletteCapacities();
+
+    renderFloor();
+  </script>
+</Layout>

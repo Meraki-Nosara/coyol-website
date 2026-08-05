@@ -1,0 +1,410 @@
+---
+import CommandLayout from '../../../layouts/CommandLayout.astro';
+
+const { id } = Astro.params;
+const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+const SUPABASE_KEY = import.meta.env.SUPABASE_SERVICE_KEY || 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng';
+
+// Fetch lead
+let lead: any = null;
+try {
+  const response = await fetch(`${SUPABASE_URL}/rest/v1/mar_azul_leads?id=eq.${id}&select=*`, {
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+    }
+  });
+  if (response.ok) {
+    const data = await response.json();
+    lead = data[0] || null;
+  }
+} catch (e) {
+  console.error('Failed to fetch lead:', e);
+}
+
+// Status options
+const statusOptions = ['new', 'contacted', 'toured', 'negotiating', 'closed', 'lost'];
+
+// Purpose labels
+const purposeLabels: Record<string, string> = {
+  'primary': 'Primary Home',
+  'vacation': 'Vacation Home',
+  'investment': 'Investment',
+  'retirement': 'Retirement',
+};
+
+// Budget labels
+const budgetLabels: Record<string, string> = {
+  'under500': 'Under $500K',
+  '500-750': '$500K - $750K',
+  '750-1m': '$750K - $1M',
+  '1m-1.5m': '$1M - $1.5M',
+  '1.5m-2m': '$1.5M - $2M',
+  '2m+': '$2M+',
+};
+
+// Timeline labels
+const timelineLabels: Record<string, string> = {
+  'now': 'Ready Now',
+  '3months': 'Within 3 Months',
+  '6months': 'Within 6 Months',
+  'nextyear': 'Next Year',
+  'exploring': 'Just Exploring',
+};
+---
+
+<CommandLayout title={lead?.full_name || 'Lead Details'} active="qualified">
+  {!lead ? (
+    <div class="error-state">
+      <h1>Lead not found</h1>
+      <a href="/command/qualified">← Back to leads</a>
+    </div>
+  ) : (
+    <div class="lead-page">
+      <div class="header">
+        <div class="header-left">
+          <a href="/command/qualified" class="back-link">← All Leads</a>
+          <h1>{lead.full_name}</h1>
+          <div class="meta">
+            {lead.country && <span class="country">{lead.country}</span>}
+            <span class="date">Added {new Date(lead.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+          </div>
+        </div>
+        <div class="header-right">
+          <select id="statusSelect" class="status-select" data-id={lead.id}>
+            {statusOptions.map(s => (
+              <option value={s} selected={lead.status === s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
+            ))}
+          </select>
+          <a href={`/command/qualified/new?id=${lead.id}`} class="edit-btn">Edit Lead</a>
+        </div>
+      </div>
+
+      <div class="grid">
+        <!-- Contact Info -->
+        <div class="card">
+          <h3>Contact Information</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Email</span>
+              <span class="value">{lead.email || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Phone</span>
+              <span class="value">{lead.phone || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Referral Source</span>
+              <span class="value">{lead.referral_source || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Referred By</span>
+              <span class="value">{lead.referred_by || '—'}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Buying Profile -->
+        <div class="card">
+          <h3>Buying Profile</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Purpose</span>
+              <span class="value">
+                {lead.purpose?.map((p: string) => purposeLabels[p] || p).join(', ') || '—'}
+              </span>
+            </div>
+            <div class="info-item">
+              <span class="label">Budget</span>
+              <span class="value highlight">{budgetLabels[lead.total_budget] || lead.total_budget || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Timeline to Buy</span>
+              <span class="value">{timelineLabels[lead.timeline_to_buy] || lead.timeline_to_buy || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Payment Method</span>
+              <span class="value">{lead.payment_method || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Visited Nosara</span>
+              <span class="value">{lead.visited_nosara || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Intl. Experience</span>
+              <span class="value">{lead.international_exp || '—'}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Home Preferences -->
+        <div class="card">
+          <h3>Home Preferences</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Bedrooms</span>
+              <span class="value">{lead.bedrooms || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Bathrooms</span>
+              <span class="value">{lead.bathrooms || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Stories</span>
+              <span class="value">{lead.stories || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Lot Size</span>
+              <span class="value">{lead.lot_size || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Pool</span>
+              <span class="value">{lead.pool || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">View Priority</span>
+              <span class="value">{lead.view_priority || '—'}</span>
+            </div>
+            <div class="info-item full-width">
+              <span class="label">Preferred Models</span>
+              <span class="value">{lead.preferred_models?.join(', ') || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Custom vs Model</span>
+              <span class="value">{lead.custom_vs_model || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Guest Accommodation</span>
+              <span class="value">{lead.guest_accom || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Home Office</span>
+              <span class="value">{lead.home_office || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Rental Interest</span>
+              <span class="value">{lead.rental_interest || '—'}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notes & Concerns -->
+        <div class="card">
+          <h3>Notes & Concerns</h3>
+          <div class="info-grid">
+            <div class="info-item full-width">
+              <span class="label">Motivation Notes</span>
+              <span class="value notes">{lead.motivation_notes || '—'}</span>
+            </div>
+            <div class="info-item full-width">
+              <span class="label">Special Requests</span>
+              <span class="value notes">{lead.special_requests || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Decision Makers</span>
+              <span class="value">{lead.decision_makers || '—'}</span>
+            </div>
+            <div class="info-item full-width">
+              <span class="label">Concerns</span>
+              <span class="value">{lead.concerns?.join(', ') || '—'}</span>
+            </div>
+            <div class="info-item full-width">
+              <span class="label">Competitors Considering</span>
+              <span class="value notes">{lead.competitors || '—'}</span>
+            </div>
+            <div class="info-item full-width">
+              <span class="label">Closing Notes</span>
+              <span class="value notes">{lead.close_notes || '—'}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
+
+  <script is:inline define:vars={{ SUPABASE_URL: 'https://mnxjzvqgrrodalcmtntf.supabase.co', SUPABASE_KEY: 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD' }}>
+    const statusSelect = document.getElementById('statusSelect');
+    if (statusSelect) {
+      statusSelect.addEventListener('change', async (e) => {
+        const id = e.target.dataset.id;
+        const status = e.target.value;
+        
+        try {
+          const response = await fetch(`${SUPABASE_URL}/rest/v1/mar_azul_leads?id=eq.${id}`, {
+            method: 'PATCH',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status, updated_at: new Date().toISOString() }),
+          });
+          
+          if (response.ok) {
+            statusSelect.style.borderColor = '#22c55e';
+            setTimeout(() => statusSelect.style.borderColor = '', 1000);
+          }
+        } catch (error) {
+          console.error('Failed to update status:', error);
+        }
+      });
+    }
+  </script>
+
+  <style>
+    .error-state {
+      text-align: center;
+      padding: 60px;
+      color: #888;
+    }
+
+    .error-state h1 {
+      color: #C4A67C;
+      margin-bottom: 16px;
+    }
+
+    .error-state a {
+      color: #3D4F3D;
+    }
+
+    .lead-page {
+      max-width: 1200px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 32px;
+    }
+
+    .back-link {
+      color: #666;
+      text-decoration: none;
+      font-size: 13px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .back-link:hover {
+      color: #C4A67C;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 300;
+      color: #fff;
+      margin: 0 0 8px 0;
+    }
+
+    .meta {
+      color: #666;
+      font-size: 13px;
+    }
+
+    .country {
+      background: #2a2d26;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-right: 12px;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .status-select {
+      background: #1a1d17;
+      border: 2px solid #2a2d26;
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+
+    .edit-btn {
+      background: #3D4F3D;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .edit-btn:hover {
+      background: #4a5f4a;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: #141714;
+      border: 1px solid #1a1d17;
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .card h3 {
+      color: #C4A67C;
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0 0 20px 0;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #1a1d17;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .info-item.full-width {
+      grid-column: span 2;
+    }
+
+    .label {
+      color: #666;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .value {
+      color: #ddd;
+      font-size: 14px;
+    }
+
+    .value.highlight {
+      color: #C4A67C;
+      font-weight: 500;
+    }
+
+    .value.notes {
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+  </style>
+</CommandLayout>

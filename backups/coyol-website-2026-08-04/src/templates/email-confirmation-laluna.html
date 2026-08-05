@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin:0;padding:0;background-color:#f5f3ef;font-family:Georgia,serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f3ef;padding:40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="500" cellpadding="0" cellspacing="0" style="max-width:500px;background:white;border-radius:0;overflow:hidden;">
+          
+          <!-- Logo Section - White background -->
+          <tr>
+            <td align="center" style="padding:40px 40px 30px 40px;background-color:#ffffff;">
+              <img src="https://coyolnosara.com/images/logos/laluna-logo-brown.png" alt="La Luna" width="120" style="margin-bottom:10px;" />
+              <h1 style="color:#8B5A3C;font-size:32px;margin:0;font-weight:normal;letter-spacing:4px;">LA LUNA</h1>
+              <p style="color:#8B5A3C;font-size:12px;margin:8px 0 0 0;letter-spacing:3px;">— RESTAURANT —</p>
+            </td>
+          </tr>
+          
+          <!-- Reservation Confirmed Banner - Terracotta -->
+          <tr>
+            <td align="center" style="padding:30px 40px;background-color:#8B5A3C;">
+              <h2 style="color:#ffffff;font-size:20px;margin:0;font-weight:normal;letter-spacing:3px;">RESERVATION CONFIRMED</h2>
+              <p style="color:#ffffff;font-size:14px;margin:10px 0 0 0;opacity:0.9;">La Luna Restaurant</p>
+            </td>
+          </tr>
+          
+          <!-- Confirmation Code -->
+          <tr>
+            <td align="center" style="padding:40px 40px 30px 40px;background-color:#ffffff;">
+              <p style="color:#888;font-size:12px;margin:0 0 10px 0;letter-spacing:2px;">CONFIRMATION CODE</p>
+              <p style="color:#8B5A3C;font-size:32px;margin:0;font-weight:bold;letter-spacing:2px;">{{CONFIRMATION_CODE}}</p>
+            </td>
+          </tr>
+          
+          <!-- Date and Time Row -->
+          <tr>
+            <td style="padding:20px 40px;background-color:#ffffff;border-top:1px solid #eee;">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="50%" style="vertical-align:top;">
+                    <p style="color:#888;font-size:11px;margin:0 0 5px 0;letter-spacing:1px;">DATE</p>
+                    <p style="color:#1A1F16;font-size:16px;margin:0;font-weight:bold;">{{DATE}}</p>
+                  </td>
+                  <td width="50%" style="vertical-align:top;text-align:right;">
+                    <p style="color:#888;font-size:11px;margin:0 0 5px 0;letter-spacing:1px;">TIME</p>
+                    <p style="color:#1A1F16;font-size:16px;margin:0;font-weight:bold;">{{TIME}}</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          
+          <!-- Party Size and Name Row -->
+          <tr>
+            <td style="padding:20px 40px;background-color:#ffffff;border-top:1px solid #eee;">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="50%" style="vertical-align:top;">
+                    <p style="color:#888;font-size:11px;margin:0 0 5px 0;letter-spacing:1px;">PARTY SIZE</p>
+                    <p style="color:#1A1F16;font-size:16px;margin:0;font-weight:bold;">{{GUESTS}} guests</p>
+                  </td>
+                  <td width="50%" style="vertical-align:top;text-align:right;">
+                    <p style="color:#888;font-size:11px;margin:0 0 5px 0;letter-spacing:1px;">RESERVED FOR</p>
+                    <p style="color:#1A1F16;font-size:16px;margin:0;font-weight:bold;">{{GUEST_NAME}}</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          
+          <!-- Restaurant Info and Cancel -->
+          <tr>
+            <td align="center" style="padding:30px 40px;background-color:#ffffff;border-top:1px solid #eee;">
+              <p style="color:#1A1F16;font-size:16px;margin:0 0 5px 0;font-weight:bold;">La Luna Restaurant</p>
+              <p style="color:#666;font-size:14px;margin:0 0 5px 0;">Guiones, Nosara, Costa Rica</p>
+              <a href="tel:+50689968221" style="color:#8B5A3C;font-size:14px;text-decoration:underline;">+506 8996-8221</a>
+            </td>
+          </tr>
+          
+          <!-- Cancel Button -->
+          <tr>
+            <td align="center" style="padding:0 40px 30px 40px;background-color:#ffffff;">
+              <a href="{{CANCEL_URL}}" style="display:inline-block;padding:14px 40px;border:2px solid #8B5A3C;color:#8B5A3C;text-decoration:none;font-size:14px;letter-spacing:1px;">Cancel Reservation</a>
+            </td>
+          </tr>
+          
+          <!-- Footer - Terracotta -->
+          <tr>
+            <td align="center" style="padding:25px 40px;background-color:#8B5A3C;">
+              <p style="color:#ffffff;font-size:14px;margin:0 0 10px 0;">We look forward to welcoming you</p>
+              <p style="color:#ffffff;font-size:12px;margin:0;opacity:0.9;">Questions? Reply to this email or call <a href="tel:+50689968221" style="color:#ffffff;">+506 8996-8221</a></p>
+            </td>
+          </tr>
+          
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

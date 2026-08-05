@@ -1,0 +1,395 @@
+---
+import CommandLayout from '../../layouts/CommandLayout.astro';
+import guestData from '../../data/guests-enriched.json';
+
+const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+// SSR-only key (never sent to client)
+const SUPABASE_SERVICE_KEY = import.meta.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_KEY || 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng';
+
+// Fetch live CRM guests from Supabase using service key
+let crmGuests: any[] = [];
+if (SUPABASE_SERVICE_KEY) {
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/crm_guests?lead_score=gte.40&select=*&order=lead_score.desc&limit=2000`, {
+      headers: {
+        'apikey': SUPABASE_SERVICE_KEY,
+        'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+        'Range': '0-1999'
+      }
+    });
+    if (response.ok) {
+      crmGuests = await response.json();
+    }
+  } catch (e) {
+    console.error('Failed to fetch CRM guests:', e);
+  }
+}
+
+// Static guests from JSON
+const staticGuests = (guestData.guests || [])
+  .filter((g: any) => g.region !== 'LatAm' && g.segment !== 'local' && g.lead_score >= 40);
+
+// Merge: CRM guests take priority (by email), then add static guests
+const crmEmails = new Set(crmGuests.map((g: any) => g.email?.toLowerCase()));
+const mergedGuests = [
+  ...crmGuests.map((g: any) => ({
+    name: g.name,
+    email: g.email,
+    city: g.city,
+    region: g.region,
+    source: g.source || 'reservation',
+    lead_score: g.lead_score,
+    segment: g.lead_score >= 50 ? 'hot' : g.lead_score >= 40 ? 'warm' : 'cold',
+    is_new: true
+  })),
+  ...staticGuests.filter((g: any) => !crmEmails.has(g.email?.toLowerCase()))
+];
+
+// Sort by score
+const allLeads = mergedGuests.sort((a, b) => b.lead_score - a.lead_score);
+
+// Counts for filters
+const score50 = allLeads.filter(g => g.lead_score >= 50);
+const score45 = allLeads.filter(g => g.lead_score >= 45);
+const score40 = allLeads.filter(g => g.lead_score >= 40);
+---
+
+<CommandLayout title="Leads" active="leads">
+  
+  <div class="page">
+    <header class="page-header">
+      <div>
+        <h1>All Leads</h1>
+        <span class="subtitle">{allLeads.length} leads with score 40+ · US & Canada · <span class="live-indicator">Live from {crmGuests.length} CRM + {staticGuests.length - crmEmails.size} historic</span></span>
+      </div>
+      <div class="header-controls">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search by name..." />
+        </div>
+        <div class="filters">
+          <button class="filter active" data-filter="all">All ({allLeads.length})</button>
+          <button class="filter" data-filter="50">50+ ({score50.length})</button>
+          <button class="filter" data-filter="45">45+ ({score45.length})</button>
+          <button class="filter" data-filter="40">40+ ({score40.length})</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="table-container">
+      <table class="leads-table" id="leadsTable">
+        <thead>
+          <tr>
+            <th class="col-rank">#</th>
+            <th class="col-name">Name</th>
+            <th class="col-email">Email</th>
+            <th class="col-city">City</th>
+            <th class="col-source">Source</th>
+            <th class="col-score">Score</th>
+            <th class="col-segment">Segment</th>
+          </tr>
+        </thead>
+        <tbody>
+          {allLeads.map((lead, i) => (
+            <tr data-segment={lead.segment} data-score={lead.lead_score} data-name={lead.name?.toLowerCase() || ''}>
+              <td class="col-rank">{i + 1}</td>
+              <td class="col-name">
+                {lead.name || '—'}
+                {lead.is_new && <span class="new-badge">NEW</span>}
+              </td>
+              <td class="col-email">{lead.email}</td>
+              <td class="col-city">{lead.city || lead.region || '—'}</td>
+              <td class="col-source">{lead.source}</td>
+              <td class="col-score">
+                <span class="score">{lead.lead_score}</span>
+              </td>
+              <td class="col-segment">
+                <span class={`segment ${lead.segment}`}>{lead.segment}</span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="export-bar">
+      <a href="/downloads/meta-custom-audience.csv" class="btn-export" download>
+        Export Hot Leads CSV
+      </a>
+    </div>
+  </div>
+
+</CommandLayout>
+
+<script>
+  const rows = document.querySelectorAll('#leadsTable tbody tr');
+  const searchInput = document.getElementById('searchInput');
+  let currentFilter = 'all';
+  let currentSearch = '';
+
+  function filterRows() {
+    rows.forEach(row => {
+      const score = parseInt(row.dataset.score);
+      const name = row.dataset.name || '';
+      
+      // Score filter
+      let showByScore = true;
+      if (currentFilter === '50') showByScore = score >= 50;
+      else if (currentFilter === '45') showByScore = score >= 45;
+      else if (currentFilter === '40') showByScore = score >= 40;
+      
+      // Name search
+      const showBySearch = !currentSearch || name.includes(currentSearch.toLowerCase());
+      
+      row.style.display = (showByScore && showBySearch) ? '' : 'none';
+    });
+  }
+
+  document.querySelectorAll('.filter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      filterRows();
+    });
+  });
+
+  searchInput.addEventListener('input', (e) => {
+    currentSearch = e.target.value;
+    filterRows();
+  });
+</script>
+
+<style>
+  .page {
+    padding: 32px 40px;
+  }
+  
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  
+  .page-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #C4A67C;
+  }
+  
+  .subtitle {
+    font-size: 12px;
+    color: #555;
+  }
+
+  .live-indicator {
+    color: #10b981;
+    font-weight: 500;
+  }
+
+  .new-badge {
+    display: inline-block;
+    background: #10b981;
+    color: #000;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .search-box input {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(196, 166, 124, 0.3);
+    border-radius: 6px;
+    padding: 8px 14px;
+    color: #F5F3EF;
+    font-size: 13px;
+    width: 200px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-box input::placeholder {
+    color: #666;
+  }
+
+  .search-box input:focus {
+    border-color: #C4A67C;
+  }
+
+  .filters {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .filter {
+    padding: 8px 16px;
+    background: #0f1210;
+    border: 1px solid #1a1d17;
+    border-radius: 6px;
+    color: #888;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  
+  .filter:hover {
+    border-color: #2a3024;
+    color: #e8e6e1;
+  }
+  
+  .filter.active {
+    background: rgba(196, 166, 124, 0.1);
+    border-color: #C4A67C;
+    color: #C4A67C;
+  }
+  
+  /* Table */
+  .table-container {
+    background: #0f1210;
+    border: 1px solid #1a1d17;
+    border-radius: 12px;
+    overflow: hidden;
+    max-height: calc(100vh - 260px);
+    overflow-y: auto;
+  }
+  
+  .leads-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .leads-table th {
+    position: sticky;
+    top: 0;
+    background: #12150f;
+    text-align: left;
+    padding: 14px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #1a1d17;
+  }
+  
+  .leads-table td {
+    padding: 12px;
+    font-size: 13px;
+    border-bottom: 1px solid #1a1d17;
+  }
+  
+  .leads-table tr:hover td {
+    background: rgba(196, 166, 124, 0.03);
+  }
+  
+  .col-rank {
+    width: 50px;
+    color: #555;
+    text-align: center;
+  }
+  
+  .col-name {
+    font-weight: 500;
+  }
+
+  .new-badge {
+    display: inline-block;
+    background: #22c55e;
+    color: #000;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  
+  .col-email {
+    color: #888;
+    font-size: 12px;
+  }
+  
+  .col-city {
+    color: #999;
+  }
+  
+  .col-source {
+    color: #666;
+    font-size: 12px;
+  }
+  
+  .col-score {
+    width: 80px;
+  }
+  
+  .score {
+    display: inline-block;
+    padding: 4px 10px;
+    background: rgba(244, 63, 94, 0.12);
+    color: #f43f5e;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  
+  .col-segment {
+    width: 90px;
+  }
+  
+  .segment {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: capitalize;
+  }
+  
+  .segment.hot {
+    background: rgba(244, 63, 94, 0.15);
+    color: #f43f5e;
+  }
+  
+  .segment.warm {
+    background: rgba(249, 115, 22, 0.15);
+    color: #f97316;
+  }
+  
+  .segment.nurture {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+  }
+  
+  /* Export */
+  .export-bar {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .btn-export {
+    padding: 12px 24px;
+    background: #22c55e;
+    color: #0a0c08;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  
+  @media (max-width: 900px) {
+    .page { padding: 20px; }
+    .page-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .col-email, .col-source { display: none; }
+  }
+</style>
+// cache bust 1779681950

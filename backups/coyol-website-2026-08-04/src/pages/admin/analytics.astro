@@ -1,0 +1,715 @@
+---
+// Analytics Dashboard - Client-side Plausible Data
+// Data is fetched client-side to always show current stats
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Analytics — Coyol Nosara</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <style is:global>
+    :root {
+      --keswick: #3D4F3D;
+      --sand: #C4A67C;
+      --terracotta: #A65D3F;
+      --alaska: #F5F3EF;
+      --santorini: #1A1F16;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --red: #ef4444;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: linear-gradient(180deg, #0f1410 0%, #1a2318 50%, #0f1410 100%);
+      min-height: 100vh;
+      color: var(--alaska);
+      padding: 20px;
+    }
+    
+    .container { max-width: 1400px; margin: 0 auto; }
+    
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .back-link {
+      display: inline-block;
+      color: var(--sand);
+      text-decoration: none;
+      font-size: 0.85em;
+      margin-bottom: 16px;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    
+    .back-link:hover {
+      opacity: 1;
+    }
+    
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5em;
+      font-weight: 400;
+      letter-spacing: 8px;
+      color: var(--sand);
+      margin-bottom: 8px;
+    }
+    
+    .subtitle {
+      color: rgba(212, 201, 181, 0.6);
+      font-size: 0.9em;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    
+    .refresh-note {
+      color: rgba(255,255,255,0.4);
+      font-size: 0.75em;
+      margin-top: 8px;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 100px 20px;
+      color: rgba(255,255,255,0.5);
+    }
+    
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(196, 166, 124, 0.2);
+      border-top-color: var(--sand);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .error {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--red);
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: 12px;
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    
+    .stat-card {
+      background: radial-gradient(ellipse at center bottom, rgba(61, 79, 61, 0.4) 0%, rgba(15, 20, 16, 0.9) 70%);
+      border: 1px solid rgba(196, 166, 124, 0.2);
+      border-radius: 20px;
+      padding: 30px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--sand), transparent);
+    }
+    
+    .stat-label {
+      font-size: 0.7em;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--sand);
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    
+    .stat-value {
+      font-size: 3em;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
+    
+    .stat-unit {
+      font-size: 0.35em;
+      color: var(--sand);
+      font-weight: 400;
+      margin-left: 4px;
+    }
+    
+    .stat-period {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.8em;
+      margin-top: 8px;
+    }
+    
+    .stat-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.75em;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    
+    .status-good {
+      background: rgba(34, 197, 94, 0.2);
+      color: var(--green);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    
+    .status-warn {
+      background: rgba(234, 179, 8, 0.2);
+      color: var(--yellow);
+      border: 1px solid rgba(234, 179, 8, 0.3);
+    }
+    
+    .status-bad {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--red);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    
+    /* Charts Section */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    
+    .card {
+      background: rgba(61, 79, 61, 0.2);
+      border: 1px solid rgba(196, 166, 124, 0.15);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    
+    .card-title {
+      font-size: 1em;
+      font-weight: 600;
+      color: var(--sand);
+      letter-spacing: 1px;
+    }
+    
+    /* Bar Chart */
+    .bar-chart {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      height: 200px;
+      padding: 0 10px;
+      gap: 4px;
+    }
+    
+    .bar-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+      justify-content: flex-end;
+    }
+    
+    .bar {
+      width: 100%;
+      max-width: 40px;
+      background: linear-gradient(to top, var(--keswick), var(--sand));
+      border-radius: 4px 4px 0 0;
+      transition: height 0.5s ease;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .bar:hover {
+      background: linear-gradient(to top, var(--sand), #fff);
+    }
+    
+    .bar-label {
+      font-size: 0.65em;
+      color: rgba(255,255,255,0.5);
+      margin-top: 8px;
+    }
+    
+    /* Page List */
+    .page-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .page-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .page-rank {
+      width: 28px;
+      height: 28px;
+      background: rgba(196, 166, 124, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8em;
+      font-weight: 600;
+      color: var(--sand);
+    }
+    
+    .page-info { flex: 1; }
+    
+    .page-name {
+      font-size: 0.9em;
+      margin-bottom: 6px;
+      color: rgba(255,255,255,0.9);
+    }
+    
+    .page-bar {
+      height: 6px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    
+    .page-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--keswick), var(--sand));
+      border-radius: 3px;
+    }
+    
+    .page-views {
+      font-size: 0.9em;
+      font-weight: 600;
+      color: var(--sand);
+      min-width: 50px;
+      text-align: right;
+    }
+    
+    /* Sources */
+    .sources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    
+    .source-card {
+      background: rgba(61, 79, 61, 0.3);
+      border: 1px solid rgba(196, 166, 124, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .source-percent {
+      font-size: 1.8em;
+      font-weight: 700;
+      color: var(--sand);
+    }
+    
+    .source-name {
+      font-size: 0.8em;
+      color: rgba(255,255,255,0.6);
+      margin-top: 4px;
+    }
+    
+    .source-count {
+      font-size: 0.7em;
+      color: rgba(255,255,255,0.4);
+      margin-top: 2px;
+    }
+    
+    /* No Data State */
+    .no-data {
+      text-align: center;
+      padding: 40px 20px;
+      color: rgba(255,255,255,0.5);
+    }
+    
+    .no-data-icon {
+      font-size: 2em;
+      margin-bottom: 12px;
+    }
+    
+    @media (max-width: 1100px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .charts-grid { grid-template-columns: 1fr; }
+    }
+    
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .sources-grid { grid-template-columns: 1fr 1fr; }
+      .logo { font-size: 1.8em; letter-spacing: 4px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="/command" class="back-link">← Back to Command</a>
+      <div class="logo">COYOL</div>
+      <div class="subtitle">Website Analytics</div>
+      <div class="refresh-note" id="lastUpdate">Loading...</div>
+    </header>
+    
+    <div id="content">
+      <div class="loading">
+        <div class="loading-spinner"></div>
+        <p>Fetching analytics data...</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_KEY = '3MSdVsFOPR-5oFxyGxSuv5P4EU4HvVtp1HxXzjYOeuhsGRuGntpr8CaNGttl9jhk';
+    const SITE_ID = 'coyolnosara.com';
+    
+    const countryFlags = {
+      'US': '🇺🇸', 'United States': '🇺🇸',
+      'CR': '🇨🇷', 'Costa Rica': '🇨🇷',
+      'CA': '🇨🇦', 'Canada': '🇨🇦',
+      'MX': '🇲🇽', 'Mexico': '🇲🇽',
+      'GB': '🇬🇧', 'United Kingdom': '🇬🇧',
+      'DE': '🇩🇪', 'Germany': '🇩🇪',
+      'FR': '🇫🇷', 'France': '🇫🇷',
+      'ES': '🇪🇸', 'Spain': '🇪🇸',
+      'BR': '🇧🇷', 'Brazil': '🇧🇷',
+      'AU': '🇦🇺', 'Australia': '🇦🇺',
+      'NL': '🇳🇱', 'Netherlands': '🇳🇱',
+      'CH': '🇨🇭', 'Switzerland': '🇨🇭',
+      'AR': '🇦🇷', 'Argentina': '🇦🇷',
+      'CO': '🇨🇴', 'Colombia': '🇨🇴',
+      'PA': '🇵🇦', 'Panama': '🇵🇦',
+      'NI': '🇳🇮', 'Nicaragua': '🇳🇮',
+    };
+
+    async function fetchPlausible(endpoint, params = {}) {
+      const url = new URL('/api/plausible', window.location.origin);
+      url.searchParams.set('endpoint', endpoint);
+      Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+      
+      const res = await fetch(url.toString());
+      if (!res.ok) throw new Error(`API error: ${res.status}`);
+      return res.json();
+    }
+
+    function formatDuration(seconds) {
+      if (!seconds || seconds < 1) return '0s';
+      if (seconds < 60) return `${Math.round(seconds)}s`;
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.round(seconds % 60);
+      return `${mins}m ${secs}s`;
+    }
+
+    function getStatus(metric, value) {
+      if (metric === 'bounce_rate') {
+        if (value <= 40) return { cls: 'status-good', text: 'Excellent' };
+        if (value <= 60) return { cls: 'status-warn', text: 'Average' };
+        return { cls: 'status-bad', text: 'High' };
+      }
+      if (metric === 'duration') {
+        if (value >= 120) return { cls: 'status-good', text: 'Engaging' };
+        if (value >= 30) return { cls: 'status-warn', text: 'Brief' };
+        return { cls: 'status-bad', text: 'Too short' };
+      }
+      return { cls: '', text: '' };
+    }
+
+    async function loadData() {
+      try {
+        const [todayStats, weekStats, monthStats, timeseries, topPages, topSources, devices, countries] = await Promise.all([
+          fetchPlausible('aggregate', { period: 'day', metrics: 'visitors,pageviews,bounce_rate,visit_duration' }),
+          fetchPlausible('aggregate', { period: '7d', metrics: 'visitors,pageviews,bounce_rate,visit_duration' }),
+          fetchPlausible('aggregate', { period: '30d', metrics: 'visitors,pageviews,bounce_rate,visit_duration' }),
+          fetchPlausible('timeseries', { period: '30d', metrics: 'visitors' }),
+          fetchPlausible('breakdown', { period: '30d', property: 'event:page', metrics: 'visitors,pageviews', limit: '10' }),
+          fetchPlausible('breakdown', { period: '30d', property: 'visit:source', metrics: 'visitors', limit: '5' }),
+          fetchPlausible('breakdown', { period: '30d', property: 'visit:device', metrics: 'visitors', limit: '5' }),
+          fetchPlausible('breakdown', { period: '30d', property: 'visit:country', metrics: 'visitors', limit: '10' })
+        ]);
+
+        const today = todayStats?.results || { visitors: { value: 0 }, pageviews: { value: 0 }, bounce_rate: { value: 0 }, visit_duration: { value: 0 } };
+        const month = monthStats?.results || { visitors: { value: 0 }, pageviews: { value: 0 }, bounce_rate: { value: 0 }, visit_duration: { value: 0 } };
+        const dailyData = timeseries?.results || [];
+        const pages = topPages?.results || [];
+        const sources = topSources?.results || [];
+        const deviceData = devices?.results || [];
+        const countryData = countries?.results || [];
+
+        const totalSourceVisitors = sources.reduce((sum, s) => sum + s.visitors, 0) || 1;
+        const bounceStatus = getStatus('bounce_rate', month.bounce_rate.value);
+        const durationStatus = getStatus('duration', month.visit_duration.value);
+
+        // Property pages
+        const propertyPagesData = pages.filter(p => p.page?.includes('/homesites/'));
+
+        // Build HTML
+        let html = `
+          <!-- Main Stats Cards -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-label">Visitors</div>
+              <div class="stat-value">${month.visitors.value.toLocaleString()}</div>
+              <div class="stat-period">Last 30 days</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-label">Page Views</div>
+              <div class="stat-value">${month.pageviews.value.toLocaleString()}</div>
+              <div class="stat-period">Last 30 days</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-label">Avg. Duration</div>
+              <div class="stat-value">${formatDuration(month.visit_duration.value)}</div>
+              <div class="stat-period">Last 30 days</div>
+              ${durationStatus.text ? `<div class="stat-status ${durationStatus.cls}">${durationStatus.text}</div>` : ''}
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-label">Bounce Rate</div>
+              <div class="stat-value">${month.bounce_rate.value}<span class="stat-unit">%</span></div>
+              <div class="stat-period">Last 30 days</div>
+              ${bounceStatus.text ? `<div class="stat-status ${bounceStatus.cls}">${bounceStatus.text}</div>` : ''}
+            </div>
+          </div>
+        `;
+
+        // Charts
+        if (dailyData.length > 0) {
+          const max = Math.max(...dailyData.map(x => x.visitors), 1);
+          html += `
+            <div class="charts-grid">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Visitors — Last 30 Days</div>
+                </div>
+                <div class="bar-chart">
+                  ${dailyData.map(d => {
+                    const height = Math.max((d.visitors / max) * 100, 2);
+                    const day = new Date(d.date).getDate();
+                    return `
+                      <div class="bar-col">
+                        <div class="bar" style="height: ${height}%" title="${d.date}: ${d.visitors} visitors"></div>
+                        <div class="bar-label">${day}</div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+              
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Top Pages</div>
+                </div>
+                ${pages.length > 0 ? `
+                  <div class="page-list">
+                    ${pages.slice(0, 5).map((p, i) => {
+                      const maxViews = pages[0]?.pageviews || 1;
+                      const width = (p.pageviews / maxViews) * 100;
+                      const name = p.page === '/' ? 'Home' : p.page.replace(/^\//, '').replace(/-/g, ' ');
+                      return `
+                        <div class="page-item">
+                          <div class="page-rank">${i + 1}</div>
+                          <div class="page-info">
+                            <div class="page-name" style="text-transform: capitalize">${name}</div>
+                            <div class="page-bar"><div class="page-bar-fill" style="width: ${width}%"></div></div>
+                          </div>
+                          <div class="page-views">${p.pageviews}</div>
+                        </div>
+                      `;
+                    }).join('')}
+                  </div>
+                ` : '<div class="no-data"><div class="no-data-icon">📄</div><p>No page data yet</p></div>'}
+              </div>
+            </div>
+          `;
+        }
+
+        // Traffic Sources
+        html += `
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Traffic Sources</div>
+            </div>
+            ${sources.length > 0 ? `
+              <div class="sources-grid">
+                ${sources.map(s => {
+                  const name = s.source || 'Direct / None';
+                  const percent = Math.round((s.visitors / totalSourceVisitors) * 100);
+                  return `
+                    <div class="source-card">
+                      <div class="source-percent">${percent}%</div>
+                      <div class="source-name">${name}</div>
+                      <div class="source-count">${s.visitors} visitors</div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            ` : '<div class="no-data"><div class="no-data-icon">🔍</div><p>No source data yet</p></div>'}
+          </div>
+        `;
+
+        // Devices & Countries
+        html += `
+          <div class="charts-grid" style="margin-top: 24px;">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Devices</div>
+              </div>
+              ${deviceData.length > 0 ? `
+                <div class="sources-grid" style="grid-template-columns: repeat(3, 1fr);">
+                  ${deviceData.map(d => {
+                    const percent = Math.round((d.visitors / month.visitors.value) * 100) || 0;
+                    return `
+                      <div class="source-card">
+                        <div class="source-percent">${percent}%</div>
+                        <div class="source-name">${d.device}</div>
+                        <div class="source-count">${d.visitors} visitors</div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              ` : '<div class="no-data"><div class="no-data-icon">📱</div><p>No device data yet</p></div>'}
+            </div>
+            
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Countries</div>
+              </div>
+              ${countryData.length > 0 ? `
+                <div class="page-list">
+                  ${countryData.slice(0, 5).map((c, i) => {
+                    const maxVisitors = countryData[0]?.visitors || 1;
+                    const width = (c.visitors / maxVisitors) * 100;
+                    const flag = countryFlags[c.country] || '🌍';
+                    return `
+                      <div class="page-item">
+                        <div class="page-rank" style="font-size: 1.2em;">${flag}</div>
+                        <div class="page-info">
+                          <div class="page-name">${c.country}</div>
+                          <div class="page-bar"><div class="page-bar-fill" style="width: ${width}%"></div></div>
+                        </div>
+                        <div class="page-views">${c.visitors}</div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              ` : '<div class="no-data"><div class="no-data-icon">🌍</div><p>No country data yet</p></div>'}
+            </div>
+          </div>
+        `;
+
+        // Property Interest
+        html += `
+          <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+              <div class="card-title">Property Interest</div>
+            </div>
+            ${propertyPagesData.length > 0 ? `
+              <div class="page-list">
+                ${propertyPagesData.slice(0, 5).map((p, i) => {
+                  const maxViews = propertyPagesData[0]?.pageviews || 1;
+                  const width = (p.pageviews / maxViews) * 100;
+                  const name = p.page.replace('/homesites/', '').replace(/-/g, ' ');
+                  return `
+                    <div class="page-item">
+                      <div class="page-rank">${i + 1}</div>
+                      <div class="page-info">
+                        <div class="page-name" style="text-transform: capitalize;">${name}</div>
+                        <div class="page-bar"><div class="page-bar-fill" style="width: ${width}%"></div></div>
+                      </div>
+                      <div class="page-views">${p.pageviews} views</div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            ` : '<div class="no-data"><div class="no-data-icon">🏡</div><p>No property views yet</p></div>'}
+          </div>
+        `;
+
+        // Today's Stats
+        html += `
+          <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+              <div class="card-title">Today</div>
+            </div>
+            <div style="display: flex; gap: 40px; justify-content: center; padding: 20px 0;">
+              <div style="text-align: center;">
+                <div style="font-size: 2em; font-weight: 700; color: var(--sand);">${today.visitors.value}</div>
+                <div style="font-size: 0.8em; color: rgba(255,255,255,0.5);">Visitors</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-size: 2em; font-weight: 700; color: var(--sand);">${today.pageviews.value}</div>
+                <div style="font-size: 0.8em; color: rgba(255,255,255,0.5);">Page Views</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-size: 2em; font-weight: 700; color: var(--sand);">${formatDuration(today.visit_duration.value)}</div>
+                <div style="font-size: 0.8em; color: rgba(255,255,255,0.5);">Avg Duration</div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        // Plausible link
+        html += `
+          <div style="text-align: center; margin-top: 24px; padding: 16px; background: rgba(196, 166, 124, 0.1); border-radius: 8px;">
+            <p style="color: rgba(255,255,255,0.5); font-size: 0.8em;">
+              For detailed analytics, visit <a href="https://plausible.io/coyolnosara.com" target="_blank" style="color: var(--sand);">Plausible Dashboard</a>
+            </p>
+          </div>
+        `;
+
+        document.getElementById('content').innerHTML = html;
+        document.getElementById('lastUpdate').textContent = `Live data — ${new Date().toLocaleString('en-US', { timeZone: 'America/Costa_Rica' })}`;
+
+      } catch (error) {
+        console.error('Failed to load analytics:', error);
+        document.getElementById('content').innerHTML = `
+          <div class="error">
+            <h3>Failed to load analytics</h3>
+            <p>${error.message}</p>
+            <p style="margin-top: 16px; font-size: 0.9em;">
+              <a href="https://plausible.io/coyolnosara.com" target="_blank" style="color: var(--sand);">View on Plausible directly →</a>
+            </p>
+          </div>
+        `;
+      }
+    }
+
+    // Load on page load
+    loadData();
+  </script>
+</body>
+</html>

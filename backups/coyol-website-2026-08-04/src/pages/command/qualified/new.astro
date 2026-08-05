@@ -1,0 +1,716 @@
+---
+import CommandLayout from '../../../layouts/CommandLayout.astro';
+
+const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+---
+
+<CommandLayout title="New Lead" active="qualified">
+  <div class="lead-form-container">
+    
+    <!-- Header -->
+    <div class="form-header">
+      <a href="/command/qualified" class="back-link">← Back to Leads</a>
+      <div class="header-content">
+        <img src="/images/coyol-logo.png" alt="Coyol" class="form-logo">
+        <div>
+          <h1>Mar Azul — Lead Qualification</h1>
+          <p>Fill in as you learn more about the client</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-section">
+      <div class="progress-header">
+        <span>Progress</span>
+        <span id="progressText">0% complete</span>
+      </div>
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <form id="leadForm">
+      <input type="hidden" name="id" id="leadId">
+      
+      <!-- Section 1: Contact Info -->
+      <div class="form-section">
+        <h2>Contact Information <span class="meeting-badge">Meeting 1</span></h2>
+        
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>Full Name *</label>
+            <input type="text" name="full_name" required placeholder="Client's full name">
+          </div>
+          
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="email@example.com">
+          </div>
+          
+          <div class="form-group">
+            <label>Phone / WhatsApp</label>
+            <input type="tel" name="phone" placeholder="+1 555 123 4567">
+          </div>
+          
+          <div class="form-group">
+            <label>Country</label>
+            <input type="text" name="country" placeholder="USA, Canada, etc.">
+          </div>
+          
+          <div class="form-group">
+            <label>How did they find us?</label>
+            <select name="referral_source">
+              <option value="">Select...</option>
+              <option value="website">Website</option>
+              <option value="instagram">Instagram</option>
+              <option value="facebook">Facebook</option>
+              <option value="google">Google</option>
+              <option value="referral">Referral</option>
+              <option value="event">Event</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          
+          <div class="form-group full-width">
+            <label>Referred by (if applicable)</label>
+            <input type="text" name="referred_by" placeholder="Name of person who referred">
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Timeline & Motivation -->
+      <div class="form-section">
+        <h2>Timeline & Motivation <span class="meeting-badge">Meeting 1-2</span></h2>
+        
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>Purpose (select all that apply)</label>
+            <div class="checkbox-grid">
+              <label class="checkbox-item">
+                <input type="checkbox" name="purpose" value="primary_home"> Primary Home
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="purpose" value="vacation_home"> Vacation Home
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="purpose" value="rental_investment"> Rental Investment
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="purpose" value="retirement"> Retirement
+              </label>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Visited Nosara before?</label>
+            <select name="visited_nosara">
+              <option value="">Select...</option>
+              <option value="never">Never</option>
+              <option value="once">Once</option>
+              <option value="few_times">A few times</option>
+              <option value="many_times">Many times</option>
+              <option value="lives_here">Lives here</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Timeline to Purchase</label>
+            <select name="timeline">
+              <option value="">Select...</option>
+              <option value="asap">ASAP (0-3 months)</option>
+              <option value="soon">Soon (3-6 months)</option>
+              <option value="this_year">This year</option>
+              <option value="next_year">Next year</option>
+              <option value="exploring">Just exploring</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>When do they want to move in / use it?</label>
+            <select name="move_in_timeline">
+              <option value="">Select...</option>
+              <option value="immediate">Immediately</option>
+              <option value="6_months">Within 6 months</option>
+              <option value="1_year">Within 1 year</option>
+              <option value="2_years">1-2 years</option>
+              <option value="flexible">Flexible</option>
+            </select>
+          </div>
+          
+          <div class="form-group full-width">
+            <label>Notes from conversation</label>
+            <textarea name="motivation_notes" rows="3" placeholder="What brings them to Nosara? Any personal connection?"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Budget & Financing -->
+      <div class="form-section">
+        <h2>Budget & Financing <span class="meeting-badge">Meeting 2-3</span></h2>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Total Budget (lot + construction)</label>
+            <select name="budget_range">
+              <option value="">Select...</option>
+              <option value="under_500k">Under $500K</option>
+              <option value="500k_750k">$500K - $750K</option>
+              <option value="750k_1m">$750K - $1M</option>
+              <option value="1m_1.5m">$1M - $1.5M</option>
+              <option value="1.5m_2m">$1.5M - $2M</option>
+              <option value="over_2m">Over $2M</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Payment Method</label>
+            <select name="payment_method">
+              <option value="">Select...</option>
+              <option value="cash">All Cash</option>
+              <option value="financing_us">Financing (US/Canada)</option>
+              <option value="financing_cr">Financing (Costa Rica)</option>
+              <option value="mixed">Mixed (Cash + Financing)</option>
+              <option value="undecided">Undecided</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>International property experience?</label>
+            <select name="intl_experience">
+              <option value="">Select...</option>
+              <option value="first_time">First time</option>
+              <option value="owns_abroad">Owns property abroad</option>
+              <option value="experienced">Experienced investor</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Property Preferences -->
+      <div class="form-section">
+        <h2>Property Preferences <span class="meeting-badge">Meeting 2-3</span></h2>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Bedrooms</label>
+            <select name="bedrooms">
+              <option value="">Select...</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5+">5+</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Bathrooms</label>
+            <select name="bathrooms">
+              <option value="">Select...</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5+">5+</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Stories</label>
+            <select name="stories">
+              <option value="">Select...</option>
+              <option value="1">Single Story</option>
+              <option value="2">Two Story</option>
+              <option value="flexible">Flexible</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Preferred Lot Size</label>
+            <select name="lot_size_pref">
+              <option value="">Select...</option>
+              <option value="small">Small (&lt;2,000 m²)</option>
+              <option value="medium">Medium (2,000-3,500 m²)</option>
+              <option value="large">Large (3,500-5,000 m²)</option>
+              <option value="xlarge">Extra Large (&gt;5,000 m²)</option>
+            </select>
+          </div>
+          
+          <div class="form-group full-width">
+            <label>Must-haves (select all that apply)</label>
+            <div class="checkbox-grid">
+              <label class="checkbox-item">
+                <input type="checkbox" name="must_have" value="ocean_view"> Ocean View
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="must_have" value="pool"> Pool
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="must_have" value="privacy"> Privacy
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="must_have" value="flat_lot"> Flat Lot
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="must_have" value="guest_house"> Guest House
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="must_have" value="garage"> Garage
+              </label>
+            </div>
+          </div>
+          
+          <div class="form-group full-width">
+            <label>Additional notes</label>
+            <textarea name="property_notes" rows="3" placeholder="Any specific requirements or preferences"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: Qualification Score -->
+      <div class="form-section score-section">
+        <h2>Lead Score</h2>
+        
+        <div class="score-display">
+          <div class="score-number" id="scoreDisplay">--</div>
+          <div class="score-label">/ 100</div>
+        </div>
+        
+        <div class="score-bar">
+          <div id="scoreFill" class="score-fill"></div>
+        </div>
+        
+        <div class="score-legend">
+          <span class="cold">0-40 Cold</span>
+          <span class="warm">41-70 Warm</span>
+          <span class="hot">71-100 Hot</span>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" onclick="window.location='/command/qualified'">Cancel</button>
+        <button type="submit" class="btn-primary">Save Lead</button>
+      </div>
+    </form>
+  </div>
+
+  <style>
+    .lead-form-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 32px;
+    }
+    
+    .form-header {
+      margin-bottom: 24px;
+    }
+    
+    .back-link {
+      color: #666;
+      font-size: 14px;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+    
+    .back-link:hover {
+      color: #C4A67C;
+    }
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: linear-gradient(135deg, #3D4F3D, #2a3d2a);
+      padding: 24px;
+      border-radius: 12px;
+    }
+    
+    .form-logo {
+      height: 48px;
+      width: auto;
+      filter: brightness(0) invert(1);
+    }
+    
+    .header-content h1 {
+      font-size: 22px;
+      font-weight: 600;
+      color: #fff;
+      margin: 0;
+    }
+    
+    .header-content p {
+      color: rgba(255,255,255,0.7);
+      font-size: 14px;
+      margin: 4px 0 0;
+    }
+    
+    /* Progress */
+    .progress-section {
+      background: #0f1210;
+      border: 1px solid #1a1d17;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+    
+    .progress-bar {
+      height: 8px;
+      background: #1a1d17;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #3D4F3D, #C4A67C);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    
+    /* Form Sections */
+    .form-section {
+      background: #0f1210;
+      border: 1px solid #1a1d17;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    
+    .form-section h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #C4A67C;
+      margin: 0 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .meeting-badge {
+      font-size: 11px;
+      font-weight: 400;
+      color: #666;
+      background: #1a1d17;
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    
+    .form-group label {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 12px 14px;
+      background: #1a1d17;
+      border: 1px solid #2a3024;
+      border-radius: 8px;
+      color: #e8e6e1;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #C4A67C;
+    }
+    
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: #555;
+    }
+    
+    .form-group select option {
+      background: #1a1d17;
+      color: #e8e6e1;
+    }
+    
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    
+    /* Checkboxes */
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+    }
+    
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: #1a1d17;
+      border: 1px solid #2a3024;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 13px;
+      color: #e8e6e1;
+    }
+    
+    .checkbox-item:hover {
+      border-color: #3D4F3D;
+    }
+    
+    .checkbox-item input {
+      width: 16px;
+      height: 16px;
+      accent-color: #C4A67C;
+    }
+    
+    /* Score Section */
+    .score-section {
+      text-align: center;
+    }
+    
+    .score-display {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    
+    .score-number {
+      font-size: 48px;
+      font-weight: 700;
+      color: #C4A67C;
+    }
+    
+    .score-label {
+      font-size: 18px;
+      color: #666;
+    }
+    
+    .score-bar {
+      height: 12px;
+      background: linear-gradient(90deg, #666 0%, #C4A67C 50%, #22c55e 100%);
+      border-radius: 6px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    
+    .score-fill {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      background: #1a1d17;
+      border-radius: 0 6px 6px 0;
+      width: 100%;
+      transition: width 0.3s ease;
+    }
+    
+    .score-legend {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+    }
+    
+    .score-legend .cold { color: #666; }
+    .score-legend .warm { color: #C4A67C; }
+    .score-legend .hot { color: #22c55e; }
+    
+    /* Actions */
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #C4A67C, #a8905f);
+      border: none;
+      color: #0a0c08;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(196, 166, 124, 0.3);
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid #2a3024;
+      color: #888;
+    }
+    
+    .btn-secondary:hover {
+      border-color: #C4A67C;
+      color: #C4A67C;
+    }
+    
+    /* Responsive */
+    @media (max-width: 600px) {
+      .lead-form-container {
+        padding: 16px;
+      }
+      
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .checkbox-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script is:inline>
+    // Calculate score and progress
+    const form = document.getElementById('leadForm');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const scoreFill = document.getElementById('scoreFill');
+    
+    function updateProgress() {
+      const inputs = form.querySelectorAll('input:not([type="hidden"]):not([type="checkbox"]), select, textarea');
+      let filled = 0;
+      let total = inputs.length;
+      
+      inputs.forEach(input => {
+        if (input.value && input.value.trim() !== '') {
+          filled++;
+        }
+      });
+      
+      const progress = Math.round((filled / total) * 100);
+      progressFill.style.width = progress + '%';
+      progressText.textContent = progress + '% complete';
+      
+      // Calculate score
+      let score = 0;
+      
+      // Has name (+10)
+      if (form.full_name?.value) score += 10;
+      
+      // Has contact info (+15)
+      if (form.email?.value || form.phone?.value) score += 15;
+      
+      // Timeline (+20)
+      const timeline = form.timeline?.value;
+      if (timeline === 'asap') score += 20;
+      else if (timeline === 'soon') score += 15;
+      else if (timeline === 'this_year') score += 10;
+      else if (timeline) score += 5;
+      
+      // Budget (+20)
+      const budget = form.budget_range?.value;
+      if (budget === 'over_2m') score += 20;
+      else if (budget === '1.5m_2m') score += 18;
+      else if (budget === '1m_1.5m') score += 15;
+      else if (budget === '750k_1m') score += 12;
+      else if (budget) score += 8;
+      
+      // Payment method (+10)
+      if (form.payment_method?.value === 'cash') score += 10;
+      else if (form.payment_method?.value) score += 5;
+      
+      // Visited Nosara (+10)
+      const visited = form.visited_nosara?.value;
+      if (visited === 'lives_here' || visited === 'many_times') score += 10;
+      else if (visited === 'few_times') score += 7;
+      else if (visited === 'once') score += 4;
+      
+      // Has preferences (+10)
+      if (form.bedrooms?.value || form.lot_size_pref?.value) score += 10;
+      
+      // Referral (+5)
+      if (form.referral_source?.value === 'referral') score += 5;
+      
+      scoreDisplay.textContent = score;
+      scoreFill.style.width = (100 - score) + '%';
+    }
+    
+    form.addEventListener('input', updateProgress);
+    form.addEventListener('change', updateProgress);
+    
+    // Form submission
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      
+      // Collect checkboxes
+      data.purpose = Array.from(form.querySelectorAll('input[name="purpose"]:checked')).map(cb => cb.value);
+      data.must_have = Array.from(form.querySelectorAll('input[name="must_have"]:checked')).map(cb => cb.value);
+      data.score = parseInt(scoreDisplay.textContent) || 0;
+      data.created_at = new Date().toISOString();
+      
+      try {
+        const res = await fetch('https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/coyol_qualified_leads', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD',
+            'Authorization': 'Bearer sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify(data)
+        });
+        
+        if (res.ok) {
+          window.location.href = '/command/qualified?saved=1';
+        } else {
+          alert('Error saving lead. Please try again.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Error saving lead. Please try again.');
+      }
+    });
+  </script>
+</CommandLayout>

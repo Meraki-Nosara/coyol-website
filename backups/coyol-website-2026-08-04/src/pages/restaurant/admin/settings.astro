@@ -1,0 +1,307 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import '../../../styles/coyol-tables.css';
+---
+
+<Layout hideFloatingButtons={true} title="Settings | Coyol Restaurant Admin" appleTouchIcon="/coyol-apple-touch-icon.png">
+  <div class="admin">
+    <!-- Sidebar Icons -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="/images/coyol-moon-white-real.png" alt="Coyol Restaurant" />
+      </div>
+      <nav class="sidebar-nav">
+        <a href="/coyol/admin" class="nav-icon" title="Dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </a>
+        <a href="/coyol/admin/floor" class="nav-icon" title="Floor Plan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+        </a>
+        <a href="/coyol/admin/guests" class="nav-icon" title="Guests">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </a>
+        <a href="/coyol/admin/gifts" class="nav-icon" title="Gift Cards">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v10H4V12"></path><path d="M2 7h20v5H2z"></path><path d="M12 22V7"></path><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+        </a>
+        <a href="/coyol/admin/settings" class="nav-icon active" title="Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="/" class="nav-icon" title="View Site">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" style="padding: 24px;">
+      <h1 style="color: white; margin-bottom: 24px; font-size: 24px;">Settings</h1>
+      
+      <!-- Block Dates Section -->
+      <div class="settings-card">
+        <h2>Block Dates</h2>
+        <p style="color: #999; margin-bottom: 16px;">Block specific dates for private events (weddings, parties). Guests won't be able to make reservations on blocked dates.</p>
+        
+        <div class="block-form">
+          <input type="date" id="blockDate" min="" />
+          <input type="text" id="blockReason" placeholder="Reason (e.g., Private Wedding)" />
+          <button onclick="blockDate()" class="btn-block">Block Date</button>
+        </div>
+        
+        <div class="blocked-list" id="blockedList">
+          <p style="color: #666;">Loading blocked dates...</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <style>
+    .admin {
+      display: flex;
+      min-height: 100vh;
+      background: #1a1a1a;
+    }
+    
+    .sidebar {
+      width: 60px;
+      background: #3D4F3D;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0;
+    }
+    
+    .sidebar-logo img {
+      width: 36px;
+      height: 36px;
+      margin-bottom: 24px;
+    }
+    
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+    
+    .nav-icon {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.2s;
+    }
+    
+    .nav-icon:hover, .nav-icon.active {
+      background: rgba(255,255,255,0.15);
+      color: white;
+    }
+    
+    .nav-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+    
+    .sidebar-footer {
+      margin-top: auto;
+    }
+    
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+    }
+    
+    .settings-card {
+      background: #242424;
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 600px;
+    }
+    
+    .settings-card h2 {
+      color: white;
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+    
+    .block-form {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    
+    .block-form input {
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #1a1a1a;
+      color: white;
+      font-size: 14px;
+    }
+    
+    .block-form input[type="date"] {
+      width: 160px;
+    }
+    
+    .block-form input[type="text"] {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .btn-block {
+      padding: 12px 24px;
+      background: #3D4F3D;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .btn-block:hover {
+      background: #2D3F2D;
+    }
+    
+    .blocked-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .blocked-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: #1a1a1a;
+      border-radius: 8px;
+      border-left: 3px solid #3D4F3D;
+    }
+    
+    .blocked-item .date {
+      color: white;
+      font-weight: 600;
+    }
+    
+    .blocked-item .reason {
+      color: #999;
+      font-size: 13px;
+    }
+    
+    .blocked-item .btn-unblock {
+      padding: 6px 12px;
+      background: transparent;
+      border: 1px solid #666;
+      color: #999;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    
+    .blocked-item .btn-unblock:hover {
+      border-color: #ff6b6b;
+      color: #ff6b6b;
+    }
+    
+    .empty-state {
+      color: #666;
+      text-align: center;
+      padding: 24px;
+    }
+  </style>
+
+  <script is:inline>
+    // Set min date to today
+    document.getElementById('blockDate').min = new Date().toISOString().split('T')[0];
+    
+    async function loadBlockedDates() {
+      try {
+        const res = await fetch('/api/blocked-dates?restaurant=coyol');
+        const dates = await res.json();
+        
+        const list = document.getElementById('blockedList');
+        
+        if (!dates.length) {
+          list.innerHTML = '<p class="empty-state">No blocked dates</p>';
+          return;
+        }
+        
+        list.innerHTML = dates.map(d => `
+          <div class="blocked-item">
+            <div>
+              <div class="date">${formatDate(d.date)}</div>
+              <div class="reason">${d.reason || 'No reason specified'}</div>
+            </div>
+            <button class="btn-unblock" onclick="unblockDate('${d.id}')">Unblock</button>
+          </div>
+        `).join('');
+      } catch (e) {
+        console.error('Error loading blocked dates:', e);
+      }
+    }
+    
+    function formatDate(dateStr) {
+      const date = new Date(dateStr + 'T12:00:00');
+      return date.toLocaleDateString('en-US', { 
+        weekday: 'long',
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+    }
+    
+    async function blockDate() {
+      const date = document.getElementById('blockDate').value;
+      const reason = document.getElementById('blockReason').value;
+      
+      if (!date) {
+        alert('Please select a date');
+        return;
+      }
+      
+      try {
+        const res = await fetch('/api/blocked-dates', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            restaurant: 'coyol',
+            date,
+            reason,
+            blocked_by: 'admin'
+          })
+        });
+        
+        if (res.ok) {
+          document.getElementById('blockDate').value = '';
+          document.getElementById('blockReason').value = '';
+          loadBlockedDates();
+        } else {
+          const error = await res.json();
+          alert('Error: ' + (error.error || 'Could not block date'));
+        }
+      } catch (e) {
+        alert('Error blocking date');
+      }
+    }
+    
+    async function unblockDate(id) {
+      if (!confirm('Unblock this date?')) return;
+      
+      try {
+        await fetch(`/api/blocked-dates?id=${id}`, { method: 'DELETE' });
+        loadBlockedDates();
+      } catch (e) {
+        alert('Error unblocking date');
+      }
+    }
+    
+    // Load on page load
+    loadBlockedDates();
+  </script>
+</Layout>

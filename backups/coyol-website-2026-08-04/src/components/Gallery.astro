@@ -1,0 +1,51 @@
+---
+const images = [
+  { src: "/images/real/lagoon-aerial.jpg", alt: "Lagoon aerial with gazebo", span: "lg:col-span-2 lg:row-span-2" },
+  { src: "/images/gallery/land-rover-greenhouse.jpg", alt: "Classic Land Rover at the greenhouse", span: "" },
+  { src: "/images/gallery/tennis-aerial.jpg", alt: "Clay tennis court aerial", span: "lg:col-span-2" },
+  { src: "/images/gallery/farrier.jpg", alt: "Farrier shoeing horses", span: "" },
+  { src: "/images/gallery/firepit-friends.jpg", alt: "Friends by the firepit at sunset", span: "lg:col-span-2" },
+  { src: "/images/gallery/greenhouse-interior.jpg", alt: "Organic greenhouse", span: "" },
+  { src: "/images/real/39.jpg", alt: "Luxury compound with pool", span: "lg:col-span-2" },
+  { src: "/images/gallery/ranch-team.jpg", alt: "Our ranch team", span: "" },
+  { src: "/images/gallery/interior-decor.jpg", alt: "Elegant interior details", span: "" },
+  { src: "/images/gallery/coyol-evening.jpg", alt: "Coyol Restaurant evening", span: "lg:col-span-2" },
+  { src: "/images/gallery/water-reservoir.jpg", alt: "Water reservoir in the jungle", span: "" },
+  { src: "/images/gallery/flaming-dish.jpg", alt: "Flaming dish at La Luna", span: "" },
+  { src: "/images/real/8.jpg", alt: "Ruby with her black horse", span: "" },
+  { src: "/images/gallery/construction-frame.jpg", alt: "Home construction in the jungle", span: "lg:col-span-2" },
+  { src: "/images/real/2.jpg", alt: "Beach dining at La Luna", span: "" },
+];
+---
+
+<section id="gallery" class="py-24 lg:py-32 bg-landrover-pangea">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    
+    <!-- Header -->
+    <div class="max-w-3xl mb-16">
+      <p class="text-landrover-coniston text-xs tracking-[0.3em] uppercase mb-4">Gallery</p>
+      <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl text-landrover-santorini mb-6">
+        Spaces That Inspire
+      </h2>
+      <p class="text-landrover-marine/70 text-lg leading-relaxed">
+        Each design emerges naturally from its surroundings, guided by light, climate, 
+        and material honesty. No repetition. No formulas. Only spaces that feel inevitable.
+      </p>
+    </div>
+
+    <!-- Image Grid -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {images.map((image) => (
+        <div class={`img-zoom overflow-hidden ${image.span}`}>
+          <img 
+            src={image.src}
+            alt={image.alt}
+            class="w-full h-full object-cover aspect-square"
+            loading="lazy"
+          />
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Casa Cacao — Finish Selector | Coyol</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --bg: #D4C9B5;
+      --bg-light: #E8E2D6;
+      --text: #1A1F16;
+      --text-light: #4A5D4A;
+      --accent: #3D4F3D;
+      --white: #F5F3EF;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    ::selection {
+      background: var(--accent);
+      color: white;
+    }
+    
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .header-logo {
+      height: 36px;
+    }
+    
+    .header-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    
+    .header-subtitle {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--text-light);
+    }
+    
+    /* Main Layout - Side by Side */
+    .main {
+      padding-top: 70px;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      min-height: calc(100vh - 70px);
+    }
+    
+    /* Left - Render (Sticky) */
+    .render-panel {
+      position: sticky;
+      top: 70px;
+      height: calc(100vh - 70px);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .render-frame {
+      flex: 1;
+      background: var(--bg-light);
+      border-radius: 8px;
+      padding: 0;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .render-image {
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+      object-fit: cover;
+      display: block;
+    }
+    
+    /* Current Selection Bar */
+    .current-selection {
+      margin-top: 16px;
+      padding: 16px 20px;
+      background: rgba(255,255,255,0.6);
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .current-selection-label {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 4px;
+    }
+    
+    .current-selection-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+    }
+    
+    /* Right - Swatches Panel */
+    .swatches-panel {
+      background: var(--white);
+      padding: 32px 28px;
+      overflow-y: auto;
+      border-left: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .panel-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    
+    .panel-number {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--text-light);
+      margin-bottom: 4px;
+    }
+    
+    .panel-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 400;
+      letter-spacing: 1px;
+    }
+    
+    /* Swatches Section */
+    .swatches-section {
+      margin-bottom: 32px;
+    }
+    
+    .swatches-label {
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    
+    .swatches-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .swatch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    
+    .swatch:hover {
+      transform: translateY(-3px);
+    }
+    
+    .swatch-circle {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .swatch.selected .swatch-circle {
+      border-color: var(--accent);
+      box-shadow: 0 4px 14px rgba(61,79,61,0.3);
+      transform: scale(1.08);
+    }
+    
+    .swatch-name {
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text);
+      text-align: center;
+      max-width: 80px;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+    
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: rgba(0,0,0,0.08);
+      margin: 8px 0 32px;
+    }
+    
+    /* CTA Button */
+    .cta-section {
+      margin-top: 24px;
+      text-align: center;
+    }
+    
+    .cta-button {
+      display: inline-block;
+      width: 100%;
+      padding: 18px 32px;
+      background: var(--accent);
+      color: white;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    .cta-button:hover {
+      background: var(--text);
+      transform: translateY(-2px);
+    }
+    
+    /* Footer note */
+    .footer-note {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 10px;
+      color: var(--text-light);
+      letter-spacing: 0.5px;
+    }
+    
+    /* Mobile - Stack vertically */
+    @media (max-width: 900px) {
+      .main {
+        grid-template-columns: 1fr;
+        display: block;
+      }
+      
+      .render-panel {
+        position: sticky;
+        top: 70px;
+        height: auto;
+        padding: 12px;
+        z-index: 50;
+        background: var(--bg);
+      }
+      
+      .render-frame {
+        aspect-ratio: 16/10;
+        height: auto;
+        max-height: 45vh;
+        padding: 0;
+        flex: none;
+      }
+      
+      .render-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      
+      .current-selection {
+        margin-top: 8px;
+        padding: 10px 16px;
+      }
+      
+      .current-selection-value {
+        font-size: 13px;
+      }
+      
+      .swatches-panel {
+        border-left: none;
+        border-top: 1px solid rgba(0,0,0,0.05);
+      }
+    }
+    
+    @media (max-width: 500px) {
+      .header {
+        padding: 12px 16px;
+      }
+      
+      .header-logo {
+        height: 28px;
+      }
+      
+      .header-title {
+        font-size: 14px;
+      }
+      
+      .render-panel {
+        padding: 8px;
+      }
+      
+      .render-frame {
+        max-height: 40vh;
+        border-radius: 6px;
+      }
+      
+      .swatches-panel {
+        padding: 20px 16px;
+      }
+      
+      .panel-header {
+        margin-bottom: 20px;
+      }
+      
+      .panel-title {
+        font-size: 20px;
+      }
+      
+      .swatches-section {
+        margin-bottom: 20px;
+      }
+      
+      .swatches-label {
+        margin-bottom: 12px;
+      }
+      
+      .swatch-circle {
+        width: 52px;
+        height: 52px;
+      }
+      
+      .swatches-row {
+        gap: 14px;
+      }
+      
+      .swatch-name {
+        font-size: 8px;
+      }
+      
+      .divider {
+        margin: 4px 0 20px;
+      }
+    }
+    
+    /* Landscape phone - use side-by-side layout */
+    @media (max-width: 900px) and (orientation: landscape) {
+      .main {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+      
+      .render-panel {
+        position: sticky;
+        top: 70px;
+        height: calc(100vh - 70px);
+        padding: 12px;
+      }
+      
+      .render-frame {
+        max-height: none;
+        height: 100%;
+        aspect-ratio: auto;
+      }
+      
+      .render-image {
+        object-fit: contain;
+      }
+      
+      .current-selection {
+        display: none;
+      }
+      
+      .swatches-panel {
+        border-left: 1px solid rgba(0,0,0,0.05);
+        border-top: none;
+        padding: 16px;
+        overflow-y: auto;
+        max-height: calc(100vh - 70px);
+      }
+      
+      .panel-header {
+        margin-bottom: 16px;
+      }
+      
+      .panel-title {
+        font-size: 18px;
+      }
+      
+      .swatches-section {
+        margin-bottom: 16px;
+      }
+      
+      .swatch-circle {
+        width: 48px;
+        height: 48px;
+      }
+      
+      .swatches-row {
+        gap: 12px;
+      }
+      
+      .divider {
+        margin: 8px 0 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Header -->
+  <header class="header">
+    <img src="/images/logo-coyol.png" alt="Coyol" class="header-logo">
+    <div style="text-align: right;">
+      <div class="header-title">Casa Cacao</div>
+      <div class="header-subtitle">Lot 18 · Mar Azul</div>
+    </div>
+  </header>
+  
+  <main class="main">
+    
+    <!-- Left - Render -->
+    <div class="render-panel">
+      <div class="render-frame">
+        <img src="/images/finishes/renders/exterior_white_sukabumi_travertino.png" alt="Exterior render" class="render-image" id="exterior-render">
+      </div>
+      <div class="current-selection">
+        <div class="current-selection-label">Current Selection</div>
+        <div class="current-selection-value" id="exterior-selection">
+          White Venetian · Sukabumi · Travertino
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right - Swatches -->
+    <div class="swatches-panel">
+      <div class="panel-header">
+        <div class="panel-number">01</div>
+        <h2 class="panel-title">Exterior Finishes</h2>
+      </div>
+      
+      <!-- Wall Color -->
+      <div class="swatches-section">
+        <div class="swatches-label">Wall Finish</div>
+        <div class="swatches-row" data-category="wall">
+          <div class="swatch selected" data-value="white" data-label="White Venetian">
+            <div class="swatch-circle" style="background-image: url('/images/finishes/swatches/wall-white.jpg');"></div>
+            <span class="swatch-name">White Venetian</span>
+          </div>
+          <div class="swatch" data-value="beige" data-label="Beige Venetian">
+            <div class="swatch-circle" style="background-image: url('/images/finishes/swatches/wall-beige.jpg');"></div>
+            <span class="swatch-name">Beige Venetian</span>
+          </div>
+          <div class="swatch" data-value="black" data-label="Black Venetian">
+            <div class="swatch-circle" style="background-image: url('/images/finishes/swatches/wall-black.jpg');"></div>
+            <span class="swatch-name">Black Venetian</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="divider"></div>
+      
+      <!-- Pool Finish -->
+      <div class="swatches-section">
+        <div class="swatches-label">Pool Finish</div>
+        <div class="swatches-row" data-category="pool">
+          <div class="swatch selected" data-value="sukabumi" data-label="Sukabumi Stone">
+            <div class="swatch-circle" style="background-image: url('/images/finishes/swatches/pool-sukabumi.jpg');"></div>
+            <span class="swatch-name">Sukabumi Stone</span>
+          </div>
+          <div class="swatch" data-value="onix" data-label="Crystal Ónix">
+            <div class="swatch-circle" style="background-image: url('/images/finishes/swatches/pool-onix.jpg');"></div>
+            <span class="swatch-name">Crystal Ónix</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="divider"></div>
+      
+      <!-- Deck Stone -->
+      <div class="swatches-section">
+        <div class="swatches-label">Deck Stone</div>
+        <div class="swatches-row" data-category="deck">
+          <div class="swatch selected" data-value="travertino" data-label="Travertino">
+            <div class="swatch-circle" style="background-image: url('/images/finishes/swatches/deck-travertino.jpg');"></div>
+            <span class="swatch-name">Travertino</span>
+          </div>
+          <div class="swatch" data-value="piedra" data-label="Piedra Sánchez">
+            <div class="swatch-circle" style="background-image: url('/images/finishes/swatches/deck-piedra-sanchez.jpg');"></div>
+            <span class="swatch-name">Piedra Sánchez</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Kitchen Section Hidden for Now
+      <div class="divider"></div>
+      
+      <div class="panel-header" style="margin-top: 24px;">
+        <div class="panel-number">02</div>
+        <h2 class="panel-title">Kitchen Finishes</h2>
+      </div>
+      
+      <div class="swatches-section">
+        <div class="swatches-label">Countertop</div>
+        <div class="swatches-row" data-category="countertop">
+          <div class="swatch selected" data-value="stormwave" data-label="Stormwave">
+            <div class="swatch-circle" style="background-image: url('/images/finishes/swatches/marble-stormwave.jpg');"></div>
+            <span class="swatch-name">Stormwave</span>
+          </div>
+          <div class="swatch" data-value="emerald" data-label="Emerald">
+            <div class="swatch-circle" style="background-image: url('/images/finishes/swatches/marble-emerald.jpg');"></div>
+            <span class="swatch-name">Emerald</span>
+          </div>
+          <div class="swatch" data-value="arctic" data-label="Arctic Flow">
+            <div class="swatch-circle" style="background-image: url('/images/finishes/swatches/marble-arctic-flow.jpg');"></div>
+            <span class="swatch-name">Arctic Flow</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="divider"></div>
+      
+      <div class="swatches-section">
+        <div class="swatches-label">Cabinetry</div>
+        <div class="swatches-row" data-category="cabinet">
+          <div class="swatch selected" data-value="laurel" data-label="Laurel">
+            <div class="swatch-circle" style="background-image: url('/images/finishes/swatches/wood-walnut.jpg');"></div>
+            <span class="swatch-name">Laurel</span>
+          </div>
+          <div class="swatch" data-value="melina" data-label="Melina">
+            <div class="swatch-circle" style="background-image: url('/images/finishes/swatches/wood-oak.jpg');"></div>
+            <span class="swatch-name">Melina</span>
+          </div>
+          <div class="swatch" data-value="melina-stained" data-label="Stained Melina">
+            <div class="swatch-circle" style="background-image: url('/images/finishes/swatches/wood-black.jpg');"></div>
+            <span class="swatch-name">Stained Melina</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="divider"></div>
+      End Kitchen Section Hidden -->
+      
+      <!-- Submit -->
+      <div class="cta-section">
+        <a href="#" class="cta-button" id="submit-btn">Submit Selections</a>
+      </div>
+      
+      <p class="footer-note">
+        Your selections will be sent to the Coyol design team.
+      </p>
+    </div>
+    
+  </main>
+  
+  <script>
+    // Selection state
+    const selections = {
+      wall: { value: 'white', label: 'White Venetian' },
+      pool: { value: 'sukabumi', label: 'Sukabumi Stone' },
+      deck: { value: 'travertino', label: 'Travertino' },
+      countertop: { value: 'stormwave', label: 'Stormwave' },
+      cabinet: { value: 'laurel', label: 'Laurel' }
+    };
+    
+    // Handle swatch clicks
+    document.querySelectorAll('.swatch').forEach(swatch => {
+      swatch.addEventListener('click', function() {
+        const row = this.closest('.swatches-row');
+        const category = row.dataset.category;
+        
+        // Update UI
+        row.querySelectorAll('.swatch').forEach(s => s.classList.remove('selected'));
+        this.classList.add('selected');
+        
+        // Update state
+        selections[category] = {
+          value: this.dataset.value,
+          label: this.dataset.label
+        };
+        
+        // Update current selection display
+        updateCurrentSelection();
+        
+        // Update render
+        updateRender();
+      });
+    });
+    
+    function updateCurrentSelection() {
+      const display = document.getElementById('exterior-selection');
+      display.textContent = `${selections.wall.label} · ${selections.pool.label} · ${selections.deck.label}`;
+    }
+    
+    function updateRender() {
+      const wall = selections.wall.value;
+      const pool = selections.pool.value;
+      const deck = selections.deck.value;
+      
+      // All renders now PNG for consistency
+      let filename = `exterior_${wall}_${pool}_${deck}.png`;
+      
+      const renderEl = document.getElementById('exterior-render');
+      renderEl.src = `/images/finishes/renders/${filename}`;
+    }
+    
+    // Submit button
+    document.getElementById('submit-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      const body = encodeURIComponent(`Casa Cacao - Lot 18 - Finish Selections
+
+EXTERIOR
+Wall Finish: ${selections.wall.label}
+Pool Finish: ${selections.pool.label}
+Deck Stone: ${selections.deck.label}
+
+---
+Submitted via Coyol Finish Selector`);
+      
+      window.location.href = `mailto:info@coyolnosara.com?subject=Casa%20Cacao%20Finish%20Selections&body=${body}`;
+    });
+  </script>
+</body>
+</html>

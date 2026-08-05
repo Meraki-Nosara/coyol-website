@@ -2,51 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 
-// Sold & Built - completed homes to showcase
-const soldBuilt = [
-  {
-    id: 'coyol-xl',
-    name: 'Coyol XL',
-    area: '',
-    acres: 'Mar Azul',
-    description: 'Expansive luxury residence with infinity pool overlooking the mountains. A masterpiece of indoor-outdoor living, now complete.',
-    features: ['Infinity Pool', 'Mountain Views', 'Completed'],
-    image: '/images/properties/coyol-xl.jpg',
-    status: 'Sold & Built',
-    specs: {
-      bedrooms: 4,
-      bathrooms: 4.5
-    }
-  },
-  {
-    id: 'modern-barn',
-    name: 'Modern Barn',
-    area: '',
-    acres: 'Mar Azul',
-    description: 'Contemporary barn architecture with charred wood cladding and panoramic mountain views. Bold design that harmonizes with the landscape.',
-    features: ['Black Wood', 'Mountain Views', 'Completed'],
-    image: '/images/properties/modern-barn.jpg',
-    status: 'Sold & Built',
-    specs: {
-      bedrooms: 3,
-      bathrooms: 3.5
-    }
-  },
-  {
-    id: 'casa-eclipse',
-    name: 'Casa Eclipse',
-    area: '',
-    acres: 'Mar Azul',
-    description: 'Twin pavilions with black metal roofing and floor-to-ceiling glass. Infinity pool perched above a lower garden level with spectacular mountain views.',
-    features: ['Twin Pavilions', 'Infinity Pool', 'Completed'],
-    image: '/images/properties/casa-eclipse.jpg',
-    status: 'Sold & Built',
-    specs: {
-      bedrooms: 3,
-      bathrooms: 3.5
-    }
-  }
-];
+// Sold & Built - completed homes to showcase (currently hidden)
+const soldBuilt = [];
 
 // Under Construction
 const underConstruction = [
@@ -72,6 +29,44 @@ const underConstruction = [
 
 // Homes for sale - actual properties with renders/photos
 const homesites = [
+  {
+    id: 'coyol-xl-lot9',
+    name: 'Coyol XL',
+    area: 'Lot 9',
+    acres: 'Mar Azul',
+    description: 'Expansive luxury residence with infinity pool overlooking the mountains. Our signature design featuring seamless indoor-outdoor living across 507m² of thoughtfully designed space.',
+    features: ['Infinity Pool', 'Mountain Views', '507m² Design'],
+    image: '/images/properties/coyol-xl.jpg',
+    floorplan: '/images/floorplans/coyol-xl-floorplan.jpg',
+    status: 'Available',
+    specs: {
+      indoor: 380,
+      terrace: 85,
+      deck: 120,
+      pool: 65,
+      bedrooms: 4,
+      bathrooms: 4.5
+    }
+  },
+  {
+    id: 'modern-barn-lot23',
+    name: 'Modern Barn',
+    area: 'Lot 23',
+    acres: 'Mar Azul',
+    description: 'Contemporary barn architecture with charred wood cladding and panoramic mountain views. Bold design that harmonizes with the landscape on a premium 4,220m² lot.',
+    features: ['Charred Wood', 'Mountain Views', 'Barn Architecture'],
+    image: '/images/properties/modern-barn.jpg',
+    floorplan: '/images/floorplans/modern-barn-floorplan.jpg',
+    status: 'Available',
+    specs: {
+      indoor: 320,
+      terrace: 70,
+      deck: 100,
+      pool: 55,
+      bedrooms: 3,
+      bathrooms: 3.5
+    }
+  },
   {
     id: 'casa-elle',
     name: 'Casa Elle',

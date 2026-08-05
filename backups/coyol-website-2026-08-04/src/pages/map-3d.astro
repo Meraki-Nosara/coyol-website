@@ -1,0 +1,603 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Explore Mar Azul | Coyol Real Estate">
+  <div id="map-container">
+    <canvas id="three-canvas"></canvas>
+    
+    <!-- UI Overlay -->
+    <div id="ui-overlay">
+      <a href="/" id="logo">
+        <img src="/images/logo.png" alt="Coyol" />
+      </a>
+      
+      <div id="lot-info" class="hidden">
+        <button id="close-info">×</button>
+        <h3 id="lot-title">Lot 1</h3>
+        <div id="lot-details">
+          <p><span>Area:</span> <strong id="lot-area">5,760 m²</strong></p>
+          <p><span>Status:</span> <strong id="lot-status" class="available">Available</strong></p>
+        </div>
+        <a href="#contact" id="lot-cta">Inquire About This Lot</a>
+      </div>
+      
+      <div id="controls-hint">
+        <p>🖱️ Drag to rotate • Scroll to zoom</p>
+      </div>
+      
+      <div id="legend">
+        <h4>Mar Azul</h4>
+        <p class="subtitle">36 Homesites</p>
+        <div class="legend-item">
+          <span class="dot available"></span> Available
+        </div>
+        <div class="legend-item">
+          <span class="dot reserved"></span> Reserved
+        </div>
+        <div class="legend-item">
+          <span class="dot sold"></span> Sold
+        </div>
+      </div>
+    </div>
+    
+    <!-- Loading -->
+    <div id="loading">
+      <div class="spinner"></div>
+      <p>Loading Mar Azul...</p>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  #map-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(180deg, #2d4a2d 0%, #1a2f1a 100%);
+    overflow: hidden;
+  }
+  
+  #three-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  
+  #ui-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+  }
+  
+  #ui-overlay > * {
+    pointer-events: auto;
+  }
+  
+  #logo {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    text-decoration: none;
+  }
+  
+  #logo img {
+    height: 36px;
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
+    transition: opacity 0.3s;
+  }
+  
+  #logo:hover img {
+    opacity: 1;
+  }
+  
+  #lot-info {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    background: rgba(26, 31, 22, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(196, 166, 124, 0.2);
+    border-radius: 12px;
+    padding: 24px;
+    min-width: 260px;
+    color: #D4C9B5;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  #lot-info.hidden {
+    display: none;
+  }
+  
+  #close-info {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #D4C9B5;
+    font-size: 24px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    line-height: 1;
+  }
+  
+  #close-info:hover {
+    opacity: 1;
+  }
+  
+  #lot-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px;
+    font-weight: 400;
+    margin: 0 0 16px 0;
+    color: #F5F3EF;
+  }
+  
+  #lot-details p {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+    font-size: 14px;
+  }
+  
+  #lot-details span {
+    opacity: 0.6;
+  }
+  
+  #lot-status.available { color: #8fbc8f; }
+  #lot-status.reserved { color: #C4A67C; }
+  #lot-status.sold { color: #A65D3F; }
+  
+  #lot-cta {
+    display: block;
+    margin-top: 20px;
+    padding: 12px 20px;
+    background: #3D4F3D;
+    color: #F5F3EF;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: background 0.3s;
+  }
+  
+  #lot-cta:hover {
+    background: #4A5D4A;
+  }
+  
+  #controls-hint {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(26, 31, 22, 0.7);
+    padding: 10px 20px;
+    border-radius: 20px;
+    color: #D4C9B5;
+    font-size: 12px;
+    opacity: 0.7;
+  }
+  
+  #legend {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    background: rgba(26, 31, 22, 0.9);
+    backdrop-filter: blur(12px);
+    padding: 16px 20px;
+    border-radius: 8px;
+    color: #D4C9B5;
+    font-size: 13px;
+  }
+  
+  #legend h4 {
+    margin: 0 0 4px 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px;
+    color: #F5F3EF;
+    font-weight: 400;
+  }
+  
+  #legend .subtitle {
+    margin: 0 0 12px 0;
+    font-size: 11px;
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 6px 0;
+  }
+  
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  
+  .dot.available { background: #8fbc8f; }
+  .dot.reserved { background: #C4A67C; }
+  .dot.sold { background: #A65D3F; }
+  
+  #loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #D4C9B5;
+  }
+  
+  #loading.hidden {
+    display: none;
+  }
+  
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 2px solid rgba(196, 166, 124, 0.2);
+    border-top-color: #C4A67C;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 16px;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  @media (max-width: 768px) {
+    #lot-info {
+      top: auto;
+      bottom: 80px;
+      right: 16px;
+      left: 16px;
+      min-width: auto;
+    }
+    
+    #controls-hint {
+      display: none;
+    }
+    
+    #legend {
+      bottom: 16px;
+      left: 16px;
+      padding: 12px 16px;
+    }
+  }
+</style>
+
+<script>
+  import * as THREE from 'three';
+  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+  
+  // Load clean DXF data
+  const mapData = await fetch('/source-files/mar-azul-clean-data.json').then(r => r.json());
+  
+  // Scene setup
+  const canvas = document.getElementById('three-canvas') as HTMLCanvasElement;
+  const scene = new THREE.Scene();
+  
+  // Sky gradient background
+  scene.background = new THREE.Color(0x4a6b4a);
+  scene.fog = new THREE.Fog(0x3d5a3d, 200, 600);
+  
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
+  camera.position.set(0, 250, 350);
+  
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  
+  // Controls
+  const controls = new OrbitControls(camera, canvas);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
+  controls.maxPolarAngle = Math.PI / 2.3;
+  controls.minDistance = 80;
+  controls.maxDistance = 500;
+  controls.target.set(0, 0, 0);
+  
+  // Lighting - soft, natural
+  const ambientLight = new THREE.AmbientLight(0x6b8e6b, 0.6);
+  scene.add(ambientLight);
+  
+  const sunLight = new THREE.DirectionalLight(0xfff8e7, 1.0);
+  sunLight.position.set(100, 200, 100);
+  sunLight.castShadow = true;
+  sunLight.shadow.mapSize.width = 2048;
+  sunLight.shadow.mapSize.height = 2048;
+  sunLight.shadow.camera.near = 50;
+  sunLight.shadow.camera.far = 500;
+  sunLight.shadow.camera.left = -200;
+  sunLight.shadow.camera.right = 200;
+  sunLight.shadow.camera.top = 200;
+  sunLight.shadow.camera.bottom = -200;
+  scene.add(sunLight);
+  
+  const fillLight = new THREE.DirectionalLight(0x87ceeb, 0.3);
+  fillLight.position.set(-50, 100, -50);
+  scene.add(fillLight);
+  
+  // Convert DXF coordinates to scene coordinates
+  const bounds = mapData.bounds;
+  const centerX = (bounds.minX + bounds.maxX) / 2;
+  const centerY = (bounds.minY + bounds.maxY) / 2;
+  const scale = 0.15; // Scale factor to fit nicely
+  
+  function toScene(x: number, y: number): [number, number] {
+    return [(x - centerX) * scale, (y - centerY) * scale];
+  }
+  
+  // Ground plane - lush green
+  const groundSize = 800;
+  const groundGeometry = new THREE.PlaneGeometry(groundSize, groundSize, 80, 80);
+  
+  // Add subtle terrain variation
+  const vertices = groundGeometry.attributes.position.array as Float32Array;
+  for (let i = 0; i < vertices.length; i += 3) {
+    const x = vertices[i];
+    const z = vertices[i + 1];
+    // Gentle rolling hills
+    vertices[i + 2] = Math.sin(x * 0.015) * 2 + Math.cos(z * 0.012) * 2 + Math.random() * 0.3;
+  }
+  groundGeometry.computeVertexNormals();
+  
+  const groundMaterial = new THREE.MeshStandardMaterial({
+    color: 0x4a7c4a,
+    roughness: 0.9,
+    metalness: 0.0,
+  });
+  
+  const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+  ground.rotation.x = -Math.PI / 2;
+  ground.position.y = -0.5;
+  ground.receiveShadow = true;
+  scene.add(ground);
+  
+  // Roads - as flat paths
+  const roadMaterial = new THREE.MeshStandardMaterial({
+    color: 0x9c8b7a,
+    roughness: 0.8,
+    metalness: 0.0,
+  });
+  
+  mapData.roads.forEach((road: any) => {
+    if (road.points.length < 2) return;
+    
+    // Create road as extruded path
+    const shape = new THREE.Shape();
+    const width = road.layer.includes('via') ? 3 : 1.5; // Main roads wider
+    
+    for (let i = 0; i < road.points.length - 1; i++) {
+      const [x1, z1] = toScene(road.points[i][0], road.points[i][1]);
+      const [x2, z2] = toScene(road.points[i + 1][0], road.points[i + 1][1]);
+      
+      // Direction and perpendicular
+      const dx = x2 - x1;
+      const dz = z2 - z1;
+      const len = Math.sqrt(dx * dx + dz * dz);
+      if (len < 0.1) continue;
+      
+      const px = -dz / len * width / 2;
+      const pz = dx / len * width / 2;
+      
+      if (i === 0) {
+        shape.moveTo(x1 + px, z1 + pz);
+      }
+      shape.lineTo(x2 + px, z2 + pz);
+    }
+    
+    // Return path
+    for (let i = road.points.length - 1; i >= 0; i--) {
+      const [x, z] = toScene(road.points[i][0], road.points[i][1]);
+      const [x2, z2] = i > 0 ? toScene(road.points[i-1][0], road.points[i-1][1]) : [x, z];
+      
+      const dx = x - x2;
+      const dz = z - z2;
+      const len = Math.sqrt(dx * dx + dz * dz);
+      if (len < 0.1) continue;
+      
+      const px = -dz / len * width / 2;
+      const pz = dx / len * width / 2;
+      
+      shape.lineTo(x - px, z - pz);
+    }
+    
+    const geometry = new THREE.ShapeGeometry(shape);
+    const mesh = new THREE.Mesh(geometry, roadMaterial);
+    mesh.rotation.x = -Math.PI / 2;
+    mesh.position.y = 0.1;
+    mesh.receiveShadow = true;
+    scene.add(mesh);
+  });
+  
+  // Lots - as extruded polygons
+  const lotMeshes: THREE.Mesh[] = [];
+  
+  mapData.lots.forEach((lot: any, index: number) => {
+    if (lot.points.length < 3) return;
+    
+    const shape = new THREE.Shape();
+    const firstPoint = toScene(lot.points[0][0], lot.points[0][1]);
+    shape.moveTo(firstPoint[0], firstPoint[1]);
+    
+    for (let i = 1; i < lot.points.length; i++) {
+      const point = toScene(lot.points[i][0], lot.points[i][1]);
+      shape.lineTo(point[0], point[1]);
+    }
+    shape.closePath();
+    
+    const extrudeSettings = {
+      steps: 1,
+      depth: 0.5,
+      bevelEnabled: false,
+    };
+    
+    const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+    
+    // All lots available for now (green tones)
+    const lotColor = 0x8fbc8f;
+    
+    const material = new THREE.MeshStandardMaterial({
+      color: lotColor,
+      roughness: 0.7,
+      metalness: 0.05,
+      transparent: true,
+      opacity: 0.9,
+    });
+    
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.rotation.x = -Math.PI / 2;
+    mesh.position.y = 0.2;
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    
+    // Store lot data
+    (mesh as any).lotData = {
+      lotNumber: index + 1,
+      areaM2: lot.area,
+      status: 'available'
+    };
+    
+    lotMeshes.push(mesh);
+    scene.add(mesh);
+  });
+  
+  // Add trees around the perimeter
+  function createTree(x: number, z: number, scale: number = 1) {
+    const group = new THREE.Group();
+    
+    // Trunk
+    const trunkGeo = new THREE.CylinderGeometry(0.3 * scale, 0.5 * scale, 4 * scale, 6);
+    const trunkMat = new THREE.MeshStandardMaterial({ color: 0x4a3728, roughness: 0.9 });
+    const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+    trunk.position.y = 2 * scale;
+    trunk.castShadow = true;
+    group.add(trunk);
+    
+    // Foliage
+    const foliageMat = new THREE.MeshStandardMaterial({ color: 0x2d5a2d, roughness: 0.8 });
+    
+    [{ y: 5, r: 2.5 }, { y: 6.5, r: 2 }, { y: 7.5, r: 1.2 }].forEach(pos => {
+      const geo = new THREE.SphereGeometry(pos.r * scale, 6, 5);
+      const foliage = new THREE.Mesh(geo, foliageMat);
+      foliage.position.y = pos.y * scale;
+      foliage.position.x = (Math.random() - 0.5) * scale;
+      foliage.position.z = (Math.random() - 0.5) * scale;
+      foliage.castShadow = true;
+      group.add(foliage);
+    });
+    
+    group.position.set(x, 0, z);
+    return group;
+  }
+  
+  // Scatter trees around edges
+  for (let i = 0; i < 120; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 150 + Math.random() * 200;
+    const x = Math.cos(angle) * distance;
+    const z = Math.sin(angle) * distance;
+    const scale = 0.6 + Math.random() * 0.5;
+    scene.add(createTree(x, z, scale));
+  }
+  
+  // Some trees between lots
+  for (let i = 0; i < 30; i++) {
+    const x = (Math.random() - 0.5) * 200;
+    const z = (Math.random() - 0.5) * 200;
+    const scale = 0.4 + Math.random() * 0.3;
+    scene.add(createTree(x, z, scale));
+  }
+  
+  // Raycaster for interaction
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+  let hoveredLot: THREE.Mesh | null = null;
+  
+  // UI elements
+  const lotInfo = document.getElementById('lot-info')!;
+  const lotTitle = document.getElementById('lot-title')!;
+  const lotArea = document.getElementById('lot-area')!;
+  const lotStatus = document.getElementById('lot-status')!;
+  const closeInfo = document.getElementById('close-info')!;
+  const loading = document.getElementById('loading')!;
+  
+  // Hide loading
+  setTimeout(() => loading.classList.add('hidden'), 800);
+  
+  // Mouse events
+  canvas.addEventListener('mousemove', (event) => {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(lotMeshes);
+    
+    if (intersects.length > 0) {
+      const mesh = intersects[0].object as THREE.Mesh;
+      
+      if (hoveredLot !== mesh) {
+        if (hoveredLot) {
+          (hoveredLot.material as THREE.MeshStandardMaterial).emissive.setHex(0x000000);
+        }
+        hoveredLot = mesh;
+        (mesh.material as THREE.MeshStandardMaterial).emissive.setHex(0x222222);
+        canvas.style.cursor = 'pointer';
+      }
+    } else {
+      if (hoveredLot) {
+        (hoveredLot.material as THREE.MeshStandardMaterial).emissive.setHex(0x000000);
+        hoveredLot = null;
+        canvas.style.cursor = 'grab';
+      }
+    }
+  });
+  
+  canvas.addEventListener('click', () => {
+    if (hoveredLot) {
+      const data = (hoveredLot as any).lotData;
+      lotTitle.textContent = `Lot ${data.lotNumber}`;
+      lotArea.textContent = `${data.areaM2.toLocaleString()} m²`;
+      lotStatus.textContent = data.status.charAt(0).toUpperCase() + data.status.slice(1);
+      lotStatus.className = data.status;
+      lotInfo.classList.remove('hidden');
+    }
+  });
+  
+  closeInfo.addEventListener('click', () => lotInfo.classList.add('hidden'));
+  
+  // Resize
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+  
+  // Animation
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  
+  animate();
+</script>
