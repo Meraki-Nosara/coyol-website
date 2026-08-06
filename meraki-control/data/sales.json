@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-07-27T19:10:00Z",
-  "source": "Anlly QuickBooks + Ingrid cierres OCR",
+  "lastUpdated": "2026-08-06T10:45:00Z",
+  "source": "Ingrid cierres (daily photos)",
   "daily": [
     {
       "date": "2026-01-01",
@@ -3950,6 +3950,35 @@
         "cash": 58925,
         "card": 53100,
         "total": 62015
+      }
+    },
+    {
+      "date": "2026-08-04",
+      "esh": {
+        "cash": 70890,
+        "card": 482020,
+        "total": 482688,
+        "netSales": 405113,
+        "service10": 24909,
+        "iva13": 52686
+      },
+      "coyol": {
+        "cash": 50000,
+        "card": 2328123,
+        "total": 2129376,
+        "netSales": 1731200,
+        "service10": 173120,
+        "iva13": 225056,
+        "tips": 198747
+      },
+      "laluna": {
+        "cash": 305265,
+        "card": 3879744,
+        "total": 4084994,
+        "netSales": 3332534,
+        "service10": 323614,
+        "iva13": 428845,
+        "tips": 247076
       }
     }
   ]
