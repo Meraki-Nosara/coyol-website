@@ -2,7 +2,57 @@
 import Layout from '../../layouts/Layout.astro';
 ---
 
-<Layout title="Vivero Mar Azul — Sustainable Nursery at Mar Azul Costa Rica | Coyol Real Estate">
+<Layout 
+  title="Vivero Mar Azul — Sustainable Nursery at Mar Azul Costa Rica | Coyol Real Estate"
+>
+  <Fragment slot="head">
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Vivero Mar Azul: A sustainable nursery at Mar Azul development in Nosara, Costa Rica. Organic compost from La Luna, Coyol, and Esh restaurants creates living soil for native plants." />
+    <meta name="keywords" content="Mar Azul, Vivero Mar Azul, Mar Azul Nosara, Mar Azul Costa Rica, sustainable nursery, Nosara real estate, La Luna restaurant, Coyol restaurant, Esh bakery, organic compost, native plants Costa Rica" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Vivero Mar Azul — Sustainable Nursery at Mar Azul Costa Rica" />
+    <meta property="og:description" content="Where restaurant waste becomes living soil. Organic compost from La Luna, Coyol, and Esh creates native plants for Mar Azul homes." />
+    <meta property="og:image" content="https://coyolnosara.com/images/mar-azul/vivero/hero.jpg" />
+    <meta property="og:url" content="https://coyolnosara.com/blog/vivero-mar-azul-sustainable-nursery" />
+    <meta property="og:site_name" content="Coyol Real Estate" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Vivero Mar Azul — Sustainable Nursery at Mar Azul Costa Rica" />
+    <meta name="twitter:description" content="Where restaurant waste becomes living soil. Organic compost from La Luna, Coyol, and Esh creates native plants for Mar Azul homes." />
+    <meta name="twitter:image" content="https://coyolnosara.com/images/mar-azul/vivero/hero.jpg" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://coyolnosara.com/blog/vivero-mar-azul-sustainable-nursery" />
+    
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Vivero Mar Azul — Sustainable Nursery at Mar Azul Costa Rica",
+      "description": "A sustainable nursery where organic waste from La Luna, Coyol, and Esh restaurants becomes living soil for native plants.",
+      "image": "https://coyolnosara.com/images/mar-azul/vivero/hero.jpg",
+      "datePublished": "2026-08-07",
+      "author": {
+        "@type": "Organization",
+        "name": "Coyol Real Estate"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Coyol Real Estate",
+        "url": "https://coyolnosara.com"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://coyolnosara.com/blog/vivero-mar-azul-sustainable-nursery"
+      },
+      "keywords": ["Mar Azul", "Vivero", "Nosara", "Costa Rica", "sustainable nursery", "organic compost"]
+    }
+    </script>
+  </Fragment>
   <article class="blog-post">
     <header class="post-header">
       <p class="category">Sustainability</p>
