@@ -41,15 +41,15 @@ import Layout from '../../layouts/Layout.astro';
 
       <div class="stats-block">
         <div class="stat">
-          <span class="number">🌱</span>
+          <span class="number"></span>
           <span class="label">Desde la Semilla — Every plant grown from seed</span>
         </div>
         <div class="stat">
-          <span class="number">♻️</span>
+          <span class="number"></span>
           <span class="label">Tierra Viva — Living soil from restaurant compost</span>
         </div>
         <div class="stat">
-          <span class="number">🏡</span>
+          <span class="number"></span>
           <span class="label">Nuevos Hogares — Native plants for Mar Azul homes</span>
         </div>
       </div>
@@ -74,10 +74,13 @@ import Layout from '../../layouts/Layout.astro';
     <footer class="post-footer">
       <div class="tags">
         <span>Tags:</span>
-        <a href="/blog/tag/sustainability">Sustainability</a>
-        <a href="/blog/tag/mar-azul">Mar Azul</a>
-        <a href="/blog/tag/nosara">Nosara</a>
-        <a href="/blog/tag/gardening">Gardening</a>
+        <span class="tag">Sustainability</span>
+        <span class="tag">Mar Azul</span>
+        <span class="tag">Nosara</span>
+        <span class="tag">Gardening</span>
+        <span class="tag">Coyol</span>
+        <span class="tag">La Luna</span>
+        <span class="tag">Esh</span>
       </div>
     </footer>
   </article>
@@ -229,18 +232,12 @@ import Layout from '../../layouts/Layout.astro';
     margin-right: 0.5rem;
   }
 
-  .tags a {
+  .tag {
     font-size: 0.85rem;
     color: #3D4F3D;
     background: #f0f0f0;
     padding: 0.25rem 0.75rem;
     border-radius: 3px;
-    text-decoration: none;
-  }
-
-  .tags a:hover {
-    background: #3D4F3D;
-    color: white;
   }
 
   @media (max-width: 768px) {
@@ -255,5 +252,10 @@ import Layout from '../../layouts/Layout.astro';
     .stats-block {
       grid-template-columns: 1fr;
     }
+  }
+
+  /* Hide floating buttons on blog posts */
+  :global(.fixed) {
+    display: none !important;
   }
 </style>

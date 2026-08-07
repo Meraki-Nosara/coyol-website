@@ -1,0 +1,169 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const posts = [
+  {
+    slug: 'vivero-mar-azul-sustainable-nursery',
+    title: 'Vivero Mar Azul',
+    subtitle: 'De la semilla a tu hogar — where restaurant waste becomes living soil',
+    category: 'Sustainability',
+    date: 'August 7, 2026',
+    image: '/images/mar-azul/vivero/hero.jpg'
+  },
+  {
+    slug: 'mar-azul-water-donation-asada-santa-marta',
+    title: 'Mar Azul Developers Donate Water System to ASADA Santa Marta',
+    subtitle: 'Private investment solves freshwater access for over 250 Costa Rican families',
+    category: 'Community Impact',
+    date: 'August 1, 2026',
+    image: '/images/mar-azul/community-water.jpg'
+  },
+  {
+    slug: 'mar-azul-electric-infrastructure-las-flores-road',
+    title: 'Mar Azul Funds Electric Infrastructure for Las Flores Road',
+    subtitle: 'Private investment brings power to the community',
+    category: 'Infrastructure',
+    date: 'July 15, 2026',
+    image: '/images/mar-azul/electric-infrastructure.jpg'
+  },
+  {
+    slug: 'mar-azul-christmas-event-nosara-children',
+    title: 'Mar Azul Christmas Event for Nosara Children',
+    subtitle: 'Celebrating the holidays with our local community',
+    category: 'Community',
+    date: 'December 20, 2025',
+    image: '/images/mar-azul/christmas-event.jpg'
+  }
+];
+---
+
+<Layout title="Blog — Coyol Real Estate | News from Nosara, Costa Rica">
+  <main class="blog-page">
+    <header class="page-header">
+      <h1>Blog</h1>
+      <p>News and stories from our communities in Nosara</p>
+    </header>
+
+    <div class="posts-grid">
+      {posts.map(post => (
+        <a href={`/blog/${post.slug}`} class="post-card">
+          <div class="post-image">
+            <img src={post.image} alt={post.title} onerror="this.style.display='none'" />
+          </div>
+          <div class="post-content">
+            <span class="category">{post.category}</span>
+            <h2>{post.title}</h2>
+            <p>{post.subtitle}</p>
+            <time>{post.date}</time>
+          </div>
+        </a>
+      ))}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .blog-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 3rem 0;
+    border-bottom: 1px solid #e8e6e3;
+  }
+
+  .page-header h1 {
+    font-family: Georgia, serif;
+    font-size: 3rem;
+    font-weight: 400;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-header p {
+    font-size: 1.1rem;
+    color: #666;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .post-card {
+    text-decoration: none;
+    color: inherit;
+    background: #fff;
+    border: 1px solid #e8e6e3;
+    transition: box-shadow 0.2s;
+  }
+
+  .post-card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+
+  .post-image {
+    aspect-ratio: 16/10;
+    overflow: hidden;
+    background: #f5f5f5;
+  }
+
+  .post-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .post-content {
+    padding: 1.5rem;
+  }
+
+  .category {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #3D4F3D;
+  }
+
+  .post-content h2 {
+    font-family: Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin: 0.75rem 0;
+    color: #1a1a1a;
+    line-height: 1.3;
+  }
+
+  .post-content p {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+
+  time {
+    font-size: 0.85rem;
+    color: #999;
+  }
+
+  @media (max-width: 768px) {
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .page-header h1 {
+      font-size: 2rem;
+    }
+  }
+
+  /* Hide floating buttons */
+  :global(.fixed) {
+    display: none !important;
+  }
+</style>
