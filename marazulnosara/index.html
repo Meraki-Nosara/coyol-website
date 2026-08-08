@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mar Azul Nosara — Live the Lifestyle</title>
+  <meta name="description" content="A private residential community in Nosara, Costa Rica. Thoughtfully designed homes immersed in nature, minutes from the Pacific.">
+  <link rel="canonical" href="https://marazulnosara.com/">
+  <meta property="og:title" content="Mar Azul Nosara — Live the Lifestyle">
+  <meta property="og:description" content="A private residential community in Nosara, Costa Rica.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://marazulnosara.com/">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --sand: #f5f2ed;
+      --stone: #e8e4dd;
+      --warm: #d4ccc0;
+      --earth: #8b8578;
+      --deep: #4a4640;
+      --ink: #2c2a27;
+      --white: #ffffff;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    html { 
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+    
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      color: var(--ink);
+      background: var(--sand);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 28px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.4s ease;
+    }
+    
+    nav.scrolled {
+      background: rgba(245, 242, 237, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 20px 48px;
+    }
+    
+    .logo {
+      font-size: 13px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 400;
+      transition: color 0.3s;
+    }
+    
+    nav.scrolled .logo { color: var(--ink); }
+    
+    .nav-links {
+      display: flex;
+      gap: 40px;
+    }
+    
+    .nav-links a {
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    nav.scrolled .nav-links a { color: var(--earth); }
+    .nav-links a:hover { color: var(--white); }
+    nav.scrolled .nav-links a:hover { color: var(--ink); }
+    
+    /* Hero */
+    .hero {
+      height: 100vh;
+      min-height: 700px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.35)),
+                  url('https://coyolnosara.com/images/mar-azul-aerial-4k.jpg') center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 48px 120px;
+    }
+    
+    .hero-content {
+      max-width: 800px;
+    }
+    
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 24px;
+      letter-spacing: 0.02em;
+    }
+    
+    .hero p {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.8);
+      max-width: 500px;
+      font-weight: 300;
+    }
+    
+    /* Sections */
+    section {
+      padding: 140px 48px;
+    }
+    
+    .section-light { background: var(--sand); }
+    .section-white { background: var(--white); }
+    .section-warm { background: var(--stone); }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .section-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 80px;
+    }
+    
+    .section-header h2 {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 300;
+      margin-bottom: 24px;
+      letter-spacing: 0.02em;
+    }
+    
+    .section-header p {
+      font-size: 1.1rem;
+      color: var(--earth);
+      font-weight: 300;
+    }
+    
+    /* Two Column */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    
+    .two-col.reverse { direction: rtl; }
+    .two-col.reverse > * { direction: ltr; }
+    
+    .col-image {
+      aspect-ratio: 4/5;
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .col-content h3 {
+      font-size: 1.8rem;
+      font-weight: 300;
+      margin-bottom: 20px;
+      letter-spacing: 0.02em;
+    }
+    
+    .col-content p {
+      font-size: 1.05rem;
+      color: var(--earth);
+      margin-bottom: 16px;
+      font-weight: 300;
+    }
+    
+    .subtle-link {
+      display: inline-block;
+      margin-top: 20px;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--deep);
+      text-decoration: none;
+      border-bottom: 1px solid var(--warm);
+      padding-bottom: 4px;
+      transition: border-color 0.3s;
+    }
+    
+    .subtle-link:hover { border-color: var(--deep); }
+    
+    /* Homes Grid */
+    .homes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    
+    .home-card {
+      position: relative;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    
+    .home-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s ease;
+    }
+    
+    .home-card:hover img { transform: scale(1.05); }
+    
+    .home-card-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 32px 24px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.6));
+      color: var(--white);
+    }
+    
+    .home-card h4 {
+      font-size: 1.3rem;
+      font-weight: 300;
+      margin-bottom: 4px;
+    }
+    
+    .home-card span {
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+    
+    /* Quote */
+    .quote-section {
+      padding: 180px 48px;
+      text-align: center;
+      background: var(--ink);
+      color: var(--white);
+    }
+    
+    .quote {
+      max-width: 900px;
+      margin: 0 auto;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.5;
+    }
+    
+    /* Location */
+    .location-section {
+      padding: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 80vh;
+    }
+    
+    .location-image {
+      background: url('https://coyolnosara.com/images/DJI_20250326172126_0411_D.jpg') center/cover no-repeat;
+    }
+    
+    .location-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px;
+      background: var(--white);
+    }
+    
+    .location-content h2 {
+      font-size: 2.2rem;
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+    
+    .location-content p {
+      font-size: 1.05rem;
+      color: var(--earth);
+      margin-bottom: 16px;
+      font-weight: 300;
+      max-width: 450px;
+    }
+    
+    .location-details {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    
+    .location-detail {
+      font-size: 14px;
+    }
+    
+    .location-detail span {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--earth);
+      margin-bottom: 4px;
+    }
+    
+    /* Footer */
+    footer {
+      background: var(--ink);
+      color: var(--white);
+      padding: 80px 48px;
+    }
+    
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    
+    .footer-brand {
+      font-size: 13px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    
+    .footer-tagline {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.6);
+      font-weight: 300;
+      font-style: italic;
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 60px;
+    }
+    
+    .footer-col h5 {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      color: rgba(255,255,255,0.5);
+      font-weight: 400;
+    }
+    
+    .footer-col a {
+      display: block;
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 14px;
+      margin-bottom: 12px;
+      font-weight: 300;
+      transition: color 0.3s;
+    }
+    
+    .footer-col a:hover { color: var(--white); }
+    
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 60px auto 0;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+    }
+    
+    /* Responsive */
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .nav-links { display: none; }
+      section { padding: 80px 24px; }
+      .hero { padding: 0 24px 80px; }
+      .two-col { grid-template-columns: 1fr; gap: 40px; }
+      .two-col.reverse { direction: ltr; }
+      .homes-grid { grid-template-columns: 1fr; }
+      .location-section { grid-template-columns: 1fr; }
+      .location-image { min-height: 50vh; }
+      .location-content { padding: 60px 24px; }
+      .footer-inner { flex-direction: column; gap: 40px; }
+      .footer-links { flex-direction: column; gap: 32px; }
+    }
+  </style>
+</head>
+
+<body>
+  <nav id="nav">
+    <a href="/" class="logo">Mar Azul</a>
+    <div class="nav-links">
+      <a href="#community">Community</a>
+      <a href="#homes">Homes</a>
+      <a href="#location">Location</a>
+      <a href="/available">Available</a>
+      <a href="https://marazullegal.com" target="_blank">Documentation</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>A place to belong</h1>
+      <p>Private residences immersed in nature, minutes from Playa Guiones on Costa Rica's Pacific coast.</p>
+    </div>
+  </section>
+
+  <section class="section-white" id="community">
+    <div class="container">
+      <div class="two-col">
+        <div class="col-image" style="background-image: url('https://coyolnosara.com/images/gallery/mar-azul-entrance.jpg')"></div>
+        <div class="col-content">
+          <h3>The Community</h3>
+          <p>Mar Azul is a private residential condominium of 35 homesites, set across forested hillsides overlooking the Pacific Ocean.</p>
+          <p>Each home is sited for privacy and connection to the surrounding nature — howler monkeys in the canopy, ocean breezes through open living spaces, sunsets that mark the end of unhurried days.</p>
+          <a href="/community" class="subtle-link">Discover the community</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-light" id="homes">
+    <div class="container">
+      <div class="section-header">
+        <h2>The Homes</h2>
+        <p>Thoughtfully designed residences that honor the landscape, built with enduring materials and crafted for the way life unfolds here.</p>
+      </div>
+      <div class="homes-grid">
+        <div class="home-card">
+          <img src="https://coyolnosara.com/images/gallery/casa-cacao.jpg" alt="Casa Cacao">
+          <div class="home-card-overlay">
+            <h4>Casa Cacao</h4>
+            <span>3 Bedrooms</span>
+          </div>
+        </div>
+        <div class="home-card">
+          <img src="https://coyolnosara.com/images/gallery/casa-elle.jpg" alt="Casa Elle">
+          <div class="home-card-overlay">
+            <h4>Casa Elle</h4>
+            <span>4 Bedrooms</span>
+          </div>
+        </div>
+        <div class="home-card">
+          <img src="https://coyolnosara.com/images/gallery/casa-umi.jpg" alt="Casa Umi">
+          <div class="home-card-overlay">
+            <h4>Casa Umi</h4>
+            <span>3 Bedrooms</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="quote-section">
+    <p class="quote">"We came for a visit. We stayed for a life."</p>
+  </section>
+
+  <section class="location-section" id="location">
+    <div class="location-image"></div>
+    <div class="location-content">
+      <h2>Nosara, Costa Rica</h2>
+      <p>Located in the Blue Zone of the Nicoya Peninsula, Nosara offers one of the healthiest, most vibrant communities in the Americas.</p>
+      <p>World-class surf breaks, pristine beaches, and a culture of wellness — all within reach of international airports and modern conveniences.</p>
+      <div class="location-details">
+        <div class="location-detail">
+          <span>Beach</span>
+          5 minutes to Playa Guiones
+        </div>
+        <div class="location-detail">
+          <span>Airport</span>
+          15 minutes to Nosara airstrip
+        </div>
+        <div class="location-detail">
+          <span>Restaurants</span>
+          La Luna, Coyol, and more nearby
+        </div>
+        <div class="location-detail">
+          <span>Region</span>
+          Nicoya Blue Zone
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-white">
+    <div class="container">
+      <div class="two-col reverse">
+        <div class="col-image" style="background-image: url('https://coyolnosara.com/images/render-hacienda.jpg')"></div>
+        <div class="col-content">
+          <h3>Available Homes</h3>
+          <p>A limited number of homesites and completed residences are available for those seeking to make Mar Azul home.</p>
+          <p>Each property offers a unique relationship to the land — ocean views, forest immersion, or both.</p>
+          <a href="/available" class="subtle-link">View available properties</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Mar Azul</div>
+        <p class="footer-tagline">Live the lifestyle</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h5>Explore</h5>
+          <a href="/community">Community</a>
+          <a href="/homes">Homes</a>
+          <a href="/architecture">Architecture</a>
+          <a href="/location">Location</a>
+        </div>
+        <div class="footer-col">
+          <h5>Inquire</h5>
+          <a href="/available">Available Homes</a>
+          <a href="/faq">FAQ</a>
+          <a href="mailto:info@marazulnosara.com">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h5>Resources</h5>
+          <a href="https://marazullegal.com" target="_blank">Documentation</a>
+          <a href="https://coyolnosara.com" target="_blank">Coyol Group</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Mar Azul. All rights reserved.</span>
+      <span>Nosara, Costa Rica</span>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    });
+  </script>
+</body>
+</html>
