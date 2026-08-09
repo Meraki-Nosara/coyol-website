@@ -31,7 +31,7 @@
     .topbar-inner{max-width:1000px;margin:0 auto;display:flex;justify-content:space-between;text-transform:uppercase}
     header{background:var(--white);border-bottom:1px solid var(--border);padding:20px 24px;position:sticky;top:0;z-index:100}
     .header-inner{max-width:1000px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
-    .brand{font-weight:700;font-size:15px;letter-spacing:.08em;color:var(--navy);text-decoration:none;font-family:-apple-system,sans-serif} .brand-logo{height:36px;width:auto;border-radius:50%}
+    .brand{font-weight:700;font-size:15px;letter-spacing:.08em;color:var(--navy);text-decoration:none;font-family:-apple-system,sans-serif;display:flex;align-items:center;gap:10px} .brand-logo{height:32px;width:auto}.brand-sub{font-weight:400;font-size:11px;color:var(--muted);display:block;letter-spacing:.03em}
     nav{display:flex;gap:24px;font-size:14px}nav a{color:var(--ink);text-decoration:none;font-family:-apple-system,sans-serif}nav a:hover{color:var(--accent)}nav a.active{color:var(--accent);font-weight:600}
     .hero{background:var(--navy);color:#fff;padding:56px 24px 48px}.hero-inner{max-width:800px;margin:0 auto}
     .breadcrumb{font-family:-apple-system,sans-serif;font-size:13px;color:#94a3b8;margin-bottom:12px}.breadcrumb a{color:#94a3b8}
@@ -68,7 +68,7 @@
 </head>
 <body>
   <div class="topbar"><div class="topbar-inner"><span>Condominio Mar Azul, Nosara, Costa Rica</span><span>Development Record</span></div></div>
-  <header><div class="header-inner"><a href="/" class="brand"><img src="/images/logo.jpg" alt="Mar Azul" class="brand-logo">MAR AZUL</a><nav><a href="/permits/">Permits</a><a href="/water/">Water</a><a href="/environment/">Environment</a><a href="/electricity/">Electricity</a><a href="/condominium/">Condominium</a><a href="/documents/" class="active">Documents</a></nav></div></header>
+  <header><div class="header-inner"><a href="/" class="brand"><img src="/images/logo.jpg" alt="Mar Azul" class="brand-logo"><div>MAR AZUL<span class="brand-sub">Development Record &amp; Documentation</span></div></a><nav><a href="/permits/">Permits</a><a href="/water/">Water</a><a href="/environment/">Environment</a><a href="/electricity/">Electricity</a><a href="/condominium/">Condominium</a><a href="/documents/" class="active">Documents</a></nav></div></header>
 
   <main>
     <section class="hero">
