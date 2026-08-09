@@ -14,7 +14,7 @@
     .topbar-inner{max-width:1000px;margin:0 auto;display:flex;justify-content:space-between;text-transform:uppercase}
     header{background:var(--white);border-bottom:1px solid var(--border);padding:20px 24px;position:sticky;top:0;z-index:100}
     .header-inner{max-width:1000px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
-    .brand{font-weight:700;font-size:15px;letter-spacing:.08em;color:var(--navy);text-decoration:none;font-family:-apple-system,sans-serif}
+    .brand{font-weight:700;font-size:15px;letter-spacing:.08em;color:var(--navy);text-decoration:none;font-family:-apple-system,sans-serif} .brand-logo{height:36px;width:auto;border-radius:50%}
     nav{display:flex;gap:24px;font-size:14px}nav a{color:var(--ink);text-decoration:none;font-family:-apple-system,sans-serif}nav a:hover{color:var(--accent)}nav a.active{color:var(--accent);font-weight:600}
     .hero{background:var(--navy);color:#fff;padding:56px 24px 48px}.hero-inner{max-width:800px;margin:0 auto}
     .breadcrumb{font-family:-apple-system,sans-serif;font-size:13px;color:#94a3b8;margin-bottom:12px}.breadcrumb a{color:#94a3b8}
@@ -42,6 +42,7 @@
     .doc-link{display:inline-flex;align-items:center;gap:8px;font-family:-apple-system,sans-serif;font-size:13px;padding:6px 12px;background:var(--white);border:1px solid var(--border);color:var(--ink);text-decoration:none;margin-top:12px}
     .doc-link:hover{border-color:var(--accent);color:var(--accent)}
     .pending{color:var(--muted);font-style:italic;font-size:14px}
+    .doc-note{font-size:14px;color:var(--muted);font-style:italic;margin-top:16px;padding:12px;background:#f9fafb;border-left:3px solid var(--accent)}
     .back-link{font-family:-apple-system,sans-serif;font-size:14px;margin-top:32px;display:inline-block}
     footer{background:#111827;color:#9ca3af;padding:32px 24px;font-family:-apple-system,sans-serif;font-size:13px}
     .footer-inner{max-width:1000px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px}footer a{color:#fff}
@@ -49,13 +50,13 @@
   </style>
 </head>
 <body>
-  <div class="topbar"><div class="topbar-inner"><span>Condominio Mar Azul, Nosara, Costa Rica</span><span>Legal Documentation</span></div></div>
-  <header><div class="header-inner"><a href="/" class="brand">MAR AZUL LEGAL</a><nav><a href="/permits/">Permits</a><a href="/water/">Water</a><a href="/environment/">Environment</a><a href="/electricity/">Electricity</a><a href="/condominium/" class="active">Condominium</a><a href="/documents/">Documents</a></nav></div></header>
+  <div class="topbar"><div class="topbar-inner"><span>Condominio Mar Azul, Nosara, Costa Rica</span><span>Development Record</span></div></div>
+  <header><div class="header-inner"><a href="/" class="brand"><img src="/images/logo.jpg" alt="Mar Azul" class="brand-logo">MAR AZUL</a><nav><a href="/permits/">Permits</a><a href="/water/">Water</a><a href="/environment/">Environment</a><a href="/electricity/">Electricity</a><a href="/condominium/" class="active">Condominium</a><a href="/documents/">Documents</a></nav></div></header>
 
   <main>
     <section class="hero">
       <div class="hero-inner">
-        <div class="breadcrumb"><a href="/">Mar Azul Legal</a> / Condominium</div>
+        <div class="breadcrumb"><a href="/">Mar Azul</a> / Condominium</div>
         <h1>Condominium Registration</h1>
         <p class="hero-lead">Registration documentation, finca records, and title transfer chronology for Mar Azul.</p>
       </div>
@@ -72,20 +73,31 @@
         
         <div class="record">
           <div class="record-header">
-            <span class="record-id">Finca No. 5-370-M-000</span>
-            <div class="record-meta">Registro Nacional de Costa Rica</div>
+            <span class="record-id">Condominio Mar Azul</span>
+            <span class="record-status">Registered</span>
           </div>
+          <div class="record-meta">Escritura No. 72 — Registro Nacional de Costa Rica</div>
           <dl class="record-detail">
-            <dt>Finca Number</dt>
-            <dd>5-370-M-000</dd>
-            <dt>Cedula Juridica</dt>
-            <dd>3-109-895251</dd>
-            <dt>Province</dt>
-            <dd>Guanacaste</dd>
-            <dt>Registration</dt>
-            <dd>2022</dd>
+            <dt>Parent Property</dt>
+            <dd>Finca 229982, Guanacaste</dd>
+            <dt>Total Area</dt>
+            <dd>210,268.45 m²</dd>
+            <dt>Fincas Filiales</dt>
+            <dd>35 individual lots</dd>
+            <dt>Common Area</dt>
+            <dd>113,183.99 m² (53.8%)</dd>
+            <dt>Private Area</dt>
+            <dd>106,960.01 m² (46.2%)</dd>
+            <dt>Developer</dt>
+            <dd>Desarrollo Rancho Mar Azul Nosara, Ltda.</dd>
+            <dt>Cédula Jurídica</dt>
+            <dd>3-102-664912</dd>
+            <dt>Use</dt>
+            <dd>Residential (max 4 floors)</dd>
+            <dt>Governing Law</dt>
+            <dd>Ley 7933 (Ley Reguladora de la Propiedad en Condominio)</dd>
           </dl>
-          <a href="/docs/finca-5-370-M-000.pdf" class="doc-link">Download Registration <span class="pending">(pending upload)</span></a>
+          <p class="doc-note">Full constitution document (Testimonio Escritura) available upon request. Contains personal information requiring redaction.</p>
         </div>
 
         <h2>Registration Chronology</h2>
@@ -112,11 +124,11 @@
         <p>The November 2021 Sale Agreement expressly stated that the seller was "in the process of submitting the Property to the condominium regime." The Construction Agreement also addressed the allocation of responsibility for obtaining government permits and authorizations.</p>
         <p>These contracts are available with appropriate redactions of personal information.</p>
 
-        <a href="/" class="back-link">Back to Mar Azul Legal</a>
+        <a href="/" class="back-link">Back to Mar Azul</a>
       </div>
     </section>
   </main>
 
-  <footer><div class="footer-inner"><div><strong style="color:#fff">Mar Azul Legal Documentation</strong><br>Condominio Mar Azul, Nosara</div><div style="text-align:right"><a href="https://marazullegal.com/">marazullegal.com</a></div></div></footer>
+  <footer><div class="footer-inner"><div><strong style="color:#fff">Mar Azul Development Record</strong><br>Condominio Mar Azul, Nosara</div><div style="text-align:right"><a href="https://marazullegal.com/">marazullegal.com</a></div></div></footer>
 </body>
 </html>

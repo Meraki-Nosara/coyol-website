@@ -33,6 +33,27 @@ himalaya flag add <ID> seen               # Mark as read
 - **OpenRouter:** Configured in ~/.openclaw/.env
 - **Mapbox:** ⚠️ NEEDED — Ask Marion for token
 
+## Supabase (Coyol Website)
+**Project:** mnxjzvqgrrodalcmtntf
+**URL:** https://mnxjzvqgrrodalcmtntf.supabase.co
+
+**✅ CORRECT KEY (use this!):**
+```
+sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD
+```
+
+**❌ WRONG KEY (don't use):**
+```
+sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng
+```
+
+**Tables:**
+- `mar_azul_leads` — Qualified Leads
+- `coyol_reservations` — Coyol Restaurant
+- `laluna_reservations` — La Luna Restaurant
+
+**Note:** The publishable key works for BOTH read AND write. Don't change it to "secret" keys — those are placeholders that don't work.
+
 ## Dev Servers
 | Project | Port | URL |
 |---------|------|-----|

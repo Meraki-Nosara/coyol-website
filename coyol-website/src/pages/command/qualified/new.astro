@@ -3,9 +3,33 @@ import CommandLayout from '../../../layouts/CommandLayout.astro';
 
 const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+
+// Check if editing existing lead
+const editId = Astro.url.searchParams.get('id');
+let existingLead = null;
+
+if (editId) {
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/mar_azul_leads?id=eq.${editId}&select=*`, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+      }
+    });
+    if (response.ok) {
+      const data = await response.json();
+      existingLead = data[0] || null;
+    }
+  } catch (e) {
+    console.error('Failed to fetch lead:', e);
+  }
+}
+
+const isEdit = !!existingLead;
+const pageTitle = isEdit ? `Edit: ${existingLead.full_name}` : 'New Lead';
 ---
 
-<CommandLayout title="New Lead" active="qualified">
+<CommandLayout title={pageTitle} active="qualified">
   <div class="lead-form-container">
     
     <!-- Header -->
@@ -32,8 +56,9 @@ const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
     </div>
 
     <!-- Form -->
+    <script is:inline set:html={`window.__EXISTING_LEAD__ = ${JSON.stringify(existingLead)};`}></script>
     <form id="leadForm">
-      <input type="hidden" name="id" id="leadId">
+      <input type="hidden" name="id" id="leadId" value={existingLead?.id || ''}>
       
       <!-- Section 1: Contact Info -->
       <div class="form-section">
@@ -677,22 +702,59 @@ const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
     form.addEventListener('input', updateProgress);
     form.addEventListener('change', updateProgress);
     
+    // Pre-fill form if editing existing lead
+    const existingLead = window.__EXISTING_LEAD__ || null;
+    if (existingLead) {
+      // Fill text inputs and selects
+      Object.keys(existingLead).forEach(key => {
+        const input = form.querySelector(`[name="${key}"]`);
+        if (input && existingLead[key] !== null) {
+          if (input.type === 'checkbox') {
+            input.checked = existingLead[key];
+          } else {
+            input.value = existingLead[key];
+          }
+        }
+      });
+      // Fill purpose checkboxes
+      if (existingLead.purpose && Array.isArray(existingLead.purpose)) {
+        existingLead.purpose.forEach(p => {
+          const cb = form.querySelector(`input[name="purpose"][value="${p}"]`);
+          if (cb) cb.checked = true;
+        });
+      }
+      updateProgress();
+    }
+    
     // Form submission
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
+      const editId = data.id;
       
       // Collect checkboxes
       data.purpose = Array.from(form.querySelectorAll('input[name="purpose"]:checked')).map(cb => cb.value);
-      data.must_have = Array.from(form.querySelectorAll('input[name="must_have"]:checked')).map(cb => cb.value);
-      data.score = parseInt(scoreDisplay.textContent) || 0;
-      data.created_at = new Date().toISOString();
+      
+      // Remove fields that don't exist in the database
+      delete data.must_have;
+      delete data.score;
+      delete data.id;
+      
+      data.updated_at = new Date().toISOString();
+      if (!editId) {
+        data.created_at = new Date().toISOString();
+      }
+      
+      const isEdit = !!editId;
+      const url = isEdit 
+        ? `https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/mar_azul_leads?id=eq.${editId}`
+        : 'https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/mar_azul_leads';
       
       try {
-        const res = await fetch('https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/mar_azul_leads', {
-          method: 'POST',
+        const res = await fetch(url, {
+          method: isEdit ? 'PATCH' : 'POST',
           headers: {
             'Content-Type': 'application/json',
             'apikey': 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD',
