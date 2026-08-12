@@ -1,102 +1,95 @@
 {
-  "lastUpdated": "2026-08-12",
+  "lastUpdated": "2026-08-12 11:46",
   "period": "2026-01 to 2026-08",
   "exchangeRate": 505,
-  "revenue": {
-    "totalCRC": 1609780562,
-    "totalUSD": 3187684,
-    "byRestaurant": {
-      "laluna": {
-        "crc": 1046357365,
-        "share": 65
+  "restaurants": {
+    "laluna": {
+      "name": "La Luna",
+      "color": "#A65D3F",
+      "revenue": {
+        "crc": 1020397209.59,
+        "usd": 2020588
       },
-      "coyol": {
-        "crc": 450738557,
-        "share": 28
+      "gastos": {
+        "crc": 582670670,
+        "usd": 1153803
       },
-      "esh": {
-        "crc": 112684640,
-        "share": 7
-      }
-    },
-    "source": "monthly.json + lafise_estimates"
-  },
-  "expenses": {
-    "gastos": {
-      "crc": 918783049,
-      "usd": 1819372,
-      "label": "Suppliers & Costs",
-      "source": "proveedores_excel + facturas_xml"
-    },
-    "cardDeductions": {
-      "comision": {
-        "crc": 7167488,
-        "pct": 1.95,
-        "label": "Card Commission"
+      "cardDeductions": {
+        "comision": 4511837,
+        "iva": 12286059,
+        "renta": 4072197,
+        "total": 20870093
       },
-      "ivaRetention": {
-        "crc": 19517584,
-        "pct": 2.0,
-        "label": "IVA Retention"
+      "netProfit": {
+        "crc": 416856446.5899999,
+        "usd": 825458
       },
-      "rentaRetention": {
-        "crc": 6469080,
-        "pct": 2.0,
-        "label": "Renta Retention"
+      "profitMargin": 40.9
+    },
+    "coyol": {
+      "name": "Coyol",
+      "color": "#3D4F3D",
+      "revenue": {
+        "crc": 500228731.38,
+        "usd": 990551
       },
-      "totalCRC": 33154152,
-      "source": "lafise_tcr_reports"
+      "gastos": {
+        "crc": 292190261,
+        "usd": 578594
+      },
+      "cardDeductions": {
+        "comision": 2092688,
+        "iva": 5698542,
+        "renta": 1888773,
+        "total": 9680003
+      },
+      "netProfit": {
+        "crc": 198358467.37999997,
+        "usd": 392789
+      },
+      "profitMargin": 39.7
     },
-    "totalCRC": 951937201,
-    "totalUSD": 1885024
-  },
-  "operatingProfit": {
-    "grossCRC": 690997513,
-    "grossMargin": 42.9,
-    "netCRC": 657843361,
-    "netMargin": 40.9,
-    "netUSD": 1302660
-  },
-  "cardSalesByMonth": {
-    "2026-04": 62041540,
-    "2026-05": 91167736,
-    "2026-06": 92852308,
-    "2026-07": 101481150,
-    "2026-08": 20020748
-  },
-  "cardDeductionsByMonth": {
-    "2026-04": {
-      "comision": 1209810,
-      "iva": 3294401,
-      "renta": 1091926
-    },
-    "2026-05": {
-      "comision": 1777771,
-      "iva": 4840995,
-      "renta": 1604540
-    },
-    "2026-06": {
-      "comision": 1810620,
-      "iva": 4930448,
-      "renta": 1634191
-    },
-    "2026-07": {
-      "comision": 1978882,
-      "iva": 5388641,
-      "renta": 1786060
-    },
-    "2026-08": {
-      "comision": 390405,
-      "iva": 1063100,
-      "renta": 352363
+    "esh": {
+      "name": "Esh",
+      "color": "#C4A67C",
+      "revenue": {
+        "crc": 89154619.08,
+        "usd": 176543
+      },
+      "gastos": {
+        "crc": 43922105,
+        "usd": 86974
+      },
+      "cardDeductions": {
+        "comision": 562957,
+        "iva": 1532976,
+        "renta": 508101,
+        "total": 2604034
+      },
+      "netProfit": {
+        "crc": 42628480.080000006,
+        "usd": 84412
+      },
+      "profitMargin": 47.8
     }
   },
-  "dataQuality": {
-    "salesJanApr": "complete",
-    "salesMayAug": "estimated_from_lafise",
-    "gastosJanApr": "complete_from_excel",
-    "gastosMayAug": "partial_from_xml",
-    "cardDataAprAug": "complete_from_lafise",
-    "cardDataJanMar": "missing"
+  "totals": {
+    "revenue": {
+      "crc": 1609780560.05,
+      "usd": 3187684
+    },
+    "gastos": {
+      "crc": 918783036,
+      "usd": 1819372
+    },
+    "cardDeductions": {
+      "crc": 33154130,
+      "usd": 65651
+    },
+    "netProfit": {
+      "crc": 657843394.05,
+      "usd": 1302660
+    },
+    "profitMargin": 40.9
   }
 }

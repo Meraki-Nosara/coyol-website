@@ -1,0 +1,89 @@
+{
+  "name": "La Luna",
+  "code": "laluna",
+  "color": "#A65D3F",
+  "manager": "Abner",
+  "months": {
+    "2026-01": {
+      "revenue": 220540817.92,
+      "gastos": 140736112,
+      "cardComision": 0,
+      "ivaRetention": 0,
+      "rentaRetention": 0,
+      "totalDeductions": 140736112,
+      "netProfit": 79804705.91999999
+    },
+    "2026-02": {
+      "revenue": 182515402.97,
+      "gastos": 141943886,
+      "cardComision": 0,
+      "ivaRetention": 0,
+      "rentaRetention": 0,
+      "totalDeductions": 141943886,
+      "netProfit": 40571516.97
+    },
+    "2026-03": {
+      "revenue": 227937561.57,
+      "gastos": 176804094,
+      "cardComision": 0,
+      "ivaRetention": 0,
+      "rentaRetention": 0,
+      "totalDeductions": 176804094,
+      "netProfit": 51133467.56999999
+    },
+    "2026-04": {
+      "revenue": 162956573.53999996,
+      "gastos": 98423153,
+      "cardComision": 775813,
+      "ivaRetention": 2112596,
+      "rentaRetention": 700217,
+      "totalDeductions": 102011779,
+      "netProfit": 60944794.53999996
+    },
+    "2026-05": {
+      "revenue": 67577761.59,
+      "gastos": 2815041,
+      "cardComision": 1098204,
+      "ivaRetention": 2990487,
+      "rentaRetention": 991192,
+      "totalDeductions": 7894924,
+      "netProfit": 59682837.59
+    },
+    "2026-06": {
+      "revenue": 107412864,
+      "gastos": 1541166,
+      "cardComision": 1159491,
+      "ivaRetention": 3157378,
+      "rentaRetention": 1046509,
+      "totalDeductions": 6904544,
+      "netProfit": 100508320
+    },
+    "2026-07": {
+      "revenue": 35189371,
+      "gastos": 11928323,
+      "cardComision": 1224566,
+      "ivaRetention": 3334583,
+      "rentaRetention": 1105244,
+      "totalDeductions": 17592716,
+      "netProfit": 17596655
+    },
+    "2026-08": {
+      "revenue": 16266857,
+      "gastos": 8478895,
+      "cardComision": 253763,
+      "ivaRetention": 691015,
+      "rentaRetention": 229035,
+      "totalDeductions": 9652708,
+      "netProfit": 6614149
+    }
+  },
+  "ytd2026": {
+    "revenue": 1020397209.59,
+    "gastos": 582670670,
+    "cardComision": 4511837,
+    "ivaRetention": 12286059,
+    "rentaRetention": 4072197,
+    "netProfit": 416856446.5899999
+  },
+  "profitMargin": 40.9
+}
