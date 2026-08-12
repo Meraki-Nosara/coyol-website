@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mar Azul Retreat — Women's Wellness Retreats in Nosara, Costa Rica</title>
+  <meta name="description" content="Intimate women's retreats at a historic Costa Rican farmhouse. Yoga, writing, cooking, pottery, juicing, and gardening in the hills above Nosara.">
+  <link rel="canonical" href="https://marazulretreat.com/">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Outfit:wght@200;300;400&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --white: #ffffff;
+      --cream: #faf9f7;
+      --sand: #f5f3ef;
+      --warm-gray: #9a9590;
+      --soft-brown: #8b7355;
+      --charcoal: #3d3d3d;
+      --blush: #e8ddd4;
+      --sage: #c5cec5;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      color: var(--charcoal);
+      background: var(--white);
+      line-height: 1.8;
+      font-size: 16px;
+      letter-spacing: 0.02em;
+    }
+    
+    .serif {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+    
+    /* HEADER */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 24px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+    }
+    
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      text-decoration: none;
+    }
+    
+    nav {
+      display: flex;
+      gap: 40px;
+    }
+    
+    nav a {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    nav a:hover {
+      color: var(--charcoal);
+    }
+    
+    /* HERO */
+    .hero {
+      height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      text-align: center;
+      background: url('/images/hero.jpg') center center / cover no-repeat;
+      padding: 0 24px 40px;
+      position: relative;
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .hero-content {
+      max-width: 700px;
+    }
+    
+    .hero-overline {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+      margin-bottom: 32px;
+    }
+    
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(42px, 6vw, 72px);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 32px;
+      color: var(--charcoal);
+      text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+    }
+    
+    .hero p {
+      font-size: 17px;
+      color: var(--warm-gray);
+      max-width: 500px;
+      margin: 0 auto 48px;
+    }
+    
+    .btn {
+      display: inline-block;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 16px 40px;
+      border: 1px solid var(--charcoal);
+      color: var(--charcoal);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    
+    .btn:hover {
+      background: var(--charcoal);
+      color: var(--white);
+    }
+    
+    /* INTRO */
+    .intro {
+      padding: 120px 24px;
+      text-align: center;
+      background: var(--white);
+    }
+    
+    .intro-inner {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    
+    .intro h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 300;
+      margin-bottom: 32px;
+    }
+    
+    .intro p {
+      color: var(--warm-gray);
+      font-size: 17px;
+    }
+    
+    /* THE PLACE */
+    .place {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 80vh;
+    }
+    
+    .place-image {
+      background: var(--blush);
+      min-height: 500px;
+    }
+    
+    .place-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .place-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px;
+      background: var(--sand);
+    }
+    
+    .place-text {
+      max-width: 440px;
+    }
+    
+    .place-text .overline {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+      margin-bottom: 24px;
+    }
+    
+    .place-text h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+    
+    .place-text p {
+      color: var(--warm-gray);
+      margin-bottom: 16px;
+    }
+    
+    /* RETREATS */
+    .retreats {
+      padding: 120px 24px;
+      background: var(--white);
+    }
+    
+    .retreats-header {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 80px;
+    }
+    
+    .retreats-header .overline {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+      margin-bottom: 24px;
+    }
+    
+    .retreats-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 40px;
+      font-weight: 300;
+    }
+    
+    .retreat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .retreat-card {
+      background: var(--cream);
+      padding: 48px 36px;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    
+    .retreat-card:hover {
+      transform: translateY(-4px);
+    }
+    
+    .retreat-date {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+      margin-bottom: 16px;
+    }
+    
+    .retreat-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+    
+    .retreat-leader {
+      font-size: 14px;
+      color: var(--soft-brown);
+      margin-bottom: 20px;
+    }
+    
+    .retreat-description {
+      font-size: 14px;
+      color: var(--warm-gray);
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+    
+    .retreat-details {
+      font-size: 12px;
+      color: var(--warm-gray);
+      border-top: 1px solid var(--blush);
+      padding-top: 20px;
+      margin-top: auto;
+    }
+    
+    .retreat-link {
+      display: inline-block;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      text-decoration: none;
+      margin-top: 24px;
+      padding-bottom: 2px;
+      border-bottom: 1px solid var(--charcoal);
+    }
+    
+    /* SAMPLE SCHEDULE */
+    .schedule {
+      padding: 120px 24px;
+      background: var(--sand);
+    }
+    
+    .schedule-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .schedule-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    
+    .schedule-header .overline {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+      margin-bottom: 24px;
+    }
+    
+    .schedule-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 300;
+    }
+    
+    .day-schedule {
+      display: grid;
+      gap: 24px;
+    }
+    
+    .schedule-item {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 32px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--blush);
+    }
+    
+    .schedule-time {
+      font-size: 13px;
+      color: var(--warm-gray);
+      letter-spacing: 0.05em;
+    }
+    
+    .schedule-activity h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 400;
+      margin-bottom: 4px;
+    }
+    
+    .schedule-activity p {
+      font-size: 14px;
+      color: var(--warm-gray);
+    }
+    
+    /* LEADERS */
+    .leaders {
+      padding: 120px 24px;
+      background: var(--white);
+    }
+    
+    .leaders-header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+    
+    .leaders-header .overline {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+      margin-bottom: 24px;
+    }
+    
+    .leaders-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 40px;
+      font-weight: 300;
+    }
+    
+    .leaders-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    
+    .leader-card {
+      text-align: center;
+    }
+    
+    .leader-image {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: var(--blush);
+      margin: 0 auto 24px;
+      overflow: hidden;
+    }
+    
+    .leader-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .leader-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 400;
+      margin-bottom: 4px;
+    }
+    
+    .leader-role {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+      margin-bottom: 16px;
+    }
+    
+    .leader-bio {
+      font-size: 14px;
+      color: var(--warm-gray);
+      line-height: 1.6;
+    }
+    
+    /* REGISTER */
+    .register {
+      padding: 120px 24px;
+      background: var(--cream);
+      text-align: center;
+    }
+    
+    .register-inner {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .register h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+    
+    .register p {
+      color: var(--warm-gray);
+      margin-bottom: 40px;
+    }
+    
+    .register-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .register-form input,
+    .register-form select {
+      padding: 16px 20px;
+      border: 1px solid var(--blush);
+      background: var(--white);
+      font-family: inherit;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+    }
+    
+    .register-form input::placeholder {
+      color: var(--warm-gray);
+    }
+    
+    .register-form button {
+      padding: 18px 40px;
+      border: none;
+      background: var(--charcoal);
+      color: var(--white);
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    .register-form button:hover {
+      background: var(--soft-brown);
+    }
+    
+    /* FOOTER */
+    footer {
+      padding: 60px 24px;
+      background: var(--white);
+      text-align: center;
+      border-top: 1px solid var(--sand);
+    }
+    
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    
+    .footer-location {
+      font-size: 13px;
+      color: var(--warm-gray);
+      margin-bottom: 24px;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+    }
+    
+    .footer-links a {
+      font-size: 12px;
+      color: var(--warm-gray);
+      text-decoration: none;
+    }
+    
+    .footer-links a:hover {
+      color: var(--charcoal);
+    }
+    
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .place {
+        grid-template-columns: 1fr;
+      }
+      
+      .retreat-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+      }
+      
+      .leaders-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+      }
+      
+      header {
+        padding: 20px 24px;
+      }
+      
+      nav {
+        gap: 24px;
+      }
+    }
+    
+    @media (max-width: 600px) {
+      .leaders-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      nav {
+        display: none;
+      }
+      
+      .schedule-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="/" class="logo">Mar Azul Retreat</a>
+    <nav>
+      <a href="#retreats">Retreats</a>
+      <a href="#place">The Place</a>
+      <a href="#leaders">Leaders</a>
+      <a href="#register">Register</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <a href="#retreats" class="btn">View 2027 Retreats</a>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="intro">
+    <div class="intro-inner">
+      <h2 class="serif">A Place to Slow Down</h2>
+      <p>Mar Azul Retreat is held at El Rancho, the original farmhouse of the Mar Azul estate. Five bedrooms under a palm-thatched roof. A pottery cabin. Gardens producing what we cook. No agenda beyond presence, practice, and creation.</p>
+    </div>
+  </section>
+
+  <!-- THE PLACE -->
+  <section class="place" id="place">
+    <div class="place-image">
+      <!-- Image placeholder -->
+    </div>
+    <div class="place-content">
+      <div class="place-text">
+        <p class="overline">El Rancho</p>
+        <h2>The Original Farmhouse</h2>
+        <p>Built in the traditional Costa Rican style with a soaring palm-thatched roof, El Rancho sits on a hillside overlooking the Pacific. Five private bedrooms. Open-air living. Gardens surrounding.</p>
+        <p>All activities — yoga, cooking, pottery, gardening — happen within steps of where you sleep. The retreat is the place itself.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RETREATS -->
+  <section class="retreats" id="retreats">
+    <div class="retreats-header">
+      <p class="overline">2027 Calendar</p>
+      <h2>Six Retreats, Six Invitations</h2>
+    </div>
+    
+    <div class="retreat-grid">
+      
+      <div class="retreat-card">
+        <p class="retreat-date">January 18 – 24</p>
+        <h3 class="retreat-title">Writing Retreat</h3>
+        <p class="retreat-leader">with Karen Rinaldi</p>
+        <p class="retreat-description">Author of <em>It's Great to Suck at Something</em>. Morning pages, afternoon workshops, evening readings under the palms.</p>
+        <div class="retreat-details">6 nights · 12 guests max</div>
+        <a href="#register" class="retreat-link">Reserve Your Place</a>
+      </div>
+      
+      <div class="retreat-card">
+        <p class="retreat-date">February 15 – 21</p>
+        <h3 class="retreat-title">Juice & Plant Life</h3>
+        <p class="retreat-leader">with Ruth Tal</p>
+        <p class="retreat-description">Founder of Fresh Restaurants. Hands-on juicing, plant-based cooking, garden harvesting, and conversations about nourishment.</p>
+        <div class="retreat-details">6 nights · 12 guests max</div>
+        <a href="#register" class="retreat-link">Reserve Your Place</a>
+      </div>
+      
+      <div class="retreat-card">
+        <p class="retreat-date">March 22 – 28</p>
+        <h3 class="retreat-title">Cooking Retreat</h3>
+        <p class="retreat-leader">with Angelina Peri</p>
+        <p class="retreat-description">Mediterranean and Costa Rican cuisines. Market visits, garden-to-table cooking, long dinners with wine and stories.</p>
+        <div class="retreat-details">6 nights · 12 guests max</div>
+        <a href="#register" class="retreat-link">Reserve Your Place</a>
+      </div>
+      
+      <div class="retreat-card">
+        <p class="retreat-date">April 19 – 25</p>
+        <h3 class="retreat-title">Costume & Textile</h3>
+        <p class="retreat-leader">with Catherine Ladd</p>
+        <p class="retreat-description">Film costume designer. Hands-on making: dyeing, stitching, draping. Creating garments that tell stories.</p>
+        <div class="retreat-details">6 nights · 12 guests max</div>
+        <a href="#register" class="retreat-link">Reserve Your Place</a>
+      </div>
+      
+      <div class="retreat-card">
+        <p class="retreat-date">October 11 – 17</p>
+        <h3 class="retreat-title">Pottery & Clay</h3>
+        <p class="retreat-leader">with Guest Artist</p>
+        <p class="retreat-description">Wheel throwing, hand building, glazing. Working with earth in a jungle pottery cabin. Take home what you make.</p>
+        <div class="retreat-details">6 nights · 10 guests max</div>
+        <a href="#register" class="retreat-link">Reserve Your Place</a>
+      </div>
+      
+      <div class="retreat-card">
+        <p class="retreat-date">November 8 – 14</p>
+        <h3 class="retreat-title">Garden & Growing</h3>
+        <p class="retreat-leader">with Guest Artist</p>
+        <p class="retreat-description">Tropical permaculture, seed saving, propagation. Learning to grow in a climate where everything thrives.</p>
+        <div class="retreat-details">6 nights · 12 guests max</div>
+        <a href="#register" class="retreat-link">Reserve Your Place</a>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- SAMPLE SCHEDULE -->
+  <section class="schedule">
+    <div class="schedule-inner">
+      <div class="schedule-header">
+        <p class="overline">A Day at Retreat</p>
+        <h2>Sample Schedule</h2>
+      </div>
+      
+      <div class="day-schedule">
+        <div class="schedule-item">
+          <span class="schedule-time">7:00 am</span>
+          <div class="schedule-activity">
+            <h4>Sunrise Yoga</h4>
+            <p>Gentle morning practice on the terrace</p>
+          </div>
+        </div>
+        
+        <div class="schedule-item">
+          <span class="schedule-time">8:30 am</span>
+          <div class="schedule-activity">
+            <h4>Breakfast</h4>
+            <p>Fresh tropical fruit, local eggs, coffee from Tarrazú</p>
+          </div>
+        </div>
+        
+        <div class="schedule-item">
+          <span class="schedule-time">10:00 am</span>
+          <div class="schedule-activity">
+            <h4>Morning Workshop</h4>
+            <p>Led by the retreat leader — writing, cooking, pottery, or craft</p>
+          </div>
+        </div>
+        
+        <div class="schedule-item">
+          <span class="schedule-time">1:00 pm</span>
+          <div class="schedule-activity">
+            <h4>Lunch</h4>
+            <p>Garden-to-table, shared at the long table</p>
+          </div>
+        </div>
+        
+        <div class="schedule-item">
+          <span class="schedule-time">2:30 pm</span>
+          <div class="schedule-activity">
+            <h4>Rest & Free Time</h4>
+            <p>Pool, hammocks, reading, journaling, exploring</p>
+          </div>
+        </div>
+        
+        <div class="schedule-item">
+          <span class="schedule-time">4:30 pm</span>
+          <div class="schedule-activity">
+            <h4>Afternoon Session</h4>
+            <p>Garden walk, continued practice, or beach excursion</p>
+          </div>
+        </div>
+        
+        <div class="schedule-item">
+          <span class="schedule-time">6:30 pm</span>
+          <div class="schedule-activity">
+            <h4>Dinner</h4>
+            <p>Chef-prepared meal with wine, candlelight, conversation</p>
+          </div>
+        </div>
+        
+        <div class="schedule-item">
+          <span class="schedule-time">8:30 pm</span>
+          <div class="schedule-activity">
+            <h4>Evening Circle</h4>
+            <p>Sharing, sound bath, stargazing, or early rest</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEADERS -->
+  <section class="leaders" id="leaders">
+    <div class="leaders-header">
+      <p class="overline">2027 Retreat Leaders</p>
+      <h2>Women Who Inspire</h2>
+    </div>
+    
+    <div class="leaders-grid">
+      <div class="leader-card">
+        <div class="leader-image"></div>
+        <h4 class="leader-name">Karen Rinaldi</h4>
+        <p class="leader-role">Writing</p>
+        <p class="leader-bio">Author, publisher, surfer. Founder of Harper Wave. Author of <em>It's Great to Suck at Something</em>.</p>
+      </div>
+      
+      <div class="leader-card">
+        <div class="leader-image"></div>
+        <h4 class="leader-name">Ruth Tal</h4>
+        <p class="leader-role">Juice & Plant Life</p>
+        <p class="leader-bio">Founder of Fresh Restaurants. Pioneer of Toronto's plant-based movement since 1991.</p>
+      </div>
+      
+      <div class="leader-card">
+        <div class="leader-image"></div>
+        <h4 class="leader-name">Angelina Peri</h4>
+        <p class="leader-role">Cooking</p>
+        <p class="leader-bio">Mediterranean home cook. Runs Meraki restaurant group in Nosara.</p>
+      </div>
+      
+      <div class="leader-card">
+        <div class="leader-image"></div>
+        <h4 class="leader-name">Catherine Ladd</h4>
+        <p class="leader-role">Costume & Textile</p>
+        <p class="leader-bio">London-based costume designer for film, theatre, and editorial.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- REGISTER -->
+  <section class="register" id="register">
+    <div class="register-inner">
+      <h2>Reserve Your Place</h2>
+      <p>Each retreat is limited to 10–12 guests. Register your interest and we'll reach out with full details and pricing.</p>
+      
+      <form class="register-form" action="#" method="POST">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Email Address" required>
+        <select name="retreat" required>
+          <option value="">Select a Retreat</option>
+          <option value="writing-jan">Writing with Karen Rinaldi — January</option>
+          <option value="juice-feb">Juice & Plant Life with Ruth Tal — February</option>
+          <option value="cooking-mar">Cooking with Angelina Peri — March</option>
+          <option value="costume-apr">Costume & Textile with Catherine Ladd — April</option>
+          <option value="pottery-oct">Pottery & Clay — October</option>
+          <option value="garden-nov">Garden & Growing — November</option>
+        </select>
+        <button type="submit">Register Interest</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Mar Azul Retreat</div>
+    <p class="footer-location">El Rancho · Mar Azul · Nosara, Costa Rica</p>
+    <div class="footer-links">
+      <a href="mailto:retreat@marazulretreat.com">retreat@marazulretreat.com</a>
+      <a href="https://instagram.com/marazulretreat">Instagram</a>
+    </div>
+  </footer>
+
+</body>
+</html>

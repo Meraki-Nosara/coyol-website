@@ -742,6 +742,12 @@ const pageTitle = isEdit ? `Edit: ${existingLead.full_name}` : 'New Lead';
       delete data.score;
       delete data.id;
       
+      // Rename form fields to match database columns
+      if (data.budget_range) {
+        data.total_budget = data.budget_range;
+        delete data.budget_range;
+      }
+      
       data.updated_at = new Date().toISOString();
       if (!editId) {
         data.created_at = new Date().toISOString();
@@ -767,7 +773,9 @@ const pageTitle = isEdit ? `Edit: ${existingLead.full_name}` : 'New Lead';
         if (res.ok) {
           window.location.href = '/command/qualified?saved=1';
         } else {
-          alert('Error saving lead. Please try again.');
+          const errorText = await res.text();
+          console.error('Save failed:', res.status, errorText);
+          alert(`Error saving lead (${res.status}): ${errorText || 'Unknown error'}`);
         }
       } catch (err) {
         console.error(err);

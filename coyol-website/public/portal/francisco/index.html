@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal del Cliente — Coyol Group</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1a1f16 0%, #2a3020 100%);
+      color: #f5f3ef;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .login-container {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 50px 40px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .logo-img {
+      width: 80px;
+      height: auto;
+      margin-bottom: 15px;
+      filter: invert(1) brightness(0.85) sepia(0.3) hue-rotate(10deg) saturate(0.8);
+    }
+    
+    .logo {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 28px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      color: #C4A67C;
+      margin-bottom: 5px;
+    }
+    
+    .tagline {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #888;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+    
+    .welcome {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      color: #f5f3ef;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 30px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #f5f3ef;
+      font-family: inherit;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+    
+    .form-group input:focus {
+      outline: none;
+      border-color: #C4A67C;
+    }
+    
+    .form-group input::placeholder {
+      color: #555;
+    }
+    
+    .login-btn {
+      width: 100%;
+      padding: 16px;
+      background: #C4A67C;
+      border: none;
+      border-radius: 8px;
+      color: #1a1f16;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 10px;
+    }
+    
+    .login-btn:hover {
+      background: #d4b68c;
+    }
+    
+    .error-msg {
+      color: #e57373;
+      font-size: 12px;
+      margin-top: 15px;
+      display: none;
+    }
+    
+    .footer-text {
+      margin-top: 30px;
+      font-size: 11px;
+      color: #555;
+    }
+    
+    .footer-text a {
+      color: #C4A67C;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <img src="https://coyolrealestate.com/images/logo-black.png" alt="Coyol Group" class="logo-img">
+    <div class="logo">COYOL GROUP</div>
+    <div class="tagline">Portal del Cliente</div>
+    
+    <h1 class="welcome">Bienvenido</h1>
+    <p class="subtitle">Ingrese sus credenciales para acceder a su portal</p>
+    
+    <form id="loginForm">
+      <div class="form-group">
+        <label>Usuario</label>
+        <input type="text" id="username" placeholder="Su nombre de usuario" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Código de Acceso</label>
+        <input type="password" id="accessCode" placeholder="Su código de acceso" required>
+      </div>
+      
+      <button type="submit" class="login-btn">Ingresar</button>
+      
+      <p class="error-msg" id="errorMsg">Usuario o código incorrecto</p>
+    </form>
+    
+    <p class="footer-text">
+      ¿Problemas para acceder? <a href="mailto:info@coyolrealestate.com">Contáctenos</a>
+    </p>
+  </div>
+
+  <script>
+    // Client credentials - multiple spellings accepted
+    const clients = {
+      'francisco': {
+        code: 'NEST2026',
+        redirect: 'dashboard.html'
+      },
+      'fransisco': {
+        code: 'NEST2026',
+        redirect: 'dashboard.html'
+      },
+      'fvillalobos': {
+        code: 'NEST2026',
+        redirect: 'dashboard.html'
+      },
+      'villalobos': {
+        code: 'NEST2026',
+        redirect: 'dashboard.html'
+      }
+    };
+    
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value.toLowerCase().trim();
+      const code = document.getElementById('accessCode').value.trim();
+      
+      if (clients[username] && clients[username].code === code) {
+        window.location.href = clients[username].redirect;
+      } else {
+        document.getElementById('errorMsg').style.display = 'block';
+      }
+    });
+  </script>
+
+</body>
+</html>
