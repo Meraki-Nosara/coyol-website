@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-12 11:46",
+  "lastUpdated": "2026-08-12 11:53",
   "period": "2026-01 to 2026-08",
   "exchangeRate": 505,
   "restaurants": {
@@ -91,5 +91,53 @@
       "usd": 1302660
     },
     "profitMargin": 40.9
+  },
+  "expenses": {
+    "gastos": {
+      "crc": 918783049,
+      "usd": 1819372,
+      "label": "Suppliers & Costs",
+      "isExpense": true
+    },
+    "cardCommission": {
+      "crc": 7167488,
+      "usd": 14193,
+      "label": "Card Processing Fees",
+      "isExpense": true
+    },
+    "totalExpensesCRC": 925950537,
+    "totalExpensesUSD": 1833565
+  },
+  "taxPrepayments": {
+    "ivaRetention": {
+      "crc": 19517584,
+      "usd": 38648,
+      "label": "IVA Retention (2%)",
+      "isExpense": false,
+      "note": "Prepayment to Hacienda - reduces IVA liability"
+    },
+    "rentaRetention": {
+      "crc": 6469080,
+      "usd": 12810,
+      "label": "Renta Retention (2%)",
+      "isExpense": false,
+      "note": "Prepayment to Hacienda - reduces income tax liability"
+    },
+    "totalCRC": 25986664,
+    "totalUSD": 51458
+  },
+  "profit": {
+    "grossProfit": {
+      "crc": 683830023,
+      "usd": 1354118,
+      "margin": 42.5
+    }
+  },
+  "cashFlow": {
+    "note": "Cash received is reduced by tax prepayments",
+    "grossProfit": 683830023,
+    "minusTaxPrepayments": 25986664,
+    "netCashFlow": 657843359,
+    "netCashFlowUSD": 1302660
   }
 }

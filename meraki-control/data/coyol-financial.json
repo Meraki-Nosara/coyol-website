@@ -83,7 +83,12 @@
     "cardComision": 2092688,
     "ivaRetention": 5698542,
     "rentaRetention": 1888773,
-    "netProfit": 198358467.37999997
+    "netProfit": 198358467.37999997,
+    "realExpenses": 294282949,
+    "grossProfit": 205945782.38,
+    "grossMargin": 41.2,
+    "taxPrepayments": 7587315,
+    "netCashFlow": 198358467.38
   },
-  "profitMargin": 39.7
+  "profitMargin": 41.2
 }
