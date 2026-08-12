@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaElectronica xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica">
+  <Clave>50611042600310187612290200207010000001721100004097</Clave>
+  <ProveedorSistemas>3101566759</ProveedorSistemas>
+  <CodigoActividadEmisor>4772.0</CodigoActividadEmisor>
+  <NumeroConsecutivo>90200207010000001721</NumeroConsecutivo>
+  <FechaEmision>2026-04-11T21:41:02</FechaEmision>
+  <Emisor>
+    <Nombre>Cadena de Farmacias Dokka S.A. (FLB)</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3101876122</Numero>
+    </Identificacion>
+    <NombreComercial>Cadena de Farmacias Dokka S.A. (FLB)</NombreComercial>
+    <Ubicacion>
+      <Provincia>1</Provincia>
+      <Canton>01</Canton>
+      <Distrito>09</Distrito>
+      <OtrasSenas>Pavas, de la Embajada Americana, 200 metros al sur y 125 metros al este.</OtrasSenas>
+    </Ubicacion>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>25190000</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>factelectsalud@cuestamoras.com</CorreoElectronico>
+  </Emisor>
+  <Receptor>
+    <Nombre>MERAKI FAMILY LIMITADA</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3102618820</Numero>
+    </Identificacion>
+    <NombreComercial>MERAKI FAMILY LIMITADA</NombreComercial>
+    <CorreoElectronico>merakifamilylimitada@gmail.com</CorreoElectronico>
+  </Receptor>
+  <CondicionVenta>01</CondicionVenta>
+  <DetalleServicio>
+    <LineaDetalle>
+      <NumeroLinea>1</NumeroLinea>
+      <CodigoCABYS>3563401010417</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>01</Tipo>
+        <Codigo>S6552878</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UNIDAD</UnidadMedidaComercial>
+      <Detalle>ENANTYUM PLUS TAB 75MG/25MG X10</Detalle>
+      <NumeroVINoSerie />
+      <RegistroMedicamento />
+      <FormaFarmaceutica>199</FormaFarmaceutica>
+      <PrecioUnitario>1740.64000</PrecioUnitario>
+      <MontoTotal>1740.64000</MontoTotal>
+      <SubTotal>1740.64000</SubTotal>
+      <BaseImponible>1740.64000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>03</CodigoTarifaIVA>
+        <Tarifa>2.00</Tarifa>
+        <Monto>34.81280</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>34.81280</ImpuestoNeto>
+      <MontoTotalLinea>1775.45280</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>2</NumeroLinea>
+      <CodigoCABYS>3562308030003</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>01</Tipo>
+        <Codigo>S4121500</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UNIDAD</UnidadMedidaComercial>
+      <Detalle>DIOVAN TAB 80MG X14</Detalle>
+      <NumeroVINoSerie />
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>1022.35000</PrecioUnitario>
+      <MontoTotal>1022.35000</MontoTotal>
+      <SubTotal>1022.35000</SubTotal>
+      <BaseImponible>1022.35000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>03</CodigoTarifaIVA>
+        <Tarifa>2.00</Tarifa>
+        <Monto>20.44700</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>20.44700</ImpuestoNeto>
+      <MontoTotalLinea>1042.79700</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>3</NumeroLinea>
+      <CodigoCABYS>3565901030000</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>01</Tipo>
+        <Codigo>5341954</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UNIDAD</UnidadMedidaComercial>
+      <Detalle>PROBIO I3 CAP X30</Detalle>
+      <NumeroVINoSerie />
+      <RegistroMedicamento />
+      <FormaFarmaceutica>04</FormaFarmaceutica>
+      <PrecioUnitario>20907.08000</PrecioUnitario>
+      <MontoTotal>20907.08000</MontoTotal>
+      <Descuento>
+        <MontoDescuento>5226.77000</MontoDescuento>
+        <CodigoDescuento>07</CodigoDescuento>
+      </Descuento>
+      <SubTotal>15680.31000</SubTotal>
+      <BaseImponible>15680.31000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>2038.44030</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>2038.44030</ImpuestoNeto>
+      <MontoTotalLinea>17718.75030</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>4</NumeroLinea>
+      <CodigoCABYS>3563201080102</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>01</Tipo>
+        <Codigo>S6020530</Codigo>
+      </CodigoComercial>
+      <Cantidad>4.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UNIDAD</UnidadMedidaComercial>
+      <Detalle>FLOXACIN TAB 500MG X10</Detalle>
+      <NumeroVINoSerie />
+      <RegistroMedicamento>2101-A-2938</RegistroMedicamento>
+      <FormaFarmaceutica>199</FormaFarmaceutica>
+      <PrecioUnitario>1660.63000</PrecioUnitario>
+      <MontoTotal>6642.52000</MontoTotal>
+      <SubTotal>6642.52000</SubTotal>
+      <BaseImponible>6642.52000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>03</CodigoTarifaIVA>
+        <Tarifa>2.00</Tarifa>
+        <Monto>132.85040</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>132.85040</ImpuestoNeto>
+      <MontoTotalLinea>6775.37040</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>5</NumeroLinea>
+      <CodigoCABYS>3563201080102</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>01</Tipo>
+        <Codigo>6020530</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UNIDAD</UnidadMedidaComercial>
+      <Detalle>FLOXACIN TAB 500MG X10</Detalle>
+      <NumeroVINoSerie />
+      <RegistroMedicamento>2101-A-2938</RegistroMedicamento>
+      <FormaFarmaceutica>199</FormaFarmaceutica>
+      <PrecioUnitario>16606.30000</PrecioUnitario>
+      <MontoTotal>16606.30000</MontoTotal>
+      <SubTotal>16606.30000</SubTotal>
+      <BaseImponible>16606.30000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>03</CodigoTarifaIVA>
+        <Tarifa>2.00</Tarifa>
+        <Monto>332.12600</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>332.12600</ImpuestoNeto>
+      <MontoTotalLinea>16938.42600</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>6</NumeroLinea>
+      <CodigoCABYS>4815013010000</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>01</Tipo>
+        <Codigo>6720095</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UNIDAD</UnidadMedidaComercial>
+      <Detalle>TENSIOMETRO BASICO AUT BP3AQ1-1</Detalle>
+      <NumeroVINoSerie />
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>34477.80000</PrecioUnitario>
+      <MontoTotal>34477.80000</MontoTotal>
+      <SubTotal>34477.80000</SubTotal>
+      <BaseImponible>34477.80000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>10</CodigoTarifaIVA>
+        <Tarifa>0.00</Tarifa>
+        <Monto>0.00000</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>0.00000</ImpuestoNeto>
+      <MontoTotalLinea>34477.80000</MontoTotalLinea>
+    </LineaDetalle>
+  </DetalleServicio>
+  <ResumenFactura>
+    <CodigoTipoMoneda>
+      <CodigoMoneda>CRC</CodigoMoneda>
+      <TipoCambio>1.00000</TipoCambio>
+    </CodigoTipoMoneda>
+    <TotalServGravados>0.00000</TotalServGravados>
+    <TotalServExentos>0.00000</TotalServExentos>
+    <TotalServExonerado>0.00000</TotalServExonerado>
+    <TotalServNoSujeto>0.00000</TotalServNoSujeto>
+    <TotalMercanciasGravadas>46918.89000</TotalMercanciasGravadas>
+    <TotalMercanciasExentas>34477.80000</TotalMercanciasExentas>
+    <TotalMercExonerada>0.00000</TotalMercExonerada>
+    <TotalMercNoSujeta>0.00000</TotalMercNoSujeta>
+    <TotalGravado>46918.89000</TotalGravado>
+    <TotalExento>34477.80000</TotalExento>
+    <TotalExonerado>0.00000</TotalExonerado>
+    <TotalNoSujeto>0.00000</TotalNoSujeto>
+    <TotalVenta>81396.69000</TotalVenta>
+    <TotalDescuentos>5226.77000</TotalDescuentos>
+    <TotalVentaNeta>76169.92000</TotalVentaNeta>
+    <TotalDesgloseImpuesto>
+      <Codigo>01</Codigo>
+      <CodigoTarifaIVA>03</CodigoTarifaIVA>
+      <TotalMontoImpuesto>520.23620</TotalMontoImpuesto>
+    </TotalDesgloseImpuesto>
+    <TotalDesgloseImpuesto>
+      <Codigo>01</Codigo>
+      <CodigoTarifaIVA>08</CodigoTarifaIVA>
+      <TotalMontoImpuesto>2038.44030</TotalMontoImpuesto>
+    </TotalDesgloseImpuesto>
+    <TotalDesgloseImpuesto>
+      <Codigo>01</Codigo>
+      <CodigoTarifaIVA>10</CodigoTarifaIVA>
+      <TotalMontoImpuesto>0.00000</TotalMontoImpuesto>
+    </TotalDesgloseImpuesto>
+    <TotalImpuesto>2558.67650</TotalImpuesto>
+    <TotalImpAsumEmisorFabrica>0.00000</TotalImpAsumEmisorFabrica>
+    <TotalIVADevuelto>0.00000</TotalIVADevuelto>
+    <TotalOtrosCargos>0.00000</TotalOtrosCargos>
+    <MedioPago>
+      <TipoMedioPago>02</TipoMedioPago>
+      <TotalMedioPago>78728.59000</TotalMedioPago>
+    </MedioPago>
+    <TotalComprobante>78728.59650</TotalComprobante>
+  </ResumenFactura>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-1af70f01-b760-4cab-af95-10f85c517eb0"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" /><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" /><ds:Reference Id="Reference-44ab222f-f8b0-4bb6-8cfc-c1057c457760" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>hNcvYwvGCb3uSLoNsHSMuE4Jzrt7STSN93DNp2WprxM=</ds:DigestValue></ds:Reference><ds:Reference Id="ReferenceKeyInfo" URI="#KeyInfoId-Signature-1af70f01-b760-4cab-af95-10f85c517eb0"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>rloEzyvb+82AcnrStX+0tdQEPje0dMnwyYHKXZuv7qc=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-Signature-1af70f01-b760-4cab-af95-10f85c517eb0"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>S2SeXemplG5EIa6nurCMnfkaCoR/5GSETQCTTOS9u+g=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue-1af70f01-b760-4cab-af95-10f85c517eb0">acX9D471CauaOH7VtS0l1dV9erFvzNtvCG6eP5A+YxfG7hddAdljtqT8u0i4ldH8hPiKF4jpxCbmHf62x2Eah06SDByVdVmCQh6RBTUMDDe/ownmOio0K+FmRiBFNU7H8t3W7XFm29gzwaiG1Ag9UgbybkEpdRs0ol3vOjHC3iv+aa3A/ltEcwBtRLc4mmixcFcq1raEwD71rNQjQydDH9jIp1vBwY8YqMJxhOn+pnSQ6Rw3uIdhbdxgBRwm3d69V3rG18WbuPN8d7f4DRa8cX3YUlJyz9xxVWHE6/VHFJ9oAjxAAUT+OzT02GuAmbI4KrTiTx3msuJI0l+QTTVPzw==</ds:SignatureValue><ds:KeyInfo Id="KeyInfoId-Signature-1af70f01-b760-4cab-af95-10f85c517eb0"><ds:X509Data><ds:X509Certificate>MIIFLDCCAxSgAwIBAgIGAZGy8OzfMA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYDVQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBFUlNPTkEgSlVSSURJQ0EwHhcNMjQwOTAyMTMzMzM5WhcNMjgwOTAxMTMzMzM5WjCBhjEZMBcGA1UEBRMQQ1BKLTMtMTAxLTg3NjEyMjELMAkGA1UEBhMCQ1IxGTAXBgNVBAoMEFBFUlNPTkEgSlVSSURJQ0ExDDAKBgNVBAsMA0NQSjEzMDEGA1UEAwwqQ0FERU5BIERFIEZBUk1BQ0lBUyBET0tLQSBTT0NJRURBRCBBTk9OSU1BMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAl11uJYQJcR4SFeb4sT4fK2FVbH9qFab3N1pFgvVkjfo+ADqBPmw+mC5waB2Dn1ulzEEmMVZQdHxZkOK6DqYnES+nULlkPYORvwoubXHQi7EQa2ONp+T4ps/q98d5F8x9bGa2qYkxTv+syS02XTqiZ5s+ZmfYoVm0I3ghN7Nsy6B5YDtR/fVvrwWJDCqwMvo+U/Wam+Sna/CbCsauhBM8YswdyZNpZUuZSbQ/8dOjVSrZsDf4R0WmAwbTn+gFGAtoN7adOKEitET2Z5S3QsWCBeNX8fc7rr/YD9UNUJoK23ZIEO85kUoyGR42nyri/G3gDGVOAEUBOdUHSd27OOLvEQIDAQABo4HKMIHHMB8GA1UdIwQYMBaAFDttV/XWfOmeEAIgQeO9GszPs06VMB0GA1UdDgQWBBSYQyJDsiHysCSkng0sghGj/EWCBDALBgNVHQ8EBAMCBsAwEwYDVR0lBAwwCgYIKwYBBQUHAwQwYwYIKwYBBQUHAQEEVzBVMFMGCCsGAQUFBzAChkdodHRwczovL3BraS5jb21wcm9iYW50ZXNlbGVjdHJvbmljb3MuZ28uY3IvcHJvZC9pbnRlcm1lZGlhdGUtcGotcGVtLmNydDANBgkqhkiG9w0BAQsFAAOCAgEAfALfNKT9BP1G0DKxBmeQRqARYuRqKLM3MGl4LRA+sPHt+QO7ZvD/WkglB4UDcu0UiMjFCfISk9LqygAQJJUHjLioOzoZU9htCDC7p+wV+ABC/0ykb+CdV8/ziMRyJ/vPdUETr8SJNIsoeJJ5JOqGkMI6Umd5nAkdSxDIZIEXB7jZZ3pjLt/mxTN8NbnKrG5+/jekGYs0mtfaiS7W0QuFjGiemonI872Yuk6VG0aXZ9qKwzQ5N7ydkjsaLv5UGfkWM1Ql3YPdEFfpyi+CKS3lqktKt+yokyS3dx3Dorqdumnw2nOlE8ZynngsYoNzRbj4dTgkBey/H10ZsUxMT6xjDaZg4R4bpBtzdENPDuj1UwM2/hUmt7so++H4RgCuVLq1/tmkPTRXH/NiUjy61Gb+mHJasGov0ZTL6HtlVaSkePSOxk0b3OEB4vaB+VNhj2BDCcD2y+lgTH6/6EKQC/vcnH3zokAuuRkmiZva0CzmD7GXAkSTq4DDjIFCBjSwEaCFQqdZfTyMB/xZncskdCwtjS1N8bM9VJMUMRhaoJ/5OAXHzDgGZGRW0fjMIrGBpHKy3zWH5d6vPTBo2c2mYdsOdBbb6ClntCoSU05i/USHWAq0TlzIsUn0eaudiG84hSPiBbp22sIQ0+W/b8JwXUFcDHVcMVM8QfX8MvZRoC1VQfs=</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>l11uJYQJcR4SFeb4sT4fK2FVbH9qFab3N1pFgvVkjfo+ADqBPmw+mC5waB2Dn1ulzEEmMVZQdHxZkOK6DqYnES+nULlkPYORvwoubXHQi7EQa2ONp+T4ps/q98d5F8x9bGa2qYkxTv+syS02XTqiZ5s+ZmfYoVm0I3ghN7Nsy6B5YDtR/fVvrwWJDCqwMvo+U/Wam+Sna/CbCsauhBM8YswdyZNpZUuZSbQ/8dOjVSrZsDf4R0WmAwbTn+gFGAtoN7adOKEitET2Z5S3QsWCBeNX8fc7rr/YD9UNUJoK23ZIEO85kUoyGR42nyri/G3gDGVOAEUBOdUHSd27OOLvEQ==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="XadesObjectId-4ca94a2b-0288-48f2-a597-ae4e53e778ea"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="QualifyingProperties-023a52d5-810a-4365-889a-294062849767" Target="#Signature-1af70f01-b760-4cab-af95-10f85c517eb0"><xades:SignedProperties Id="SignedProperties-Signature-1af70f01-b760-4cab-af95-10f85c517eb0"><xades:SignedSignatureProperties><xades:SigningTime>2026-04-11T21:42:23-06:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>MDc+eQza3tWul2KFk5ouSuSKxtGxwhBTkNN/W4Y4M3E=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA PERSONA JURIDICA, OU=DGT, O=MINISTERIO DE HACIENDA, C=CR</ds:X509IssuerName><ds:X509SerialNumber>1725284019423</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://tribunet.hacienda.go.cr/docs/esquemas/2016/v4.1/Resolucion_Comprobantes_Electronicos_DGT-R-48-2016.pdf</xades:Identifier><xades:Description /></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><ds:DigestValue>Ohixl6upD6av8N7pEvDABhEL6hM=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-44ab222f-f8b0-4bb6-8cfc-c1057c457760"><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>UTF-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></FacturaElectronica>

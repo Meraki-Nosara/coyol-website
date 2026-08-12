@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaElectronica xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica">
+  <Clave>50624072600310164424400300001010000002342100074488</Clave>
+  <ProveedorSistemas>3101235123</ProveedorSistemas>
+  <CodigoActividadEmisor>7500.0</CodigoActividadEmisor>
+  <NumeroConsecutivo>00300001010000002342</NumeroConsecutivo>
+  <FechaEmision>2026-07-24T14:12:30</FechaEmision>
+  <Emisor>
+    <Nombre>Inversiones Veterinarias y Asociados Cedeño Marin SA</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3101644244</Numero>
+    </Identificacion>
+    <Ubicacion>
+      <Provincia>5</Provincia>
+      <Canton>02</Canton>
+      <Distrito>06</Distrito>
+      <OtrasSenas>Desconocido</OtrasSenas>
+    </Ubicacion>
+    <Telefono xsi:nil="true"/>
+    <CorreoElectronico>safarianimalclinic@gmail.com</CorreoElectronico>
+  </Emisor>
+  <Receptor>
+    <Nombre>MERAKI FAMILY LTDA</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3102618820</Numero>
+    </Identificacion>
+    <CorreoElectronico>merakifamilylimitada@gmail.com</CorreoElectronico>
+  </Receptor>
+  <CondicionVenta>01</CondicionVenta>
+  <DetalleServicio>
+    <LineaDetalle>
+      <NumeroLinea>1</NumeroLinea>
+      <CodigoCABYS>8351000000000</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>04</Tipo>
+        <Codigo>8351000000000</Codigo>
+      </CodigoComercial>
+      <Cantidad>1</Cantidad>
+      <UnidadMedida>Sp</UnidadMedida>
+      <Detalle>HEMOGRAMA  </Detalle>
+      <PrecioUnitario>20000</PrecioUnitario>
+      <MontoTotal>20000</MontoTotal>
+      <SubTotal>20000</SubTotal>
+      <BaseImponible>20000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>04</CodigoTarifaIVA>
+        <Tarifa>4</Tarifa>
+        <Monto>800</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>800</ImpuestoNeto>
+      <MontoTotalLinea>20800</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>2</NumeroLinea>
+      <CodigoCABYS>3564099000000</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>04</Tipo>
+        <Codigo>3564099000000</Codigo>
+      </CodigoComercial>
+      <Cantidad>1</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <Detalle>VACUNA MULTIPLE (PERROS) </Detalle>
+      <PrecioUnitario>18000</PrecioUnitario>
+      <MontoTotal>18000</MontoTotal>
+      <SubTotal>18000</SubTotal>
+      <BaseImponible>18000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13</Tarifa>
+        <Monto>2340</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>2340</ImpuestoNeto>
+      <MontoTotalLinea>20340</MontoTotalLinea>
+    </LineaDetalle>
+  </DetalleServicio>
+  <ResumenFactura>
+    <CodigoTipoMoneda>
+      <CodigoMoneda>CRC</CodigoMoneda>
+      <TipoCambio>1</TipoCambio>
+    </CodigoTipoMoneda>
+    <TotalServGravados>20000</TotalServGravados>
+    <TotalServExentos>0</TotalServExentos>
+    <TotalMercanciasGravadas>18000.00000</TotalMercanciasGravadas>
+    <TotalMercanciasExentas>0</TotalMercanciasExentas>
+    <TotalGravado>38000.00000</TotalGravado>
+    <TotalExento>0</TotalExento>
+    <TotalVenta>38000.00000</TotalVenta>
+    <TotalDescuentos>0</TotalDescuentos>
+    <TotalVentaNeta>38000.00000</TotalVentaNeta>
+    <TotalDesgloseImpuesto>
+      <Codigo>01</Codigo>
+      <CodigoTarifaIVA>04</CodigoTarifaIVA>
+      <TotalMontoImpuesto>800</TotalMontoImpuesto>
+    </TotalDesgloseImpuesto>
+    <TotalDesgloseImpuesto>
+      <Codigo>01</Codigo>
+      <CodigoTarifaIVA>08</CodigoTarifaIVA>
+      <TotalMontoImpuesto>2340</TotalMontoImpuesto>
+    </TotalDesgloseImpuesto>
+    <TotalImpuesto>3140</TotalImpuesto>
+    <TotalIVADevuelto>0</TotalIVADevuelto>
+    <MedioPago>
+      <TipoMedioPago>04</TipoMedioPago>
+      <TotalMedioPago>41140</TotalMedioPago>
+    </MedioPago>
+    <TotalComprobante>41140.00000</TotalComprobante>
+  </ResumenFactura>
+  <Otros>
+    <OtroTexto/>
+  </Otros><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-2118a7d4-a5ce-4449-a445-695308f9f6ab">
+	<ds:SignedInfo>
+		<ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+		<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+		<ds:Reference Id="r-id-1" URI="">
+			<ds:Transforms>
+				<ds:Transform Algorithm="http://www.w3.org/TR/1999/REC-xpath-19991116">
+					<ds:XPath>not(ancestor-or-self::ds:Signature)</ds:XPath>
+				</ds:Transform>
+				<ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+			</ds:Transforms>
+			<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+			<ds:DigestValue>c5pcHgZd3dOosgj9NDe0ok5+YGWMeTk1iipeG4Y6qBM=</ds:DigestValue>
+		</ds:Reference>
+		<ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xades-id-2118a7d4-a5ce-4449-a445-695308f9f6ab">
+			<ds:Transforms>
+				<ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+			</ds:Transforms>
+			<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+			<ds:DigestValue>rl7yNYtOHH4wX8x4QSevNITZxdtcVGKufEFJIgXLxVM=</ds:DigestValue>
+		</ds:Reference>
+	</ds:SignedInfo>
+	<ds:SignatureValue Id="value-id-2118a7d4-a5ce-4449-a445-695308f9f6ab">GbrM+88N1BVl9CP9d1Uldlcx1IX+NQsrfDrRpQCjJXRnrLQT4F8DveNxYJ2838sPBbF9aQpVwJQ7qPljdid3G203kvGMdIZzH1Voyn+pGuHuwqPcdWIMVpVoPaSGqBH/q0IADrRM05lERlYH8lFCS/sawl+dp5uwKoCODpphfWTt/QjUUQEnIqiue1izzFAjyQyVtUQkHYMeKwp+/5rpoN0ENj9rF8kZtnFJNVlVpS588CcuJu75WWs1/Zad7Mu0znpms7uaaQ1UfMzNQ6B3/ZxUcLe9wbdua6M+hp0W2AfRJX0Nx9zFVGxO7rgzifyuhxwCCEkUmQnnuajjq3ALCw==</ds:SignatureValue>
+	<ds:KeyInfo>
+		<ds:X509Data>
+			<ds:X509Certificate>MIIFSjCCAzKgAwIBAgIGAZveQv3+MA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYDVQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBFUlNPTkEgSlVSSURJQ0EwHhcNMjYwMTIxMDE1NDUxWhcNMzAwMTIwMDE1NDUxWjCBpDEZMBcGA1UEBRMQQ1BKLTMtMTAxLTY0NDI0NDELMAkGA1UEBhMCQ1IxGTAXBgNVBAoMEFBFUlNPTkEgSlVSSURJQ0ExDDAKBgNVBAsMA0NQSjFRME8GA1UEAwxISU5WRVJTSU9ORVMgVkVURVJJTkFSSUFTICYgQVNPQ0lBRE9TIENFREXDkU8gTUFSSU4gU09DSUVEQUQgQU5PTklNQSBudWxsMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKvv1HQzMOFYp5pulSsCV+wiBXcYF8m0C2eYo5C+pRe7ZmWONLrfAwSx1EmcP8f1/fDA63YCltKBFNPceNUZfZwA1khf3pkgGEk8MlvxdcQpkIZ1VoYS4WiBs+UIaBgJ80kEfbpHdIiDTXzJ0vOF9zja0VXRP13MZhxbIVlfJWWcR8ibKU0f/WmRh/oZIuz5NaB/b6E6q4WB4RTANpfClvRzxm7lFUwOa0t/yKFqnHbFUqRnnRE2NH9l05W+6LoAi+35tgJKIW0YdwBBrvwoXoL5EPMONFHvbCywjv5Ri9N9De9gQBNTeuS5F1I24XiLe4qRKMDqJFon60NmW3p92QIDAQABo4HKMIHHMB8GA1UdIwQYMBaAFDttV/XWfOmeEAIgQeO9GszPs06VMB0GA1UdDgQWBBTsYf65R1FXQ6Mag3WQ3+sFWuzjHjALBgNVHQ8EBAMCBsAwEwYDVR0lBAwwCgYIKwYBBQUHAwQwYwYIKwYBBQUHAQEEVzBVMFMGCCsGAQUFBzAChkdodHRwczovL3BraS5jb21wcm9iYW50ZXNlbGVjdHJvbmljb3MuZ28uY3IvcHJvZC9pbnRlcm1lZGlhdGUtcGotcGVtLmNydDANBgkqhkiG9w0BAQsFAAOCAgEADoQRcN0aGUnPn4ZZfXHoLJk4dY6H0OvsrFq6gS74B+1DOvw/2dEDs7j4TS2KMLiYqO6ceu76bMsUDkoqo6aiBxyA+WzFMgwwMbnahVNcCzxA7bffinJz9CavkqgYgX8yNoaKRqgc2hVlU5srkVlJGKkBpTkau4R4J3ErAKIFY7uqoSwbtQo4THsUqP/iWZevEYa4RtqQ9yQLn7A10fYoTWsAcdIYFqAE/z9ynOlfTsZEQcQ8OUbMkrpgsmMWYt4D76rDrw3Rbm7zML94wwFRDr1prahnCRCbT1IWGpdq3bHif+roU+R/z8Q3fwZc+t9whc6Tgp/cC3T5pNUBPQfo775fClsW2PCmWXbX6ns3p0Ab6TR+sHfAeVSPwgUctjmLVcnTTlm5Xx1H+dDZcWZlziODRsj4dQ8yDn/bI4v5oMejMbgbZw87cih+9zRCcsygML1/aBFGsPStuUJG7oM3tRQ1eJ0RJOSR4ejfFgIWC3ZXe3jY2ilUmrLmI2ZTfJpo9Ys1HFLiEARL0ejdbFhTPN1v9tVmk+2ssymSmrDrEOwL5sfAxDd2iYH91KmVkJJPjI3h8e428Fz4rPdw9T+9l3aStSvmIl8u/W/uOUi5/dJwpkbFMGHGE6VBqdouwUspsqnwGisDFeiM+FfdW+oYNaN05Xka9DdJCLBxfveqeBo=</ds:X509Certificate>
+		</ds:X509Data>
+	</ds:KeyInfo>
+	<ds:Object>
+		<xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#Signature-2118a7d4-a5ce-4449-a445-695308f9f6ab">
+			<xades:SignedProperties Id="xades-id-2118a7d4-a5ce-4449-a445-695308f9f6ab">
+				<xades:SignedSignatureProperties>
+					<xades:SigningTime>2026-07-24T20:17:10.305Z</xades:SigningTime>
+					<xades:SigningCertificate>
+						<xades:Cert>
+							<xades:CertDigest>
+								<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+								<ds:DigestValue>99CWuniwPgDz7Uddi1xvm3gdR0E=</ds:DigestValue>
+							</xades:CertDigest>
+							<xades:IssuerSerial>
+								<ds:X509IssuerName>CN=CA PERSONA JURIDICA, OU=DGT, O=MINISTERIO DE HACIENDA, C=CR</ds:X509IssuerName>
+								<ds:X509SerialNumber>1768960491006</ds:X509SerialNumber>
+							</xades:IssuerSerial>
+						</xades:Cert>
+					</xades:SigningCertificate>
+					<xades:SignaturePolicyIdentifier>
+						<xades:SignaturePolicyId>
+							<xades:SigPolicyId>
+								<xades:Identifier>https://tribunet.hacienda.go.cr/docs/esquemas/2016/v4.1/Resolucion_Comprobantes_Electronicos_DGT-R-48-2016.pdf</xades:Identifier>
+							</xades:SigPolicyId>
+							<xades:SigPolicyHash>
+								<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+								<ds:DigestValue>NmI5Njk1ZThkNzI0MmIzMGJmZDAyNDc4YjUwNzkzODM2NTBiOWUxNTBkMmI2YjgzYzZjM2I5NTZlNDQ4OWQzMQ==</ds:DigestValue>
+							</xades:SigPolicyHash>
+						</xades:SignaturePolicyId>
+					</xades:SignaturePolicyIdentifier>
+				</xades:SignedSignatureProperties>
+				<xades:SignedDataObjectProperties>
+					<xades:DataObjectFormat ObjectReference="#r-id-1">
+						<xades:MimeType>application/octet-stream</xades:MimeType>
+					</xades:DataObjectFormat>
+				</xades:SignedDataObjectProperties>
+			</xades:SignedProperties>
+		</xades:QualifyingProperties>
+	</ds:Object>
+</ds:Signature>
+</FacturaElectronica>

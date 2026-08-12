@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?><FacturaElectronica xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica  https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica.xsd"><Clave>50631072600310107490301000001010001148130181887288</Clave><ProveedorSistemas>3101074903</ProveedorSistemas><CodigoActividadEmisor>4630.9</CodigoActividadEmisor><CodigoActividadReceptor>5610.0</CodigoActividadReceptor><NumeroConsecutivo>01000001010001148130</NumeroConsecutivo><FechaEmision>2026-07-31T16:16:14</FechaEmision><Emisor><Nombre>EXPORTADORA PMT S.A.</Nombre><Identificacion><Tipo>02</Tipo><Numero>3101074903</Numero></Identificacion><Registrofiscal8707>8379</Registrofiscal8707><Ubicacion><Provincia>1</Provincia><Canton>09</Canton><Distrito>06</Distrito><Barrio>Copey.</Barrio><OtrasSenas>San Jose, Santa Ana, Brasil</OtrasSenas></Ubicacion><Telefono><CodigoPais>506</CodigoPais><NumTelefono>22495555</NumTelefono></Telefono><CorreoElectronico>info@pmtcr.com</CorreoElectronico></Emisor><Receptor><Nombre>MERAKI FAMILYLIMITADA - RESTAURANTE LA LUNA PLAYA PELADA</Nombre><Identificacion><Tipo>02</Tipo><Numero>3102618820</Numero></Identificacion><NombreComercial>RESTAURANTE LA LUNA PLAYA PELADA</NombreComercial><Ubicacion><Provincia>5</Provincia><Canton>02</Canton><Distrito>01</Distrito><Barrio>San Jose</Barrio><OtrasSenas>GUANACASTE,NICOYA,NOSARA,LA LUNA,PLAYA PELADA</OtrasSenas></Ubicacion><Telefono><CodigoPais>506</CodigoPais><NumTelefono>26820122</NumTelefono></Telefono><CorreoElectronico>merakifamilylimitada@gmail.com</CorreoElectronico></Receptor><CondicionVenta>02</CondicionVenta><PlazoCredito>30</PlazoCredito><DetalleServicio><LineaDetalle><NumeroLinea>1</NumeroLinea><CodigoCABYS>2165200009900</CodigoCABYS><CodigoComercial><Tipo>04</Tipo><Codigo>06010433</Codigo></CodigoComercial><Cantidad>2.000</Cantidad><UnidadMedida>Unid</UnidadMedida><UnidadMedidaComercial>UN</UnidadMedidaComercial><Detalle>ACEITE DORAL FRITURA ALTO REND</Detalle><PrecioUnitario>19330.00000</PrecioUnitario><MontoTotal>38660.00000</MontoTotal><SubTotal>38660.00000</SubTotal><BaseImponible>38660.00000</BaseImponible><Impuesto><Codigo>01</Codigo><CodigoTarifaIVA>02</CodigoTarifaIVA><Tarifa>1.00</Tarifa><Monto>386.60000</Monto></Impuesto><ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica><ImpuestoNeto>386.60000</ImpuestoNeto><MontoTotalLinea>39046.60000</MontoTotalLinea></LineaDetalle><LineaDetalle><NumeroLinea>2</NumeroLinea><CodigoCABYS>2421200000100</CodigoCABYS><CodigoComercial><Tipo>04</Tipo><Codigo>20405403</Codigo></CodigoComercial><Cantidad>12.000</Cantidad><UnidadMedida>Unid</UnidadMedida><UnidadMedidaComercial>UN</UnidadMedidaComercial><Detalle>CA DEL LAGO PINOT GRIGIO</Detalle><PrecioUnitario>4955.75000</PrecioUnitario><MontoTotal>59469.00000</MontoTotal><SubTotal>59469.00000</SubTotal><BaseImponible>59469.00000</BaseImponible><Impuesto><Codigo>01</Codigo><CodigoTarifaIVA>08</CodigoTarifaIVA><Tarifa>13.00</Tarifa><Monto>7730.97000</Monto></Impuesto><ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica><ImpuestoNeto>7730.97000</ImpuestoNeto><MontoTotalLinea>67199.97000</MontoTotalLinea></LineaDetalle><LineaDetalle><NumeroLinea>3</NumeroLinea><CodigoCABYS>2225102010400</CodigoCABYS><CodigoComercial><Tipo>04</Tipo><Codigo>102283288</Codigo></CodigoComercial><Cantidad>5.000</Cantidad><UnidadMedida>Kg</UnidadMedida><UnidadMedidaComercial>Kg</UnidadMedidaComercial><Detalle>GRANA PADANO PIEZA KG</Detalle><PrecioUnitario>14240.77000</PrecioUnitario><MontoTotal>71203.85000</MontoTotal><SubTotal>71203.85000</SubTotal><BaseImponible>71203.85000</BaseImponible><Impuesto><Codigo>01</Codigo><CodigoTarifaIVA>08</CodigoTarifaIVA><Tarifa>13.00</Tarifa><Monto>9256.50000</Monto></Impuesto><ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica><ImpuestoNeto>9256.50000</ImpuestoNeto><MontoTotalLinea>80460.35000</MontoTotalLinea></LineaDetalle><LineaDetalle><NumeroLinea>4</NumeroLinea><CodigoCABYS>2211001030000</CodigoCABYS><CodigoComercial><Tipo>04</Tipo><Codigo>02030700</Codigo></CodigoComercial><Cantidad>2.000</Cantidad><UnidadMedida>Unid</UnidadMedida><UnidadMedidaComercial>UN</UnidadMedidaComercial><Detalle>LECHE FOODIE ENTERA 12X1L</Detalle><PrecioUnitario>9577.09000</PrecioUnitario><MontoTotal>19154.18000</MontoTotal><SubTotal>19154.18000</SubTotal><BaseImponible>19154.18000</BaseImponible><Impuesto><Codigo>01</Codigo><CodigoTarifaIVA>02</CodigoTarifaIVA><Tarifa>1.00</Tarifa><Monto>191.54000</Monto></Impuesto><ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica><ImpuestoNeto>191.54000</ImpuestoNeto><MontoTotalLinea>19345.72000</MontoTotalLinea></LineaDetalle><LineaDetalle><NumeroLinea>5</NumeroLinea><CodigoCABYS>2225101010100</CodigoCABYS><CodigoComercial><Tipo>04</Tipo><Codigo>02030893</Codigo></CodigoComercial><Cantidad>66.460</Cantidad><UnidadMedida>Kg</UnidadMedida><UnidadMedidaComercial>Kg</UnidadMedidaComercial><Detalle>MOZZARELLA BLOQUE CONG EEUU KG</Detalle><PrecioUnitario>3225.00000</PrecioUnitario><MontoTotal>214333.50000</MontoTotal><SubTotal>214333.50000</SubTotal><BaseImponible>214333.50000</BaseImponible><Impuesto><Codigo>01</Codigo><CodigoTarifaIVA>08</CodigoTarifaIVA><Tarifa>13.00</Tarifa><Monto>27863.36000</Monto></Impuesto><ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica><ImpuestoNeto>27863.36000</ImpuestoNeto><MontoTotalLinea>242196.86000</MontoTotalLinea></LineaDetalle><LineaDetalle><NumeroLinea>6</NumeroLinea><CodigoCABYS>2139999000500</CodigoCABYS><CodigoComercial><Tipo>04</Tipo><Codigo>02030138</Codigo></CodigoComercial><Cantidad>24.000</Cantidad><UnidadMedida>Unid</UnidadMedida><UnidadMedidaComercial>UN</UnidadMedidaComercial><Detalle>TOMATES ENTEROS PELADOS 2.54 KG</Detalle><PrecioUnitario>2550.00000</PrecioUnitario><MontoTotal>61200.00000</MontoTotal><SubTotal>61200.00000</SubTotal><BaseImponible>61200.00000</BaseImponible><Impuesto><Codigo>01</Codigo><CodigoTarifaIVA>08</CodigoTarifaIVA><Tarifa>13.00</Tarifa><Monto>7956.00000</Monto></Impuesto><ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica><ImpuestoNeto>7956.00000</ImpuestoNeto><MontoTotalLinea>69156.00000</MontoTotalLinea></LineaDetalle></DetalleServicio><ResumenFactura><CodigoTipoMoneda><CodigoMoneda>CRC</CodigoMoneda><TipoCambio>1.00000</TipoCambio></CodigoTipoMoneda><TotalServGravados>0.00000</TotalServGravados><TotalServExentos>0.00000</TotalServExentos><TotalServExonerado>0.00000</TotalServExonerado><TotalServNoSujeto>0.00000</TotalServNoSujeto><TotalMercanciasGravadas>464020.53000</TotalMercanciasGravadas><TotalMercanciasExentas>0.00000</TotalMercanciasExentas><TotalMercExonerada>0.00000</TotalMercExonerada><TotalMercNoSujeta>0.00000</TotalMercNoSujeta><TotalGravado>464020.53000</TotalGravado><TotalExento>0.00000</TotalExento><TotalExonerado>0.00000</TotalExonerado><TotalNoSujeto>0.00000</TotalNoSujeto><TotalVenta>464020.53000</TotalVenta><TotalDescuentos>0.00000</TotalDescuentos><TotalVentaNeta>464020.53000</TotalVentaNeta><TotalDesgloseImpuesto><Codigo>01</Codigo><CodigoTarifaIVA>02</CodigoTarifaIVA><TotalMontoImpuesto>578.14000</TotalMontoImpuesto></TotalDesgloseImpuesto><TotalDesgloseImpuesto><Codigo>01</Codigo><CodigoTarifaIVA>08</CodigoTarifaIVA><TotalMontoImpuesto>52806.83000</TotalMontoImpuesto></TotalDesgloseImpuesto><TotalImpuesto>53384.97000</TotalImpuesto><TotalImpAsumEmisorFabrica>0.00000</TotalImpAsumEmisorFabrica><MedioPago><TipoMedioPago>04</TipoMedioPago><TotalMedioPago>0.00000</TotalMedioPago></MedioPago><TotalComprobante>517405.50000</TotalComprobante></ResumenFactura><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="xmldsig-bf070446-6bb7-4b8e-aaed-862bae2dc562">
+<ds:SignedInfo>
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+<ds:Reference Id="xmldsig-bf070446-6bb7-4b8e-aaed-862bae2dc562-ref0" URI="">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>g+nHDjrb00jnymIG7KbG3AoZXXhDjDeCskq4VoAHEkQ=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#xmldsig-bf070446-6bb7-4b8e-aaed-862bae2dc562-keyinfo">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>Mp9cxzniHY7MYSBW0rHWTB/4goFVe0CJydQsaeYlVrQ=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xmldsig-bf070446-6bb7-4b8e-aaed-862bae2dc562-signedprops">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>AiJ9exDF1O1A3mDepm80CrHxxFy0NASddB9bwu18tmo=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="xmldsig-bf070446-6bb7-4b8e-aaed-862bae2dc562-sigvalue">
+JSbYYFuJh6dwI5RW37jjyWG3PSoDpZqhadlXJ76r1g+FKoX6mAL9lRdddpWVWyubjRNsRF48tZpc&#13;
+cdU9Ws2FEP9oUxXSYBmj6ygGT8HAkjzAeFYf5iTVyNbRayhTx7SQLqezF93acKatK4v6nZcUYRvo&#13;
+JXNSbSby0PB+BsLhvcA0B8L9qKX9GYQlrS/RPzPszWNGnQTB5bzfLJCluzy2Z1fS3ds0h/fsmR/B&#13;
+Gue6qw/eMRXmanf0XutmZrT1KnuYiz0Y99Eez31f3DPHIFYdGAK0kg2HbUYIVP0ChXtHIIEiAP/c&#13;
+PIhN3sgGFkv/si3I5tKAudU9TL/AScd7mFfObg==
+</ds:SignatureValue>
+<ds:KeyInfo Id="xmldsig-bf070446-6bb7-4b8e-aaed-862bae2dc562-keyinfo">
+<ds:X509Data>
+<ds:X509Certificate>
+MIIFITCCAwmgAwIBAgIGAYLLdpuJMA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYD&#13;
+VQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBF&#13;
+UlNPTkEgSlVSSURJQ0EwHhcNMjIwODIzMTYwODQ0WhcNMjYwODIyMTYwODQ0WjB8MRkwFwYDVQQF&#13;
+ExBDUEotMy0xMDEtMDc0OTAzMQswCQYDVQQGEwJDUjEZMBcGA1UECgwQUEVSU09OQSBKVVJJRElD&#13;
+QTEMMAoGA1UECwwDQ1BKMSkwJwYDVQQDDCBFWFBPUlRBRE9SQSBQTVQgU09DSUVEQUQgQU5PTklN&#13;
+QTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKLjDp5Yb7BrmntUZByUq62SqqIkxAsv&#13;
+VLxOWrQog7J/zHDy7SsRKzmoz2qvLgGXmCfTrOG9yKLYm5eI69miJiF6DN3dnVbf7dN6M+Kn+7oH&#13;
+BZgYy+9r1FugbJqLt9rNkiQ/Jd94rLePasnRMHBix4ayGbUQHoqRZVLEItS6oMjiF+laok0ZwsEZ&#13;
+4LGgTMelYT1xXPnLX2bYBTudBqrvmeUZdFp2Pa+yMBK6isWJoNb0oBpLXKj8fnW8wQzR0by7a+Qr&#13;
+eWmZ8fT2vwM5Vor7LpTNfJULjDYCquQ7z7t55chWnb2q8nIbYRqyYmpBFX9JGs2elyJ9+TOV6oNr&#13;
+BKlmUPUCAwEAAaOByjCBxzAfBgNVHSMEGDAWgBQ7bVf11nzpnhACIEHjvRrMz7NOlTAdBgNVHQ4E&#13;
+FgQUsqIQ1KPfcTOyRnSiOmqxQdV0bGUwCwYDVR0PBAQDAgbAMBMGA1UdJQQMMAoGCCsGAQUFBwME&#13;
+MGMGCCsGAQUFBwEBBFcwVTBTBggrBgEFBQcwAoZHaHR0cHM6Ly9wa2kuY29tcHJvYmFudGVzZWxl&#13;
+Y3Ryb25pY29zLmdvLmNyL3Byb2QvaW50ZXJtZWRpYXRlLXBqLXBlbS5jcnQwDQYJKoZIhvcNAQEL&#13;
+BQADggIBAKow7fZ+9ws4/6MkBikfjmbp/riX7bp+t85iaBIid1daLvwCYx/CaqJ+BBhd9esZ3Tcc&#13;
+Eebk9o6ucVuTUeMR68D95umk2FW4cY2LvgmzqHIMjha/adb7COK5Lyxv/znwfPqKhLCFVZFsu2u5&#13;
+EWR4tO4WeLkuPZ+iYX9VABVSWNumDEf/gPhkg9VUErWzcblAYL8W4ka1rm79ei/tV4eYK9zKspQY&#13;
+U7KDZXKbm4KK7TEK5gu94mxSUKY7ONFtWpdDSko0b888twalN2cdOPKACiASiL5FFH9bE8zEXnPZ&#13;
+DBE9wL+9h5D8fIlMFqR/kQVAlzU0BTMDp4QPpO99JnmOjWmhGNFCYt58OtMxgD/BkwNWJhJ5BxdJ&#13;
+dS84z/Vh6GQjmIaFZUJKuhk8r4czYf6v6tTNI1AA8LgZPAelkfQPtvFjNSxK8Lw4IX+zmiajOG8w&#13;
+QfjcHDsNZRNrFMFT1mMV+YfyLM8Wk0tQoQlJWZQsexW21Bqjw8AM2w5lt9XWkQn706SEb2oB89iR&#13;
++l3DHPIsH/hDVpIITTqqncjcVNx1Tq23af4UmxUr4/kn+EG2ziUC4d0G3K8ndwyAIPTKPJiy8US9&#13;
+VlX01zzeOREvkGJoFK+Pkhp94YBlS3mo9ZTQoW3nqz60Do0eLJlKE0R9c4/ZD4Ic9oJORwzENj9y&#13;
+3BQOt4tO
+</ds:X509Certificate>
+<ds:X509IssuerSerial>
+<ds:X509IssuerName>cn=CA PERSONA JURIDICA,ou=DGT,o=MINISTERIO DE HACIENDA,c=CR</ds:X509IssuerName>
+<ds:X509SerialNumber>1661270924169</ds:X509SerialNumber>
+</ds:X509IssuerSerial>
+<ds:X509SubjectName>cn=EXPORTADORA PMT SOCIEDAD ANONIMA,ou=CPJ,o=PERSONA JURIDICA,c=CR,serialNumber=CPJ-3-101-074903</ds:X509SubjectName>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>ouMOnlhvsGuae1RkHJSrrZKqoiTECy9UvE5atCiDsn/McPLtKxErOajPaq8uAZeYJ9Os4b3Iotib&#13;
+l4jr2aImIXoM3d2dVt/t03oz4qf7ugcFmBjL72vUW6Bsmou32s2SJD8l33ist49qydEwcGLHhrIZ&#13;
+tRAeipFlUsQi1LqgyOIX6VqiTRnCwRngsaBMx6VhPXFc+ctfZtgFO50Gqu+Z5Rl0WnY9r7IwErqK&#13;
+xYmg1vSgGktcqPx+dbzBDNHRvLtr5Ct5aZnx9Pa/AzlWivsulM18lQuMNgKq5DvPu3nlyFadvary&#13;
+chthGrJiakEVf0kazZ6XIn35M5Xqg2sEqWZQ9Q==</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xades141="http://uri.etsi.org/01903/v1.4.1#" Target="#xmldsig-bf070446-6bb7-4b8e-aaed-862bae2dc562"><xades:SignedProperties Id="xmldsig-bf070446-6bb7-4b8e-aaed-862bae2dc562-signedprops"><xades:SignedSignatureProperties><xades:SigningTime>2026-07-31T16:16:23.643-06:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>TnDWZivRNOW2Ns3bkPFq+ITdCK8=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>cn=CA PERSONA JURIDICA,ou=DGT,o=MINISTERIO DE HACIENDA,c=CR</ds:X509IssuerName><ds:X509SerialNumber>1661270924169</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier Qualifier="OIDAsURI">https://tribunet.hacienda.go.cr/docs/esquemas/2016/v4.2/ResolucionComprobantesElectronicosDGT-R-48-2016_4.2.pdf</xades:Identifier></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>iA3sKANkD9LNjhHtbgg45Aw7/Fw=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#xmldsig-bf070446-6bb7-4b8e-aaed-862bae2dc562-ref0"><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>utf-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object>
+</ds:Signature></FacturaElectronica>

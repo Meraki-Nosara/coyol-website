@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?><FacturaElectronica xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica  https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica.xsd"><Clave>50602072600310154869000100502010000002303134498899</Clave><ProveedorSistemas>3101282001</ProveedorSistemas><CodigoActividadEmisor>4530.0</CodigoActividadEmisor><NumeroConsecutivo>00100502010000002303</NumeroConsecutivo><FechaEmision>2026-07-02T11:48:08</FechaEmision><Emisor><Nombre>AUTOSERVICIO Y REPUESTOS NOSARA S.A.</Nombre><Identificacion><Tipo>02</Tipo><Numero>3101548690</Numero></Identificacion><NombreComercial>AUTO SERVICIOS NOSARA</NombreComercial><Ubicacion><Provincia>5</Provincia><Canton>02</Canton><Distrito>06</Distrito><OtrasSenas>CONTIGUO A SERVICENTRO NOSARA FRENTE A LAS TORRES DEL ICE</OtrasSenas></Ubicacion><Telefono><CodigoPais>506</CodigoPais><NumTelefono>26824101</NumTelefono></Telefono><CorreoElectronico>soporte@gruponosara.com</CorreoElectronico></Emisor><Receptor><Nombre>MERAKI FAMILY LTDA</Nombre><Identificacion><Tipo>02</Tipo><Numero>3102618820</Numero></Identificacion><CorreoElectronico>merakifamilylimitada@gmail.com</CorreoElectronico></Receptor><CondicionVenta>01</CondicionVenta><PlazoCredito>0</PlazoCredito><DetalleServicio><LineaDetalle><NumeroLinea>1</NumeroLinea><CodigoCABYS>4912999009900</CodigoCABYS><CodigoComercial><Tipo>04</Tipo><Codigo>567</Codigo></CodigoComercial><Cantidad>1.000</Cantidad><UnidadMedida>Unid</UnidadMedida><Detalle>SELLADOR DE ROSCA ROJO</Detalle><PrecioUnitario>4159.29000</PrecioUnitario><MontoTotal>4159.29000</MontoTotal><Descuento><MontoDescuento>831.86000</MontoDescuento><CodigoDescuento>07</CodigoDescuento><NaturalezaDescuento>Naturaleza por defecto</NaturalezaDescuento></Descuento><SubTotal>3327.43000</SubTotal><BaseImponible>3327.43000</BaseImponible><Impuesto><Codigo>01</Codigo><CodigoTarifaIVA>08</CodigoTarifaIVA><Tarifa>13.00</Tarifa><Monto>432.56590</Monto></Impuesto><ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica><ImpuestoNeto>432.56590</ImpuestoNeto><MontoTotalLinea>3759.99590</MontoTotalLinea></LineaDetalle></DetalleServicio><ResumenFactura><CodigoTipoMoneda><CodigoMoneda>CRC</CodigoMoneda><TipoCambio>1.00000</TipoCambio></CodigoTipoMoneda><TotalServGravados>0.00000</TotalServGravados><TotalServExentos>0.00000</TotalServExentos><TotalServExonerado>0.00000</TotalServExonerado><TotalServNoSujeto>0.00000</TotalServNoSujeto><TotalMercanciasGravadas>4159.29000</TotalMercanciasGravadas><TotalMercanciasExentas>0.00000</TotalMercanciasExentas><TotalMercExonerada>0.00000</TotalMercExonerada><TotalMercNoSujeta>0.00000</TotalMercNoSujeta><TotalGravado>4159.29000</TotalGravado><TotalExento>0.00000</TotalExento><TotalExonerado>0.00000</TotalExonerado><TotalNoSujeto>0.00000</TotalNoSujeto><TotalVenta>4159.29000</TotalVenta><TotalDescuentos>831.86000</TotalDescuentos><TotalVentaNeta>3327.43000</TotalVentaNeta><TotalDesgloseImpuesto><Codigo>01</Codigo><CodigoTarifaIVA>08</CodigoTarifaIVA><TotalMontoImpuesto>432.56590</TotalMontoImpuesto></TotalDesgloseImpuesto><TotalImpuesto>432.56590</TotalImpuesto><TotalImpAsumEmisorFabrica>0.00000</TotalImpAsumEmisorFabrica><MedioPago><TipoMedioPago>01</TipoMedioPago><TotalMedioPago>3760.00000</TotalMedioPago></MedioPago><TotalComprobante>3759.99590</TotalComprobante></ResumenFactura><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="xmldsig-905b1c9f-de3e-4448-918f-5e11f7cd2157">
+<ds:SignedInfo>
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+<ds:Reference Id="xmldsig-905b1c9f-de3e-4448-918f-5e11f7cd2157-ref0" URI="">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>H0DBpbLkqEKyCxKqtOmCW3IeKREqtwr3bYzkwKozPE4=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#xmldsig-905b1c9f-de3e-4448-918f-5e11f7cd2157-keyinfo">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>Ob0zVMRjvqKQ2NZJO5W+ybp1Yx6yGaMjRapkhXKryxA=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xmldsig-905b1c9f-de3e-4448-918f-5e11f7cd2157-signedprops">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>G/hUgxxa5v+aosXNGHYKXMNG3MVS8ran4tZPjuCNmiI=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="xmldsig-905b1c9f-de3e-4448-918f-5e11f7cd2157-sigvalue">
+SibhVzByxLsky+xbu624V+QPzpR8uzJrXHO1Znz9WMRKfS7xzLagfLXgHS1lPF2Ah9mmA7XJOXPj&#13;
+8AYX/a92t0+x+98QHcXNw67sbGdiPQwXT0ot/0oOXPY3OzKYq4v7s/s3pEslxRMv45WXYZX6w54u&#13;
+tfaC+THcm97SA5V6l6B3ZlGGe0G6gz1aPMB2PRmpGOp/oXQ8qvlAQ9wAPDzk6nJafrJJ635MiF59&#13;
+7R7xbuiX3aJ5frqypMUIeym0dOLHRwX/aYiBR4yFIoDyJCA8gG2sYfI6DeTgjnNpglXn1oWxb3+J&#13;
+8KuGflNheg9wHnO5XWsQZHWQzgWGfO1fIAV7Lw==
+</ds:SignatureValue>
+<ds:KeyInfo Id="xmldsig-905b1c9f-de3e-4448-918f-5e11f7cd2157-keyinfo">
+<ds:X509Data>
+<ds:X509Certificate>
+MIIFMjCCAxqgAwIBAgIGAZh3NtLWMA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYD&#13;
+VQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBF&#13;
+UlNPTkEgSlVSSURJQ0EwHhcNMjUwODA0MjIzMjE4WhcNMjkwODAzMjIzMjE4WjCBjDEZMBcGA1UE&#13;
+BRMQQ1BKLTMtMTAxLTU0ODY5MDELMAkGA1UEBhMCQ1IxGTAXBgNVBAoMEFBFUlNPTkEgSlVSSURJ&#13;
+Q0ExDDAKBgNVBAsMA0NQSjE5MDcGA1UEAwwwQVVUT1NFUlZJQ0lPIFkgUkVQVUVTVE9TIE5PU0FS&#13;
+QSBTT0NJRURBRCBBTk9OSU1BMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk4ldNNX1&#13;
+sWA2G0wpcSb+toIc5XdKPPn5l9asB2VSujEKy0Ln5L+Ev0rgygtTV+C8YZ4wwtzD4X5vwK+xal1N&#13;
+W1H/9Xub9Ke3B/oAYAGLqmcF6+dIPKvXRt5xLJv4NszSnrpZbVIujYdkpmYBMrLWsJrFvSC/YJ8+&#13;
+kzKhfgV91+FhvjmKfNehphaiJw5bUtLSNIoVuYUNOs+Qf2cOoGloz+YSeTjIDL15HWlNfmiIO8tM&#13;
+NQoecY5zRVz8h5U/wVPAmnsyh8J+0EtlS0QjuQwZDSSPsCgRb4HU1WHF9tcscGuDcW/T8nle8FWF&#13;
+KVNKNIwHdFsh0DjAn3kPSbWxVvH96QIDAQABo4HKMIHHMB8GA1UdIwQYMBaAFDttV/XWfOmeEAIg&#13;
+QeO9GszPs06VMB0GA1UdDgQWBBTKyS+Eb0zJykIQTqIyu649RL/tvjALBgNVHQ8EBAMCBsAwEwYD&#13;
+VR0lBAwwCgYIKwYBBQUHAwQwYwYIKwYBBQUHAQEEVzBVMFMGCCsGAQUFBzAChkdodHRwczovL3Br&#13;
+aS5jb21wcm9iYW50ZXNlbGVjdHJvbmljb3MuZ28uY3IvcHJvZC9pbnRlcm1lZGlhdGUtcGotcGVt&#13;
+LmNydDANBgkqhkiG9w0BAQsFAAOCAgEAdjVDyEF4m4RAw67gJUeoRvkww1W2wkULlvyW8Ja3NLEV&#13;
+ydXEoruQwhHF1U86AsUA6h/+XFAs1ewh1EBvxh37yUxTwK0Eeziq9ZSeOniIa7nCKqpjQiPpaGqW&#13;
+E87MVR7pIujBoWXiCCp+smKyfzxJp4pv9TZWJyFGf8AHpHdUiSU67J1VRkuVVYGookqs2IeQJ4iy&#13;
+oFFSsFznSNwbSiTVjf4vVmbNhER/rCljp36UgUK/ENruR+o8wqtKu8WsNQgEiKhN8yMgUMusmAPI&#13;
+fZNuXqZ7nTMwO/6+K5xev8Vx/U7om/Nx+3UMmmSP1vIHficehkiULIrMVReQH055C8QosMRNjZHc&#13;
+HCxWAL8GH4Inq0nOkdyTsEpH3N3SZcRphtAWPGTHeDtEhmQjq9AK+Sidt9htrESXiE/cr0mcQCm5&#13;
+IPommcsegDy9Dwy8zWryuujpGNHWo2NUno11wFotoQPSeuk3kE8O5FyfUfLH8TemxyZZ8BPUTc/x&#13;
+3ZI0XuoDmpWcH++mVkitr9QnAXT/2X3R1Bd+mYYJhui5dy0c7SIh8HvM2e/EfnuKXJAXSOkJ4zS5&#13;
+yW+i1oHyGxFL52IWoDXHj9fhNv1OKFdgjpRT+YCJJ8S5lb/mohCX3ekGtCz9zexZGGv3AgEHhXrl&#13;
+qUuZHEtYWsaif2tNAaxfgUGQayOwYqU=
+</ds:X509Certificate>
+<ds:X509IssuerSerial>
+<ds:X509IssuerName>cn=CA PERSONA JURIDICA,ou=DGT,o=MINISTERIO DE HACIENDA,c=CR</ds:X509IssuerName>
+<ds:X509SerialNumber>1754346738390</ds:X509SerialNumber>
+</ds:X509IssuerSerial>
+<ds:X509SubjectName>cn=AUTOSERVICIO Y REPUESTOS NOSARA SOCIEDAD ANONIMA,ou=CPJ,o=PERSONA JURIDICA,c=CR,serialNumber=CPJ-3-101-548690</ds:X509SubjectName>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>k4ldNNX1sWA2G0wpcSb+toIc5XdKPPn5l9asB2VSujEKy0Ln5L+Ev0rgygtTV+C8YZ4wwtzD4X5v&#13;
+wK+xal1NW1H/9Xub9Ke3B/oAYAGLqmcF6+dIPKvXRt5xLJv4NszSnrpZbVIujYdkpmYBMrLWsJrF&#13;
+vSC/YJ8+kzKhfgV91+FhvjmKfNehphaiJw5bUtLSNIoVuYUNOs+Qf2cOoGloz+YSeTjIDL15HWlN&#13;
+fmiIO8tMNQoecY5zRVz8h5U/wVPAmnsyh8J+0EtlS0QjuQwZDSSPsCgRb4HU1WHF9tcscGuDcW/T&#13;
+8nle8FWFKVNKNIwHdFsh0DjAn3kPSbWxVvH96Q==</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xades141="http://uri.etsi.org/01903/v1.4.1#" Target="#xmldsig-905b1c9f-de3e-4448-918f-5e11f7cd2157"><xades:SignedProperties Id="xmldsig-905b1c9f-de3e-4448-918f-5e11f7cd2157-signedprops"><xades:SignedSignatureProperties><xades:SigningTime>2026-07-02T11:48:34.461-06:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>W/bRHCcDGM8t0HVNb8sjGqS0+H0=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>cn=CA PERSONA JURIDICA,ou=DGT,o=MINISTERIO DE HACIENDA,c=CR</ds:X509IssuerName><ds:X509SerialNumber>1754346738390</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier Qualifier="OIDAsURI">https://tribunet.hacienda.go.cr/docs/esquemas/2016/v4.2/ResolucionComprobantesElectronicosDGT-R-48-2016_4.2.pdf</xades:Identifier></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>iA3sKANkD9LNjhHtbgg45Aw7/Fw=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#xmldsig-905b1c9f-de3e-4448-918f-5e11f7cd2157-ref0"><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>utf-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object>
+</ds:Signature></FacturaElectronica>

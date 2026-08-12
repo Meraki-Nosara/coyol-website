@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaElectronica xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica">
+  <Clave>50617072600310179441000400001010000056003161992888</Clave>
+  <ProveedorSistemas>3101409261</ProveedorSistemas>
+  <CodigoActividadEmisor>4711.2</CodigoActividadEmisor>
+  <CodigoActividadReceptor>5610.0</CodigoActividadReceptor>
+  <NumeroConsecutivo>00400001010000056003</NumeroConsecutivo>
+  <FechaEmision>2026-07-17T14:58:06-06:00</FechaEmision>
+  <Emisor>
+    <Nombre>AGRO LOS CARTAGOS</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3101794410</Numero>
+    </Identificacion>
+    <NombreComercial>AGRO LOS CARTAGOS</NombreComercial>
+    <Ubicacion>
+      <Provincia>3</Provincia>
+      <Canton>07</Canton>
+      <Distrito>02</Distrito>
+      <OtrasSenas>50 metros SurOeste de Pali Cot, Oreamuno Cartago</OtrasSenas>
+    </Ubicacion>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>25366241</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>inversioneshpc@hotmail.com</CorreoElectronico>
+  </Emisor>
+  <Receptor>
+    <Nombre>MERAKI FAMILY LIMITADA                                                          </Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3102618820</Numero>
+    </Identificacion>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>84197595</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>merakifamilylimitada@gmail.com</CorreoElectronico>
+  </Receptor>
+  <CondicionVenta>02</CondicionVenta>
+  <PlazoCredito>8</PlazoCredito>
+  <DetalleServicio>
+    <LineaDetalle>
+      <NumeroLinea>1</NumeroLinea>
+      <CodigoCABYS>0121402020800</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>01</Tipo>
+        <Codigo>103</Codigo>
+      </CodigoComercial>
+      <Cantidad>12.0</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <Detalle>LECHUGA AMERICANA UNIDAD</Detalle>
+      <PrecioUnitario>346.53465</PrecioUnitario>
+      <MontoTotal>4158.41580</MontoTotal>
+      <SubTotal>4158.41580</SubTotal>
+      <BaseImponible>4158.41580</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>02</CodigoTarifaIVA>
+        <Tarifa>1.0</Tarifa>
+        <Monto>41.58416</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>41.58416</ImpuestoNeto>
+      <MontoTotalLinea>4199.99996</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>2</NumeroLinea>
+      <CodigoCABYS>2922007020000</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>01</Tipo>
+        <Codigo>349</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.0</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <Detalle>bolsa plastica grande und</Detalle>
+      <PrecioUnitario>132.74336</PrecioUnitario>
+      <MontoTotal>132.74336</MontoTotal>
+      <SubTotal>132.74336</SubTotal>
+      <BaseImponible>132.74336</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.0</Tarifa>
+        <Monto>17.25664</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>17.25664</ImpuestoNeto>
+      <MontoTotalLinea>150.00000</MontoTotalLinea>
+    </LineaDetalle>
+  </DetalleServicio>
+  <ResumenFactura>
+    <CodigoTipoMoneda>
+      <CodigoMoneda>CRC</CodigoMoneda>
+      <TipoCambio>1.0</TipoCambio>
+    </CodigoTipoMoneda>
+    <TotalServGravados>0</TotalServGravados>
+    <TotalServExentos>0</TotalServExentos>
+    <TotalServExonerado>0</TotalServExonerado>
+    <TotalServNoSujeto>0</TotalServNoSujeto>
+    <TotalMercanciasGravadas>4291.15916</TotalMercanciasGravadas>
+    <TotalMercanciasExentas>0</TotalMercanciasExentas>
+    <TotalMercExonerada>0</TotalMercExonerada>
+    <TotalMercNoSujeta>0</TotalMercNoSujeta>
+    <TotalGravado>4291.15916</TotalGravado>
+    <TotalExento>0</TotalExento>
+    <TotalExonerado>0</TotalExonerado>
+    <TotalNoSujeto>0</TotalNoSujeto>
+    <TotalVenta>4291.15916</TotalVenta>
+    <TotalDescuentos>0</TotalDescuentos>
+    <TotalVentaNeta>4291.15916</TotalVentaNeta>
+    <TotalDesgloseImpuesto>
+      <Codigo>01</Codigo>
+      <CodigoTarifaIVA>02</CodigoTarifaIVA>
+      <TotalMontoImpuesto>41.58416</TotalMontoImpuesto>
+    </TotalDesgloseImpuesto>
+    <TotalDesgloseImpuesto>
+      <Codigo>01</Codigo>
+      <CodigoTarifaIVA>08</CodigoTarifaIVA>
+      <TotalMontoImpuesto>17.25664</TotalMontoImpuesto>
+    </TotalDesgloseImpuesto>
+    <TotalImpuesto>58.84080</TotalImpuesto>
+    <TotalImpAsumEmisorFabrica>0</TotalImpAsumEmisorFabrica>
+    <TotalIVADevuelto>0</TotalIVADevuelto>
+    <TotalOtrosCargos>0</TotalOtrosCargos>
+    <TotalComprobante>4349.99996</TotalComprobante>
+  </ResumenFactura>
+  <Otros>
+    <OtroTexto codigo="">
+IMPUESTO AL VALOR AGREGADO:
+% IVA         MONTO
+ 1%           41.58
+13%           17.26</OtroTexto>
+  </Otros>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-909f8244-3c44-4cb7-a057-73e3cabe6c6d"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" /><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" /><ds:Reference Id="Reference-88225901-cad3-41b8-ac88-972b4caf8027" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>nPEFvDdEQYXLqBDAnrRGrMwac5Z3HVGaOf9DaZq7UBo=</ds:DigestValue></ds:Reference><ds:Reference Id="ReferenceKeyInfo" URI="#KeyInfoId-Signature-909f8244-3c44-4cb7-a057-73e3cabe6c6d"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>34NTjgHIebYTNqkJ1qt/a2NjjhXkWxRCvpQXn8ru/4I=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-Signature-909f8244-3c44-4cb7-a057-73e3cabe6c6d"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>PCaXeG7fzwI5io/hotniDMFDSe0kzHsiT0KiJZCleNY=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue-909f8244-3c44-4cb7-a057-73e3cabe6c6d">FTX860i7hTKUFFTdxNhha00WgjZ8lwEXdp4ckoOEiH3jD0PGrFD8kVgX5RRz9iEoByc019piWQiamj65Sz66RcR98/4pEF2MVJ+Yg3rGqRaMXHidEfeCgGykb60EsMPgHVp6HH0dUck0jk9bwGQvgPEwYd2NzfYQfpCS8BYUbd822/ygkhPvClfRJ0BTEko/peyePvD2vRHNkvH6zuuICO9gXJTgJ+6gktGMqQFW4K50QOE5hwVCC2BP4gS2cwUn+Nw/o7htrh/Zo/IkwmeMIQ7Lg5ubpyaOe/PS+QqgFPvPrGs6qJZFbeHpJuSY6gK8nIXuQW1d2vwWTuLxXtBePw==</ds:SignatureValue><ds:KeyInfo Id="KeyInfoId-Signature-909f8244-3c44-4cb7-a057-73e3cabe6c6d"><ds:X509Data><ds:X509Certificate>MIIFIzCCAwugAwIBAgIGAZ7M/EeDMA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYDVQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBFUlNPTkEgSlVSSURJQ0EwHhcNMjYwNjE1MjAzMjI1WhcNMzAwNjE0MjAzMjI1WjB+MRkwFwYDVQQFExBDUEotMy0xMDEtNzk0NDEwMQswCQYDVQQGEwJDUjEZMBcGA1UECgwQUEVSU09OQSBKVVJJRElDQTEMMAoGA1UECwwDQ1BKMSswKQYDVQQDDCJBR1JPIExPUyBDQVJUQUdPUyBTT0NJRURBRCBBTk9OSU1BMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0LjRRzP2lYQYOwF5NCVZVDWuzana/ZFgIG+G9+K4pQlgv9X0lrTgnfgdmpq/gMgVXZylxuKcPThMroGbzQy35/DV+x6A3GEdjs9SLc907lV+eQM24QcU9i3aGI856VVUA7ve/+KwU1ri9yKuTaXe9mj0Gl398mirCXvdq2aKBUYLK+C3eACdnHo9Wh0+k3UctYj6+5uzrUiOWZcr30aIy28+0VdFMMlRa7wHYTxAVK+o7JFirUpNekmM5oc6R8Q6nYFcnNaZXlN5I6cFUdjWuMoNBfZikspKrxdUtzkRZTF3wZx6q84HcwqR8zSoe1FMMEyBvnCV6tRcWm7Lh27TUQIDAQABo4HKMIHHMB8GA1UdIwQYMBaAFDttV/XWfOmeEAIgQeO9GszPs06VMB0GA1UdDgQWBBRUnssJGuy3DaWJum3LM5hszvC9NTALBgNVHQ8EBAMCBsAwEwYDVR0lBAwwCgYIKwYBBQUHAwQwYwYIKwYBBQUHAQEEVzBVMFMGCCsGAQUFBzAChkdodHRwczovL3BraS5jb21wcm9iYW50ZXNlbGVjdHJvbmljb3MuZ28uY3IvcHJvZC9pbnRlcm1lZGlhdGUtcGotcGVtLmNydDANBgkqhkiG9w0BAQsFAAOCAgEApQ7JktHr5AMrvSjY/g6XK/UsUo8i11C0YrNUiP8p7quksMf1j9N04fheLZx9/dvtPj/ZL6OY5cpwaKD6NPTSnHsjq8Wqhyai1mjYwkcDOdJyMBkBJMPGpSZ9t7oa2RHi/dhv9PnWo/JkotBGDrsNMC6TzNyQSh6zJxnH816G0oZRwhmUNL6neqqhD4Yarkb0uRPFonXJd5vdy9uF+C4F5B+BmgcF5R7drAw6zNy7gOs00r01uVnDJBYwHF7hI+nAs82SVlHwTtZlyBnRG5AQYrNqYFq9csyy7ZaUIq1rsfPFIWeXI5zVb0kQeCwe8XaNvHJoaI1Lgo5wUY44U5IAtMsX4kEeyfn1b/HrVnlYCNzwFVtKdmj1EoWUh0qc/Y80ZMD+ULCNSnOBwugnSpV97M9skhXLUO98EdgGmBngliEotrqPJPcMBx+jIQ+q3Lf3vInBnTLzK1iGNOMWPto9l9ZXerJvwzbgy2NH8hQPWL/c0s5blCEDgD/IsVHwIJ59I2q+cUHK8mggzMgHzMIiGpytcljQoMwSl00woY5336OxaZzwK/VxM3x5xOxtD0QrjwpiZBFN8jiOe1iz/mGVg1tTqzN2UEl6CA+oBOUvlxv+DDDIwnkN+iySQusNKpsvL9vfWuzm8WDCdBGpo1iygErHsM1iIQblbHorG5HcM8U=</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>0LjRRzP2lYQYOwF5NCVZVDWuzana/ZFgIG+G9+K4pQlgv9X0lrTgnfgdmpq/gMgVXZylxuKcPThMroGbzQy35/DV+x6A3GEdjs9SLc907lV+eQM24QcU9i3aGI856VVUA7ve/+KwU1ri9yKuTaXe9mj0Gl398mirCXvdq2aKBUYLK+C3eACdnHo9Wh0+k3UctYj6+5uzrUiOWZcr30aIy28+0VdFMMlRa7wHYTxAVK+o7JFirUpNekmM5oc6R8Q6nYFcnNaZXlN5I6cFUdjWuMoNBfZikspKrxdUtzkRZTF3wZx6q84HcwqR8zSoe1FMMEyBvnCV6tRcWm7Lh27TUQ==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="XadesObjectId-9ae0d147-6e5c-40d9-b73d-514acb184405"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="QualifyingProperties-136d8efd-43cb-4c63-b349-2aa187fea690" Target="#Signature-909f8244-3c44-4cb7-a057-73e3cabe6c6d"><xades:SignedProperties Id="SignedProperties-Signature-909f8244-3c44-4cb7-a057-73e3cabe6c6d"><xades:SignedSignatureProperties><xades:SigningTime>2026-07-17T20:58:11+00:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>yUAv6cD/RicX5QlQ2ea7xQT6DAUhrIWVeuM2d90ziXw=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA PERSONA JURIDICA, OU=DGT, O=MINISTERIO DE HACIENDA, C=CR</ds:X509IssuerName><ds:X509SerialNumber>1781555545987</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://cdn.comprobanteselectronicos.go.cr/xml-schemas/Resoluci%C3%B3n_General_sobre_disposiciones_t%C3%A9cnicas_comprobantes_electr%C3%B3nicos_para_efectos_tributarios.pdf</xades:Identifier><xades:Description /></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>DWxin1xWOeI8OuWQXazh4VjLWAaCLAA954em7DMh0h8=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-88225901-cad3-41b8-ac88-972b4caf8027"><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>UTF-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></FacturaElectronica>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaElectronica xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica.xsd">
+  <Clave>50606072600050288078300100001010000003123102867833</Clave>
+  <ProveedorSistemas>3101225890</ProveedorSistemas>
+  <CodigoActividadEmisor>4721.4</CodigoActividadEmisor>
+  <NumeroConsecutivo>00100001010000003123</NumeroConsecutivo>
+  <FechaEmision>2026-07-06T10:23:59-06:00</FechaEmision>
+  <Emisor>
+    <Nombre>GIOVANNI MARTIN AVILA ALVARADO</Nombre>
+    <Identificacion>
+      <Tipo>01</Tipo>
+      <Numero>502880783</Numero>
+    </Identificacion>
+    <NombreComercial>ORGANICO GEOVANNI'S</NombreComercial>
+    <Ubicacion>
+      <Provincia>5</Provincia>
+      <Canton>02</Canton>
+      <Distrito>06</Distrito>
+      <Barrio>Ligia</Barrio>
+      <OtrasSenas>BARRIO SAN CARLOS 250 MTS SUR DE EBAIS</OtrasSenas>
+    </Ubicacion>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>86970660</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>avilageovany712@gmail.com</CorreoElectronico>
+  </Emisor>
+  <Receptor>
+    <Nombre>MERAKI FAMILY LTDA</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3102618820</Numero>
+    </Identificacion>
+    <Ubicacion>
+      <Provincia>5</Provincia>
+      <Canton>02</Canton>
+      <Distrito>06</Distrito>
+      <Barrio>PLAYA PELADAS</Barrio>
+      <OtrasSenas>200 metros de banco de costa rica</OtrasSenas>
+    </Ubicacion>
+    <CorreoElectronico>merakifamilylimitada@gmail.com</CorreoElectronico>
+  </Receptor>
+  <CondicionVenta>01</CondicionVenta>
+  <DetalleServicio>
+    <LineaDetalle>
+      <NumeroLinea>1</NumeroLinea>
+      <CodigoCABYS>0121402020800</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>01</Tipo>
+        <Codigo>021</Codigo>
+      </CodigoComercial>
+      <Cantidad>4.00</Cantidad>
+      <UnidadMedida>Kg</UnidadMedida>
+      <Detalle>LECHUGAS MIXTAS</Detalle>
+      <PrecioUnitario>9000.00</PrecioUnitario>
+      <MontoTotal>36000.00</MontoTotal>
+      <SubTotal>36000.00</SubTotal>
+      <BaseImponible>36000.00</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>02</CodigoTarifaIVA>
+        <Tarifa>1.00</Tarifa>
+        <Monto>360.00</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>360.00</ImpuestoNeto>
+      <MontoTotalLinea>36360.00</MontoTotalLinea>
+    </LineaDetalle>
+  </DetalleServicio>
+  <ResumenFactura>
+    <CodigoTipoMoneda>
+      <CodigoMoneda>CRC</CodigoMoneda>
+      <TipoCambio>1</TipoCambio>
+    </CodigoTipoMoneda>
+    <TotalServGravados>0</TotalServGravados>
+    <TotalServExentos>0</TotalServExentos>
+    <TotalServExonerado>0</TotalServExonerado>
+    <TotalServNoSujeto>0</TotalServNoSujeto>
+    <TotalMercanciasGravadas>36000.00</TotalMercanciasGravadas>
+    <TotalMercanciasExentas>0</TotalMercanciasExentas>
+    <TotalMercExonerada>0</TotalMercExonerada>
+    <TotalMercNoSujeta>0</TotalMercNoSujeta>
+    <TotalGravado>36000.00</TotalGravado>
+    <TotalExento>0</TotalExento>
+    <TotalExonerado>0</TotalExonerado>
+    <TotalVenta>36000.00</TotalVenta>
+    <TotalDescuentos>0</TotalDescuentos>
+    <TotalVentaNeta>36000.00</TotalVentaNeta>
+    <TotalDesgloseImpuesto>
+      <Codigo>01</Codigo>
+      <CodigoTarifaIVA>02</CodigoTarifaIVA>
+      <TotalMontoImpuesto>360.00</TotalMontoImpuesto>
+    </TotalDesgloseImpuesto>
+    <TotalImpuesto>360.00</TotalImpuesto>
+    <TotalImpAsumEmisorFabrica>0</TotalImpAsumEmisorFabrica>
+    <TotalIVADevuelto>0</TotalIVADevuelto>
+    <MedioPago>
+      <TipoMedioPago>01</TipoMedioPago>
+    </MedioPago>
+    <TotalComprobante>36360.00</TotalComprobante>
+  </ResumenFactura>
+  <Otros>
+    <OtroTexto>Factura pendiente de panderia del 29/06/26</OtroTexto>
+  </Otros>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-3688fdcc-c75d-4e06-b4e3-f964a6647112"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" /><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" /><ds:Reference Id="Reference-00ab5f51-ff0e-4ea3-bb90-f5cfb566ed0f" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>IS8y/ZyMW+Mute6zTfLcXD/V+vTClopd0N3YkUl9DO8=</ds:DigestValue></ds:Reference><ds:Reference Id="ReferenceKeyInfo" URI="#KeyInfoId-Signature-3688fdcc-c75d-4e06-b4e3-f964a6647112"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>FGKvq0QoxQmq0bKAWt+JEjTIfu3c/XkUGIhkCbv+hx8=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-Signature-3688fdcc-c75d-4e06-b4e3-f964a6647112"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>DR2XA6DA8fQTo758c+5Fm0kxcMsuh8eAjaQS6wDhCAI=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue-3688fdcc-c75d-4e06-b4e3-f964a6647112">gLwql0l4/lwz5YnQDlClwpN9PegJjgjj3p6rl1YYrGBLelrwG6ZN/dF9mi7GovwYb/plxDSkcoqYtUE5zDvm4hhSdiASAbxtFWMerf1Z1hIjsyEAxMxfx646CKXSrxraPH7DTqzqDTPCiBKJkqmyWm13LsJLQDWPCA2VYOxyNFnJOoHAyS9eZGJ3C2y69l1k/MipAKJS7w3YQTWGG6M/ZzusSnjyzYh2zoOj5XNNY8Fmh8m74DBiJSwv+AKPF/w3oEREmfqDSPr5bS8bQ9S647ZKvdXd+6mmE0q8FzPxt+AJ4jvByfK3/fbvs/RcyWFIb2eR7yxet1QH12fT77RxPw==</ds:SignatureValue><ds:KeyInfo Id="KeyInfoId-Signature-3688fdcc-c75d-4e06-b4e3-f964a6647112"><ds:X509Data><ds:X509Certificate>MIIFTzCCAzegAwIBAgIGAZpRRCdTMA0GCSqGSIb3DQEBCwUAMFgxCzAJBgNVBAYTAkNSMR8wHQYDVQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxGjAYBgNVBAMMEUNBIFBFUlNPTkEgRklTSUNBMB4XDTI1MTEwNDIzNDY1MloXDTI5MTEwMzIzNDY1MlowgasxGTAXBgNVBAUTEENQRi0wNS0wMjg4LTA3ODMxFzAVBgNVBAQMDkFWSUxBIEFMVkFSQURPMRgwFgYDVQQqDA9HSU9WQU5OSSBNQVJUSU4xCzAJBgNVBAYTAkNSMRcwFQYDVQQKDA5QRVJTT05BIEZJU0lDQTEMMAoGA1UECwwDQ1BGMScwJQYDVQQDDB5HSU9WQU5OSSBNQVJUSU4gQVZJTEEgQUxWQVJBRE8wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCHC7iuP5LbohYzBKgU27IGw/CgQYhC86QoyCp+Vr9sCF6QeLgCe8CpBPEbTQJqax2QS8O8FNgocodvJmeLOrSuGXYPSg1DWwUJVJBzBKPCp1qDDKU40JtHHjolbo4E7qQsmzG7nk479g6MTuvtZUL0tAKE3Aj9PiRhh7uHaVZ55LjgaNpmr2V7uWu6TK58SPJVhcdew8AO0Z0ZsbgQlhVxubRem/jreY4Q0MWDemDomw5fYBdrXg134lFbPLM9hOxNvf4m37VKfKnpP/WirL+npG2jJQfc4uU2YhoXxWS5ilni+OIt2jxyDuF1xTE6C8oZDLCJqxMQ6++TB0gW9xYXAgMBAAGjgcowgccwHwYDVR0jBBgwFoAUE/ZqQQ3toiRF0ciUqEGDfGIla1kwHQYDVR0OBBYEFPLFsmOLM5h+bFTc3Y6qkM98TJM9MAsGA1UdDwQEAwIGwDATBgNVHSUEDDAKBggrBgEFBQcDBDBjBggrBgEFBQcBAQRXMFUwUwYIKwYBBQUHMAKGR2h0dHBzOi8vcGtpLmNvbXByb2JhbnRlc2VsZWN0cm9uaWNvcy5nby5jci9wcm9kL2ludGVybWVkaWF0ZS1wZi1wZW0uY3J0MA0GCSqGSIb3DQEBCwUAA4ICAQCFxmQV+cAmtCITdy4TP5w4RTjnoW7ZSVPu9sowTnAM2rRFxiqcpt0OiqnTNSh/KVuuqVjupFWswc3hTXr5smEwvt3DrlTqTpdhfYSWuEvv+To+usz6xGIsOTFxrHohrtGrw/LFolmq28GACmyLKaYMjNEkA8+TJCaZcV3B/bJgSY6GX2JZMOuW4EZ6iL0kZh+pnS5kxb9W+Vk4lvqnu84R6WfbTT6e+L93gEkBFPVmLatxS2pdA3KZC1lSREdoS68Wk2jzwGf4GzZPxE+oPekyAW1TGkhqbIlXy91P4n11qYW0koi5PhoP6o0nQbuFNdau47sTmDKyaSuPJoJZVkQbtChxCy15NEbPWELVvQKFm2L02UTpiDyw1R9NHARIUuqCysngilPvPOxEbyXGlL0a795lKr7flWfxRPgl9TIJ14sjHLfwK/V5KY3fxx2e6aqx0oUOqzcjPXVKWLnDA+GArN9J7WyDdf8xoDtj0iAnZ+H8F0OQIJtpsnfeXtc6ZxxBwZaLB4ZsfLD2CsYgvbDPr36mxC3toYJnMRI2E1xG0AFMQvMnlmyNRivJT76FbzZTqMsHHyxPN2/AL8S8Epc1Q1V7AjZ9nJ8hA4KsHo0Bbd9hN/bMleQfymPF8Dfab+KQVDI5ivyGAK48JNAV6f+imyZ1bZ3JZ1IPXRAL6elApQ==</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>hwu4rj+S26IWMwSoFNuyBsPwoEGIQvOkKMgqfla/bAhekHi4AnvAqQTxG00CamsdkEvDvBTYKHKHbyZnizq0rhl2D0oNQ1sFCVSQcwSjwqdagwylONCbRx46JW6OBO6kLJsxu55OO/YOjE7r7WVC9LQChNwI/T4kYYe7h2lWeeS44GjaZq9le7lrukyufEjyVYXHXsPADtGdGbG4EJYVcbm0Xpv463mOENDFg3pg6JsOX2AXa14Nd+JRWzyzPYTsTb3+Jt+1Snyp6T/1oqy/p6RtoyUH3OLlNmIaF8VkuYpZ4vjiLdo8cg7hdcUxOgvKGQywiasTEOvvkwdIFvcWFw==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="XadesObjectId-d2d9898a-1f11-42ea-8d62-47a5ab54e3d0"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="QualifyingProperties-7a9fad14-063e-434d-bacf-fe5a7dd26fee" Target="#Signature-3688fdcc-c75d-4e06-b4e3-f964a6647112"><xades:SignedProperties Id="SignedProperties-Signature-3688fdcc-c75d-4e06-b4e3-f964a6647112"><xades:SignedSignatureProperties><xades:SigningTime>2026-07-06T10:24:00-06:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>dYSSRNq5IVGpg7VblBzQwIse/VFEhpsDj4K5rsidNUY=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA PERSONA FISICA, OU=DGT, O=MINISTERIO DE HACIENDA, C=CR</ds:X509IssuerName><ds:X509SerialNumber>1762300012371</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica</xades:Identifier><xades:Description /></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><ds:DigestValue>Ohixl6upD6av8N7pEvDABhEL6hM=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier><xades:SignerRole><xades:ClaimedRoles><xades:ClaimedRole>ObligadoTributario</xades:ClaimedRole></xades:ClaimedRoles></xades:SignerRole></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-00ab5f51-ff0e-4ea3-bb90-f5cfb566ed0f"><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>UTF-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></FacturaElectronica>

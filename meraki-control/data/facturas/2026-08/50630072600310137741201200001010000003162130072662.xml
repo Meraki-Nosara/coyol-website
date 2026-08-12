@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaElectronica xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica  https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.4/FacturaElectronica_v4.4.xsd">
+  <Clave>50630072600310137741201200001010000003162130072662</Clave>
+  <ProveedorSistemas>3102261960</ProveedorSistemas>
+  <CodigoActividadEmisor>3530.0</CodigoActividadEmisor>
+  <CodigoActividadReceptor>5610.0</CodigoActividadReceptor>
+  <NumeroConsecutivo>01200001010000003162</NumeroConsecutivo>
+  <FechaEmision>2026-07-30T09:53:34</FechaEmision>
+  <Emisor>
+    <Nombre>REFRIMUNDO S.A.</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3101377412</Numero>
+    </Identificacion>
+    <NombreComercial>Refrimundo S.A.</NombreComercial>
+    <Ubicacion>
+      <Provincia>1</Provincia>
+      <Canton>01</Canton>
+      <Distrito>09</Distrito>
+      <Barrio>Pavas (centro)</Barrio>
+      <OtrasSenas>LA URUCA</OtrasSenas>
+    </Ubicacion>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>44049205</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>rfdofe@refrimundo.com</CorreoElectronico>
+  </Emisor>
+  <Receptor>
+    <Nombre>MERAKI FAMILY  LIMITADA</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3102618820</Numero>
+    </Identificacion>
+    <NombreComercial>MERAKI  LIMITADA</NombreComercial>
+    <Ubicacion>
+      <Provincia>5</Provincia>
+      <Canton>02</Canton>
+      <Distrito>06</Distrito>
+      <Barrio>Ángeles de Garza</Barrio>
+      <OtrasSenas>GUANACASTE</OtrasSenas>
+    </Ubicacion>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>84197595</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>merakifamilylimitada@gmail.com</CorreoElectronico>
+  </Receptor>
+  <CondicionVenta>02</CondicionVenta>
+  <PlazoCredito>1</PlazoCredito>
+  <DetalleServicio>
+    <LineaDetalle>
+      <NumeroLinea>1</NumeroLinea>
+      <CodigoCABYS>4299999990100</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>04</Tipo>
+        <Codigo>20249</Codigo>
+      </CodigoComercial>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>20249</Codigo>
+      </CodigoComercial>
+      <Cantidad>15.000</Cantidad>
+      <UnidadMedida>M</UnidadMedida>
+      <UnidadMedidaComercial>M</UnidadMedidaComercial>
+      <Detalle>TUBO COBRE FLEXIBLE DE 5/8" X 50"    (15 MTRS)</Detalle>
+      <PrecioUnitario>4092.75</PrecioUnitario>
+      <MontoTotal>61391.25</MontoTotal>
+      <Descuento>
+        <MontoDescuento>9231.90</MontoDescuento>
+        <CodigoDescuento>07</CodigoDescuento>
+        <NaturalezaDescuento>Descuento comercial</NaturalezaDescuento>
+      </Descuento>
+      <SubTotal>52159.35</SubTotal>
+      <BaseImponible>52159.35</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>6780.72</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>.00</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>6780.72</ImpuestoNeto>
+      <MontoTotalLinea>58940.07</MontoTotalLinea>
+    </LineaDetalle>
+  </DetalleServicio>
+  <ResumenFactura>
+    <CodigoTipoMoneda>
+      <CodigoMoneda>CRC</CodigoMoneda>
+      <TipoCambio>1</TipoCambio>
+    </CodigoTipoMoneda>
+    <TotalServGravados>0.00</TotalServGravados>
+    <TotalMercanciasGravadas>61391.25</TotalMercanciasGravadas>
+    <TotalGravado>61391.25</TotalGravado>
+    <TotalVenta>61391.25</TotalVenta>
+    <TotalDescuentos>9231.90</TotalDescuentos>
+    <TotalVentaNeta>52159.35</TotalVentaNeta>
+    <TotalDesgloseImpuesto>
+      <Codigo>01</Codigo>
+      <CodigoTarifaIVA>08</CodigoTarifaIVA>
+      <TotalMontoImpuesto>6780.72</TotalMontoImpuesto>
+    </TotalDesgloseImpuesto>
+    <TotalImpuesto>6780.72</TotalImpuesto>
+    <MedioPago>
+      <TipoMedioPago>01</TipoMedioPago>
+      <TotalMedioPago>58940.07</TotalMedioPago>
+    </MedioPago>
+    <TotalComprobante>58940.07</TotalComprobante>
+  </ResumenFactura>
+  <Otros>
+    <OtroTexto>CAMPO EN BLANCO</OtroTexto>
+  </Otros>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-e846a4a3-02b3-4f3b-a539-80378ce81182"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" /><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" /><ds:Reference Id="Reference-96f92750-3399-4ee5-aed6-edd29c3fc23f" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>RPlSG5NzFNqFHlJdNcfXZkDlPSd+Kw+pMZHZr+FMlz0=</ds:DigestValue></ds:Reference><ds:Reference Id="ReferenceKeyInfo" URI="#KeyInfoId-Signature-e846a4a3-02b3-4f3b-a539-80378ce81182"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>H7JhrMSIVIrNEC88Ctg/DVcx+3N/+EPQMc/6+TjEecE=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-Signature-e846a4a3-02b3-4f3b-a539-80378ce81182"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>7ldaDjrJNMXBhF08nQebJdB2ktF8Ah1rby+B4REWFLg=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue-e846a4a3-02b3-4f3b-a539-80378ce81182">R0f0yV1xsngrXRlXG+EzPqLvWVlNMHB8tGD+UJawo5fMjliow8212QWydF9ZMbVyvrFJxAg+0jzV/DoNJa7PX0IXIKXzwRXOQKMFbPM2Z3X1UXuGgbTXMyZnNhiUnahKxRGjwckn7LkVJxNdvmAJBdaF3oqVATSwjOwMmuCOOSZ4GcfSm3tTZpobzuCD4vbMa45dyxIfeuMobzBIR+riqvzl7+m8/riGLx8/Lb05ghggCPydI0ZIEva07Nr+n4AcfnSyU4g1/JKjDPCzc6Nuh9N7TUibEMBbGsEeLh72Y1BxK1RzCgXypX48oDaDWE96s4YZak1FZpXJxM/zsIvFoQ==</ds:SignatureValue><ds:KeyInfo Id="KeyInfoId-Signature-e846a4a3-02b3-4f3b-a539-80378ce81182"><ds:X509Data><ds:X509Certificate>MIIFHDCCAwSgAwIBAgIGAZj3wXYmMA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYDVQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBFUlNPTkEgSlVSSURJQ0EwHhcNMjUwODI5MjEzNTA3WhcNMjkwODI4MjEzNTA3WjB3MRkwFwYDVQQFExBDUEotMy0xMDEtMzc3NDEyMQswCQYDVQQGEwJDUjEZMBcGA1UECgwQUEVSU09OQSBKVVJJRElDQTEMMAoGA1UECwwDQ1BKMSQwIgYDVQQDDBtSRUZSSU1VTkRPIFNPQ0lFREFEIEFOT05JTUEwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCV2+ODxkRzg/LJWEt5hI6IHM2rWRsr+ndh8IbqSSYA5KMKQHeIviKeuf0wf4nN6kx/eXpQam6VoK5LnPp9BfDhx2FfZObUqBcEadpWOUFbsh8td4ndKQnuNKQbWdJeSpX7tOqOuGA1mrRF08cHDgYy0hc5NM9OoJUIH1X35WgSA0i23KuroU6vhjt/zA4o2DLM7MHn/w2sxnETJLx3rDoTYP+F3rWJt3axG4W3G20e9mqDiykxThIRmKSIywwlPrQdlAagBkhn5FbQXZShWxUQdgydsUoaZFQyYnWd5dVlLra5mKPpoGQ4ilCQOj1d7fHpwKTjWZyJwKe+cftflWobAgMBAAGjgcowgccwHwYDVR0jBBgwFoAUO21X9dZ86Z4QAiBB470azM+zTpUwHQYDVR0OBBYEFPLXIPL2GxvvE27/Ir+KZnf6x3N1MAsGA1UdDwQEAwIGwDATBgNVHSUEDDAKBggrBgEFBQcDBDBjBggrBgEFBQcBAQRXMFUwUwYIKwYBBQUHMAKGR2h0dHBzOi8vcGtpLmNvbXByb2JhbnRlc2VsZWN0cm9uaWNvcy5nby5jci9wcm9kL2ludGVybWVkaWF0ZS1wai1wZW0uY3J0MA0GCSqGSIb3DQEBCwUAA4ICAQCENskyTyz6pVpIOxOqT1ya42jVIZ5AiNM9RTpSmdAQlB3wIRj1Yth5C6iewn9fX32xLVUG1pf3qYB/J9S7XVIl9jxgeW4mT+yU+K4CS58MD1EEz77s7YqsdF+YOTl0LLkRz/EUor4XNuDhL4j5AP09FZjVvRiFgdx9NrU2TlBGrLBcs9KGJx+6ROtwtQfat7c//J3jS0HeR6kQZX62AaobgXSiX4FW3STixif3wBI06jCssXdGIpzY5F1fIvcDCvUVz9K+RpFcY4FbmIt4DSM+VxkD8SnXMVVaQ56nLeqCY/Gfzx5R2Q1Cjqrv8/ikxfVSZc3WkGMRxcndJSx+DwzOXcULBi4J3akCGr3qZL2F+kDrLkSTzVH7AmVeqvKGEMcTg7UI0Ie/f97RCUQl7TeXy9c2CPPgwMazeYzsRNklsVcn1mIqbJFGZ8tENLBmnwXvFNqkHOVYmQMKvwM8InorKBK6biYBY4s2QdfoZ8SWj7rubGq7LNW70TycdYKh1HW34FaPSdauvmuFYUwRbr59XNP6sOUthpOaCquIWBu8xxf/JKzZuTpYBvqHM96GuSEWIx9S6YT8LOFkk4pZ2FHC91hmJm1WTi6bsElXbocNgSsg3hyoR4qPC454gwaGtXoflIDxRu1JYgR0g2Ri/RiU4H4ch7QKt78R9wbh0hD9RQ==</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>ldvjg8ZEc4PyyVhLeYSOiBzNq1kbK/p3YfCG6kkmAOSjCkB3iL4inrn9MH+JzepMf3l6UGpulaCuS5z6fQXw4cdhX2Tm1KgXBGnaVjlBW7IfLXeJ3SkJ7jSkG1nSXkqV+7TqjrhgNZq0RdPHBw4GMtIXOTTPTqCVCB9V9+VoEgNIttyrq6FOr4Y7f8wOKNgyzOzB5/8NrMZxEyS8d6w6E2D/hd61ibd2sRuFtxttHvZqg4spMU4SEZikiMsMJT60HZQGoAZIZ+RW0F2UoVsVEHYMnbFKGmRUMmJ1neXVZS62uZij6aBkOIpQkDo9Xe3x6cCk41mcicCnvnH7X5VqGw==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="XadesObjectId-864fe283-ed2c-4798-a605-e685d133574e"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="QualifyingProperties-00d5c253-efd5-4b79-950c-529cc792d988" Target="#Signature-e846a4a3-02b3-4f3b-a539-80378ce81182"><xades:SignedProperties Id="SignedProperties-Signature-e846a4a3-02b3-4f3b-a539-80378ce81182"><xades:SignedSignatureProperties><xades:SigningTime>2026-07-30T09:57:25</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>QOXe/0SXkjNUbR8Tfx8xe/EI0jpAq/dV5tX6Hl3uA9c=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA PERSONA JURIDICA,OU=DGT,O=MINISTERIO DE HACIENDA,C=CR</ds:X509IssuerName><ds:X509SerialNumber>1756503307814</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://cdn.comprobanteselectronicos.go.cr/xml-schemas/Resoluci%C3%B3n_General_sobre_disposiciones_t%C3%A9cnicas_comprobantes_electr%C3%B3nicos_para_efectos_tributarios.pdf</xades:Identifier></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><ds:DigestValue>LoXZC86JwDL7zWC35qj7Q4AzrRQ=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></FacturaElectronica>

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaElectronica xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica  https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.4/FacturaElectronica_v4.4.xsd">
+  <Clave>50616072600310110918000200003010000108567116072667</Clave>
+  <ProveedorSistemas>3102261960</ProveedorSistemas>
+  <CodigoActividadEmisor>4630.9</CodigoActividadEmisor>
+  <CodigoActividadReceptor>5610.0</CodigoActividadReceptor>
+  <NumeroConsecutivo>00200003010000108567</NumeroConsecutivo>
+  <FechaEmision>2026-07-16T16:01:19</FechaEmision>
+  <Emisor>
+    <Nombre>Distribuidora Isleña de Alimentos, S.A.</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3101109180</Numero>
+    </Identificacion>
+    <Registrofiscal8707>4809</Registrofiscal8707>
+    <NombreComercial>Distribuidora Isleña de Alimentos S.A.</NombreComercial>
+    <Ubicacion>
+      <Provincia>4</Provincia>
+      <Canton>01</Canton>
+      <Distrito>04</Distrito>
+      <Barrio>Pueblo Nuevo</Barrio>
+      <OtrasSenas>400 Mtr N. Embotelladora Pepsi</OtrasSenas>
+    </Ubicacion>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>22930609</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>emisionfacturas@di.cr</CorreoElectronico>
+  </Emisor>
+  <Receptor>
+    <Nombre>CORPORATIVO MERAKI FAMILY LIMITADA</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3102618820</Numero>
+    </Identificacion>
+    <NombreComercial>MERAKI FAMILY LIMITADA</NombreComercial>
+    <Ubicacion>
+      <Provincia>5</Provincia>
+      <Canton>02</Canton>
+      <Distrito>06</Distrito>
+      <Barrio>Ángeles de Garza</Barrio>
+      <OtrasSenas>GUANACASTE NICOYA NOSARA PLAYA PELADA 100MTS ANTES DEL HOTEL NOSARA</OtrasSenas>
+    </Ubicacion>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>84197595</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>merakifamilylimitada@gmail.com</CorreoElectronico>
+  </Receptor>
+  <CondicionVenta>02</CondicionVenta>
+  <PlazoCredito>30</PlazoCredito>
+  <DetalleServicio>
+    <LineaDetalle>
+      <NumeroLinea>1</NumeroLinea>
+      <CodigoCABYS>3219302030100</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>04</Tipo>
+        <Codigo>01979</Codigo>
+      </CodigoComercial>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>8005892345644</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <UnidadMedidaComercial>Unid</UnidadMedidaComercial>
+      <Detalle>TOALL PULL OUT ECONAT LUCART 2HOJAS 135M 1X6 852226A</Detalle>
+      <PrecioUnitario>20033.00</PrecioUnitario>
+      <MontoTotal>20033.00</MontoTotal>
+      <Descuento>
+        <MontoDescuento>4006.60</MontoDescuento>
+        <CodigoDescuento>07</CodigoDescuento>
+        <NaturalezaDescuento>Descuento comercial</NaturalezaDescuento>
+      </Descuento>
+      <SubTotal>16026.40</SubTotal>
+      <BaseImponible>16026.40</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>2083.43</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>.00</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>2083.43</ImpuestoNeto>
+      <MontoTotalLinea>18109.83</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>2</NumeroLinea>
+      <CodigoCABYS>2169300000000</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>04</Tipo>
+        <Codigo>01876</Codigo>
+      </CodigoComercial>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>8018440000889</Codigo>
+      </CodigoComercial>
+      <Cantidad>2.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <UnidadMedidaComercial>Unid</UnidadMedidaComercial>
+      <Detalle>OLIO EXTRA VIRGEN 5L LUGLIO X2</Detalle>
+      <PrecioUnitario>33825.00</PrecioUnitario>
+      <MontoTotal>67650.00</MontoTotal>
+      <Descuento>
+        <MontoDescuento>20295.00</MontoDescuento>
+        <CodigoDescuento>07</CodigoDescuento>
+        <NaturalezaDescuento>Descuento comercial</NaturalezaDescuento>
+      </Descuento>
+      <SubTotal>47355.00</SubTotal>
+      <BaseImponible>47355.00</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>6156.15</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>.00</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>6156.15</ImpuestoNeto>
+      <MontoTotalLinea>53511.15</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>3</NumeroLinea>
+      <CodigoCABYS>2222900009900</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>04</Tipo>
+        <Codigo>2350</Codigo>
+      </CodigoComercial>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>041224860025</Codigo>
+      </CodigoComercial>
+      <Cantidad>10.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <UnidadMedidaComercial>Unid</UnidadMedidaComercial>
+      <Detalle>LECHE DE COCO ROLAND 400ml 1X24</Detalle>
+      <PrecioUnitario>1720.00</PrecioUnitario>
+      <MontoTotal>17200.00</MontoTotal>
+      <Descuento>
+        <MontoDescuento>3440.00</MontoDescuento>
+        <CodigoDescuento>07</CodigoDescuento>
+        <NaturalezaDescuento>Descuento comercial</NaturalezaDescuento>
+      </Descuento>
+      <SubTotal>13760.00</SubTotal>
+      <BaseImponible>13760.00</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>1788.80</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>.00</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>1788.80</ImpuestoNeto>
+      <MontoTotalLinea>15548.80</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>4</NumeroLinea>
+      <CodigoCABYS>2134000000400</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>04</Tipo>
+        <Codigo>11660</Codigo>
+      </CodigoComercial>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>7445082007197</Codigo>
+      </CodigoComercial>
+      <Cantidad>6.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <UnidadMedidaComercial>Unid</UnidadMedidaComercial>
+      <Detalle>TOMATE PELADO CAMPORO 2.5kg 1x6</Detalle>
+      <PrecioUnitario>3200.00</PrecioUnitario>
+      <MontoTotal>19200.00</MontoTotal>
+      <Descuento>
+        <MontoDescuento>5952.00</MontoDescuento>
+        <CodigoDescuento>07</CodigoDescuento>
+        <NaturalezaDescuento>Descuento comercial</NaturalezaDescuento>
+      </Descuento>
+      <SubTotal>13248.00</SubTotal>
+      <BaseImponible>13248.00</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>1722.24</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>.00</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>1722.24</ImpuestoNeto>
+      <MontoTotalLinea>14970.24</MontoTotalLinea>
+    </LineaDetalle>
+  </DetalleServicio>
+  <ResumenFactura>
+    <CodigoTipoMoneda>
+      <CodigoMoneda>CRC</CodigoMoneda>
+      <TipoCambio>1</TipoCambio>
+    </CodigoTipoMoneda>
+    <TotalServGravados>0.00</TotalServGravados>
+    <TotalMercanciasGravadas>124083.00</TotalMercanciasGravadas>
+    <TotalGravado>124083.00</TotalGravado>
+    <TotalVenta>124083.00</TotalVenta>
+    <TotalDescuentos>33693.60</TotalDescuentos>
+    <TotalVentaNeta>90389.40</TotalVentaNeta>
+    <TotalDesgloseImpuesto>
+      <Codigo>01</Codigo>
+      <CodigoTarifaIVA>08</CodigoTarifaIVA>
+      <TotalMontoImpuesto>11750.62</TotalMontoImpuesto>
+    </TotalDesgloseImpuesto>
+    <TotalImpuesto>11750.62</TotalImpuesto>
+    <MedioPago>
+      <TipoMedioPago>04</TipoMedioPago>
+      <TotalMedioPago>102140.02</TotalMedioPago>
+    </MedioPago>
+    <TotalComprobante>102140.02</TotalComprobante>
+  </ResumenFactura>
+  <Otros>
+    <OtroTexto>Cargado de FR - Fecha Entrega: 17-07-2026</OtroTexto>
+  </Otros>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-8b18b585-0076-4526-90ba-7e43d37be794"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" /><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" /><ds:Reference Id="Reference-fc10325d-85c3-451e-a973-b5e2a0138d6e" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>+XiCCZgM68b0XxkqtYInWZobUXANgP5xuF/s4ivNCms=</ds:DigestValue></ds:Reference><ds:Reference Id="ReferenceKeyInfo" URI="#KeyInfoId-Signature-8b18b585-0076-4526-90ba-7e43d37be794"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>b+1sCY8YzXBiEfq7x/5eWPbtczAxJI4LYe6bbK7Dj/4=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-Signature-8b18b585-0076-4526-90ba-7e43d37be794"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>38uOgWGo1POeuRF85nEdFuvI3NNqI6yENs1PguG/bnQ=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue-8b18b585-0076-4526-90ba-7e43d37be794">AuNLhxvTIFhR+Fsu2Gl1lExEt7BswFgwn8oSe976PzdsBuq4qgnDkPx5zq0vGIz7RMA0Yc44XeuYoxnkekRgrws55uJWsRF50ngRomp7ccWRpe4bdNPRq56QWyYBviLNh25hKoY4oHmghgWkvg4nwALzXSheN3c2IlDpSWpXdJAI0eC5p/Tj4oZzlW58MltzIHRzJudyIxU1kN9eqBVNW0auq3bg5vjakW3vkoQBBtLe8BHGjbnWzQfkBC7hmgc1QrN1wueJQxC91L3wCmBvzsEw5Gt8pE6HINkCD7VuwZAZqPa4y9e96fJjAgVSiQIR7K2K6hyCoVjdggzU+VrY0Q==</ds:SignatureValue><ds:KeyInfo Id="KeyInfoId-Signature-8b18b585-0076-4526-90ba-7e43d37be794"><ds:X509Data><ds:X509Certificate>MIIFNDCCAxygAwIBAgIGAYQKa8NDMA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYDVQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBFUlNPTkEgSlVSSURJQ0EwHhcNMjIxMDI0MTQzNTQ1WhcNMjYxMDIzMTQzNTQ1WjCBjjEZMBcGA1UEBRMQQ1BKLTMtMTAxLTEwOTE4MDELMAkGA1UEBhMCQ1IxGTAXBgNVBAoMEFBFUlNPTkEgSlVSSURJQ0ExDDAKBgNVBAsMA0NQSjE7MDkGA1UEAwwyRElTVFJJQlVJRE9SQSBJU0xFbkEgREUgQUxJTUVOVE9TIFNPQ0lFREFEIEFOT05JTUEwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCHPoPBwrOqd3Ocrh8sX0DOhgA0CuhYsMOgkrKH01npGWqk2ZF5DGKoXTPbJXdUYf9J41XULdCoUpwPC7c1BzZEraHoWxCtfKdpvP/u55elVVfmrj5+mBRta/oXNIOkWBPLaQs+pbmBGppH4Z7MFm9KY0dH04fBAk+RabsCT0gpZ8Opg0Z3J87BXtvwBvFlbeITPF3dgK6R4cW5HpVxrE3jdg5YOA934sGrxc4bVJRZudKZOiouAwz3SLSHBSQuXphP16oUEHg6sMSbzkPu22k008vbTIMHeYnydZhPqlywJZjPmuU9SvOW38oQvdQd8Is7HxHNsbEpdPi+s+rHiHiPAgMBAAGjgcowgccwHwYDVR0jBBgwFoAUO21X9dZ86Z4QAiBB470azM+zTpUwHQYDVR0OBBYEFEbTQ4l0BAJfKh+PQtQfMui27qiEMAsGA1UdDwQEAwIGwDATBgNVHSUEDDAKBggrBgEFBQcDBDBjBggrBgEFBQcBAQRXMFUwUwYIKwYBBQUHMAKGR2h0dHBzOi8vcGtpLmNvbXByb2JhbnRlc2VsZWN0cm9uaWNvcy5nby5jci9wcm9kL2ludGVybWVkaWF0ZS1wai1wZW0uY3J0MA0GCSqGSIb3DQEBCwUAA4ICAQAUMvs6KJ4Hdym3OsBXvvXznUEv0z4GFxGq3hJHS07kkp+58t6ioLB/xDp9jjgNsNgaZvo/ZK1M8NavNqGBxuQUH8S7r2eTi72VUpoSiy4U0iP9o9dmMaUcY960cKES9PsP3vDJ/mWXNcqqSxig8zs35t0/BYh/a/kjr1lxo8p0pJ9UdDfslMGXQsEeDCigLF0N4pekdOM56sYJVRsKHBWymTN/VOwLmgUx/FKeuNu/NoRKs+6fQO31GNH9rRZXyw3Rbinfs1IJZ5RkoDDn1ZlEu2p/QkSAXRkP3mYUEAY1YreDepaCJfZ53bsRQgQQUjgq7IZc5DROEaIM+rzD94Dkwzguii9L9vBL5MAUf+w1v+cLyKrGDg0aqyidSVcQuvUu/gMGpxVLbt/BwyJtBSJGQzd4vEfr6gDgdh2HTzUKFQYRhiXaU/ttFJW1qxicBlbklow1JDAtlNZ062y7OJjp2R2ex/BYZKEzGwdDa3aJXhsPOm3c8GB7VbhOJPw0a48W8AZxrlRZY8N5D/IkP2Ul4VYcYEMTS8V1lCHPk5efcOFLDB2vYwgE/v4yY2PvEj2YnuinS1/lwVEqZ3R+nqJrc1MPMF8VleXmzmvn26Z0/kWwf8zHrsA1xYsdJlhU+gl/Y02wgRB1hHqTEa9uurQYhHUf/C9ILycXvGIEkh16Aw==</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>hz6DwcKzqndznK4fLF9AzoYANAroWLDDoJKyh9NZ6RlqpNmReQxiqF0z2yV3VGH/SeNV1C3QqFKcDwu3NQc2RK2h6FsQrXynabz/7ueXpVVX5q4+fpgUbWv6FzSDpFgTy2kLPqW5gRqaR+GezBZvSmNHR9OHwQJPkWm7Ak9IKWfDqYNGdyfOwV7b8AbxZW3iEzxd3YCukeHFuR6VcaxN43YOWDgPd+LBq8XOG1SUWbnSmToqLgMM90i0hwUkLl6YT9eqFBB4OrDEm85D7ttpNNPL20yDB3mJ8nWYT6pcsCWYz5rlPUrzlt/KEL3UHfCLOx8RzbGxKXT4vrPqx4h4jw==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="XadesObjectId-a2dcb3e0-dbe6-4224-afae-e7d331b5fa58"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="QualifyingProperties-bd606e06-42dc-4a0d-aecc-efefe02654ce" Target="#Signature-8b18b585-0076-4526-90ba-7e43d37be794"><xades:SignedProperties Id="SignedProperties-Signature-8b18b585-0076-4526-90ba-7e43d37be794"><xades:SignedSignatureProperties><xades:SigningTime>2026-07-16T16:01:31</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>q6YnZ7TdsvtuU+tymYjDUhcU2aMAuebMQ25NHj3sN9o=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA PERSONA JURIDICA,OU=DGT,O=MINISTERIO DE HACIENDA,C=CR</ds:X509IssuerName><ds:X509SerialNumber>1666622145347</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://cdn.comprobanteselectronicos.go.cr/xml-schemas/Resoluci%C3%B3n_General_sobre_disposiciones_t%C3%A9cnicas_comprobantes_electr%C3%B3nicos_para_efectos_tributarios.pdf</xades:Identifier></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><ds:DigestValue>LoXZC86JwDL7zWC35qj7Q4AzrRQ=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></FacturaElectronica>

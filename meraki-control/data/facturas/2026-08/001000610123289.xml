@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><FacturaElectronica xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica.xsd"><Clave>50608042600310162292500100061010000023289185765597</Clave><ProveedorSistemas>3101665089</ProveedorSistemas><CodigoActividadEmisor>4773.0</CodigoActividadEmisor><CodigoActividadReceptor>5610.0</CodigoActividadReceptor><NumeroConsecutivo>00100061010000023289</NumeroConsecutivo><FechaEmision>2026-04-08T15:04:49-06:00</FechaEmision><Emisor><Nombre>3101622925 S.A</Nombre><Identificacion><Tipo>02</Tipo><Numero>3101622925</Numero></Identificacion><NombreComercial>3101622925 S.A</NombreComercial><Ubicacion><Provincia>3</Provincia><Canton>01</Canton><Distrito>04</Distrito><Barrio>Cartago</Barrio><OtrasSenas>300 o y 300 n Pequeo Mundo la</OtrasSenas></Ubicacion><Telefono><CodigoPais>506</CodigoPais><NumTelefono>25737212</NumTelefono></Telefono><CorreoElectronico>confirmafacturapetro@gmail.com</CorreoElectronico></Emisor><Receptor><Nombre>RESTAURANTE LUNA </Nombre><Identificacion><Tipo>02</Tipo><Numero>3101618820</Numero></Identificacion><NombreComercial>MERAKI FAMILY S.A.</NombreComercial><Ubicacion><Provincia>5</Provincia><Canton>02</Canton><Distrito>06</Distrito><Barrio>NOSARA 200 MTS BANCO COSTA RICA</Barrio><OtrasSenas>NOSARA 200 MTS BANCO COSTA RICA</OtrasSenas></Ubicacion><Telefono><CodigoPais>506</CodigoPais><NumTelefono>86608829</NumTelefono></Telefono><CorreoElectronico>merakifamilylimitada@gmail.com</CorreoElectronico></Receptor><CondicionVenta>02</CondicionVenta><PlazoCredito>8</PlazoCredito><DetalleServicio><LineaDetalle><NumeroLinea>1</NumeroLinea><CodigoCABYS>3342900000000</CodigoCABYS><CodigoComercial><Tipo>04</Tipo><Codigo>LTS-GRANEL</Codigo></CodigoComercial><Cantidad>1262.000</Cantidad><UnidadMedida>L</UnidadMedida><TipoTransaccion>01</TipoTransaccion><UnidadMedidaComercial>L</UnidadMedidaComercial><Detalle>LITROS DE GAS-GRANEL</Detalle><PrecioUnitario>185.21000</PrecioUnitario><MontoTotal>233735.02000</MontoTotal><SubTotal>233735.02000</SubTotal><BaseImponible>233735.02000</BaseImponible><Impuesto><Codigo>01</Codigo><CodigoTarifaIVA>10</CodigoTarifaIVA><Tarifa>0.00</Tarifa><Monto>0.00000</Monto></Impuesto><ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica><ImpuestoNeto>0.00000</ImpuestoNeto><MontoTotalLinea>233735.02000</MontoTotalLinea></LineaDetalle></DetalleServicio><ResumenFactura><CodigoTipoMoneda><CodigoMoneda>CRC</CodigoMoneda><TipoCambio>1</TipoCambio></CodigoTipoMoneda><TotalServGravados>0.00000</TotalServGravados><TotalServExentos>0.00000</TotalServExentos><TotalServExonerado>0.00000</TotalServExonerado><TotalMercanciasGravadas>0.00000</TotalMercanciasGravadas><TotalMercanciasExentas>233735.02000</TotalMercanciasExentas><TotalMercExonerada>0.00000</TotalMercExonerada><TotalGravado>0.00000</TotalGravado><TotalExento>233735.02000</TotalExento><TotalExonerado>0.00000</TotalExonerado><TotalVenta>233735.02000</TotalVenta><TotalDescuentos>0.00000</TotalDescuentos><TotalVentaNeta>233735.02000</TotalVentaNeta><TotalDesgloseImpuesto><Codigo>01</Codigo><CodigoTarifaIVA>10</CodigoTarifaIVA><TotalMontoImpuesto>0.00000</TotalMontoImpuesto></TotalDesgloseImpuesto><TotalImpuesto>0.00000</TotalImpuesto><TotalImpAsumEmisorFabrica>0.00000</TotalImpAsumEmisorFabrica><TotalComprobante>233735.02000</TotalComprobante></ResumenFactura><Otros/><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="xmldsig-8d016203-95e5-4d89-ae53-387708458694">
+<ds:SignedInfo>
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+<ds:Reference Id="xmldsig-8d016203-95e5-4d89-ae53-387708458694-ref0" URI="">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>aeoVjxhoF4GiFwpolGFvMNARLeySCaYIqNKeDOWXdog=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xmldsig-8d016203-95e5-4d89-ae53-387708458694-signedprops">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>jqcTrcaMo1Z8KsElXot9X02sR+eVNj4rLqya65NuQVo=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="xmldsig-8d016203-95e5-4d89-ae53-387708458694-sigvalue">
+AYJRDw1Qm/PTpwp91FDzzU0wETXB0AxrXlxkl1u6w0ifGbdLCVmDw2sC/Wwh2F4lfQanQMbP3Blj&#13;
+JV8Rwq1vU3rrretgM1liHZvY45QhAFfmkdzWZUzEi6R9zwBhH0HfTcz+uPq3W13Tnu3MejRP9n5F&#13;
+gjj2Gtd5H21uQMrGH0aMP5mBwRSm256/iqJtfNiNdxvGHJzWgJ5sa7u8Z3VvrCZYmCFeJGQIq9HR&#13;
+JQN9+uji8pcmxOTID8ijqZtfY5ayR2eCeQWyKuaP2Ec9vYfykmfw00s8nBb7iXjfT8RuxjahFNbN&#13;
+6yp8i/475uxBuKB137hVk6+pPTqQHktZI3NmoA==
+</ds:SignatureValue>
+<ds:KeyInfo>
+<ds:X509Data>
+<ds:X509Certificate>
+MIIFHjCCAwagAwIBAgIGAZkGJgQWMA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYD&#13;
+VQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBF&#13;
+UlNPTkEgSlVSSURJQ0EwHhcNMjUwOTAxMTYzOTM4WhcNMjkwODMxMTYzOTM4WjB5MRkwFwYDVQQF&#13;
+ExBDUEotMy0xMDEtNjIyOTI1MQswCQYDVQQGEwJDUjEZMBcGA1UECgwQUEVSU09OQSBKVVJJRElD&#13;
+QTEMMAoGA1UECwwDQ1BKMSYwJAYDVQQDDB0zLTEwMS02MjI5MjUgU09DSUVEQUQgQU5PTklNQTCC&#13;
+ASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMLUAU6MVJQN18ZLYnNIwTHmmzMkYEfZZZ1f&#13;
+v2GM7U5N8MvNFSHEKMuq0ncY0FdyvmieL7vVzeRIZInEiRSv40VNvDlxyw+Ts2Pntcn1ua6eQ6qQ&#13;
+tBdMfrf+RCauzx77llYci9OOPNkNZsoTLKm2jP4tX3o15hglncsD9GidFGmbFO04reYZKgsVFwHf&#13;
+Vt2MvRUU/5NGjK59aNFcfAIkbsxN30rfGKaZQYYyne973/+wZzo5hKrBd7kKLpeuAL6xQNImCgxy&#13;
+O7dOqhZU5iE4aISiwfCgNkEgGcnMPxZMrJlew8F56auykn3DmTscSzMVNmdt4Qhdq/Rzekspkj6X&#13;
+CwkCAwEAAaOByjCBxzAfBgNVHSMEGDAWgBQ7bVf11nzpnhACIEHjvRrMz7NOlTAdBgNVHQ4EFgQU&#13;
+BjQjduQgq/G0BuX9gjwOGmjVHy0wCwYDVR0PBAQDAgbAMBMGA1UdJQQMMAoGCCsGAQUFBwMEMGMG&#13;
+CCsGAQUFBwEBBFcwVTBTBggrBgEFBQcwAoZHaHR0cHM6Ly9wa2kuY29tcHJvYmFudGVzZWxlY3Ry&#13;
+b25pY29zLmdvLmNyL3Byb2QvaW50ZXJtZWRpYXRlLXBqLXBlbS5jcnQwDQYJKoZIhvcNAQELBQAD&#13;
+ggIBAE/x3GHAC0F68lnjmvBq1vf8ebnuUIqBfoixC6PkskTk68PwGThKT2YOF/MU6/5SLk0BaTvr&#13;
+vR7bF1X5SaopJNHCvdhoMGRHNVqX7/69BrF+9Q0iBjNrHxi3O2v/gUSdp0fni6+gZH8FpOY6FNFC&#13;
+jSUsInaH0DeDspC8EQkqd96HnVJ8WrdBmsgRIjDSz49wvM3cQsc4GZmL4Y+KAG/G/K7aD2y/1Enw&#13;
+B/+ED9z/UaGC0/YE2jS+2N2GVhMH+EMrGzDhtj+SAKZJeFbK2uEk+iBY8AtOO2LK/1+3yy73rSa5&#13;
+bs33y7GIBsLuvsgGaRLVDLUvRYm5RM9TlYL1rIthBndzDWmO/HieE6FJ2H03TJ0r/8yIF6X50RUa&#13;
+XahwTUdAmPujp1Uksd4Vr78aufrQ9oZ1hcxZcJUHfd7QHBtcyLCj8ZQmA8MT3LPdELb70i49xkAH&#13;
+ZXBvOqIkGBbEQvnxGIG5n1GumMC6D/URzrzhgAAwnMh880OjhfhiyzMAGaUq5KFQFlh7rsZhM64N&#13;
+Xfsse6PCXVAmSZ43QJHFfdZ+dNyr8mvlimOZm8hYpiLX/xy995pZGviiSVlpXQEdD+PTjPC1u9HM&#13;
+U0+ngxgxCr+XaavzlH7Hd8Uok7IYfWCwtchLYvWEdewm4Cx11t+3RI+1at4iqY3DVHmWeN05rkEi&#13;
+Tw6F
+</ds:X509Certificate>
+</ds:X509Data>
+</ds:KeyInfo>
+<ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xades141="http://uri.etsi.org/01903/v1.4.1#" Target="#xmldsig-8d016203-95e5-4d89-ae53-387708458694"><xades:SignedProperties Id="xmldsig-8d016203-95e5-4d89-ae53-387708458694-signedprops"><xades:SignedSignatureProperties><xades:SigningTime>2026-04-08T16:05:53.439-05:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>GBVIHiGOffBYCoJmF1/aLU1P0mzLjz3VuGGxV6uk8vI=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>cn=CA PERSONA JURIDICA,ou=DGT,o=MINISTERIO DE HACIENDA,c=CR</ds:X509IssuerName><ds:X509SerialNumber>1756744778774</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://cdn.comprobanteselectronicos.go.cr/xml-schemas/Resoluci%C3%B3n_General_sobre_disposiciones_t%C3%A9cnicas_comprobantes_electr%C3%B3nicos_para_efectos_tributarios.pdf</xades:Identifier></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>nVCrSwvK8dNnGHwfLYAzNAQMe5FCQjMl2Pf+Nfu5IBw=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object>
+</ds:Signature></FacturaElectronica>

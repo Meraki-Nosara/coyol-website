@@ -1,149 +1,102 @@
 {
-  "lastUpdated": "2026-06-07",
-  "period": "2026-01 to 2026-06",
+  "lastUpdated": "2026-08-12",
+  "period": "2026-01 to 2026-08",
   "exchangeRate": 505,
   "revenue": {
-    "totalCRC": 1324189082,
-    "totalUSD": 2622157,
+    "totalCRC": 1609780562,
+    "totalUSD": 3187684,
     "byRestaurant": {
       "laluna": {
-        "crc": 838020137,
-        "usd": 1659446,
-        "share": 63
+        "crc": 1046357365,
+        "share": 65
       },
       "coyol": {
-        "crc": 420889817,
-        "usd": 833445,
-        "share": 32
+        "crc": 450738557,
+        "share": 28
       },
       "esh": {
-        "crc": 65279129,
-        "usd": 129266,
-        "share": 5
+        "crc": 112684640,
+        "share": 7
       }
-    }
+    },
+    "source": "monthly.json + lafise_estimates"
   },
-  "operatingExpenses": {
+  "expenses": {
     "gastos": {
-      "crc": 437065539,
-      "usd": 865476,
-      "label": "Suppliers & Costs"
+      "crc": 918783049,
+      "usd": 1819372,
+      "label": "Suppliers & Costs",
+      "source": "proveedores_excel + facturas_xml"
     },
-    "mdo": {
-      "crc": 143730897,
-      "usd": 284616,
-      "label": "Payroll"
+    "cardDeductions": {
+      "comision": {
+        "crc": 7167488,
+        "pct": 1.95,
+        "label": "Card Commission"
+      },
+      "ivaRetention": {
+        "crc": 19517584,
+        "pct": 2.0,
+        "label": "IVA Retention"
+      },
+      "rentaRetention": {
+        "crc": 6469080,
+        "pct": 2.0,
+        "label": "Renta Retention"
+      },
+      "totalCRC": 33154152,
+      "source": "lafise_tcr_reports"
     },
-    "taxes": {
-      "crc": 70000000,
-      "usd": 138614,
-      "label": "CCSS, INS, Renta"
-    },
-    "other": {
-      "crc": 80841251,
-      "usd": 160082,
-      "label": "Bank fees, misc"
-    },
-    "totalCRC": 731637687,
-    "totalUSD": 1448788
+    "totalCRC": 951937201,
+    "totalUSD": 1885024
   },
   "operatingProfit": {
-    "crc": 592551395,
-    "usd": 1173369,
-    "margin": 44.8
+    "grossCRC": 690997513,
+    "grossMargin": 42.9,
+    "netCRC": 657843361,
+    "netMargin": 40.9,
+    "netUSD": 1302660
   },
-  "nonOperating": {
-    "angelinaEquipment": {
-      "crc": 88390317,
-      "usd": 175030,
-      "label": "Equipment repayment to Angelina",
-      "note": "Payback for equipment purchased before Meraki"
-    },
-    "ranchoLoan": {
-      "crc": 49843500,
-      "usd": 98700,
-      "label": "Loan to Rancho Mar Azul",
-      "note": "Intercompany loan - development company"
-    },
-    "totalCRC": 138233817,
-    "totalUSD": 273730
+  "cardSalesByMonth": {
+    "2026-04": 62041540,
+    "2026-05": 91167736,
+    "2026-06": 92852308,
+    "2026-07": 101481150,
+    "2026-08": 20020748
   },
-  "netCashGenerated": {
-    "crc": 454317578,
-    "usd": 899639
-  },
-  "cashPosition": {
-    "asOf": "2026-05-14",
-    "accounts": {
-      "lafiseCRC": {
-        "crc": 327000000,
-        "usd": 647525
-      },
-      "lafiseUSD": {
-        "usd": 34000
-      },
-      "bcrCRC": {
-        "crc": 30000000,
-        "usd": 59406
-      },
-      "bcrUSD": {
-        "usd": 1000
-      }
+  "cardDeductionsByMonth": {
+    "2026-04": {
+      "comision": 1209810,
+      "iva": 3294401,
+      "renta": 1091926
     },
-    "totalCash": {
-      "crc": 357000000,
-      "usd": 741931
+    "2026-05": {
+      "comision": 1777771,
+      "iva": 4840995,
+      "renta": 1604540
     },
-    "loansReceivable": {
-      "ranchoMarAzul": {
-        "usd": 98700,
-        "note": "Owed by development company"
-      }
+    "2026-06": {
+      "comision": 1810620,
+      "iva": 4930448,
+      "renta": 1634191
     },
-    "totalAssets": {
-      "usd": 840631
+    "2026-07": {
+      "comision": 1978882,
+      "iva": 5388641,
+      "renta": 1786060
+    },
+    "2026-08": {
+      "comision": 390405,
+      "iva": 1063100,
+      "renta": 352363
     }
   },
-  "whereMoneyWent": [
-    {
-      "category": "Suppliers & Operating Costs",
-      "usd": 865476,
-      "pct": 34
-    },
-    {
-      "category": "Payroll (MDO)",
-      "usd": 284616,
-      "pct": 11
-    },
-    {
-      "category": "Taxes (CCSS/INS/Renta)",
-      "usd": 138614,
-      "pct": 5
-    },
-    {
-      "category": "Equipment Repayment (Angelina)",
-      "usd": 175030,
-      "pct": 7
-    },
-    {
-      "category": "Loan to Rancho Mar Azul",
-      "usd": 98700,
-      "pct": 4
-    },
-    {
-      "category": "Other Operations",
-      "usd": 160082,
-      "pct": 6
-    },
-    {
-      "category": "Retained in Bank",
-      "usd": 741931,
-      "pct": 29
-    },
-    {
-      "category": "Receivable (Rancho)",
-      "usd": 98700,
-      "pct": 4
-    }
-  ]
+  "dataQuality": {
+    "salesJanApr": "complete",
+    "salesMayAug": "estimated_from_lafise",
+    "gastosJanApr": "complete_from_excel",
+    "gastosMayAug": "partial_from_xml",
+    "cardDataAprAug": "complete_from_lafise",
+    "cardDataJanMar": "missing"
+  }
 }

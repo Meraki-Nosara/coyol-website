@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<FacturaElectronica xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica https://atv.hacienda.go.cr/ATV/ComprobanteElectronico/docs/esquemas/2024/v4.4/FacturaElectronica_V4.4.xsd">
+    <Clave>50602052600310284810200100001010000000341100001834</Clave>
+	<ProveedorSistemas>3101755594</ProveedorSistemas>
+    <CodigoActividadEmisor>8010.0</CodigoActividadEmisor>
+			<CodigoActividadReceptor>5610.0</CodigoActividadReceptor>
+    <NumeroConsecutivo>00100001010000000341</NumeroConsecutivo>
+    <FechaEmision>2026-05-02T12:11:02</FechaEmision>
+		<Emisor>
+        <Nombre>S C I Seguridad y Comunicaciones Integrales Sociedad de Responsabilidad Limitada </Nombre>
+        <Identificacion>
+            <Tipo>02</Tipo>
+            <Numero>3102848102</Numero>
+        </Identificacion>
+		
+        
+        			<Ubicacion>
+				<Provincia>2</Provincia>
+				<Canton>02</Canton>
+				<Distrito>03</Distrito>
+				<OtrasSenas>125 metros Oeste de la entrada Principal de Los Jardines</OtrasSenas>
+			</Ubicacion>
+		
+        		<Telefono>
+            <CodigoPais>506</CodigoPais>
+            <NumTelefono>84105707</NumTelefono>
+        </Telefono>
+		
+        			<CorreoElectronico>facturacionsci25@gmail.com</CorreoElectronico>		
+    </Emisor>
+    	<Receptor>
+        <Nombre>MERAKI FAMILY LIMITADA</Nombre>
+				<Identificacion>
+            <Tipo>02</Tipo>
+            <Numero>3102618820</Numero>
+        </Identificacion>
+        
+				<Ubicacion>
+            <Provincia>5</Provincia>
+            <Canton>02</Canton>
+            <Distrito>06</Distrito>
+            <OtrasSenas>200 metros de Banco de Costa Rica</OtrasSenas>
+        </Ubicacion>
+		
+        		<Telefono>
+            <CodigoPais>506</CodigoPais>
+            <NumTelefono>84197595</NumTelefono>
+        </Telefono>
+		
+				<CorreoElectronico>merakifamilylimitada@gmail.com</CorreoElectronico>
+    </Receptor>
+    <CondicionVenta>01</CondicionVenta>
+	
+	    
+			    <DetalleServicio>				<LineaDetalle>
+					<NumeroLinea>1</NumeroLinea>
+					
+					<CodigoCABYS>8525000000000</CodigoCABYS>					
+					<CodigoComercial>
+						<Tipo>01</Tipo> 
+						<Codigo>01</Codigo>
+					</CodigoComercial>
+					<Cantidad>1.000</Cantidad>
+					<UnidadMedida>Sp</UnidadMedida>
+										
+					<Detalle>Servicio de seguridad privada</Detalle>
+					
+					
+					<PrecioUnitario>1472.00000</PrecioUnitario>
+					<MontoTotal>1472.00000</MontoTotal>
+					
+					<SubTotal>1472.00000</SubTotal>
+					
+									<BaseImponible>1472</BaseImponible>
+										<Impuesto>
+						<Codigo>01</Codigo>
+						
+						<CodigoTarifaIVA>08</CodigoTarifaIVA>
+						<Tarifa>13</Tarifa>
+						<Monto>191.36000</Monto>
+						
+						
+					</Impuesto>					<ImpuestoAsumidoEmisorFabrica>0</ImpuestoAsumidoEmisorFabrica>					<ImpuestoNeto>191.36</ImpuestoNeto>
+					<MontoTotalLinea>1663.36</MontoTotalLinea>
+				</LineaDetalle>		    </DetalleServicio>
+	
+			    <ResumenFactura>
+				<CodigoTipoMoneda>
+					<CodigoMoneda>USD</CodigoMoneda>
+					<TipoCambio>457.78000</TipoCambio>
+				</CodigoTipoMoneda>	
+				<TotalServGravados>1472.00000</TotalServGravados>
+				<TotalServExentos>0.00000</TotalServExentos>
+				<TotalServExonerado>0.00000</TotalServExonerado>
+				<TotalServNoSujeto>0.00000</TotalServNoSujeto>
+				<TotalMercanciasGravadas>0.00000</TotalMercanciasGravadas>
+				<TotalMercanciasExentas>0.00000</TotalMercanciasExentas>
+				<TotalMercExonerada>0.00000</TotalMercExonerada>
+				<TotalMercNoSujeta>0.00000</TotalMercNoSujeta>
+				<TotalGravado>1472.00000</TotalGravado>
+				<TotalExento>0.00000</TotalExento>
+				<TotalExonerado>0.00000</TotalExonerado>
+				<TotalNoSujeto>0.00000</TotalNoSujeto>
+				<TotalVenta>1472.00000</TotalVenta>
+				<TotalDescuentos>0.00000</TotalDescuentos>
+				<TotalVentaNeta>1472.00000</TotalVentaNeta>
+				<TotalDesgloseImpuesto><Codigo>01</Codigo><CodigoTarifaIVA>08</CodigoTarifaIVA><TotalMontoImpuesto>191.36000</TotalMontoImpuesto></TotalDesgloseImpuesto>				
+				<TotalImpuesto>191.36000</TotalImpuesto>
+				<TotalImpAsumEmisorFabrica>0.00000</TotalImpAsumEmisorFabrica>
+				<TotalIVADevuelto>0.00000</TotalIVADevuelto>
+				
+				<MedioPago><TipoMedioPago>04</TipoMedioPago><TotalMedioPago>1663.36000</TotalMedioPago></MedioPago>
+				<TotalComprobante>1663.36000</TotalComprobante>
+			</ResumenFactura>	
+		
+			<Otros>
+                        <OtroTexto>Seguridad Privada.
+Restaurante La Luna. Horario de las 17 00 a las 06 00 horas.</OtroTexto>
+			
+						
+        </Otros>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-ddb543c7-ea0c-4b00-95b9-d4bfa2b4e411"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" /><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" /><ds:Reference Id="Reference-0e79b719-635c-476f-a59e-8ac3ba14365d" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>UhN5kO6vOFfu7oAA24nYRMYfSmWYhVcFMPrZfoQUX/A=</ds:DigestValue></ds:Reference><ds:Reference Id="ReferenceKeyInfo" URI="#KeyInfoId-Signature-ddb543c7-ea0c-4b00-95b9-d4bfa2b4e411"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>OXI7lOQ9PUaWhOgRs7HZ3S2c0X7ojqStzrQEVsm6zlI=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-Signature-ddb543c7-ea0c-4b00-95b9-d4bfa2b4e411"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>J2r6YjwqnGu5PVK4cxiwxxZjB3B1RwRR9FKbstWYfSI=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue-ddb543c7-ea0c-4b00-95b9-d4bfa2b4e411">wms9/9gprV7BHrpX8dE+zO3D5OGSZyHJXkpj97nCdgJ6BVhYCUW/2pCUkd5GaaLkI2MPstKYp7qRb/GUBE/Ibas6B+pcYaGcphq47FWxpRovwrGVuWWFFf2OuBT0xcMQFDd/K9UFhCRYM1uLGD9WcAVySjpO0AO/7k86h5xYPb2819s8SsPkFcrN+71eWSyNuMDhmn+7fLLVT0CRHWAsLVbEUkVYTs74vFJjT79jAuC1sPZG5XVhXKkZWA7jqDYRzDd1ExHzc77dWOLrwIVi8tznldO3nYp+K9/1CYj6x9xuHVZs8gsYTGqFTygqrZ8yoQ3IOznf6u02cJdYmq9bBA==</ds:SignatureValue><ds:KeyInfo Id="KeyInfoId-Signature-ddb543c7-ea0c-4b00-95b9-d4bfa2b4e411"><ds:X509Data><ds:X509Certificate>MIIFUzCCAzugAwIBAgIGAYScNLkTMA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYDVQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBFUlNPTkEgSlVSSURJQ0EwHhcNMjIxMTIxMjIwMDExWhcNMjYxMTIwMjIwMDExWjCBrTEZMBcGA1UEBRMQQ1BKLTMtMTAyLTg0ODEwMjELMAkGA1UEBhMCQ1IxGTAXBgNVBAoMEFBFUlNPTkEgSlVSSURJQ0ExDDAKBgNVBAsMA0NQSjFaMFgGA1UEAwxRUyBDIEkgU0VHVVJJREFEIFkgQ09NVU5JQ0FDSU9ORVMgSU5URVJHUkFMRVMgU09DSUVEQUQgREUgUkVTUE9OU0FCSUxJREFEIExJTUlUQURBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6FFz413SsOnesbcC8f5i6CYxyWRumVyLPCP3uggZJhxrmcMyvS6aFubzYMscfNOdnIASodghLo0T4FeidMefZUEvAW7omZFO6MS48juHwxXK1jVP7i7qysPW6IdYcSPxTnWyBSxv6b+e3SAoUtCsBSMGqriJtMIXJ2paW6klGaClrbTdNuWuxCjoIFC1FxRJm/T3lzEt8CfJKmaJEDbpo17EZIFWM95zNaQqyDKKm02GpyPPg/5D6wD7hFytARGFcJCOD4O8KRyaNj5cMooYcipQyh+6IFqp0RPrW5HQoHtAqnsW43wNVLzsRim3eAbQIk46CHbpti9aCZgrDEjwywIDAQABo4HKMIHHMB8GA1UdIwQYMBaAFDttV/XWfOmeEAIgQeO9GszPs06VMB0GA1UdDgQWBBTtouPdz0RJ5xw7QQLn3yNh/2kvkTALBgNVHQ8EBAMCBsAwEwYDVR0lBAwwCgYIKwYBBQUHAwQwYwYIKwYBBQUHAQEEVzBVMFMGCCsGAQUFBzAChkdodHRwczovL3BraS5jb21wcm9iYW50ZXNlbGVjdHJvbmljb3MuZ28uY3IvcHJvZC9pbnRlcm1lZGlhdGUtcGotcGVtLmNydDANBgkqhkiG9w0BAQsFAAOCAgEAfHNzDCLUrvIfqzWbnFm7Rl5H0FrtXTKc+J1em0JzQfkir4dCg2xB4SdWmA/DU43oWgcgyuk9Rwnvc+pvW9v4YwxLV+qEywr7FbitibVfwxndgo9EjVn0oclHwkUZEbgiC/ZVnobSTIFjGxeg+vQ3lWiQWwz8kfurXD7x+D5WiKvjBNnFGn96WtI1R9rMvEK1j+DnumjUhnPL5ZYf+7KeC0sN/Zk7SbKJcpWIABiHyRLEiz5B5TZ04W8AMfhjT+BmTli/XwNZBQh0oJE/K1KZt32riGh2VCXask84EVq/1tsR6xztsrt3/Ov6CCK8+s7FP8swlxA+ABG2wJupm9HAB7dykyJ435vi7iEkbjeS5M2b6O5dUmxZdoHDuPqf6JDzTOjBMrDTh+N8O8wHd6/WeuzzUfyJfNayuTfyBm248BYdWq6rnLSPmVdZgIIgAkhKmn7ZcI3FRB+WD2AJhzXNDHJLJDY+1ouvHRXivmVPAOnTDxQtCV222puJCZoQ5+FvzsGcA6Bn1S66vmcelprx11ugGXfSxVXJHehf9crDh1MrrErK3Vu6kM0VRRJFFVrwF8OayZd1zgZZyYy1VB6gvviGSNYSB3v7h50joL/ZLsEozBITbzbSO2DojDUGbhJQ2kxXKvrYtbNA0hjuSB09bixpMdW0BAAkzDGyT6kIjpk=</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>6FFz413SsOnesbcC8f5i6CYxyWRumVyLPCP3uggZJhxrmcMyvS6aFubzYMscfNOdnIASodghLo0T4FeidMefZUEvAW7omZFO6MS48juHwxXK1jVP7i7qysPW6IdYcSPxTnWyBSxv6b+e3SAoUtCsBSMGqriJtMIXJ2paW6klGaClrbTdNuWuxCjoIFC1FxRJm/T3lzEt8CfJKmaJEDbpo17EZIFWM95zNaQqyDKKm02GpyPPg/5D6wD7hFytARGFcJCOD4O8KRyaNj5cMooYcipQyh+6IFqp0RPrW5HQoHtAqnsW43wNVLzsRim3eAbQIk46CHbpti9aCZgrDEjwyw==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="XadesObjectId-43208d10-650c-4f42-af80-fc889962c9ac"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="QualifyingProperties-012b8df6-b93e-4867-9901-83447ffce4bf" Target="#Signature-ddb543c7-ea0c-4b00-95b9-d4bfa2b4e411"><xades:SignedProperties Id="SignedProperties-Signature-ddb543c7-ea0c-4b00-95b9-d4bfa2b4e411"><xades:SignedSignatureProperties><xades:SigningTime>2026-05-02T12:11:02-06:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>eUH+S9Ri91W9vh+p8vJOHel5mgRl+Mh4j4KP2ty/xHk=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA PERSONA JURIDICA, OU=DGT, O=MINISTERIO DE HACIENDA, C=CR</ds:X509IssuerName><ds:X509SerialNumber>1669068011795</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://cdn.comprobanteselectronicos.go.cr/xml-schemas/Resoluci%C3%B3n_General_sobre_disposiciones_t%C3%A9cnicas_comprobantes_electr%C3%B3nicos_para_efectos_tributarios.pdf</xades:Identifier><xades:Description /></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>DWxin1xWOeI8OuWQXazh4VjLWAaCLAA954em7DMh0h8=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-0e79b719-635c-476f-a59e-8ac3ba14365d"><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>UTF-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></FacturaElectronica>

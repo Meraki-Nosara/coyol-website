@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaElectronica xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica.xsd">
+  <Clave>50629072600310287286400100001010000000961195875997</Clave>
+  <ProveedorSistemas>3101225890</ProveedorSistemas>
+  <CodigoActividadEmisor>4630.4</CodigoActividadEmisor>
+  <NumeroConsecutivo>00100001010000000961</NumeroConsecutivo>
+  <FechaEmision>2026-07-29T13:45:58-06:00</FechaEmision>
+  <Emisor>
+    <Nombre>IMPORTACION Y DISTRIBUCION DE VINOS</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3102872864</Numero>
+    </Identificacion>
+    <NombreComercial>Swill Wines CR SRL</NombreComercial>
+    <Ubicacion>
+      <Provincia>5</Provincia>
+      <Canton>02</Canton>
+      <Distrito>06</Distrito>
+      <Barrio>Esperanza Sur</Barrio>
+      <OtrasSenas>50 metros de tennis centro "506" en el antiguo Dos Lorenas</OtrasSenas>
+    </Ubicacion>
+    <Telefono>
+      <CodigoPais>31</CodigoPais>
+      <NumTelefono>61803551</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>renz@swillwines.com</CorreoElectronico>
+  </Emisor>
+  <Receptor>
+    <Nombre>Meraki Family LTDA</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3102618820</Numero>
+    </Identificacion>
+    <CorreoElectronico>merakifamilylimitada@gmail.com</CorreoElectronico>
+  </Receptor>
+  <CondicionVenta>02</CondicionVenta>
+  <PlazoCredito>7</PlazoCredito>
+  <DetalleServicio>
+    <LineaDetalle>
+      <NumeroLinea>1</NumeroLinea>
+      <CodigoCABYS>2413100009900</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>01</Tipo>
+        <Codigo>MADES</Codigo>
+      </CodigoComercial>
+      <Cantidad>6.00</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <Detalle>mezcal MADRE ESPADIN</Detalle>
+      <PrecioUnitario>49.00</PrecioUnitario>
+      <MontoTotal>294.00</MontoTotal>
+      <SubTotal>294.00</SubTotal>
+      <BaseImponible>294.00</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>38.22</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>38.22</ImpuestoNeto>
+      <MontoTotalLinea>332.22</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>2</NumeroLinea>
+      <CodigoCABYS>2421200000100</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>01</Tipo>
+        <Codigo>BARB</Codigo>
+      </CodigoComercial>
+      <Cantidad>6.00</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <Detalle>vino tinto LOS BARBAROS</Detalle>
+      <PrecioUnitario>31.25</PrecioUnitario>
+      <MontoTotal>187.50</MontoTotal>
+      <SubTotal>187.50</SubTotal>
+      <BaseImponible>187.50</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>24.38</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>24.38</ImpuestoNeto>
+      <MontoTotalLinea>211.88</MontoTotalLinea>
+    </LineaDetalle>
+  </DetalleServicio>
+  <ResumenFactura>
+    <CodigoTipoMoneda>
+      <CodigoMoneda>USD</CodigoMoneda>
+      <TipoCambio>454.55</TipoCambio>
+    </CodigoTipoMoneda>
+    <TotalServGravados>0</TotalServGravados>
+    <TotalServExentos>0</TotalServExentos>
+    <TotalServExonerado>0</TotalServExonerado>
+    <TotalServNoSujeto>0</TotalServNoSujeto>
+    <TotalMercanciasGravadas>481.50</TotalMercanciasGravadas>
+    <TotalMercanciasExentas>0</TotalMercanciasExentas>
+    <TotalMercExonerada>0</TotalMercExonerada>
+    <TotalMercNoSujeta>0</TotalMercNoSujeta>
+    <TotalGravado>481.50</TotalGravado>
+    <TotalExento>0</TotalExento>
+    <TotalExonerado>0</TotalExonerado>
+    <TotalVenta>481.50</TotalVenta>
+    <TotalDescuentos>0</TotalDescuentos>
+    <TotalVentaNeta>481.50</TotalVentaNeta>
+    <TotalDesgloseImpuesto>
+      <Codigo>01</Codigo>
+      <CodigoTarifaIVA>08</CodigoTarifaIVA>
+      <TotalMontoImpuesto>62.60</TotalMontoImpuesto>
+    </TotalDesgloseImpuesto>
+    <TotalImpuesto>62.60</TotalImpuesto>
+    <TotalImpAsumEmisorFabrica>0</TotalImpAsumEmisorFabrica>
+    <TotalIVADevuelto>0</TotalIVADevuelto>
+    <MedioPago>
+      <TipoMedioPago>04</TipoMedioPago>
+    </MedioPago>
+    <TotalComprobante>544.10</TotalComprobante>
+  </ResumenFactura>
+  <Otros>
+    <OtroTexto>Swill Wines CR SRL
+Cédula Jurídica 3-102-872864
+info@swillwines.com
+LAFISE Dólares: CR68011400007455550776
+
+Recibido conforme por ..................................... firma</OtroTexto>
+  </Otros>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-f2d1ee55-c4a0-4583-b19b-238b0a5d0cab"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" /><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" /><ds:Reference Id="Reference-9eb44d3a-a19a-45ca-8669-ac15e1066919" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>pKMbqrkevCtsYIBMA8RyDFJ+VUtaKFWSSmdGkKoxr6Y=</ds:DigestValue></ds:Reference><ds:Reference Id="ReferenceKeyInfo" URI="#KeyInfoId-Signature-f2d1ee55-c4a0-4583-b19b-238b0a5d0cab"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>YJHnJxN/M/j4ivRozQpNK213nv52i7Tu62/yKxjO9L0=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-Signature-f2d1ee55-c4a0-4583-b19b-238b0a5d0cab"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>4f+UZZtYe2Ea5w4xStwD6LYFV3m8Mw90/66W/+YZwGI=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue-f2d1ee55-c4a0-4583-b19b-238b0a5d0cab">ipMPuWG+c1qLc6ZCt55t/vKdoM/m0HKTcj6pNhlPcixGEsc3kN4MpA2JtVRwJ2OaEPD1qczauhmvyfy4qsF8y3JeC/cwAlGZVFztnAPwCGAHffL9Y9Z/ufpw0VT2ib3gYB/zRwv1BLBRke3x8KtgNBlJIFnQ547C+mXcpQ6uEEnTVILgDtDavuy3wIDYt+BcHwCpayEEvckZMe3cCw0so5Pip/Sx4kwth6RSsgGhIQHkfhxRtu8J6KVWehrnjygvSlbePYEDzVjGArM7ntHvoU/iq7JMuZdgpsAqedYoy3Yy/7nLPTOIrL7A8VyVjwpJBL8+NiNPJsyHRxLIa5sXEA==</ds:SignatureValue><ds:KeyInfo Id="KeyInfoId-Signature-f2d1ee55-c4a0-4583-b19b-238b0a5d0cab"><ds:X509Data><ds:X509Certificate>MIIFNTCCAx2gAwIBAgIGAYi2pZNaMA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYDVQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBFUlNPTkEgSlVSSURJQ0EwHhcNMjMwNjEzMjEyNDQ0WhcNMjcwNjEyMjEyNDQ0WjCBjzEZMBcGA1UEBRMQQ1BKLTMtMTAyLTg3Mjg2NDELMAkGA1UEBhMCQ1IxGTAXBgNVBAoMEFBFUlNPTkEgSlVSSURJQ0ExDDAKBgNVBAsMA0NQSjE8MDoGA1UEAwwzU1dJTEwgV0lORVMgQ1IgU09DSUVEQUQgREUgUkVTUE9OU0FCSUxJREFEIExJTUlUQURBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAns/hHfYw87eAvRKaP2dtVcL9onTfDnBSGArWfxf8KQTqid/GhGmeYJA7Um4RO7ha2tf5R6n18IBXsk8MWGzu+LzBOJTBaaqEEhknJxPeTu8KBETTzwcVUf/IcaEq+NByjxrG7qlAuUC4Rgv195CGXI+pKTNnK1/bq0w7Un8Z7LaOM+3hxtSxjjV8vF0vl00OsKZUEE1aV5ATkZMOIoIJDDhgyf4RZ1tyS3KFdYHW9fGobX6Gocd8OdazxdF15RJy40kIoBIzo5JjuaHMA+Y1UMGp1UVFpXxS49+sN4Qvn/moCOxdiSz2i2MnNHHsDhm+E+dq6fq+WZXARgJnF8iCTQIDAQABo4HKMIHHMB8GA1UdIwQYMBaAFDttV/XWfOmeEAIgQeO9GszPs06VMB0GA1UdDgQWBBTRDso1RfGyZOTL0QdOsvd63PSyiTALBgNVHQ8EBAMCBsAwEwYDVR0lBAwwCgYIKwYBBQUHAwQwYwYIKwYBBQUHAQEEVzBVMFMGCCsGAQUFBzAChkdodHRwczovL3BraS5jb21wcm9iYW50ZXNlbGVjdHJvbmljb3MuZ28uY3IvcHJvZC9pbnRlcm1lZGlhdGUtcGotcGVtLmNydDANBgkqhkiG9w0BAQsFAAOCAgEAqXYfYCyIABwbUbSxD7j/MEpeGcX84S/hUZOA1MGlEYfY9eLZ3pN2/I3JGYm9EHrjvnBuHID+nzFgMWChvQaSP4v1aF160NXCf9pkMCnY6fGWtgL8wpadqxgixKj4LxfVk5IV8BBh/z5QdXkeWS8Mtd1E4/BYvFskYlSZnFCXSWCx2o78m0dC9I7LtqYJpHiEGI8PepQpl9ZHwba54i/YAoy0UG+YnkrjJORq7dEn/YURjNaRXLMWdGhYQgzJlx+blDfxl3SyB+9zDCjsED+n6MbQkHINFZHu0St3+KKQfF9N7iFb7AzjezJWgVd70VkqhBR8KJtPFUHHaPaEPP6Ax0jpz+ZKb2T/W6XtGR2HB1iqUA5XLFCklhdbHCiWhd4QU/Tl/+BBGWkXnsh5YsWJHs2UvBLbJAWHS2+j33sg0VD2vn8OmuuViK8xp0w5tl9ZqT1nyhkHJdycw9v6X4385PksOQ7A6+Zj0DRDcCeOsfef4tf2PBSiLRLIKH5p0UpWHm/+y4LEgpt51Zzx4iuJvE0U7mi+Z2VLflLQf5NL3lURdNFlpZbIEHZjIIBxVVJG/fhFjgfAdjRe5wy0XmdVstTc/a1lAuWf37G5oRk6iwyUxW14DP6k17tGX6h87OvW2dlElKJ5ki8pmzedmmDZQwhO82xXAqlg5H4NHU+WhwM=</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>ns/hHfYw87eAvRKaP2dtVcL9onTfDnBSGArWfxf8KQTqid/GhGmeYJA7Um4RO7ha2tf5R6n18IBXsk8MWGzu+LzBOJTBaaqEEhknJxPeTu8KBETTzwcVUf/IcaEq+NByjxrG7qlAuUC4Rgv195CGXI+pKTNnK1/bq0w7Un8Z7LaOM+3hxtSxjjV8vF0vl00OsKZUEE1aV5ATkZMOIoIJDDhgyf4RZ1tyS3KFdYHW9fGobX6Gocd8OdazxdF15RJy40kIoBIzo5JjuaHMA+Y1UMGp1UVFpXxS49+sN4Qvn/moCOxdiSz2i2MnNHHsDhm+E+dq6fq+WZXARgJnF8iCTQ==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="XadesObjectId-4b907d3f-953c-4509-a450-56000e6f3459"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="QualifyingProperties-0ab7f63e-7bdb-4ad8-a8f3-8a33f26c3bf0" Target="#Signature-f2d1ee55-c4a0-4583-b19b-238b0a5d0cab"><xades:SignedProperties Id="SignedProperties-Signature-f2d1ee55-c4a0-4583-b19b-238b0a5d0cab"><xades:SignedSignatureProperties><xades:SigningTime>2026-07-29T13:45:59-06:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>PKvkXj570toqflHSeedPWEeAxhaW3a8UemLHyegZxBw=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA PERSONA JURIDICA, OU=DGT, O=MINISTERIO DE HACIENDA, C=CR</ds:X509IssuerName><ds:X509SerialNumber>1686691484506</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica</xades:Identifier><xades:Description /></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><ds:DigestValue>Ohixl6upD6av8N7pEvDABhEL6hM=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier><xades:SignerRole><xades:ClaimedRoles><xades:ClaimedRole>ObligadoTributario</xades:ClaimedRole></xades:ClaimedRoles></xades:SignerRole></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-9eb44d3a-a19a-45ca-8669-ac15e1066919"><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>UTF-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></FacturaElectronica>

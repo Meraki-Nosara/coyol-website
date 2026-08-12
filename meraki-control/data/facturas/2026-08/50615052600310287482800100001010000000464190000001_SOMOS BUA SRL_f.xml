@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><FacturaElectronica xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <Clave>50615052600310287482800100001010000000464190000001</Clave>
+  <ProveedorSistemas>3101357887</ProveedorSistemas>
+  <CodigoActividadEmisor>4722.0</CodigoActividadEmisor>
+  <CodigoActividadReceptor>5610.0</CodigoActividadReceptor>
+  <NumeroConsecutivo>00100001010000000464</NumeroConsecutivo>
+  <FechaEmision>2026-05-15T10:42:02.000</FechaEmision>
+  <Emisor>
+    <Nombre>SOMOS BUA SOCIEDAD DE RESPONSABILIDAD LIMITADA</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3102874828</Numero>
+    </Identificacion>
+    <NombreComercial>SOMOS BUA SOCIEDAD DE RESPONSABILIDAD LIMITADA</NombreComercial>
+    <Ubicacion>
+      <Provincia>2</Provincia>
+      <Canton>10</Canton>
+      <Distrito>09</Distrito>
+      <Barrio>ALAJUELA</Barrio>
+      <OtrasSenas>ANTIGUO ASERRADERO LA MARINA</OtrasSenas>
+    </Ubicacion>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>40701618</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>facturas@somosbua.com</CorreoElectronico>
+  </Emisor>
+  <Receptor>
+    <Nombre>MERAKI FAMILY LIMITADA</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3102618820</Numero>
+    </Identificacion>
+    <CorreoElectronico>merakifamilylimitada@gmail.com</CorreoElectronico>
+  </Receptor>
+  <CondicionVenta>02</CondicionVenta>
+  <PlazoCredito>1</PlazoCredito>
+  <DetalleServicio>
+    <LineaDetalle>
+      <NumeroLinea>1</NumeroLinea>
+      <CodigoCABYS>2449001000000</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>04</Tipo>
+        <Codigo>05</Codigo>
+      </CodigoComercial>
+      <Cantidad>6.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <Detalle>KOMBUCHA MANGO</Detalle>
+      <PrecioUnitario>1760.00000</PrecioUnitario>
+      <MontoTotal>10560.00000</MontoTotal>
+      <SubTotal>10560.00000</SubTotal>
+      <BaseImponible>10560.00000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>10</CodigoTarifaIVA>
+        <Tarifa>0.00</Tarifa>
+        <Monto>0.00000</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>0.00000</ImpuestoNeto>
+      <MontoTotalLinea>10560.00000</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>2</NumeroLinea>
+      <CodigoCABYS>2449001000000</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>04</Tipo>
+        <Codigo>04</Codigo>
+      </CodigoComercial>
+      <Cantidad>6.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <Detalle>KOMBUCHA GINGER BOOST</Detalle>
+      <PrecioUnitario>1760.00000</PrecioUnitario>
+      <MontoTotal>10560.00000</MontoTotal>
+      <SubTotal>10560.00000</SubTotal>
+      <BaseImponible>10560.00000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>10</CodigoTarifaIVA>
+        <Tarifa>0.00</Tarifa>
+        <Monto>0.00000</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>0.00000</ImpuestoNeto>
+      <MontoTotalLinea>10560.00000</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>3</NumeroLinea>
+      <CodigoCABYS>2449001000000</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>04</Tipo>
+        <Codigo>03</Codigo>
+      </CodigoComercial>
+      <Cantidad>6.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <Detalle>KOMBUCHA ACAI PEPINO LIMON</Detalle>
+      <PrecioUnitario>1760.00000</PrecioUnitario>
+      <MontoTotal>10560.00000</MontoTotal>
+      <SubTotal>10560.00000</SubTotal>
+      <BaseImponible>10560.00000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>10</CodigoTarifaIVA>
+        <Tarifa>0.00</Tarifa>
+        <Monto>0.00000</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>0.00000</ImpuestoNeto>
+      <MontoTotalLinea>10560.00000</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>4</NumeroLinea>
+      <CodigoCABYS>2449001000000</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>04</Tipo>
+        <Codigo>02</Codigo>
+      </CodigoComercial>
+      <Cantidad>6.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <Detalle>KOMBUCHA PINA CHAI</Detalle>
+      <PrecioUnitario>1760.00000</PrecioUnitario>
+      <MontoTotal>10560.00000</MontoTotal>
+      <SubTotal>10560.00000</SubTotal>
+      <BaseImponible>10560.00000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>10</CodigoTarifaIVA>
+        <Tarifa>0.00</Tarifa>
+        <Monto>0.00000</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>0.00000</ImpuestoNeto>
+      <MontoTotalLinea>10560.00000</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>5</NumeroLinea>
+      <CodigoCABYS>2449001000000</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>04</Tipo>
+        <Codigo>01</Codigo>
+      </CodigoComercial>
+      <Cantidad>6.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <Detalle>KOMBUCHA FRUTAS</Detalle>
+      <PrecioUnitario>1760.00000</PrecioUnitario>
+      <MontoTotal>10560.00000</MontoTotal>
+      <SubTotal>10560.00000</SubTotal>
+      <BaseImponible>10560.00000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>10</CodigoTarifaIVA>
+        <Tarifa>0.00</Tarifa>
+        <Monto>0.00000</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>0.00000</ImpuestoNeto>
+      <MontoTotalLinea>10560.00000</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>6</NumeroLinea>
+      <CodigoCABYS>6802100000000</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>04</Tipo>
+        <Codigo>A</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Os</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <Detalle>ENVIO</Detalle>
+      <PrecioUnitario>2800.00000</PrecioUnitario>
+      <MontoTotal>2800.00000</MontoTotal>
+      <SubTotal>2800.00000</SubTotal>
+      <BaseImponible>2800.00000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>10</CodigoTarifaIVA>
+        <Tarifa>0.00</Tarifa>
+        <Monto>0.00000</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>0.00000</ImpuestoNeto>
+      <MontoTotalLinea>2800.00000</MontoTotalLinea>
+    </LineaDetalle>
+  </DetalleServicio>
+  <ResumenFactura>
+    <CodigoTipoMoneda>
+      <CodigoMoneda>CRC</CodigoMoneda>
+      <TipoCambio>1.00000</TipoCambio>
+    </CodigoTipoMoneda>
+    <TotalServGravados>0.00000</TotalServGravados>
+    <TotalServExentos>2800.00000</TotalServExentos>
+    <TotalMercanciasGravadas>0.00000</TotalMercanciasGravadas>
+    <TotalMercanciasExentas>52800.00000</TotalMercanciasExentas>
+    <TotalGravado>0.00000</TotalGravado>
+    <TotalExento>55600.00000</TotalExento>
+    <TotalVenta>55600.00000</TotalVenta>
+    <TotalDescuentos>0.00000</TotalDescuentos>
+    <TotalVentaNeta>55600.00000</TotalVentaNeta>
+    <TotalDesgloseImpuesto>
+      <Codigo>01</Codigo>
+      <CodigoTarifaIVA>10</CodigoTarifaIVA>
+      <TotalMontoImpuesto>0.00000</TotalMontoImpuesto>
+    </TotalDesgloseImpuesto>
+    <TotalImpuesto>0.00000</TotalImpuesto>
+    <MedioPago>
+      <TipoMedioPago>04</TipoMedioPago>
+      <TotalMedioPago>55600.00000</TotalMedioPago>
+    </MedioPago>
+    <TotalComprobante>55600.00000</TotalComprobante>
+  </ResumenFactura>
+<ds:Signature Id="xmldsig-271d4806-3940-4c1e-bddc-6a8c848422e5">
+<ds:SignedInfo>
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+<ds:Reference Id="xmldsig-271d4806-3940-4c1e-bddc-6a8c848422e5-ref0" URI="">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>hjLl+pxic1jKMWeSwPYOZL6CkOq+sTEzqq86ps/ckxc=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xmldsig-271d4806-3940-4c1e-bddc-6a8c848422e5-signedprops">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>abFIjVb7tzD3oF1/51f+ialAoiq8fchUiJbgRPgPNgg=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="xmldsig-271d4806-3940-4c1e-bddc-6a8c848422e5-sigvalue">
+L79ljBIVzxw0yz5V3K2LzxM8Skx9lUPOKjMjh4oQ+PXZA+qPBPMpycQLpIW6JLVJzt7xzUzCD1p2&#13;
+FIdYOVTXBJNCl6z9Wu3Ub5Szr3BtiTHoVQaKi9cKWZB2QZ85UR0PxvSB/OHGiq6CT1PMsJQO0HCM&#13;
+weW5Oq2sMf4bz7Fm1RGRdZMSf9j+2oh1+40GaLhUJx3Q0cFEIOKXgJ0T9v3maRUP/eKREXr+oJiU&#13;
+sz+thSAW4oaH/3XdU9iXoNNo556747AmcOI6l3AQGjWryiZ3tzVIyK38ZoyWnGhYT/xIi3u1lOY2&#13;
+gyLLBkZ6FRftfzrC1tw/YwU86w71KrQM+Jy4kA==
+</ds:SignatureValue>
+<ds:KeyInfo>
+<ds:X509Data>
+<ds:X509Certificate>
+MIIFNTCCAx2gAwIBAgIGAZvbzLKWMA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYD&#13;
+VQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBF&#13;
+UlNPTkEgSlVSSURJQ0EwHhcNMjYwMTIwMTQyNjI0WhcNMzAwMTE5MTQyNjI0WjCBjzEZMBcGA1UE&#13;
+BRMQQ1BKLTMtMTAyLTg3NDgyODELMAkGA1UEBhMCQ1IxGTAXBgNVBAoMEFBFUlNPTkEgSlVSSURJ&#13;
+Q0ExDDAKBgNVBAsMA0NQSjE8MDoGA1UEAwwzU09NT1MgQlVBIFNPQ0lFREFEIERFIFJFU1BPTlNB&#13;
+QklMSURBRCBMSU1JVEFEQSBudWxsMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxB73&#13;
+IjNfT8+cvRtUFfuiFN7jJ+Ks35INoz2AjPg5r0oicRtQr5IRbULEDQj9iAie+drBe2X9JF2yHJpc&#13;
+HNgMOVdVybcQfRYdPjhsJ1eT4Pc48fo92upeGFf6giGHZDD/fWwHHkipOOzG2Op7ml6jLAIJn6jt&#13;
++RJM8uxuR4+W993GkDfd6bJXwXp4MGuGyqLOVor2SMe0Go+0RrcjLSxyJZQkq3g2WxjW2esfecGC&#13;
+m7W/V0rTA4q5wh0SBeHyEAMPNWOOFeLLoiVJjOKtUpXeT4qgaq5utI+LLfhQWE2q7hbCqV2/oHh2&#13;
+5vqI0yeBGMvRowE4QBLBXew4NbdutOoKxQIDAQABo4HKMIHHMB8GA1UdIwQYMBaAFDttV/XWfOme&#13;
+EAIgQeO9GszPs06VMB0GA1UdDgQWBBSzI7Bs8Suf+lN+jFl8lbVxHBJ5gDALBgNVHQ8EBAMCBsAw&#13;
+EwYDVR0lBAwwCgYIKwYBBQUHAwQwYwYIKwYBBQUHAQEEVzBVMFMGCCsGAQUFBzAChkdodHRwczov&#13;
+L3BraS5jb21wcm9iYW50ZXNlbGVjdHJvbmljb3MuZ28uY3IvcHJvZC9pbnRlcm1lZGlhdGUtcGot&#13;
+cGVtLmNydDANBgkqhkiG9w0BAQsFAAOCAgEAOx53OdB5WHDUMx45Y1JCc6q8US3vH0r/SGJTsdcL&#13;
+pFRhx+07RgHrCWj8/sKcN5/de3I8PKM25TpWsbKAmKx2myTKoaNu+z2oX7geeyNDSXWc3VB0YjNj&#13;
+WSvF/2MUcABTR55o6Ws3ZVqsiypMZdA+Pmv568IOHrPxVInaOwhjW9GsXztdVefCtcsMmN4sFDDP&#13;
+7X654jwV2qK2KbKHhhRU7Cl2vby3ojKLhynpSkAqrp8fZsZ6q37wiDcWYQWfNgstL8ZpXOPc2UIC&#13;
+/o2P3NWhMf+cV9d2pA5NRfIHcyTb1rm+RUTpPY8NvIwmCQp231NllCPsp/wHU61EGn1DygZ7F6/d&#13;
+EYbFudRcYiScKJLbOSL2xDteRl4wvuqsRYDwMIV02Svog4huIamUTjzFxeEF5FGAROErI/rmcFX/&#13;
+viuxwcAk4Mq2c5AXu0OiR9uUyFASKS6J0WIzEfBuyWXs/IuuYJ7jzfOeoiv3Elaroek9FzWd7Ub6&#13;
+Y1FnXNXHXYdQ8KeqayP/jM4bgtp5uLa/nJSWy6FSjJtlb15cWYDo5W5h7N3hzLknCE2VLbr6PO+g&#13;
+kYC2zlsjdzXNZ4Q3rnIZbDe0lG7KhmCvLyPuc6pu1jIZXbQ7mghxX28WT7P87ep/crzVXqE8dqUw&#13;
+NPKoQiOnzTEmFMxa6xFFCTrL6oBZO8XoO5I=
+</ds:X509Certificate>
+</ds:X509Data>
+</ds:KeyInfo>
+<ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xades141="http://uri.etsi.org/01903/v1.4.1#" Target="#xmldsig-271d4806-3940-4c1e-bddc-6a8c848422e5"><xades:SignedProperties Id="xmldsig-271d4806-3940-4c1e-bddc-6a8c848422e5-signedprops"><xades:SignedSignatureProperties><xades:SigningTime>2026-05-15T10:42:29.941-06:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>5Pei2KVKWzsS3VNFu9qdRkSMxyqv1HKhbuh5CycjcUw=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>cn=CA PERSONA JURIDICA,ou=DGT,o=MINISTERIO DE HACIENDA,c=CR</ds:X509IssuerName><ds:X509SerialNumber>1768919184022</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://cdn.comprobanteselectronicos.go.cr/xmlschemas/Resoluci%C3%B3n_General_sobre_disposiciones_t%C3%A9cnicas_comprobantes_electr%C3%B3nicos_para_efectos_tributarios.pdf</xades:Identifier></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>nVCrSwvK8dNnGHwfLYAzNAQMe5FCQjMl2Pf+Nfu5IBw=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object>
+</ds:Signature></FacturaElectronica>

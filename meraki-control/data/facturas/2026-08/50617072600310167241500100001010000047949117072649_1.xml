@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaElectronica xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica  https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.4/FacturaElectronica_v4.4.xsd">
+  <Clave>50617072600310167241500100001010000047949117072649</Clave>
+  <ProveedorSistemas>3102261960</ProveedorSistemas>
+  <CodigoActividadEmisor>4690.0</CodigoActividadEmisor>
+  <NumeroConsecutivo>00100001010000047949</NumeroConsecutivo>
+  <FechaEmision>2026-07-17T12:05:27</FechaEmision>
+  <Emisor>
+    <Nombre>DISTRIBUIDORA EXCELON, S.A.</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3101672415</Numero>
+    </Identificacion>
+    <Registrofiscal8707>8365</Registrofiscal8707>
+    <NombreComercial>Distribuidora Excelon</NombreComercial>
+    <Ubicacion>
+      <Provincia>4</Provincia>
+      <Canton>01</Canton>
+      <Distrito>01</Distrito>
+      <Barrio>Pirro</Barrio>
+      <OtrasSenas>100 oeste, 300 sur de la bomba</OtrasSenas>
+    </Ubicacion>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>22383310</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>enviodefacturas@exceloncr.com</CorreoElectronico>
+  </Emisor>
+  <Receptor>
+    <Nombre>3-102-618820 S.A. (Meraki Family Restaurante La Luna)</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3102618820</Numero>
+    </Identificacion>
+    <NombreComercial>Meraki Familia LTDA (Restaurante La Luna)</NombreComercial>
+    <Ubicacion>
+      <Provincia>5</Provincia>
+      <Canton>02</Canton>
+      <Distrito>06</Distrito>
+      <Barrio>Playa Pelada</Barrio>
+      <OtrasSenas>GUANACASTE NICOYA NOSARA, PLAYA PELADA DEL PEPERONI PRIMERA ENTRADA A LA IZQUIERDA, 100 MTS ESTE</OtrasSenas>
+    </Ubicacion>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>84197595</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>merakifamilylimitada@gmail.com</CorreoElectronico>
+  </Receptor>
+  <CondicionVenta>01</CondicionVenta>
+  <PlazoCredito>1</PlazoCredito>
+  <DetalleServicio>
+    <LineaDetalle>
+      <NumeroLinea>1</NumeroLinea>
+      <CodigoCABYS>2449006009900</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>04</Tipo>
+        <Codigo>RH804</Codigo>
+      </CodigoComercial>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>5060120282347</Codigo>
+      </CodigoComercial>
+      <Cantidad>12.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <UnidadMedidaComercial>Unid</UnidadMedidaComercial>
+      <Detalle>Rude Health - Bebida de Coco 1L</Detalle>
+      <PrecioUnitario>2880.00</PrecioUnitario>
+      <MontoTotal>34560.00</MontoTotal>
+      <Descuento>
+        <MontoDescuento>1728.00</MontoDescuento>
+        <CodigoDescuento>07</CodigoDescuento>
+        <NaturalezaDescuento>Descuento comercial</NaturalezaDescuento>
+      </Descuento>
+      <SubTotal>32832.00</SubTotal>
+      <BaseImponible>32832.00</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>4268.16</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>.00</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>4268.16</ImpuestoNeto>
+      <MontoTotalLinea>37100.16</MontoTotalLinea>
+    </LineaDetalle>
+  </DetalleServicio>
+  <ResumenFactura>
+    <CodigoTipoMoneda>
+      <CodigoMoneda>CRC</CodigoMoneda>
+      <TipoCambio>1</TipoCambio>
+    </CodigoTipoMoneda>
+    <TotalServGravados>0.00</TotalServGravados>
+    <TotalMercanciasGravadas>34560.00</TotalMercanciasGravadas>
+    <TotalGravado>34560.00</TotalGravado>
+    <TotalVenta>34560.00</TotalVenta>
+    <TotalDescuentos>1728.00</TotalDescuentos>
+    <TotalVentaNeta>32832.00</TotalVentaNeta>
+    <TotalDesgloseImpuesto>
+      <Codigo>01</Codigo>
+      <CodigoTarifaIVA>08</CodigoTarifaIVA>
+      <TotalMontoImpuesto>4268.16</TotalMontoImpuesto>
+    </TotalDesgloseImpuesto>
+    <TotalImpuesto>4268.16</TotalImpuesto>
+    <MedioPago>
+      <TipoMedioPago>04</TipoMedioPago>
+      <TotalMedioPago>37100.16</TotalMedioPago>
+    </MedioPago>
+    <TotalComprobante>37100.16</TotalComprobante>
+  </ResumenFactura>
+  <Otros>
+    <OtroTexto>Cargado de FR</OtroTexto>
+  </Otros>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-c8b37821-05af-4cc5-aa6b-1b839802e9d6"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" /><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" /><ds:Reference Id="Reference-fcc6a5f7-cf03-4a88-b37e-23541da5fca1" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>hG4eCI9dywHr6A8wsH2Myq0IPQF4XW6HZBQjHRD4byc=</ds:DigestValue></ds:Reference><ds:Reference Id="ReferenceKeyInfo" URI="#KeyInfoId-Signature-c8b37821-05af-4cc5-aa6b-1b839802e9d6"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>5WTrvo7BfddmWzDMZSRy1oO8zO9JN9FkuBD1X/JMMXk=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-Signature-c8b37821-05af-4cc5-aa6b-1b839802e9d6"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>l8d7gg4uC7oZhISAgXMc0edSkvuee/VhX7VvEJA4vkk=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue-c8b37821-05af-4cc5-aa6b-1b839802e9d6">SMjb/VuIxuzjDNapnHkClFW5q6wgy46z2z739eTw4wJhAF1jJE3Ix1DgGo3+JgW8mSjdh6ocZojD4HpDQtGvFcs6UhXXtpyeXJXhtnybc2Y3mfnA0AwEOM0T/SFBoygmw40+PeOl+U/45AG1p1QgnrN5PRHCN3x5gad1oPtlbJlhsDQcnjbdQk4xtK5QGLIaTijlKSGCRwl2K+l+RH/h2GGJM3SBu1l4MOz4zTfybAPMfnPCx/9Kw4VHonGUwXn1L5zEK8AMSeT52+m7/2bd0N/ijyZTCiLaRXFvlOmHEKbrC3VZ2KEWnke6QrKQoznPYHeAweKlBLs3ERpK+l9bDg==</ds:SignatureValue><ds:KeyInfo Id="KeyInfoId-Signature-c8b37821-05af-4cc5-aa6b-1b839802e9d6"><ds:X509Data><ds:X509Certificate>MIIFKDCCAxCgAwIBAgIGAZedu3f4MA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYDVQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBFUlNPTkEgSlVSSURJQ0EwHhcNMjUwNjIzMTY1OTU4WhcNMjkwNjIyMTY1OTU4WjCBgjEZMBcGA1UEBRMQQ1BKLTMtMTAxLTY3MjQxNTELMAkGA1UEBhMCQ1IxGTAXBgNVBAoMEFBFUlNPTkEgSlVSSURJQ0ExDDAKBgNVBAsMA0NQSjEvMC0GA1UEAwwmRElTVFJJQlVJRE9SQSBFWENFTE9OIFNPQ0lFREFEIEFOT05JTUEwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCdmxKZl9W0nLFHVac0mcq70etHA0domwrzVBKabuZ7W3DTzbo7YGwMh8485vJpVe+0CXKIJCuqNWZPV8DxvcsXXK8mZiXZcWmAfMbaXCL4ngU6PxKYRfIzvp8FLgyzL1+MwNoSxHEhY6t7s5qCtqD9zmrgQajhYOEz7OBzdNcsygLJNEAfMbKmBWHznaAGE5H4o+NjRwWuyxZx2FTvBPEQbyX9s219sYZcI8uxREM0767Ret/jwXjgvyXcN+qF8B8YD0761tHWcpoFaxb0ZW8Lpjafg5tBr7Q7rT7OhJxIuaAWiZucGzpBIEe6S7lgHdpT3XlN3iPoBLzPDlV60hODAgMBAAGjgcowgccwHwYDVR0jBBgwFoAUO21X9dZ86Z4QAiBB470azM+zTpUwHQYDVR0OBBYEFJmRelLd3MugXi8oeaOCkatZPItvMAsGA1UdDwQEAwIGwDATBgNVHSUEDDAKBggrBgEFBQcDBDBjBggrBgEFBQcBAQRXMFUwUwYIKwYBBQUHMAKGR2h0dHBzOi8vcGtpLmNvbXByb2JhbnRlc2VsZWN0cm9uaWNvcy5nby5jci9wcm9kL2ludGVybWVkaWF0ZS1wai1wZW0uY3J0MA0GCSqGSIb3DQEBCwUAA4ICAQA8pRepRxzPoP30KUBIlKu6m8SgH/6uvEs/40hhEKBCEOFtXxtv5t9CfeA5v0RlBhrlTV1RjUXxCe3JgwaVloG0BdrqNGU9JG5I4edJZu/FQYhFSijcsenkbpBekjQPTA/hgcAZuubgHDi/1tpJO8TWp5UAWXTkhDhX8h+xhzRNGy6UyYi33EQq3iVo3gwFqlrM6VzXy08SIrt+aEPzPP8txJfxjgmrXZdWxmMtyTn2mi3SOQ33ZVPVn7df9kIvI+ikXuDeRTDE0zAGidfVunKJJ3fjSrpzVxo6cR5Ao6p3cjRefMP9/1ZjobiXEnXbEjYTju2eFDQMTKDojc/MMAQgfOG3DGjv9vO8BvnjxCqh+Jfor2pGQwkTjhnsaKWH73mBFsviamGs9BZbD2JG9GS22uy/H7dWI/RJYYWWLCO66bqQVyuWQMpxuXVg3g3Gs9jHCGC93SWow6yL12XeQH6SDSV9sCryldX6PJ1gvhhd1InlmYcLDoAXAZetQrqHR/StEbJy8z/++bvAoqTiDhZ6w2zwoh9CdFFO3V2HBw+ouXv/CRKGs6HVY/6OrBTWjiIeDUnb/siV30KW0v/doL/wIBkgjVpGp2UDYiocfnZasPU3FyXu7Nq7fHOQ++ZvYoMZ+amETYOqc9IGEnj+6SzZt6Nx8E2FHQlXX4eUvoSEYA==</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>nZsSmZfVtJyxR1WnNJnKu9HrRwNHaJsK81QSmm7me1tw0826O2BsDIfOPObyaVXvtAlyiCQrqjVmT1fA8b3LF1yvJmYl2XFpgHzG2lwi+J4FOj8SmEXyM76fBS4Msy9fjMDaEsRxIWOre7Oagrag/c5q4EGo4WDhM+zgc3TXLMoCyTRAHzGypgVh852gBhOR+KPjY0cFrssWcdhU7wTxEG8l/bNtfbGGXCPLsURDNO+u0Xrf48F44L8l3DfqhfAfGA9O+tbR1nKaBWsW9GVvC6Y2n4ObQa+0O60+zoScSLmgFombnBs6QSBHuku5YB3aU915Td4j6AS8zw5VetITgw==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="XadesObjectId-39338cff-c128-450a-b2e2-1dfc1efdbc39"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="QualifyingProperties-a8c9296b-0edd-4f5c-b91d-a7ed77a2bcd8" Target="#Signature-c8b37821-05af-4cc5-aa6b-1b839802e9d6"><xades:SignedProperties Id="SignedProperties-Signature-c8b37821-05af-4cc5-aa6b-1b839802e9d6"><xades:SignedSignatureProperties><xades:SigningTime>2026-07-17T12:08:47</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>HRhsnWUdgSztyLmTPoWTixVq1umre96JOl9kfA3uYD4=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA PERSONA JURIDICA,OU=DGT,O=MINISTERIO DE HACIENDA,C=CR</ds:X509IssuerName><ds:X509SerialNumber>1750697998328</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://cdn.comprobanteselectronicos.go.cr/xml-schemas/Resoluci%C3%B3n_General_sobre_disposiciones_t%C3%A9cnicas_comprobantes_electr%C3%B3nicos_para_efectos_tributarios.pdf</xades:Identifier></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><ds:DigestValue>LoXZC86JwDL7zWC35qj7Q4AzrRQ=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></FacturaElectronica>

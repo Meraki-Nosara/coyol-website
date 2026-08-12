@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaElectronica xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica">
+  <Clave>50606082600310263070000100212010000084850100084850</Clave>
+  <ProveedorSistemas>3101769529</ProveedorSistemas>
+  <CodigoActividadEmisor>4752.1</CodigoActividadEmisor>
+  <CodigoActividadReceptor>5610.0</CodigoActividadReceptor>
+  <NumeroConsecutivo>00100212010000084850</NumeroConsecutivo>
+  <FechaEmision>2026-08-06T13:26:42</FechaEmision>
+  <Emisor>
+    <Nombre>Ferreterías Grupo Nosara S.R.L</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3102630700</Numero>
+    </Identificacion>
+    <NombreComercial>Ferreterías Grupo Nosara</NombreComercial>
+    <Ubicacion>
+      <Provincia>5</Provincia>
+      <Canton>02</Canton>
+      <Distrito>05</Distrito>
+      <OtrasSenas>Nosara, Guanacaste, detras de las oficinas del BCR.</OtrasSenas>
+    </Ubicacion>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>45001919</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>facturasgruponosara@gmail.com</CorreoElectronico>
+  </Emisor>
+  <Receptor>
+    <Nombre>MERAKI FAMILY LTDA (RESTAURANTE EL COYOL)</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3102618820</Numero>
+    </Identificacion>
+    <NombreComercial>MERAKI FAMILY LTDA</NombreComercial>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>84197595</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>merakifamilylimitada@gmail.com</CorreoElectronico>
+  </Receptor>
+  <CondicionVenta>01</CondicionVenta>
+  <CondicionVentaOtros>                                                                                                    </CondicionVentaOtros>
+  <PlazoCredito>1</PlazoCredito>
+  <DetalleServicio>
+    <LineaDetalle>
+      <NumeroLinea>1</NumeroLinea>
+      <CodigoCABYS>4831203009900</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>029399</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>TRUPER ANTEOJO DEP VISION INT/EXT 10824 S1:3383822136742 S2:7506240619604</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>1461.04000</PrecioUnitario>
+      <MontoTotal>1461.04000</MontoTotal>
+      <SubTotal>1461.04000</SubTotal>
+      <BaseImponible>1461.04000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>189.93520</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>189.93520</ImpuestoNeto>
+      <MontoTotalLinea>1650.97520</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>2</NumeroLinea>
+      <CodigoCABYS>4292201050000</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>013420</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>DW BROCA PALETA 7/8 X 6 DW1580Y S1:3193052043600 S2:028877475653</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>3007.80000</PrecioUnitario>
+      <MontoTotal>3007.80000</MontoTotal>
+      <SubTotal>3007.80000</SubTotal>
+      <BaseImponible>3007.80000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>391.01400</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>391.01400</ImpuestoNeto>
+      <MontoTotalLinea>3398.81400</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>3</NumeroLinea>
+      <CodigoCABYS>4292104020000</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>028899</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>TRUPER JGO ADAPTADORES 2 3/4 3PZA 10752 S1:3396652148632 S2:7506240658085</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>1381.96000</PrecioUnitario>
+      <MontoTotal>1381.96000</MontoTotal>
+      <SubTotal>1381.96000</SubTotal>
+      <BaseImponible>1381.96000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>179.65480</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>179.65480</ImpuestoNeto>
+      <MontoTotalLinea>1561.61480</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>4</NumeroLinea>
+      <CodigoCABYS>4292201050000</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>900048</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>IRWIN BROCA METAL 1/4 X 12'' #62116 S1:3088372043662 S2:042526621161</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>6795.05000</PrecioUnitario>
+      <MontoTotal>6795.05000</MontoTotal>
+      <SubTotal>6795.05000</SubTotal>
+      <BaseImponible>6795.05000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>883.35650</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>883.35650</ImpuestoNeto>
+      <MontoTotalLinea>7678.40650</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>5</NumeroLinea>
+      <CodigoCABYS>4823300009900</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>025506</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>TRUPER CUERDA ALBAÑIL BLANCA 165M 12989 S1:3112892214230 S2:7501206621936</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>858.12000</PrecioUnitario>
+      <MontoTotal>858.12000</MontoTotal>
+      <SubTotal>858.12000</SubTotal>
+      <BaseImponible>858.12000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>111.55560</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>111.55560</ImpuestoNeto>
+      <MontoTotalLinea>969.67560</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>6</NumeroLinea>
+      <CodigoCABYS>3511003009900</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>040090</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>ABRACOL DISCO CORTE METAL 4 1/2 520 S1:3326852246524 S2:7705059178443</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>1060.68000</PrecioUnitario>
+      <MontoTotal>1060.68000</MontoTotal>
+      <SubTotal>1060.68000</SubTotal>
+      <BaseImponible>1060.68000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>137.88840</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>137.88840</ImpuestoNeto>
+      <MontoTotalLinea>1198.56840</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>7</NumeroLinea>
+      <CodigoCABYS>3791001020200</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>023000</Codigo>
+      </CodigoComercial>
+      <Cantidad>3.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>UYUSTOOLS DISCO CORTE METAL 4.1/2 DCM504 S1:3345522096603 S2:6931598238718 S3:DCM504</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>506.40000</PrecioUnitario>
+      <MontoTotal>1519.20000</MontoTotal>
+      <SubTotal>1519.20000</SubTotal>
+      <BaseImponible>1519.20000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>197.49600</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>197.49600</ImpuestoNeto>
+      <MontoTotalLinea>1716.69600</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>8</NumeroLinea>
+      <CodigoCABYS>4294401039900</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>011039</Codigo>
+      </CodigoComercial>
+      <Cantidad>2.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>ARANDELA PLANA 1/4" BLT 25UND S1:3299542221456 S2:7445322016927</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>521.68000</PrecioUnitario>
+      <MontoTotal>1043.36000</MontoTotal>
+      <SubTotal>1043.36000</SubTotal>
+      <BaseImponible>1043.36000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>135.63680</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>135.63680</ImpuestoNeto>
+      <MontoTotalLinea>1178.99680</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>9</NumeroLinea>
+      <CodigoCABYS>4292104020000</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>029804</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>TRUPER CUBO ESTRIADO 13MM ESP 1/2 13527 S1:3390392142592 S2:7501206615508</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>974.40000</PrecioUnitario>
+      <MontoTotal>974.40000</MontoTotal>
+      <SubTotal>974.40000</SubTotal>
+      <BaseImponible>974.40000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>126.67200</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>126.67200</ImpuestoNeto>
+      <MontoTotalLinea>1101.07200</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>10</NumeroLinea>
+      <CodigoCABYS>4294401039900</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>042067</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>TORNILLO MADERA C.PL #8X1 1/2" BLT 25UND S1:3352402263741 S2:7445322009103</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>261.63000</PrecioUnitario>
+      <MontoTotal>261.63000</MontoTotal>
+      <SubTotal>261.63000</SubTotal>
+      <BaseImponible>261.63000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>34.01190</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>34.01190</ImpuestoNeto>
+      <MontoTotalLinea>295.64190</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>11</NumeroLinea>
+      <CodigoCABYS>4294401039900</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>042067</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>TORNILLO MADERA C.PL #8X1 1/2" BLT 25UND S1:3352402263741 S2:7445322009103</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>261.63000</PrecioUnitario>
+      <MontoTotal>261.63000</MontoTotal>
+      <SubTotal>261.63000</SubTotal>
+      <BaseImponible>261.63000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>34.01190</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>34.01190</ImpuestoNeto>
+      <MontoTotalLinea>295.64190</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>12</NumeroLinea>
+      <CodigoCABYS>4294401039900</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>037660</Codigo>
+      </CodigoComercial>
+      <Cantidad>2.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>TORNILLO MADERA #8X2'' BLT 50UND</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>802.30000</PrecioUnitario>
+      <MontoTotal>1604.60000</MontoTotal>
+      <SubTotal>1604.60000</SubTotal>
+      <BaseImponible>1604.60000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>208.59800</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>208.59800</ImpuestoNeto>
+      <MontoTotalLinea>1813.19800</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>13</NumeroLinea>
+      <CodigoCABYS>4294401039900</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>037661</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>TORNILLO MADERA #8X2 1/2'' BLT 50UND S1:3298882220976 S2:7445322017030</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>1329.00000</PrecioUnitario>
+      <MontoTotal>1329.00000</MontoTotal>
+      <SubTotal>1329.00000</SubTotal>
+      <BaseImponible>1329.00000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>172.77000</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>172.77000</ImpuestoNeto>
+      <MontoTotalLinea>1501.77000</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>14</NumeroLinea>
+      <CodigoCABYS>4294401039900</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>102606</Codigo>
+      </CodigoComercial>
+      <Cantidad>51.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>TORNILLO TIRAFONDO 5/16" X 5" S1:3067372024390 S2:102606</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>213.18000</PrecioUnitario>
+      <MontoTotal>10872.18000</MontoTotal>
+      <SubTotal>10872.18000</SubTotal>
+      <BaseImponible>10872.18000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>1413.38340</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>1413.38340</ImpuestoNeto>
+      <MontoTotalLinea>12285.56340</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>15</NumeroLinea>
+      <CodigoCABYS>4292103030000</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>03</Tipo>
+        <Codigo>014722</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial>UN</UnidadMedidaComercial>
+      <Detalle>UYUSTOOLS PATA CHANCHO 24" DIA024 S1:3232562008300 S2:6931598217331 S3:DIA024</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>3241.03000</PrecioUnitario>
+      <MontoTotal>3241.03000</MontoTotal>
+      <SubTotal>3241.03000</SubTotal>
+      <BaseImponible>3241.03000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>08</CodigoTarifaIVA>
+        <Tarifa>13.00</Tarifa>
+        <Monto>421.33390</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>421.33390</ImpuestoNeto>
+      <MontoTotalLinea>3662.36390</MontoTotalLinea>
+    </LineaDetalle>
+  </DetalleServicio>
+  <ResumenFactura>
+    <CodigoTipoMoneda>
+      <CodigoMoneda>CRC</CodigoMoneda>
+      <TipoCambio>1.00000</TipoCambio>
+    </CodigoTipoMoneda>
+    <TotalServGravados>0.00000</TotalServGravados>
+    <TotalServExentos>0.00000</TotalServExentos>
+    <TotalServExonerado>0.00000</TotalServExonerado>
+    <TotalServNoSujeto>0.00000</TotalServNoSujeto>
+    <TotalMercanciasGravadas>35671.68000</TotalMercanciasGravadas>
+    <TotalMercanciasExentas>0.00000</TotalMercanciasExentas>
+    <TotalMercExonerada>0.00000</TotalMercExonerada>
+    <TotalMercNoSujeta>0.00000</TotalMercNoSujeta>
+    <TotalGravado>35671.68000</TotalGravado>
+    <TotalExento>0.00000</TotalExento>
+    <TotalExonerado>0.00000</TotalExonerado>
+    <TotalNoSujeto>0.00000</TotalNoSujeto>
+    <TotalVenta>35671.68000</TotalVenta>
+    <TotalDescuentos>0.00000</TotalDescuentos>
+    <TotalVentaNeta>35671.68000</TotalVentaNeta>
+    <TotalDesgloseImpuesto>
+      <Codigo>01</Codigo>
+      <CodigoTarifaIVA>08</CodigoTarifaIVA>
+      <TotalMontoImpuesto>4637.31840</TotalMontoImpuesto>
+    </TotalDesgloseImpuesto>
+    <TotalImpuesto>4637.31840</TotalImpuesto>
+    <TotalImpAsumEmisorFabrica>0.00000</TotalImpAsumEmisorFabrica>
+    <TotalIVADevuelto>0.00000</TotalIVADevuelto>
+    <TotalOtrosCargos>0.00000</TotalOtrosCargos>
+    <MedioPago>
+      <TipoMedioPago>01</TipoMedioPago>
+      <MedioPagoOtros>Efectivo</MedioPagoOtros>
+      <TotalMedioPago>40308.99840</TotalMedioPago>
+    </MedioPago>
+    <TotalComprobante>40308.99840</TotalComprobante>
+  </ResumenFactura>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-4f9d4ef0-97e7-417b-8ce1-049fc29b0b05"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" /><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" /><ds:Reference Id="Reference-8f812dbd-9172-4232-8a4d-9f7c2f435ffa" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>VUOO6zsbcSKB6iRQdUbo3NF5g+pL0hKVZ7d/6xggqLg=</ds:DigestValue></ds:Reference><ds:Reference Id="ReferenceKeyInfo" URI="#KeyInfoId-Signature-4f9d4ef0-97e7-417b-8ce1-049fc29b0b05"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>Mv2CnY5J5PG0GJcVMx4qFnw4vfycw423GGNC9Wn5ETI=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-Signature-4f9d4ef0-97e7-417b-8ce1-049fc29b0b05"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>C5e3+rWJuzqDjIcxSnoWRMyix1TUnduorCYp455XLPs=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue-4f9d4ef0-97e7-417b-8ce1-049fc29b0b05">XxhYFqS5zVDzuJL6HuT59Zo1rzDoq7OsBMg5JK8rwR5Szq28WJ5lxFG57ryMUunN0SaKPqDjp7QZDvg7UimEG6ihsoFX6T6P/AGymCMFBhE/3NQx4gQBQ8hadEE1SK3Pi7gqaI8F0wZLEIklCybCc7dp7LTShNqbhmqSuWcMxg+cj4ttb8avab8K8W7Yqeo6ozaWk+DLoTM2ia30q5PwWtpTMCnRTw7QK7BHprJKVDCbluuPTRYMIs6WmIOqouEbbPFio82HwYDlqeL2JgFpGdUPS6MZU6Q8zEfYFkkyncRiGhsZFMZSCtpf8kbV9rqxdET1oy08Ehx3ct17wMmg2g==</ds:SignatureValue><ds:KeyInfo Id="KeyInfoId-Signature-4f9d4ef0-97e7-417b-8ce1-049fc29b0b05"><ds:X509Data><ds:X509Certificate>MIIFSTCCAzGgAwIBAgIGAYkDRNNpMA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYDVQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBFUlNPTkEgSlVSSURJQ0EwHhcNMjMwNjI4MTgyOTQ5WhcNMjcwNjI3MTgyOTQ5WjCBozEZMBcGA1UEBRMQQ1BKLTMtMTAyLTYzMDcwMDELMAkGA1UEBhMCQ1IxGTAXBgNVBAoMEFBFUlNPTkEgSlVSSURJQ0ExDDAKBgNVBAsMA0NQSjFQME4GA1UEAwxHR1JVUE8gTk9TQVJBIEZFUlJFVEVSSUEgWSBBQ0FCQURPUyBTT0NJRURBRCBERSBSRVNQT05TQUJJTElEQUQgTElNSVRBREEwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCVCqHGDczzshGALyyonaokvFk8g1b3I7r4PtS4gdqPUGcHifDlzwuQUSslIhviMhtwgVpszxMeE8ksmJ2HnuAIs/w/m8iLHLBKC7CeHn67RttW7X+HMWEwemnO0mqaiAESk5FlWvsboTWi66HroWsQ6hMhT/RqkYBTjgHzWOZIjugT2N75IQ9EbEj9PYvSQxYycQ0ZIofQv7v/EIzhsh+MvGzjlnTZLgaSd22AJtidqP9AoX6q7e1q75hucpB8oCTv5NYdNCE+6QLaYAFytWoIIVO1O1CjR+ta5lbdac6BXBiWcomMpVLehsR5TtwQaFhxTUrPAzVQKmdAINVB8KunAgMBAAGjgcowgccwHwYDVR0jBBgwFoAUO21X9dZ86Z4QAiBB470azM+zTpUwHQYDVR0OBBYEFDdQ/7mA3/3Egn3JJXad+tdJ6USSMAsGA1UdDwQEAwIGwDATBgNVHSUEDDAKBggrBgEFBQcDBDBjBggrBgEFBQcBAQRXMFUwUwYIKwYBBQUHMAKGR2h0dHBzOi8vcGtpLmNvbXByb2JhbnRlc2VsZWN0cm9uaWNvcy5nby5jci9wcm9kL2ludGVybWVkaWF0ZS1wai1wZW0uY3J0MA0GCSqGSIb3DQEBCwUAA4ICAQB0BMbk3JTyN2zuE/P3JUkwQ+VQV5tnm1cxUCRRC+aIlW7Hiu/QlVPskbQY9UW3g8JSBrCSbg/F8Q7A48O9HE0MchE9Jc7uoRKr9l/PVAzb2xRWYz6g0/Rn7zjiD8qrisGqc5Bgjxme6WlWEEIM2Yk98/4wy6BaGkUaDaPSXUuyvBkTzdX+0Q7RjIxGjSi1cuso/Wart3xSXdJgfENVWcgvvBRJ7+BY+sdqDc10/QZCbfJ5TNmDlwF1TOX49kASFLbBxxd/MQ9QKS5cipNCWiRX++7V8FfjCJx2FaoivDg7TEUFdlPmkmXGPkV2TxEciLdAWv4rpOkC0zq59EeEPUBnUWuuizPo8kgw/Hm9jTf5MmbNSF8RzLeA0KwUriiYZo813/s8IS9Ej6k+zGQmesA4H14O7smpsVZ+7oiuc1gd1mykWFWA9CGPr4abM/lQupDNTQULNa4MHGPMFjlegBqhPNMr9p8MBOlpsM/BYfapBnLqnhqr3ZVTWuZ2dwk/h8YEfg0fNTYf6M24XNx2m1QxlSltuH5Q17hR4IeTbj00gT+lq21wq+fkHEGvRpkTk/DP/kMltUVsRq6GkfxHXoOzh1pB3cNBeUNs7GMHj1ZiazJHaV1Tiq0o4tRWrtO2EKecrWsjWDc0ZlgsI6nbQgrBheLt9Fn4X1Bj2Se++0Obiw==</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>lQqhxg3M87IRgC8sqJ2qJLxZPINW9yO6+D7UuIHaj1BnB4nw5c8LkFErJSIb4jIbcIFabM8THhPJLJidh57gCLP8P5vIixywSguwnh5+u0bbVu1/hzFhMHppztJqmogBEpORZVr7G6E1ouuh66FrEOoTIU/0apGAU44B81jmSI7oE9je+SEPRGxI/T2L0kMWMnENGSKH0L+7/xCM4bIfjLxs45Z02S4GkndtgCbYnaj/QKF+qu3tau+YbnKQfKAk7+TWHTQhPukC2mABcrVqCCFTtTtQo0frWuZW3WnOgVwYlnKJjKVS3obEeU7cEGhYcU1KzwM1UCpnQCDVQfCrpw==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="XadesObjectId-afcfda33-ec13-4c76-a33a-5d7492a5d65b"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="QualifyingProperties-a2f806d7-e12d-4a9a-ba70-5f577f66ee1f" Target="#Signature-4f9d4ef0-97e7-417b-8ce1-049fc29b0b05"><xades:SignedProperties Id="SignedProperties-Signature-4f9d4ef0-97e7-417b-8ce1-049fc29b0b05"><xades:SignedSignatureProperties><xades:SigningTime>2026-08-06T13:45:53-06:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>az4povTWmb6TDhvcsc5mTs+zq4+bP04ZbaBpxTqz1eU=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA PERSONA JURIDICA, OU=DGT, O=MINISTERIO DE HACIENDA, C=CR</ds:X509IssuerName><ds:X509SerialNumber>1687976989545</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://atv.hacienda.go.cr/ATV/ComprobanteElectronico/docs/esquemas/2024/v4.4/Resoluci%C3%B3n_General_sobre_disposiciones_t%C3%A9cnicas_comprobantes_electr%C3%B3nicos_para_efectos_tributarios.pdf</xades:Identifier><xades:Description /></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>DWxin1xWOeI8OuWQXazh4VjLWAaCLAA954em7DMh0h8=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier><xades:SignerRole><xades:ClaimedRoles><xades:ClaimedRole>emisor</xades:ClaimedRole></xades:ClaimedRoles></xades:SignerRole></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-8f812dbd-9172-4232-8a4d-9f7c2f435ffa"><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>UTF-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></FacturaElectronica>

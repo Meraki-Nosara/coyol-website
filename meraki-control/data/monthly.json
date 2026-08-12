@@ -955,6 +955,24 @@
       "restaurant": "laluna",
       "source": "daily_aggregate",
       "partial": true
+    },
+    {
+      "month": "2026-08",
+      "restaurant": "laluna",
+      "totalSales": 16266857,
+      "source": "estimated_from_lafise"
+    },
+    {
+      "month": "2026-08",
+      "restaurant": "coyol",
+      "totalSales": 7007261,
+      "source": "estimated_from_lafise"
+    },
+    {
+      "month": "2026-08",
+      "restaurant": "esh",
+      "totalSales": 1751815,
+      "source": "estimated_from_lafise"
     }
   ],
   "lastUpdated": "2026-08-06T10:45:16Z",

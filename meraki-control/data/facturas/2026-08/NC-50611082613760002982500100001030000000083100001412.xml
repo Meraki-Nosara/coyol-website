@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NotaCreditoElectronica xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/notaCreditoElectronica">
+  <Clave>50611082613760002982500100001030000000083100001412</Clave>
+  <ProveedorSistemas>3101566759</ProveedorSistemas>
+  <CodigoActividadEmisor>5610.0</CodigoActividadEmisor>
+  <NumeroConsecutivo>00100001030000000083</NumeroConsecutivo>
+  <FechaEmision>2026-08-11T09:03:28</FechaEmision>
+  <Emisor>
+    <Nombre>HAGIT MOSS</Nombre>
+    <Identificacion>
+      <Tipo>03</Tipo>
+      <Numero>137600029825</Numero>
+    </Identificacion>
+    <NombreComercial>HAGIT MOSS</NombreComercial>
+    <Ubicacion>
+      <Provincia>5</Provincia>
+      <Canton>03</Canton>
+      <Distrito>06</Distrito>
+      <OtrasSenas>Nosara Estates proyecto Lote 54, el fin de calle Ligia, Las Delicias Garza Nosara</OtrasSenas>
+    </Ubicacion>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>85156666</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>confia111@gmail.com</CorreoElectronico>
+  </Emisor>
+  <Receptor>
+    <Nombre>Meraki Family LTDA</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3102618820</Numero>
+    </Identificacion>
+    <NombreComercial>ESH</NombreComercial>
+    <Ubicacion>
+      <Provincia>5</Provincia>
+      <Canton>02</Canton>
+      <Distrito>01</Distrito>
+      <OtrasSenas>200 m norte del BCR Nosara</OtrasSenas>
+    </Ubicacion>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>84197595</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>merakifamilylimitada@gmail.com</CorreoElectronico>
+  </Receptor>
+  <CondicionVenta>01</CondicionVenta>
+  <DetalleServicio>
+    <LineaDetalle>
+      <NumeroLinea>1</NumeroLinea>
+      <CodigoCABYS>2449002000100</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>01</Tipo>
+        <Codigo>P0007</Codigo>
+      </CodigoComercial>
+      <Cantidad>12.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial />
+      <Detalle>blue lemonade</Detalle>
+      <NumeroVINoSerie />
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>2300.00000</PrecioUnitario>
+      <MontoTotal>27600.00000</MontoTotal>
+      <SubTotal>27600.00000</SubTotal>
+      <BaseImponible>27600.00000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>10</CodigoTarifaIVA>
+        <Tarifa>0.00</Tarifa>
+        <Monto>0.00000</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>0.00000</ImpuestoNeto>
+      <MontoTotalLinea>27600.00000</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>2</NumeroLinea>
+      <CodigoCABYS>2349002011400</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>01</Tipo>
+        <Codigo>P0012</Codigo>
+      </CodigoComercial>
+      <Cantidad>2.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial />
+      <Detalle>Cracker Package</Detalle>
+      <NumeroVINoSerie />
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>7000.00000</PrecioUnitario>
+      <MontoTotal>14000.00000</MontoTotal>
+      <SubTotal>14000.00000</SubTotal>
+      <BaseImponible>14000.00000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>10</CodigoTarifaIVA>
+        <Tarifa>0.00</Tarifa>
+        <Monto>0.00000</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>0.00000</ImpuestoNeto>
+      <MontoTotalLinea>14000.00000</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>3</NumeroLinea>
+      <CodigoCABYS>2314000990300</CodigoCABYS>
+      <CodigoComercial>
+        <Tipo>01</Tipo>
+        <Codigo>P0011</Codigo>
+      </CodigoComercial>
+      <Cantidad>2.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <TipoTransaccion>01</TipoTransaccion>
+      <UnidadMedidaComercial />
+      <Detalle>Sunflower Bars Package</Detalle>
+      <NumeroVINoSerie />
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>8500.00000</PrecioUnitario>
+      <MontoTotal>17000.00000</MontoTotal>
+      <SubTotal>17000.00000</SubTotal>
+      <BaseImponible>17000.00000</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifaIVA>10</CodigoTarifaIVA>
+        <Tarifa>0.00</Tarifa>
+        <Monto>0.00000</Monto>
+      </Impuesto>
+      <ImpuestoAsumidoEmisorFabrica>0.00000</ImpuestoAsumidoEmisorFabrica>
+      <ImpuestoNeto>0.00000</ImpuestoNeto>
+      <MontoTotalLinea>17000.00000</MontoTotalLinea>
+    </LineaDetalle>
+  </DetalleServicio>
+  <ResumenFactura>
+    <CodigoTipoMoneda>
+      <CodigoMoneda>CRC</CodigoMoneda>
+      <TipoCambio>1.00000</TipoCambio>
+    </CodigoTipoMoneda>
+    <TotalServGravados>0.00000</TotalServGravados>
+    <TotalServExentos>0.00000</TotalServExentos>
+    <TotalServExonerado>0.00000</TotalServExonerado>
+    <TotalServNoSujeto>0.00000</TotalServNoSujeto>
+    <TotalMercanciasGravadas>0.00000</TotalMercanciasGravadas>
+    <TotalMercanciasExentas>58600.00000</TotalMercanciasExentas>
+    <TotalMercExonerada>0.00000</TotalMercExonerada>
+    <TotalMercNoSujeta>0.00000</TotalMercNoSujeta>
+    <TotalGravado>0.00000</TotalGravado>
+    <TotalExento>58600.00000</TotalExento>
+    <TotalExonerado>0.00000</TotalExonerado>
+    <TotalNoSujeto>0.00000</TotalNoSujeto>
+    <TotalVenta>58600.00000</TotalVenta>
+    <TotalDescuentos>0.00000</TotalDescuentos>
+    <TotalVentaNeta>58600.00000</TotalVentaNeta>
+    <TotalDesgloseImpuesto>
+      <Codigo>01</Codigo>
+      <CodigoTarifaIVA>10</CodigoTarifaIVA>
+      <TotalMontoImpuesto>0.00000</TotalMontoImpuesto>
+    </TotalDesgloseImpuesto>
+    <TotalImpuesto>0.00000</TotalImpuesto>
+    <TotalImpAsumEmisorFabrica>0.00000</TotalImpAsumEmisorFabrica>
+    <TotalIVADevuelto>0.00000</TotalIVADevuelto>
+    <TotalOtrosCargos>0.00000</TotalOtrosCargos>
+    <MedioPago>
+      <TipoMedioPago>01</TipoMedioPago>
+      <TotalMedioPago>58600.00000</TotalMedioPago>
+    </MedioPago>
+    <TotalComprobante>58600.00000</TotalComprobante>
+  </ResumenFactura>
+  <InformacionReferencia>
+    <TipoDocIR>01</TipoDocIR>
+    <Numero>50611082613760002982500100001010000001329100001411</Numero>
+    <FechaEmisionIR>2026-08-11T14:46:32</FechaEmisionIR>
+    <Codigo>01</Codigo>
+    <Razon>Anulación total del documento</Razon>
+  </InformacionReferencia>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-af675f27-1af3-4b02-8266-b01a48f89bf0"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" /><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" /><ds:Reference Id="Reference-9c9786a1-a5b4-4b56-98ad-236355292da7" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>aMArDwPz4cmDLeqbh4fdwl1xS1ACQD0JFw3oBgc4olc=</ds:DigestValue></ds:Reference><ds:Reference Id="ReferenceKeyInfo" URI="#KeyInfoId-Signature-af675f27-1af3-4b02-8266-b01a48f89bf0"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>oIdMorrk8A3zVVZl6woxu0Ll7WNNklFajWK/sSJXHGo=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-Signature-af675f27-1af3-4b02-8266-b01a48f89bf0"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>OJxJMANEabU+7wjvwsfSrN6LrkjsxwOp87cJGNFUYWI=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue-af675f27-1af3-4b02-8266-b01a48f89bf0">A+xEVhVXKvNOFPk+xJSk7UDCPvc3lMMo2b1FA8Isin22fbg3yTG88h57zLZ97BfLWhteKEQd9c5Prea3ycJ8WpadpCYGEhh73BVlKYPqBGwO+c4wqJk6jxg6nvMAIafTNr0+L/Kmtn16dL6hgoKEyVLBEWa47BCe0O6wiC+I3CPhloMsrc26xbuWI3AiFO6lFScIq31OcDTuspmW3ZZIPcAyDTct0Z1KFxG9mkhhckF6Ic6VwBJDgc4qn/CxMKigOUjPSxy883J7g7GY731VHWhdGrCG+Wb4Rz0OEuHH8uSkjMsk46mwbRrHNzP05Bx6U9jKpbQ/k/2tRbLoldQaJg==</ds:SignatureValue><ds:KeyInfo Id="KeyInfoId-Signature-af675f27-1af3-4b02-8266-b01a48f89bf0"><ds:X509Data><ds:X509Certificate>MIIFITCCAwmgAwIBAgIGAZf3VT6mMA0GCSqGSIb3DQEBCwUAMFgxCzAJBgNVBAYTAkNSMR8wHQYDVQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxGjAYBgNVBAMMEUNBIFBFUlNPTkEgRklTSUNBMB4XDTI1MDcxMTAyMzQwOFoXDTI5MDcxMDAyMzQwOFowfjEbMBkGA1UEBRMSRElNRVgtMTM3NjAwMDI5ODI1MQ0wCwYDVQQEDARNT1NTMQ4wDAYDVQQqDAVIQUdJVDELMAkGA1UEBhMCQ1IxDjAMBgNVBAoMBURJTUVYMQ4wDAYDVQQLDAVESU1FWDETMBEGA1UEAwwKSEFHSVQgTU9TUzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAI6MXBlYwMoR888YuPJlkgJZQ1+SwlN0VZ28VJifS3D9XMYpnZKS9Xoj9CJydgmL2RRP/aTS18oPBhZlhr4EJvtpBtr+gUahAB1ErsdgiVy2ZBwCImZs2DmVDkRkAdp9290suZvRm5W2ibj6FesDiIGqWo8tT97NMvziX+UYkyKS00IoyEAU87uNwTemZiasYb2LLEr6NjV8RRr9LoWbGX6TGX1eWf3gWUoNVfmsGufjrzKRc7mYP8jp5FoUMhBrR9sg7hCiQ5USxNJb90OjxRohJvMZZ/s+X85sVWnDMvFC+Re35m0uMugMEhRwHUbLECe+1SBbYOphCgNKvWXK7BMCAwEAAaOByjCBxzAfBgNVHSMEGDAWgBQT9mpBDe2iJEXRyJSoQYN8YiVrWTAdBgNVHQ4EFgQU/zNNEoESJC4v3t4GqGhrsFP6ceIwCwYDVR0PBAQDAgbAMBMGA1UdJQQMMAoGCCsGAQUFBwMEMGMGCCsGAQUFBwEBBFcwVTBTBggrBgEFBQcwAoZHaHR0cHM6Ly9wa2kuY29tcHJvYmFudGVzZWxlY3Ryb25pY29zLmdvLmNyL3Byb2QvaW50ZXJtZWRpYXRlLXBmLXBlbS5jcnQwDQYJKoZIhvcNAQELBQADggIBAArookGC3tqARcUzbIYDGsUi1pBm1zJZQj/81YPNREmTpp9Kg6hzjiKvcd8cvNAznFbLtiWpzkVHW7UlNkzvKagSI9scGfAw3rkUM9zP4JDePGtvN1ugTtCy4PNvPsgKYA7MSHqhLkt1W5NQ7Dl8sz7NHTYCBsaHT8zp4/Z35SLWaQxDSKtKBNHH8KoylD2GXmH+ptw2zHa1NYc+KpJGn1zeWvqx7ZXbSqqlmbGJjuhZMrUJxB6njVNa6+YN7TydQkIRC6xmCMqdfN0dN2VnOUmkTxOxjzGL2u+B1eHL+v5VvPpVXdC0M7GuAX5VlJnuUuT2k9qHPfETgiEZAPdHP87XZkDfLLLTFtoeUvB0stQ1FfohnyaSczozuqm9KGmkiiTl7nhzcuNaIV5yMcvOJwCbphYd/Y4IjHZHxRLVfbGKgTS+m3fe8ZefoAMgY31R1x7YE9gpqrO+E7qB/7VIb2owKSrYoHgBAbwCQF2YWICMeV9PlHX3ZyvAeyEcnL+kFPi/+Jy5Uy2FJ1DoTYajR4pomh3daDgB94ZIxJRAfN/vny4OqXeLgaz4aOR07G5Lq8ZRcVBrZS6FVlwVe+a6fsRl1i+knx2GdDMCuBCA2PyhPRppC6Yp+YAnazkepUS+fhBMIZyl3B/tRe/lmr9H2F6j6qNuY7X5SS3/QiMO0PQ2</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>joxcGVjAyhHzzxi48mWSAllDX5LCU3RVnbxUmJ9LcP1cximdkpL1eiP0InJ2CYvZFE/9pNLXyg8GFmWGvgQm+2kG2v6BRqEAHUSux2CJXLZkHAIiZmzYOZUORGQB2n3b3Sy5m9GblbaJuPoV6wOIgapajy1P3s0y/OJf5RiTIpLTQijIQBTzu43BN6ZmJqxhvYssSvo2NXxFGv0uhZsZfpMZfV5Z/eBZSg1V+awa5+OvMpFzuZg/yOnkWhQyEGtH2yDuEKJDlRLE0lv3Q6PFGiEm8xln+z5fzmxVacMy8UL5F7fmbS4y6AwSFHAdRssQJ77VIFtg6mEKA0q9ZcrsEw==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="XadesObjectId-6559ff07-b339-4f75-852c-7577fe81c7b9"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="QualifyingProperties-69890d1b-d301-4710-96b3-21cd999e0075" Target="#Signature-af675f27-1af3-4b02-8266-b01a48f89bf0"><xades:SignedProperties Id="SignedProperties-Signature-af675f27-1af3-4b02-8266-b01a48f89bf0"><xades:SignedSignatureProperties><xades:SigningTime>2026-08-11T09:03:47-06:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>07aj3ZLMn3xj/SA3qvZFA8J2BgxWmNeLefZA5krT+gQ=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA PERSONA FISICA, OU=DGT, O=MINISTERIO DE HACIENDA, C=CR</ds:X509IssuerName><ds:X509SerialNumber>1752201248422</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://tribunet.hacienda.go.cr/docs/esquemas/2016/v4.1/Resolucion_Comprobantes_Electronicos_DGT-R-48-2016.pdf</xades:Identifier><xades:Description /></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><ds:DigestValue>Ohixl6upD6av8N7pEvDABhEL6hM=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-9c9786a1-a5b4-4b56-98ad-236355292da7"><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>UTF-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></NotaCreditoElectronica>
