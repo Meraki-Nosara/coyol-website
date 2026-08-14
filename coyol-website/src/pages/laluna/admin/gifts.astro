@@ -447,9 +447,19 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
     renderGiftCards();
   };
 
+  // Supabase direct access (same as Coyol)
+  const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+
   async function loadData() {
     try {
-      const giftsRes = await fetch('/api/gift-cards');
+      // Fetch directly from Supabase (like Coyol does)
+      const giftsRes = await fetch(`${SUPABASE_URL}/rest/v1/laluna_gift_cards?select=*&order=created_at.desc`, {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`
+        }
+      });
       giftCards = await giftsRes.json();
       if (!Array.isArray(giftCards)) giftCards = [];
 
