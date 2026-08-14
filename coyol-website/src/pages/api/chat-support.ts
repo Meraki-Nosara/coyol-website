@@ -3,7 +3,7 @@ import type { APIRoute } from 'astro';
 // API Keys
 const OPENROUTER_API_KEY = import.meta.env.OPENROUTER_API_KEY || process.env.OPENROUTER_API_KEY;
 const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
-const SUPABASE_KEY = 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng';
+const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
 
 // Log conversation to Supabase for analysis
 async function logConversation(restaurant: string, userMessage: string, botReply: string, category?: string) {
@@ -115,11 +115,53 @@ async function searchReservations(restaurant: string, searchTerm: string) {
   }
 }
 
+// Search gift cards by code or recipient name
+async function searchGiftCards(restaurant: string, searchTerm: string) {
+  const table = restaurant === 'laluna' ? 'laluna_gift_cards' : 'coyol_gift_cards';
+  const term = searchTerm.toUpperCase();
+  
+  try {
+    // Search by code or recipient name
+    const byCode = await fetch(
+      `${SUPABASE_URL}/rest/v1/${table}?select=*&code=ilike.*${term}*&order=created_at.desc&limit=5`,
+      {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+        }
+      }
+    );
+    const codeResults = await byCode.json();
+    
+    const byName = await fetch(
+      `${SUPABASE_URL}/rest/v1/${table}?select=*&recipient_name=ilike.*${searchTerm}*&order=created_at.desc&limit=5`,
+      {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+        }
+      }
+    );
+    const nameResults = await byName.json();
+    
+    // Combine and dedupe
+    const all = [...(codeResults || []), ...(nameResults || [])];
+    const seen = new Set();
+    return all.filter(gc => {
+      if (seen.has(gc.code)) return false;
+      seen.add(gc.code);
+      return true;
+    });
+  } catch (e) {
+    return [];
+  }
+}
+
 const SYSTEM_PROMPT = `Eres el asistente de soporte del sistema de reservaciones de Meraki Restaurants (La Luna y Coyol) en Nosara, Costa Rica.
 
-Tu trabajo es ayudar al personal (hostess, managers) con preguntas sobre cómo usar el sistema Y responder consultas sobre reservaciones.
+Tu trabajo es ayudar al personal (hostess, managers) con preguntas sobre cómo usar el sistema Y responder consultas sobre reservaciones y gift cards.
 
-TIENES ACCESO A LA BASE DE DATOS DE RESERVACIONES. Cuando el usuario pregunte sobre reservaciones específicas, busca en los datos proporcionados.
+TIENES ACCESO A LA BASE DE DATOS DE RESERVACIONES Y GIFT CARDS. Cuando el usuario pregunte sobre datos específicos, busca en los datos proporcionados.
 
 CONOCIMIENTO DEL SISTEMA:
 
@@ -130,6 +172,12 @@ CONOCIMIENTO DEL SISTEMA:
 - Filtro de shift: Dinner 1 (4-7pm), Dinner 2 (7pm+)
 - Botón "+" para nueva reservación
 - Botón "Walk-in" para clientes sin reserva
+
+**Gift Cards:**
+- Ver en menú lateral "Gift Cards" o ir a /laluna/admin/gifts
+- Buscar por código (ej: LL-DJCS-AKW3) o nombre del destinatario
+- Al encontrar un gift card, mostrar: código, monto, balance restante, nombre
+- Para aplicar: abrir el gift card, click "Use", seleccionar la reservación
 
 **Cómo crear una reservación:**
 1. Click en botón "+" (arriba a la izquierda)
@@ -155,9 +203,10 @@ REGLAS DE RESPUESTA:
 1. Responde SIEMPRE en español
 2. Sé conciso y directo
 3. Cuando muestres datos de reservaciones, incluye: nombre, hora, # personas, mesa asignada, notas especiales
-4. Si buscas un cliente y no lo encuentras, dilo claramente
-5. Para preguntas que no puedas responder, di "Contacta a Marion"
-6. NUNCA inventes reservaciones - solo usa los datos proporcionados`;
+4. Cuando muestres gift cards, incluye: código, monto, balance, destinatario, estado
+5. Si buscas algo y no lo encuentras, dilo claramente
+6. Para preguntas que no puedas responder, di "Contacta a Marion"
+7. NUNCA inventes datos - solo usa los datos proporcionados`;
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -201,7 +250,41 @@ export const POST: APIRoute = async ({ request }) => {
     // Detect if searching for a specific person
     const nameMatch = messageLower.match(/(?:busca|encuentra|reserva de|cliente|guest|señor|señora|sr\.|sra\.)\s+([a-záéíóúñ]+)/i);
     
-    if (isAskingAboutWeek) {
+    // Detect gift card queries
+    const isAskingAboutGiftCards = 
+      messageLower.includes('gift') ||
+      messageLower.includes('certificado') ||
+      messageLower.includes('tarjeta de regalo') ||
+      messageLower.includes('codigo') ||
+      messageLower.includes('código') ||
+      /[LC][LY][L-]-?[A-Z0-9]{4}-?[A-Z0-9]{4}/i.test(message); // Gift card code pattern
+    
+    // Extract gift card code if present
+    const giftCodeMatch = message.match(/([LC][LY][L-]-?[A-Z0-9]{4}-?[A-Z0-9]{4})/i);
+    
+    // Extract name for gift card search
+    const giftNameMatch = messageLower.match(/(?:gift\s*card|certificado|tarjeta).*?(?:de|for|nombre|name)\s+([a-záéíóúñ\s]+)/i);
+    
+    // Handle gift card searches first (higher priority)
+    if (giftCodeMatch || (isAskingAboutGiftCards && giftNameMatch)) {
+      const searchTerm = giftCodeMatch ? giftCodeMatch[1] : (giftNameMatch ? giftNameMatch[1].trim() : '');
+      const giftCards = await searchGiftCards(restaurant, searchTerm);
+      
+      if (giftCards && giftCards.length > 0) {
+        contextData = `\n\n🎁 GIFT CARDS ENCONTRADOS:\n`;
+        giftCards.forEach((gc: any) => {
+          const balance = gc.remaining_balance ?? gc.amount;
+          contextData += `\n• Código: ${gc.code}\n`;
+          contextData += `  Monto original: $${gc.amount}\n`;
+          contextData += `  Balance restante: $${balance}\n`;
+          contextData += `  Destinatario: ${gc.recipient_name}\n`;
+          contextData += `  Estado: ${gc.status === 'redeemed' ? 'CANJEADO' : gc.status === 'partial' ? 'PARCIALMENTE USADO' : 'ACTIVO'}\n`;
+          if (gc.recipient_email) contextData += `  Email: ${gc.recipient_email}\n`;
+        });
+      } else {
+        contextData = `\n\n⚠️ No encontré gift cards para "${searchTerm}"`;
+      }
+    } else if (isAskingAboutWeek) {
       // Get week reservations
       const weekReservations = await getWeekReservations(restaurant);
       if (weekReservations && weekReservations.length > 0) {
