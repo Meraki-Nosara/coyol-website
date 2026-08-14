@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 
 const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
-const SUPABASE_KEY = 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng';
+const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
 
 export const GET: APIRoute = async ({ request }) => {
   try {
