@@ -740,18 +740,15 @@ import Layout from '../../../layouts/Layout.astro';
       name = walkinName || 'Walk-in';
     }
     
-    await fetch(`${SUPABASE_URL}/rest/v1/coyol_gift_cards?code=eq.${code}`, {
+    await fetch('/api/gift-cards', {
       method: 'PATCH',
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=minimal'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
+        code,
         status: rem <= 0 ? 'redeemed' : 'partial',
         remaining_balance: rem,
-        redeemed_at: rem <= 0 ? new Date().toISOString() : null
+        redeemed_at: rem <= 0 ? new Date().toISOString() : null,
+        notes: `$${actualApply} applied to ${name} (bill: $${bill})${rem > 0 ? ` — $${rem} remaining` : ''}`
       }),
     });
     

@@ -38,7 +38,13 @@ export const PATCH: APIRoute = async ({ request }) => {
     // Determine table: Coyol cards start with CYL-, otherwise La Luna
     const tableName = table || (code.startsWith('CYL-') ? 'coyol_gift_cards' : 'laluna_gift_cards');
     
-    console.log('Updating gift card:', code, 'table:', tableName, updates);
+    // Coyol table doesn't have 'notes' column - strip it
+    const cleanUpdates = { ...updates };
+    if (tableName === 'coyol_gift_cards' && cleanUpdates.notes) {
+      delete cleanUpdates.notes;
+    }
+    
+    console.log('Updating gift card:', code, 'table:', tableName, cleanUpdates);
     
     const res = await fetch(`${SUPABASE_URL}/rest/v1/${tableName}?code=eq.${code}`, {
       method: 'PATCH',
@@ -48,7 +54,7 @@ export const PATCH: APIRoute = async ({ request }) => {
         'Content-Type': 'application/json',
         'Prefer': 'return=minimal',
       },
-      body: JSON.stringify(updates),
+      body: JSON.stringify(cleanUpdates),
     });
     
     if (!res.ok) {
