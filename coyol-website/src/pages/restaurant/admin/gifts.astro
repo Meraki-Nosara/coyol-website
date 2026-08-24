@@ -751,8 +751,7 @@ import Layout from '../../../layouts/Layout.astro';
       body: JSON.stringify({ 
         status: rem <= 0 ? 'redeemed' : 'partial',
         remaining_balance: rem,
-        redeemed_at: rem <= 0 ? new Date().toISOString() : null,
-        notes: `$${actualApply} applied (bill: $${bill})${rem > 0 ? ` — $${rem} remaining` : ''}`
+        redeemed_at: rem <= 0 ? new Date().toISOString() : null
       }),
     });
     
