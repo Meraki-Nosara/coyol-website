@@ -4851,6 +4851,14 @@ import '../../../styles/laluna-tables.css';
     setInterval(updateCurrentTimeDisplay, 60000);
     updateCurrentTimeDisplay();
 
+    // Auto-refresh reservations every 30 seconds to keep list current
+    setInterval(async () => {
+      if (isOnline && !document.hidden) {
+        await loadReservations();
+        renderFloor();
+      }
+    }, 30000);
+
     // Load shifts from Supabase (uses SUPABASE_URL and SUPABASE_KEY from above)
 
     async function loadShifts() {
