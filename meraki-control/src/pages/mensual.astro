@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { loadMonthlyData, formatCurrency, formatMonth, USD_RATE, loadDailySales, getDailyTotals, getLastUpdated, getYearPayroll, loadAllPayroll, loadFinancialSummary } from '../lib/monthly-data';
+import { loadMonthlyData, formatCurrency, formatMonth, USD_RATE, loadDailySales, getDailyTotals, getLastUpdated, getLatestDataDate, getYearPayroll, loadAllPayroll, loadFinancialSummary } from '../lib/monthly-data';
 import fs from 'fs';
 import path from 'path';
 
@@ -48,6 +48,7 @@ const logos: Record<string, string> = {
 const dailySales = loadDailySales();
 const dailyTotals = getDailyTotals();
 const lastUpdated = getLastUpdated();
+const latestDataDate = getLatestDataDate();
 
 // Calculate totals BY RESTAURANT (2026 monthly + daily)
 const restaurantTotals = restaurants.map(code => {
@@ -300,7 +301,7 @@ const financialSummary = loadFinancialSummary();
         <div class="px-4 lg:px-8 py-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
             <h2 class="text-xl font-semibold text-landrover-santorini">Dashboard</h2>
-            <p class="text-sm text-landrover-marine/60">Data through: <span class="font-bold text-landrover-keswick">{lastUpdated ? new Date(lastUpdated).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A'}</span></p>
+            <p class="text-sm text-landrover-marine/60">Data through: <span class="font-bold text-landrover-keswick">{latestDataDate ? new Date(latestDataDate + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A'}</span></p>
           </div>
           
           <!-- Currency Toggle & Reports Button -->

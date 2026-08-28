@@ -203,6 +203,19 @@ export function getLastUpdated(): string | null {
   }
 }
 
+// Get the latest date in the sales data (most recent cierre)
+export function getLatestDataDate(): string | null {
+  try {
+    const raw = fs.readFileSync(SALES_PATH, 'utf-8');
+    const data = JSON.parse(raw);
+    if (!data.daily || data.daily.length === 0) return null;
+    const dates = data.daily.map((d: any) => d.date).sort();
+    return dates[dates.length - 1]; // Latest date
+  } catch {
+    return null;
+  }
+}
+
 // Payroll data interfaces
 export interface PayrollWeek {
   period: string;
