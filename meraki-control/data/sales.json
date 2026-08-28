@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-08-06T10:45:11Z",
-  "source": "Ingrid cierres (daily photos)",
+  "lastUpdated": "2026-08-28T07:44:30.734564Z",
+  "source": "Ingrid cierres (daily photos) - auto-parsed",
   "daily": [
     {
       "date": "2026-01-01",
@@ -2413,7 +2413,7 @@
       "service10": 155460,
       "iva13": 208738,
       "source": "ingrid_email",
-      "cashier": "Carmen Mu\u00f1oz"
+      "cashier": "Carmen Muñoz"
     },
     {
       "date": "2026-05-20",
@@ -2533,7 +2533,7 @@
       "service10": 236442,
       "iva13": 320916,
       "source": "ingrid_email",
-      "cashier": "Carmen Mu\u00f1oz"
+      "cashier": "Carmen Muñoz"
     },
     {
       "date": "2026-05-23",
@@ -2635,7 +2635,7 @@
       "service10": 183707,
       "iva13": 239370,
       "source": "ingrid_email",
-      "cashier": "Carmen Mu\u00f1oz"
+      "cashier": "Carmen Muñoz"
     },
     {
       "date": "2026-05-26",
@@ -2906,7 +2906,7 @@
       "service10": 56770,
       "iva13": 73801,
       "source": "ingrid_email",
-      "cashier": "Yordany D\u00edaz"
+      "cashier": "Yordany Díaz"
     },
     {
       "date": "2026-06-02",
@@ -3497,7 +3497,7 @@
       "service10": 391927,
       "iva13": 516332,
       "source": "ingrid_email",
-      "cashier": "Carmen Mu\u00f1oz"
+      "cashier": "Carmen Muñoz"
     },
     {
       "date": "2026-06-21",
@@ -3608,7 +3608,7 @@
       "service10": 295636,
       "iva13": 400309,
       "source": "ingrid_email",
-      "cashier": "Julia/Carmen Mu\u00f1oz"
+      "cashier": "Julia/Carmen Muñoz"
     },
     {
       "date": "2026-06-25",
@@ -3979,6 +3979,60 @@
         "service10": 323614,
         "iva13": 428845,
         "tips": 247076
+      }
+    },
+    {
+      "date": "2026-08-25",
+      "laluna": {
+        "netSales": 2166585.49,
+        "service10": 216280.83,
+        "iva13": 281656.42,
+        "total": 2664522.74,
+        "cash": 231275.0,
+        "card": 2533254.14
+      },
+      "coyol": {
+        "netSales": 523100.0,
+        "service10": 52310.0,
+        "iva13": 68003.0,
+        "total": 643413.0,
+        "cash": 578352.0,
+        "card": 578153.0
+      },
+      "esh": {
+        "netSales": 419551.76,
+        "service10": 30275.67,
+        "iva13": 54541.96,
+        "total": 504369.39,
+        "cash": 302930.31,
+        "card": 153458.53
+      }
+    },
+    {
+      "date": "2026-08-26",
+      "laluna": {
+        "netSales": 1609967.09,
+        "service10": 151405.57,
+        "iva13": 209295.87,
+        "total": 1970668.53,
+        "cash": 247120.0,
+        "card": 1958027.1
+      },
+      "coyol": {
+        "netSales": 523200.0,
+        "service10": 52320.0,
+        "iva13": 68016.0,
+        "total": 643536.0,
+        "cash": 0.0,
+        "card": 710501.3
+      },
+      "esh": {
+        "netSales": 380764.37,
+        "service10": 25718.18,
+        "iva13": 49499.67,
+        "total": 455982.22,
+        "cash": 25900.0,
+        "card": 429941.55
       }
     }
   ]

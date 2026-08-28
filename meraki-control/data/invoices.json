@@ -1,6 +1,1072 @@
 {
   "invoices": [
     {
+      "clave": "50627082600310179773900100002010000017862166137672",
+      "supplier": "DISTRIBUIDORA LA ANEXION SOCIEDAD ANONIMA",
+      "supplier_id": "3101797739",
+      "receiver": "MERAKI FAMILYLIMITADA",
+      "date": "2026-08-27",
+      "subtotal": 237089.2,
+      "iva": 6326.06,
+      "total": 243415.26,
+      "parsed_at": "2026-08-28T07:44:58.800691Z"
+    },
+    {
+      "clave": "50627082600310179773900100001010000040567186740888",
+      "supplier": "DISTRIBUIDORA LA ANEXION SOCIEDAD ANONIMA",
+      "supplier_id": "3101797739",
+      "receiver": "MERAKI FAMILYLIMITADA",
+      "date": "2026-08-27",
+      "subtotal": 37771.77,
+      "iva": 377.72,
+      "total": 38149.49,
+      "parsed_at": "2026-08-28T07:44:58.802284Z"
+    },
+    {
+      "clave": "50627082600310283040700100001010000070800199999999",
+      "supplier": "Distribuidora AYR Ltda",
+      "supplier_id": "3102830407",
+      "receiver": "MERAKI FAMILY LIMITADA",
+      "date": "2026-08-27",
+      "subtotal": 102047.96,
+      "iva": 1020.48,
+      "total": 103068.44,
+      "parsed_at": "2026-08-28T07:44:58.802727Z"
+    },
+    {
+      "clave": "50627082600310110918000200003010000111316127082616",
+      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
+      "supplier_id": "3101109180",
+      "receiver": "CORPORATIVO MERAKI FAMILY LIMITADA",
+      "date": "2026-08-27",
+      "subtotal": 73084.8,
+      "iva": 9501.02,
+      "total": 82585.82,
+      "parsed_at": "2026-08-28T07:44:58.805001Z"
+    },
+    {
+      "clave": "50627082600310283040700100001010000070801199999999",
+      "supplier": "Distribuidora AYR Ltda",
+      "supplier_id": "3102830407",
+      "receiver": "MERAKI FAMILY LIMITADA",
+      "date": "2026-08-27",
+      "subtotal": 332289.87,
+      "iva": 43197.68,
+      "total": 375487.55,
+      "parsed_at": "2026-08-28T07:44:58.808632Z"
+    },
+    {
+      "clave": "50627082600310263070000100218010000086748100086748",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "receiver": "MERAKI FAMILY LTDA (RESTAURANTE EL COYOL)",
+      "date": "2026-08-27",
+      "subtotal": 20230.69,
+      "iva": 2629.99,
+      "total": 22860.68,
+      "parsed_at": "2026-08-28T07:44:58.809119Z"
+    },
+    {
+      "clave": "50627082600310263070000100212010000086345100086345",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "receiver": "MERAKI FAMILY LTDA (RESTAURANTE EL COYOL)",
+      "date": "2026-08-27",
+      "subtotal": 3648.0,
+      "iva": 474.24,
+      "total": 4122.24,
+      "parsed_at": "2026-08-28T07:44:58.811445Z"
+    },
+    {
+      "clave": "50627082600310110918000200002010000178126127082626",
+      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
+      "supplier_id": "3101109180",
+      "receiver": "CORPORATIVO MERAKI FAMILY LIMITADA",
+      "date": "2026-08-27",
+      "subtotal": 60432.3,
+      "iva": 3639.67,
+      "total": 64071.97,
+      "parsed_at": "2026-08-28T07:44:58.811909Z"
+    },
+    {
+      "clave": "50627082600050405054700100001010000008291188861742",
+      "supplier": "JOSE ALEXIS RANGEL CARRILLO",
+      "supplier_id": "504050547",
+      "receiver": "MERAKI FAMILY LIMITADA",
+      "date": "2026-08-27",
+      "subtotal": 547370.97,
+      "iva": 25943.06,
+      "total": 573314.03,
+      "parsed_at": "2026-08-28T07:44:58.815018Z"
+    },
+    {
+      "clave": "50627082600310263070000100212010000086389100086389",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "receiver": "MERAKI FAMILY LTDA (RESTAURANTE EL COYOL)",
+      "date": "2026-08-27",
+      "subtotal": 2150.94,
+      "iva": 279.62,
+      "total": 2430.56,
+      "parsed_at": "2026-08-28T07:44:58.815954Z"
+    },
+    {
+      "clave": "50627082600310110918000200002010000178156127082656",
+      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
+      "supplier_id": "3101109180",
+      "receiver": "CORPORATIVO MERAKI FAMILY LIMITADA",
+      "date": "2026-08-27",
+      "subtotal": 74815.3,
+      "iva": 7492.83,
+      "total": 82308.13,
+      "parsed_at": "2026-08-28T07:44:58.817254Z"
+    },
+    {
+      "clave": "50627082600310181823400215501010000041576127082601",
+      "supplier": "Restaurante Charifrijo SA",
+      "supplier_id": "3101818234",
+      "receiver": "Meraki family limitada",
+      "date": "2026-08-27",
+      "subtotal": 4513.0,
+      "iva": 586.69,
+      "total": 5099.69,
+      "parsed_at": "2026-08-28T07:44:58.819371Z"
+    },
+    {
+      "clave": "50627082600310283040700100001010000070802199999999",
+      "supplier": "Distribuidora AYR Ltda",
+      "supplier_id": "3102830407",
+      "receiver": "MERAKI FAMILY LIMITADA",
+      "date": "2026-08-27",
+      "subtotal": 354885.58,
+      "iva": 46135.13,
+      "total": 401020.71,
+      "parsed_at": "2026-08-28T07:44:58.819799Z"
+    },
+    {
+      "clave": "50627082600310175902500200001010000110493157847751",
+      "supplier": "RINDE MAS GUANACASTE S.A",
+      "supplier_id": "3101759025",
+      "receiver": "MERAKI FAMILY Ltda",
+      "date": "2026-08-27",
+      "subtotal": 17907.08,
+      "iva": 2327.92,
+      "total": 20235.0,
+      "parsed_at": "2026-08-28T07:44:58.820720Z"
+    },
+    {
+      "clave": "50627082600060276013100100001010000000605100041769",
+      "supplier": "KARLA DE LOS ANGELES MARTINEZ OVIEDO",
+      "supplier_id": "602760131",
+      "receiver": "MERAKI FAMILYLIMITADA",
+      "date": "2026-08-27",
+      "subtotal": 25200.0,
+      "iva": 252.0,
+      "total": 25452.0,
+      "parsed_at": "2026-08-28T07:44:58.821514Z"
+    },
+    {
+      "clave": "50627082600310110918000200002010000178132127082632",
+      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
+      "supplier_id": "3101109180",
+      "receiver": "CORPORATIVO MERAKI FAMILY LIMITADA",
+      "date": "2026-08-27",
+      "subtotal": 436668.12,
+      "iva": 47861.78,
+      "total": 484529.9,
+      "parsed_at": "2026-08-28T07:44:58.824374Z"
+    },
+    {
+      "clave": "50627082600060276013100100001010000000603100041769",
+      "supplier": "KARLA DE LOS ANGELES MARTINEZ OVIEDO",
+      "supplier_id": "602760131",
+      "receiver": "MERAKI FAMILYLIMITADA",
+      "date": "2026-08-27",
+      "subtotal": 33600.0,
+      "iva": 336.0,
+      "total": 33936.0,
+      "parsed_at": "2026-08-28T07:44:58.824823Z"
+    },
+    {
+      "clave": "50627082600060276013100100001010000000604100041769",
+      "supplier": "KARLA DE LOS ANGELES MARTINEZ OVIEDO",
+      "supplier_id": "602760131",
+      "receiver": "MERAKI FAMILYLIMITADA",
+      "date": "2026-08-27",
+      "subtotal": 12600.0,
+      "iva": 126.0,
+      "total": 12726.0,
+      "parsed_at": "2026-08-28T07:44:58.825214Z"
+    },
+    {
+      "clave": "50627082600310210660200100003010000299914100000999",
+      "supplier": "SERVICENTRO SAMARA LTDA",
+      "supplier_id": "3102106602",
+      "receiver": "MERAKI FAMILY LTDA",
+      "date": "2026-08-27",
+      "subtotal": 30000.0,
+      "iva": 0.0,
+      "total": 30000.0,
+      "parsed_at": "2026-08-28T07:44:58.825559Z"
+    },
+    {
+      "clave": "50627082600310179773900100001010000040568195287664",
+      "supplier": "DISTRIBUIDORA LA ANEXION SOCIEDAD ANONIMA",
+      "supplier_id": "3101797739",
+      "receiver": "MERAKI FAMILYLIMITADA",
+      "date": "2026-08-27",
+      "subtotal": 74653.26,
+      "iva": 746.53,
+      "total": 75399.79,
+      "parsed_at": "2026-08-28T07:44:58.826191Z"
+    },
+    {
+      "clave": "50626082600310263070000100218010000086706100086706",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "receiver": "MERAKI FAMILY LTDA (RESTAURANTE EL COYOL)",
+      "date": "2026-08-26",
+      "subtotal": 15192.22,
+      "iva": 1974.99,
+      "total": 17167.21,
+      "parsed_at": "2026-08-28T07:44:58.801788Z"
+    },
+    {
+      "clave": "50626082600310263070000100214010000057085100057085",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "receiver": "MERAKI FAMILY LTDA (RESTAURANTE EL COYOL)",
+      "date": "2026-08-26",
+      "subtotal": 471949.39,
+      "iva": 61353.42,
+      "total": 533302.81,
+      "parsed_at": "2026-08-28T07:44:58.803465Z"
+    },
+    {
+      "clave": "50626082600310212090800100001010000049991100002825",
+      "supplier": "LICORERIAS HERRERA SRL",
+      "supplier_id": "3102120908",
+      "receiver": "MERAKI FAMILY LTDA",
+      "date": "2026-08-26",
+      "subtotal": 365264.5,
+      "iva": 47484.39,
+      "total": 412748.89,
+      "parsed_at": "2026-08-28T07:44:58.804546Z"
+    },
+    {
+      "clave": "50626082600310179441000400001010000057509153641827",
+      "supplier": "AGRO LOS CARTAGOS",
+      "supplier_id": "3101794410",
+      "receiver": "MERAKI FAMILY LIMITADA",
+      "date": "2026-08-26",
+      "subtotal": 1150.44,
+      "iva": 149.56,
+      "total": 1300.0,
+      "parsed_at": "2026-08-28T07:44:58.805418Z"
+    },
+    {
+      "clave": "50626082600310263070000100212010000086318100086318",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "receiver": "MERAKI FAMILY LTDA (RESTAURANTE EL COYOL)",
+      "date": "2026-08-26",
+      "subtotal": 42747.91,
+      "iva": 5557.23,
+      "total": 48305.14,
+      "parsed_at": "2026-08-28T07:44:58.806428Z"
+    },
+    {
+      "clave": "50626082600310285267800100001010000130798115489317",
+      "supplier": "GRUPO SUPERMERCADO NOSARA LIMITADA",
+      "supplier_id": "3102852678",
+      "receiver": "MERAKI FAMILY S.A",
+      "date": "2026-08-26",
+      "subtotal": 1415.93,
+      "iva": 184.07,
+      "total": 1600.0,
+      "parsed_at": "2026-08-28T07:44:58.806868Z"
+    },
+    {
+      "clave": "50626082600310164424400300001010000002412100075374",
+      "supplier": "Inversiones Veterinarias y Asociados Cedeño Marin SA",
+      "supplier_id": "3101644244",
+      "receiver": "MERAKI FAMILY LTDA",
+      "date": "2026-08-26",
+      "subtotal": 95433.63,
+      "iva": 12406.37,
+      "total": 107840.0,
+      "parsed_at": "2026-08-28T07:44:58.807985Z"
+    },
+    {
+      "clave": "50626082600310182180000100001010000014879126082603",
+      "supplier": "LA KAVA GOURMET S.A.",
+      "supplier_id": "3101821800",
+      "receiver": "Meraki Family LTDA (Rest. La Luna)",
+      "date": "2026-08-26",
+      "subtotal": 106200.0,
+      "iva": 13806.0,
+      "total": 120006.0,
+      "parsed_at": "2026-08-28T07:44:58.809813Z"
+    },
+    {
+      "clave": "50626082600310263070000100212010000086304100086304",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "receiver": "MERAKI FAMILY LTDA (RESTAURANTE EL COYOL)",
+      "date": "2026-08-26",
+      "subtotal": 14311.76,
+      "iva": 1860.53,
+      "total": 16172.29,
+      "parsed_at": "2026-08-28T07:44:58.810304Z"
+    },
+    {
+      "clave": "50626082600310266739800100001010000005936187654660",
+      "supplier": "Copey Vino de Altura Limitada",
+      "supplier_id": "3102667398",
+      "receiver": "MERAKI FAMILY",
+      "date": "2026-08-26",
+      "subtotal": 404601.84,
+      "iva": 52598.24,
+      "total": 457200.08,
+      "parsed_at": "2026-08-28T07:44:58.812312Z"
+    },
+    {
+      "clave": "50626082600310266739800100001010000005937160202860",
+      "supplier": "Copey Vino de Altura Limitada",
+      "supplier_id": "3102667398",
+      "receiver": "MERAKI FAMILY",
+      "date": "2026-08-26",
+      "subtotal": 202300.92,
+      "iva": 26299.12,
+      "total": 228600.04,
+      "parsed_at": "2026-08-28T07:44:58.812904Z"
+    },
+    {
+      "clave": "50626082600310257672000100020010000001407188405973",
+      "supplier": "AGROVETERINARIA NOSARA SRL",
+      "supplier_id": "3102576720",
+      "receiver": "MERAKI FAMILY LTDA",
+      "date": "2026-08-26",
+      "subtotal": 13530.5,
+      "iva": 1758.96,
+      "total": 15289.47,
+      "parsed_at": "2026-08-28T07:44:58.815516Z"
+    },
+    {
+      "clave": "50626082600310191086700100001010000023315136825241",
+      "supplier": "FERRETERIA Y MATERIALES DE CONSTRUCCION AEROPUERTO NOSARA SOCIEDAD ANONIMA",
+      "supplier_id": "3101910867",
+      "receiver": "MERAKI FAMILY LIMITADA",
+      "date": "2026-08-26",
+      "subtotal": 18663.72,
+      "iva": 2426.28,
+      "total": 21090.0,
+      "parsed_at": "2026-08-28T07:44:58.816355Z"
+    },
+    {
+      "clave": "50626082600310107443000100001010000016819146812436",
+      "supplier": "PRODUCTOS MAKY SOCIEDAD ANONIMA",
+      "supplier_id": "3101074430",
+      "receiver": "MERAKI FAMILY SA:THE BAKERY   .",
+      "date": "2026-08-26",
+      "subtotal": 125663.68,
+      "iva": 16336.29,
+      "total": 141999.97,
+      "parsed_at": "2026-08-28T07:44:58.818466Z"
+    },
+    {
+      "clave": "50626082600310175902500200001010000110440137877880",
+      "supplier": "RINDE MAS GUANACASTE S.A",
+      "supplier_id": "3101759025",
+      "receiver": "MERAKI FAMILY Ltda",
+      "date": "2026-08-26",
+      "subtotal": 1564.36,
+      "iva": 15.64,
+      "total": 1580.0,
+      "parsed_at": "2026-08-28T07:44:58.818875Z"
+    },
+    {
+      "clave": "50626082600310263070000100212010000086281100086281",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "receiver": "MERAKI FAMILY LTDA (RESTAURANTE EL COYOL)",
+      "date": "2026-08-26",
+      "subtotal": 11655.92,
+      "iva": 1515.27,
+      "total": 13171.19,
+      "parsed_at": "2026-08-28T07:44:58.821908Z"
+    },
+    {
+      "clave": "50626082600310107443000100001010000016820163872572",
+      "supplier": "PRODUCTOS MAKY SOCIEDAD ANONIMA",
+      "supplier_id": "3101074430",
+      "receiver": "MERAKI FAMILY SA:RESTAURANTE LA LUNA   .",
+      "date": "2026-08-26",
+      "subtotal": 221681.35,
+      "iva": 28818.57,
+      "total": 250499.92,
+      "parsed_at": "2026-08-28T07:44:58.822772Z"
+    },
+    {
+      "clave": "50626082600310175902500200001010000110442117227073",
+      "supplier": "RINDE MAS GUANACASTE S.A",
+      "supplier_id": "3101759025",
+      "receiver": "MERAKI FAMILY Ltda",
+      "date": "2026-08-26",
+      "subtotal": 4212.39,
+      "iva": 547.61,
+      "total": 4760.0,
+      "parsed_at": "2026-08-28T07:44:58.823200Z"
+    },
+    {
+      "clave": "50626082600310212090800100001010000049995100002825",
+      "supplier": "LICORERIAS HERRERA SRL",
+      "supplier_id": "3102120908",
+      "receiver": "MERAKI FAMILY LTDA",
+      "date": "2026-08-26",
+      "subtotal": 103857.5,
+      "iva": 13501.48,
+      "total": 117358.98,
+      "parsed_at": "2026-08-28T07:44:58.823667Z"
+    },
+    {
+      "clave": "50626082600310175902500200001010000110455115006927",
+      "supplier": "RINDE MAS GUANACASTE S.A",
+      "supplier_id": "3101759025",
+      "receiver": "MERAKI FAMILY Ltda",
+      "date": "2026-08-26",
+      "subtotal": 8150.44,
+      "iva": 1059.56,
+      "total": 9210.0,
+      "parsed_at": "2026-08-28T07:44:58.826605Z"
+    },
+    {
+      "clave": "50626082600310285267800100001010000130812114329588",
+      "supplier": "GRUPO SUPERMERCADO NOSARA LIMITADA",
+      "supplier_id": "3102852678",
+      "receiver": "MERAKI FAMILY S.A",
+      "date": "2026-08-26",
+      "subtotal": 98584.07,
+      "iva": 12815.93,
+      "total": 111400.0,
+      "parsed_at": "2026-08-28T07:44:58.827735Z"
+    },
+    {
+      "clave": "50625082600310107490301000001010001162859122308969",
+      "supplier": "EXPORTADORA PMT S.A.",
+      "supplier_id": "3101074903",
+      "receiver": "MERAKI FAMILYLIMITADA - RESTAURANTE LA LUNA PLAYA PELADA",
+      "date": "2026-08-25",
+      "subtotal": 195398.36,
+      "iva": 13065.98,
+      "total": 208464.34,
+      "parsed_at": "2026-08-28T07:44:58.803978Z"
+    },
+    {
+      "clave": "50625082600310107490301000001010001162951112228070",
+      "supplier": "EXPORTADORA PMT S.A.",
+      "supplier_id": "3101074903",
+      "receiver": "MERAKI FAMILYLIMITADA - RESTAURANTE LA LUNA PLAYA PELADA",
+      "date": "2026-08-25",
+      "subtotal": 308150.48,
+      "iva": 7463.6,
+      "total": 315614.08,
+      "parsed_at": "2026-08-28T07:44:58.810786Z"
+    },
+    {
+      "clave": "50625082600310107490301000001010001163057146180757",
+      "supplier": "EXPORTADORA PMT S.A.",
+      "supplier_id": "3101074903",
+      "receiver": "MERAKI FAMILYLIMITADA - RESTAURANTE LA LUNA PLAYA PELADA",
+      "date": "2026-08-25",
+      "subtotal": 208350.17,
+      "iva": 8919.07,
+      "total": 217269.24,
+      "parsed_at": "2026-08-28T07:44:58.820281Z"
+    },
+    {
+      "clave": "50604052600310110918000200002010000168534104052634",
+      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
+      "supplier_id": "3101109180",
+      "date": "2026-05-04",
+      "subtotal": 116485.99,
+      "iva": 15143.18,
+      "total": 131629.17,
+      "source_file": "50604052600310110918000200002010000168534104052634.xml"
+    },
+    {
+      "clave": "50604052600310110918000200002010000168558104052658",
+      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
+      "supplier_id": "3101109180",
+      "date": "2026-05-04",
+      "subtotal": 123855.44,
+      "iva": 16101.21,
+      "total": 139956.65,
+      "source_file": "50604052600310110918000200002010000168558104052658.xml"
+    },
+    {
+      "clave": "50604052600310110918000200002010000168580104052680",
+      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
+      "supplier_id": "3101109180",
+      "date": "2026-05-04",
+      "subtotal": 322197.39,
+      "iva": 38540.78,
+      "total": 360738.17,
+      "source_file": "50604052600310110918000200002010000168580104052680.xml"
+    },
+    {
+      "clave": "50604052600310110918000200002010000168587104052687",
+      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
+      "supplier_id": "3101109180",
+      "date": "2026-05-04",
+      "subtotal": 45093.6,
+      "iva": 5862.16,
+      "total": 50955.76,
+      "source_file": "50604052600310110918000200002010000168587104052687.xml"
+    },
+    {
+      "clave": "50602052600310117226700100001010002593407177919815",
+      "supplier": "Mayca Distribuidores, S.A.",
+      "supplier_id": "3101172267",
+      "date": "2026-05-02",
+      "subtotal": 38118.0,
+      "iva": 4955.34,
+      "total": 43073.34,
+      "source_file": "003101172267-FC-00100001010002593407.xml"
+    },
+    {
+      "clave": "50602052600310117226700100001010002593408177856686",
+      "supplier": "Mayca Distribuidores, S.A.",
+      "supplier_id": "3101172267",
+      "date": "2026-05-02",
+      "subtotal": 264346.0,
+      "iva": 19726.78,
+      "total": 284072.78,
+      "source_file": "003101172267-FC-00100001010002593408.xml"
+    },
+    {
+      "clave": "50602052600310129586800100001010012140679177722940",
+      "supplier": "Distribuidora La Florida S.A.",
+      "supplier_id": "3101295868",
+      "date": "2026-05-02",
+      "subtotal": 155156.16,
+      "iva": 20170.31,
+      "total": 175326.47,
+      "source_file": "003101295868-FE-00100001010012140679.xml"
+    },
+    {
+      "clave": "50601052600310107490301000001010001093386187886839",
+      "supplier": "EXPORTADORA PMT S.A.",
+      "supplier_id": "3101074903",
+      "date": "2026-05-01",
+      "subtotal": 84608.36,
+      "iva": 6402.08,
+      "total": 91010.44,
+      "source_file": "50601052600310107490301000001010001093386187886839.xml"
+    },
+    {
+      "clave": "50601052600310107490301000001010001093474170826318",
+      "supplier": "EXPORTADORA PMT S.A.",
+      "supplier_id": "3101074903",
+      "date": "2026-05-01",
+      "subtotal": 221997.18,
+      "iva": 20931.94,
+      "total": 242929.12,
+      "source_file": "50601052600310107490301000001010001093474170826318.xml"
+    },
+    {
+      "clave": "50625042600310117226700100001010002584850177250358",
+      "supplier": "Mayca Distribuidores, S.A.",
+      "supplier_id": "3101172267",
+      "date": "2026-04-25",
+      "subtotal": 60223.0,
+      "iva": 5925.43,
+      "total": 66148.43,
+      "items": [
+        {
+          "product": "LECHE EVAPORADA IDEAL 1 UN/360 GR",
+          "qty": 20.0,
+          "unit": "Unid",
+          "unit_price": 993.0,
+          "total": 22441.8
+        },
+        {
+          "product": "ALAMBRINAS # 40 1/25 UDS.",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 8922.0,
+          "total": 10081.86
+        },
+        {
+          "product": "GALLETA MOLIDA MARIA POZUELO 1/1 KG",
+          "qty": 2.0,
+          "unit": "Otros",
+          "unit_price": 4731.0,
+          "total": 9556.62
+        },
+        {
+          "product": "MAYONESA RELIANCE SYSCO 1/3.78L",
+          "qty": 1.0,
+          "unit": "Gal",
+          "unit_price": 6401.0,
+          "total": 6465.01
+        },
+        {
+          "product": "HELADO VAINILLA DOS PINOS 1/2.5 GALONES",
+          "qty": 1.0,
+          "unit": "Gal",
+          "unit_price": 15578.0,
+          "total": 17603.14
+        }
+      ],
+      "restaurant": null,
+      "source_file": "003101172267-FC-00100001010002584850.xml"
+    },
+    {
+      "clave": "50625042600310117226700100001010002584851177295209",
+      "supplier": "Mayca Distribuidores, S.A.",
+      "supplier_id": "3101172267",
+      "date": "2026-04-25",
+      "subtotal": 171157.0,
+      "iva": 9918.13,
+      "total": 181075.13,
+      "items": [
+        {
+          "product": "AJO EN POLVO MFS 1/454GR",
+          "qty": 2.0,
+          "unit": "Unid",
+          "unit_price": 3751.0,
+          "total": 8477.26
+        },
+        {
+          "product": "CREMA DULCE CORSO 32% 1/1 GL",
+          "qty": 2.0,
+          "unit": "Gal",
+          "unit_price": 12890.0,
+          "total": 29131.4
+        },
+        {
+          "product": "HARINA DE TRIGO NACARINA 1/ 25KG",
+          "qty": 2.0,
+          "unit": "Unid",
+          "unit_price": 20958.0,
+          "total": 42335.16
+        },
+        {
+          "product": "HARINA MASECA 1/20 KG",
+          "qty": 1.0,
+          "unit": "Otros",
+          "unit_price": 16038.0,
+          "total": 16198.38
+        },
+        {
+          "product": "HELADO VAINILLA DOS PINOS 1/2.5 GALONES",
+          "qty": 2.0,
+          "unit": "Gal",
+          "unit_price": 15578.0,
+          "total": 35206.28
+        }
+      ],
+      "restaurant": null,
+      "source_file": "003101172267-FE-00100001010002584851.xml"
+    },
+    {
+      "clave": "50625042600310129586800100001010012113711177809339",
+      "supplier": "Distribuidora La Florida S.A.",
+      "supplier_id": "3101295868",
+      "date": "2026-04-25",
+      "subtotal": 150908.4,
+      "iva": 19618.1,
+      "total": 170526.5,
+      "items": [
+        {
+          "product": "PILSEN 350ML VR",
+          "qty": 48.0,
+          "unit": "Otros",
+          "unit_price": 698.65,
+          "total": 37894.78
+        },
+        {
+          "product": "IMPERIAL 350ML VR",
+          "qty": 120.0,
+          "unit": "Otros",
+          "unit_price": 698.65,
+          "total": 94736.94
+        },
+        {
+          "product": "IMPERIAL LIGHT 350ML VR",
+          "qty": 48.0,
+          "unit": "Otros",
+          "unit_price": 698.65,
+          "total": 37894.78
+        }
+      ],
+      "restaurant": null,
+      "source_file": "003101295868-FE-00100001010012113711.xml"
+    },
+    {
+      "clave": "50625042600310278551500100001010000000758199999999",
+      "supplier": "TUCAN TICO TROPICAL EXPERIENCE S.R.L.",
+      "supplier_id": "3102785515",
+      "date": "2026-04-25",
+      "subtotal": 58500.0,
+      "iva": 585.0,
+      "total": 59085.0,
+      "items": [
+        {
+          "product": "Mermelada Fresa de Las Brumas Kilo",
+          "qty": 6.0,
+          "unit": "Unid",
+          "unit_price": 9750.0,
+          "total": 59085.0
+        }
+      ],
+      "restaurant": null,
+      "source_file": "50625042600310278551500100001010000000758199999999.xml"
+    },
+    {
+      "clave": "50624042600310107490301000001010001089370128121635",
+      "supplier": "EXPORTADORA PMT S.A.",
+      "supplier_id": "3101074903",
+      "date": "2026-04-24",
+      "subtotal": 28731.27,
+      "iva": 287.31,
+      "total": 29018.58,
+      "items": [
+        {
+          "product": "LECHE FOODIE ENTERA 12X1L",
+          "qty": 3.0,
+          "unit": "Unid",
+          "unit_price": 9577.09,
+          "total": 29018.58
+        }
+      ],
+      "restaurant": null,
+      "source_file": "50624042600310107490301000001010001089370128121635.xml"
+    },
+    {
+      "clave": "50624042600310107490301000001010001089483142884621",
+      "supplier": "EXPORTADORA PMT S.A.",
+      "supplier_id": "3101074903",
+      "date": "2026-04-24",
+      "subtotal": 333878.0,
+      "iva": 8738.78,
+      "total": 342616.78,
+      "items": [
+        {
+          "product": "ACEITE DORAL FRITURA ALTO REND",
+          "qty": 4.0,
+          "unit": "Unid",
+          "unit_price": 19330.0,
+          "total": 78093.2
+        },
+        {
+          "product": "MOLDE RED 8.3CM; 55 UD; DULCE",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 45000.0,
+          "total": 50850.0
+        },
+        {
+          "product": "TIRA DE ASADO CJ",
+          "qty": 30.44,
+          "unit": "Kg",
+          "unit_price": 6950.0,
+          "total": 213673.58
+        }
+      ],
+      "restaurant": null,
+      "source_file": "50624042600310107490301000001010001089483142884621.xml"
+    },
+    {
+      "clave": "50624042600310107490301000001010001089484121703361",
+      "supplier": "EXPORTADORA PMT S.A.",
+      "supplier_id": "3101074903",
+      "date": "2026-04-24",
+      "subtotal": 319929.0,
+      "iva": 27673.17,
+      "total": 347602.17,
+      "items": [
+        {
+          "product": "ACEITE DORAL FRITURA ALTO REND",
+          "qty": 6.0,
+          "unit": "Unid",
+          "unit_price": 19330.0,
+          "total": 117139.8
+        },
+        {
+          "product": "CA DEL LAGO PINOT GRIGIO",
+          "qty": 12.0,
+          "unit": "Unid",
+          "unit_price": 4955.75,
+          "total": 67199.97
+        },
+        {
+          "product": "MOZZARELLA BLOQUE CONG EEUU KG",
+          "qty": 44.8,
+          "unit": "Kg",
+          "unit_price": 3225.0,
+          "total": 163262.4
+        }
+      ],
+      "restaurant": null,
+      "source_file": "50624042600310107490301000001010001089484121703361.xml"
+    },
+    {
+      "clave": "50616042600060276013100100001010000000347100041769",
+      "supplier": "KARLA DE LOS ANGELES MARTINEZ OVIEDO",
+      "supplier_id": "602760131",
+      "date": "2026-04-16",
+      "subtotal": 21000.0,
+      "iva": 210.0,
+      "total": 21210.0,
+      "items": [
+        {
+          "product": "HUEVO DE PASTOREO, CARTÓN DE 15 UNIDADES",
+          "qty": 10.0,
+          "unit": "Unid",
+          "unit_price": 2100.0,
+          "total": 21210.0
+        }
+      ],
+      "restaurant": "esh",
+      "source_file": "50616042600060276013100100001010000000347100041769.xml"
+    },
+    {
+      "clave": "50616042600060276013100100001010000000348100041769",
+      "supplier": "KARLA DE LOS ANGELES MARTINEZ OVIEDO",
+      "supplier_id": "602760131",
+      "date": "2026-04-16",
+      "subtotal": 12600.0,
+      "iva": 126.0,
+      "total": 12726.0,
+      "items": [
+        {
+          "product": "HUEVO DE PASTOREO, CARTÓN DE 15 UNIDADES",
+          "qty": 6.0,
+          "unit": "Unid",
+          "unit_price": 2100.0,
+          "total": 12726.0
+        }
+      ],
+      "restaurant": "coyol",
+      "source_file": "50616042600060276013100100001010000000348100041769.xml"
+    },
+    {
+      "clave": "50616042600060276013100100001010000000349100041769",
+      "supplier": "KARLA DE LOS ANGELES MARTINEZ OVIEDO",
+      "supplier_id": "602760131",
+      "date": "2026-04-16",
+      "subtotal": 21000.0,
+      "iva": 210.0,
+      "total": 21210.0,
+      "items": [
+        {
+          "product": "HUEVO DE PASTOREO, CARTÓN DE 15 UNIDADES",
+          "qty": 10.0,
+          "unit": "Unid",
+          "unit_price": 2100.0,
+          "total": 21210.0
+        }
+      ],
+      "restaurant": "laluna",
+      "source_file": "50616042600060276013100100001010000000349100041769.xml"
+    },
+    {
+      "clave": "50616042600310110918000200003010000100870116042670",
+      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
+      "supplier_id": "3101109180",
+      "date": "2026-04-16",
+      "subtotal": 36542.4,
+      "iva": 4750.51,
+      "total": 41292.91,
+      "items": [
+        {
+          "product": "PROSCIUTTO CRUDO SILVER CITTERIO REBANADO PACK 500GR",
+          "qty": 2.0,
+          "unit": "Kg",
+          "unit_price": 22839.0,
+          "total": 41292.91
+        }
+      ],
+      "restaurant": null,
+      "source_file": "50616042600310110918000200003010000100870116042670_1.xml"
+    },
+    {
+      "clave": "50616042600310110918000200003010000100885116042685",
+      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
+      "supplier_id": "3101109180",
+      "date": "2026-04-16",
+      "subtotal": 265263.04,
+      "iva": 29905.28,
+      "total": 295168.32,
+      "items": [
+        {
+          "product": "AZUCAR CRUDO ZUKRA 2KG",
+          "qty": 12.0,
+          "total": 22105.51
+        },
+        {
+          "product": "VINAGRE CLARO GALON PIPPO",
+          "qty": 4.0,
+          "total": 7407.15
+        },
+        {
+          "product": "TOMATES SECOS EN ACEITE IPOSEA",
+          "qty": 4.0,
+          "total": 55002.98
+        },
+        {
+          "product": "TOALL INTERFOL ECONAT",
+          "qty": 1.0,
+          "total": 22114.55
+        },
+        {
+          "product": "TE MENTA TWININGS",
+          "qty": 1.0,
+          "total": 3072.42
+        },
+        {
+          "product": "OLIO SANSA LUGLIO 5LT",
+          "qty": 8.0,
+          "total": 114331.14
+        }
+      ],
+      "restaurant": null,
+      "source_file": "50616042600310110918000200003010000100885116042685_1.xml"
+    },
+    {
+      "clave": "50616042600310110918000200003010000100965116042665",
+      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
+      "supplier_id": "3101109180",
+      "date": "2026-04-16",
+      "subtotal": 57867.45,
+      "iva": 7522.78,
+      "total": 65390.23,
+      "items": [
+        {
+          "product": "AZUCAR ZUKRA SACHETS",
+          "qty": 1.0,
+          "total": 872.76
+        },
+        {
+          "product": "TOALL ROLL ECO PULITUTTO LUCART",
+          "qty": 2.0,
+          "total": 35934.68
+        },
+        {
+          "product": "OLIO SANSA LUGLIO 5LT",
+          "qty": 2.0,
+          "total": 28582.79
+        }
+      ],
+      "restaurant": null,
+      "source_file": "50616042600310110918000200003010000100965116042665_1.xml"
+    },
+    {
+      "clave": "50616042600310110918000200003010000100978116042678",
+      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
+      "supplier_id": "3101109180",
+      "date": "2026-04-16",
+      "subtotal": 163028.45,
+      "iva": 18709.1,
+      "total": 181737.55,
+      "items": [
+        {
+          "product": "SEMOLA DE TRIGO GRANORO 1k",
+          "qty": 10.0,
+          "total": 15634.8
+        },
+        {
+          "product": "SAL SALTARINA FINA 500GR",
+          "qty": 25.0,
+          "total": 5277.25
+        },
+        {
+          "product": "OLIO EXTRA VIRGEN 5L LUGLIO",
+          "qty": 3.0,
+          "total": 80266.73
+        },
+        {
+          "product": "LECHE DE COCO ROLAND",
+          "qty": 5.0,
+          "total": 7774.4
+        },
+        {
+          "product": "TOMATE PELADO CAMPORO",
+          "qty": 5.0,
+          "total": 15368.0
+        },
+        {
+          "product": "ALCACHOFA CORAZON NAT IPOSEA",
+          "qty": 3.0,
+          "total": 39306.54
+        }
+      ],
+      "restaurant": null,
+      "source_file": "50616042600310110918000200003010000100978116042678_1.xml"
+    },
+    {
+      "clave": "50616042615581547203100100001010000001636144122853",
+      "supplier": "MARIO GONZALEZ OLIVERA",
+      "supplier_id": "155815472031",
+      "date": "2026-04-16",
+      "subtotal": 35000.0,
+      "iva": 0.0,
+      "total": 35000.0,
+      "items": [
+        {
+          "product": "Cilindro de 100 lbs GLP",
+          "qty": 1.0,
+          "unit": "Unid",
+          "unit_price": 35000.0,
+          "total": 35000.0
+        }
+      ],
+      "restaurant": null,
+      "source_file": "FE-50616042615581547203100100001010000001636144122853.xml"
+    },
+    {
+      "clave": "50616042615581547203100100001010000001637178249477",
+      "supplier": "MARIO GONZALEZ OLIVERA",
+      "supplier_id": "155815472031",
+      "date": "2026-04-16",
+      "subtotal": 185000.0,
+      "iva": 0.0,
+      "total": 185000.0,
+      "items": [
+        {
+          "product": "Cilindro de 100 lbs GLP",
+          "qty": 5.0,
+          "unit": "Kg",
+          "unit_price": 37000.0,
+          "total": 185000.0
+        }
+      ],
+      "restaurant": null,
+      "source_file": "FE-50616042615581547203100100001010000001637178249477.xml"
+    },
+    {
+      "clave": "50616042600310263070000100212010000075504100075504",
+      "supplier": "Ferreterías Grupo Nosara S.R.L",
+      "supplier_id": "3102630700",
+      "date": "2026-04-16",
+      "subtotal": 72746.62,
+      "iva": 9457.06,
+      "total": 82203.68,
+      "items": [
+        {
+          "product": "REMACHE 3/16 X 3/8",
+          "qty": 3683.0,
+          "unit": "Unid",
+          "unit_price": 24.69,
+          "total": 82203.68
+        }
+      ],
+      "restaurant": "coyol",
+      "source_file": "50616042600310263070000100212010000075504100075504.xml"
+    },
+    {
       "clave": "50613042600310110918000200003010000100380113042680",
       "supplier": "Distribuidora Isleña de Alimentos, S.A.",
       "supplier_id": "3101109180",
@@ -3783,588 +4849,6 @@
         }
       ],
       "parsed_at": "2026-04-08T10:33:34.265941"
-    },
-    {
-      "clave": "50616042600060276013100100001010000000347100041769",
-      "supplier": "KARLA DE LOS ANGELES MARTINEZ OVIEDO",
-      "supplier_id": "602760131",
-      "date": "2026-04-16",
-      "subtotal": 21000.0,
-      "iva": 210.0,
-      "total": 21210.0,
-      "items": [
-        {
-          "product": "HUEVO DE PASTOREO, CARTÓN DE 15 UNIDADES",
-          "qty": 10.0,
-          "unit": "Unid",
-          "unit_price": 2100.0,
-          "total": 21210.0
-        }
-      ],
-      "restaurant": "esh",
-      "source_file": "50616042600060276013100100001010000000347100041769.xml"
-    },
-    {
-      "clave": "50616042600060276013100100001010000000348100041769",
-      "supplier": "KARLA DE LOS ANGELES MARTINEZ OVIEDO",
-      "supplier_id": "602760131",
-      "date": "2026-04-16",
-      "subtotal": 12600.0,
-      "iva": 126.0,
-      "total": 12726.0,
-      "items": [
-        {
-          "product": "HUEVO DE PASTOREO, CARTÓN DE 15 UNIDADES",
-          "qty": 6.0,
-          "unit": "Unid",
-          "unit_price": 2100.0,
-          "total": 12726.0
-        }
-      ],
-      "restaurant": "coyol",
-      "source_file": "50616042600060276013100100001010000000348100041769.xml"
-    },
-    {
-      "clave": "50616042600060276013100100001010000000349100041769",
-      "supplier": "KARLA DE LOS ANGELES MARTINEZ OVIEDO",
-      "supplier_id": "602760131",
-      "date": "2026-04-16",
-      "subtotal": 21000.0,
-      "iva": 210.0,
-      "total": 21210.0,
-      "items": [
-        {
-          "product": "HUEVO DE PASTOREO, CARTÓN DE 15 UNIDADES",
-          "qty": 10.0,
-          "unit": "Unid",
-          "unit_price": 2100.0,
-          "total": 21210.0
-        }
-      ],
-      "restaurant": "laluna",
-      "source_file": "50616042600060276013100100001010000000349100041769.xml"
-    },
-    {
-      "clave": "50616042600310110918000200003010000100870116042670",
-      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
-      "supplier_id": "3101109180",
-      "date": "2026-04-16",
-      "subtotal": 36542.4,
-      "iva": 4750.51,
-      "total": 41292.91,
-      "items": [
-        {
-          "product": "PROSCIUTTO CRUDO SILVER CITTERIO REBANADO PACK 500GR",
-          "qty": 2.0,
-          "unit": "Kg",
-          "unit_price": 22839.0,
-          "total": 41292.91
-        }
-      ],
-      "restaurant": null,
-      "source_file": "50616042600310110918000200003010000100870116042670_1.xml"
-    },
-    {
-      "clave": "50616042600310110918000200003010000100885116042685",
-      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
-      "supplier_id": "3101109180",
-      "date": "2026-04-16",
-      "subtotal": 265263.04,
-      "iva": 29905.28,
-      "total": 295168.32,
-      "items": [
-        {
-          "product": "AZUCAR CRUDO ZUKRA 2KG",
-          "qty": 12.0,
-          "total": 22105.51
-        },
-        {
-          "product": "VINAGRE CLARO GALON PIPPO",
-          "qty": 4.0,
-          "total": 7407.15
-        },
-        {
-          "product": "TOMATES SECOS EN ACEITE IPOSEA",
-          "qty": 4.0,
-          "total": 55002.98
-        },
-        {
-          "product": "TOALL INTERFOL ECONAT",
-          "qty": 1.0,
-          "total": 22114.55
-        },
-        {
-          "product": "TE MENTA TWININGS",
-          "qty": 1.0,
-          "total": 3072.42
-        },
-        {
-          "product": "OLIO SANSA LUGLIO 5LT",
-          "qty": 8.0,
-          "total": 114331.14
-        }
-      ],
-      "restaurant": null,
-      "source_file": "50616042600310110918000200003010000100885116042685_1.xml"
-    },
-    {
-      "clave": "50616042600310110918000200003010000100965116042665",
-      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
-      "supplier_id": "3101109180",
-      "date": "2026-04-16",
-      "subtotal": 57867.45,
-      "iva": 7522.78,
-      "total": 65390.23,
-      "items": [
-        {
-          "product": "AZUCAR ZUKRA SACHETS",
-          "qty": 1.0,
-          "total": 872.76
-        },
-        {
-          "product": "TOALL ROLL ECO PULITUTTO LUCART",
-          "qty": 2.0,
-          "total": 35934.68
-        },
-        {
-          "product": "OLIO SANSA LUGLIO 5LT",
-          "qty": 2.0,
-          "total": 28582.79
-        }
-      ],
-      "restaurant": null,
-      "source_file": "50616042600310110918000200003010000100965116042665_1.xml"
-    },
-    {
-      "clave": "50616042600310110918000200003010000100978116042678",
-      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
-      "supplier_id": "3101109180",
-      "date": "2026-04-16",
-      "subtotal": 163028.45,
-      "iva": 18709.1,
-      "total": 181737.55,
-      "items": [
-        {
-          "product": "SEMOLA DE TRIGO GRANORO 1k",
-          "qty": 10.0,
-          "total": 15634.8
-        },
-        {
-          "product": "SAL SALTARINA FINA 500GR",
-          "qty": 25.0,
-          "total": 5277.25
-        },
-        {
-          "product": "OLIO EXTRA VIRGEN 5L LUGLIO",
-          "qty": 3.0,
-          "total": 80266.73
-        },
-        {
-          "product": "LECHE DE COCO ROLAND",
-          "qty": 5.0,
-          "total": 7774.4
-        },
-        {
-          "product": "TOMATE PELADO CAMPORO",
-          "qty": 5.0,
-          "total": 15368.0
-        },
-        {
-          "product": "ALCACHOFA CORAZON NAT IPOSEA",
-          "qty": 3.0,
-          "total": 39306.54
-        }
-      ],
-      "restaurant": null,
-      "source_file": "50616042600310110918000200003010000100978116042678_1.xml"
-    },
-    {
-      "clave": "50616042615581547203100100001010000001636144122853",
-      "supplier": "MARIO GONZALEZ OLIVERA",
-      "supplier_id": "155815472031",
-      "date": "2026-04-16",
-      "subtotal": 35000.0,
-      "iva": 0.0,
-      "total": 35000.0,
-      "items": [
-        {
-          "product": "Cilindro de 100 lbs GLP",
-          "qty": 1.0,
-          "unit": "Unid",
-          "unit_price": 35000.0,
-          "total": 35000.0
-        }
-      ],
-      "restaurant": null,
-      "source_file": "FE-50616042615581547203100100001010000001636144122853.xml"
-    },
-    {
-      "clave": "50616042615581547203100100001010000001637178249477",
-      "supplier": "MARIO GONZALEZ OLIVERA",
-      "supplier_id": "155815472031",
-      "date": "2026-04-16",
-      "subtotal": 185000.0,
-      "iva": 0.0,
-      "total": 185000.0,
-      "items": [
-        {
-          "product": "Cilindro de 100 lbs GLP",
-          "qty": 5.0,
-          "unit": "Kg",
-          "unit_price": 37000.0,
-          "total": 185000.0
-        }
-      ],
-      "restaurant": null,
-      "source_file": "FE-50616042615581547203100100001010000001637178249477.xml"
-    },
-    {
-      "clave": "50616042600310263070000100212010000075504100075504",
-      "supplier": "Ferreterías Grupo Nosara S.R.L",
-      "supplier_id": "3102630700",
-      "date": "2026-04-16",
-      "subtotal": 72746.62,
-      "iva": 9457.06,
-      "total": 82203.68,
-      "items": [
-        {
-          "product": "REMACHE 3/16 X 3/8",
-          "qty": 3683.0,
-          "unit": "Unid",
-          "unit_price": 24.69,
-          "total": 82203.68
-        }
-      ],
-      "restaurant": "coyol",
-      "source_file": "50616042600310263070000100212010000075504100075504.xml"
-    },
-    {
-      "clave": "50625042600310117226700100001010002584850177250358",
-      "supplier": "Mayca Distribuidores, S.A.",
-      "supplier_id": "3101172267",
-      "date": "2026-04-25",
-      "subtotal": 60223.0,
-      "iva": 5925.43,
-      "total": 66148.43,
-      "items": [
-        {
-          "product": "LECHE EVAPORADA IDEAL 1 UN/360 GR",
-          "qty": 20.0,
-          "unit": "Unid",
-          "unit_price": 993.0,
-          "total": 22441.8
-        },
-        {
-          "product": "ALAMBRINAS # 40 1/25 UDS.",
-          "qty": 1.0,
-          "unit": "Unid",
-          "unit_price": 8922.0,
-          "total": 10081.86
-        },
-        {
-          "product": "GALLETA MOLIDA MARIA POZUELO 1/1 KG",
-          "qty": 2.0,
-          "unit": "Otros",
-          "unit_price": 4731.0,
-          "total": 9556.62
-        },
-        {
-          "product": "MAYONESA RELIANCE SYSCO 1/3.78L",
-          "qty": 1.0,
-          "unit": "Gal",
-          "unit_price": 6401.0,
-          "total": 6465.01
-        },
-        {
-          "product": "HELADO VAINILLA DOS PINOS 1/2.5 GALONES",
-          "qty": 1.0,
-          "unit": "Gal",
-          "unit_price": 15578.0,
-          "total": 17603.14
-        }
-      ],
-      "restaurant": null,
-      "source_file": "003101172267-FC-00100001010002584850.xml"
-    },
-    {
-      "clave": "50625042600310117226700100001010002584851177295209",
-      "supplier": "Mayca Distribuidores, S.A.",
-      "supplier_id": "3101172267",
-      "date": "2026-04-25",
-      "subtotal": 171157.0,
-      "iva": 9918.13,
-      "total": 181075.13,
-      "items": [
-        {
-          "product": "AJO EN POLVO MFS 1/454GR",
-          "qty": 2.0,
-          "unit": "Unid",
-          "unit_price": 3751.0,
-          "total": 8477.26
-        },
-        {
-          "product": "CREMA DULCE CORSO 32% 1/1 GL",
-          "qty": 2.0,
-          "unit": "Gal",
-          "unit_price": 12890.0,
-          "total": 29131.4
-        },
-        {
-          "product": "HARINA DE TRIGO NACARINA 1/ 25KG",
-          "qty": 2.0,
-          "unit": "Unid",
-          "unit_price": 20958.0,
-          "total": 42335.16
-        },
-        {
-          "product": "HARINA MASECA 1/20 KG",
-          "qty": 1.0,
-          "unit": "Otros",
-          "unit_price": 16038.0,
-          "total": 16198.38
-        },
-        {
-          "product": "HELADO VAINILLA DOS PINOS 1/2.5 GALONES",
-          "qty": 2.0,
-          "unit": "Gal",
-          "unit_price": 15578.0,
-          "total": 35206.28
-        }
-      ],
-      "restaurant": null,
-      "source_file": "003101172267-FE-00100001010002584851.xml"
-    },
-    {
-      "clave": "50625042600310129586800100001010012113711177809339",
-      "supplier": "Distribuidora La Florida S.A.",
-      "supplier_id": "3101295868",
-      "date": "2026-04-25",
-      "subtotal": 150908.4,
-      "iva": 19618.1,
-      "total": 170526.5,
-      "items": [
-        {
-          "product": "PILSEN 350ML VR",
-          "qty": 48.0,
-          "unit": "Otros",
-          "unit_price": 698.65,
-          "total": 37894.78
-        },
-        {
-          "product": "IMPERIAL 350ML VR",
-          "qty": 120.0,
-          "unit": "Otros",
-          "unit_price": 698.65,
-          "total": 94736.94
-        },
-        {
-          "product": "IMPERIAL LIGHT 350ML VR",
-          "qty": 48.0,
-          "unit": "Otros",
-          "unit_price": 698.65,
-          "total": 37894.78
-        }
-      ],
-      "restaurant": null,
-      "source_file": "003101295868-FE-00100001010012113711.xml"
-    },
-    {
-      "clave": "50624042600310107490301000001010001089370128121635",
-      "supplier": "EXPORTADORA PMT S.A.",
-      "supplier_id": "3101074903",
-      "date": "2026-04-24",
-      "subtotal": 28731.27,
-      "iva": 287.31,
-      "total": 29018.58,
-      "items": [
-        {
-          "product": "LECHE FOODIE ENTERA 12X1L",
-          "qty": 3.0,
-          "unit": "Unid",
-          "unit_price": 9577.09,
-          "total": 29018.58
-        }
-      ],
-      "restaurant": null,
-      "source_file": "50624042600310107490301000001010001089370128121635.xml"
-    },
-    {
-      "clave": "50624042600310107490301000001010001089483142884621",
-      "supplier": "EXPORTADORA PMT S.A.",
-      "supplier_id": "3101074903",
-      "date": "2026-04-24",
-      "subtotal": 333878.0,
-      "iva": 8738.78,
-      "total": 342616.78,
-      "items": [
-        {
-          "product": "ACEITE DORAL FRITURA ALTO REND",
-          "qty": 4.0,
-          "unit": "Unid",
-          "unit_price": 19330.0,
-          "total": 78093.2
-        },
-        {
-          "product": "MOLDE RED 8.3CM; 55 UD; DULCE",
-          "qty": 1.0,
-          "unit": "Unid",
-          "unit_price": 45000.0,
-          "total": 50850.0
-        },
-        {
-          "product": "TIRA DE ASADO CJ",
-          "qty": 30.44,
-          "unit": "Kg",
-          "unit_price": 6950.0,
-          "total": 213673.58
-        }
-      ],
-      "restaurant": null,
-      "source_file": "50624042600310107490301000001010001089483142884621.xml"
-    },
-    {
-      "clave": "50624042600310107490301000001010001089484121703361",
-      "supplier": "EXPORTADORA PMT S.A.",
-      "supplier_id": "3101074903",
-      "date": "2026-04-24",
-      "subtotal": 319929.0,
-      "iva": 27673.17,
-      "total": 347602.17,
-      "items": [
-        {
-          "product": "ACEITE DORAL FRITURA ALTO REND",
-          "qty": 6.0,
-          "unit": "Unid",
-          "unit_price": 19330.0,
-          "total": 117139.8
-        },
-        {
-          "product": "CA DEL LAGO PINOT GRIGIO",
-          "qty": 12.0,
-          "unit": "Unid",
-          "unit_price": 4955.75,
-          "total": 67199.97
-        },
-        {
-          "product": "MOZZARELLA BLOQUE CONG EEUU KG",
-          "qty": 44.8,
-          "unit": "Kg",
-          "unit_price": 3225.0,
-          "total": 163262.4
-        }
-      ],
-      "restaurant": null,
-      "source_file": "50624042600310107490301000001010001089484121703361.xml"
-    },
-    {
-      "clave": "50625042600310278551500100001010000000758199999999",
-      "supplier": "TUCAN TICO TROPICAL EXPERIENCE S.R.L.",
-      "supplier_id": "3102785515",
-      "date": "2026-04-25",
-      "subtotal": 58500.0,
-      "iva": 585.0,
-      "total": 59085.0,
-      "items": [
-        {
-          "product": "Mermelada Fresa de Las Brumas Kilo",
-          "qty": 6.0,
-          "unit": "Unid",
-          "unit_price": 9750.0,
-          "total": 59085.0
-        }
-      ],
-      "restaurant": null,
-      "source_file": "50625042600310278551500100001010000000758199999999.xml"
-    },
-    {
-      "clave": "50602052600310117226700100001010002593407177919815",
-      "supplier": "Mayca Distribuidores, S.A.",
-      "supplier_id": "3101172267",
-      "date": "2026-05-02",
-      "subtotal": 38118.0,
-      "iva": 4955.34,
-      "total": 43073.34,
-      "source_file": "003101172267-FC-00100001010002593407.xml"
-    },
-    {
-      "clave": "50602052600310117226700100001010002593408177856686",
-      "supplier": "Mayca Distribuidores, S.A.",
-      "supplier_id": "3101172267",
-      "date": "2026-05-02",
-      "subtotal": 264346.0,
-      "iva": 19726.78,
-      "total": 284072.78,
-      "source_file": "003101172267-FC-00100001010002593408.xml"
-    },
-    {
-      "clave": "50602052600310129586800100001010012140679177722940",
-      "supplier": "Distribuidora La Florida S.A.",
-      "supplier_id": "3101295868",
-      "date": "2026-05-02",
-      "subtotal": 155156.16,
-      "iva": 20170.31,
-      "total": 175326.47,
-      "source_file": "003101295868-FE-00100001010012140679.xml"
-    },
-    {
-      "clave": "50601052600310107490301000001010001093386187886839",
-      "supplier": "EXPORTADORA PMT S.A.",
-      "supplier_id": "3101074903",
-      "date": "2026-05-01",
-      "subtotal": 84608.36,
-      "iva": 6402.08,
-      "total": 91010.44,
-      "source_file": "50601052600310107490301000001010001093386187886839.xml"
-    },
-    {
-      "clave": "50601052600310107490301000001010001093474170826318",
-      "supplier": "EXPORTADORA PMT S.A.",
-      "supplier_id": "3101074903",
-      "date": "2026-05-01",
-      "subtotal": 221997.18,
-      "iva": 20931.94,
-      "total": 242929.12,
-      "source_file": "50601052600310107490301000001010001093474170826318.xml"
-    },
-    {
-      "clave": "50604052600310110918000200002010000168534104052634",
-      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
-      "supplier_id": "3101109180",
-      "date": "2026-05-04",
-      "subtotal": 116485.99,
-      "iva": 15143.18,
-      "total": 131629.17,
-      "source_file": "50604052600310110918000200002010000168534104052634.xml"
-    },
-    {
-      "clave": "50604052600310110918000200002010000168558104052658",
-      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
-      "supplier_id": "3101109180",
-      "date": "2026-05-04",
-      "subtotal": 123855.44,
-      "iva": 16101.21,
-      "total": 139956.65,
-      "source_file": "50604052600310110918000200002010000168558104052658.xml"
-    },
-    {
-      "clave": "50604052600310110918000200002010000168580104052680",
-      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
-      "supplier_id": "3101109180",
-      "date": "2026-05-04",
-      "subtotal": 322197.39,
-      "iva": 38540.78,
-      "total": 360738.17,
-      "source_file": "50604052600310110918000200002010000168580104052680.xml"
-    },
-    {
-      "clave": "50604052600310110918000200002010000168587104052687",
-      "supplier": "Distribuidora Isleña de Alimentos, S.A.",
-      "supplier_id": "3101109180",
-      "date": "2026-05-04",
-      "subtotal": 45093.6,
-      "iva": 5862.16,
-      "total": 50955.76,
-      "source_file": "50604052600310110918000200002010000168587104052687.xml"
     }
   ]
 }
