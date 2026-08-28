@@ -1,0 +1,2014 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Linea Privada Nosara Hills</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Modern Blue Palette */
+      --primary: #0f172a;
+      --primary-light: #1e293b;
+      --accent: #3b82f6;
+      --accent-light: #60a5fa;
+      --success: #10b981;
+      --success-light: #34d399;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-400: #94a3b8;
+      --gray-500: #64748b;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --gray-900: #0f172a;
+      /* Aliases for compatibility */
+      --keswick: #0f172a;
+      --keswick-dark: #020617;
+      --coniston: #64748b;
+      --limestone: #e2e8f0;
+      --limestone-light: #f1f5f9;
+      --alaska: #f8fafc;
+      --santorini: #0f172a;
+      --sand: #f59e0b;
+      --sand-light: #fbbf24;
+      --terracotta: #ef4444;
+      --white: #ffffff;
+      --radius: 8px;
+      --shadow: 0 2px 8px rgba(26,31,22,0.08);
+      --shadow-md: 0 4px 16px rgba(26,31,22,0.12);
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--alaska);
+      color: var(--santorini);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    
+    h1, h2, h3, .serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+    
+    /* Header */
+    .header {
+      background: var(--keswick);
+      color: var(--alaska);
+      padding: 0 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 72px;
+      box-shadow: var(--shadow-md);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header h1 {
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .header h1 .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--sand);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .header-nav {
+      display: flex;
+      gap: 2px;
+      background: rgba(0,0,0,0.15);
+      padding: 4px;
+      border-radius: 6px;
+    }
+    .header-nav a {
+      color: var(--limestone);
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .header-nav a:hover { color: var(--alaska); background: rgba(255,255,255,0.08); }
+    .header-nav a.active { color: white; background: rgba(255,255,255,0.2); }
+    .header-month {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .header-month select {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--alaska);
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .header-month select option { color: var(--santorini); background: white; }
+    
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    
+    /* Main Layout */
+    .main {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      background: var(--white);
+      border-right: 1px solid var(--limestone);
+      padding: 28px;
+      overflow-y: auto;
+      max-height: calc(100vh - 72px);
+    }
+    
+    .section-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--coniston);
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--limestone-light);
+    }
+    
+    /* ICE Bill Section */
+    .ice-drop {
+      border: 2px dashed var(--limestone);
+      border-radius: var(--radius);
+      padding: 28px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: var(--alaska);
+      margin-bottom: 24px;
+    }
+    .ice-drop:hover, .ice-drop.dragover {
+      border-color: var(--sand);
+      background: var(--limestone-light);
+    }
+    .ice-drop-icon {
+      width: 56px;
+      height: 56px;
+      background: var(--sand);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin: 0 auto 14px;
+    }
+    .ice-drop-text { 
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 16px; 
+      font-weight: 600; 
+      color: var(--santorini); 
+    }
+    .ice-drop-hint { font-size: 12px; color: var(--coniston); margin-top: 6px; }
+    .ice-status {
+      background: var(--limestone-light);
+      border: 1px solid var(--coniston);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--keswick-dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    
+    /* Form Inputs */
+    .form-group { margin-bottom: 20px; }
+    .form-label {
+      display: block;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--coniston);
+      margin-bottom: 8px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1px solid var(--limestone);
+      border-radius: 6px;
+      font-size: 15px;
+      font-family: inherit;
+      transition: all 0.2s;
+      background: var(--white);
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: var(--keswick);
+      box-shadow: 0 0 0 3px rgba(61,79,61,0.1);
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--limestone);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+    }
+    .stat-value {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 42px;
+      font-weight: 600;
+      color: var(--keswick);
+      line-height: 1;
+    }
+    .stat-value.success { color: var(--coniston); }
+    .stat-value.warning { color: var(--sand); }
+    .stat-value.danger { color: var(--terracotta); }
+    .stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--coniston);
+      margin-top: 8px;
+    }
+    
+    /* Filter Buttons */
+    .filter-group {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 10px 16px;
+      border: 1px solid var(--limestone);
+      background: var(--white);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--coniston);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .filter-btn:hover { border-color: var(--keswick); background: var(--alaska); }
+    .filter-btn.active { 
+      background: var(--keswick); 
+      color: var(--alaska); 
+      border-color: var(--keswick); 
+    }
+    
+    /* Meter List */
+    .meter-list { max-height: 380px; overflow-y: auto; }
+    .meter-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 18px;
+      background: var(--white);
+      border: 1px solid var(--limestone);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .meter-item:hover {
+      border-color: var(--keswick);
+      background: var(--alaska);
+      transform: translateX(4px);
+    }
+    .meter-item.selected {
+      border-color: var(--keswick);
+      border-width: 2px;
+      background: var(--limestone-light);
+    }
+    .meter-item.completed {
+      background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+      border-color: var(--success);
+      border-left: 4px solid var(--success);
+    }
+    .meter-item.has-data {
+      border-left: 4px solid var(--coniston);
+    }
+    .meter-name { 
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 16px; 
+      font-weight: 600; 
+      color: var(--santorini); 
+    }
+    .meter-owner { font-size: 13px; color: var(--coniston); margin-top: 2px; }
+    .meter-location { font-size: 11px; color: var(--sand); letter-spacing: 0.02em; }
+    .meter-status {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .meter-status.pending { background: var(--limestone); color: var(--coniston); }
+    .meter-status.done { background: var(--keswick); color: var(--alaska); }
+    
+    /* Content Area */
+    .content {
+      padding: 32px;
+      overflow-y: auto;
+      max-height: calc(100vh - 72px);
+      background: var(--alaska);
+    }
+    
+    /* Drop Zone */
+    .drop-zone {
+      border: 2px dashed var(--limestone);
+      border-radius: 12px;
+      padding: 64px 48px;
+      text-align: center;
+      background: var(--white);
+      transition: all 0.3s;
+      cursor: pointer;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow);
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--keswick);
+      background: var(--limestone-light);
+    }
+    .drop-zone.has-selection {
+      border-color: var(--coniston);
+      border-style: solid;
+    }
+    .drop-zone-icon {
+      width: 88px;
+      height: 88px;
+      background: var(--limestone-light);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 44px;
+      margin: 0 auto 24px;
+    }
+    .drop-zone-text { 
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 22px; 
+      font-weight: 600; 
+      color: var(--santorini); 
+    }
+    .drop-zone-hint { font-size: 14px; color: var(--coniston); margin-top: 8px; }
+    .drop-zone-warning {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      background: var(--limestone-light);
+      border: 1px solid var(--sand);
+      border-radius: 8px;
+      color: var(--santorini);
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .drop-zone-selected {
+      margin-top: 20px;
+      padding: 14px 28px;
+      background: var(--keswick);
+      border-radius: 8px;
+      color: var(--alaska);
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .drop-zone input[type="file"] { display: none; }
+    
+    /* Preview Card */
+    .preview-card {
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      display: none;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--limestone);
+    }
+    .preview-card.active { display: block; }
+    .preview-header {
+      background: var(--keswick);
+      padding: 20px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .preview-title { 
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 20px; 
+      font-weight: 600; 
+      color: var(--alaska); 
+    }
+    .preview-body {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 36px;
+      padding: 28px;
+    }
+    .preview-image {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid var(--limestone);
+    }
+    .preview-form .reading-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    .preview-form .calculated {
+      background: var(--limestone-light);
+      padding: 24px;
+      border-radius: 10px;
+      margin-bottom: 24px;
+    }
+    .preview-form .calculated-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--limestone);
+      font-size: 14px;
+    }
+    .preview-form .calculated-row:last-child {
+      border-bottom: none;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 700;
+      font-size: 28px;
+      color: var(--keswick);
+      padding-top: 20px;
+    }
+    
+    /* Buttons */
+    .btn {
+      padding: 14px 28px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: var(--keswick);
+      color: var(--alaska);
+    }
+    .btn-primary:hover { background: var(--keswick-dark); }
+    .btn-accent {
+      background: var(--sand);
+      color: var(--santorini);
+    }
+    .btn-accent:hover { background: var(--sand-light); }
+    .btn-success {
+      background: var(--coniston);
+      color: var(--alaska);
+    }
+    .btn-success:hover { background: var(--keswick); }
+    .btn-outline {
+      background: var(--white);
+      border: 1px solid var(--limestone);
+      color: var(--santorini);
+    }
+    .btn-outline:hover { background: var(--alaska); border-color: var(--keswick); }
+    .btn-sm { padding: 10px 16px; font-size: 12px; }
+    
+    /* Invoices Table */
+    .invoices-section {
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--limestone);
+    }
+    .invoices-header {
+      background: var(--limestone-light);
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--limestone);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 600;
+      font-size: 18px;
+    }
+    .invoices-table { width: 100%; border-collapse: collapse; }
+    .invoices-table th {
+      text-align: left;
+      padding: 16px 24px;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--coniston);
+      border-bottom: 1px solid var(--limestone);
+      background: var(--alaska);
+    }
+    .invoices-table td {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--limestone-light);
+      font-size: 14px;
+    }
+    .invoices-table tr:hover { background: var(--alaska); }
+    .invoices-table tr:last-child td { border-bottom: none; }
+    
+    /* Settings Page */
+    .settings-container { max-width: 1200px; margin: 0 auto; padding: 32px; }
+    .settings-section {
+      background: var(--white);
+      border: 1px solid var(--limestone);
+      border-radius: 12px;
+      margin-bottom: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .settings-header {
+      background: var(--limestone-light);
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--limestone);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 600;
+      font-size: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .settings-body { padding: 28px; }
+    
+    /* Meter Edit Cards */
+    .meter-edit-card {
+      background: var(--alaska);
+      border: 1px solid var(--limestone);
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 16px;
+      display: grid;
+      grid-template-columns: 2fr 2fr 2fr 1.5fr auto;
+      gap: 20px;
+      align-items: end;
+      transition: all 0.2s;
+    }
+    .meter-edit-card:hover {
+      border-color: var(--coniston);
+      box-shadow: var(--shadow);
+    }
+    .meter-field-label {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--coniston);
+      margin-bottom: 8px;
+    }
+    .meter-edit-card input, .meter-edit-card select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--limestone);
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--white);
+    }
+    .meter-edit-card input:focus, .meter-edit-card select:focus {
+      outline: none;
+      border-color: var(--keswick);
+    }
+    
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(26,31,22,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: var(--white);
+      border-radius: 16px;
+      width: 750px;
+      max-width: 95vw;
+      max-height: 90vh;
+      overflow: auto;
+      box-shadow: 0 25px 50px -12px rgba(26, 31, 22, 0.4);
+    }
+    .modal-header {
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--limestone);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 600;
+      font-size: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-body { padding: 28px; }
+    .modal-footer {
+      padding: 20px 28px;
+      border-top: 1px solid var(--limestone);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      background: var(--alaska);
+    }
+    
+    /* Mobile Responsive */
+    @media (max-width: 1024px) {
+      .main { grid-template-columns: 1fr; }
+      .sidebar { max-height: none; border-right: none; border-bottom: 1px solid var(--limestone); }
+      .preview-body { grid-template-columns: 1fr; }
+      .meter-edit-card { grid-template-columns: 1fr 1fr; }
+    }
+    
+    @media (max-width: 768px) {
+      .header { flex-wrap: wrap; gap: 12px; padding: 16px; height: auto; }
+      .header h1 { font-size: 18px; }
+      .header-nav { order: 3; width: 100%; justify-content: center; }
+      .header-month { order: 2; }
+      .content { padding: 20px; }
+      .sidebar { padding: 20px; }
+      .drop-zone { padding: 40px 24px; }
+      .drop-zone-icon { width: 64px; height: 64px; font-size: 32px; }
+      .drop-zone-text { font-size: 18px; }
+      .btn { padding: 16px 24px; }
+      .meter-list { max-height: none; }
+      .invoices-table { font-size: 12px; }
+      .invoices-table th, .invoices-table td { padding: 12px 16px; }
+      .meter-edit-card { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>
+      <span class="logo-icon">⚡</span>
+      Linea Privada Nosara Hills
+    </h1>
+    <nav class="header-nav">
+      <a class="active" onclick="showTab('billing')">Facturacion</a>
+      <a onclick="showTab('settings')">Medidores</a>
+      <a onclick="showTab('report')">Reportes</a>
+    </nav>
+    <div class="header-month">
+      <select id="billingMonthSelect" onchange="updateMonthFromSelect()">
+        <option value="01">Enero</option>
+        <option value="02">Febrero</option>
+        <option value="03">Marzo</option>
+        <option value="04">Abril</option>
+        <option value="05">Mayo</option>
+        <option value="06">Junio</option>
+        <option value="07" selected>Julio</option>
+        <option value="08">Agosto</option>
+        <option value="09">Septiembre</option>
+        <option value="10">Octubre</option>
+        <option value="11">Noviembre</option>
+        <option value="12">Diciembre</option>
+      </select>
+      <select id="billingYearSelect" onchange="updateMonthFromSelect()">
+        <option value="2025">2025</option>
+        <option value="2026" selected>2026</option>
+        <option value="2027">2027</option>
+      </select>
+      <input type="hidden" id="billingMonth" value="2026-07">
+    </div>
+  </header>
+  
+  <!-- BILLING TAB -->
+  <div id="tab-billing" class="tab-content active">
+    <main class="main">
+      <aside class="sidebar">
+        <div class="section-title">Factura ICE del Mes</div>
+        
+        <!-- Upload Mode -->
+        <div id="iceBillUploadMode">
+          <div class="ice-drop" id="iceBillDropZone" onclick="document.getElementById('iceBillInput').click()">
+            <div class="ice-drop-icon">📄</div>
+            <div class="ice-drop-text">Factura ICE de <span id="iceBillMonth">Julio 2026</span></div>
+            <div class="ice-drop-hint">Arrastra PDF o imagen</div>
+            <input type="file" id="iceBillInput" accept=".pdf,image/*" style="display:none" onchange="handleIceBillUpload(event)">
+          </div>
+          <div class="ice-status" id="iceBillStatus" style="display:none">
+            ✓ <span id="iceBillFileName">factura.pdf</span>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Factura ICE (₡)</label>
+              <input type="number" class="form-input" id="iceBill" placeholder="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Consumo Macro (KW)</label>
+              <input type="number" class="form-input" id="totalKw" placeholder="0">
+            </div>
+          </div>
+          
+          <button class="btn btn-primary" onclick="saveMonthSetup()" style="width:100%">Guardar Datos del Mes</button>
+        </div>
+        
+        <!-- Saved Mode -->
+        <div id="iceBillSavedMode" style="display:none;">
+          <div style="background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%); border: 1px solid var(--gray-200); border-radius: 10px; padding: 20px; cursor: pointer;" onclick="viewIceBill(document.getElementById('billingMonth').value)">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+              <div style="width: 44px; height: 44px; background: var(--success); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;">📄</div>
+              <div>
+                <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; font-weight: 600; color: var(--gray-900);">Factura ICE <span id="iceBillMonthSaved">Julio 2026</span></div>
+                <div style="font-size: 12px; color: var(--gray-500);" id="iceBillFileNameSaved">factura.pdf</div>
+                <div style="font-size: 10px; color: var(--accent); margin-top: 2px;">Click para ver PDF ↗</div>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+              <div style="background: white; padding: 14px; border-radius: 8px; text-align: center; border: 1px solid var(--gray-200);">
+                <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; font-weight: 600; color: var(--accent);" id="iceBillAmountSaved">₡0</div>
+                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-500); margin-top: 4px;">Monto</div>
+              </div>
+              <div style="background: white; padding: 14px; border-radius: 8px; text-align: center; border: 1px solid var(--gray-200);">
+                <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; font-weight: 600; color: var(--accent);" id="iceBillKwSaved">0</div>
+                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-500); margin-top: 4px;">KW Total</div>
+              </div>
+              <div style="background: white; padding: 14px; border-radius: 8px; text-align: center; border: 1px solid var(--gray-200);">
+                <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; font-weight: 600; color: var(--warning);" id="iceBillPricePerKw">₡0</div>
+                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-500); margin-top: 4px;">por KW</div>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); viewIceBill(document.getElementById('billingMonth').value)" style="width: 100%; margin-top: 16px;">Ver Factura ICE</button>
+          </div>
+        </div>
+        
+        <div style="height: 32px;"></div>
+        
+        <div class="section-title">Progreso del Mes</div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value success" id="completedCount">0</div>
+            <div class="stat-label">Completados</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value warning" id="pendingCount">18</div>
+            <div class="stat-label">Pendientes</div>
+          </div>
+        </div>
+        
+        <div class="section-title">
+          Medidores
+          <button class="btn btn-outline btn-sm" onclick="showTab('settings')">Editar</button>
+        </div>
+        
+        <div class="filter-group">
+          <button class="filter-btn active" onclick="filterMeters('all')" id="filter-all">Todos</button>
+          <button class="filter-btn" onclick="filterMeters('missing')" id="filter-missing">Sin Dato</button>
+          <button class="filter-btn" onclick="filterMeters('pending')" id="filter-pending">Pendientes</button>
+          <button class="filter-btn" onclick="filterMeters('done')" id="filter-done">Listos</button>
+        </div>
+        
+        <div class="meter-list" id="pendingList"></div>
+        
+        <!-- KW Summary -->
+        <!-- KW Gauge -->
+        <div id="kwSummary" style="display:none; margin-top: 16px; padding: 16px; background: var(--gray-100); border-radius: 10px; border: 1px solid var(--gray-200);">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray-400); margin-bottom: 12px; font-weight: 600;">Consumo KW</div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-500);">Registrado</div>
+              <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 22px; font-weight: 600; color: var(--gray-900);" id="kwRegistered">0 KW</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 12px; color: var(--gray-400);">de</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-500);">Factura ICE</div>
+              <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 22px; font-weight: 600; color: var(--gray-900);" id="kwIceTotal">0 KW</div>
+            </div>
+          </div>
+          <div style="margin-top: 10px; height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden;">
+            <div id="kwProgressBar" style="height: 100%; background: var(--success); border-radius: 4px; transition: width 0.3s;" ></div>
+          </div>
+          <div style="text-align: center; margin-top: 6px; font-size: 12px;" id="kwProgressText"></div>
+        </div>
+        
+        <!-- Money Gauge -->
+        <div id="moneySummary" style="display:none; margin-top: 12px; padding: 16px; background: var(--gray-100); border-radius: 10px; border: 1px solid var(--gray-200);">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray-400); margin-bottom: 12px; font-weight: 600;">Facturacion ₡</div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-500);">Cobrado</div>
+              <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 22px; font-weight: 600; color: var(--gray-900);" id="moneyCollected">₡0</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 12px; color: var(--gray-400);">de</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-500);">Factura ICE</div>
+              <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 22px; font-weight: 600; color: var(--gray-900);" id="moneyIceTotal">₡0</div>
+            </div>
+          </div>
+          <div style="margin-top: 10px; height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden;">
+            <div id="moneyProgressBar" style="height: 100%; background: var(--success); border-radius: 4px; transition: width 0.3s;" ></div>
+          </div>
+          <div style="text-align: center; margin-top: 6px; font-size: 12px;" id="moneyProgressText"></div>
+        </div>
+      </aside>
+      
+      <div class="content">
+        <!-- Upload Mode -->
+        <div id="meterUploadMode">
+          <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+            <div class="drop-zone-icon">📸</div>
+            <div class="drop-zone-text">Arrastra la foto del medidor aqui</div>
+            <div class="drop-zone-hint">o haz clic para seleccionar archivo</div>
+            <div class="drop-zone-warning" id="monthWarning">
+              ⚠ Solo lecturas de <span id="warningMonth">Julio 2026</span>
+            </div>
+            <div class="drop-zone-selected" id="selectedMeterDisplay" style="display:none"></div>
+            <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
+          </div>
+        </div>
+        
+        <!-- All Complete Mode -->
+        <div id="meterCompleteMode" style="display:none;">
+          <div style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); border: 2px solid var(--success); border-radius: 16px; padding: 48px; text-align: center; margin-bottom: 28px;">
+            <div style="width: 80px; height: 80px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 40px; color: white;">✓</div>
+            <h2 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; font-weight: 600; color: #065f46; margin: 0 0 8px;">Mes Completo</h2>
+            <p style="color: #047857; font-size: 16px; margin: 0 0 24px;">Todas las lecturas de <span id="completeMonthName">Julio 2026</span> han sido registradas.</p>
+            <div style="display: inline-flex; gap: 16px;">
+              <div style="background: white; padding: 16px 24px; border-radius: 10px; text-align: center;">
+                <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 32px; font-weight: 600; color: var(--success);" id="completeCount">18</div>
+                <div style="font-size: 12px; color: #065f46; text-transform: uppercase; letter-spacing: 0.05em;">Medidores</div>
+              </div>
+              <div style="background: white; padding: 16px 24px; border-radius: 10px; text-align: center;">
+                <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 32px; font-weight: 600; color: var(--success);" id="completeTotalKw">0</div>
+                <div style="font-size: 12px; color: #065f46; text-transform: uppercase; letter-spacing: 0.05em;">KW Total</div>
+              </div>
+              <div style="background: white; padding: 16px 24px; border-radius: 10px; text-align: center;">
+                <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 32px; font-weight: 600; color: var(--success);" id="completeTotalAmount">₡0</div>
+                <div style="font-size: 12px; color: #065f46; text-transform: uppercase; letter-spacing: 0.05em;">Facturado</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="preview-card" id="previewCard">
+          <div class="preview-header">
+            <span class="preview-title" id="previewMeterName">Medidor</span>
+            <button class="btn btn-outline" onclick="closePreview()" style="background: transparent; border-color: rgba(255,255,255,0.3); color: var(--alaska);">Cancelar</button>
+          </div>
+          <div class="preview-body">
+            <div>
+              <img id="previewImage" class="preview-image" src="" alt="Foto del medidor">
+              <p style="margin-top: 16px; font-size: 13px; color: var(--coniston);">
+                Verifica la lectura del medidor e ingresa el valor actual.
+              </p>
+            </div>
+            <div class="preview-form">
+              <div class="reading-row">
+                <div class="form-group">
+                  <label class="form-label">Lectura Anterior (KW)</label>
+                  <input type="number" class="form-input" id="prevReading" style="background: var(--gray-50);" oninput="calculateConsumption()">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Lectura Actual (KW)</label>
+                  <input type="number" class="form-input" id="currentReading" placeholder="Ingrese lectura" style="border-color: var(--keswick); border-width: 2px;" oninput="calculateConsumption()">
+                </div>
+              </div>
+              
+              <div class="calculated">
+                <div class="calculated-row">
+                  <span>Consumo</span>
+                  <span id="kwConsumption">0 KW</span>
+                </div>
+                <div class="calculated-row">
+                  <span>Porcentaje del Total</span>
+                  <span id="icePercent">0%</span>
+                </div>
+                <div class="calculated-row">
+                  <span>Monto a Cobrar</span>
+                  <span id="totalAmount">₡0</span>
+                </div>
+              </div>
+              
+              <div style="background: var(--alaska); border: 1px solid var(--limestone); border-radius: 8px; padding: 16px 20px; margin-bottom: 24px; font-size: 13px;">
+                <strong style="color: var(--keswick);">Calculo:</strong>
+                <span id="calculationFormula" style="color: var(--santorini);">₡0 × 0% = ₡0</span>
+              </div>
+              
+              <button class="btn btn-success" onclick="generateInvoice()" style="width:100%; padding: 18px; font-size: 15px;">
+                ✓ Generar Factura
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="invoices-section">
+          <div class="invoices-header">Facturas Generadas — <span id="invoiceMonth">Julio 2026</span></div>
+          <table class="invoices-table">
+            <thead>
+              <tr>
+                <th>Medidor</th>
+                <th>Cliente</th>
+                <th>Consumo</th>
+                <th>%</th>
+                <th>Monto</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="invoicesBody">
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--coniston); padding: 48px;">
+                  Selecciona un medidor y arrastra la foto para comenzar.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <!-- SETTINGS TAB -->
+  <div id="tab-settings" class="tab-content">
+    <div class="settings-container">
+      <div class="settings-section">
+        <div class="settings-header">
+          <span>Administrar Medidores</span>
+          <button class="btn btn-accent btn-sm" onclick="addNewMeter()">+ Agregar Medidor</button>
+        </div>
+        <div class="settings-body" id="meterEditList"></div>
+      </div>
+      
+      <div class="settings-section">
+        <div class="settings-header">Datos de la Empresa</div>
+        <div class="settings-body">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+            <div class="form-group">
+              <label class="form-label">Nombre</label>
+              <input type="text" class="form-input" id="companyName" value="Nosara Hills Limitada">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Cedula Juridica</label>
+              <input type="text" class="form-input" id="companyId" value="3-102-670637">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Telefono</label>
+              <input type="text" class="form-input" id="companyPhone" placeholder="+506 8888-8888">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="text" class="form-input" id="companyEmail" value="info@nosaraconstruction.com">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="saveSettings()" style="margin-top: 24px;">Guardar Configuracion</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- REPORT TAB -->
+  <div id="tab-report" class="tab-content">
+    <div class="settings-container">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 32px;" id="reportSummaryCards"></div>
+      
+      <div class="settings-section">
+        <div class="settings-header">
+          <span>Historial de Reportes Mensuales</span>
+        </div>
+        <div class="settings-body" id="reportsList" style="padding: 0;"></div>
+      </div>
+      
+      <div class="settings-section">
+        <div class="settings-header">
+          <span>Detalle: <span id="reportMonthTitle">Julio 2026</span></span>
+          <button class="btn btn-accent btn-sm" onclick="printCurrentReport()">Imprimir Reporte</button>
+        </div>
+        <div class="settings-body" id="reportBody">
+          <p style="color: var(--coniston); text-align: center; padding: 48px;">
+            Genera facturas para ver los reportes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Invoice Modal -->
+  <div class="modal-overlay" id="invoiceModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span>Vista Previa de Factura</span>
+        <button class="btn btn-outline btn-sm" onclick="closeInvoiceModal()">✕</button>
+      </div>
+      <div class="modal-body" id="invoicePreview"></div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeInvoiceModal()">Cerrar</button>
+        <button class="btn btn-primary" onclick="printInvoice()">Imprimir / PDF</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Supabase Config
+    const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+    
+    async function supabaseFetch(table, options = {}) {
+      const { method = 'GET', body, query = '' } = options;
+      const headers = {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      };
+      const url = `${SUPABASE_URL}/rest/v1/${table}${query}`;
+      const res = await fetch(url, { method, headers, body: body ? JSON.stringify(body) : undefined });
+      if (!res.ok) throw new Error(await res.text());
+      return method === 'DELETE' ? null : res.json();
+    }
+    
+    const STORAGE_BUCKET = 'utilitiy-files';
+    
+    async function uploadToStorage(path, file) {
+      const url = `${SUPABASE_URL}/storage/v1/object/${STORAGE_BUCKET}/${path}`;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': file.type || 'application/octet-stream',
+          'x-upsert': 'true'
+        },
+        body: file
+      });
+      if (!res.ok) throw new Error(await res.text());
+      return `${SUPABASE_URL}/storage/v1/object/public/${STORAGE_BUCKET}/${path}`;
+    }
+    
+    function getStorageUrl(path) {
+      return `${SUPABASE_URL}/storage/v1/object/public/${STORAGE_BUCKET}/${path}`;
+    }
+    
+    async function loadFromSupabase() {
+      try {
+        const dbMeters = await supabaseFetch('utility_meters', { query: '?order=display_name' });
+        if (dbMeters.length > 0) {
+          meters = dbMeters.map(m => ({
+            id: m.id,
+            displayName: m.display_name,
+            owner: m.owner,
+            email: m.email || '',
+            location: m.location,
+            prevKw: parseFloat(m.prev_kw) || 0
+          }));
+        }
+        
+        const dbInvoices = await supabaseFetch('utility_invoices', { query: '?order=created_at.desc' });
+        invoices = dbInvoices.map(i => ({
+          id: i.id,
+          meterId: i.meter_id,
+          meterName: i.meter_name,
+          owner: i.owner,
+          month: i.month,
+          prevKw: parseFloat(i.prev_kw) || 0,
+          currKw: parseFloat(i.curr_kw) || 0,
+          consumption: parseFloat(i.consumption) || 0,
+          percent: parseFloat(i.percent) || 0,
+          amount: parseFloat(i.amount) || 0,
+          iceBillTotal: parseFloat(i.ice_bill_total) || 0,
+          totalKwAll: parseFloat(i.total_kw_all) || 0
+        }));
+        
+        const month = document.getElementById('billingMonth').value;
+        const iceBills = await supabaseFetch('utility_ice_bills', { query: `?month=eq.${month}` });
+        if (iceBills.length > 0) {
+          document.getElementById('iceBill').value = iceBills[0].total_amount;
+          document.getElementById('totalKw').value = iceBills[0].total_kw;
+          if (iceBills[0].file_name) {
+            document.getElementById('iceBillFileName').textContent = iceBills[0].file_name;
+            document.getElementById('iceBillStatus').style.display = 'flex';
+            document.getElementById('iceBillDropZone').style.display = 'none';
+          }
+        }
+        
+        console.log('Loaded:', meters.length, 'meters,', invoices.length, 'invoices');
+      } catch (e) {
+        console.error('Load error:', e);
+      }
+    }
+    
+    async function saveInvoiceToSupabase(invoice) {
+      try {
+        await supabaseFetch('utility_invoices', {
+          method: 'POST',
+          body: {
+            id: invoice.id,
+            meter_id: invoice.meterId,
+            month: invoice.month,
+            meter_name: invoice.meterName,
+            owner: invoice.owner,
+            prev_kw: invoice.prevKw,
+            curr_kw: invoice.currKw,
+            consumption: invoice.consumption,
+            percent: invoice.percent,
+            amount: invoice.amount,
+            ice_bill_total: invoice.iceBillTotal,
+            total_kw_all: invoice.totalKwAll,
+            image_url: invoice.imageUrl || null
+          }
+        });
+        
+        await supabaseFetch(`utility_meters?id=eq.${invoice.meterId}`, {
+          method: 'PATCH',
+          body: { prev_kw: invoice.currKw }
+        });
+      } catch (e) {
+        console.error('Save error:', e);
+      }
+    }
+    
+    async function saveIceBillToSupabase(month, amount, totalKw, fileName) {
+      try {
+        await supabaseFetch('utility_ice_bills', {
+          method: 'POST',
+          query: '?on_conflict=month',
+          body: { month, total_amount: amount, total_kw: totalKw, file_name: fileName }
+        });
+      } catch (e) {
+        await supabaseFetch(`utility_ice_bills?month=eq.${month}`, {
+          method: 'PATCH',
+          body: { total_amount: amount, total_kw: totalKw, file_name: fileName }
+        });
+      }
+    }
+    
+    async function saveMeterToSupabase(meter) {
+      try {
+        await supabaseFetch(`utility_meters?id=eq.${meter.id}`, {
+          method: 'PATCH',
+          body: {
+            display_name: meter.displayName,
+            owner: meter.owner,
+            email: meter.email,
+            location: meter.location,
+            prev_kw: meter.prevKw
+          }
+        });
+      } catch (e) {
+        console.error('Error saving meter:', e);
+      }
+    }
+
+    // Data
+    let meters = [];
+    let completedMeters = {};
+    let invoices = [];
+    let selectedMeter = null;
+    let currentFilter = 'all';
+    let companySettings = { name: 'Nosara Hills Limitada', id: '3-102-670637', phone: '', email: 'info@nosaraconstruction.com' };
+    
+    async function init() {
+      await loadFromSupabase();
+      renderPendingList();
+      renderMeterEditList();
+      setupDropZone();
+      updateMonthDisplay();
+    }
+    
+    function showTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.header-nav a').forEach(a => a.classList.remove('active'));
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+      event.target.classList.add('active');
+      if (tabName === 'settings') renderMeterEditList();
+      if (tabName === 'report') renderReportsTab();
+    }
+    
+    function updateMonthFromSelect() {
+      const monthVal = document.getElementById('billingMonthSelect').value;
+      const yearVal = document.getElementById('billingYearSelect').value;
+      document.getElementById('billingMonth').value = yearVal + '-' + monthVal;
+      updateMonthDisplay();
+    }
+    
+    async function updateMonthDisplay() {
+      const month = document.getElementById('billingMonth').value;
+      const date = new Date(month + '-15'); // Use 15th to avoid timezone issues
+      const display = date.toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
+      const displayCapitalized = display.charAt(0).toUpperCase() + display.slice(1);
+      document.getElementById('invoiceMonth').textContent = displayCapitalized;
+      document.getElementById('warningMonth').textContent = displayCapitalized;
+      document.getElementById('iceBillMonth').textContent = displayCapitalized;
+      
+      const [year, mon] = month.split('-');
+      document.getElementById('billingMonthSelect').value = mon;
+      document.getElementById('billingYearSelect').value = year;
+      
+      completedMeters = {};
+      invoices.filter(i => i.month === month).forEach(i => {
+        completedMeters[i.meterId] = true;
+      });
+      
+      // Load ICE bill data for this month from Supabase
+      await loadIceBillForMonth(month);
+      
+      renderPendingList();
+      renderInvoices();
+    }
+    
+    async function loadIceBillForMonth(month) {
+      const date = new Date(month + '-01');
+      const display = date.toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
+      
+      try {
+        const iceBills = await supabaseFetch('utility_ice_bills', { query: `?month=eq.${month}` });
+        if (iceBills.length > 0 && iceBills[0].total_amount) {
+          // Show saved mode
+          document.getElementById('iceBillUploadMode').style.display = 'none';
+          document.getElementById('iceBillSavedMode').style.display = 'block';
+          document.getElementById('iceBillMonthSaved').textContent = display;
+          document.getElementById('iceBillFileNameSaved').textContent = iceBills[0].file_name || 'Sin archivo';
+          document.getElementById('iceBillAmountSaved').textContent = '₡' + parseInt(iceBills[0].total_amount).toLocaleString();
+          document.getElementById('iceBillKwSaved').textContent = parseInt(iceBills[0].total_kw).toLocaleString() + ' KW';
+          // Calculate price per KW
+          const pricePerKw = iceBills[0].total_kw > 0 ? Math.round(iceBills[0].total_amount / iceBills[0].total_kw) : 0;
+          document.getElementById('iceBillPricePerKw').textContent = '₡' + pricePerKw.toLocaleString();
+          // Also set hidden values for calculations
+          document.getElementById('iceBill').value = iceBills[0].total_amount || '';
+          document.getElementById('totalKw').value = iceBills[0].total_kw || '';
+        } else {
+          // Show upload mode
+          showUploadMode();
+          document.getElementById('iceBill').value = '';
+          document.getElementById('totalKw').value = '';
+        }
+      } catch (e) {
+        console.error('Error loading ICE bill:', e);
+        showUploadMode();
+        document.getElementById('iceBill').value = '';
+        document.getElementById('totalKw').value = '';
+      }
+    }
+    
+    function showUploadMode() {
+      document.getElementById('iceBillUploadMode').style.display = 'block';
+      document.getElementById('iceBillSavedMode').style.display = 'none';
+      document.getElementById('iceBillStatus').style.display = 'none';
+      document.getElementById('iceBillDropZone').style.display = 'block';
+    }
+    
+    function editIceBill() {
+      showUploadMode();
+      // Pre-fill the form with existing values
+      const amount = document.getElementById('iceBillAmountSaved').textContent.replace(/[^\d]/g, '');
+      const kw = document.getElementById('iceBillKwSaved').textContent.replace(/[^\d]/g, '');
+      document.getElementById('iceBill').value = amount;
+      document.getElementById('totalKw').value = kw;
+    }
+    
+    function filterMeters(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('filter-' + filter).classList.add('active');
+      renderPendingList();
+    }
+    
+    function renderPendingList() {
+      const list = document.getElementById('pendingList');
+      const locations = { 'mar-azul': 'Mar Azul', 'nosara-hills': 'Nosara Hills', 'common': 'Comun', 'commercial': 'Comercial' };
+      
+      let filteredMeters = meters;
+      if (currentFilter === 'missing') {
+        filteredMeters = meters.filter(m => m.prevKw === 0 || !m.prevKw);
+      } else if (currentFilter === 'pending') {
+        filteredMeters = meters.filter(m => !completedMeters[m.id] && m.prevKw > 0);
+      } else if (currentFilter === 'done') {
+        filteredMeters = meters.filter(m => completedMeters[m.id]);
+      }
+      
+      if (filteredMeters.length === 0) {
+        list.innerHTML = '<p style="text-align:center;color:var(--coniston);padding:32px;font-size:14px;">Sin medidores</p>';
+      } else {
+        const month = document.getElementById('billingMonth').value;
+        list.innerHTML = filteredMeters.map(m => {
+          const hasData = m.prevKw > 0;
+          const isCompleted = completedMeters[m.id];
+          const inv = invoices.find(i => i.meterId === m.id && i.month === month);
+          return `
+          <div class="meter-item ${isCompleted ? 'completed' : ''} ${hasData && !isCompleted ? 'has-data' : ''} ${selectedMeter?.id === m.id ? 'selected' : ''}" 
+               onclick="${isCompleted ? `viewMeterImage('${m.id}', '${month}')` : `selectMeter('${m.id}')`}">
+            <div style="flex: 1;">
+              <div class="meter-name">${m.displayName}</div>
+              <div class="meter-owner">${m.owner}</div>
+              <div class="meter-location">${locations[m.location] || m.location}</div>
+            </div>
+            ${isCompleted && inv ? `
+              <div style="text-align: right; margin-right: 12px;">
+                <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 16px; font-weight: 600; color: var(--success);">${inv.consumption.toLocaleString()} KW</div>
+                <div style="font-size: 11px; color: var(--gray-500);">${(inv.percent * 100).toFixed(2)}%</div>
+              </div>
+            ` : ''}
+            <div class="meter-status ${isCompleted ? 'done' : 'pending'}">
+              ${isCompleted ? '📷' : (hasData ? '●' : '○')}
+            </div>
+          </div>
+        `}).join('');
+      }
+      
+      const completed = Object.keys(completedMeters).length;
+      document.getElementById('completedCount').textContent = completed;
+      document.getElementById('pendingCount').textContent = meters.length - completed;
+      
+      // Update KW summary
+      const month = document.getElementById('billingMonth').value;
+      const monthInv = invoices.filter(i => i.month === month);
+      const totalKwRegistered = monthInv.reduce((s, i) => s + i.consumption, 0);
+      const iceKw = parseFloat(document.getElementById('totalKw').value) || 0;
+      
+      if (monthInv.length > 0) {
+        document.getElementById('kwSummary').style.display = 'block';
+        document.getElementById('kwRegistered').textContent = totalKwRegistered.toLocaleString() + ' KW';
+        document.getElementById('kwIceTotal').textContent = iceKw.toLocaleString() + ' KW';
+        
+        const percent = iceKw > 0 ? (totalKwRegistered / iceKw) * 100 : 0;
+        document.getElementById('kwProgressBar').style.width = Math.min(percent, 100) + '%';
+        
+        const diff = iceKw - totalKwRegistered;
+        if (Math.abs(diff) < 50) {
+          document.getElementById('kwProgressText').innerHTML = '<span style="color: var(--success);">✓ Cuadrado - Distribucion completa</span>';
+          document.getElementById('kwProgressBar').style.background = 'var(--success)';
+        } else if (diff > 0) {
+          document.getElementById('kwProgressText').innerHTML = `<span style="color: var(--warning);">Faltan ${diff.toLocaleString()} KW por registrar</span>`;
+          document.getElementById('kwProgressBar').style.background = 'var(--warning)';
+        } else {
+          document.getElementById('kwProgressText').innerHTML = `<span style="color: var(--danger);">⚠ Exceso de ${Math.abs(diff).toLocaleString()} KW</span>`;
+          document.getElementById('kwProgressBar').style.background = 'var(--danger)';
+        }
+      // Update Money summary
+        const totalMoneyCollected = monthInv.reduce((s, i) => s + i.amount, 0);
+        const iceBillAmount = parseFloat(document.getElementById('iceBill').value) || 0;
+        
+        document.getElementById('moneySummary').style.display = 'block';
+        document.getElementById('moneyCollected').textContent = '₡' + totalMoneyCollected.toLocaleString();
+        document.getElementById('moneyIceTotal').textContent = '₡' + iceBillAmount.toLocaleString();
+        
+        const moneyPercent = iceBillAmount > 0 ? (totalMoneyCollected / iceBillAmount) * 100 : 0;
+        document.getElementById('moneyProgressBar').style.width = Math.min(moneyPercent, 100) + '%';
+        
+        const moneyDiff = iceBillAmount - totalMoneyCollected;
+        if (Math.abs(moneyDiff) < 1000) {
+          document.getElementById('moneyProgressText').innerHTML = '<span style="color: var(--success);">\u2713 Cuadrado - Sin ganancia</span>';
+          document.getElementById('moneyProgressBar').style.background = 'var(--success)';
+        } else if (moneyDiff > 0) {
+          document.getElementById('moneyProgressText').innerHTML = `<span style="color: var(--warning);">Faltan \u20a1${moneyDiff.toLocaleString()} por facturar</span>`;
+          document.getElementById('moneyProgressBar').style.background = 'var(--warning)';
+        } else {
+          document.getElementById('moneyProgressText').innerHTML = `<span style="color: var(--danger);">\u26a0 Exceso de \u20a1${Math.abs(moneyDiff).toLocaleString()}</span>`;
+          document.getElementById('moneyProgressBar').style.background = 'var(--danger)';
+        }
+      } else {
+        document.getElementById('kwSummary').style.display = 'none';
+        document.getElementById('moneySummary').style.display = 'none';
+      }
+      
+      // Check if all meters are complete
+      const allComplete = completed >= meters.length && meters.length > 0;
+      if (allComplete) {
+        document.getElementById('meterUploadMode').style.display = 'none';
+        document.getElementById('meterCompleteMode').style.display = 'block';
+        
+        // Calculate totals for the month
+        const month = document.getElementById('billingMonth').value;
+        const monthInv = invoices.filter(i => i.month === month);
+        const totalKw = monthInv.reduce((s, i) => s + i.consumption, 0);
+        const totalAmount = monthInv.reduce((s, i) => s + i.amount, 0);
+        const date = new Date(month + '-01');
+        const display = date.toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
+        
+        document.getElementById('completeMonthName').textContent = display;
+        document.getElementById('completeCount').textContent = completed;
+        document.getElementById('completeTotalKw').textContent = totalKw.toLocaleString();
+        document.getElementById('completeTotalAmount').textContent = '₡' + totalAmount.toLocaleString();
+      } else {
+        document.getElementById('meterUploadMode').style.display = 'block';
+        document.getElementById('meterCompleteMode').style.display = 'none';
+      }
+    }
+    
+    function renderMeterEditList() {
+      const list = document.getElementById('meterEditList');
+      list.innerHTML = meters.map((m, i) => `
+        <div class="meter-edit-card">
+          <div>
+            <div class="meter-field-label">Nombre del Medidor</div>
+            <input type="text" value="${m.displayName}" onchange="updateMeter(${i}, 'displayName', this.value)">
+          </div>
+          <div>
+            <div class="meter-field-label">Propietario / Cliente</div>
+            <input type="text" value="${m.owner}" onchange="updateMeter(${i}, 'owner', this.value)">
+          </div>
+          <div>
+            <div class="meter-field-label">Email</div>
+            <input type="email" value="${m.email || ''}" placeholder="email@ejemplo.com" onchange="updateMeter(${i}, 'email', this.value)">
+          </div>
+          <div>
+            <div class="meter-field-label">Ubicacion</div>
+            <select onchange="updateMeter(${i}, 'location', this.value)">
+              <option value="mar-azul" ${m.location === 'mar-azul' ? 'selected' : ''}>Mar Azul</option>
+              <option value="nosara-hills" ${m.location === 'nosara-hills' ? 'selected' : ''}>Nosara Hills</option>
+              <option value="common" ${m.location === 'common' ? 'selected' : ''}>Comun</option>
+              <option value="commercial" ${m.location === 'commercial' ? 'selected' : ''}>Comercial</option>
+            </select>
+          </div>
+          <div>
+            <button class="btn btn-outline btn-sm" onclick="deleteMeter(${i})" style="color: var(--terracotta); border-color: var(--terracotta); margin-top: 22px;">Eliminar</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function viewMeterImage(meterId, month) {
+      const inv = invoices.find(i => i.meterId === meterId && i.month === month);
+      const meter = meters.find(m => m.id === meterId);
+      const imageUrl = inv?.imageUrl || getStorageUrl(`meters/${month}/${meterId}.jpg`);
+      
+      const win = window.open('', '_blank');
+      win.document.write(`
+        <html>
+        <head>
+          <title>${meter?.displayName || 'Medidor'} - ${month}</title>
+          <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+          <style>
+            body { font-family: 'Inter', sans-serif; margin: 0; padding: 20px; background: #f8fafc; }
+            .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+            h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 24px; margin: 0; }
+            .btn { padding: 12px 24px; background: #0f172a; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; }
+            .info { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+            .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e2e8f0; }
+            .info-row:last-child { border-bottom: none; }
+            img { max-width: 100%; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1>${meter?.displayName || 'Medidor'}</h1>
+            <button class="btn" onclick="window.close()">← Volver</button>
+          </div>
+          <div class="info">
+            <div class="info-row"><span>Cliente:</span><span>${inv?.owner || meter?.owner || '-'}</span></div>
+            <div class="info-row"><span>Mes:</span><span>${month}</span></div>
+            <div class="info-row"><span>Consumo:</span><span>${inv ? inv.consumption.toLocaleString() + ' KW' : '-'}</span></div>
+            <div class="info-row"><span>Porcentaje:</span><span>${inv ? (inv.percent * 100).toFixed(2) + '%' : '-'}</span></div>
+            <div class="info-row"><span>Monto:</span><span>${inv ? '₡' + inv.amount.toLocaleString() : '-'}</span></div>
+          </div>
+          <img src="${imageUrl}" alt="Lectura del medidor" onerror="this.parentElement.innerHTML += '<p style=color:#666;text-align:center;>Imagen no disponible para este mes.</p>'; this.style.display='none';">
+        </body>
+        </html>
+      `);
+      win.document.close();
+    }
+    
+    function viewIceBill(month) {
+      const ext = 'pdf'; // Default extension
+      const url = getStorageUrl(`ice/${month}.${ext}`);
+      window.open(url, '_blank');
+    }
+    
+    function updateMeter(i, field, value) { 
+      meters[i][field] = value; 
+      saveMeterToSupabase(meters[i]);
+      saveData(); 
+      renderPendingList(); 
+    }
+    async function deleteMeter(i) { 
+      if (confirm('Eliminar este medidor?')) { 
+        const meter = meters[i];
+        // Delete from Supabase
+        try {
+          await supabaseFetch(`utility_meters?id=eq.${meter.id}`, { method: 'DELETE' });
+        } catch (e) {
+          console.error('Error deleting meter:', e);
+        }
+        meters.splice(i, 1); 
+        saveData(); 
+        renderMeterEditList(); 
+        renderPendingList(); 
+      } 
+    }
+    function addNewMeter() {
+      meters.push({ id: 'meter-' + Date.now(), displayName: 'Nuevo Medidor', owner: 'Cliente', email: '', location: 'mar-azul', prevKw: 0 });
+      saveData(); renderMeterEditList(); renderPendingList();
+    }
+    
+    function selectMeter(id) {
+      selectedMeter = meters.find(m => m.id === id);
+      renderPendingList();
+      const display = document.getElementById('selectedMeterDisplay');
+      const dropZone = document.getElementById('dropZone');
+      if (selectedMeter) {
+        display.textContent = `✓ Seleccionado: ${selectedMeter.displayName}`;
+        display.style.display = 'block';
+        dropZone.classList.add('has-selection');
+      }
+    }
+    
+    function setupDropZone() {
+      const dz = document.getElementById('dropZone');
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(e => dz.addEventListener(e, ev => { ev.preventDefault(); ev.stopPropagation(); }, false));
+      ['dragenter', 'dragover'].forEach(e => dz.addEventListener(e, () => dz.classList.add('dragover'), false));
+      ['dragleave', 'drop'].forEach(e => dz.addEventListener(e, () => dz.classList.remove('dragover'), false));
+      dz.addEventListener('drop', e => { if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]); }, false);
+      
+      const iceDz = document.getElementById('iceBillDropZone');
+      if (iceDz) {
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(e => iceDz.addEventListener(e, ev => { ev.preventDefault(); ev.stopPropagation(); }, false));
+        ['dragenter', 'dragover'].forEach(e => iceDz.addEventListener(e, () => iceDz.classList.add('dragover'), false));
+        ['dragleave', 'drop'].forEach(e => iceDz.addEventListener(e, () => iceDz.classList.remove('dragover'), false));
+        iceDz.addEventListener('drop', e => { if (e.dataTransfer.files.length) processIceBill(e.dataTransfer.files[0]); }, false);
+      }
+    }
+    
+    function handleIceBillUpload(event) {
+      if (event.target.files.length) processIceBill(event.target.files[0]);
+    }
+    
+    async function processIceBill(file) {
+      document.getElementById('iceBillFileName').textContent = file.name;
+      document.getElementById('iceBillStatus').style.display = 'flex';
+      document.getElementById('iceBillDropZone').style.display = 'none';
+      window.currentIceBillFile = file;
+      
+      // Upload PDF to storage
+      const month = document.getElementById('billingMonth').value;
+      const ext = file.name.split('.').pop() || 'pdf';
+      try {
+        const path = `ice/${month}.${ext}`;
+        await uploadToStorage(path, file);
+        console.log('ICE bill uploaded:', path);
+      } catch (e) {
+        console.error('Error uploading ICE bill:', e);
+      }
+    }
+    
+    function handleFileSelect(e) { if (e.target.files.length) handleFile(e.target.files[0]); }
+    
+    async function handleFile(file) {
+      if (!selectedMeter) { alert('Primero selecciona un medidor'); return; }
+      const reader = new FileReader();
+      reader.onload = async e => {
+        const base64Image = e.target.result;
+        document.getElementById('previewImage').src = base64Image;
+        document.getElementById('previewMeterName').textContent = `${selectedMeter.displayName} — ${selectedMeter.owner}`;
+        document.getElementById('prevReading').value = selectedMeter.prevKw;
+        document.getElementById('currentReading').value = '';
+        document.getElementById('previewCard').classList.add('active');
+        
+        document.getElementById('currentReading').placeholder = 'Leyendo medidor...';
+        
+        try {
+          const reading = await ocrMeterReading(base64Image);
+          if (reading) {
+            document.getElementById('currentReading').value = reading;
+            document.getElementById('currentReading').placeholder = 'Lectura detectada';
+            calculateConsumption();
+          } else {
+            document.getElementById('currentReading').placeholder = 'Ingrese lectura';
+            document.getElementById('currentReading').focus();
+          }
+        } catch (err) {
+          console.error('OCR error:', err);
+          document.getElementById('currentReading').placeholder = 'Ingrese lectura';
+          document.getElementById('currentReading').focus();
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+    
+    async function ocrMeterReading(base64Image) {
+      try {
+        const response = await fetch('/api/ocr-meter', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: base64Image })
+        });
+        
+        if (!response.ok) return null;
+        const data = await response.json();
+        return data.reading || null;
+      } catch (e) {
+        return null;
+      }
+    }
+    
+    function calculateConsumption() {
+      const prev = parseFloat(document.getElementById('prevReading').value) || 0;
+      const curr = parseFloat(document.getElementById('currentReading').value) || 0;
+      const consumption = Math.max(0, curr - prev);
+      
+      const iceBill = parseFloat(document.getElementById('iceBill').value) || 0;
+      const totalKw = parseFloat(document.getElementById('totalKw').value) || 1;
+      
+      const percent = consumption / totalKw;
+      const amount = Math.round(iceBill * percent);
+      
+      document.getElementById('kwConsumption').textContent = `${consumption.toLocaleString()} KW`;
+      document.getElementById('icePercent').textContent = `${(percent * 100).toFixed(4)}%`;
+      document.getElementById('totalAmount').textContent = `₡${amount.toLocaleString()}`;
+      document.getElementById('calculationFormula').textContent = `₡${iceBill.toLocaleString()} × ${(percent * 100).toFixed(4)}% = ₡${amount.toLocaleString()}`;
+      
+      return { consumption, percent, amount, curr };
+    }
+    
+    async function generateInvoice() {
+      if (!selectedMeter) return;
+      const calc = calculateConsumption();
+      const month = document.getElementById('billingMonth').value;
+      
+      // Upload meter image to storage
+      const imgSrc = document.getElementById('previewImage').src;
+      let imageUrl = null;
+      if (imgSrc && imgSrc.startsWith('data:')) {
+        try {
+          const blob = await fetch(imgSrc).then(r => r.blob());
+          const path = `meters/${month}/${selectedMeter.id}.jpg`;
+          imageUrl = await uploadToStorage(path, blob);
+          console.log('Meter image uploaded:', path);
+        } catch (e) {
+          console.error('Error uploading meter image:', e);
+        }
+      }
+      
+      const invoice = {
+        id: 'INV-' + Date.now(),
+        meterId: selectedMeter.id,
+        meterName: selectedMeter.displayName,
+        owner: selectedMeter.owner,
+        email: selectedMeter.email,
+        location: selectedMeter.location,
+        prevKw: selectedMeter.prevKw,
+        currKw: calc.curr,
+        consumption: calc.consumption,
+        percent: calc.percent,
+        amount: calc.amount,
+        iceBillTotal: parseFloat(document.getElementById('iceBill').value) || 0,
+        totalKwAll: parseFloat(document.getElementById('totalKw').value) || 0,
+        date: new Date().toISOString(),
+        month: month,
+        imageUrl: imageUrl
+      };
+      
+      invoices.push(invoice);
+      completedMeters[selectedMeter.id] = true;
+      
+      const idx = meters.findIndex(m => m.id === selectedMeter.id);
+      if (idx >= 0) meters[idx].prevKw = calc.curr;
+      
+      saveInvoiceToSupabase(invoice);
+      
+      closePreview();
+      renderPendingList();
+      renderInvoices();
+      saveData();
+      showInvoicePreview(invoice);
+      
+      selectedMeter = null;
+      document.getElementById('selectedMeterDisplay').style.display = 'none';
+      document.getElementById('dropZone').classList.remove('has-selection');
+    }
+    
+    function closePreview() { document.getElementById('previewCard').classList.remove('active'); }
+    
+    function renderInvoices() {
+      const tbody = document.getElementById('invoicesBody');
+      const month = document.getElementById('billingMonth').value;
+      const monthInv = invoices.filter(i => i.month === month);
+      
+      if (!monthInv.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--coniston);padding:48px;">Sin facturas para este mes</td></tr>';
+        return;
+      }
+      
+      tbody.innerHTML = monthInv.map(i => `
+        <tr>
+          <td><strong style="font-family: 'Cormorant Garamond', Georgia, serif;">${i.meterName}</strong></td>
+          <td>${i.owner}</td>
+          <td>${i.consumption.toLocaleString()} KW</td>
+          <td>${(i.percent * 100).toFixed(2)}%</td>
+          <td><strong style="color: var(--keswick);">₡${i.amount.toLocaleString()}</strong></td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="viewInvoice('${i.id}')">Ver</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+    
+    function showInvoicePreview(inv) {
+      const monthName = new Date(inv.month + '-01').toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
+      document.getElementById('invoicePreview').innerHTML = generateInvoiceHTML(inv, monthName);
+      document.getElementById('invoiceModal').classList.add('active');
+    }
+    
+    function generateInvoiceHTML(inv, monthName) {
+      return `
+        <div id="invoicePrint" style="font-family: 'Inter', -apple-system, sans-serif; padding: 24px;">
+          <div style="border-bottom: 2px solid #3D4F3D; padding-bottom: 24px; margin-bottom: 28px;">
+            <h1 style="margin: 0; font-size: 28px; font-weight: 600; font-family: 'Cormorant Garamond', Georgia, serif; color: #3D4F3D;">${companySettings.name || 'Nosara Hills Limitada'}</h1>
+            ${companySettings.id ? `<p style="margin:6px 0;color:#4A5D4A;font-size:13px;">Cedula Juridica: ${companySettings.id}</p>` : ''}
+            ${companySettings.email ? `<p style="margin:4px 0;color:#4A5D4A;font-size:13px;">${companySettings.email}</p>` : ''}
+          </div>
+          
+          <div style="display:flex;justify-content:space-between;margin-bottom:28px;">
+            <div>
+              <h2 style="margin:0 0 10px;font-size:20px;color:#1A1F16;font-family: 'Cormorant Garamond', Georgia, serif;text-transform:uppercase;letter-spacing:0.05em;">Factura de Electricidad</h2>
+              <p style="margin:0;color:#4A5D4A;">Periodo: ${monthName}</p>
+              <p style="margin:0;color:#4A5D4A;">Fecha: ${new Date().toLocaleDateString('es-CR')}</p>
+            </div>
+            <div style="text-align:right;">
+              <p style="margin:0;font-size:12px;color:#4A5D4A;">No. ${inv.id}</p>
+            </div>
+          </div>
+          
+          <div style="background:#F5F3EF;padding:24px;border-radius:10px;margin-bottom:28px;border-left:4px solid #C4A67C;">
+            <p style="margin:0 0 4px;font-weight:600;font-size:20px;color:#1A1F16;font-family: 'Cormorant Garamond', Georgia, serif;">${inv.owner}</p>
+            <p style="margin:0;color:#4A5D4A;">${inv.meterName}</p>
+          </div>
+          
+          <table style="width:100%;border-collapse:collapse;margin-bottom:28px;">
+            <tr style="border-bottom:1px solid #D4C9B5;">
+              <th style="text-align:left;padding:16px;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#4A5D4A;font-family: 'Cormorant Garamond', Georgia, serif;">Concepto</th>
+              <th style="text-align:right;padding:16px;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#4A5D4A;font-family: 'Cormorant Garamond', Georgia, serif;">Lect. Anterior</th>
+              <th style="text-align:right;padding:16px;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#4A5D4A;font-family: 'Cormorant Garamond', Georgia, serif;">Lect. Actual</th>
+              <th style="text-align:right;padding:16px;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#4A5D4A;font-family: 'Cormorant Garamond', Georgia, serif;">Consumo</th>
+              <th style="text-align:right;padding:16px;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#4A5D4A;font-family: 'Cormorant Garamond', Georgia, serif;">Monto</th>
+            </tr>
+            <tr>
+              <td style="padding:18px 16px;">Electricidad (ICE)</td>
+              <td style="padding:18px 16px;text-align:right;">${inv.prevKw.toLocaleString()} KW</td>
+              <td style="padding:18px 16px;text-align:right;">${inv.currKw.toLocaleString()} KW</td>
+              <td style="padding:18px 16px;text-align:right;">${inv.consumption.toLocaleString()} KW</td>
+              <td style="padding:18px 16px;text-align:right;font-weight:700;color:#3D4F3D;font-size:18px;">₡${inv.amount.toLocaleString()}</td>
+            </tr>
+          </table>
+          
+          <div style="background:#E8E1D3;border:1px solid #D4C9B5;border-radius:10px;padding:24px;margin-bottom:28px;">
+            <h4 style="margin:0 0 18px;font-size:12px;color:#3D4F3D;text-transform:uppercase;letter-spacing:0.08em;font-family: 'Cormorant Garamond', Georgia, serif;">Calculo Proporcional — Sin Fines de Lucro</h4>
+            <table style="width:100%;font-size:14px;">
+              <tr><td style="padding:8px 0;color:#4A5D4A;">Factura ICE Total:</td><td style="text-align:right;color:#1A1F16;">₡${inv.iceBillTotal.toLocaleString()}</td></tr>
+              <tr><td style="padding:8px 0;color:#4A5D4A;">Consumo Total Macro:</td><td style="text-align:right;color:#1A1F16;">${inv.totalKwAll.toLocaleString()} KW</td></tr>
+              <tr><td style="padding:8px 0;color:#4A5D4A;">Su Consumo:</td><td style="text-align:right;color:#1A1F16;">${inv.consumption.toLocaleString()} KW</td></tr>
+              <tr><td style="padding:8px 0;color:#4A5D4A;">Porcentaje:</td><td style="text-align:right;color:#1A1F16;">${(inv.percent * 100).toFixed(4)}%</td></tr>
+              <tr style="border-top:1px solid #C4A67C;"><td style="padding:16px 0 8px;font-weight:700;color:#3D4F3D;">₡${inv.iceBillTotal.toLocaleString()} × ${(inv.percent * 100).toFixed(4)}%</td><td style="text-align:right;padding:16px 0 8px;font-weight:700;color:#3D4F3D;">= ₡${inv.amount.toLocaleString()}</td></tr>
+            </table>
+          </div>
+          
+          <div style="font-size:12px;color:#4A5D4A;border-top:1px solid #D4C9B5;padding-top:20px;text-align:center;">
+            <p style="margin:0 0 6px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;font-family: 'Cormorant Garamond', Georgia, serif;">Distribucion de Costos Sin Fines de Lucro</p>
+            <p style="margin:0;">Este cobro corresponde a la distribucion proporcional del costo real de la factura ICE. No se aplica recargo ni ganancia.</p>
+          </div>
+        </div>
+      `;
+    }
+    
+    function viewInvoice(id) {
+      const inv = invoices.find(i => i.id === id);
+      if (inv) showInvoicePreview(inv);
+    }
+    
+    function closeInvoiceModal() { document.getElementById('invoiceModal').classList.remove('active'); }
+    
+    function printInvoice() {
+      const content = document.getElementById('invoicePrint').innerHTML;
+      const win = window.open('', '_blank');
+      win.document.write(`<html><head><title>Factura</title><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><style>body{margin:0;padding:20px;font-family:'Inter',-apple-system,sans-serif;}</style></head><body>${content}</body></html>`);
+      win.document.close();
+      win.print();
+    }
+    
+    function renderReportsTab() {
+      const monthsWithData = [...new Set(invoices.map(i => i.month))].sort().reverse();
+      
+      const totalMonths = monthsWithData.length;
+      const totalInvoices = invoices.length;
+      const totalCollected = invoices.reduce((s, i) => s + i.amount, 0);
+      const totalIceBills = monthsWithData.reduce((s, m) => {
+        const inv = invoices.find(i => i.month === m);
+        return s + (inv?.iceBillTotal || 0);
+      }, 0);
+      const totalDiff = totalIceBills - totalCollected;
+      
+      document.getElementById('reportSummaryCards').innerHTML = `
+        <div class="stat-card"><div class="stat-value">${totalMonths}</div><div class="stat-label">Meses</div></div>
+        <div class="stat-card"><div class="stat-value">${totalInvoices}</div><div class="stat-label">Facturas</div></div>
+        <div class="stat-card"><div class="stat-value success">₡${totalCollected.toLocaleString()}</div><div class="stat-label">Cobrado</div></div>
+        <div class="stat-card"><div class="stat-value ${Math.abs(totalDiff) < 500 ? 'success' : 'warning'}">${Math.abs(totalDiff) < 500 ? '✓ ₡0' : '₡' + totalDiff.toLocaleString()}</div><div class="stat-label">Diferencia</div></div>
+      `;
+      
+      if (monthsWithData.length === 0) {
+        document.getElementById('reportsList').innerHTML = '<p style="color:var(--coniston);text-align:center;padding:48px;">Sin reportes</p>';
+        document.getElementById('reportBody').innerHTML = '<p style="color:var(--coniston);text-align:center;padding:48px;">Genera facturas para ver reportes.</p>';
+        return;
+      }
+      
+      document.getElementById('reportsList').innerHTML = `
+        <table style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr style="background:var(--alaska);">
+              <th style="text-align:left;padding:16px 24px;font-family:'Cormorant Garamond',Georgia,serif;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--coniston);border-bottom:1px solid var(--limestone);">Mes</th>
+              <th style="text-align:right;padding:16px 24px;font-family:'Cormorant Garamond',Georgia,serif;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--coniston);border-bottom:1px solid var(--limestone);">Factura ICE</th>
+              <th style="text-align:right;padding:16px 24px;font-family:'Cormorant Garamond',Georgia,serif;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--coniston);border-bottom:1px solid var(--limestone);">Cobrado</th>
+              <th style="text-align:right;padding:16px 24px;font-family:'Cormorant Garamond',Georgia,serif;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--coniston);border-bottom:1px solid var(--limestone);">Diferencia</th>
+              <th style="text-align:center;padding:16px 24px;font-family:'Cormorant Garamond',Georgia,serif;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--coniston);border-bottom:1px solid var(--limestone);">Estado</th>
+              <th style="padding:16px 24px;border-bottom:1px solid var(--limestone);"></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${monthsWithData.map(m => {
+              const mInv = invoices.filter(i => i.month === m);
+              const iceBill = mInv[0]?.iceBillTotal || 0;
+              const charged = mInv.reduce((s, i) => s + i.amount, 0);
+              const diff = iceBill - charged;
+              const isBalanced = Math.abs(diff) < 100;
+              const monthName = new Date(m + '-01').toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
+              return `
+                <tr style="cursor:pointer;" onclick="showMonthReport('${m}')">
+                  <td style="padding:18px 24px;border-bottom:1px solid var(--limestone-light);font-weight:600;font-family:'Cormorant Garamond',Georgia,serif;font-size:16px;">${monthName}</td>
+                  <td style="padding:18px 24px;border-bottom:1px solid var(--limestone-light);text-align:right;">₡${iceBill.toLocaleString()}</td>
+                  <td style="padding:18px 24px;border-bottom:1px solid var(--limestone-light);text-align:right;">₡${charged.toLocaleString()}</td>
+                  <td style="padding:18px 24px;border-bottom:1px solid var(--limestone-light);text-align:right;color:${isBalanced ? 'var(--coniston)' : 'var(--terracotta)'};">₡${diff.toLocaleString()}</td>
+                  <td style="padding:18px 24px;border-bottom:1px solid var(--limestone-light);text-align:center;">
+                    <span style="display:inline-block;padding:8px 18px;border-radius:6px;font-size:12px;font-weight:600;background:${isBalanced ? 'var(--limestone-light)' : '#FEE2E2'};color:${isBalanced ? 'var(--keswick)' : '#991B1B'};border:1px solid ${isBalanced ? 'var(--coniston)' : '#EF4444'};">
+                      ${isBalanced ? '✓ Balanceado' : '⚠ Pendiente'}
+                    </span>
+                  </td>
+                  <td style="padding:18px 24px;border-bottom:1px solid var(--limestone-light);">
+                    <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();printMonthReport('${m}')">PDF</button>
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      `;
+      
+      showMonthReport(monthsWithData[0]);
+    }
+    
+    function showMonthReport(month) {
+      const monthInv = invoices.filter(i => i.month === month);
+      const container = document.getElementById('reportBody');
+      const monthName = new Date(month + '-01').toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
+      
+      document.getElementById('reportMonthTitle').textContent = monthName;
+      
+      if (!monthInv.length) {
+        container.innerHTML = '<p style="color:var(--coniston);text-align:center;padding:48px;">Sin facturas</p>';
+        return;
+      }
+      
+      const iceBill = monthInv[0].iceBillTotal || 0;
+      const totalKw = monthInv[0].totalKwAll || 0;
+      const totalCharged = monthInv.reduce((s, i) => s + i.amount, 0);
+      const totalKwCharged = monthInv.reduce((s, i) => s + i.consumption, 0);
+      const diff = iceBill - totalCharged;
+      const isBalanced = Math.abs(diff) < 100;
+      
+      container.innerHTML = `
+        <div style="background:${isBalanced ? 'var(--limestone-light)' : '#FEE2E2'};border:2px solid ${isBalanced ? 'var(--coniston)' : 'var(--terracotta)'};border-radius:10px;padding:28px;text-align:center;margin-bottom:28px;">
+          <h3 style="margin:0 0 10px;font-size:22px;font-family:'Cormorant Garamond',Georgia,serif;color:${isBalanced ? 'var(--keswick)' : '#991B1B'};">
+            ${isBalanced ? '✓ DISTRIBUCION VERIFICADA' : '⚠ DIFERENCIA DETECTADA'}
+          </h3>
+          <p style="margin:0;color:${isBalanced ? 'var(--coniston)' : '#B91C1C'};">
+            ${isBalanced ? 'Total facturado igual al monto ICE. Sin ganancia.' : 'Hay medidores pendientes de facturar.'}
+          </p>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:28px;">
+          <div class="stat-card"><div style="font-size:28px;font-weight:600;color:var(--keswick);font-family:'Cormorant Garamond',Georgia,serif;">₡${iceBill.toLocaleString()}</div><div class="stat-label">Factura ICE</div></div>
+          <div class="stat-card"><div style="font-size:28px;font-weight:600;color:var(--coniston);font-family:'Cormorant Garamond',Georgia,serif;">₡${totalCharged.toLocaleString()}</div><div class="stat-label">Cobrado</div></div>
+          <div class="stat-card"><div style="font-size:28px;font-weight:600;color:${isBalanced ? 'var(--coniston)' : 'var(--terracotta)'};font-family:'Cormorant Garamond',Georgia,serif;">₡${diff.toLocaleString()}</div><div class="stat-label">Diferencia</div></div>
+        </div>
+        
+        <table style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr style="background:var(--alaska);">
+              <th style="text-align:left;padding:14px 16px;border:1px solid var(--limestone);font-family:'Cormorant Garamond',Georgia,serif;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--coniston);">Medidor</th>
+              <th style="text-align:left;padding:14px 16px;border:1px solid var(--limestone);font-family:'Cormorant Garamond',Georgia,serif;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--coniston);">Cliente</th>
+              <th style="text-align:right;padding:14px 16px;border:1px solid var(--limestone);font-family:'Cormorant Garamond',Georgia,serif;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--coniston);">KW</th>
+              <th style="text-align:right;padding:14px 16px;border:1px solid var(--limestone);font-family:'Cormorant Garamond',Georgia,serif;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--coniston);">%</th>
+              <th style="text-align:right;padding:14px 16px;border:1px solid var(--limestone);font-family:'Cormorant Garamond',Georgia,serif;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--coniston);">Monto</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${monthInv.map(i => `
+              <tr>
+                <td style="padding:14px 16px;border:1px solid var(--limestone);font-weight:600;font-family:'Cormorant Garamond',Georgia,serif;">${i.meterName}</td>
+                <td style="padding:14px 16px;border:1px solid var(--limestone);">${i.owner}</td>
+                <td style="padding:14px 16px;border:1px solid var(--limestone);text-align:right;">${i.consumption.toLocaleString()}</td>
+                <td style="padding:14px 16px;border:1px solid var(--limestone);text-align:right;">${(i.percent * 100).toFixed(2)}%</td>
+                <td style="padding:14px 16px;border:1px solid var(--limestone);text-align:right;font-weight:600;color:var(--keswick);">₡${i.amount.toLocaleString()}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+          <tfoot>
+            <tr style="background:var(--limestone-light);font-weight:700;">
+              <td colspan="2" style="padding:16px;border:1px solid var(--limestone);font-family:'Cormorant Garamond',Georgia,serif;font-size:15px;">TOTAL</td>
+              <td style="padding:16px;border:1px solid var(--limestone);text-align:right;">${totalKwCharged.toLocaleString()} KW</td>
+              <td style="padding:16px;border:1px solid var(--limestone);text-align:right;">${((totalKwCharged/totalKw)*100).toFixed(2)}%</td>
+              <td style="padding:16px;border:1px solid var(--limestone);text-align:right;color:var(--keswick);">₡${totalCharged.toLocaleString()}</td>
+            </tr>
+          </tfoot>
+        </table>
+        
+        <div style="margin-top:28px;padding:20px 24px;background:var(--alaska);border-radius:8px;font-size:13px;color:var(--coniston);border-left:4px solid var(--sand);">
+          <strong>Nota Legal:</strong> Este reporte demuestra distribucion proporcional sin margen de ganancia. Total cobrado igual o menor (por redondeo) a la factura ICE.
+        </div>
+      `;
+    }
+    
+    function printCurrentReport() {
+      const content = document.getElementById('reportBody').innerHTML;
+      const title = document.getElementById('reportMonthTitle').textContent;
+      const win = window.open('', '_blank');
+      win.document.write(`<html><head><title>Reporte ${title}</title><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><style>body{font-family:'Inter',-apple-system,sans-serif;margin:20px;}.no-print{margin-bottom:20px;}@media print{.no-print{display:none;}}</style></head><body><div class="no-print"><button onclick="window.close()" style="padding:12px 24px;background:#0f172a;color:white;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-family:inherit;">← Volver</button> <button onclick="window.print()" style="padding:12px 24px;background:#3b82f6;color:white;border:none;border-radius:8px;font-size:14px;cursor:pointer;margin-left:8px;font-family:inherit;">Imprimir / PDF</button></div>${content}</body></html>`);
+      win.document.close();
+      win.print();
+    }
+    
+    function printMonthReport(month) {
+      showMonthReport(month);
+      setTimeout(() => printCurrentReport(), 100);
+    }
+    
+    async function saveMonthSetup() { 
+      const month = document.getElementById('billingMonth').value;
+      const amount = parseFloat(document.getElementById('iceBill').value) || 0;
+      const totalKw = parseFloat(document.getElementById('totalKw').value) || 0;
+      const fileName = document.getElementById('iceBillFileName')?.textContent || '';
+      
+      await saveIceBillToSupabase(month, amount, totalKw, fileName);
+      saveData(); 
+      alert('✓ Guardado'); 
+    }
+    
+    function saveSettings() {
+      companySettings = {
+        name: document.getElementById('companyName').value,
+        id: document.getElementById('companyId').value,
+        phone: document.getElementById('companyPhone').value,
+        email: document.getElementById('companyEmail').value
+      };
+      saveData();
+      alert('✓ Guardado');
+    }
+    
+    function saveData() {
+      localStorage.setItem('utilityBilling', JSON.stringify({
+        meters, completedMeters, invoices, companySettings,
+        iceBill: document.getElementById('iceBill').value,
+        totalKw: document.getElementById('totalKw').value,
+        month: document.getElementById('billingMonth').value
+      }));
+    }
+    
+    init();
+  </script>
+</body>
+</html>

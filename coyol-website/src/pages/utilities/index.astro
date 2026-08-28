@@ -1,0 +1,107 @@
+---
+// Password protection for utilities page
+const VALID_PASSWORD = "Linea2026NH";
+
+// Check for password in cookie or query
+const url = new URL(Astro.request.url);
+const passwordParam = url.searchParams.get('pwd');
+const cookies = Astro.request.headers.get('cookie') || '';
+const hasAuthCookie = cookies.includes('utilities_auth=true');
+
+const isAuthenticated = hasAuthCookie || passwordParam === VALID_PASSWORD;
+
+if (passwordParam === VALID_PASSWORD) {
+  // Set cookie and redirect to clean URL
+  return new Response(null, {
+    status: 302,
+    headers: {
+      'Location': '/utilities/',
+      'Set-Cookie': 'utilities_auth=true; Path=/utilities; Max-Age=86400; SameSite=Strict'
+    }
+  });
+}
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linea Privada Nosara Hills</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f3f4f6;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-box {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+    .login-box h1 {
+      font-size: 24px;
+      margin-bottom: 8px;
+      color: #111827;
+    }
+    .login-box p {
+      color: #6b7280;
+      margin-bottom: 24px;
+    }
+    .login-box input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-bottom: 16px;
+    }
+    .login-box input:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .login-box button {
+      width: 100%;
+      padding: 12px;
+      background: #111827;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .login-box button:hover {
+      background: #1f2937;
+    }
+    iframe {
+      width: 100%;
+      height: 100vh;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  {isAuthenticated ? (
+    <iframe src="/utilities.html"></iframe>
+  ) : (
+    <div class="login-box">
+      <h1>⚡ Linea Privada</h1>
+      <p>Nosara Hills - Sistema de Distribucion</p>
+      <form method="GET">
+        <input type="password" name="pwd" placeholder="Contraseña" required autofocus />
+        <button type="submit">Ingresar</button>
+      </form>
+    </div>
+  )}
+</body>
+</html>
