@@ -57,6 +57,29 @@ import '../../../styles/laluna-tables.css';
         </div>
       </div>
 
+      <!-- Booking Time Slots Section -->
+      <div class="section" style="margin-top:20px;">
+        <h2>Booking Time Slots</h2>
+        <p style="font-size:12px;color:#666;margin-bottom:16px;">Select which time slots guests can book online. Uncheck slots you want to disable.</p>
+        
+        <div class="time-slots-container">
+          <div class="shift-slots">
+            <h3 style="font-size:13px;color:#A65D3F;margin-bottom:12px;">Dinner 1 (First Seating)</h3>
+            <div class="slots-grid" id="dinner1Slots"></div>
+          </div>
+          <div class="shift-slots">
+            <h3 style="font-size:13px;color:#A65D3F;margin-bottom:12px;">Dinner 2 (Second Seating)</h3>
+            <div class="slots-grid" id="dinner2Slots"></div>
+          </div>
+        </div>
+        
+        <div style="margin-top:16px;padding:12px;background:#f5f3ef;border-radius:8px;">
+          <p style="font-size:12px;color:#666;margin:0;"><strong>Tip:</strong> For 2 seatings, enable only 5:30-6:30pm for first seating and 8:00-9:00pm for second seating.</p>
+        </div>
+        
+        <button onclick="saveTimeSlots()" class="btn-save" style="margin-top:12px;">Save Time Slots</button>
+      </div>
+
       <div class="section" style="margin-top:20px;">
         <h2>Table Capacities</h2>
         <div class="tables-row">
@@ -149,14 +172,173 @@ import '../../../styles/laluna-tables.css';
     .blocked-item .btn-unblock { padding: 6px 12px; background: transparent; border: 1px solid #ccc; color: #666; border-radius: 6px; cursor: pointer; font-size: 12px; }
     .blocked-item .btn-unblock:hover { border-color: #dc3545; color: #dc3545; }
     .empty-state { color: #666; text-align: center; padding: 16px; }
+    
+    /* Time Slots */
+    .time-slots-container { display: flex; gap: 24px; flex-wrap: wrap; }
+    .shift-slots { flex: 1; min-width: 280px; }
+    .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px; }
+    .slot-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--cream); border-radius: 8px; cursor: pointer; transition: all 0.15s; }
+    .slot-item:hover { background: #e8e5df; }
+    .slot-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--terracotta); cursor: pointer; }
+    .slot-item label { font-size: 13px; font-weight: 500; color: var(--santorini); cursor: pointer; }
+    .slot-item.disabled { opacity: 0.5; background: #f0f0f0; }
+    .slot-item.disabled label { text-decoration: line-through; color: #999; }
   </style>
 
   <script is:inline>
+    const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+    
+    // Time Slots Configuration
+    const dinner1Times = ['17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '19:45'];
+    const dinner2Times = ['20:00', '20:30', '21:00', '21:30', '22:00'];
+    
+    // Default: all enabled
+    let enabledSlots = [...dinner1Times, ...dinner2Times];
+    
+    function formatTime12(time24) {
+      const [h, m] = time24.split(':');
+      const hour = parseInt(h);
+      const ampm = hour >= 12 ? 'PM' : 'AM';
+      const hour12 = hour % 12 || 12;
+      return `${hour12}:${m} ${ampm}`;
+    }
+    
+    function renderTimeSlots() {
+      const d1Container = document.getElementById('dinner1Slots');
+      const d2Container = document.getElementById('dinner2Slots');
+      
+      d1Container.innerHTML = dinner1Times.map(time => `
+        <div class="slot-item ${enabledSlots.includes(time) ? '' : 'disabled'}" onclick="toggleSlot('${time}', this)">
+          <input type="checkbox" id="slot-${time}" ${enabledSlots.includes(time) ? 'checked' : ''} onclick="event.stopPropagation(); toggleSlot('${time}', this.parentElement)" />
+          <label for="slot-${time}">${formatTime12(time)}</label>
+        </div>
+      `).join('');
+      
+      d2Container.innerHTML = dinner2Times.map(time => `
+        <div class="slot-item ${enabledSlots.includes(time) ? '' : 'disabled'}" onclick="toggleSlot('${time}', this)">
+          <input type="checkbox" id="slot-${time}" ${enabledSlots.includes(time) ? 'checked' : ''} onclick="event.stopPropagation(); toggleSlot('${time}', this.parentElement)" />
+          <label for="slot-${time}">${formatTime12(time)}</label>
+        </div>
+      `).join('');
+    }
+    
+    function toggleSlot(time, element) {
+      const checkbox = element.querySelector('input[type="checkbox"]');
+      const isChecked = !checkbox.checked;
+      checkbox.checked = isChecked;
+      
+      if (isChecked) {
+        if (!enabledSlots.includes(time)) enabledSlots.push(time);
+        element.classList.remove('disabled');
+      } else {
+        enabledSlots = enabledSlots.filter(t => t !== time);
+        element.classList.add('disabled');
+      }
+    }
+    window.toggleSlot = toggleSlot;
+    
+    async function loadTimeSlots() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_time_slots`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const data = await res.json();
+        if (data.length > 0 && data[0].value) {
+          const parsed = JSON.parse(data[0].value);
+          // Handle both formats: object {time: true/false} or array [time1, time2]
+          if (Array.isArray(parsed)) {
+            enabledSlots = parsed;
+          } else {
+            // Convert object to array of enabled times
+            enabledSlots = Object.entries(parsed)
+              .filter(([time, enabled]) => enabled === true)
+              .map(([time]) => time);
+          }
+        }
+      } catch (e) {
+        console.error('Error loading time slots:', e);
+      }
+      renderTimeSlots();
+    }
+    
+    async function saveTimeSlots() {
+      const btn = document.querySelector('button[onclick="saveTimeSlots()"]');
+      const originalText = btn?.textContent || 'Save Time Slots';
+      
+      try {
+        if (btn) { btn.textContent = 'Saving...'; btn.disabled = true; }
+        
+        const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_time_slots`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const existing = await checkRes.json();
+        
+        // Convert array to object format {time: true/false} for consistency with public page
+        const allTimes = [...dinner1Times, ...dinner2Times];
+        const slotsObj = {};
+        allTimes.forEach(t => slotsObj[t] = enabledSlots.includes(t));
+        const payload = { value: JSON.stringify(slotsObj), updated_at: new Date().toISOString() };
+        
+        if (existing.length > 0) {
+          await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_time_slots`, {
+            method: 'PATCH',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+          });
+        } else {
+          await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings`, {
+            method: 'POST',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ key: 'laluna_time_slots', ...payload })
+          });
+        }
+        
+        if (btn) { btn.textContent = 'Saved ✓'; }
+        setTimeout(() => { if (btn) btn.textContent = originalText; }, 2000);
+        
+      } catch (e) {
+        console.error('Error saving time slots:', e);
+        alert('Error al guardar: ' + e.message);
+        if (btn) { btn.textContent = originalText; }
+      } finally {
+        if (btn) { btn.disabled = false; }
+      }
+    }
+    window.saveTimeSlots = saveTimeSlots;
+
     // Table types
     const types = ['square', 'round', 'round-lg', 'sofa', 'diamond', 'rect', 'bar'];
     const defaults = { 'square': [2,4], 'round': [2,4], 'round-lg': [4,6], 'sofa': [2,4], 'diamond': [2,4], 'rect': [4,8], 'bar': [6,16] };
     
-    function loadTableTypes() {
+    async function loadTableTypes() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_table_types`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const data = await res.json();
+        if (data.length > 0 && data[0].value) {
+          const s = JSON.parse(data[0].value);
+          types.forEach(t => {
+            const [dMin, dMax] = defaults[t];
+            document.getElementById(`${t}-min`).value = s[t]?.min || dMin;
+            document.getElementById(`${t}-max`).value = s[t]?.max || dMax;
+          });
+          return;
+        }
+      } catch (e) {
+        console.error('Error loading table types:', e);
+      }
+      
+      // Fallback to localStorage
       const s = JSON.parse(localStorage.getItem('laluna_table_types') || '{}');
       types.forEach(t => {
         const [dMin, dMax] = defaults[t];
@@ -165,13 +347,47 @@ import '../../../styles/laluna-tables.css';
       });
     }
     
-    function saveTableTypes() {
+    async function saveTableTypes() {
       const s = {};
       types.forEach(t => {
         s[t] = { min: +document.getElementById(`${t}-min`).value, max: +document.getElementById(`${t}-max`).value };
       });
+      
+      // Save to localStorage as backup
       localStorage.setItem('laluna_table_types', JSON.stringify(s));
-      alert('Table capacities saved!');
+      
+      try {
+        const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_table_types`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const existing = await checkRes.json();
+        
+        if (existing.length > 0) {
+          await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_table_types`, {
+            method: 'PATCH',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ value: JSON.stringify(s), updated_at: new Date().toISOString() })
+          });
+        } else {
+          await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings`, {
+            method: 'POST',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ key: 'laluna_table_types', value: JSON.stringify(s) })
+          });
+        }
+        alert('Table capacities saved!');
+      } catch (e) {
+        console.error('Error saving table types:', e);
+        alert('Saved locally only - server sync failed');
+      }
     }
     window.saveTableTypes = saveTableTypes;
 
@@ -183,7 +399,24 @@ import '../../../styles/laluna-tables.css';
       { name: 'Dinner 2', start: '19:00', end: '22:00' }
     ];
 
-    function loadShifts() {
+    async function loadShifts() {
+      try {
+        // Try to load from Supabase first
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_shifts`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const data = await res.json();
+        
+        if (data.length > 0 && data[0].value) {
+          const shifts = JSON.parse(data[0].value);
+          renderShifts(shifts);
+          return;
+        }
+      } catch (e) {
+        console.error('Error loading shifts from Supabase:', e);
+      }
+      
+      // Fallback to localStorage or defaults
       const shifts = JSON.parse(localStorage.getItem('laluna_shifts') || 'null') || defaultShifts;
       renderShifts(shifts);
     }
@@ -225,10 +458,62 @@ import '../../../styles/laluna-tables.css';
       }));
     }
 
-    function saveShifts() {
+    async function saveShifts() {
       const shifts = getShiftsFromUI();
-      localStorage.setItem('laluna_shifts', JSON.stringify(shifts));
-      alert('Shifts saved!');
+      const btn = document.querySelector('.btn-save[onclick="saveShifts()"]');
+      const originalText = btn?.textContent || 'Save Shifts';
+      
+      try {
+        if (btn) { btn.textContent = 'Saving...'; btn.disabled = true; }
+        
+        // Save to localStorage as backup
+        localStorage.setItem('laluna_shifts', JSON.stringify(shifts));
+        
+        // Save to Supabase
+        const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_shifts`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const existing = await checkRes.json();
+        
+        let saveRes;
+        if (existing.length > 0) {
+          saveRes = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_shifts`, {
+            method: 'PATCH',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=representation'
+            },
+            body: JSON.stringify({ value: JSON.stringify(shifts), updated_at: new Date().toISOString() })
+          });
+        } else {
+          saveRes = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings`, {
+            method: 'POST',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=representation'
+            },
+            body: JSON.stringify({ key: 'laluna_shifts', value: JSON.stringify(shifts) })
+          });
+        }
+        
+        if (!saveRes.ok) {
+          throw new Error('Failed to save to server');
+        }
+        
+        if (btn) { btn.textContent = 'Saved ✓'; }
+        setTimeout(() => { if (btn) btn.textContent = originalText; }, 2000);
+        
+      } catch (e) {
+        console.error('Error saving shifts:', e);
+        alert('Error al guardar: ' + e.message);
+        if (btn) { btn.textContent = originalText; }
+      } finally {
+        if (btn) { btn.disabled = false; }
+      }
     }
     window.saveShifts = saveShifts;
 
@@ -300,6 +585,7 @@ import '../../../styles/laluna-tables.css';
     window.unblockDate = unblockDate;
 
     // Init
+    loadTimeSlots();
     loadTableTypes();
     loadShifts();
     loadBlockedDates();

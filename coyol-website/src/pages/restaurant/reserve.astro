@@ -21,7 +21,7 @@ import Layout from '../../layouts/Layout.astro';
       <div class="form-container">
         <h1>Reserve a Table</h1>
         <a href="/coyol/gift" class="gift-link">Gift a Friend</a>
-        <p class="subtitle">Mar Azul · Nosara</p>
+        <p class="subtitle">Nosara, Costa Rica</p>
 
         <!-- Step 1: Date & Party -->
         <div class="step active" id="step-1">
@@ -45,29 +45,30 @@ import Layout from '../../layouts/Layout.astro';
 
           <div class="input-group">
             <label>Time</label>
-            <div class="time-grid">
+            <div class="time-grid" id="timeGrid">
               <div class="time-section">
                 <span class="time-label">Lunch</span>
-                <div class="time-slots" id="lunch-slots">
+                <div class="time-slots">
+                  <button type="button" class="time-btn" data-time="11:30">11:30</button>
                   <button type="button" class="time-btn" data-time="12:00">12:00</button>
                   <button type="button" class="time-btn" data-time="12:30">12:30</button>
-                  <button type="button" class="time-btn" data-time="13:00">13:00</button>
-                  <button type="button" class="time-btn" data-time="13:30">13:30</button>
-                  <button type="button" class="time-btn" data-time="14:00">14:00</button>
-                  <button type="button" class="time-btn" data-time="14:30">14:30</button>
+                  <button type="button" class="time-btn" data-time="13:00">1:00</button>
+                  <button type="button" class="time-btn" data-time="13:30">1:30</button>
+                  <button type="button" class="time-btn" data-time="14:00">2:00</button>
                 </div>
               </div>
               <div class="time-section">
                 <span class="time-label">Dinner</span>
-                <div class="time-slots" id="dinner-slots">
-                  <button type="button" class="time-btn" data-time="17:00">17:00</button>
-                  <button type="button" class="time-btn" data-time="17:30">17:30</button>
-                  <button type="button" class="time-btn" data-time="18:00">18:00</button>
-                  <button type="button" class="time-btn selected" data-time="18:30">18:30</button>
-                  <button type="button" class="time-btn" data-time="19:00">19:00</button>
-                  <button type="button" class="time-btn" data-time="19:30">19:30</button>
-                  <button type="button" class="time-btn" data-time="20:00">20:00</button>
-                  <button type="button" class="time-btn" data-time="20:30">20:30</button>
+                <div class="time-slots">
+                  <button type="button" class="time-btn" data-time="17:00">5:00</button>
+                  <button type="button" class="time-btn" data-time="17:30">5:30</button>
+                  <button type="button" class="time-btn" data-time="18:00">6:00</button>
+                  <button type="button" class="time-btn selected" data-time="18:30">6:30</button>
+                  <button type="button" class="time-btn" data-time="19:00">7:00</button>
+                  <button type="button" class="time-btn" data-time="19:30">7:30</button>
+                  <button type="button" class="time-btn" data-time="20:00">8:00</button>
+                  <button type="button" class="time-btn" data-time="20:30">8:30</button>
+                  <button type="button" class="time-btn" data-time="21:00">9:00</button>
                 </div>
               </div>
             </div>
@@ -160,7 +161,7 @@ import Layout from '../../layouts/Layout.astro';
             <p class="conf-ref">Confirmation #<span id="conf-id">---</span></p>
             <div class="conf-info">
               <p><strong>Coyol Restaurant</strong></p>
-              <p>Mar Azul, Nosara</p>
+              <p>Nosara, Costa Rica</p>
               <p>+506 8632-9590</p>
             </div>
             <p class="conf-note">
@@ -830,14 +831,90 @@ import Layout from '../../layouts/Layout.astro';
       document.getElementById('largePartyModal').classList.remove('open');
     };
 
-    // Time selection
-    document.querySelectorAll('.time-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (btn.classList.contains('unavailable')) return;
-        document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
+    // Time selection - handled dynamically in renderTimeGrid()
+    
+    // Load and render time slots from settings
+    // SUPABASE_URL and SUPABASE_KEY already defined above
+    
+    const ALL_TIME_SLOTS = {
+      'Lunch': ['11:30', '12:00', '12:30', '13:00', '13:30', '14:00'],
+      'Dinner': ['17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00']
+    };
+    
+    let selectedTime = null;
+    let enabledTimeSlots = {};
+    
+    // DISABLED - using static HTML buttons instead
+    async function loadTimeSlots() {
+      // Do nothing - static buttons are already in HTML
+      return;
+    }
+    
+    function renderTimeGrid() {
+      const container = document.getElementById('timeGrid');
+      
+      const sectionsHtml = Object.entries(ALL_TIME_SLOTS).map(([section, slots]) => {
+        const enabledSlots = slots.filter(t => enabledTimeSlots[t] !== false);
+        if (enabledSlots.length === 0) return '';
+        
+        return `
+          <div class="time-section">
+            <span class="time-label">${section}</span>
+            <div class="time-slots">
+              ${enabledSlots.map(time => {
+                const hour = parseInt(time.split(':')[0]);
+                const mins = time.split(':')[1];
+                const displayTime = hour > 12 ? `${hour - 12}:${mins}` : `${hour}:${mins}`;
+                return `<button type="button" class="time-btn" data-time="${time}">${displayTime}</button>`;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }).filter(Boolean).join('');
+      
+      if (!sectionsHtml) {
+        container.innerHTML = '<p style="color:#999;text-align:center;">Please call to book: +506 2682-1280</p>';
+        return;
+      }
+      
+      container.innerHTML = sectionsHtml;
+      
+      // Add click handlers
+      document.querySelectorAll('.time-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (btn.classList.contains('unavailable')) return;
+          document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          selectedTime = btn.dataset.time;
+        });
       });
-    });
+      
+      // Select first available time by default
+      const firstBtn = container.querySelector('.time-btn:not(.unavailable)');
+      if (firstBtn) {
+        firstBtn.classList.add('selected');
+        selectedTime = firstBtn.dataset.time;
+      }
+    }
+    
+    // Initialize time button handlers (static HTML buttons)
+    function initTimeButtons() {
+      document.querySelectorAll('.time-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (btn.classList.contains('unavailable')) return;
+          document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          selectedTime = btn.dataset.time;
+        });
+      });
+      // Set default selected time
+      const selectedBtn = document.querySelector('.time-btn.selected');
+      if (selectedBtn) selectedTime = selectedBtn.dataset.time;
+    }
+    initTimeButtons();
+    
+    // Skip dynamic loading - use static buttons
+    // loadTimeSlots();
 
     // Seating selection
     document.querySelectorAll('.seating-btn').forEach(btn => {
@@ -864,23 +941,43 @@ import Layout from '../../layouts/Layout.astro';
       checkAvailability();
     });
 
+    // Track if current date is blocked
+    let isDateBlocked = false;
+    
     async function checkAvailability() {
       const selectedDate = dateInput.value;
+      isDateBlocked = false;
       
       // Check if date is blocked
       try {
         const blockRes = await fetch(`/api/blocked-dates?restaurant=coyol`);
         const blockedDates = await blockRes.json();
-        const isBlocked = blockedDates.some(b => b.date === selectedDate);
+        const blocked = blockedDates.find(b => b.date === selectedDate);
         
-        if (isBlocked) {
+        if (blocked) {
+          isDateBlocked = true;
           // Show blocked message and disable all times
           document.querySelectorAll('.time-btn').forEach(btn => {
             btn.classList.add('unavailable');
+            btn.classList.remove('selected');
           });
-          const blockedInfo = blockedDates.find(b => b.date === selectedDate);
-          alert(`Sorry, Coyol Restaurant is closed on this date for a private event${blockedInfo?.reason ? ': ' + blockedInfo.reason : ''}. Please select another date.`);
+          // Disable continue button
+          const continueBtn = document.querySelector('.continue-btn');
+          if (continueBtn) {
+            continueBtn.disabled = true;
+            continueBtn.style.opacity = '0.5';
+            continueBtn.style.cursor = 'not-allowed';
+          }
+          alert(`Sorry, Coyol Restaurant is closed on this date for a private event${blocked.reason ? ': ' + blocked.reason : ''}. Please select another date.`);
           return;
+        } else {
+          // Re-enable continue button
+          const continueBtn = document.querySelector('.continue-btn');
+          if (continueBtn) {
+            continueBtn.disabled = false;
+            continueBtn.style.opacity = '1';
+            continueBtn.style.cursor = 'pointer';
+          }
         }
       } catch (e) {
         console.error('Error checking blocked dates:', e);
@@ -938,6 +1035,25 @@ import Layout from '../../layouts/Layout.astro';
       const btn = document.getElementById('confirmBtn');
       if (btn.disabled) return;
       btn.disabled = true;
+      btn.textContent = 'Checking...';
+      
+      // Double-check if date is blocked (safety net)
+      try {
+        const blockRes = await fetch(`/api/blocked-dates?restaurant=coyol`);
+        const blockedDates = await blockRes.json();
+        const selectedDate = dateInput.value;
+        const blocked = blockedDates.find(b => b.date === selectedDate);
+        if (blocked) {
+          alert(`Sorry, Coyol Restaurant is closed on ${selectedDate} for a private event${blocked.reason ? ': ' + blocked.reason : ''}. Please select another date.`);
+          btn.disabled = false;
+          btn.textContent = 'Confirm Reservation';
+          showStep(1); // Go back to date selection
+          return;
+        }
+      } catch (e) {
+        console.error('Error checking blocked dates:', e);
+      }
+      
       btn.textContent = 'Saving...';
 
       const name = document.getElementById('name').value.trim();
@@ -989,7 +1105,7 @@ import Layout from '../../layouts/Layout.astro';
       }
 
       const date = dateInput.value;
-      const time = document.querySelector('.time-btn.selected')?.dataset.time || '18:30';
+      const time = selectedTime || document.querySelector('.time-btn.selected')?.dataset.time || '18:30';
       const guests = document.querySelector('.party-btn.selected')?.dataset.guests || '2';
       const zone = document.querySelector('.seating-btn.selected')?.dataset.zone || 'any';
 
@@ -1048,7 +1164,7 @@ import Layout from '../../layouts/Layout.astro';
       
       const formatDate = (d) => d.toISOString().replace(/-|:|\.\d{3}/g, '');
       
-      const calUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Dinner at Coyol')}&dates=${formatDate(startDate)}/${formatDate(endDate)}&location=${encodeURIComponent('Coyol Restaurant, Mar Azul, Nosara, Costa Rica')}&details=${encodeURIComponent('Reservation at Coyol Restaurant\\n+506 8632-9590')}`;
+      const calUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Dinner at Coyol')}&dates=${formatDate(startDate)}/${formatDate(endDate)}&location=${encodeURIComponent('Coyol Restaurant, Nosara, Costa Rica')}&details=${encodeURIComponent('Reservation at Coyol Restaurant\\n+506 8632-9590')}`;
       
       window.open(calUrl, '_blank');
     }

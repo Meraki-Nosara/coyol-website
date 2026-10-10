@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Distribucion de Electricidad - Linea Privada Nosara Hills</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --success: #059669;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-500: #6b7280;
+      --gray-700: #374151;
+      --gray-900: #111827;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--gray-100);
+      color: var(--gray-900);
+      line-height: 1.5;
+    }
+    
+    .header {
+      background: var(--gray-900);
+      color: white;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header h1 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .header-nav {
+      display: flex;
+      gap: 16px;
+    }
+    .header-nav a {
+      color: white;
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      opacity: 0.8;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .header-nav a:hover, .header-nav a.active {
+      opacity: 1;
+      background: rgba(255,255,255,0.1);
+    }
+    .header-info {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+    
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    
+    .main {
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      min-height: calc(100vh - 60px);
+    }
+    
+    .sidebar {
+      background: white;
+      border-right: 1px solid var(--gray-200);
+      padding: 24px;
+      overflow-y: auto;
+      max-height: calc(100vh - 60px);
+    }
+    
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--gray-500);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .month-setup {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+    .month-setup label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      color: var(--gray-700);
+    }
+    .month-setup input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--gray-300);
+      border-radius: 6px;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+    .month-setup input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .stat-value.warning { color: var(--warning); }
+    .stat-value.success { color: var(--success); }
+    .stat-label {
+      font-size: 11px;
+      color: var(--gray-500);
+      text-transform: uppercase;
+    }
+    
+    .pending-list { margin-bottom: 24px; }
+    .pending-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pending-item:hover {
+      border-color: var(--primary);
+      background: var(--gray-50);
+    }
+    .pending-item.selected {
+      border-color: var(--primary);
+      background: rgba(37, 99, 235, 0.05);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+    .pending-item.completed {
+      background: rgba(5, 150, 105, 0.05);
+      border-color: var(--success);
+    }
+    .pending-item.has-data {
+      background: rgba(5, 150, 105, 0.03);
+      border-left: 3px solid var(--success);
+    }
+    .pending-name { font-size: 14px; font-weight: 500; }
+    .pending-owner { font-size: 12px; color: var(--gray-500); }
+    .pending-location { font-size: 11px; color: var(--gray-500); }
+    .pending-status {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 500;
+    }
+    .pending-status.pending { background: var(--warning); color: white; }
+    .pending-status.done { background: var(--success); color: white; }
+    
+    .content {
+      padding: 24px;
+      overflow-y: auto;
+      max-height: calc(100vh - 60px);
+    }
+    
+    .drop-zone {
+      border: 3px dashed var(--gray-300);
+      border-radius: 16px;
+      padding: 60px;
+      text-align: center;
+      background: white;
+      transition: all 0.3s;
+      cursor: pointer;
+      margin-bottom: 24px;
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--primary);
+      background: rgba(37, 99, 235, 0.02);
+    }
+    .drop-zone.has-selection {
+      border-color: var(--success);
+      background: rgba(5, 150, 105, 0.02);
+    }
+    .drop-zone-icon { font-size: 64px; margin-bottom: 16px; }
+    .drop-zone-text { font-size: 18px; color: var(--gray-700); margin-bottom: 8px; }
+    .drop-zone-hint { font-size: 14px; color: var(--gray-500); }
+    .drop-zone-selected { font-size: 16px; color: var(--success); font-weight: 600; margin-top: 12px; }
+    .drop-zone input[type="file"] { display: none; }
+    
+    .preview-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      overflow: hidden;
+      display: none;
+    }
+    .preview-card.active { display: block; }
+    .preview-header {
+      background: var(--gray-50);
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .preview-title { font-size: 16px; font-weight: 600; }
+    .preview-body {
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      gap: 24px;
+      padding: 20px;
+    }
+    .preview-image {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid var(--gray-200);
+    }
+    .preview-form label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      color: var(--gray-700);
+    }
+    .preview-form input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--gray-300);
+      border-radius: 6px;
+      font-size: 16px;
+      margin-bottom: 16px;
+    }
+    .preview-form input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .preview-form input.highlight {
+      background: #fef3c7;
+      border-color: var(--warning);
+    }
+    .preview-form .reading-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .preview-form .calculated {
+      background: var(--gray-50);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+    .preview-form .calculated-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .preview-form .calculated-row:last-child {
+      border-bottom: none;
+      font-weight: 600;
+      font-size: 18px;
+      color: var(--primary);
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-success { background: var(--success); color: white; }
+    .btn-outline { background: white; border: 1px solid var(--gray-300); color: var(--gray-700); }
+    .btn-outline:hover { background: var(--gray-50); }
+    .btn-sm { padding: 4px 10px; font-size: 12px; }
+    
+    .invoices-section {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 24px;
+    }
+    .invoices-header {
+      background: var(--gray-50);
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--gray-200);
+      font-weight: 600;
+    }
+    .invoices-table { width: 100%; border-collapse: collapse; }
+    .invoices-table th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .invoices-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .invoices-table tr:hover { background: var(--gray-50); }
+    
+    .settings-container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    .settings-section {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .settings-header {
+      background: var(--gray-50);
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--gray-200);
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .settings-body { padding: 20px; }
+    .meter-edit-row {
+      display: grid;
+      grid-template-columns: 200px 200px 250px 120px 60px;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gray-100);
+      align-items: center;
+    }
+    .meter-edit-row:last-child { border-bottom: none; }
+    .meter-edit-row input, .meter-edit-row select {
+      padding: 8px 12px;
+      border: 1px solid var(--gray-300);
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .meter-edit-row input:focus { outline: none; border-color: var(--primary); }
+    
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: white;
+      border-radius: 12px;
+      width: 700px;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow: auto;
+    }
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--gray-200);
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-body { padding: 20px; }
+    .modal-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+    
+    @media (max-width: 1024px) {
+      .main { grid-template-columns: 1fr; }
+      .sidebar { border-right: none; border-bottom: 1px solid var(--gray-200); max-height: none; }
+      .preview-body { grid-template-columns: 1fr; }
+      .meter-edit-row { grid-template-columns: 1fr; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>⚡ Linea Privada Nosara Hills</h1>
+    <nav class="header-nav">
+      <a class="active" onclick="showTab('billing')">Facturacion</a>
+      <a onclick="showTab('settings')">Medidores</a>
+      <a onclick="showTab('report')">Reporte</a>
+    </nav>
+    <div class="header-month" style="display: flex; gap: 8px; align-items: center;">
+      <select id="billingMonthSelect" onchange="updateMonthFromSelect()" style="background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.3); color: white; padding: 8px 16px; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer;">
+        <option value="01">Enero</option>
+        <option value="02">Febrero</option>
+        <option value="03">Marzo</option>
+        <option value="04">Abril</option>
+        <option value="05">Mayo</option>
+        <option value="06">Junio</option>
+        <option value="07" selected>Julio</option>
+        <option value="08">Agosto</option>
+        <option value="09">Septiembre</option>
+        <option value="10">Octubre</option>
+        <option value="11">Noviembre</option>
+        <option value="12">Diciembre</option>
+      </select>
+      <select id="billingYearSelect" onchange="updateMonthFromSelect()" style="background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.3); color: white; padding: 8px 16px; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer;">
+        <option value="2025">2025</option>
+        <option value="2026" selected>2026</option>
+        <option value="2027">2027</option>
+      </select>
+      <input type="hidden" id="billingMonth" value="2026-07">
+    </div>
+  </header>
+  
+  <!-- BILLING TAB -->
+  <div id="tab-billing" class="tab-content active">
+    <main class="main">
+      <aside class="sidebar">
+        <div class="section-title">Factura ICE del Mes</div>
+        <div class="month-setup">
+          <!-- ICE Bill Drop Zone -->
+          <div id="iceBillDropZone" style="border: 2px dashed var(--gray-300); border-radius: 8px; padding: 16px; text-align: center; margin: 12px 0; cursor: pointer; transition: all 0.2s;" onclick="document.getElementById('iceBillInput').click()">
+            <div style="font-size: 24px; margin-bottom: 4px;">⚡</div>
+            <div style="font-size: 13px; color: var(--gray-600);">Arrastra factura ICE de <strong id="iceBillMonth">Julio 2026</strong></div>
+            <div style="font-size: 11px; color: var(--gray-400);">PDF o imagen</div>
+            <input type="file" id="iceBillInput" accept=".pdf,image/*" style="display:none" onchange="handleIceBillUpload(event)">
+          </div>
+          <div id="iceBillStatus" style="display:none; background: #d1fae5; border: 1px solid #6ee7b7; border-radius: 6px; padding: 8px 12px; margin-bottom: 12px; font-size: 13px;">
+            ✓ <span id="iceBillFileName">factura.pdf</span>
+          </div>
+          
+          <div class="input-row">
+            <div>
+              <label>Factura ICE (₡)</label>
+              <input type="number" id="iceBill" placeholder="0" value="1975885">
+            </div>
+            <div>
+              <label>Consumo Macro (KW)</label>
+              <input type="number" id="totalKw" placeholder="0" value="15750">
+            </div>
+          </div>
+          <style>
+            .input-row { align-items: end; }
+            .input-row > div { display: flex; flex-direction: column; }
+            .input-row label { min-height: 36px; display: flex; align-items: flex-end; }
+            #iceBillDropZone:hover, #iceBillDropZone.dragover { border-color: var(--primary); background: rgba(37, 99, 235, 0.02); }
+          </style>
+          
+          <button class="btn btn-primary" onclick="saveMonthSetup()" style="width:100%">Guardar</button>
+        </div>
+        
+        <div class="section-title">Progreso</div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value success" id="completedCount">0</div>
+            <div class="stat-label">Completados</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value warning" id="pendingCount">22</div>
+            <div class="stat-label">Pendientes</div>
+          </div>
+        </div>
+        
+        <div class="section-title">
+          Medidores
+          <button class="btn btn-outline btn-sm" onclick="showTab('settings')">Editar</button>
+        </div>
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <button class="btn btn-sm filter-btn active" onclick="filterMeters('all')" id="filter-all">Todos</button>
+          <button class="btn btn-sm filter-btn" onclick="filterMeters('missing')" id="filter-missing" style="color: var(--warning);">Sin Dato</button>
+          <button class="btn btn-sm filter-btn" onclick="filterMeters('pending')" id="filter-pending">Pendientes</button>
+          <button class="btn btn-sm filter-btn" onclick="filterMeters('done')" id="filter-done" style="color: var(--success);">Listos</button>
+        </div>
+        <style>
+          .filter-btn { background: var(--gray-100); border: 1px solid var(--gray-300); }
+          .filter-btn.active { background: var(--gray-900); color: white; border-color: var(--gray-900); }
+        </style>
+        <div class="pending-list" id="pendingList"></div>
+      </aside>
+      
+      <div class="content">
+        <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+          <div class="drop-zone-icon">📸</div>
+          <div class="drop-zone-text">Arrastra la foto del medidor aqui</div>
+          <div class="drop-zone-hint">o haz clic para seleccionar archivo</div>
+          <div class="drop-zone-warning" id="monthWarning" style="margin-top: 12px; padding: 8px 16px; background: #fef3c7; border: 1px solid #f59e0b; border-radius: 6px; color: #92400e; font-size: 13px; font-weight: 500;">
+            ⚠️ Solo lecturas de <span id="warningMonth">Julio 2026</span>
+          </div>
+          <div class="drop-zone-selected" id="selectedMeterDisplay" style="display:none"></div>
+          <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
+        </div>
+        
+        <div class="preview-card" id="previewCard">
+          <div class="preview-header">
+            <span class="preview-title" id="previewMeterName">Medidor</span>
+            <button class="btn btn-outline" onclick="closePreview()">Cancelar</button>
+          </div>
+          <div class="preview-body">
+            <div>
+              <img id="previewImage" class="preview-image" src="" alt="Foto del medidor">
+              <p style="margin-top: 12px; font-size: 13px; color: var(--gray-500);">
+                Ingresa la lectura que aparece en el medidor.
+              </p>
+            </div>
+            <div class="preview-form">
+              <div class="reading-row">
+                <div>
+                  <label>Lectura Anterior (KW)</label>
+                  <input type="number" id="prevReading" readonly style="background: var(--gray-100)">
+                </div>
+                <div>
+                  <label>Lectura Actual (KW)</label>
+                  <input type="number" id="currentReading" placeholder="Ingrese lectura" class="highlight" oninput="calculateConsumption()">
+                </div>
+              </div>
+              
+              <div class="calculated">
+                <div class="calculated-row">
+                  <span>Consumo</span>
+                  <span id="kwConsumption">0 KW</span>
+                </div>
+                <div class="calculated-row">
+                  <span>Porcentaje del Total</span>
+                  <span id="icePercent">0%</span>
+                </div>
+                <div class="calculated-row">
+                  <span>MONTO A COBRAR</span>
+                  <span id="totalAmount">₡0</span>
+                </div>
+              </div>
+              
+              <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 12px; margin-bottom: 16px; font-size: 13px;">
+                <strong style="color: #0369a1;">Calculo:</strong><br>
+                <span id="calculationFormula">₡0 × 0% = ₡0</span>
+              </div>
+              
+              <button class="btn btn-success" onclick="generateInvoice()" style="width:100%; padding: 14px; font-size: 16px;">
+                Generar Factura
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="invoices-section">
+          <div class="invoices-header">Facturas Generadas - <span id="invoiceMonth">Agosto 2026</span></div>
+          <table class="invoices-table">
+            <thead>
+              <tr>
+                <th>Medidor</th>
+                <th>Cliente</th>
+                <th>Consumo KW</th>
+                <th>Porcentaje</th>
+                <th>Monto</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="invoicesBody">
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--gray-500); padding: 40px;">
+                  Selecciona un medidor y arrastra la foto para comenzar.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <!-- SETTINGS TAB -->
+  <div id="tab-settings" class="tab-content">
+    <div class="settings-container">
+      <div class="settings-section">
+        <div class="settings-header">
+          <span>Administrar Medidores</span>
+          <div>
+            <button class="btn btn-outline btn-sm" onclick="resetMeters()" style="margin-right:8px;">Restaurar Originales</button>
+            <button class="btn btn-primary btn-sm" onclick="addNewMeter()">+ Agregar Medidor</button>
+          </div>
+        </div>
+        <div class="settings-body">
+          <div class="meter-edit-row" style="font-weight: 600; color: var(--gray-500); font-size: 12px; text-transform: uppercase;">
+            <span>Nombre Medidor</span>
+            <span>Cliente</span>
+            <span>Email</span>
+            <span>Ubicacion</span>
+            <span></span>
+          </div>
+          <div id="meterEditList"></div>
+        </div>
+      </div>
+      
+      <div class="settings-section">
+        <div class="settings-header">Datos de la Empresa</div>
+        <div class="settings-body">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
+              <label style="display:block; font-size: 13px; font-weight: 500; margin-bottom: 4px;">Nombre</label>
+              <input type="text" id="companyName" value="Nosara Hills Limitada" style="width:100%; padding: 10px; border: 1px solid var(--gray-300); border-radius: 6px;">
+            </div>
+            <div>
+              <label style="display:block; font-size: 13px; font-weight: 500; margin-bottom: 4px;">Cedula Juridica</label>
+              <input type="text" id="companyId" value="3-102-670637" placeholder="3-102-670637" style="width:100%; padding: 10px; border: 1px solid var(--gray-300); border-radius: 6px;">
+            </div>
+            <div>
+              <label style="display:block; font-size: 13px; font-weight: 500; margin-bottom: 4px;">Telefono</label>
+              <input type="text" id="companyPhone" placeholder="+506 8888-8888" style="width:100%; padding: 10px; border: 1px solid var(--gray-300); border-radius: 6px;">
+            </div>
+            <div>
+              <label style="display:block; font-size: 13px; font-weight: 500; margin-bottom: 4px;">Email</label>
+              <input type="text" id="companyEmail" value="info@nosaraconstruction.com" placeholder="admin@empresa.cr" style="width:100%; padding: 10px; border: 1px solid var(--gray-300); border-radius: 6px;">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="saveSettings()" style="margin-top: 20px;">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- REPORT TAB -->
+  <div id="tab-report" class="tab-content">
+    <div class="settings-container">
+      <!-- Summary Cards -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;" id="reportSummaryCards"></div>
+      
+      <!-- Monthly Reports List -->
+      <div class="settings-section">
+        <div class="settings-header">
+          <span>Historial de Reportes Mensuales</span>
+        </div>
+        <div class="settings-body" id="reportsList" style="padding: 0;"></div>
+      </div>
+      
+      <!-- Current Month Detail -->
+      <div class="settings-section">
+        <div class="settings-header">
+          <span>Detalle del Mes: <span id="reportMonthTitle">Julio 2026</span></span>
+          <button class="btn btn-primary btn-sm" onclick="printCurrentReport()">Imprimir Reporte</button>
+        </div>
+        <div class="settings-body" id="reportBody">
+          <p style="color: var(--gray-500); text-align: center; padding: 40px;">
+            Selecciona un mes para ver el detalle.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Invoice Modal -->
+  <div class="modal-overlay" id="invoiceModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span>Factura</span>
+        <button class="btn btn-outline btn-sm" onclick="closeInvoiceModal()">×</button>
+      </div>
+      <div class="modal-body" id="invoicePreview"></div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeInvoiceModal()">Cerrar</button>
+        <button class="btn btn-primary" onclick="printInvoice()">Imprimir / PDF</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Supabase Config
+    const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+    
+    async function supabaseFetch(table, options = {}) {
+      const { method = 'GET', body, query = '' } = options;
+      const headers = {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      };
+      const url = `${SUPABASE_URL}/rest/v1/${table}${query}`;
+      const res = await fetch(url, { method, headers, body: body ? JSON.stringify(body) : undefined });
+      if (!res.ok) throw new Error(await res.text());
+      return method === 'DELETE' ? null : res.json();
+    }
+    
+    async function loadFromSupabase() {
+      try {
+        // Load meters
+        const dbMeters = await supabaseFetch('utility_meters', { query: '?order=display_name' });
+        if (dbMeters.length > 0) {
+          meters = dbMeters.map(m => ({
+            id: m.id,
+            displayName: m.display_name,
+            owner: m.owner,
+            email: m.email || '',
+            location: m.location,
+            prevKw: parseFloat(m.prev_kw) || 0
+          }));
+        }
+        
+        // Load invoices
+        const dbInvoices = await supabaseFetch('utility_invoices', { query: '?order=created_at.desc' });
+        invoices = dbInvoices.map(i => ({
+          id: i.id,
+          meterId: i.meter_id,
+          meterName: i.meter_name,
+          owner: i.owner,
+          month: i.month,
+          prevKw: parseFloat(i.prev_kw) || 0,
+          currKw: parseFloat(i.curr_kw) || 0,
+          consumption: parseFloat(i.consumption) || 0,
+          percent: parseFloat(i.percent) || 0,
+          amount: parseFloat(i.amount) || 0,
+          iceBillTotal: parseFloat(i.ice_bill_total) || 0,
+          totalKwAll: parseFloat(i.total_kw_all) || 0
+        }));
+        
+        // Load ICE bill for current month
+        const month = document.getElementById('billingMonth').value;
+        const iceBills = await supabaseFetch('utility_ice_bills', { query: `?month=eq.${month}` });
+        if (iceBills.length > 0) {
+          document.getElementById('iceBill').value = iceBills[0].total_amount;
+          document.getElementById('totalKw').value = iceBills[0].total_kw;
+          if (iceBills[0].file_name) {
+            document.getElementById('iceBillFileName').textContent = iceBills[0].file_name;
+            document.getElementById('iceBillStatus').style.display = 'block';
+            document.getElementById('iceBillDropZone').style.display = 'none';
+          }
+        }
+        
+        console.log('Loaded from Supabase:', meters.length, 'meters,', invoices.length, 'invoices');
+      } catch (e) {
+        console.error('Supabase load error:', e);
+      }
+    }
+    
+    async function saveInvoiceToSupabase(invoice) {
+      try {
+        await supabaseFetch('utility_invoices', {
+          method: 'POST',
+          body: {
+            id: invoice.id,
+            meter_id: invoice.meterId,
+            month: invoice.month,
+            meter_name: invoice.meterName,
+            owner: invoice.owner,
+            prev_kw: invoice.prevKw,
+            curr_kw: invoice.currKw,
+            consumption: invoice.consumption,
+            percent: invoice.percent,
+            amount: invoice.amount,
+            ice_bill_total: invoice.iceBillTotal,
+            total_kw_all: invoice.totalKwAll
+          }
+        });
+        
+        // Update meter's prevKw
+        await supabaseFetch(`utility_meters?id=eq.${invoice.meterId}`, {
+          method: 'PATCH',
+          body: { prev_kw: invoice.currKw }
+        });
+        
+        console.log('Saved invoice to Supabase:', invoice.id);
+      } catch (e) {
+        console.error('Supabase save error:', e);
+      }
+    }
+    
+    async function saveIceBillToSupabase(month, amount, totalKw, fileName) {
+      try {
+        await supabaseFetch('utility_ice_bills', {
+          method: 'POST',
+          query: '?on_conflict=month',
+          body: { month, total_amount: amount, total_kw: totalKw, file_name: fileName }
+        });
+      } catch (e) {
+        // Try update if insert fails
+        await supabaseFetch(`utility_ice_bills?month=eq.${month}`, {
+          method: 'PATCH',
+          body: { total_amount: amount, total_kw: totalKw, file_name: fileName }
+        });
+      }
+    }
+    
+    async function saveMeterToSupabase(meter) {
+      try {
+        await supabaseFetch(`utility_meters?id=eq.${meter.id}`, {
+          method: 'PATCH',
+          body: {
+            display_name: meter.displayName,
+            owner: meter.owner,
+            email: meter.email,
+            location: meter.location,
+            prev_kw: meter.prevKw
+          }
+        });
+      } catch (e) {
+        console.error('Error saving meter:', e);
+      }
+    }
+
+    // Meters data
+    let meters = [
+      { id: 'hoa-bomba1', displayName: 'Bomba #1+#2', owner: 'HOA', email: '', location: 'common', prevKw: 0 },
+      { id: 'hoa-bomba3', displayName: 'Bomba #3 (Tanque)', owner: 'HOA', email: '', location: 'common', prevKw: 222 },
+      { id: 'hoa-bomba4', displayName: 'Bomba #4 NH-MA', owner: 'HOA', email: '', location: 'common', prevKw: 522 },
+      { id: 'common-tanque', displayName: 'Tanque Mar Azul', owner: 'Areas Comunes', email: '', location: 'common', prevKw: 574 },
+      { id: 'common-porton', displayName: 'Porton Mar Azul', owner: 'Areas Comunes', email: '', location: 'common', prevKw: 1971 },
+      { id: 'common-areas', displayName: 'Areas Comunes NH', owner: 'Areas Comunes', email: '', location: 'common', prevKw: 1958 },
+      { id: 'nh-casa9', displayName: 'Casa 9', owner: 'Propietario Casa 9', email: '', location: 'nosara-hills', prevKw: 1340 },
+      { id: 'nh-cedro', displayName: 'Casa Cedro', owner: 'Propietario Cedro', email: '', location: 'nosara-hills', prevKw: 610 },
+      { id: 'nh-casa6', displayName: 'Casa 6', owner: 'Propietario Casa 6', email: '', location: 'nosara-hills', prevKw: 0 },
+      { id: 'nh-miramunt', displayName: 'Miramunt', owner: 'Propietario Miramunt', email: '', location: 'nosara-hills', prevKw: 1502 },
+      { id: 'dev-coyol', displayName: 'Restaurante Coyol', owner: 'Meraki Family', email: '', location: 'commercial', prevKw: 2574 },
+      { id: 'dev-rancho', displayName: 'Rancho + Granja', owner: 'Desarrollador', email: '', location: 'common', prevKw: 519 },
+      { id: 'ma-lote1', displayName: 'Casa Churcher', owner: 'Churcher', email: '', location: 'mar-azul', prevKw: 0 },
+      { id: 'ma-lote2', displayName: 'Casa Nispero', owner: 'Propietario Lote 2', email: '', location: 'mar-azul', prevKw: 88 },
+      { id: 'ma-lote4', displayName: 'Casa Mirador', owner: 'Propietario Lote 4', email: '', location: 'mar-azul', prevKw: 0 },
+      { id: 'ma-lote12', displayName: 'Casa Eclipse', owner: 'Propietario Lote 12', email: '', location: 'mar-azul', prevKw: 867 },
+      { id: 'ma-lote14', displayName: 'Casa ELLE', owner: 'Propietario Lote 14', email: '', location: 'mar-azul', prevKw: 982 },
+      { id: 'ma-lote20', displayName: 'Coyol XL', owner: 'Propietario Lote 20', email: '', location: 'mar-azul', prevKw: 102 },
+      { id: 'ma-lote30', displayName: 'Villa Cazullini', owner: 'Cazullini', email: '', location: 'mar-azul', prevKw: 978 },
+      { id: 'ma-lote31', displayName: 'Casa Beautie', owner: 'Propietario Lote 31', email: '', location: 'mar-azul', prevKw: 1123 },
+      { id: 'ma-lote32', displayName: 'Casa Modern', owner: 'Propietario Lote 32', email: '', location: 'mar-azul', prevKw: 410 },
+    ];
+    
+    let completedMeters = {};
+    let invoices = [];
+    let selectedMeter = null;
+    let companySettings = { name: 'Nosara Hills Limitada', id: '3-102-670637', phone: '', email: 'info@nosaraconstruction.com' };
+    
+    async function init() {
+      await loadFromSupabase();
+      renderPendingList();
+      renderMeterEditList();
+      setupDropZone();
+      updateMonthDisplay();
+    }
+    
+    function showTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.header-nav a').forEach(a => a.classList.remove('active'));
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+      event.target.classList.add('active');
+      if (tabName === 'settings') renderMeterEditList();
+      if (tabName === 'report') renderReportsTab();
+    }
+    
+    function updateMonthFromSelect() {
+      const monthVal = document.getElementById('billingMonthSelect').value;
+      const yearVal = document.getElementById('billingYearSelect').value;
+      document.getElementById('billingMonth').value = yearVal + '-' + monthVal;
+      updateMonthDisplay();
+    }
+    
+    function updateMonthDisplay() {
+      const month = document.getElementById('billingMonth').value;
+      const date = new Date(month + '-01');
+      const display = date.toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
+      document.getElementById('invoiceMonth').textContent = display;
+      document.getElementById('warningMonth').textContent = display;
+      document.getElementById('iceBillMonth').textContent = display;
+      
+      // Sync dropdowns
+      const [year, mon] = month.split('-');
+      document.getElementById('billingMonthSelect').value = mon;
+      document.getElementById('billingYearSelect').value = year;
+      
+      // Reset completed meters for this month view
+      completedMeters = {};
+      invoices.filter(i => i.month === month).forEach(i => {
+        completedMeters[i.meterId] = true;
+      });
+      
+      // Reset ICE bill upload display
+      document.getElementById('iceBillStatus').style.display = 'none';
+      document.getElementById('iceBillDropZone').style.display = 'block';
+      
+      // Re-render lists
+      renderPendingList();
+      renderInvoices();
+    }
+    
+    let currentFilter = 'all';
+    
+    function filterMeters(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('filter-' + filter).classList.add('active');
+      renderPendingList();
+    }
+    
+    function renderPendingList() {
+      const list = document.getElementById('pendingList');
+      const locations = { 'mar-azul': 'Mar Azul', 'nosara-hills': 'Nosara Hills', 'common': 'Comun', 'commercial': 'Comercial' };
+      
+      let filteredMeters = meters;
+      if (currentFilter === 'missing') {
+        filteredMeters = meters.filter(m => m.prevKw === 0 || !m.prevKw);
+      } else if (currentFilter === 'pending') {
+        filteredMeters = meters.filter(m => !completedMeters[m.id] && m.prevKw > 0);
+      } else if (currentFilter === 'done') {
+        filteredMeters = meters.filter(m => completedMeters[m.id]);
+      }
+      
+      if (filteredMeters.length === 0) {
+        list.innerHTML = '<p style="text-align:center;color:var(--gray-500);padding:20px;font-size:14px;">Ninguno en esta categoria</p>';
+      } else {
+        list.innerHTML = filteredMeters.map(m => {
+          const hasData = m.prevKw > 0;
+          const isCompleted = completedMeters[m.id];
+          return `
+          <div class="pending-item ${isCompleted ? 'completed' : ''} ${hasData && !isCompleted ? 'has-data' : ''} ${selectedMeter?.id === m.id ? 'selected' : ''}" 
+               onclick="selectMeter('${m.id}')">
+            <div>
+              <div class="pending-name">${m.displayName}</div>
+              <div class="pending-owner">${m.owner}</div>
+              <div class="pending-location">${locations[m.location] || m.location}${hasData ? ' • ' + m.prevKw.toLocaleString() + ' KW' : ''}</div>
+            </div>
+            <span class="pending-status ${isCompleted ? 'done' : 'pending'}">
+              ${isCompleted ? '✓' : (hasData ? '●' : '○')}
+            </span>
+          </div>
+        `}).join('');
+      }
+      
+      // Update counts
+      const completed = Object.keys(completedMeters).length;
+      const missing = meters.filter(m => m.prevKw === 0 || !m.prevKw).length;
+      document.getElementById('completedCount').textContent = completed;
+      document.getElementById('pendingCount').textContent = meters.length - completed;
+    }
+    
+    function renderMeterEditList() {
+      const list = document.getElementById('meterEditList');
+      list.innerHTML = meters.map((m, i) => `
+        <div class="meter-edit-row">
+          <input type="text" value="${m.displayName}" onchange="updateMeter(${i}, 'displayName', this.value)">
+          <input type="text" value="${m.owner}" onchange="updateMeter(${i}, 'owner', this.value)">
+          <input type="email" value="${m.email || ''}" placeholder="email@ejemplo.com" onchange="updateMeter(${i}, 'email', this.value)">
+          <select onchange="updateMeter(${i}, 'location', this.value)">
+            <option value="mar-azul" ${m.location === 'mar-azul' ? 'selected' : ''}>Mar Azul</option>
+            <option value="nosara-hills" ${m.location === 'nosara-hills' ? 'selected' : ''}>Nosara Hills</option>
+            <option value="common" ${m.location === 'common' ? 'selected' : ''}>Comun</option>
+            <option value="commercial" ${m.location === 'commercial' ? 'selected' : ''}>Comercial</option>
+          </select>
+          <button class="btn btn-outline btn-sm" onclick="deleteMeter(${i})" style="color: var(--danger);">×</button>
+        </div>
+      `).join('');
+    }
+    
+    function updateMeter(i, field, value) { 
+      meters[i][field] = value; 
+      saveMeterToSupabase(meters[i]);
+      saveData(); 
+      renderPendingList(); 
+    }
+    function deleteMeter(i) { if (confirm('Eliminar?')) { meters.splice(i, 1); saveData(); renderMeterEditList(); renderPendingList(); } }
+    function addNewMeter() {
+      meters.push({ id: 'meter-' + Date.now(), displayName: 'Nuevo Medidor', owner: 'Cliente', email: '', location: 'mar-azul', prevKw: 0 });
+      saveData(); renderMeterEditList(); renderPendingList();
+    }
+    
+    function resetMeters() {
+      if (!confirm('Restaurar lista original de medidores? Se perderan cambios.')) return;
+      meters = [
+        // June 2026 readings as baseline (from spreadsheet dated 22/6/2026)
+        { id: 'nh-tanque2', displayName: 'Tanque #2 NH (Bomba)', owner: 'HOA', email: '', location: 'nosara-hills', prevKw: 23983 },
+        { id: 'nh-porton-bomba', displayName: 'Porton + Bomba Parque NH', owner: 'HOA', email: '', location: 'nosara-hills', prevKw: 53904 },
+        { id: 'common-tanque-ma', displayName: 'Tanque Mar Azul', owner: 'Areas Comunes', email: '', location: 'mar-azul', prevKw: 19124 },
+        { id: 'common-cancha', displayName: 'Cancha', owner: 'Areas Comunes', email: '', location: 'common', prevKw: 138 },
+        { id: 'nh-casa9', displayName: 'Casa 9', owner: 'Propietario Casa 9', email: '', location: 'nosara-hills', prevKw: 10455 },
+        { id: 'nh-cedro', displayName: 'Casa Cedro', owner: 'Propietario Cedro', email: '', location: 'nosara-hills', prevKw: 68387 },
+        { id: 'nh-miramunt', displayName: 'Miramunt', owner: 'Propietario Miramunt', email: '', location: 'nosara-hills', prevKw: 89659 },
+        { id: 'dev-coyol', displayName: 'Restaurante Coyol', owner: 'Meraki Family', email: '', location: 'commercial', prevKw: 116541 },
+        { id: 'dev-rancho', displayName: 'Rancho', owner: 'Desarrollador', email: '', location: 'common', prevKw: 60388 },
+        { id: 'dev-caballeriza', displayName: 'Caballeriza', owner: 'Desarrollador', email: '', location: 'common', prevKw: 323 },
+        { id: 'dev-granja', displayName: 'Casa Granja', owner: 'Desarrollador', email: '', location: 'common', prevKw: 1438 },
+        { id: 'ma-lote2', displayName: 'Casa Nispero', owner: 'Propietario Lote 2', email: '', location: 'mar-azul', prevKw: 103 },
+        { id: 'ma-lote12', displayName: 'Casa Eclipse', owner: 'Propietario Lote 12', email: '', location: 'mar-azul', prevKw: 35086 },
+        { id: 'ma-lote14', displayName: 'Casa ELLE', owner: 'Propietario Lote 14', email: '', location: 'mar-azul', prevKw: 27205 },
+        { id: 'ma-lote20', displayName: 'Coyol XL', owner: 'Propietario Lote 20', email: '', location: 'mar-azul', prevKw: 44914 },
+        { id: 'ma-lote30', displayName: 'Villa Cazullini', owner: 'Cazullini', email: '', location: 'mar-azul', prevKw: 45362 },
+        { id: 'ma-lote31', displayName: 'Casa Beautie', owner: 'Propietario Lote 31', email: '', location: 'mar-azul', prevKw: 71607 },
+        { id: 'ma-lote32', displayName: 'Casa Modern Barn', owner: 'Propietario Lote 32', email: '', location: 'mar-azul', prevKw: 169800 },
+      ];
+      completedMeters = {};
+      saveData(); renderMeterEditList(); renderPendingList();
+      alert('Medidores restaurados');
+    }
+    
+    function selectMeter(id) {
+      selectedMeter = meters.find(m => m.id === id);
+      renderPendingList();
+      const display = document.getElementById('selectedMeterDisplay');
+      const dropZone = document.getElementById('dropZone');
+      if (selectedMeter) {
+        display.textContent = `✓ ${selectedMeter.displayName}`;
+        display.style.display = 'block';
+        dropZone.classList.add('has-selection');
+      }
+    }
+    
+    function setupDropZone() {
+      const dz = document.getElementById('dropZone');
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(e => dz.addEventListener(e, ev => { ev.preventDefault(); ev.stopPropagation(); }, false));
+      ['dragenter', 'dragover'].forEach(e => dz.addEventListener(e, () => dz.classList.add('dragover'), false));
+      ['dragleave', 'drop'].forEach(e => dz.addEventListener(e, () => dz.classList.remove('dragover'), false));
+      dz.addEventListener('drop', e => { if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]); }, false);
+      
+      // ICE Bill drop zone
+      const iceDz = document.getElementById('iceBillDropZone');
+      if (iceDz) {
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(e => iceDz.addEventListener(e, ev => { ev.preventDefault(); ev.stopPropagation(); }, false));
+        ['dragenter', 'dragover'].forEach(e => iceDz.addEventListener(e, () => iceDz.classList.add('dragover'), false));
+        ['dragleave', 'drop'].forEach(e => iceDz.addEventListener(e, () => iceDz.classList.remove('dragover'), false));
+        iceDz.addEventListener('drop', e => { if (e.dataTransfer.files.length) processIceBill(e.dataTransfer.files[0]); }, false);
+      }
+    }
+    
+    function handleIceBillUpload(event) {
+      if (event.target.files.length) processIceBill(event.target.files[0]);
+    }
+    
+    function processIceBill(file) {
+      // Show file uploaded
+      document.getElementById('iceBillFileName').textContent = file.name;
+      document.getElementById('iceBillStatus').style.display = 'block';
+      document.getElementById('iceBillDropZone').style.display = 'none';
+      
+      // Store the file reference for the record
+      window.currentIceBillFile = file;
+      
+      // For now, user enters values manually
+      // Future: OCR/parse PDF to extract values automatically
+      alert('Factura cargada: ' + file.name + '\n\nIngresa el monto y consumo manualmente por ahora.');
+    }
+    
+    function handleFileSelect(e) { if (e.target.files.length) handleFile(e.target.files[0]); }
+    
+    function handleFile(file) {
+      if (!selectedMeter) { alert('Primero selecciona un medidor'); return; }
+      const reader = new FileReader();
+      reader.onload = e => {
+        document.getElementById('previewImage').src = e.target.result;
+        document.getElementById('previewMeterName').textContent = `${selectedMeter.displayName} - ${selectedMeter.owner}`;
+        document.getElementById('prevReading').value = selectedMeter.prevKw;
+        document.getElementById('currentReading').value = '';
+        document.getElementById('previewCard').classList.add('active');
+        setTimeout(() => document.getElementById('currentReading').focus(), 100);
+      };
+      reader.readAsDataURL(file);
+    }
+    
+    function calculateConsumption() {
+      const prev = parseFloat(document.getElementById('prevReading').value) || 0;
+      const curr = parseFloat(document.getElementById('currentReading').value) || 0;
+      const consumption = Math.max(0, curr - prev);
+      
+      const iceBill = parseFloat(document.getElementById('iceBill').value) || 0;
+      const totalKw = parseFloat(document.getElementById('totalKw').value) || 1;
+      
+      const percent = consumption / totalKw;
+      const amount = Math.round(iceBill * percent);
+      
+      document.getElementById('kwConsumption').textContent = `${consumption.toLocaleString()} KW`;
+      document.getElementById('icePercent').textContent = `${(percent * 100).toFixed(4)}%`;
+      document.getElementById('totalAmount').textContent = `₡${amount.toLocaleString()}`;
+      document.getElementById('calculationFormula').textContent = `₡${iceBill.toLocaleString()} × ${(percent * 100).toFixed(4)}% = ₡${amount.toLocaleString()}`;
+      
+      return { consumption, percent, amount, curr };
+    }
+    
+    function generateInvoice() {
+      if (!selectedMeter) return;
+      const calc = calculateConsumption();
+      
+      const invoice = {
+        id: 'INV-' + Date.now(),
+        meterId: selectedMeter.id,
+        meterName: selectedMeter.displayName,
+        owner: selectedMeter.owner,
+        email: selectedMeter.email,
+        location: selectedMeter.location,
+        prevKw: selectedMeter.prevKw,
+        currKw: calc.curr,
+        consumption: calc.consumption,
+        percent: calc.percent,
+        amount: calc.amount,
+        iceBillTotal: parseFloat(document.getElementById('iceBill').value) || 0,
+        totalKwAll: parseFloat(document.getElementById('totalKw').value) || 0,
+        date: new Date().toISOString(),
+        month: document.getElementById('billingMonth').value
+      };
+      
+      invoices.push(invoice);
+      completedMeters[selectedMeter.id] = true;
+      
+      const idx = meters.findIndex(m => m.id === selectedMeter.id);
+      if (idx >= 0) meters[idx].prevKw = calc.curr;
+      
+      // Save to Supabase
+      saveInvoiceToSupabase(invoice);
+      
+      closePreview();
+      renderPendingList();
+      renderInvoices();
+      saveData();
+      showInvoicePreview(invoice);
+      
+      selectedMeter = null;
+      document.getElementById('selectedMeterDisplay').style.display = 'none';
+      document.getElementById('dropZone').classList.remove('has-selection');
+    }
+    
+    function closePreview() { document.getElementById('previewCard').classList.remove('active'); }
+    
+    function renderInvoices() {
+      const tbody = document.getElementById('invoicesBody');
+      const month = document.getElementById('billingMonth').value;
+      const monthInv = invoices.filter(i => i.month === month);
+      
+      if (!monthInv.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--gray-500);padding:40px;">Sin facturas</td></tr>';
+        return;
+      }
+      
+      tbody.innerHTML = monthInv.map(i => `
+        <tr>
+          <td><strong>${i.meterName}</strong></td>
+          <td>${i.owner}</td>
+          <td>${i.consumption.toLocaleString()} KW</td>
+          <td>${(i.percent * 100).toFixed(2)}%</td>
+          <td><strong>₡${i.amount.toLocaleString()}</strong></td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="viewInvoice('${i.id}')">Ver</button>
+            <button class="btn btn-outline btn-sm" onclick="printInvoiceById('${i.id}')">PDF</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+    
+    function showInvoicePreview(inv) {
+      const monthName = new Date(inv.month + '-01').toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
+      document.getElementById('invoicePreview').innerHTML = generateInvoiceHTML(inv, monthName);
+      document.getElementById('invoiceModal').classList.add('active');
+    }
+    
+    function generateInvoiceHTML(inv, monthName) {
+      return `
+        <div id="invoicePrint" style="font-family: 'Helvetica Neue', Arial, sans-serif; padding: 20px;">
+          <div style="border-bottom: 2px solid #1a1a1a; padding-bottom: 16px; margin-bottom: 20px;">
+            <h1 style="margin: 0; font-size: 22px;">${companySettings.name || 'Nosara Hills LTDA'}</h1>
+            ${companySettings.id ? `<p style="margin:4px 0;color:#666;font-size:13px;">Cedula: ${companySettings.id}</p>` : ''}
+            ${companySettings.phone ? `<p style="margin:4px 0;color:#666;font-size:13px;">Tel: ${companySettings.phone}</p>` : ''}
+          </div>
+          
+          <div style="display:flex;justify-content:space-between;margin-bottom:24px;">
+            <div>
+              <h2 style="margin:0 0 8px;font-size:18px;">FACTURA DE ELECTRICIDAD</h2>
+              <p style="margin:0;color:#666;">Periodo: ${monthName}</p>
+              <p style="margin:0;color:#666;">Fecha: ${new Date().toLocaleDateString('es-CR')}</p>
+            </div>
+            <div style="text-align:right;">
+              <p style="margin:0;font-size:13px;color:#666;">No. ${inv.id}</p>
+            </div>
+          </div>
+          
+          <div style="background:#f5f5f5;padding:16px;border-radius:8px;margin-bottom:20px;">
+            <p style="margin:0 0 4px;font-weight:600;font-size:16px;">${inv.owner}</p>
+            <p style="margin:0;color:#666;">${inv.meterName}</p>
+          </div>
+          
+          <table style="width:100%;border-collapse:collapse;margin-bottom:20px;">
+            <tr style="border-bottom:1px solid #ddd;">
+              <th style="text-align:left;padding:12px 8px;font-size:12px;text-transform:uppercase;color:#666;">Concepto</th>
+              <th style="text-align:right;padding:12px 8px;font-size:12px;text-transform:uppercase;color:#666;">Lect. Anterior</th>
+              <th style="text-align:right;padding:12px 8px;font-size:12px;text-transform:uppercase;color:#666;">Lect. Actual</th>
+              <th style="text-align:right;padding:12px 8px;font-size:12px;text-transform:uppercase;color:#666;">Consumo</th>
+              <th style="text-align:right;padding:12px 8px;font-size:12px;text-transform:uppercase;color:#666;">Monto</th>
+            </tr>
+            <tr>
+              <td style="padding:12px 8px;">Electricidad (ICE)</td>
+              <td style="padding:12px 8px;text-align:right;">${inv.prevKw.toLocaleString()} KW</td>
+              <td style="padding:12px 8px;text-align:right;">${inv.currKw.toLocaleString()} KW</td>
+              <td style="padding:12px 8px;text-align:right;">${inv.consumption.toLocaleString()} KW</td>
+              <td style="padding:12px 8px;text-align:right;font-weight:600;">₡${inv.amount.toLocaleString()}</td>
+            </tr>
+          </table>
+          
+          <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:16px;margin-bottom:20px;">
+            <h4 style="margin:0 0 12px;font-size:13px;color:#0369a1;text-transform:uppercase;">Calculo Proporcional - Sin Fines de Lucro</h4>
+            <table style="width:100%;font-size:13px;">
+              <tr><td style="padding:4px 0;">Factura ICE Total:</td><td style="text-align:right;">₡${inv.iceBillTotal.toLocaleString()}</td></tr>
+              <tr><td style="padding:4px 0;">Consumo Total Macro Medidor:</td><td style="text-align:right;">${inv.totalKwAll.toLocaleString()} KW</td></tr>
+              <tr><td style="padding:4px 0;">Su Consumo:</td><td style="text-align:right;">${inv.consumption.toLocaleString()} KW</td></tr>
+              <tr><td style="padding:4px 0;">Porcentaje:</td><td style="text-align:right;">${(inv.percent * 100).toFixed(4)}%</td></tr>
+              <tr style="font-weight:600;border-top:1px solid #bae6fd;">
+                <td style="padding:8px 0 4px;">₡${inv.iceBillTotal.toLocaleString()} × ${(inv.percent * 100).toFixed(4)}%</td>
+                <td style="text-align:right;padding:8px 0 4px;">= ₡${inv.amount.toLocaleString()}</td>
+              </tr>
+            </table>
+          </div>
+          
+          <div style="font-size:11px;color:#666;border-top:1px solid #ddd;padding-top:12px;text-align:center;">
+            <p style="margin:0 0 4px;"><strong>DISTRIBUCION DE COSTOS SIN FINES DE LUCRO</strong></p>
+            <p style="margin:0;">Este cobro es la distribucion proporcional del costo real de la factura ICE. No se aplica recargo ni comision.</p>
+          </div>
+        </div>
+      `;
+    }
+    
+    function viewInvoice(id) {
+      const inv = invoices.find(i => i.id === id);
+      if (inv) showInvoicePreview(inv);
+    }
+    
+    function closeInvoiceModal() { document.getElementById('invoiceModal').classList.remove('active'); }
+    
+    function printInvoice() {
+      const content = document.getElementById('invoicePrint').innerHTML;
+      const win = window.open('', '_blank');
+      win.document.write(`<html><head><title>Factura</title><style>body{margin:0;padding:20px;}@media print{body{padding:0;}}</style></head><body>${content}</body></html>`);
+      win.document.close();
+      win.print();
+    }
+    
+    function printInvoiceById(id) {
+      const inv = invoices.find(i => i.id === id);
+      if (inv) {
+        const monthName = new Date(inv.month + '-01').toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
+        const content = generateInvoiceHTML(inv, monthName);
+        const win = window.open('', '_blank');
+        win.document.write(`<html><head><title>Factura</title><style>body{margin:0;padding:20px;}</style></head><body>${content}</body></html>`);
+        win.document.close();
+        win.print();
+      }
+    }
+    
+    function generateMonthlyReport() {
+      const month = document.getElementById('billingMonth').value;
+      showMonthReport(month);
+    }
+    
+    function showMonthReport(month) {
+      const monthInv = invoices.filter(i => i.month === month);
+      const container = document.getElementById('reportBody');
+      const monthName = new Date(month + '-01').toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
+      
+      document.getElementById('reportMonthTitle').textContent = monthName;
+      
+      if (!monthInv.length) {
+        container.innerHTML = '<p style="color:var(--gray-500);text-align:center;padding:40px;">No hay facturas para este mes.</p>';
+        return;
+      }
+      
+      // Get ICE bill from first invoice (stored when generated)
+      const iceBill = monthInv[0].iceBillTotal || 0;
+      const totalKw = monthInv[0].totalKwAll || 0;
+      const totalCharged = monthInv.reduce((s, i) => s + i.amount, 0);
+      const totalKwCharged = monthInv.reduce((s, i) => s + i.consumption, 0);
+      const diff = iceBill - totalCharged;
+      const isBalanced = Math.abs(diff) < 100;
+      
+      container.innerHTML = `
+        <div style="max-width:800px;margin:0 auto;">
+          <h2 style="text-align:center;margin-bottom:24px;">Reporte de Distribucion - ${monthName}</h2>
+          
+          <div style="background:${isBalanced ? '#f0fdf4' : '#fef2f2'};border:2px solid ${isBalanced ? '#22c55e' : '#ef4444'};border-radius:12px;padding:24px;text-align:center;margin-bottom:24px;">
+            <h3 style="margin:0 0 8px;color:${isBalanced ? '#166534' : '#dc2626'};font-size:20px;">
+              ${isBalanced ? '✓ DISTRIBUCION VERIFICADA' : '⚠ DIFERENCIA DETECTADA'}
+            </h3>
+            <p style="margin:0;color:#666;">
+              ${isBalanced ? 'El total facturado es igual al monto de la factura ICE. Sin ganancia.' : 'Hay medidores pendientes de facturar.'}
+            </p>
+          </div>
+          
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px;">
+            <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:20px;text-align:center;">
+              <div style="font-size:24px;font-weight:700;color:#2563eb;">₡${iceBill.toLocaleString()}</div>
+              <div style="font-size:12px;color:#6b7280;text-transform:uppercase;">Factura ICE</div>
+            </div>
+            <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:20px;text-align:center;">
+              <div style="font-size:24px;font-weight:700;color:#059669;">₡${totalCharged.toLocaleString()}</div>
+              <div style="font-size:12px;color:#6b7280;text-transform:uppercase;">Total Cobrado</div>
+            </div>
+            <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:20px;text-align:center;">
+              <div style="font-size:24px;font-weight:700;color:${isBalanced ? '#059669' : '#dc2626'};">₡${diff.toLocaleString()}</div>
+              <div style="font-size:12px;color:#6b7280;text-transform:uppercase;">Diferencia</div>
+            </div>
+          </div>
+          
+          <h3 style="margin:24px 0 16px;">Detalle por Usuario</h3>
+          <table style="width:100%;border-collapse:collapse;font-size:14px;">
+            <thead>
+              <tr style="background:#f3f4f6;">
+                <th style="text-align:left;padding:12px;border:1px solid #e5e7eb;">Medidor</th>
+                <th style="text-align:left;padding:12px;border:1px solid #e5e7eb;">Cliente</th>
+                <th style="text-align:right;padding:12px;border:1px solid #e5e7eb;">Consumo KW</th>
+                <th style="text-align:right;padding:12px;border:1px solid #e5e7eb;">%</th>
+                <th style="text-align:right;padding:12px;border:1px solid #e5e7eb;">Monto</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${monthInv.map(i => `
+                <tr>
+                  <td style="padding:10px;border:1px solid #e5e7eb;">${i.meterName}</td>
+                  <td style="padding:10px;border:1px solid #e5e7eb;">${i.owner}</td>
+                  <td style="padding:10px;border:1px solid #e5e7eb;text-align:right;">${i.consumption.toLocaleString()}</td>
+                  <td style="padding:10px;border:1px solid #e5e7eb;text-align:right;">${(i.percent * 100).toFixed(2)}%</td>
+                  <td style="padding:10px;border:1px solid #e5e7eb;text-align:right;">₡${i.amount.toLocaleString()}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+            <tfoot>
+              <tr style="background:#f3f4f6;font-weight:600;">
+                <td colspan="2" style="padding:12px;border:1px solid #e5e7eb;">TOTAL</td>
+                <td style="padding:12px;border:1px solid #e5e7eb;text-align:right;">${totalKwCharged.toLocaleString()} KW</td>
+                <td style="padding:12px;border:1px solid #e5e7eb;text-align:right;">${((totalKwCharged/totalKw)*100).toFixed(2)}%</td>
+                <td style="padding:12px;border:1px solid #e5e7eb;text-align:right;">₡${totalCharged.toLocaleString()}</td>
+              </tr>
+            </tfoot>
+          </table>
+          
+          <div style="margin-top:24px;padding:16px;background:#f9fafb;border-radius:8px;font-size:12px;color:#666;">
+            <p style="margin:0;"><strong>Nota Legal:</strong> Este reporte demuestra que la distribucion se realiza de forma proporcional al consumo, sin margen de ganancia. El total cobrado es igual o menor (por redondeo) al monto de la factura ICE original.</p>
+          </div>
+          
+          <div style="margin-top:20px;text-align:center;">
+            <button class="btn btn-primary" onclick="printMonthlyReport()">Imprimir Reporte</button>
+          </div>
+        </div>
+      `;
+    }
+    
+    function renderReportsTab() {
+      // Get all months that have invoices
+      const monthsWithData = [...new Set(invoices.map(i => i.month))].sort().reverse();
+      
+      // Summary cards
+      const totalMonths = monthsWithData.length;
+      const totalInvoices = invoices.length;
+      const totalCollected = invoices.reduce((s, i) => s + i.amount, 0);
+      const totalIceBills = monthsWithData.reduce((s, m) => {
+        const inv = invoices.find(i => i.month === m);
+        return s + (inv?.iceBillTotal || 0);
+      }, 0);
+      const totalDiff = totalIceBills - totalCollected;
+      
+      document.getElementById('reportSummaryCards').innerHTML = `
+        <div style="background:white;border:1px solid var(--gray-200);border-radius:8px;padding:20px;text-align:center;">
+          <div style="font-size:32px;font-weight:700;color:var(--primary);">${totalMonths}</div>
+          <div style="font-size:12px;color:var(--gray-500);text-transform:uppercase;">Meses</div>
+        </div>
+        <div style="background:white;border:1px solid var(--gray-200);border-radius:8px;padding:20px;text-align:center;">
+          <div style="font-size:32px;font-weight:700;color:var(--primary);">${totalInvoices}</div>
+          <div style="font-size:12px;color:var(--gray-500);text-transform:uppercase;">Facturas</div>
+        </div>
+        <div style="background:white;border:1px solid var(--gray-200);border-radius:8px;padding:20px;text-align:center;">
+          <div style="font-size:32px;font-weight:700;color:var(--success);">₡${totalCollected.toLocaleString()}</div>
+          <div style="font-size:12px;color:var(--gray-500);text-transform:uppercase;">Total Cobrado</div>
+        </div>
+        <div style="background:white;border:1px solid var(--gray-200);border-radius:8px;padding:20px;text-align:center;">
+          <div style="font-size:32px;font-weight:700;color:${Math.abs(totalDiff) < 500 ? 'var(--success)' : 'var(--danger)'};">
+            ${Math.abs(totalDiff) < 500 ? '✓ ₡0' : '₡' + totalDiff.toLocaleString()}
+          </div>
+          <div style="font-size:12px;color:var(--gray-500);text-transform:uppercase;">Ganancia/Perdida</div>
+        </div>
+      `;
+      
+      // Monthly reports list
+      if (monthsWithData.length === 0) {
+        document.getElementById('reportsList').innerHTML = '<p style="color:var(--gray-500);text-align:center;padding:40px;">No hay reportes generados.</p>';
+        document.getElementById('reportBody').innerHTML = '<p style="color:var(--gray-500);text-align:center;padding:40px;">Genera facturas para crear reportes.</p>';
+        return;
+      }
+      
+      document.getElementById('reportsList').innerHTML = `
+        <table style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr style="background:var(--gray-50);">
+              <th style="text-align:left;padding:12px 16px;font-size:12px;text-transform:uppercase;color:var(--gray-500);border-bottom:1px solid var(--gray-200);">Mes</th>
+              <th style="text-align:right;padding:12px 16px;font-size:12px;text-transform:uppercase;color:var(--gray-500);border-bottom:1px solid var(--gray-200);">Factura ICE</th>
+              <th style="text-align:right;padding:12px 16px;font-size:12px;text-transform:uppercase;color:var(--gray-500);border-bottom:1px solid var(--gray-200);">Total Cobrado</th>
+              <th style="text-align:right;padding:12px 16px;font-size:12px;text-transform:uppercase;color:var(--gray-500);border-bottom:1px solid var(--gray-200);">Diferencia</th>
+              <th style="text-align:center;padding:12px 16px;font-size:12px;text-transform:uppercase;color:var(--gray-500);border-bottom:1px solid var(--gray-200);">Estado</th>
+              <th style="padding:12px 16px;border-bottom:1px solid var(--gray-200);"></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${monthsWithData.map(m => {
+              const mInv = invoices.filter(i => i.month === m);
+              const iceBill = mInv[0]?.iceBillTotal || 0;
+              const charged = mInv.reduce((s, i) => s + i.amount, 0);
+              const diff = iceBill - charged;
+              const isBalanced = Math.abs(diff) < 100;
+              const monthName = new Date(m + '-01').toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
+              return `
+                <tr style="cursor:pointer;" onclick="showMonthReport('${m}')">
+                  <td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);font-weight:500;">${monthName}</td>
+                  <td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);text-align:right;">₡${iceBill.toLocaleString()}</td>
+                  <td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);text-align:right;">₡${charged.toLocaleString()}</td>
+                  <td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);text-align:right;color:${isBalanced ? 'var(--success)' : 'var(--danger)'};">₡${diff.toLocaleString()}</td>
+                  <td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);text-align:center;">
+                    <span style="display:inline-block;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:500;background:${isBalanced ? '#d1fae5' : '#fee2e2'};color:${isBalanced ? '#065f46' : '#991b1b'};">
+                      ${isBalanced ? '✓ Balanceado' : '⚠ Pendiente'}
+                    </span>
+                  </td>
+                  <td style="padding:12px 16px;border-bottom:1px solid var(--gray-100);">
+                    <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();printMonthReport('${m}')">PDF</button>
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      `;
+      
+      // Show first month detail
+      showMonthReport(monthsWithData[0]);
+    }
+    
+    function printCurrentReport() {
+      const content = document.getElementById('reportBody').innerHTML;
+      const title = document.getElementById('reportMonthTitle').textContent;
+      const win = window.open('', '_blank');
+      win.document.write(`<html><head><title>Reporte ${title}</title><style>body{font-family:sans-serif;margin:20px;}button{display:none;}</style></head><body>${content}</body></html>`);
+      win.document.close();
+      win.print();
+    }
+    
+    function printMonthReport(month) {
+      showMonthReport(month);
+      setTimeout(() => printCurrentReport(), 100);
+    }
+    
+    function printMonthlyReport() {
+      printCurrentReport();
+    }
+    
+    function saveSettings() {
+      companySettings = {
+        name: document.getElementById('companyName').value,
+        id: document.getElementById('companyId').value,
+        phone: document.getElementById('companyPhone').value,
+        email: document.getElementById('companyEmail').value
+      };
+      saveData();
+      alert('Guardado');
+    }
+    
+    async function saveMonthSetup() { 
+      const month = document.getElementById('billingMonth').value;
+      const amount = parseFloat(document.getElementById('iceBill').value) || 0;
+      const totalKw = parseFloat(document.getElementById('totalKw').value) || 0;
+      const fileName = document.getElementById('iceBillFileName')?.textContent || '';
+      
+      await saveIceBillToSupabase(month, amount, totalKw, fileName);
+      saveData(); 
+      alert('Guardado en Supabase'); 
+    }
+    
+    function saveData() {
+      localStorage.setItem('utilityBilling', JSON.stringify({
+        meters, completedMeters, invoices, companySettings,
+        iceBill: document.getElementById('iceBill').value,
+        totalKw: document.getElementById('totalKw').value,
+        month: document.getElementById('billingMonth').value
+      }));
+    }
+    
+    function loadSavedData() {
+      const saved = localStorage.getItem('utilityBilling');
+      if (saved) {
+        const data = JSON.parse(saved);
+        if (data.meters) meters = data.meters;
+        completedMeters = data.completedMeters || {};
+        invoices = data.invoices || [];
+        if (data.companySettings) {
+          companySettings = data.companySettings;
+          document.getElementById('companyName').value = companySettings.name || '';
+          document.getElementById('companyId').value = companySettings.id || '';
+          document.getElementById('companyPhone').value = companySettings.phone || '';
+          document.getElementById('companyEmail').value = companySettings.email || '';
+        }
+        if (data.iceBill) document.getElementById('iceBill').value = data.iceBill;
+        if (data.totalKw) document.getElementById('totalKw').value = data.totalKw;
+        if (data.month) document.getElementById('billingMonth').value = data.month;
+        renderInvoices();
+      }
+    }
+    
+    init();
+  </script>
+</body>
+</html>

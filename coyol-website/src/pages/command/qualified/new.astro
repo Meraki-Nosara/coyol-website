@@ -741,12 +741,25 @@ const pageTitle = isEdit ? `Edit: ${existingLead.full_name}` : 'New Lead';
       delete data.must_have;
       delete data.score;
       delete data.id;
+      // Map property_notes to special_requests
+      if (data.property_notes) data.special_requests = data.property_notes;
+      delete data.property_notes;
       
       // Rename form fields to match database columns
-      if (data.budget_range) {
-        data.total_budget = data.budget_range;
-        delete data.budget_range;
-      }
+      if (data.budget_range) data.total_budget = data.budget_range;
+      delete data.budget_range;
+      
+      if (data.intl_experience) data.international_exp = data.intl_experience;
+      delete data.intl_experience;
+      
+      if (data.lot_size_pref) data.lot_size = data.lot_size_pref;
+      delete data.lot_size_pref;
+      
+      if (data.move_in_timeline) data.timeline_to_move = data.move_in_timeline;
+      delete data.move_in_timeline;
+      
+      if (data.timeline) data.timeline_to_buy = data.timeline;
+      delete data.timeline;
       
       data.updated_at = new Date().toISOString();
       if (!editId) {
@@ -784,3 +797,4 @@ const pageTitle = isEdit ? `Edit: ${existingLead.full_name}` : 'New Lead';
     });
   </script>
 </CommandLayout>
+<!-- deploy Thu Sep  3 09:36:12 CST 2026 -->

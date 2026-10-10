@@ -3,15 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Francisco Villalobos — Casa Nest | Coyol Group</title>
+  <title>Portal del Cliente — Coyol Group</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
     
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body {
       font-family: 'Inter', sans-serif;
@@ -22,7 +18,6 @@
       line-height: 1.6;
     }
     
-    /* Header */
     .header {
       display: flex;
       justify-content: space-between;
@@ -31,69 +26,19 @@
       border-bottom: 1px solid rgba(255,255,255,0.1);
     }
     
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
+    .header-left { display: flex; align-items: center; gap: 15px; }
+    .logo-img { width: 50px; height: auto; filter: invert(1) brightness(0.85); }
+    .logo-text { font-family: 'Playfair Display', serif; font-size: 20px; letter-spacing: 3px; color: #C4A67C; }
+    .header-right { display: flex; align-items: center; gap: 20px; }
+    .user-name { font-size: 13px; color: #888; }
+    .logout-btn { font-size: 11px; color: #C4A67C; text-decoration: none; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
     
-    .logo-img {
-      width: 50px;
-      height: auto;
-      filter: invert(1) brightness(0.85) sepia(0.3) hue-rotate(10deg) saturate(0.8);
-    }
+    .main { max-width: 1200px; margin: 0 auto; padding: 40px; }
     
-    .logo-text {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 20px;
-      letter-spacing: 3px;
-      color: #C4A67C;
-    }
+    .welcome-section { margin-bottom: 40px; }
+    .welcome-title { font-family: 'Playfair Display', serif; font-size: 32px; color: #f5f3ef; margin-bottom: 8px; }
+    .welcome-subtitle { font-size: 14px; color: #888; }
     
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-    
-    .user-name {
-      font-size: 13px;
-      color: #888;
-    }
-    
-    .logout-btn {
-      font-size: 11px;
-      color: #C4A67C;
-      text-decoration: none;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-    
-    /* Main Content */
-    .main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 40px;
-    }
-    
-    /* Welcome Section */
-    .welcome-section {
-      margin-bottom: 40px;
-    }
-    
-    .welcome-title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 32px;
-      color: #f5f3ef;
-      margin-bottom: 8px;
-    }
-    
-    .welcome-subtitle {
-      font-size: 14px;
-      color: #888;
-    }
-    
-    /* Property Card */
     .property-card {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -107,43 +52,26 @@
     
     .property-image {
       height: 300px;
-      background: url('https://coyolrealestate.com/images/properties/casa-nest.jpg') center center / cover no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-color: rgba(255,255,255,0.05);
     }
     
-    .property-info {
-      padding: 40px 40px 40px 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    
-    .property-name {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 36px;
-      color: #C4A67C;
-      margin-bottom: 5px;
-    }
-    
-    .property-lot {
-      font-size: 13px;
-      color: #888;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-    }
-    
+    .property-info { padding: 40px; display: flex; flex-direction: column; justify-content: center; }
+    .property-name { font-family: 'Playfair Display', serif; font-size: 28px; color: #C4A67C; margin-bottom: 8px; }
+    .property-lot { font-size: 14px; color: #888; margin-bottom: 20px; }
     .property-status {
       display: inline-block;
-      padding: 6px 14px;
+      padding: 6px 16px;
       background: rgba(196, 166, 124, 0.2);
-      color: #C4A67C;
-      font-size: 11px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
+      border: 1px solid #C4A67C;
       border-radius: 20px;
+      font-size: 12px;
+      color: #C4A67C;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
     
-    /* Stats Grid */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -159,41 +87,88 @@
       text-align: center;
     }
     
-    .stat-value {
-      font-size: 28px;
-      font-weight: 300;
-      color: #C4A67C;
-      margin-bottom: 5px;
-    }
+    .stat-value { font-size: 32px; font-weight: 300; color: #C4A67C; margin-bottom: 5px; }
+    .stat-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
     
-    .stat-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #888;
-    }
-    
-    /* Sections */
-    .section {
-      margin-bottom: 40px;
-    }
-    
+    .section { margin-bottom: 40px; }
     .section-title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 24px;
-      color: #f5f3ef;
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: #C4A67C;
       margin-bottom: 20px;
       padding-bottom: 10px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
     }
     
-    /* Documents */
-    .documents-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 15px;
+    /* Payment Summary */
+    .payment-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 25px;
+      background: rgba(196, 166, 124, 0.1);
+      border: 1px solid rgba(196, 166, 124, 0.3);
+      border-radius: 12px;
+      margin-bottom: 20px;
     }
     
+    .payment-stat { text-align: center; }
+    .payment-stat:first-child { text-align: left; }
+    .payment-stat:last-child { text-align: right; }
+    .payment-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+    .payment-value { font-size: 28px; font-weight: 300; }
+    .payment-value.paid { color: #4ade80; }
+    .payment-value.progress { color: #C4A67C; }
+    .payment-value.total { color: #f5f3ef; }
+    
+    .progress-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-bottom: 25px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #3D4F3D, #C4A67C); border-radius: 10px; transition: width 0.5s; }
+    
+    /* Milestones Table */
+    .milestones-table { border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; }
+    .milestone-header {
+      display: grid;
+      grid-template-columns: 50px 1fr 120px 120px 100px;
+      gap: 15px;
+      padding: 15px 20px;
+      background: rgba(255,255,255,0.05);
+      font-size: 11px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .milestone-row {
+      display: grid;
+      grid-template-columns: 50px 1fr 120px 120px 100px;
+      gap: 15px;
+      padding: 15px 20px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .milestone-row.paid { background: rgba(74, 222, 128, 0.08); }
+    .milestone-row.paid .milestone-num, .milestone-row.paid .milestone-name, .milestone-row.paid .milestone-amount { color: #4ade80; }
+    .milestone-row.next .milestone-name { color: #f5f3ef; }
+    .milestone-row.next .milestone-amount { color: #C4A67C; }
+    
+    .milestone-num { color: #666; font-weight: 600; }
+    .milestone-name { color: #888; }
+    .milestone-period { color: #666; font-size: 12px; }
+    .milestone-amount { text-align: right; color: #888; }
+    .milestone-status { text-align: center; }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .status-badge.paid { background: #4ade80; color: #1a1f16; }
+    .status-badge.next { background: rgba(196, 166, 124, 0.2); color: #C4A67C; }
+    
+    /* Documents */
+    .documents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
     .document-card {
       display: flex;
       align-items: center;
@@ -206,187 +181,63 @@
       color: inherit;
       transition: all 0.2s;
     }
+    .document-card:hover { background: rgba(255,255,255,0.05); border-color: #C4A67C; }
+    .document-icon { width: 45px; height: 45px; background: rgba(196, 166, 124, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .document-info h4 { font-size: 14px; font-weight: 500; color: #f5f3ef; margin-bottom: 3px; }
+    .document-info p { font-size: 11px; color: #888; }
+    .document-pending { opacity: 0.5; pointer-events: none; }
     
-    .document-card:hover {
-      background: rgba(255,255,255,0.05);
-      border-color: #C4A67C;
-    }
-    
-    .document-icon {
-      width: 45px;
-      height: 45px;
-      background: rgba(196, 166, 124, 0.15);
-      border-radius: 10px;
+    /* Construction Reports */
+    .reports-list { display: flex; flex-direction: column; gap: 15px; }
+    .report-card {
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 20px;
-    }
-    
-    .document-info h4 {
-      font-size: 14px;
-      font-weight: 500;
-      color: #f5f3ef;
-      margin-bottom: 3px;
-    }
-    
-    .document-info p {
-      font-size: 11px;
-      color: #888;
-    }
-    
-    .document-pending {
-      opacity: 0.5;
-      pointer-events: none;
-    }
-    
-    .document-pending .document-icon {
-      background: rgba(255,255,255,0.05);
-    }
-    
-    /* Timeline */
-    .timeline {
-      position: relative;
-      padding-left: 30px;
-    }
-    
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 10px;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: linear-gradient(to bottom, #C4A67C, rgba(196, 166, 124, 0.2));
-    }
-    
-    .timeline-item {
-      position: relative;
+      gap: 20px;
       padding: 20px;
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 10px;
-      margin-bottom: 15px;
     }
+    .report-icon { font-size: 28px; }
+    .report-info { flex: 1; }
+    .report-title { font-weight: 500; color: #f5f3ef; margin-bottom: 3px; }
+    .report-date { font-size: 12px; color: #888; }
+    .report-link { color: #C4A67C; text-decoration: none; font-size: 13px; }
+    .report-link:hover { text-decoration: underline; }
     
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: -26px;
-      top: 25px;
-      width: 12px;
-      height: 12px;
-      background: #3D4F3D;
-      border: 2px solid #C4A67C;
-      border-radius: 50%;
-    }
-    
-    .timeline-item.complete::before {
-      background: #C4A67C;
-    }
-    
-    .timeline-item.current::before {
-      background: #C4A67C;
-      box-shadow: 0 0 0 4px rgba(196, 166, 124, 0.3);
-    }
-    
-    .timeline-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    
-    .timeline-title {
-      font-weight: 500;
-      color: #f5f3ef;
-    }
-    
-    .timeline-date {
-      font-size: 11px;
-      color: #C4A67C;
-      background: rgba(196, 166, 124, 0.15);
-      padding: 3px 10px;
-      border-radius: 15px;
-    }
-    
-    .timeline-desc {
-      font-size: 13px;
-      color: #888;
-    }
+    /* Timeline */
+    .timeline { position: relative; padding-left: 30px; }
+    .timeline::before { content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #C4A67C, rgba(196, 166, 124, 0.2)); }
+    .timeline-item { position: relative; padding: 20px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; margin-bottom: 15px; }
+    .timeline-item::before { content: ''; position: absolute; left: -26px; top: 25px; width: 12px; height: 12px; background: #3D4F3D; border: 2px solid #C4A67C; border-radius: 50%; }
+    .timeline-item.complete::before { background: #C4A67C; }
+    .timeline-item.current::before { background: #C4A67C; box-shadow: 0 0 0 4px rgba(196, 166, 124, 0.3); }
+    .timeline-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .timeline-title { font-weight: 500; color: #f5f3ef; }
+    .timeline-date { font-size: 11px; color: #C4A67C; background: rgba(196, 166, 124, 0.15); padding: 3px 10px; border-radius: 15px; }
+    .timeline-desc { font-size: 13px; color: #888; }
     
     /* Contact */
-    .contact-card {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      padding: 25px;
-      background: rgba(196, 166, 124, 0.1);
-      border: 1px solid rgba(196, 166, 124, 0.3);
-      border-radius: 12px;
-    }
+    .contact-card { display: flex; align-items: center; gap: 20px; padding: 25px; background: rgba(196, 166, 124, 0.1); border: 1px solid rgba(196, 166, 124, 0.3); border-radius: 12px; }
+    .contact-avatar { width: 60px; height: 60px; background: #C4A67C; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #1a1f16; }
+    .contact-info h4 { font-size: 16px; color: #f5f3ef; margin-bottom: 3px; }
+    .contact-info p { font-size: 13px; color: #888; margin-bottom: 8px; }
+    .contact-info a { color: #C4A67C; text-decoration: none; font-size: 13px; }
     
-    .contact-avatar {
-      width: 60px;
-      height: 60px;
-      background: #C4A67C;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      color: #1a1f16;
-    }
+    .footer { text-align: center; padding: 30px; color: #555; font-size: 12px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 40px; }
     
-    .contact-info h4 {
-      font-size: 16px;
-      color: #f5f3ef;
-      margin-bottom: 3px;
-    }
+    .loading { text-align: center; padding: 60px; color: #888; }
+    .no-data { text-align: center; padding: 40px; color: #666; font-style: italic; }
     
-    .contact-info p {
-      font-size: 13px;
-      color: #888;
-      margin-bottom: 8px;
-    }
-    
-    .contact-info a {
-      color: #C4A67C;
-      text-decoration: none;
-      font-size: 13px;
-    }
-    
-    /* Footer */
-    .footer {
-      text-align: center;
-      padding: 30px;
-      color: #555;
-      font-size: 12px;
-      border-top: 1px solid rgba(255,255,255,0.05);
-      margin-top: 40px;
-    }
-    
-    /* Responsive */
     @media (max-width: 900px) {
-      .property-card {
-        grid-template-columns: 1fr;
-      }
-      
-      .property-info {
-        padding: 30px;
-      }
-      
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
-      .header {
-        padding: 15px 20px;
-      }
-      
-      .main {
-        padding: 20px;
-      }
+      .property-card { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .milestone-header, .milestone-row { grid-template-columns: 40px 1fr 80px; }
+      .milestone-period, .milestone-status { display: none; }
+      .header { padding: 15px 20px; }
+      .main { padding: 20px; }
+      .payment-summary { flex-direction: column; gap: 20px; }
+      .payment-stat { text-align: center !important; }
     }
   </style>
 </head>
@@ -399,135 +250,75 @@
       <span class="logo-text">COYOL GROUP</span>
     </div>
     <div class="header-right">
-      <span class="user-name">Francisco Villalobos</span>
-      <a href="index.html" class="logout-btn">Salir</a>
+      <span class="user-name" id="userName">...</span>
+      <span class="logout-btn" onclick="logout()">Salir</span>
     </div>
   </header>
 
+  <!-- Loading State -->
+  <div id="loadingState" class="main">
+    <div class="loading">⏳ Cargando portal...</div>
+  </div>
+
   <!-- Main Content -->
-  <main class="main">
+  <main class="main" id="mainContent" style="display: none;">
     
     <!-- Welcome -->
     <div class="welcome-section">
-      <h1 class="welcome-title">Bienvenido, Francisco</h1>
-      <p class="welcome-subtitle">Portal de seguimiento de su proyecto Casa Nest</p>
+      <h1 class="welcome-title" id="welcomeTitle">Bienvenido</h1>
+      <p class="welcome-subtitle" id="welcomeSubtitle">Portal de seguimiento de su proyecto</p>
     </div>
     
     <!-- Property Card -->
     <div class="property-card">
-      <div class="property-image"></div>
+      <div class="property-image" id="propertyImage"></div>
       <div class="property-info">
-        <h2 class="property-name">Casa Nest</h2>
-        <p class="property-lot">Lote 28 · Mar Azul · Nosara</p>
-        <span class="property-status">En Preparación</span>
+        <h2 class="property-name" id="propertyName">...</h2>
+        <p class="property-lot" id="propertyLot">...</p>
+        <span class="property-status" id="propertyStatus">En Preparación</span>
       </div>
     </div>
     
     <!-- Stats -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-value">522</div>
-        <div class="stat-label">m² de Lote</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">215</div>
-        <div class="stat-label">m² Construcción</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">2</div>
-        <div class="stat-label">Habitaciones</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">40</div>
-        <div class="stat-label">m² Piscina</div>
-      </div>
+    <div class="stats-grid" id="statsGrid">
+      <!-- Loaded dynamically -->
     </div>
     
+    <!-- Payment Schedule -->
+    <section class="section" id="paymentSection">
+      <h3 class="section-title">Calendario de Pagos</h3>
+      <div class="payment-summary" id="paymentSummary">
+        <!-- Loaded dynamically -->
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+      </div>
+      <div class="milestones-table" id="milestonesTable">
+        <!-- Loaded dynamically -->
+      </div>
+    </section>
+    
+    <!-- Construction Reports -->
+    <section class="section" id="reportsSection">
+      <h3 class="section-title">Informes de Construcción</h3>
+      <div class="reports-list" id="reportsList">
+        <div class="no-data">No hay informes disponibles aún</div>
+      </div>
+    </section>
+    
     <!-- Documents -->
-    <section class="section">
+    <section class="section" id="documentsSection">
       <h3 class="section-title">Documentos</h3>
-      <div class="documents-grid">
-        
-        <a href="https://mnxjzvqgrrodalcmtntf.supabase.co/storage/v1/object/public/order-files/coyol-control/mar-azul/lot-28/escritura.pdf" target="_blank" class="document-card">
-          <div class="document-icon">📜</div>
-          <div class="document-info">
-            <h4>Escritura</h4>
-            <p>Escritura de propiedad Lote 28</p>
-          </div>
-        </a>
-        
-        <a href="https://mnxjzvqgrrodalcmtntf.supabase.co/storage/v1/object/public/order-files/coyol-control/mar-azul/lot-28/plano.pdf" target="_blank" class="document-card">
-          <div class="document-icon">📐</div>
-          <div class="document-info">
-            <h4>Plano Catastrado</h4>
-            <p>Plano oficial del lote</p>
-          </div>
-        </a>
-        
-        <div class="document-card document-pending">
-          <div class="document-icon">📋</div>
-          <div class="document-info">
-            <h4>Contrato de Construcción</h4>
-            <p>Pendiente</p>
-          </div>
-        </div>
-        
-        <div class="document-card document-pending">
-          <div class="document-icon">✅</div>
-          <div class="document-info">
-            <h4>Aprobación CFIA</h4>
-            <p>Pendiente</p>
-          </div>
-        </div>
-        
+      <div class="documents-grid" id="documentsGrid">
+        <!-- Loaded dynamically -->
       </div>
     </section>
     
     <!-- Timeline -->
-    <section class="section">
+    <section class="section" id="timelineSection">
       <h3 class="section-title">Progreso del Proyecto</h3>
-      <div class="timeline">
-        
-        <div class="timeline-item complete">
-          <div class="timeline-header">
-            <span class="timeline-title">Compra del Lote</span>
-            <span class="timeline-date">Completado</span>
-          </div>
-          <p class="timeline-desc">Lote 28 adquirido y registrado a su nombre</p>
-        </div>
-        
-        <div class="timeline-item complete">
-          <div class="timeline-header">
-            <span class="timeline-title">Diseño Aprobado</span>
-            <span class="timeline-date">Completado</span>
-          </div>
-          <p class="timeline-desc">Casa Nest - diseño arquitectónico finalizado</p>
-        </div>
-        
-        <div class="timeline-item current">
-          <div class="timeline-header">
-            <span class="timeline-title">Permiso de Construcción</span>
-            <span class="timeline-date">En proceso</span>
-          </div>
-          <p class="timeline-desc">Trámite municipal en curso</p>
-        </div>
-        
-        <div class="timeline-item">
-          <div class="timeline-header">
-            <span class="timeline-title">Inicio de Construcción</span>
-            <span class="timeline-date">Próximamente</span>
-          </div>
-          <p class="timeline-desc">Una vez aprobado el permiso</p>
-        </div>
-        
-        <div class="timeline-item">
-          <div class="timeline-header">
-            <span class="timeline-title">Entrega</span>
-            <span class="timeline-date">Estimado 2027</span>
-          </div>
-          <p class="timeline-desc">12-18 meses de construcción</p>
-        </div>
-        
+      <div class="timeline" id="timelineContainer">
+        <!-- Loaded dynamically -->
       </div>
     </section>
     
@@ -535,11 +326,11 @@
     <section class="section">
       <h3 class="section-title">Su Contacto</h3>
       <div class="contact-card">
-        <div class="contact-avatar">JH</div>
+        <div class="contact-avatar" id="contactAvatar">MP</div>
         <div class="contact-info">
-          <h4>Ing. Jorge Hidalgo</h4>
-          <p>Director de Construcción</p>
-          <a href="mailto:info@coyolrealestate.com">info@coyolrealestate.com</a>
+          <h4 id="contactName">Marion Peri</h4>
+          <p id="contactRole">Director de Proyecto</p>
+          <a href="mailto:marion@nosaraconstruction.com">marion@nosaraconstruction.com</a>
         </div>
       </div>
     </section>
@@ -548,8 +339,235 @@
 
   <!-- Footer -->
   <footer class="footer">
-    © 2026 Coyol Group · Nosara, Costa Rica
+    © 2026 Coyol Group — Nosara, Costa Rica
   </footer>
 
+  <script>
+    const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+    
+    // Get client from URL path
+    const pathParts = window.location.pathname.split('/');
+    const clientSlug = pathParts[pathParts.length - 2] || 'francisco';
+    
+    let portalData = null;
+    
+    // Load portal data
+    async function loadPortal() {
+      // Check session
+      const accessCode = sessionStorage.getItem('portalAccess');
+      if (!accessCode) {
+        window.location.href = 'index.html';
+        return;
+      }
+      
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/client_portals?access_code=eq.${accessCode}&select=*`, {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+          }
+        });
+        
+        const data = await res.json();
+        if (!data || data.length === 0) {
+          window.location.href = 'index.html';
+          return;
+        }
+        
+        portalData = data[0];
+        renderPortal();
+        
+      } catch (err) {
+        console.error('Error loading portal:', err);
+        document.getElementById('loadingState').innerHTML = '<div class="loading" style="color: #f87171;">Error cargando el portal</div>';
+      }
+    }
+    
+    // Format currency
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(amount);
+    }
+    
+    // Render portal
+    function renderPortal() {
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('mainContent').style.display = 'block';
+      
+      // Header
+      document.getElementById('userName').textContent = portalData.client_name;
+      
+      // Welcome
+      const firstName = portalData.client_name.split(' ')[0];
+      document.getElementById('welcomeTitle').textContent = `Bienvenido, ${firstName}`;
+      document.getElementById('welcomeSubtitle').textContent = `Portal de seguimiento de su proyecto ${portalData.house_model}`;
+      
+      // Property
+      document.getElementById('propertyName').textContent = portalData.house_model;
+      document.getElementById('propertyLot').textContent = `Lote ${portalData.lot_number} · ${portalData.development} · Nosara`;
+      if (portalData.hero_image_url) {
+        document.getElementById('propertyImage').style.backgroundImage = `url('${portalData.hero_image_url}')`;
+      }
+      
+      // Stats (hardcoded for now, can be made dynamic)
+      document.getElementById('statsGrid').innerHTML = `
+        <div class="stat-card"><div class="stat-value">522</div><div class="stat-label">m² de Lote</div></div>
+        <div class="stat-card"><div class="stat-value">215</div><div class="stat-label">m² Construcción</div></div>
+        <div class="stat-card"><div class="stat-value">2</div><div class="stat-label">Habitaciones</div></div>
+        <div class="stat-card"><div class="stat-value">40</div><div class="stat-label">m² Piscina</div></div>
+      `;
+      
+      // Payment milestones
+      renderPayments();
+      
+      // Documents
+      renderDocuments();
+      
+      // Reports
+      renderReports();
+      
+      // Timeline
+      renderTimeline();
+    }
+    
+    // Render payments
+    function renderPayments() {
+      const timeline = portalData.timeline || [];
+      
+      if (timeline.length === 0) {
+        document.getElementById('paymentSection').style.display = 'none';
+        return;
+      }
+      
+      // Calculate totals
+      const totalAmount = timeline.reduce((sum, m) => sum + (m.amount || 0), 0);
+      const paidAmount = timeline.filter(m => m.status === 'paid').reduce((sum, m) => sum + (m.amount || 0), 0);
+      const progressPercent = totalAmount > 0 ? Math.round(paidAmount / totalAmount * 100) : 0;
+      
+      // Payment summary
+      document.getElementById('paymentSummary').innerHTML = `
+        <div class="payment-stat">
+          <div class="payment-label">Pagado</div>
+          <div class="payment-value paid">${formatCurrency(paidAmount)}</div>
+        </div>
+        <div class="payment-stat">
+          <div class="payment-label">Progreso</div>
+          <div class="payment-value progress">${progressPercent}%</div>
+        </div>
+        <div class="payment-stat">
+          <div class="payment-label">Total</div>
+          <div class="payment-value total">${formatCurrency(totalAmount)}</div>
+        </div>
+      `;
+      
+      document.getElementById('progressFill').style.width = `${progressPercent}%`;
+      
+      // Milestones table
+      let foundNext = false;
+      const rows = timeline.map((m, i) => {
+        const isPaid = m.status === 'paid';
+        const isNext = !isPaid && !foundNext;
+        if (isNext) foundNext = true;
+        
+        return `
+          <div class="milestone-row ${isPaid ? 'paid' : ''} ${isNext ? 'next' : ''}">
+            <div class="milestone-num">${isPaid ? '✓' : i + 1}</div>
+            <div class="milestone-name">${m.name}</div>
+            <div class="milestone-period">${m.period || ''}</div>
+            <div class="milestone-amount">${formatCurrency(m.amount || 0)}</div>
+            <div class="milestone-status">
+              ${isPaid ? '<span class="status-badge paid">PAGADO</span>' : 
+                isNext ? '<span class="status-badge next">PRÓXIMO</span>' : '—'}
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      document.getElementById('milestonesTable').innerHTML = `
+        <div class="milestone-header">
+          <div>#</div>
+          <div>Hito</div>
+          <div>Período</div>
+          <div style="text-align: right;">Monto</div>
+          <div style="text-align: center;">Estado</div>
+        </div>
+        ${rows}
+      `;
+    }
+    
+    // Render documents
+    function renderDocuments() {
+      const docs = (portalData.documents || []).filter(d => d.type !== 'report' && d.type !== 'photo');
+      
+      if (docs.length === 0) {
+        document.getElementById('documentsGrid').innerHTML = '<div class="no-data">No hay documentos disponibles aún</div>';
+        return;
+      }
+      
+      const icons = { permit: '📜', cfia: '✅', contract: '📝', escritura: '📜', plano: '📐', 'uso-suelo': '🏛️', other: '📄' };
+      
+      document.getElementById('documentsGrid').innerHTML = docs.map(doc => `
+        <a href="${doc.url}" target="_blank" class="document-card">
+          <div class="document-icon">${icons[doc.type] || '📄'}</div>
+          <div class="document-info">
+            <h4>${doc.name}</h4>
+            <p>${doc.date || ''}</p>
+          </div>
+        </a>
+      `).join('');
+    }
+    
+    // Render construction reports
+    function renderReports() {
+      const reports = (portalData.documents || []).filter(d => d.type === 'report');
+      
+      if (reports.length === 0) {
+        document.getElementById('reportsList').innerHTML = '<div class="no-data">No hay informes de construcción disponibles aún</div>';
+        return;
+      }
+      
+      document.getElementById('reportsList').innerHTML = reports.map(report => `
+        <div class="report-card">
+          <div class="report-icon">📋</div>
+          <div class="report-info">
+            <div class="report-title">${report.name}</div>
+            <div class="report-date">${report.date || ''}</div>
+          </div>
+          <a href="${report.url}" target="_blank" class="report-link">Ver Informe →</a>
+        </div>
+      `).join('');
+    }
+    
+    // Render timeline
+    function renderTimeline() {
+      // Use project milestones from notes or default timeline
+      const timelineItems = [
+        { title: 'Compra del Lote', desc: 'Lote adquirido y registrado', status: 'complete' },
+        { title: 'Diseño Aprobado', desc: 'Diseño arquitectónico finalizado', status: 'complete' },
+        { title: 'Permiso de Construcción', desc: 'Trámite municipal en curso', status: 'current' },
+        { title: 'Inicio de Construcción', desc: 'Una vez aprobado el permiso', status: 'pending' },
+        { title: 'Entrega', desc: 'Estimado 2027', status: 'pending' }
+      ];
+      
+      document.getElementById('timelineContainer').innerHTML = timelineItems.map(item => `
+        <div class="timeline-item ${item.status}">
+          <div class="timeline-header">
+            <span class="timeline-title">${item.title}</span>
+            <span class="timeline-date">${item.status === 'complete' ? 'Completado' : item.status === 'current' ? 'En proceso' : 'Próximamente'}</span>
+          </div>
+          <p class="timeline-desc">${item.desc}</p>
+        </div>
+      `).join('');
+    }
+    
+    // Logout
+    function logout() {
+      sessionStorage.removeItem('portalAccess');
+      window.location.href = 'index.html';
+    }
+    
+    // Initialize
+    loadPortal();
+  </script>
 </body>
 </html>

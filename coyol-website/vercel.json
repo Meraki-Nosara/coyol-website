@@ -40,6 +40,18 @@
   "outputDirectory": "dist",
   "redirects": [
     {
+      "source": "/:path*",
+      "destination": "https://coyolnosara.com/:path*",
+      "has": [{ "type": "host", "value": "www.coyolrealestate.com" }],
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "destination": "https://coyolnosara.com/:path*",
+      "has": [{ "type": "host", "value": "coyolrealestate.com" }],
+      "permanent": true
+    },
+    {
       "source": "/",
       "destination": "/restaurant/reserve",
       "has": [{ "type": "host", "value": "reserve.coyolrestaurant.com" }],

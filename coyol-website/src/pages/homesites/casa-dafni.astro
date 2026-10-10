@@ -1,0 +1,617 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+
+const property = {
+  name: 'Casa Dafni',
+  location: 'Nosara, Costa Rica',
+  
+  specs: {
+    bedrooms: 2,
+    bathrooms: 2,
+    built: '125',
+    lot: '522',
+  },
+  
+  intro: 'A refined two-bedroom retreat where tropical modernism meets intimate scale — designed for those who understand that luxury is not measured in square meters.',
+  
+  description: [
+    'Casa Dafni takes its name from the Greek laurel tree, a symbol of achievement and timeless beauty. Like its namesake, this home is both understated and distinguished.',
+    'The open-plan living space flows seamlessly to covered terraces, framing views of the surrounding forest canopy. Floor-to-ceiling glass dissolves the boundary between interior comfort and tropical landscape.',
+    'The kitchen is designed for living, not just cooking — clean lines, integrated appliances, and surfaces that invite morning coffee rituals and evening gatherings alike.',
+    'Two bedroom suites offer private sanctuaries, each with direct terrace access. The master bath features a walk-in rain shower open to a private garden court.',
+    'Outside, a 19m² pool catches dappled sunlight through the trees, while the 48m² of open terraces provide space for hammocks, outdoor dining, and the simple pleasure of watching the day unfold.'
+  ],
+
+  images: {
+    hero: 'https://coyolnosara.com/images/homes/dafni/exterior.jpg',
+    feature: '/images/homes/dafni/kitchen.jpg',
+    gallery: [
+      '/images/homes/dafni/kitchen.jpg',
+      '/images/homes/dafni/kitchen-island.jpg',
+      '/images/homes/dafni/kitchen-detail.jpg',
+      '/images/homes/dafni/bedroom.jpg',
+    ]
+  },
+  
+  floorplan: '/images/homes/dafni/floorplan.jpg'
+};
+---
+
+<Layout title={`${property.name} | Coyol`}>
+  <Navigation />
+  
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Serif+Display&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" slot="head" />
+
+  <!-- Hero Video -->
+  <section class="hero">
+    <video id="hero-video" autoplay muted playsinline>
+      <source src="/images/homes/dafni/video/kitchen-2.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-title">
+      <h1>Casa <span class="dafni-text">Dafni</span></h1>
+    </div>
+  </section>
+
+  <!-- Header -->
+  <header class="header">
+    <p class="eyebrow">{property.location}</p>
+    <p class="intro">{property.intro}</p>
+    
+    <div class="specs">
+      <span>{property.specs.bedrooms} Bed</span>
+      <span class="dot">·</span>
+      <span>{property.specs.bathrooms} Bath</span>
+      <span class="dot">·</span>
+      <span>{property.specs.built} m²</span>
+      <span class="dot">·</span>
+      <span>{property.specs.lot} m² Lot</span>
+    </div>
+  </header>
+
+  <!-- Feature Image -->
+  <section class="feature-image">
+    <img src={property.images.feature} alt="Kitchen" />
+  </section>
+
+  <!-- Story with Laurel Background -->
+  <section class="story">
+    <div class="story-botanical">
+      <img src="/images/homes/dafni/laurel-tree.jpg" alt="" class="laurel-tree" />
+    </div>
+    <div class="story-text">
+      {property.description.map((para, i) => (
+        <p>{i === 0 ? <><span class="drop-cap">{para.charAt(0)}</span>{para.slice(1)}</> : para}</p>
+      ))}
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery">
+    <div class="gallery-grid">
+      {property.images.gallery.map((img, i) => (
+        <div class="gallery-item" data-index={i}>
+          <img src={img} alt="" loading="lazy" />
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close">×</button>
+    <button class="lightbox-prev" id="lightbox-prev">‹</button>
+    <button class="lightbox-next" id="lightbox-next">›</button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="" />
+    <div class="lightbox-counter" id="lightbox-counter"></div>
+  </div>
+
+  <!-- From Design to Detail -->
+  <section class="design-philosophy">
+    <div class="philosophy-botanical">
+      <img src="/images/homes/dafni/laurel-leaf.jpg" alt="" class="laurel-leaf" />
+    </div>
+    <h2>From Design to Detail</h2>
+    <div class="philosophy-content">
+      <p><span class="drop-cap">C</span>oyol Development Group approaches the making of a home as a complete architectural undertaking, from the first considered drawings to the final crafted detail. Design, engineering, fabrication and construction are closely interwoven, allowing the original architectural intent to be carried faithfully from the drawing board through to the finished house.</p>
+      <p>Our light-gauge steel structures are formed digitally from the three-dimensional architectural model, producing the individual elements of walls and roofs with considerable accuracy and remarkably little material waste. This precision allows windows, doors, kitchens, cabinetry and other bespoke elements to be developed concurrently as the structure itself takes shape.</p>
+      <p>The same care is afforded to the materials and workmanship that lend each house its particular character. European window and door systems are fabricated and finished locally; selected timbers are milled, properly seasoned and worked in our own joinery workshops; natural stone and marble are cut to marry precisely with bespoke cabinetry; and even the smallest architectural fittings are individually machined for their intended place.</p>
+      <p>Throughout, our architects, designers, engineers and craftspeople remain closely involved. Modern methods of design and fabrication sit comfortably alongside the more traditional virtues of sound workmanship, good materials and attention to detail.</p>
+      <p>It is a considered, start-to-finish approach to building, founded on a rather simple principle: that a well-designed house should also be exceptionally well made.</p>
+    </div>
+  </section>
+
+  <!-- Floor Plan -->
+  <section class="floorplan">
+    <p class="section-label">Floor Plan</p>
+    <div class="floorplan-img">
+      <img src={property.floorplan} alt="Floor Plan" />
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <p class="cta-eyebrow">Private Viewings</p>
+    <h2>Arrange a Visit</h2>
+    <a 
+      href="https://wa.me/13435747238?text=Hello%2C%20I'm%20interested%20in%20Casa%20Dafni" 
+      target="_blank"
+      class="cta-btn"
+    >
+      Get in Touch
+    </a>
+  </section>
+
+  <!-- Back -->
+  <a href="/#portfolio" class="back-link">← All Properties</a>
+
+</Layout>
+
+<style>
+  :root {
+    --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-serif: 'DM Serif Display', Georgia, serif;
+    --black: #1a1a1a;
+    --grey: #666;
+    --light: #f7f7f5;
+    --sand: #e8e4dc;
+  }
+
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 600px;
+  }
+
+  .hero video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-title {
+    position: absolute;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+
+  .hero-title h1 {
+    font-family: var(--font-serif);
+    font-size: clamp(64px, 15vw, 140px);
+    font-weight: 400;
+    color: #fff;
+    margin: 0;
+    letter-spacing: 0.02em;
+    text-shadow: 0 2px 40px rgba(0,0,0,0.3);
+  }
+
+  .dafni-text {
+    display: inline-block;
+    transition: opacity 0.6s ease-in-out;
+  }
+
+  .dafni-text.fading {
+    opacity: 0;
+  }
+
+  .header {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 80px 24px;
+    text-align: center;
+  }
+
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin: 0 0 20px 0;
+  }
+
+  .intro {
+    font-family: var(--font-serif);
+    font-size: clamp(20px, 3vw, 26px);
+    color: var(--grey);
+    line-height: 1.5;
+    margin: 0 0 32px 0;
+  }
+
+  .specs {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--grey);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .dot { opacity: 0.4; }
+
+  .feature-image { width: 100%; }
+  .feature-image img { width: 100%; height: auto; }
+
+  .story {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 100px 24px;
+  }
+
+  .story-botanical {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .story-botanical .laurel-tree {
+    width: 100%;
+    height: auto;
+  }
+
+  .story-text {
+    position: relative;
+    z-index: 1;
+    column-count: 2;
+    column-gap: 48px;
+  }
+
+  .story-text p {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.9;
+    color: #333;
+    margin: 0 0 20px 0;
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  .story-text p:last-child { margin-bottom: 0; }
+
+  .story-text .drop-cap {
+    float: left;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 5.5rem;
+    line-height: 0.8;
+    font-weight: 600;
+    color: #3D4F3D;
+    margin-right: 12px;
+    margin-top: 6px;
+  }
+
+  .botanical-divider {
+    text-align: center;
+    padding: 40px 24px;
+    background: #fff;
+  }
+
+  .botanical-divider img {
+    max-width: 200px;
+    height: auto;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 768px) {
+    .story-text {
+      column-count: 1;
+    }
+    
+    .story-botanical {
+      width: 300px;
+    }
+  }
+
+  .gallery {
+    padding: 80px 24px;
+    background: var(--light);
+  }
+
+  .gallery-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    cursor: pointer;
+    transition: opacity 0.3s;
+  }
+
+  .gallery-item:hover img { opacity: 0.9; }
+
+  /* Design Philosophy */
+  .design-philosophy {
+    position: relative;
+    padding: 100px 24px;
+    background: #fff;
+  }
+
+  .philosophy-botanical {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    width: 180px;
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .philosophy-botanical .laurel-leaf {
+    width: 100%;
+    height: auto;
+  }
+
+  .design-philosophy h2 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--black);
+    text-align: center;
+    margin: 0 0 60px 0;
+    letter-spacing: 0.02em;
+  }
+
+  .philosophy-content {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    column-count: 2;
+    column-gap: 48px;
+  }
+
+  .philosophy-content p {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.9;
+    color: #333;
+    margin: 0 0 20px 0;
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  .philosophy-content p:first-child {
+    margin-top: 0;
+  }
+
+  .drop-cap {
+    float: left;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 5.5rem;
+    line-height: 0.8;
+    font-weight: 600;
+    color: #3D4F3D;
+    margin-right: 12px;
+    margin-top: 6px;
+  }
+
+  @media (max-width: 768px) {
+    .philosophy-content {
+      column-count: 1;
+    }
+  }
+
+  .floorplan {
+    padding: 80px 24px;
+    background: var(--sand);
+    text-align: center;
+  }
+
+  .section-label {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin: 0 0 40px 0;
+  }
+
+  .floorplan-img {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 24px;
+  }
+
+  .floorplan-img img { width: 100%; height: auto; }
+
+  .cta {
+    padding: 120px 24px;
+    text-align: center;
+    background: var(--black);
+  }
+
+  .cta-eyebrow {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin: 0 0 16px 0;
+  }
+
+  .cta h2 {
+    font-family: var(--font-serif);
+    font-size: clamp(32px, 6vw, 56px);
+    font-weight: 400;
+    color: #fff;
+    margin: 0 0 40px 0;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: #fff;
+    padding: 18px 48px;
+    text-decoration: none;
+    transition: opacity 0.3s;
+  }
+
+  .cta-btn:hover { opacity: 0.9; }
+
+  .back-link {
+    display: block;
+    padding: 32px 24px;
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--grey);
+    text-decoration: none;
+    background: var(--light);
+  }
+
+  .back-link:hover { color: var(--black); }
+
+  /* Lightbox */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox.active { display: flex; }
+
+  .lightbox-img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 48px;
+    cursor: pointer;
+    opacity: 0.7;
+  }
+
+  .lightbox-close:hover { opacity: 1; }
+
+  .lightbox-prev,
+  .lightbox-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 64px;
+    cursor: pointer;
+    opacity: 0.7;
+    padding: 20px;
+  }
+
+  .lightbox-prev { left: 20px; }
+  .lightbox-next { right: 20px; }
+  .lightbox-prev:hover, .lightbox-next:hover { opacity: 1; }
+
+  .lightbox-counter {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.6);
+    font-family: var(--font-sans);
+    font-size: 14px;
+  }
+
+  @media (max-width: 900px) {
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 600px) {
+    .gallery-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  const galleryItems = document.querySelectorAll('.gallery-item');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxCounter = document.getElementById('lightbox-counter');
+  const closeBtn = document.getElementById('lightbox-close');
+  const prevBtn = document.getElementById('lightbox-prev');
+  const nextBtn = document.getElementById('lightbox-next');
+  
+  const images = Array.from(galleryItems).map(item => item.querySelector('img').src);
+  let currentIndex = 0;
+
+  function showImage(index) {
+    currentIndex = (index + images.length) % images.length;
+    lightboxImg.src = images[currentIndex];
+    lightboxCounter.textContent = `${currentIndex + 1} / ${images.length}`;
+  }
+
+  galleryItems.forEach((item, i) => {
+    item.addEventListener('click', () => {
+      lightbox.classList.add('active');
+      showImage(i);
+    });
+  });
+
+  closeBtn.addEventListener('click', () => lightbox.classList.remove('active'));
+  prevBtn.addEventListener('click', () => showImage(currentIndex - 1));
+  nextBtn.addEventListener('click', () => showImage(currentIndex + 1));
+  
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) lightbox.classList.remove('active');
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape') lightbox.classList.remove('active');
+    if (e.key === 'ArrowLeft') showImage(currentIndex - 1);
+    if (e.key === 'ArrowRight') showImage(currentIndex + 1);
+  });
+
+  // Single hero video - loops automatically
+  const heroVideo = document.getElementById('hero-video');
+  heroVideo.loop = true;
+
+  // Dafni ↔ Δάφνη text swap
+  const dafniText = document.querySelector('.dafni-text');
+  const names = ['Dafni', 'Δάφνη'];
+  let nameIndex = 0;
+
+  setInterval(() => {
+    dafniText.classList.add('fading');
+    setTimeout(() => {
+      nameIndex = (nameIndex + 1) % names.length;
+      dafniText.textContent = names[nameIndex];
+      dafniText.classList.remove('fading');
+    }, 600);
+  }, 4000);
+</script>

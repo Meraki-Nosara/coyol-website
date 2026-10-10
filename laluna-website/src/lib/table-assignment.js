@@ -49,7 +49,9 @@ export async function findBestTable(date, time, guestCount, zonePreference = 'an
     const resTime = parseTime(res.time);
     // Check if times overlap (assuming 2.5 hour duration)
     if (Math.abs(requestedTime - resTime) < 150) { // 150 minutes = 2.5 hours
-      bookedTableIds.add(res.table_id);
+      // Handle comma-separated table IDs (for large groups with multiple tables)
+      const tableIds = res.table_id.split(',').map(t => t.trim());
+      tableIds.forEach(tid => bookedTableIds.add(tid));
     }
   });
   

@@ -47,32 +47,27 @@ import Layout from '../../layouts/Layout.astro';
 
           <div class="input-group">
             <label>Time</label>
-            <div class="time-grid">
-              <div class="time-section">
-                <span class="time-label">Lunch</span>
-                <div class="time-slots" id="lunch-seating">
-                  <button type="button" class="time-btn" data-time="12:00">12:00 PM</button>
-                  <button type="button" class="time-btn" data-time="12:30">12:30 PM</button>
-                  <button type="button" class="time-btn" data-time="13:00">1:00 PM</button>
-                  <button type="button" class="time-btn" data-time="13:30">1:30 PM</button>
-                  <button type="button" class="time-btn" data-time="14:00">2:00 PM</button>
-                  <button type="button" class="time-btn" data-time="14:30">2:30 PM</button>
-                </div>
-              </div>
+            <div class="time-grid" id="timeGrid">
               <div class="time-section">
                 <span class="time-label">First Seating</span>
-                <div class="time-slots" id="first-seating">
+                <div class="time-slots">
                   <button type="button" class="time-btn" data-time="17:00">5:00 PM</button>
-                  <button type="button" class="time-btn" data-time="17:15">5:15 PM</button>
-                  <button type="button" class="time-btn selected" data-time="17:30">5:30 PM</button>
+                  <button type="button" class="time-btn" data-time="17:30">5:30 PM</button>
+                  <button type="button" class="time-btn" data-time="18:00">6:00 PM</button>
+                  <button type="button" class="time-btn" data-time="18:30">6:30 PM</button>
+                  <button type="button" class="time-btn" data-time="19:00">7:00 PM</button>
+                  <button type="button" class="time-btn" data-time="19:30">7:30 PM</button>
                 </div>
               </div>
               <div class="time-section">
                 <span class="time-label">Second Seating</span>
-                <div class="time-slots" id="second-seating">
-                  <button type="button" class="time-btn" data-time="19:30">7:30 PM</button>
+                <div class="time-slots">
                   <button type="button" class="time-btn" data-time="19:45">7:45 PM</button>
                   <button type="button" class="time-btn" data-time="20:00">8:00 PM</button>
+                  <button type="button" class="time-btn" data-time="20:30">8:30 PM</button>
+                  <button type="button" class="time-btn" data-time="21:00">9:00 PM</button>
+                  <button type="button" class="time-btn" data-time="21:30">9:30 PM</button>
+                  <button type="button" class="time-btn" data-time="22:00">10:00 PM</button>
                 </div>
               </div>
             </div>
@@ -346,23 +341,28 @@ import Layout from '../../layouts/Layout.astro';
     }
 
     .time-btn {
-      padding: 0.625rem 1rem;
-      border: 1px solid #d6d3d1;
+      padding: 0.875rem 1.25rem;
+      border: 2px solid #d6d3d1;
       background: white;
-      font-size: 0.875rem;
+      font-size: 1rem;
+      font-weight: 500;
       cursor: pointer;
       transition: all 0.2s;
-      border-radius: 4px;
+      border-radius: 8px;
+      min-width: 90px;
     }
 
     .time-btn:hover {
       border-color: #A65D3F;
+      background: #faf9f8;
     }
 
     .time-btn.selected {
       background: #A65D3F;
       color: white;
       border-color: #A65D3F;
+      box-shadow: 0 2px 8px rgba(166, 93, 63, 0.3);
+      transform: scale(1.02);
     }
 
     .time-btn.unavailable {
@@ -774,6 +774,161 @@ import Layout from '../../layouts/Layout.astro';
     // Supabase config
     const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+    
+    // Default time slots (used if settings not loaded)
+    const defaultDinner1 = ['17:00', '17:30', '18:00', '18:30', '19:00', '19:30'];
+    const defaultDinner2 = ['19:45', '20:00', '20:30', '21:00', '21:30', '22:00'];
+    const defaultLunch = ['12:00', '12:30', '13:00', '13:30', '14:00', '14:30'];
+    let enabledSlots = [...defaultLunch, ...defaultDinner1, ...defaultDinner2];
+    let selectedTime = '18:00';
+    
+    function formatTime12(time24) {
+      const [h, m] = time24.split(':');
+      const hour = parseInt(h);
+      const ampm = hour >= 12 ? 'PM' : 'AM';
+      const hour12 = hour % 12 || 12;
+      return `${hour12}:${m} ${ampm}`;
+    }
+    
+    async function loadTimeSlots() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_time_slots`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.length > 0 && data[0].value) {
+            const parsed = JSON.parse(data[0].value);
+            // Handle both formats: object {time: true/false} or array [time1, time2]
+            if (Array.isArray(parsed)) {
+              enabledSlots = parsed;
+            } else {
+              // Convert object to array of enabled times
+              enabledSlots = Object.entries(parsed)
+                .filter(([time, enabled]) => enabled === true)
+                .map(([time]) => time);
+            }
+          }
+        }
+      } catch (e) {
+        console.error('Error loading time slots:', e);
+      }
+      // Don't re-render - HTML already has the correct buttons
+      // Just hide any buttons that shouldn't be shown based on settings
+      updateTimeButtonVisibility();
+    }
+    
+    function updateTimeButtonVisibility() {
+      // Hide/show buttons based on enabledSlots from settings
+      document.querySelectorAll('.time-btn').forEach(btn => {
+        const time = btn.dataset.time;
+        if (!enabledSlots.includes(time)) {
+          btn.style.display = 'none';
+        } else {
+          btn.style.display = '';
+        }
+      });
+      
+      // Hide empty sections
+      document.querySelectorAll('.time-section').forEach(section => {
+        const visibleButtons = section.querySelectorAll('.time-btn:not([style*="display: none"])');
+        if (visibleButtons.length === 0) {
+          section.style.display = 'none';
+        } else {
+          section.style.display = '';
+        }
+      });
+      
+      // If selected button is hidden, select first visible
+      const selectedBtn = document.querySelector('.time-btn.selected');
+      if (!selectedBtn || selectedBtn.style.display === 'none') {
+        const firstVisible = document.querySelector('.time-btn:not([style*="display: none"])');
+        if (firstVisible) {
+          document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+          firstVisible.classList.add('selected');
+          selectedTime = firstVisible.dataset.time;
+        }
+      }
+    }
+    
+    // Total tables at La Luna (approximate - for availability calculation)
+    const TOTAL_TABLES = 14;
+    
+    // Check if a time slot is full based on reservations
+    function isSlotFull(time, reservations) {
+      if (!reservations || reservations.length === 0) return false;
+      
+      const timeMinutes = parseInt(time.split(':')[0]) * 60 + parseInt(time.split(':')[1]);
+      
+      // Count reservations within 2-hour window of this slot
+      const conflicting = reservations.filter(r => {
+        if (r.status === 'cancelled' || r.status === 'no-show') return false;
+        const rTime = r.time.split(':');
+        const rMinutes = parseInt(rTime[0]) * 60 + parseInt(rTime[1]);
+        return Math.abs(rMinutes - timeMinutes) < 120; // 2-hour window
+      });
+      
+      // Count unique tables booked
+      const bookedTables = new Set();
+      conflicting.forEach(r => {
+        if (r.table_id) {
+          r.table_id.split(',').forEach(t => bookedTables.add(t.trim()));
+        }
+      });
+      
+      return bookedTables.size >= TOTAL_TABLES;
+    }
+    
+    // Update slot availability based on selected date
+    async function updateSlotAvailability() {
+      const dateInput = document.getElementById('date');
+      if (!dateInput || !dateInput.value) return;
+      
+      const reservations = await getReservations(dateInput.value);
+      
+      document.querySelectorAll('.time-btn').forEach(btn => {
+        const time = btn.dataset.time;
+        if (isSlotFull(time, reservations)) {
+          btn.classList.add('unavailable');
+          btn.title = 'Fully booked';
+        } else {
+          btn.classList.remove('unavailable');
+          btn.title = '';
+        }
+      });
+      
+      // If selected time is now unavailable, auto-select first available
+      const selectedBtn = document.querySelector('.time-btn.selected');
+      if (selectedBtn && selectedBtn.classList.contains('unavailable')) {
+        selectedBtn.classList.remove('selected');
+        const firstAvailable = document.querySelector('.time-btn:not(.unavailable)');
+        if (firstAvailable) {
+          firstAvailable.classList.add('selected');
+          selectedTime = firstAvailable.dataset.time;
+        }
+      }
+    }
+    
+    // Attach click handlers to time buttons (initial and dynamic)
+    function attachTimeButtonHandlers() {
+      document.querySelectorAll('.time-btn').forEach(btn => {
+        btn.onclick = () => {
+          if (btn.classList.contains('unavailable')) return;
+          document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          selectedTime = btn.dataset.time;
+        };
+      });
+    }
+    
+    // Initialize with default selection
+    selectedTime = '17:00';
+    
+    // Load time slots from settings, then attach handlers
+    loadTimeSlots().then(() => {
+      attachTimeButtonHandlers();
+      updateSlotAvailability();
+    });
 
     // Get reservations from Supabase
     async function getReservations(date) {
@@ -844,14 +999,7 @@ import Layout from '../../layouts/Layout.astro';
       document.getElementById('largePartyModal').classList.remove('open');
     };
 
-    // Time selection
-    document.querySelectorAll('.time-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (btn.classList.contains('unavailable')) return;
-        document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-      });
-    });
+    // Time selection - handled dynamically in renderTimeGrid()
 
     // Seating selection
     document.querySelectorAll('.seating-btn').forEach(btn => {
@@ -876,25 +1024,46 @@ import Layout from '../../layouts/Layout.astro';
       }
       
       checkAvailability();
+      updateSlotAvailability(); // Check which time slots are full
     });
 
+    // Track if current date is blocked
+    let isDateBlocked = false;
+    
     async function checkAvailability() {
       const selectedDate = dateInput.value;
+      isDateBlocked = false;
       
       // Check if date is blocked
       try {
         const blockRes = await fetch(`/api/blocked-dates?restaurant=laluna`);
         const blockedDates = await blockRes.json();
-        const isBlocked = blockedDates.some(b => b.date === selectedDate);
+        const blocked = blockedDates.find(b => b.date === selectedDate);
         
-        if (isBlocked) {
+        if (blocked) {
+          isDateBlocked = true;
           // Show blocked message and disable all times
           document.querySelectorAll('.time-btn').forEach(btn => {
             btn.classList.add('unavailable');
+            btn.classList.remove('selected');
           });
-          const blockedInfo = blockedDates.find(b => b.date === selectedDate);
-          alert(`Sorry, La Luna is closed on this date for a private event${blockedInfo?.reason ? ': ' + blockedInfo.reason : ''}. Please select another date.`);
+          // Disable continue button
+          const continueBtn = document.querySelector('.continue-btn');
+          if (continueBtn) {
+            continueBtn.disabled = true;
+            continueBtn.style.opacity = '0.5';
+            continueBtn.style.cursor = 'not-allowed';
+          }
+          alert(`Sorry, La Luna is closed on this date for a private event${blocked.reason ? ': ' + blocked.reason : ''}. Please select another date.`);
           return;
+        } else {
+          // Re-enable continue button
+          const continueBtn = document.querySelector('.continue-btn');
+          if (continueBtn) {
+            continueBtn.disabled = false;
+            continueBtn.style.opacity = '1';
+            continueBtn.style.cursor = 'pointer';
+          }
         }
       } catch (e) {
         console.error('Error checking blocked dates:', e);
@@ -952,6 +1121,25 @@ import Layout from '../../layouts/Layout.astro';
       const btn = document.getElementById('confirmBtn');
       if (btn.disabled) return;
       btn.disabled = true;
+      btn.textContent = 'Checking...';;
+      
+      // Double-check if date is blocked (safety net)
+      try {
+        const blockRes = await fetch(`/api/blocked-dates?restaurant=laluna`);
+        const blockedDates = await blockRes.json();
+        const selectedDate = dateInput.value;
+        const blocked = blockedDates.find(b => b.date === selectedDate);
+        if (blocked) {
+          alert(`Sorry, La Luna is closed on ${selectedDate} for a private event${blocked.reason ? ': ' + blocked.reason : ''}. Please select another date.`);
+          btn.disabled = false;
+          btn.textContent = 'Confirm Reservation';
+          showStep(1); // Go back to date selection
+          return;
+        }
+      } catch (e) {
+        console.error('Error checking blocked dates:', e);
+      }
+      
       btn.textContent = 'Saving...';
 
       const name = document.getElementById('name').value.trim();

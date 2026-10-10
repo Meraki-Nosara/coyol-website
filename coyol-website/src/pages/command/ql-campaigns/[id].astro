@@ -1,0 +1,1056 @@
+---
+import CommandLayout from '../../../layouts/CommandLayout.astro';
+import { supabase } from '../../../lib/supabase';
+
+const { id } = Astro.params;
+
+// Fetch campaign
+const { data: campaign, error } = await supabase
+  .from('ql_campaigns')
+  .select('*')
+  .eq('id', id)
+  .single();
+
+if (error || !campaign) {
+  return Astro.redirect('/command/ql-campaigns');
+}
+---
+
+<CommandLayout title={campaign.name} active="ql-campaigns">
+  
+  <div class="page">
+    <header class="page-header">
+      <div>
+        <a href="/command/ql-campaigns" class="back-link">← All Campaigns</a>
+        <h1>{campaign.name}</h1>
+        <span class="subtitle">{campaign.type} · {campaign.status}</span>
+      </div>
+      <div class="header-actions">
+        <button class="btn-edit" id="editCampaignBtn">Edit</button>
+        <button class={`status-badge clickable ${campaign.status}`} id="statusBadgeBtn">{campaign.status}</button>
+      </div>
+    </header>
+
+    <!-- Edit Modal -->
+    <div class="modal" id="editModal">
+      <div class="modal-content">
+        <h2>Edit Campaign</h2>
+        <form id="editForm">
+          <div class="form-group">
+            <label>Campaign Name</label>
+            <input type="text" id="editName" value={campaign.name} required />
+          </div>
+          <div class="form-group">
+            <label>Type</label>
+            <select id="editType">
+              <option value="email" selected={campaign.type === 'email'}>Email Campaign</option>
+              <option value="ads" selected={campaign.type === 'ads'}>Meta Ads Campaign</option>
+              <option value="outreach" selected={campaign.type === 'outreach'}>Direct Outreach</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="editStatus">
+              <option value="draft" selected={campaign.status === 'draft'}>Draft</option>
+              <option value="active" selected={campaign.status === 'active'}>Active</option>
+              <option value="completed" selected={campaign.status === 'completed'}>Completed</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="editDesc">{campaign.description || ''}</textarea>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" id="cancelEditBtn">Cancel</button>
+            <button type="submit" class="btn-primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <span class="stat-value">{campaign.lead_count || 0}</span>
+        <span class="stat-label">Leads</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">{campaign.sent_count || 0}</span>
+        <span class="stat-label">Sent</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">{campaign.response_count || 0}</span>
+        <span class="stat-label">Responses</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">{campaign.lead_count > 0 ? Math.round((campaign.response_count || 0) / campaign.lead_count * 100) : 0}%</span>
+        <span class="stat-label">Response Rate</span>
+      </div>
+    </div>
+
+    {campaign.description && (
+      <div class="description-card">
+        <h3>Description</h3>
+        <p>{campaign.description}</p>
+      </div>
+    )}
+
+    <!-- Email Draft -->
+    <div class="email-draft-card">
+      <div class="draft-header">
+        <h3>Email Draft</h3>
+        <button class="btn-save-draft" id="saveDraftBtn">Save Draft</button>
+      </div>
+      <div class="draft-form">
+        <div class="form-group">
+          <label>Subject Line</label>
+          <input type="text" id="draftSubject" placeholder="e.g., Exclusive Opportunity at Mar Azul" value={campaign.email_subject || ''} />
+        </div>
+        <div class="form-group">
+          <label>Email Body</label>
+          <textarea id="draftBody" rows="6" placeholder="Write your email template here...&#10;&#10;Use [NAME] to personalize with recipient's name.">{campaign.email_body || ''}</textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Leads Section -->
+    <div class="leads-section">
+      <div class="section-header">
+        <h2>Pending ({(campaign.leads || []).filter((l: any) => l.status !== 'sent').length})</h2>
+        <a href="/command/leads" class="btn-add">+ Add More Leads</a>
+      </div>
+
+      {(campaign.leads || []).filter((l: any) => l.status !== 'sent').length === 0 ? (
+        <div class="empty-state">
+          <p>No pending leads. Add more or all have been sent!</p>
+        </div>
+      ) : (
+        <table class="leads-table">
+          <thead>
+            <tr>
+              <th class="col-check"><input type="checkbox" id="selectAllLeads" /></th>
+              <th>Email</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {(campaign.leads || []).filter((l: any) => l.status !== 'sent').map((lead: any) => (
+              <tr>
+                <td class="col-check"><input type="checkbox" class="lead-checkbox" data-email={lead.email} /></td>
+                <td>{lead.email}</td>
+                <td><span class={`lead-status ${lead.status}`}>{lead.status}</span></td>
+                <td>
+                  <button class="btn-small remove-lead" data-email={lead.email}>Remove</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+
+    <!-- Compose Email Action -->
+    {(campaign.leads || []).filter((l: any) => l.status !== 'sent').length > 0 && (
+      <div class="compose-action-bar">
+        <span id="selectedCount">0 leads selected</span>
+        <button class="btn-compose" id="composeEmailBtn" disabled>Copy to Clipboard</button>
+        <button class="btn-primary" id="openMailBtn" disabled>Open in Mail Client</button>
+        <button class="btn-success" id="markSentBtn" disabled>Mark Selected as Sent</button>
+      </div>
+    )}
+
+    <!-- Sent Leads Section -->
+    {(campaign.leads || []).filter((l: any) => l.status === 'sent').length > 0 && (
+      <div class="leads-section sent-section">
+        <div class="section-header">
+          <h2>Sent ({(campaign.leads || []).filter((l: any) => l.status === 'sent').length})</h2>
+        </div>
+        <table class="leads-table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Sent Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {(campaign.leads || []).filter((l: any) => l.status === 'sent').map((lead: any) => (
+              <tr>
+                <td>{lead.email}</td>
+                <td class="sent-date">{lead.sent_at ? new Date(lead.sent_at).toLocaleDateString() : '—'}</td>
+                <td>
+                  <button class="btn-small move-to-pending" data-email={lead.email}>Move to Pending</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+
+    <div class="actions-bar">
+      <button class="btn-danger" id="deleteCampaign">Delete Campaign</button>
+      <button class="btn-primary" id="exportLeads" disabled={!campaign.leads?.length}>Export Leads CSV</button>
+    </div>
+  </div>
+
+</CommandLayout>
+
+<style>
+  .page {
+    padding: 32px 40px;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+  }
+
+  .back-link {
+    font-size: 13px;
+    color: #8a9b8a;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .back-link:hover {
+    color: #C4A67C;
+  }
+
+  .page-header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    color: #8a9b8a;
+    font-size: 14px;
+    text-transform: capitalize;
+  }
+
+  .status-badge {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border: none;
+  }
+
+  .status-badge.clickable {
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .status-badge.clickable:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  .status-badge.draft { background: #2a352a; color: #8a9b8a; }
+  .status-badge.active { background: #1a3a2a; color: #7cb87c; }
+  .status-badge.completed { background: #2a2a3a; color: #8a8ac8; }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: #111611;
+    border: 1px solid #2a352a;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .stat-value {
+    display: block;
+    font-size: 32px;
+    font-weight: 700;
+    color: #C4A67C;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: #6a7b6a;
+    text-transform: uppercase;
+  }
+
+  .description-card {
+    background: #111611;
+    border: 1px solid #2a352a;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .description-card h3 {
+    font-size: 14px;
+    color: #8a9b8a;
+    margin-bottom: 8px;
+  }
+
+  .description-card p {
+    color: #e8e6e1;
+    line-height: 1.5;
+  }
+
+  .leads-section {
+    background: #111611;
+    border: 1px solid #2a352a;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .section-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .btn-add {
+    background: #2a352a;
+    color: #C4A67C;
+    border: 1px solid #3a453a;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    text-decoration: none;
+  }
+
+  .btn-add:hover {
+    background: #3a453a;
+  }
+
+  .leads-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .leads-table th,
+  .leads-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #2a352a;
+  }
+
+  .leads-table th {
+    font-size: 11px;
+    color: #6a7b6a;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .lead-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+
+  .lead-status.pending { background: #2a352a; color: #8a9b8a; }
+  .lead-status.sent { background: #1a3a2a; color: #7cb87c; }
+  .lead-status.responded { background: #3a2a1a; color: #c8a87c; }
+
+  .btn-small {
+    padding: 4px 10px;
+    font-size: 12px;
+    background: transparent;
+    border: 1px solid #3a453a;
+    border-radius: 4px;
+    color: #8a9b8a;
+    cursor: pointer;
+  }
+
+  .btn-small:hover {
+    border-color: #A65D3F;
+    color: #A65D3F;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #6a7b6a;
+  }
+
+  .empty-state .btn-primary {
+    margin-top: 16px;
+  }
+
+  .actions-bar {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #3D4F3D 0%, #4a6040 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .btn-danger {
+    background: transparent;
+    color: #A65D3F;
+    border: 1px solid #A65D3F;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .btn-danger:hover {
+    background: #A65D3F;
+    color: white;
+  }
+
+  .btn-edit {
+    background: #2a352a;
+    color: #C4A67C;
+    border: 1px solid #3a453a;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    margin-right: 12px;
+  }
+
+  .btn-edit:hover {
+    background: #3a453a;
+  }
+
+  .col-check {
+    width: 40px;
+    text-align: center;
+  }
+
+  .lead-checkbox, #selectAllLeads {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #C4A67C;
+  }
+
+  .email-composer {
+    background: #111611;
+    border: 1px solid #2a352a;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .email-composer h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #C4A67C;
+  }
+
+  .composer-form .form-group {
+    margin-bottom: 16px;
+  }
+
+  .composer-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #8a9b8a;
+  }
+
+  .composer-form input,
+  .composer-form textarea {
+    width: 100%;
+    padding: 12px 16px;
+    background: #1a201a;
+    border: 1px solid #2a352a;
+    border-radius: 8px;
+    color: #e8e6e1;
+    font-size: 14px;
+    font-family: inherit;
+  }
+
+  .composer-form textarea {
+    resize: vertical;
+    min-height: 150px;
+  }
+
+  .composer-form input:focus,
+  .composer-form textarea:focus {
+    outline: none;
+    border-color: #C4A67C;
+  }
+
+  .composer-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+  }
+
+  #selectedCount {
+    color: #8a9b8a;
+    font-size: 13px;
+  }
+
+  .email-draft-card {
+    background: #111611;
+    border: 1px solid #3D4F3D;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .draft-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .draft-header h3 {
+    font-size: 16px;
+    color: #C4A67C;
+    margin: 0;
+  }
+
+  .btn-save-draft {
+    background: #2a352a;
+    color: #C4A67C;
+    border: 1px solid #3a453a;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .btn-save-draft:hover {
+    background: #3a453a;
+  }
+
+  .draft-form .form-group {
+    margin-bottom: 16px;
+  }
+
+  .draft-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #8a9b8a;
+  }
+
+  .draft-form input,
+  .draft-form textarea {
+    width: 100%;
+    padding: 12px 16px;
+    background: #1a201a;
+    border: 1px solid #2a352a;
+    border-radius: 8px;
+    color: #e8e6e1;
+    font-size: 14px;
+    font-family: inherit;
+  }
+
+  .draft-form textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  .draft-form input:focus,
+  .draft-form textarea:focus {
+    outline: none;
+    border-color: #C4A67C;
+  }
+
+  .compose-action-bar {
+    background: linear-gradient(135deg, #1a2a1a 0%, #2a3a2a 100%);
+    border: 1px solid #3D4F3D;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .btn-compose {
+    background: #2a352a;
+    color: #C4A67C;
+    border: 1px solid #C4A67C;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-compose:hover:not(:disabled) {
+    background: #3a453a;
+  }
+
+  .btn-compose:disabled,
+  #openMailBtn:disabled,
+  #markSentBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .btn-success {
+    background: linear-gradient(135deg, #1a3a2a 0%, #2a4a3a 100%);
+    color: #7cb87c;
+    border: 1px solid #7cb87c;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-success:hover:not(:disabled) {
+    background: #2a4a3a;
+    color: white;
+  }
+
+  .sent-section {
+    background: linear-gradient(135deg, #111611 0%, #1a201a 100%);
+    border-color: #2a352a;
+  }
+
+  .sent-section .section-header h2 {
+    color: #7cb87c;
+  }
+
+  .sent-date {
+    color: #7cb87c;
+    font-size: 13px;
+  }
+
+  .move-to-pending {
+    color: #C4A67C;
+  }
+
+  .btn-secondary {
+    background: #2a352a;
+    color: #e8e6e1;
+    border: 1px solid #3a453a;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal.open {
+    display: flex;
+  }
+
+  .modal-content {
+    background: #111611;
+    border: 1px solid #2a352a;
+    border-radius: 16px;
+    padding: 32px;
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .modal-content h2 {
+    margin-bottom: 24px;
+    font-size: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #8a9b8a;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    background: #1a201a;
+    border: 1px solid #2a352a;
+    border-radius: 8px;
+    color: #e8e6e1;
+    font-size: 15px;
+  }
+
+  .form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 24px;
+  }
+
+  @media (max-width: 768px) {
+    .stats-row {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
+
+<script define:vars={{ campaignId: id, leads: campaign.leads }}>
+  // Remove lead
+  document.querySelectorAll('.remove-lead').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const email = btn.dataset.email;
+      if (!confirm(`Remove ${email} from campaign?`)) return;
+
+      try {
+        const res = await fetch('/api/ql-campaigns', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            campaignId,
+            leadEmails: [email],
+            action: 'remove'
+          })
+        });
+
+        if (res.ok) {
+          location.reload();
+        } else {
+          alert('Error removing lead');
+        }
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    });
+  });
+
+  // Delete campaign
+  document.getElementById('deleteCampaign')?.addEventListener('click', async () => {
+    if (!confirm('Delete this campaign? This cannot be undone.')) return;
+
+    try {
+      const res = await fetch(`/api/ql-campaigns?id=${campaignId}`, {
+        method: 'DELETE'
+      });
+
+      if (res.ok) {
+        window.location.href = '/command/ql-campaigns';
+      } else {
+        alert('Error deleting campaign');
+      }
+    } catch (e) {
+      alert('Error: ' + e.message);
+    }
+  });
+
+  // Export leads
+  document.getElementById('exportLeads')?.addEventListener('click', () => {
+    if (!leads || leads.length === 0) return;
+
+    const csv = 'Email,Status\n' + leads.map(l => `${l.email},${l.status}`).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'campaign-leads.csv';
+    a.click();
+  });
+
+  // Edit campaign modal
+  const editModal = document.getElementById('editModal');
+  const editBtn = document.getElementById('editCampaignBtn');
+  const cancelEditBtn = document.getElementById('cancelEditBtn');
+  const editForm = document.getElementById('editForm');
+
+  editBtn?.addEventListener('click', () => editModal.classList.add('open'));
+  document.getElementById('statusBadgeBtn')?.addEventListener('click', () => editModal.classList.add('open'));
+  cancelEditBtn?.addEventListener('click', () => editModal.classList.remove('open'));
+  editModal?.addEventListener('click', (e) => {
+    if (e.target === editModal) editModal.classList.remove('open');
+  });
+
+  editForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('editName').value;
+    const type = document.getElementById('editType').value;
+    const status = document.getElementById('editStatus').value;
+    const description = document.getElementById('editDesc').value;
+
+    try {
+      const res = await fetch('/api/ql-campaigns/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: campaignId, name, type, status, description })
+      });
+
+      if (res.ok) {
+        location.reload();
+      } else {
+        alert('Error updating campaign');
+      }
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
+  });
+
+  // ========================================
+  // EMAIL DRAFT & COMPOSE
+  // ========================================
+  const checkboxes = document.querySelectorAll('.lead-checkbox');
+  const selectAllCheckbox = document.getElementById('selectAllLeads');
+  const selectedCountEl = document.getElementById('selectedCount');
+  const composeEmailBtn = document.getElementById('composeEmailBtn');
+  const openMailBtn = document.getElementById('openMailBtn');
+  const draftSubject = document.getElementById('draftSubject');
+  const draftBody = document.getElementById('draftBody');
+  const saveDraftBtn = document.getElementById('saveDraftBtn');
+  
+  let selectedEmails = new Set();
+
+  function updateSelectedCount() {
+    const count = selectedEmails.size;
+    if (selectedCountEl) {
+      selectedCountEl.textContent = `${count} lead${count !== 1 ? 's' : ''} selected`;
+    }
+    const hasDraft = draftSubject?.value && draftBody?.value;
+    if (composeEmailBtn) {
+      composeEmailBtn.disabled = count === 0 || !hasDraft;
+    }
+    if (openMailBtn) {
+      openMailBtn.disabled = count === 0 || !hasDraft;
+    }
+    const markSentBtn = document.getElementById('markSentBtn');
+    if (markSentBtn) {
+      markSentBtn.disabled = count === 0;
+    }
+  }
+
+  // Individual checkbox
+  checkboxes.forEach(cb => {
+    cb.addEventListener('change', () => {
+      const email = cb.dataset.email;
+      if (cb.checked) {
+        selectedEmails.add(email);
+      } else {
+        selectedEmails.delete(email);
+      }
+      updateSelectedCount();
+    });
+  });
+
+  // Select all
+  selectAllCheckbox?.addEventListener('change', () => {
+    checkboxes.forEach(cb => {
+      cb.checked = selectAllCheckbox.checked;
+      const email = cb.dataset.email;
+      if (selectAllCheckbox.checked) {
+        selectedEmails.add(email);
+      } else {
+        selectedEmails.delete(email);
+      }
+    });
+    updateSelectedCount();
+  });
+
+  // Update buttons when draft changes
+  draftSubject?.addEventListener('input', updateSelectedCount);
+  draftBody?.addEventListener('input', updateSelectedCount);
+
+  // Save draft to database
+  saveDraftBtn?.addEventListener('click', async () => {
+    saveDraftBtn.disabled = true;
+    saveDraftBtn.textContent = 'Saving...';
+
+    try {
+      const res = await fetch('/api/ql-campaigns/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: campaignId,
+          email_subject: draftSubject?.value || '',
+          email_body: draftBody?.value || ''
+        })
+      });
+
+      if (res.ok) {
+        saveDraftBtn.textContent = 'Saved!';
+        setTimeout(() => {
+          saveDraftBtn.textContent = 'Save Draft';
+          saveDraftBtn.disabled = false;
+        }, 2000);
+      } else {
+        alert('Error saving draft');
+        saveDraftBtn.textContent = 'Save Draft';
+        saveDraftBtn.disabled = false;
+      }
+    } catch (e) {
+      alert('Error: ' + e.message);
+      saveDraftBtn.textContent = 'Save Draft';
+      saveDraftBtn.disabled = false;
+    }
+  });
+
+  // Open in mail client (mailto link)
+  openMailBtn?.addEventListener('click', () => {
+    if (selectedEmails.size === 0) {
+      alert('Please select at least one lead');
+      return;
+    }
+    if (!draftSubject?.value || !draftBody?.value) {
+      alert('Please fill in the email draft first');
+      return;
+    }
+
+    const emails = [...selectedEmails].join(',');
+    const subject = encodeURIComponent(draftSubject.value);
+    const body = encodeURIComponent(draftBody.value);
+    
+    // Create mailto link
+    const mailtoLink = `mailto:${emails}?subject=${subject}&body=${body}`;
+    
+    // Open mail client
+    window.location.href = mailtoLink;
+  });
+
+  // Copy draft to clipboard (alternative)
+  composeEmailBtn?.addEventListener('click', () => {
+    if (selectedEmails.size === 0) {
+      alert('Please select at least one lead');
+      return;
+    }
+    if (!draftSubject?.value || !draftBody?.value) {
+      alert('Please fill in the email draft first');
+      return;
+    }
+
+    const emails = [...selectedEmails].join(', ');
+    const text = `TO: ${emails}\n\nSUBJECT: ${draftSubject.value}\n\n${draftBody.value}`;
+    
+    navigator.clipboard.writeText(text).then(() => {
+      composeEmailBtn.textContent = 'Copied!';
+      setTimeout(() => {
+        composeEmailBtn.textContent = 'Copy to Clipboard';
+      }, 2000);
+    });
+  });
+
+  // Mark selected leads as sent
+  document.getElementById('markSentBtn')?.addEventListener('click', async () => {
+    if (selectedEmails.size === 0) {
+      alert('Please select leads to mark as sent');
+      return;
+    }
+
+    if (!confirm(`Mark ${selectedEmails.size} lead(s) as sent?`)) return;
+
+    const btn = document.getElementById('markSentBtn');
+    btn.disabled = true;
+    btn.textContent = 'Updating...';
+
+    try {
+      const res = await fetch('/api/ql-campaigns/mark-leads-sent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          campaignId,
+          emails: [...selectedEmails]
+        })
+      });
+
+      if (res.ok) {
+        location.reload();
+      } else {
+        alert('Error marking leads as sent');
+        btn.disabled = false;
+        btn.textContent = 'Mark Selected as Sent';
+      }
+    } catch (e) {
+      alert('Error: ' + e.message);
+      btn.disabled = false;
+      btn.textContent = 'Mark Selected as Sent';
+    }
+  });
+
+  // Move lead back to pending
+  document.querySelectorAll('.move-to-pending').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const email = btn.dataset.email;
+      if (!confirm(`Move ${email} back to pending?`)) return;
+
+      btn.disabled = true;
+      btn.textContent = 'Moving...';
+
+      try {
+        const res = await fetch('/api/ql-campaigns/mark-leads-sent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            campaignId,
+            emails: [email],
+            status: 'pending'
+          })
+        });
+
+        if (res.ok) {
+          location.reload();
+        } else {
+          alert('Error moving lead');
+          btn.disabled = false;
+          btn.textContent = 'Move to Pending';
+        }
+      } catch (e) {
+        alert('Error: ' + e.message);
+        btn.disabled = false;
+        btn.textContent = 'Move to Pending';
+      }
+    });
+  });
+
+  // Initial state
+  updateSelectedCount();
+</script>

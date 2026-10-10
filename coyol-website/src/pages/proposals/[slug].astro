@@ -1,0 +1,17 @@
+---
+import { supabase } from '../../lib/supabase';
+
+const { slug } = Astro.params;
+
+// Fetch offer by slug
+const { data: offer, error } = await supabase
+  .from('generated_offers')
+  .select('html_content')
+  .eq('slug', slug)
+  .single();
+
+if (error || !offer || !offer.html_content) {
+  return Astro.redirect('/command/offers');
+}
+---
+<Fragment set:html={offer.html_content} />

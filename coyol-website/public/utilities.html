@@ -774,7 +774,10 @@
                 <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-500); margin-top: 4px;">por KW</div>
               </div>
             </div>
-            <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); viewIceBill(document.getElementById('billingMonth').value)" style="width: 100%; margin-top: 16px;">Ver Factura ICE</button>
+            <div style="display: flex; gap: 8px; margin-top: 16px;">
+              <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); viewIceBill(document.getElementById('billingMonth').value)" style="flex: 1;">Ver Factura ICE</button>
+              <button class="btn btn-sm" onclick="event.stopPropagation(); deleteIceBill(document.getElementById('billingMonth').value)" style="background: #ef4444; color: white; padding: 8px 12px;" title="Eliminar y subir otra">🗑️</button>
+            </div>
           </div>
         </div>
         
@@ -942,7 +945,10 @@
         </div>
         
         <div class="invoices-section">
-          <div class="invoices-header">Facturas Generadas — <span id="invoiceMonth">Julio 2026</span></div>
+          <div class="invoices-header" style="display:flex;justify-content:space-between;align-items:center;">
+            <span>Facturas Generadas — <span id="invoiceMonth">Julio 2026</span></span>
+            <button class="btn btn-primary btn-sm" onclick="sendAllInvoices()" id="sendAllBtn" style="display:none;">📧 Enviar Todas</button>
+          </div>
           <table class="invoices-table">
             <thead>
               <tr>
@@ -1031,6 +1037,17 @@
     </div>
   </div>
   
+  <!-- File Viewer Modal -->
+  <div id="fileViewerModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);z-index:10000;">
+    <div style="display:flex;flex-direction:column;height:100%;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:#0f172a;">
+        <span id="fileViewerTitle" style="color:white;font-size:16px;font-weight:600;">Documento</span>
+        <button onclick="closeFileViewer()" style="background:#ef4444;color:white;border:none;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">✕ Cerrar y Volver</button>
+      </div>
+      <iframe id="fileViewerFrame" style="flex:1;border:none;background:white;"></iframe>
+    </div>
+  </div>
+
   <!-- Invoice Modal -->
   <div class="modal-overlay" id="invoiceModal">
     <div class="modal">
@@ -1136,33 +1153,31 @@
     }
     
     async function saveInvoiceToSupabase(invoice) {
-      try {
-        await supabaseFetch('utility_invoices', {
-          method: 'POST',
-          body: {
-            id: invoice.id,
-            meter_id: invoice.meterId,
-            month: invoice.month,
-            meter_name: invoice.meterName,
-            owner: invoice.owner,
-            prev_kw: invoice.prevKw,
-            curr_kw: invoice.currKw,
-            consumption: invoice.consumption,
-            percent: invoice.percent,
-            amount: invoice.amount,
-            ice_bill_total: invoice.iceBillTotal,
-            total_kw_all: invoice.totalKwAll,
-            image_url: invoice.imageUrl || null
-          }
-        });
-        
-        await supabaseFetch(`utility_meters?id=eq.${invoice.meterId}`, {
-          method: 'PATCH',
-          body: { prev_kw: invoice.currKw }
-        });
-      } catch (e) {
-        console.error('Save error:', e);
-      }
+      console.log('Saving invoice:', invoice);
+      const result = await supabaseFetch('utility_invoices', {
+        method: 'POST',
+        body: {
+          id: invoice.id,
+          meter_id: invoice.meterId,
+          month: invoice.month,
+          meter_name: invoice.meterName,
+          owner: invoice.owner,
+          prev_kw: invoice.prevKw,
+          curr_kw: invoice.currKw,
+          consumption: invoice.consumption,
+          percent: invoice.percent,
+          amount: invoice.amount,
+          ice_bill_total: invoice.iceBillTotal,
+          total_kw_all: invoice.totalKwAll
+        }
+      });
+      console.log('Invoice saved, result:', result);
+      
+      await supabaseFetch(`utility_meters?id=eq.${invoice.meterId}`, {
+        method: 'PATCH',
+        body: { prev_kw: invoice.currKw }
+      });
+      console.log('Meter updated');
     }
     
     async function saveIceBillToSupabase(month, amount, totalKw, fileName) {
@@ -1255,7 +1270,7 @@
     }
     
     async function loadIceBillForMonth(month) {
-      const date = new Date(month + '-01');
+      const date = new Date(month + '-15T12:00:00'); // Use 15th noon to avoid timezone issues
       const display = date.toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
       
       try {
@@ -1420,7 +1435,7 @@
         const monthInv = invoices.filter(i => i.month === month);
         const totalKw = monthInv.reduce((s, i) => s + i.consumption, 0);
         const totalAmount = monthInv.reduce((s, i) => s + i.amount, 0);
-        const date = new Date(month + '-01');
+        const date = new Date(month + '-15T12:00:00');
         const display = date.toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
         
         document.getElementById('completeMonthName').textContent = display;
@@ -1507,9 +1522,40 @@
     }
     
     function viewIceBill(month) {
-      const ext = 'pdf'; // Default extension
-      const url = getStorageUrl(`ice/${month}.${ext}`);
-      window.open(url, '_blank');
+      const url = getStorageUrl(`ice/${month}.pdf`);
+      openFileViewer(url, `Factura ICE - ${month}`);
+    }
+    
+    async function deleteIceBill(month) {
+      if (!confirm(`¿Eliminar la factura ICE de ${month}? Podrás subir una nueva.`)) return;
+      
+      try {
+        // Delete from database
+        await supabaseFetch(`utility_ice_bills?month=eq.${month}`, { method: 'DELETE' });
+        
+        // Reset UI to upload state
+        document.getElementById('iceDropUpload').style.display = 'block';
+        document.getElementById('iceDropSaved').style.display = 'none';
+        document.getElementById('iceBill').value = '';
+        document.getElementById('iceBillKw').value = '';
+        
+        alert('Factura eliminada. Ahora podés subir una nueva.');
+      } catch (e) {
+        alert('Error eliminando: ' + e.message);
+      }
+    }
+    
+    function openFileViewer(url, title) {
+      document.getElementById('fileViewerTitle').textContent = title || 'Documento';
+      document.getElementById('fileViewerFrame').src = url;
+      document.getElementById('fileViewerModal').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeFileViewer() {
+      document.getElementById('fileViewerModal').style.display = 'none';
+      document.getElementById('fileViewerFrame').src = '';
+      document.body.style.overflow = '';
     }
     
     function updateMeter(i, field, value) { 
@@ -1658,9 +1704,35 @@
     }
     
     async function generateInvoice() {
-      if (!selectedMeter) return;
-      const calc = calculateConsumption();
+      if (!selectedMeter) {
+        alert('Seleccione un medidor primero');
+        return;
+      }
+      
+      const iceBillVal = parseFloat(document.getElementById('iceBill').value) || 0;
+      if (iceBillVal === 0) {
+        alert('Error: Falta la factura ICE del mes. Cargue primero la factura ICE.');
+        return;
+      }
+      
       const month = document.getElementById('billingMonth').value;
+      
+      // Check for duplicate
+      const existing = invoices.find(i => i.meterId === selectedMeter.id && i.month === month);
+      if (existing) {
+        if (!confirm(`Ya existe una factura para ${selectedMeter.displayName} en este mes. ¿Desea reemplazarla?`)) {
+          return;
+        }
+        // Delete existing invoice
+        try {
+          await supabaseFetch(`utility_invoices?id=eq.${existing.id}`, { method: 'DELETE' });
+          invoices = invoices.filter(i => i.id !== existing.id);
+        } catch (e) {
+          console.error('Error deleting existing:', e);
+        }
+      }
+      
+      const calc = calculateConsumption();
       
       // Upload meter image to storage
       const imgSrc = document.getElementById('previewImage').src;
@@ -1676,6 +1748,7 @@
         }
       }
       
+      const prevKwFromInput = parseFloat(document.getElementById('prevReading').value) || 0;
       const invoice = {
         id: 'INV-' + Date.now(),
         meterId: selectedMeter.id,
@@ -1683,7 +1756,7 @@
         owner: selectedMeter.owner,
         email: selectedMeter.email,
         location: selectedMeter.location,
-        prevKw: selectedMeter.prevKw,
+        prevKw: prevKwFromInput,
         currKw: calc.curr,
         consumption: calc.consumption,
         percent: calc.percent,
@@ -1701,7 +1774,13 @@
       const idx = meters.findIndex(m => m.id === selectedMeter.id);
       if (idx >= 0) meters[idx].prevKw = calc.curr;
       
-      saveInvoiceToSupabase(invoice);
+      try {
+        await saveInvoiceToSupabase(invoice);
+      } catch (e) {
+        alert('Error guardando: ' + e.message);
+        console.error('Save failed:', e);
+        return;
+      }
       
       closePreview();
       renderPendingList();
@@ -1726,24 +1805,138 @@
         return;
       }
       
-      tbody.innerHTML = monthInv.map(i => `
+      const meterEmails = {};
+      meters.forEach(m => meterEmails[m.id] = m.email);
+      
+      let hasAnyEmail = false;
+      tbody.innerHTML = monthInv.map(i => {
+        const email = meterEmails[i.meterId] || '';
+        const hasEmail = email && email.includes('@');
+        if (hasEmail) hasAnyEmail = true;
+        return `
         <tr>
           <td><strong style="font-family: 'Cormorant Garamond', Georgia, serif;">${i.meterName}</strong></td>
           <td>${i.owner}</td>
           <td>${i.consumption.toLocaleString()} KW</td>
           <td>${(i.percent * 100).toFixed(2)}%</td>
           <td><strong style="color: var(--keswick);">₡${i.amount.toLocaleString()}</strong></td>
-          <td>
+          <td style="display:flex;gap:8px;">
             <button class="btn btn-outline btn-sm" onclick="viewInvoice('${i.id}')">Ver</button>
+            <button class="btn btn-sm ${hasEmail ? 'btn-primary' : 'btn-outline'}" onclick="sendInvoiceEmail('${i.id}')" ${!hasEmail ? 'disabled title="Sin email configurado"' : ''} style="${!hasEmail ? 'opacity:0.5;cursor:not-allowed;' : ''}">📧</button>
+            <button class="btn btn-sm" onclick="deleteInvoice('${i.id}')" style="background:#ef4444;color:white;" title="Eliminar">🗑️</button>
           </td>
         </tr>
-      `).join('');
+      `}).join('');
+      
+      // Show/hide Send All button
+      document.getElementById('sendAllBtn').style.display = hasAnyEmail ? 'block' : 'none';
     }
     
     function showInvoicePreview(inv) {
-      const monthName = new Date(inv.month + '-01').toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
+      const monthName = new Date(inv.month + '-15T12:00:00').toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
       document.getElementById('invoicePreview').innerHTML = generateInvoiceHTML(inv, monthName);
       document.getElementById('invoiceModal').classList.add('active');
+    }
+    
+    async function sendInvoiceEmail(invoiceId) {
+      const inv = invoices.find(i => i.id === invoiceId);
+      if (!inv) { alert('Factura no encontrada'); return; }
+      
+      const meter = meters.find(m => m.id === inv.meterId);
+      const email = meter?.email;
+      if (!email || !email.includes('@')) {
+        alert('Este medidor no tiene email configurado. Ve a Configuración para agregar el email.');
+        return;
+      }
+      
+      if (!confirm(`Enviar factura a ${email}?`)) return;
+      
+      const monthName = new Date(inv.month + '-15T12:00:00').toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
+      const html = generateInvoiceHTML(inv, monthName);
+      
+      try {
+        const res = await fetch('/api/send-invoice', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to: email,
+            subject: `Factura de Electricidad - ${monthName}`,
+            invoiceHtml: html,
+            meterName: inv.meterName,
+            month: inv.month,
+            amount: inv.amount
+          })
+        });
+        
+        if (res.ok) {
+          alert('✅ Factura enviada a ' + email);
+        } else {
+          const err = await res.json();
+          alert('Error enviando: ' + (err.error || 'Unknown error'));
+        }
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    }
+    
+    async function sendAllInvoices() {
+      const month = document.getElementById('billingMonth').value;
+      const monthInv = invoices.filter(i => i.month === month);
+      
+      const withEmail = monthInv.filter(inv => {
+        const meter = meters.find(m => m.id === inv.meterId);
+        return meter?.email && meter.email.includes('@');
+      });
+      
+      if (withEmail.length === 0) {
+        alert('Ninguna factura tiene email configurado.');
+        return;
+      }
+      
+      if (!confirm(`Enviar ${withEmail.length} facturas por email?`)) return;
+      
+      let sent = 0, failed = 0;
+      for (const inv of withEmail) {
+        try {
+          const meter = meters.find(m => m.id === inv.meterId);
+          const monthName = new Date(inv.month + '-15T12:00:00').toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
+          const html = generateInvoiceHTML(inv, monthName);
+          
+          const res = await fetch('/api/send-invoice', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              to: meter.email,
+              subject: `Factura de Electricidad - ${monthName}`,
+              invoiceHtml: html,
+              meterName: inv.meterName,
+              month: inv.month,
+              amount: inv.amount
+            })
+          });
+          
+          if (res.ok) sent++;
+          else failed++;
+        } catch (e) {
+          failed++;
+        }
+      }
+      
+      alert(`Enviadas: ${sent}\nFallidas: ${failed}`);
+    }
+    
+    async function deleteInvoice(invoiceId) {
+      if (!confirm('¿Eliminar esta factura?')) return;
+      
+      try {
+        await supabaseFetch(`utility_invoices?id=eq.${invoiceId}`, { method: 'DELETE' });
+        invoices = invoices.filter(i => i.id !== invoiceId);
+        renderInvoices();
+        renderPendingList();
+        alert('Factura eliminada');
+      } catch (e) {
+        alert('Error eliminando: ' + e.message);
+      }
     }
     
     function generateInvoiceHTML(inv, monthName) {
@@ -1866,7 +2059,7 @@
               const charged = mInv.reduce((s, i) => s + i.amount, 0);
               const diff = iceBill - charged;
               const isBalanced = Math.abs(diff) < 100;
-              const monthName = new Date(m + '-01').toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
+              const monthName = new Date(m + '-15T12:00:00').toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
               return `
                 <tr style="cursor:pointer;" onclick="showMonthReport('${m}')">
                   <td style="padding:18px 24px;border-bottom:1px solid var(--limestone-light);font-weight:600;font-family:'Cormorant Garamond',Georgia,serif;font-size:16px;">${monthName}</td>
@@ -1894,7 +2087,7 @@
     function showMonthReport(month) {
       const monthInv = invoices.filter(i => i.month === month);
       const container = document.getElementById('reportBody');
-      const monthName = new Date(month + '-01').toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
+      const monthName = new Date(month + '-15T12:00:00').toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
       
       document.getElementById('reportMonthTitle').textContent = monthName;
       

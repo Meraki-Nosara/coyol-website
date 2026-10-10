@@ -1,49 +1,104 @@
 import type { APIRoute } from 'astro';
 
 const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
-const SUPABASE_KEY = 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng';
+const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
 
-// La Luna table configuration with capacities - SERVER-SIDE SOURCE OF TRUTH
-const TABLES: Record<string, { minCovers: number; maxCovers: number; zone: string; priority: number }> = {
-  // Inside
-  'high-1': { minCovers: 2, maxCovers: 4, zone: 'inside', priority: 50 },
-  'high-2': { minCovers: 2, maxCovers: 4, zone: 'inside', priority: 51 },
-  'indoor-sofa-1': { minCovers: 2, maxCovers: 4, zone: 'inside', priority: 52 },
-  'bar': { minCovers: 1, maxCovers: 8, zone: 'inside', priority: 60 },
-  'indoor-sofa-2': { minCovers: 4, maxCovers: 6, zone: 'inside', priority: 53 },
-  'indoor-sofa-3': { minCovers: 4, maxCovers: 6, zone: 'inside', priority: 54 },
-  'indoor-sof': { minCovers: 2, maxCovers: 4, zone: 'inside', priority: 55 },
-  'indoor-sofa-4': { minCovers: 2, maxCovers: 4, zone: 'inside', priority: 56 },
-  'indoor-sofa-5': { minCovers: 2, maxCovers: 4, zone: 'inside', priority: 57 },
+// Combined tables - DISABLED
+// All tables are independent - no automatic blocking
+const COMBINED_TABLES: Record<string, string[]> = {};
+
+// Get all tables that would be blocked by a given table assignment
+function getBlockedTables(tableId: string): string[] {
+  const blocked = new Set<string>();
   
-  // Terraza
-  'terr-1': { minCovers: 2, maxCovers: 4, zone: 'terraza', priority: 40 },
-  'terr-2': { minCovers: 2, maxCovers: 4, zone: 'terraza', priority: 41 },
-  'terr-3': { minCovers: 2, maxCovers: 4, zone: 'terraza', priority: 42 },
-  'terr-4': { minCovers: 4, maxCovers: 6, zone: 'terraza', priority: 43 },
-  'terr-5': { minCovers: 2, maxCovers: 4, zone: 'terraza', priority: 44 },
-  'terr-6': { minCovers: 2, maxCovers: 4, zone: 'terraza', priority: 45 },
+  // Handle multiple tables (comma-separated: "t17,t18,t19" or plus-separated: "t17+t18")
+  const separator = tableId.includes(',') ? ',' : tableId.includes('+') ? '+' : null;
   
-  // Jardin (Garden) - Best tables, priority
-  't17': { minCovers: 2, maxCovers: 4, zone: 'jardin', priority: 10 },
-  't18': { minCovers: 2, maxCovers: 4, zone: 'jardin', priority: 11 },
-  't18-1': { minCovers: 2, maxCovers: 4, zone: 'jardin', priority: 12 },
-  't19': { minCovers: 4, maxCovers: 6, zone: 'jardin', priority: 13 },
-  't20': { minCovers: 2, maxCovers: 4, zone: 'jardin', priority: 14 },
-  't21': { minCovers: 2, maxCovers: 4, zone: 'jardin', priority: 15 },
-  't22': { minCovers: 4, maxCovers: 6, zone: 'jardin', priority: 16 },
-  't23': { minCovers: 2, maxCovers: 4, zone: 'jardin', priority: 17 },
-  't24': { minCovers: 2, maxCovers: 4, zone: 'jardin', priority: 18 },
-  't25': { minCovers: 4, maxCovers: 8, zone: 'jardin', priority: 19 },
-  't26': { minCovers: 4, maxCovers: 6, zone: 'jardin', priority: 20 },
-  't27': { minCovers: 2, maxCovers: 4, zone: 'jardin', priority: 21 },
-  'sofa-16': { minCovers: 2, maxCovers: 4, zone: 'jardin', priority: 5 },
+  if (separator) {
+    tableId.split(separator).forEach(t => {
+      const trimmed = t.trim();
+      if (trimmed) {
+        blocked.add(trimmed);
+        // Also add any related tables from combinations
+        const related = COMBINED_TABLES[trimmed];
+        if (related) related.forEach(r => blocked.add(r));
+      }
+    });
+  } else {
+    // Single table
+    blocked.add(tableId);
+    const related = COMBINED_TABLES[tableId];
+    if (related) related.forEach(r => blocked.add(r));
+  }
   
-  // Fantasma (larger groups)
-  'fan-1': { minCovers: 4, maxCovers: 8, zone: 'fantasma', priority: 30 },
-  'fan-2': { minCovers: 4, maxCovers: 8, zone: 'fantasma', priority: 31 },
-  'fan-19': { minCovers: 2, maxCovers: 4, zone: 'fantasma', priority: 32 },
-};
+  return Array.from(blocked);
+}
+
+// La Luna table configuration - fetched from Supabase floor layout
+let cachedTables: Record<string, { minCovers: number; maxCovers: number; zone: string; priority: number }> | null = null;
+let cacheTime = 0;
+const CACHE_TTL = 60000; // 1 minute cache
+
+async function getTablesFromSupabase(): Promise<Record<string, { minCovers: number; maxCovers: number; zone: string; priority: number }>> {
+  // Return cache if still valid
+  if (cachedTables && Date.now() - cacheTime < CACHE_TTL) {
+    return cachedTables;
+  }
+  
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_floor_layout&select=value`, {
+      headers: { 'apikey': SUPABASE_KEY }
+    });
+    
+    if (res.ok) {
+      const data = await res.json();
+      if (data.length > 0 && data[0].value) {
+        const layout = JSON.parse(data[0].value);
+        const tables: Record<string, { minCovers: number; maxCovers: number; zone: string; priority: number }> = {};
+        
+        // Process each zone
+        const zones = ['inside', 'terraza', 'jardin', 'fantasma'];
+        zones.forEach((zone, zoneIndex) => {
+          const zoneTables = layout[zone] || [];
+          zoneTables.forEach((t: any, i: number) => {
+            tables[t.id] = {
+              minCovers: t.minCovers || 2,
+              maxCovers: t.maxCovers || 4,
+              zone: zone,
+              priority: zoneIndex * 20 + i
+            };
+          });
+        });
+        
+        cachedTables = tables;
+        cacheTime = Date.now();
+        return tables;
+      }
+    }
+  } catch (e) {
+    console.error('Failed to fetch table layout:', e);
+  }
+  
+  // Fallback to defaults if fetch fails
+  return getDefaultTables();
+}
+
+function getDefaultTables(): Record<string, { minCovers: number; maxCovers: number; zone: string; priority: number }> {
+  return {
+    // Fallback hardcoded tables (used if Supabase fails)
+    't17': { minCovers: 2, maxCovers: 4, zone: 'jardin', priority: 10 },
+    't18': { minCovers: 2, maxCovers: 4, zone: 'jardin', priority: 11 },
+    't19': { minCovers: 4, maxCovers: 6, zone: 'jardin', priority: 13 },
+    't20': { minCovers: 2, maxCovers: 4, zone: 'jardin', priority: 14 },
+    't21': { minCovers: 2, maxCovers: 4, zone: 'jardin', priority: 15 },
+    't22': { minCovers: 4, maxCovers: 6, zone: 'jardin', priority: 16 },
+    't23': { minCovers: 2, maxCovers: 4, zone: 'jardin', priority: 17 },
+    't24': { minCovers: 2, maxCovers: 4, zone: 'jardin', priority: 18 },
+    't25': { minCovers: 4, maxCovers: 8, zone: 'jardin', priority: 19 },
+    't26': { minCovers: 6, maxCovers: 10, zone: 'jardin', priority: 20 },
+    't27': { minCovers: 2, maxCovers: 4, zone: 'jardin', priority: 21 },
+  };
+}
 
 function parseTime(timeStr: string): number {
   const [h, m] = timeStr.split(':').map(Number);
@@ -66,7 +121,8 @@ async function getExistingReservations(date: string, excludeId?: string): Promis
   return res.ok ? await res.json() : [];
 }
 
-function findBestTable(guests: number, date: string, time: string, existingReservations: any[], zonePreference?: string): string | null {
+async function findBestTable(guests: number, date: string, time: string, existingReservations: any[], zonePreference?: string): Promise<string | null> {
+  const TABLES = await getTablesFromSupabase();
   const resMinutes = parseTime(time);
   
   // Get all tables sorted by priority
@@ -88,10 +144,14 @@ function findBestTable(guests: number, date: string, time: string, existingReser
     const effectiveMin = table.maxCovers <= 6 ? Math.max(1, table.minCovers - 1) : table.minCovers;
     if (guests < effectiveMin || guests > table.maxCovers) continue;
     
-    // Check for time conflicts (2-hour window)
+    // Check for time conflicts (2-hour window) - including combined tables
+    const tablesToCheck = getBlockedTables(table.id);
     const hasConflict = existingReservations.some(r => {
-      if (r.table_id !== table.id) return false;
       if (r.status === 'cancelled' || r.status === 'no-show') return false;
+      // Check if this reservation's table blocks our target table
+      const reservationBlockedTables = getBlockedTables(r.table_id || '');
+      const hasTableOverlap = tablesToCheck.some(t => reservationBlockedTables.includes(t));
+      if (!hasTableOverlap) return false;
       const rMinutes = parseTime(r.time);
       return Math.abs(rMinutes - resMinutes) < 120;
     });
@@ -104,11 +164,65 @@ function findBestTable(guests: number, date: string, time: string, existingReser
   return null; // No table available
 }
 
-function validateTableAssignment(tableId: string, guests: number): { valid: boolean; error?: string; suggested?: string } {
+function checkTableTimeConflict(tableId: string, date: string, time: string, existingReservations: any[]): { hasConflict: boolean; conflictWith?: any; conflictingTable?: string } {
+  const resMinutes = parseTime(time);
+  const tablesToCheck = getBlockedTables(tableId);
+  
+  for (const r of existingReservations) {
+    // Skip cancelled/no-show
+    if (r.status === 'cancelled' || r.status === 'no-show') continue;
+    
+    // Check if this reservation's table conflicts with our target (including combined tables)
+    const reservationBlockedTables = getBlockedTables(r.table_id || '');
+    const overlappingTables = tablesToCheck.filter(t => reservationBlockedTables.includes(t));
+    if (overlappingTables.length === 0) continue;
+    
+    // Check 2-hour conflict window
+    const rMinutes = parseTime(r.time);
+    if (Math.abs(rMinutes - resMinutes) < 120) {
+      // Return the specific table that has the conflict
+      return { hasConflict: true, conflictWith: r, conflictingTable: r.table_id };
+    }
+  }
+  
+  return { hasConflict: false };
+}
+
+async function validateTableAssignment(tableId: string, guests: number): Promise<{ valid: boolean; error?: string; suggested?: string }> {
+  const TABLES = await getTablesFromSupabase();
+  
+  // Handle multiple tables (comma-separated)
+  if (tableId.includes(',')) {
+    const tables = tableId.split(',').map(t => t.trim()).filter(Boolean);
+    let totalCapacity = 0;
+    
+    for (const t of tables) {
+      const table = TABLES[t];
+      if (!table) {
+        // Allow unknown tables (might be custom/new)
+        totalCapacity += 4; // Assume 4 capacity for unknown
+        continue;
+      }
+      totalCapacity += table.maxCovers;
+    }
+    
+    // For multiple tables, just check if total capacity is enough
+    if (guests > totalCapacity) {
+      return { 
+        valid: false, 
+        error: `Combined tables ${tableId} have max capacity of ${totalCapacity} (you have ${guests} guests)` 
+      };
+    }
+    
+    return { valid: true };
+  }
+  
+  // Single table validation
   const table = TABLES[tableId];
   
   if (!table) {
-    return { valid: false, error: `Unknown table: ${tableId}` };
+    // Allow unknown tables
+    return { valid: true };
   }
   
   // Allow 1 person less than min for small tables
@@ -183,20 +297,35 @@ export const POST: APIRoute = async ({ request }) => {
     const guestCount = parseInt(guests);
     let assignedTable = table_id;
     
-    // If table provided, validate capacity
+    // Get existing reservations for conflict checking
+    const existingReservations = await getExistingReservations(date);
+    
+    // If table provided, check for conflicts FIRST (always reject conflicts)
     if (table_id) {
-      const validation = validateTableAssignment(table_id, guestCount);
+      // Check for time conflicts - this is a hard stop
+      const conflict = checkTableTimeConflict(table_id, date, time, existingReservations);
+      if (conflict.hasConflict) {
+        return new Response(JSON.stringify({
+          error: `Mesa ${conflict.conflictingTable} ya tiene reserva a las ${conflict.conflictWith.time} (${conflict.conflictWith.guest_name}). No se puede asignar.`,
+          validation_failed: true,
+          conflict: conflict.conflictWith
+        }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+      
+      // Capacity validation is informational only - trust manual table selection
+      const validation = await validateTableAssignment(table_id, guestCount);
       if (!validation.valid) {
-        // Don't reject - just log warning and try to find a better table
-        console.warn(`Table validation failed: ${validation.error}`);
-        assignedTable = null; // Will auto-assign below
+        console.warn(`Table capacity warning (ignoring for manual selection): ${validation.error}`);
+        // Keep the manually selected table(s) - don't override to null
       }
     }
     
     // Auto-assign table if not provided or validation failed
     if (!assignedTable) {
-      const existingReservations = await getExistingReservations(date);
-      assignedTable = findBestTable(guestCount, date, time, existingReservations, zone_preference);
+      assignedTable = await findBestTable(guestCount, date, time, existingReservations, zone_preference);
       
       if (!assignedTable) {
         console.log(`No suitable table for ${guestCount} guests on ${date} at ${time} - leaving as TBA`);
@@ -237,6 +366,67 @@ export const POST: APIRoute = async ({ request }) => {
     
     const result = await res.json();
     
+    // Upsert guest record for future autocomplete
+    if (guest_phone || guest_email) {
+      try {
+        const guestPayload = {
+          name: guest_name,
+          phone: guest_phone || null,
+          email: guest_email || null,
+          last_visit: date,
+          updated_at: new Date().toISOString()
+        };
+        
+        // Try to find existing guest by phone or email
+        let existingGuest = null;
+        if (guest_phone) {
+          const phoneCheck = await fetch(`${SUPABASE_URL}/rest/v1/laluna_guests?phone=eq.${encodeURIComponent(guest_phone)}&limit=1`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+          });
+          const phoneResults = await phoneCheck.json();
+          if (phoneResults.length > 0) existingGuest = phoneResults[0];
+        }
+        
+        if (!existingGuest && guest_email) {
+          const emailCheck = await fetch(`${SUPABASE_URL}/rest/v1/laluna_guests?email=eq.${encodeURIComponent(guest_email)}&limit=1`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+          });
+          const emailResults = await emailCheck.json();
+          if (emailResults.length > 0) existingGuest = emailResults[0];
+        }
+        
+        if (existingGuest) {
+          // Update existing guest
+          await fetch(`${SUPABASE_URL}/rest/v1/laluna_guests?id=eq.${existingGuest.id}`, {
+            method: 'PATCH',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              ...guestPayload,
+              visit_count: (existingGuest.visit_count || 0) + 1
+            })
+          });
+        } else {
+          // Create new guest
+          await fetch(`${SUPABASE_URL}/rest/v1/laluna_guests`, {
+            method: 'POST',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ...guestPayload, visit_count: 1 })
+          });
+        }
+      } catch (guestError) {
+        console.error('Failed to upsert guest:', guestError);
+        // Don't fail the reservation if guest upsert fails
+      }
+    }
+    
     return new Response(JSON.stringify(result), {
       status: 201,
       headers: { 'Content-Type': 'application/json' }
@@ -262,25 +452,10 @@ export const PATCH: APIRoute = async ({ request, url }) => {
     const body = await request.json();
     const { table_id, guests, date, time, ...otherFields } = body;
     
-    // If changing table assignment, validate capacity
-    if (table_id && guests) {
-      const guestCount = parseInt(guests);
-      const validation = validateTableAssignment(table_id, guestCount);
-      if (!validation.valid) {
-        return new Response(JSON.stringify({ 
-          error: validation.error,
-          validation_failed: true 
-        }), {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' }
-        });
-      }
-    }
-    
-    // If changing guests but keeping table, validate
-    if (guests && !table_id) {
-      // Get current reservation to check table
-      const currentRes = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${id}&select=table_id`, {
+    // If changing table assignment, validate capacity AND time conflicts
+    if (table_id) {
+      // Get current reservation to check date/time AND guest count
+      const currentRes = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${id}&select=date,time,guests`, {
         headers: {
           'apikey': SUPABASE_KEY,
           'Authorization': `Bearer ${SUPABASE_KEY}`,
@@ -288,21 +463,42 @@ export const PATCH: APIRoute = async ({ request, url }) => {
       });
       const current = await currentRes.json();
       
-      if (current?.[0]?.table_id) {
-        const guestCount = parseInt(guests);
-        const validation = validateTableAssignment(current[0].table_id, guestCount);
+      if (current?.[0]) {
+        // Use guest count from request body, or from current reservation
+        const guestCount = guests ? parseInt(guests) : (current[0].guests || 2);
+        
+        // Validate table capacity - WARNING ONLY, don't block manual staff selection
+        const validation = await validateTableAssignment(table_id, guestCount);
         if (!validation.valid) {
-          // Find a new table for the updated guest count
-          const existingReservations = await getExistingReservations(date || new Date().toISOString().split('T')[0], id);
-          const newTable = findBestTable(guestCount, date || new Date().toISOString().split('T')[0], time || '18:00', existingReservations);
-          
-          if (newTable) {
-            body.table_id = newTable;
-          } else {
-            body.table_id = null; // TBA
-          }
+          console.warn(`Table capacity warning (staff override): ${validation.error}`);
+          // Don't block - staff knows what they're doing
+        }
+        
+        // Check time conflicts - THIS is a hard block
+        const checkDate = date || current[0].date;
+        const checkTime = time || current[0].time;
+        const existingReservations = await getExistingReservations(checkDate, id);
+        const conflict = checkTableTimeConflict(table_id, checkDate, checkTime, existingReservations);
+        
+        if (conflict.hasConflict) {
+          return new Response(JSON.stringify({ 
+            error: `Table ${table_id} already has a reservation at ${conflict.conflictWith.time} (${conflict.conflictWith.name})`,
+            validation_failed: true,
+            conflict: conflict.conflictWith
+          }), {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' }
+          });
         }
       }
+    }
+    
+    // If changing guests but keeping table - TRUST the staff selection
+    // Don't auto-reassign tables, just log a warning if capacity looks off
+    if (guests && !table_id) {
+      const guestCount = parseInt(guests);
+      // Just log for debugging, don't block or reassign
+      console.log(`Guests updated to ${guestCount} without table change - trusting staff selection`);
     }
     
     const res = await fetch(`${SUPABASE_URL}/rest/v1/laluna_reservations?id=eq.${id}`, {
@@ -340,7 +536,8 @@ export const PATCH: APIRoute = async ({ request, url }) => {
 
 // Endpoint to get table configuration (for client sync)
 export const OPTIONS: APIRoute = async () => {
-  return new Response(JSON.stringify({ tables: TABLES }), {
+  const tables = await getTablesFromSupabase();
+  return new Response(JSON.stringify({ tables }), {
     status: 200,
     headers: { 
       'Content-Type': 'application/json',
@@ -349,3 +546,4 @@ export const OPTIONS: APIRoute = async () => {
     }
   });
 };
+// deploy Thu Sep 24 15:56:15 CST 2026

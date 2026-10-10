@@ -13,7 +13,10 @@ import CommandLayout from '../../layouts/CommandLayout.astro';
         <h1>Email Pipeline</h1>
         <span class="subtitle">Restaurant guest marketing pipeline</span>
       </div>
-      <button class="btn-new" onclick="showNewCampaign()">+ New Campaign</button>
+      <div class="header-actions">
+        <a href="/command/qualified/campaigns" class="btn-ql">🏠 QL Lead Campaigns</a>
+        <button class="btn-new" onclick="showNewCampaign()">+ New Campaign</button>
+      </div>
     </header>
 
     <!-- Stats Overview -->
@@ -161,6 +164,21 @@ import CommandLayout from '../../layouts/CommandLayout.astro';
   }
   
   .btn-new:hover { background: #2d3d2d; }
+  
+  .header-actions { display: flex; gap: 12px; align-items: center; }
+  
+  .btn-ql {
+    background: #C4A67C;
+    color: #0a0c08;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  
+  .btn-ql:hover { background: #b39468; }
   
   /* Stats */
   .stats-row {

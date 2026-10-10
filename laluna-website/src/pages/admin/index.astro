@@ -189,10 +189,17 @@ import Layout from '../../layouts/Layout.astro';
               <input type="text" id="newName" class="form-input" placeholder="Name" />
             </div>
             <div class="form-group">
-              <label>Table</label>
-              <select id="newTable" class="form-input">
-                <option value="">Auto-assign</option>
-              </select>
+              <label>Tables (select multiple for large groups)</label>
+              <div class="multi-table-select" id="newTableContainer">
+                <button type="button" class="table-select-btn" onclick="toggleTableDropdown('new')">
+                  <span id="newTableLabel">Select Tables</span>
+                  <span class="dropdown-arrow">▼</span>
+                </button>
+                <div class="table-dropdown" id="newTableDropdown">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+              <input type="hidden" id="newTable" value="" />
             </div>
           </div>
           <div class="form-row">
@@ -1137,6 +1144,22 @@ import Layout from '../../layouts/Layout.astro';
     .btn-primary:hover { background: #8B4D33; }
     .btn-secondary { padding: 0.5rem 1rem; background: var(--cream); color: var(--santorini); border: 1px solid var(--limestone); border-radius: 4px; font-size: 0.8125rem; cursor: pointer; font-family: 'Inter', sans-serif; }
     .btn-secondary:hover { background: var(--parchment); }
+
+    /* Multi-table selector */
+    .multi-table-select { position: relative; }
+    .table-select-btn { width: 100%; padding: 0.5rem; border: 1px solid var(--limestone); border-radius: 4px; background: var(--cream); color: var(--santorini); font-size: 0.875rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .table-select-btn:hover { border-color: var(--keswick); }
+    .dropdown-arrow { font-size: 0.625rem; color: var(--keswick); }
+    .table-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid var(--limestone); border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-height: 200px; overflow-y: auto; display: none; z-index: 100; }
+    .table-dropdown.open { display: block; }
+    .table-option { padding: 0.5rem 0.75rem; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; border-bottom: 1px solid var(--limestone); font-size: 0.8125rem; }
+    .table-option:last-child { border-bottom: none; }
+    .table-option:hover { background: var(--parchment); }
+    .table-option.selected { background: var(--keswick); color: white; }
+    .table-option input[type="checkbox"] { margin: 0; }
+    .table-name { flex: 1; }
+    .table-cap { font-size: 0.6875rem; color: var(--keswick); }
+    .table-option.selected .table-cap { color: var(--limestone); }
   </style>
 
   <script is:inline>
@@ -1263,6 +1286,18 @@ import Layout from '../../layouts/Layout.astro';
       return `${h12}:${m} ${ampm}`;
     }
 
+    function formatTableDisplay(tableId) {
+      if (!tableId) return 'TBA';
+      const tables = tableId.split(',').map(t => t.trim());
+      // Clean up table names (remove 't' prefix if present, capitalize)
+      const names = tables.map(t => {
+        const name = t.replace(/^t/, '').toUpperCase();
+        return name;
+      });
+      if (names.length === 1) return names[0];
+      return names.join(' + ');
+    }
+
     function quickSeat(id) {
       const reservations = getReservations();
       const idx = reservations.findIndex(r => r.id === id);
@@ -1327,7 +1362,7 @@ import Layout from '../../layouts/Layout.astro';
                   <span class="res-name">${res.guestName}</span>
                   <span class="res-meta-inline">
                     <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> ${res.guests}</span>
-                    <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg> ${res.tableId || 'TBA'}</span>
+                    <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg> ${formatTableDisplay(res.tableId)}</span>
                   </span>
                 </div>
                 ${res.specialRequests ? `<div class="res-note">📄 ${res.specialRequests}</div>` : ''}
@@ -1362,7 +1397,12 @@ import Layout from '../../layouts/Layout.astro';
       grid.innerHTML = '';
       
       tables.forEach(table => {
-        const res = reservations.find(r => r.tableId === table.id);
+        // Check for comma-separated table IDs (multi-table support)
+        const res = reservations.find(r => {
+          if (!r.tableId) return false;
+          const assignedTables = r.tableId.split(',').map(t => t.trim());
+          return assignedTables.includes(table.id);
+        });
         const status = res ? res.status : 'available';
         
         const el = document.createElement('div');
@@ -1494,9 +1534,75 @@ import Layout from '../../layouts/Layout.astro';
       });
     });
 
+    // Multi-table selector state
+    let selectedTables = [];
+
+    function toggleTableDropdown(prefix) {
+      const dropdown = document.getElementById(prefix + 'TableDropdown');
+      dropdown.classList.toggle('open');
+    }
+
+    function populateMultiTableDropdown(prefix, preselectedTables = []) {
+      const dropdown = document.getElementById(prefix + 'TableDropdown');
+      const layouts = getLayout();
+      const allTables = [
+        ...(layouts.indoor || []),
+        ...(layouts.patio || []),
+        ...(layouts.garden || [])
+      ];
+      
+      selectedTables = [...preselectedTables];
+      
+      dropdown.innerHTML = allTables.map(t => {
+        const isSelected = selectedTables.includes(t.id);
+        const cap = t.maxCovers || 4;
+        return `<div class="table-option ${isSelected ? 'selected' : ''}" onclick="this.querySelector('input').click();">
+            <input type="checkbox" ${isSelected ? 'checked' : ''} 
+              onclick="event.stopPropagation();"
+              onchange="updateTableSelection('${prefix}', '${t.id}', '${t.name || t.id}', this); this.parentElement.classList.toggle('selected', this.checked);">
+            <span class="table-name">${t.name || t.id.toUpperCase()}</span>
+            <span class="table-cap">(${cap}p)</span>
+          </div>`;
+      }).join('');
+      
+      updateTableLabel(prefix);
+    }
+
+    function updateTableSelection(prefix, tableId, tableName, checkbox) {
+      if (checkbox.checked) {
+        if (!selectedTables.includes(tableId)) {
+          selectedTables.push(tableId);
+        }
+      } else {
+        selectedTables = selectedTables.filter(t => t !== tableId);
+      }
+      updateTableLabel(prefix);
+      document.getElementById(prefix + 'Table').value = selectedTables.join(',');
+    }
+
+    function updateTableLabel(prefix) {
+      const label = document.getElementById(prefix + 'TableLabel');
+      if (selectedTables.length === 0) {
+        label.textContent = 'Select Tables';
+      } else if (selectedTables.length === 1) {
+        label.textContent = '1 table selected';
+      } else {
+        label.textContent = selectedTables.length + ' tables selected';
+      }
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.multi-table-select')) {
+        document.querySelectorAll('.table-dropdown').forEach(d => d.classList.remove('open'));
+      }
+    });
+
     // New reservation modal
     function openNewReservation() {
       document.getElementById('newDate').value = getDateString(currentDate);
+      selectedTables = [];
+      populateMultiTableDropdown('new', []);
       document.getElementById('newResModal').classList.add('open');
     }
 

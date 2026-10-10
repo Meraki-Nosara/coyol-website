@@ -11,24 +11,24 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
     
-    // Use OpenAI Vision API to read the meter
-    const OPENAI_API_KEY = import.meta.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY;
+    // Use OpenRouter Vision API to read the meter
+    const OPENROUTER_API_KEY = import.meta.env.OPENROUTER_API_KEY || process.env.OPENROUTER_API_KEY;
     
-    if (!OPENAI_API_KEY) {
+    if (!OPENROUTER_API_KEY) {
       return new Response(JSON.stringify({ error: 'OCR not configured', reading: null }), { 
         status: 200,
         headers: { 'Content-Type': 'application/json' }
       });
     }
     
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'google/gemini-2.5-flash',
         messages: [
           {
             role: 'user',
@@ -51,7 +51,7 @@ export const POST: APIRoute = async ({ request }) => {
     if (!response.ok) {
       const error = await response.text();
       console.error('OpenAI error:', error);
-      return new Response(JSON.stringify({ error: 'OCR failed', reading: null }), { 
+      return new Response(JSON.stringify({ error: 'OCR failed', detail: error, reading: null }), { 
         status: 200,
         headers: { 'Content-Type': 'application/json' }
       });

@@ -11,19 +11,19 @@ import '../../../styles/coyol-tables.css';
         <img src="/images/coyol-moon-white-real.png" alt="Coyol Restaurant" />
       </div>
       <nav class="sidebar-nav">
-        <a href="/coyol/admin" class="nav-icon" title="Dashboard">
+        <a href="/restaurant/admin" class="nav-icon" title="Dashboard">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
         </a>
-        <a href="/coyol/admin/floor" class="nav-icon" title="Floor Plan">
+        <a href="/restaurant/admin/floor" class="nav-icon" title="Floor Plan">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
         </a>
-        <a href="/coyol/admin/guests" class="nav-icon" title="Guests">
+        <a href="/restaurant/admin/guests" class="nav-icon" title="Guests">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
         </a>
-        <a href="/coyol/admin/gifts" class="nav-icon" title="Gift Cards">
+        <a href="/restaurant/admin/gifts" class="nav-icon" title="Gift Cards">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v10H4V12"></path><path d="M2 7h20v5H2z"></path><path d="M12 22V7"></path><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
         </a>
-        <a href="/coyol/admin/settings" class="nav-icon active" title="Settings">
+        <a href="/restaurant/admin/settings" class="nav-icon active" title="Settings">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
         </a>
       </nav>
@@ -35,7 +35,7 @@ import '../../../styles/coyol-tables.css';
     </aside>
 
     <!-- Main Content -->
-    <main class="main-content" style="padding: 24px;">
+    <main class="main-content" style="padding: 24px; background: #1a1a1a; color: white;">
       <h1 style="color: white; margin-bottom: 24px; font-size: 24px;">Settings</h1>
       
       <!-- Block Dates Section -->
@@ -53,6 +53,20 @@ import '../../../styles/coyol-tables.css';
           <p style="color: #666;">Loading blocked dates...</p>
         </div>
       </div>
+      
+      <!-- Time Slots Section -->
+      <div class="settings-card" style="margin-top: 24px;">
+        <h2>Booking Time Slots</h2>
+        <p style="color: #999; margin-bottom: 16px;">Control which time slots guests can book online. Uncheck times you don't want available.</p>
+        <p style="color: #C4A67C; font-size: 12px; margin-bottom: 16px;">💡 Tip: For 2 seatings, enable only early slots (e.g., 5:30-6:30pm) and late slots (e.g., 8:00-9:00pm)</p>
+        
+        <div id="timeSlotsContainer">
+          <p style="color: #666;">Loading time slots...</p>
+        </div>
+        
+        <button onclick="saveTimeSlots()" class="btn-block" style="margin-top: 16px;">Save Time Slots</button>
+        <span id="timeSlotsStatus" style="color: #4ade80; margin-left: 12px; display: none;">Saved ✓</span>
+      </div>
     </main>
   </div>
 
@@ -60,7 +74,13 @@ import '../../../styles/coyol-tables.css';
     .admin {
       display: flex;
       min-height: 100vh;
-      background: #1a1a1a;
+      background: #1a1a1a !important;
+      color: #ffffff !important;
+    }
+    
+    .main-content {
+      background: #1a1a1a !important;
+      color: #ffffff !important;
     }
     
     .sidebar {
@@ -185,12 +205,12 @@ import '../../../styles/coyol-tables.css';
     }
     
     .blocked-item .date {
-      color: white;
+      color: #ffffff !important;
       font-weight: 600;
     }
     
     .blocked-item .reason {
-      color: #999;
+      color: #cccccc !important;
       font-size: 13px;
     }
     
@@ -213,6 +233,51 @@ import '../../../styles/coyol-tables.css';
       color: #666;
       text-align: center;
       padding: 24px;
+    }
+    
+    /* Time slots styles */
+    .time-slots-section {
+      margin-bottom: 16px;
+    }
+    .time-slots-section h4 {
+      color: #C4A67C;
+      font-size: 13px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .time-slots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 8px;
+    }
+    .time-slot-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      background: #1a1a1a;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .time-slot-toggle:hover {
+      background: #2a2a2a;
+    }
+    .time-slot-toggle input {
+      width: 18px;
+      height: 18px;
+      accent-color: #3D4F3D;
+    }
+    .time-slot-toggle span {
+      color: #ffffff !important;
+      font-size: 14px;
+    }
+    .time-slot-toggle label {
+      color: #ffffff !important;
+    }
+    .time-slot-toggle.disabled span {
+      color: #888888 !important;
     }
   </style>
 
@@ -303,5 +368,113 @@ import '../../../styles/coyol-tables.css';
     
     // Load on page load
     loadBlockedDates();
+    
+    // ===== TIME SLOTS =====
+    const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+    
+    const ALL_TIME_SLOTS = {
+      'Lunch': ['11:30', '12:00', '12:30', '13:00', '13:30', '14:00'],
+      'Dinner': ['17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00']
+    };
+    
+    let timeSlots = {};
+    
+    async function loadTimeSlots() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.coyol_time_slots&select=value`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const data = await res.json();
+        
+        if (data.length > 0 && data[0].value) {
+          timeSlots = JSON.parse(data[0].value);
+        } else {
+          // Default: all enabled
+          Object.values(ALL_TIME_SLOTS).flat().forEach(t => timeSlots[t] = true);
+        }
+        
+        renderTimeSlots();
+      } catch (e) {
+        console.error('Error loading time slots:', e);
+      }
+    }
+    
+    function renderTimeSlots() {
+      const container = document.getElementById('timeSlotsContainer');
+      
+      container.innerHTML = Object.entries(ALL_TIME_SLOTS).map(([section, slots]) => `
+        <div class="time-slots-section">
+          <h4>${section}</h4>
+          <div class="time-slots-grid">
+            ${slots.map(time => {
+              const enabled = timeSlots[time] !== false;
+              const hour = parseInt(time.split(':')[0]);
+              const displayTime = hour > 12 ? `${hour - 12}:${time.split(':')[1]} PM` : (hour === 12 ? `12:${time.split(':')[1]} PM` : `${hour}:${time.split(':')[1]} AM`);
+              return `
+                <label class="time-slot-toggle ${enabled ? '' : 'disabled'}">
+                  <input type="checkbox" data-time="${time}" ${enabled ? 'checked' : ''} onchange="toggleSlot('${time}', this.checked)">
+                  <span>${displayTime}</span>
+                </label>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function toggleSlot(time, enabled) {
+      timeSlots[time] = enabled;
+      document.querySelector(`[data-time="${time}"]`).closest('.time-slot-toggle').classList.toggle('disabled', !enabled);
+    }
+    window.toggleSlot = toggleSlot;
+    
+    async function saveTimeSlots() {
+      const statusEl = document.getElementById('timeSlotsStatus');
+      statusEl.textContent = 'Saving...';
+      statusEl.style.display = 'inline';
+      statusEl.style.color = '#C4A67C';
+      
+      try {
+        // Check if exists
+        const check = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.coyol_time_slots`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const existing = await check.json();
+        
+        const method = existing.length > 0 ? 'PATCH' : 'POST';
+        const url = existing.length > 0 
+          ? `${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.coyol_time_slots`
+          : `${SUPABASE_URL}/rest/v1/restaurant_settings`;
+        
+        const payload = {
+          key: 'coyol_time_slots',
+          value: JSON.stringify(timeSlots),
+          updated_at: new Date().toISOString()
+        };
+        
+        await fetch(url, {
+          method,
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify(payload)
+        });
+        
+        statusEl.textContent = 'Saved \u2713';
+        statusEl.style.color = '#4ade80';
+        setTimeout(() => statusEl.style.display = 'none', 2000);
+      } catch (e) {
+        statusEl.textContent = 'Error saving';
+        statusEl.style.color = '#ff6b6b';
+      }
+    }
+    window.saveTimeSlots = saveTimeSlots;
+    
+    // Load time slots on page load
+    loadTimeSlots();
   </script>
 </Layout>

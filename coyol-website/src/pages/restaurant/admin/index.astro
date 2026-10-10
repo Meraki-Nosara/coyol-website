@@ -24,7 +24,7 @@ import '../../../styles/coyol-tables.css';
     <div class="left-panel">
       <!-- Header -->
       <div class="panel-header">
-        <span class="version-badge">v2.3</span>
+         <span class="version-badge">v3.2</span>
         <button class="btn-new" onclick="openNewReservation()">+</button>
         <button class="btn-walkin" onclick="openWalkin()">Walk-in</button>
         <button class="btn-send-reminders" onclick="sendDayReminders()" title="Email confirmation reminders">
@@ -39,7 +39,7 @@ import '../../../styles/coyol-tables.css';
           <span class="res-count" id="resCount">RESERVATIONS <strong>0</strong></span>
           <span class="waitlist-count">WAITLIST <strong>0</strong></span>
         </div>
-        <input type="text" class="search-input" id="searchInput" placeholder="Search name or code..." autocomplete="off" />
+       <input type="text" class="search-input" id="searchInput" placeholder="Search name or confirmation #..." autocomplete="off" />
       </div>
 
       <!-- Filters -->
@@ -193,16 +193,24 @@ import '../../../styles/coyol-tables.css';
             </div>
           </div>
           <div class="form-row">
-            <div class="form-group flex-2">
+            <div class="form-group flex-2" style="position:relative;">
               <label>Guest Name *</label>
-              <input type="text" id="newName" class="form-input" placeholder="Name" oninput="checkGiftCardMatch(this.value)" />
+              <input type="text" id="newName" class="form-input" placeholder="Start typing to search guests..." oninput="searchGuests(this.value); checkGiftCardMatch(this.value);" autocomplete="off" />
+              <div id="guestSuggestions" class="guest-suggestions" style="display:none;"></div>
               <div id="giftCardAlert" class="gift-match-alert" style="display:none;"></div>
             </div>
             <div class="form-group">
               <label>Table</label>
-              <select id="newTable" class="form-input">
-                <option value="">Auto-assign</option>
-              </select>
+              <div class="multi-table-select" id="newTableContainer">
+                <button type="button" class="table-select-btn" onclick="toggleTableDropdown('new')">
+                  <span id="newTableLabel">Select Tables</span>
+                  <span class="dropdown-arrow">▼</span>
+                </button>
+                <div class="table-dropdown" id="newTableDropdown">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+              <input type="hidden" id="newTable" value="" />
             </div>
           </div>
           <div class="form-row">
@@ -222,6 +230,7 @@ import '../../../styles/coyol-tables.css';
                   <option value="+57" data-flag="🇨🇴">🇨🇴 +57</option>
                   <option value="+81" data-flag="🇯🇵">🇯🇵 +81</option>
                   <option value="+82" data-flag="🇰🇷">🇰🇷 +82</option>
+                  <option value="+48" data-flag="🇵🇱">🇵🇱 +48</option>
                   <option value="+86" data-flag="🇨🇳">🇨🇳 +86</option>
                   <option value="+61" data-flag="🇦🇺">🇦🇺 +61</option>
                   <option value="+31" data-flag="🇳🇱">🇳🇱 +31</option>
@@ -839,6 +848,42 @@ import '../../../styles/coyol-tables.css';
 
     :global(.res-row.cancelled .res-time) {
       color: #999;
+    }
+
+    /* Guest autocomplete suggestions */
+    .guest-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+    .guest-suggestion {
+      padding: 12px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .guest-suggestion:last-child { border-bottom: none; }
+    .guest-suggestion:hover { background: #f5f3ef; }
+    .guest-suggestion .guest-info { flex: 1; }
+    .guest-suggestion .guest-name { font-weight: 600; color: #1a1f16; }
+    .guest-suggestion .guest-details { font-size: 12px; color: #666; margin-top: 2px; }
+    .guest-suggestion .visit-badge {
+      background: #3D4F3D;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
     }
 
     /* Gift card styles */
@@ -1814,6 +1859,7 @@ import '../../../styles/coyol-tables.css';
     .table-option input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--keswick); }
     .table-name { font-weight: 500; }
     .table-cap { font-size: 0.75rem; color: #666; }
+    .table-zone-header { padding: 8px 12px; background: var(--keswick); color: white; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; position: sticky; top: 0; z-index: 1; }
     .phone-input-group { display: flex; gap: 0.5rem; }
     .country-select { width: 90px; padding: 0.5rem; border: 1px solid var(--limestone); border-radius: 4px; font-size: 0.875rem; background: var(--cream); cursor: pointer; }
     .phone-number { flex: 1; }
@@ -1879,7 +1925,7 @@ import '../../../styles/coyol-tables.css';
     const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
     const LAYOUT_KEY = 'coyol_floor_layout';
-    const LAYOUT_VERSION = 'v4-coyol-john-fix'; // Change this to force layout reset
+    const LAYOUT_VERSION = 'v3.1-fix'; // Change this to force layout reset
     
     // ============================================
     // OFFLINE MODE
@@ -2022,12 +2068,15 @@ import '../../../styles/coyol-tables.css';
     function hasGiftCard(guestName) {
       if (!guestName) return false;
       const nameLower = guestName.toLowerCase().trim();
-      return giftCardsCache.some(g => {
+      const found = giftCardsCache.some(g => {
         if (g.status === 'redeemed' || !g.recipient_name) return false;
         const recipientLower = g.recipient_name.toLowerCase().trim();
-        // STRICT MATCH: Only exact full name match
         return recipientLower === nameLower;
       });
+      if (nameLower.includes('marion') || nameLower.includes('peri')) {
+        console.log('[Coyol] hasGiftCard check for:', guestName, '-> found:', found);
+      }
+      return found;
     }
 
     // Get gift card details for a name
@@ -2041,6 +2090,80 @@ import '../../../styles/coyol-tables.css';
         return recipientLower === nameLower;
       });
     }
+    
+    // Format table ID(s) for display - handles multiple tables and cleans up temp IDs
+    function formatTableDisplay(tableIdStr) {
+      if (!tableIdStr) return 'TBA';
+      
+      const layouts = getLayout();
+      const allLayoutTables = [
+        ...(layouts.inside || []),
+        ...(layouts.terraza || []),
+        ...(layouts.jardin || [])
+      ];
+      
+      const tableIds = tableIdStr.split(',').map(t => t.trim());
+      const tableNames = tableIds.map(tid => {
+        const table = allLayoutTables.find(t => t.id.toLowerCase() === tid.toLowerCase());
+        if (table) return table.name;
+        // Fallback: show the ID itself in uppercase (e.g., j4 -> J4)
+        return tid.toUpperCase();
+      });
+      
+      return tableNames.length === 1 ? tableNames[0] : tableNames.join('+');
+    }
+
+    // Guest search for autocomplete
+    let guestSearchTimeout = null;
+    async function searchGuests(query) {
+      const suggestionsDiv = document.getElementById('guestSuggestions');
+      if (!query || query.length < 2) {
+        suggestionsDiv.style.display = 'none';
+        return;
+      }
+      
+      clearTimeout(guestSearchTimeout);
+      guestSearchTimeout = setTimeout(async () => {
+        try {
+          const res = await fetch(`/api/coyol-guests?search=${encodeURIComponent(query)}`);
+          const guests = await res.json();
+          
+          if (guests.length === 0) {
+            suggestionsDiv.style.display = 'none';
+            return;
+          }
+          
+          suggestionsDiv.innerHTML = guests.map(g => `
+            <div class="guest-suggestion" onclick="selectGuest(${JSON.stringify(g).replace(/"/g, '&quot;')})">
+              <div class="guest-info">
+                <div class="guest-name">${g.name}</div>
+                <div class="guest-details">${g.phone || ''} ${g.email ? '• ' + g.email : ''}</div>
+              </div>
+              ${g.visit_count > 1 ? `<span class="visit-badge">${g.visit_count} visits</span>` : ''}
+            </div>
+          `).join('');
+          suggestionsDiv.style.display = 'block';
+        } catch (e) {
+          console.error('Guest search error:', e);
+        }
+      }, 300);
+    }
+    window.searchGuests = searchGuests;
+    
+    function selectGuest(guest) {
+      document.getElementById('newName').value = guest.name;
+      if (guest.phone) document.getElementById('newPhone').value = guest.phone.replace(/^\+\d+/, '');
+      if (guest.email) document.getElementById('newEmail').value = guest.email;
+      document.getElementById('guestSuggestions').style.display = 'none';
+      checkGiftCardMatch(guest.name);
+    }
+    window.selectGuest = selectGuest;
+    
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#newName') && !e.target.closest('#guestSuggestions')) {
+        document.getElementById('guestSuggestions').style.display = 'none';
+      }
+    });
 
     // Check gift card match while typing in new reservation form
     function checkGiftCardMatch(name) {
@@ -2205,19 +2328,17 @@ import '../../../styles/coyol-tables.css';
         
         if (bestTable) {
           try {
-            await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?id=eq.${res.id}`, {
+            // Use API for server-side validation
+            const response = await fetch(`/api/coyol-reservations?id=${res.id}`, {
               method: 'PATCH',
-              headers: {
-                'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`,
-                'Content-Type': 'application/json',
-                'Prefer': 'return=minimal'
-              },
+              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ table_id: bestTable })
             });
-            res.tableId = bestTable;
-            // Track this assignment for the rest of the batch
-            assignedInBatch.set(bestTable, { date: res.date, time: res.time });
+            if (response.ok) {
+              res.tableId = bestTable;
+              // Track this assignment for the rest of the batch
+              assignedInBatch.set(bestTable, { date: res.date, time: res.time });
+            }
           } catch (e) {
             console.error('Auto-assign failed:', e);
           }
@@ -2231,29 +2352,38 @@ import '../../../styles/coyol-tables.css';
 
     // Save new reservation to Supabase
     async function saveReservation(reservation) {
+      const payload = {
+        date: reservation.date,
+        time: reservation.time,
+        guests: reservation.guests,
+        guest_name: reservation.guestName,
+        guest_phone: reservation.guestPhone,
+        guest_email: reservation.guestEmail,
+        table_id: reservation.tableId,
+        zone_preference: reservation.zonePreference,
+        special_requests: reservation.specialRequests,
+        status: reservation.status || 'confirmed'
+      };
+      
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations`, {
+        // Use API endpoint for validation (conflict checking)
+        const res = await fetch('/api/coyol-reservations', {
           method: 'POST',
-          headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': 'application/json',
-            'Prefer': 'return=representation'
-          },
-          body: JSON.stringify({
-            date: reservation.date,
-            time: reservation.time,
-            guests: reservation.guests,
-            guest_name: reservation.guestName,
-            guest_phone: reservation.guestPhone,
-            guest_email: reservation.guestEmail,
-            table_id: reservation.tableId,
-            zone_preference: reservation.zonePreference,
-            special_requests: reservation.specialRequests,
-            status: reservation.status || 'confirmed'
-          })
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
         });
-        return await res.json();
+        const result = await res.json();
+        
+        // Check for validation errors (table conflicts)
+        if (!res.ok) {
+          if (result.validation_failed) {
+            alert(result.error);
+            return null;
+          }
+          throw new Error(result.error || 'Failed to save');
+        }
+        
+        return result;
       } catch (e) {
         console.error('Failed to save reservation:', e);
         throw e;
@@ -2304,42 +2434,43 @@ import '../../../styles/coyol-tables.css';
       const saved = localStorage.getItem(LAYOUT_KEY);
       if (saved) return JSON.parse(saved);
       
-      // Default layouts - Coyol Restaurant
+      // Default layouts - Coyol Restaurant (I=Inside, T=Terraza, J=Jardin)
       return {
         inside: [
-          { id: 't32', name: '32', type: 'round-lg', x: 60, y: 60, minCovers: 4, maxCovers: 6 },
-          { id: 't1', name: '1', type: 'square', x: 150, y: 60, minCovers: 2, maxCovers: 4 },
-          { id: 't34', name: '34', type: 'round-lg', x: 250, y: 60, minCovers: 4, maxCovers: 6 },
-          { id: 't3', name: '3', type: 'square', x: 200, y: 140, minCovers: 2, maxCovers: 4 },
-          { id: 't2', name: '2', type: 'square', x: 300, y: 140, minCovers: 2, maxCovers: 4 },
-          { id: 't4', name: '4', type: 'square', x: 350, y: 60, minCovers: 2, maxCovers: 4 },
-          { id: 'sofa-adent', name: 'Sofa', type: 'sofa', x: 60, y: 220, minCovers: 2, maxCovers: 4 },
-          { id: 'bar-1', name: 'Bar', type: 'square', x: 180, y: 250, minCovers: 2, maxCovers: 2 },
-          { id: 'bar-2', name: 'Bar', type: 'square', x: 230, y: 250, minCovers: 2, maxCovers: 2 },
-          { id: 'bar-3', name: 'Bar', type: 'square', x: 280, y: 250, minCovers: 2, maxCovers: 2 },
+          { id: 'i1', name: 'I1', type: 'square', x: 40, y: 60, minCovers: 2, maxCovers: 4 },
+          { id: 'i2', name: 'I2', type: 'square', x: 40, y: 140, minCovers: 2, maxCovers: 4 },
+          { id: 'i3', name: 'I3', type: 'square', x: 130, y: 60, minCovers: 2, maxCovers: 4 },
+          { id: 'i4', name: 'I4', type: 'square', x: 180, y: 140, minCovers: 2, maxCovers: 4 },
+          { id: 'i5', name: 'I5', type: 'square', x: 240, y: 60, minCovers: 2, maxCovers: 4 },
+          { id: 'i6', name: 'I6', type: 'square', x: 340, y: 60, minCovers: 2, maxCovers: 4 },
+          { id: 'i-sofa', name: 'I-Sofa', type: 'sofa', x: 60, y: 220, minCovers: 2, maxCovers: 4 },
+          { id: 'i-bar1', name: 'I-Bar1', type: 'square', x: 180, y: 250, minCovers: 2, maxCovers: 2 },
+          { id: 'i-bar2', name: 'I-Bar2', type: 'square', x: 240, y: 250, minCovers: 2, maxCovers: 2 },
+          { id: 'i-bar3', name: 'I-Bar3', type: 'square', x: 300, y: 250, minCovers: 2, maxCovers: 2 },
         ],
         terraza: [
-          { id: 't21', name: '21', type: 'square', x: 60, y: 50, minCovers: 2, maxCovers: 4 },
-          { id: 't23', name: '23', type: 'square', x: 140, y: 50, minCovers: 2, maxCovers: 4 },
-          { id: 't24', name: '24', type: 'square', x: 220, y: 50, minCovers: 2, maxCovers: 4 },
-          { id: 't26', name: '26', type: 'square', x: 300, y: 50, minCovers: 2, maxCovers: 4 },
-          { id: 't28', name: '28', type: 'square', x: 380, y: 50, minCovers: 2, maxCovers: 4 },
-          { id: 't20', name: '20', type: 'square', x: 100, y: 150, minCovers: 2, maxCovers: 4 },
-          { id: 't22', name: '22', type: 'square', x: 180, y: 150, minCovers: 2, maxCovers: 4 },
-          { id: 't25', name: '25', type: 'square', x: 260, y: 150, minCovers: 2, maxCovers: 4 },
-          { id: 't27', name: '27', type: 'square', x: 340, y: 150, minCovers: 2, maxCovers: 4 },
+          { id: 't20', name: 'T20', type: 'square', x: 100, y: 150, minCovers: 2, maxCovers: 4 },
+          { id: 't21', name: 'T21', type: 'diamond', x: 60, y: 50, minCovers: 1, maxCovers: 2 },
+          { id: 't22', name: 'T22', type: 'square', x: 180, y: 150, minCovers: 2, maxCovers: 4 },
+          { id: 't23', name: 'T23', type: 'diamond', x: 140, y: 50, minCovers: 1, maxCovers: 2 },
+          { id: 't24', name: 'T24', type: 'diamond', x: 220, y: 50, minCovers: 1, maxCovers: 2 },
+          { id: 't25', name: 'T25', type: 'square', x: 260, y: 150, minCovers: 2, maxCovers: 4 },
+          { id: 't26', name: 'T26', type: 'diamond', x: 300, y: 50, minCovers: 1, maxCovers: 2 },
+          { id: 't27', name: 'T27', type: 'square', x: 340, y: 150, minCovers: 2, maxCovers: 4 },
+          { id: 't28', name: 'T28', type: 'diamond', x: 380, y: 50, minCovers: 1, maxCovers: 2 },
         ],
         jardin: [
-          { id: 't5', name: '5', type: 'square', x: 100, y: 80, minCovers: 2, maxCovers: 4 },
-          { id: 't6', name: '6', type: 'square', x: 170, y: 80, minCovers: 2, maxCovers: 4 },
-          { id: 't7', name: '7', type: 'square', x: 240, y: 80, minCovers: 2, maxCovers: 4 },
-          { id: 't8', name: '8', type: 'square', x: 310, y: 80, minCovers: 2, maxCovers: 4 },
-          { id: 't9', name: '9', type: 'square', x: 380, y: 80, minCovers: 2, maxCovers: 4 },
-          { id: 'sofa-afuer', name: 'Sofa', type: 'sofa', x: 40, y: 40, minCovers: 2, maxCovers: 4 },
-          { id: 't4-j', name: '4', type: 'sofa', x: 40, y: 140, minCovers: 2, maxCovers: 4 },
-          { id: 't3-j', name: '3', type: 'square', x: 40, y: 210, minCovers: 2, maxCovers: 4 },
-          { id: 't2-j', name: '2', type: 'square', x: 40, y: 280, minCovers: 2, maxCovers: 4 },
-          { id: 't1-j', name: '1', type: 'square', x: 40, y: 350, minCovers: 2, maxCovers: 4 },
+          { id: 'j-sofa', name: 'J-Sofa', type: 'sofa', x: 10, y: 10, minCovers: 2, maxCovers: 6 },
+          { id: 'j-sofa1', name: 'J-Sofa1', type: 'round-lg', x: 80, y: 50, minCovers: 3, maxCovers: 6 },
+          { id: 'j1', name: 'J1', type: 'rect', x: 10, y: 440, minCovers: 4, maxCovers: 8 },
+          { id: 'j2', name: 'J2', type: 'rect', x: 10, y: 370, minCovers: 4, maxCovers: 8 },
+          { id: 'j3', name: 'J3', type: 'rect', x: 10, y: 290, minCovers: 4, maxCovers: 8 },
+          { id: 'j4', name: 'J4', type: 'rect', x: 10, y: 220, minCovers: 6, maxCovers: 10 },
+          { id: 'j5', name: 'J5', type: 'rect', x: 0, y: 140, minCovers: 4, maxCovers: 10 },
+          { id: 'j6', name: 'J6', type: 'bar', x: 170, y: 0, minCovers: 6, maxCovers: 12 },
+          { id: 'j7', name: 'J7', type: 'bar', x: 260, y: 0, minCovers: 6, maxCovers: 12 },
+          { id: 'j8', name: 'J8', type: 'bar', x: 350, y: 0, minCovers: 6, maxCovers: 12 },
+          { id: 'j9', name: 'J9', type: 'bar', x: 440, y: 0, minCovers: 6, maxCovers: 12 },
         ]
       };
     }
@@ -2411,6 +2542,7 @@ import '../../../styles/coyol-tables.css';
     async function loadReservations() {
       const dateStr = getDateString(currentDate);
       await Promise.all([fetchReservations(dateStr), loadGiftCards()]);
+      console.log('[Coyol] Gift cards loaded:', giftCardsCache.length, giftCardsCache.map(g => g.recipient_name));
       renderReservationsList();
     }
     
@@ -2459,11 +2591,12 @@ import '../../../styles/coyol-tables.css';
         byShift[shift].push(res);
       });
       
-      // Update counts - use filtered results for stats
-      const filteredCovers = filtered.reduce((sum, r) => sum + (parseInt(r.guests) || 2), 0);
-      document.getElementById('resCount').innerHTML = `RESERVATIONS <strong>${filtered.length}</strong>`;
+      // Update counts - EXCLUDE cancelled/no-show from stats
+      const activeReservations = filtered.filter(r => r.status !== 'cancelled' && r.status !== 'no-show');
+      const filteredCovers = activeReservations.reduce((sum, r) => sum + (parseInt(r.guests) || 2), 0);
+      document.getElementById('resCount').innerHTML = `RESERVATIONS <strong>${activeReservations.length}</strong>`;
       document.getElementById('totalCovers').textContent = filteredCovers;
-      document.getElementById('totalRes').textContent = filtered.length;
+      document.getElementById('totalRes').textContent = activeReservations.length;
       document.getElementById('datePicker').value = getDateString(currentDate);
       
       // Render list
@@ -2473,34 +2606,41 @@ import '../../../styles/coyol-tables.css';
         return;
       }
       
-      list.innerHTML = Object.entries(byShift).map(([shift, items]) => `
+      list.innerHTML = Object.entries(byShift).map(([shift, items]) => {
+        // Exclude cancelled/no-show from shift counts
+        const activeItems = items.filter(r => r.status !== 'cancelled' && r.status !== 'no-show');
+        return `
         <div class="shift-group">
           <div class="shift-header">
             <span>${shift}</span>
             <div class="stats">
-              <span>👥 ${items.reduce((s, r) => s + (parseInt(r.guests) || 2), 0)}</span>
-              <span>🪑 ${items.length}</span>
+              <span>👥 ${activeItems.reduce((s, r) => s + (parseInt(r.guests) || 2), 0)}</span>
+              <span>🪑 ${activeItems.length}</span>
             </div>
           </div>
           ${items.map(res => {
-            const hasGC = hasGiftCard(res.guestName);
+            // Inline gift card check (same as La Luna)
+            const hasGC = giftCardsCache.some(g => {
+              if (g.status === 'redeemed' || !g.recipient_name || !res.guestName) return false;
+              return g.recipient_name.toLowerCase().trim() === res.guestName.toLowerCase().trim();
+            });
             return `
             <div class="res-row ${res.status} ${res.specialRequests ? 'has-note' : ''} ${hasGC ? 'has-gift' : ''}" onclick="selectReservation('${res.id}')">
               <div class="res-time">${formatTime12(res.time)}</div>
               <span class="res-code" title="Confirmation code">${res.id.slice(0,8).toUpperCase()}</span>
-              <span class="res-name" title="${res.guestName}">${hasGC ? '<span class="gift-indicator">GC</span> ' : ''}${res.guestName}</span>
+              <span class="res-name" title="${res.guestName}">${hasGC ? '<span class="gift-indicator">🎁</span> ' : ''}${res.guestName}</span>
               <select class="pax-select-mobile" data-res-id="${res.id}" onclick="event.stopPropagation();" onchange="quickUpdateGuests(this)" title="Guests">
-                ${Array.from({length: 20}, (_, i) => i + 1).map(n => `<option value="${n}" ${res.guests == n ? 'selected' : ''}>${n}p</option>`).join('')}
+                ${Array.from({length: 50}, (_, i) => i + 1).map(n => `<option value="${n}" ${res.guests == n ? 'selected' : ''}>${n}p</option>`).join('')}
               </select>
               <select class="table-select-mobile" data-res-id="${res.id}" onclick="event.stopPropagation();" onchange="quickAssignTable(this)" title="Table">
-                <option value="">${res.tableId ? 'T' + res.tableId.replace('t','').toUpperCase() : 'TBA'}</option>
+                <option value="">${res.tableId ? formatTableDisplay(res.tableId) : 'TBA'}</option>
               </select>
               ${res.guestPhone ? `<a class="whatsapp-icon" href="https://wa.me/${formatPhoneForWhatsApp(res.guestPhone)}?text=${encodeURIComponent(`Good day ${res.guestName.split(' ')[0]}, this is Coyol confirming your table for ${res.guests} on ${new Date(res.date + 'T12:00:00').toLocaleDateString('en-US', {weekday: 'long', month: 'long', day: 'numeric'})} at ${formatTime12(res.time)}. We look forward to welcoming you.`)}" target="_blank" onclick="event.stopPropagation();" title="WhatsApp"><svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>` : ''}
             </div>
             ${res.specialRequests ? `<div class="res-note-row"><span class="res-note">📝 ${res.specialRequests}</span></div>` : ''}
           `;}).join('')}
         </div>
-      `).join('');
+      `}).join('');
     }
 
     // Drag state
@@ -2521,8 +2661,15 @@ import '../../../styles/coyol-tables.css';
       const grid = document.getElementById('floorGrid');
       grid.innerHTML = '';
       
+      // Helper: check if a reservation includes a specific table (handles multi-table, case-insensitive)
+      function resIncludesTable(res, tableId) {
+        if (!res.tableId) return false;
+        const assignedTables = res.tableId.toLowerCase().split(',').map(t => t.trim());
+        return assignedTables.includes(tableId.toLowerCase());
+      }
+      
       tables.forEach(table => {
-        const tableReservationsAll = reservations.filter(r => r.tableId === table.id && r.status !== 'cancelled');
+        const tableReservationsAll = reservations.filter(r => resIncludesTable(r, table.id) && r.status !== 'cancelled');
         const res = tableReservationsAll[0];
         const status = res ? res.status : 'available';
         
@@ -2565,8 +2712,8 @@ import '../../../styles/coyol-tables.css';
           el.style.transform = `rotate(${45 + table.rotation}deg)`;
         }
         
-        // Find ALL reservations for this table today (exclude cancelled)
-        const tableReservations = reservations.filter(r => r.tableId === table.id && r.status !== 'cancelled');
+        // Find ALL reservations for this table today (exclude cancelled) - handles multi-table
+        const tableReservations = reservations.filter(r => resIncludesTable(r, table.id) && r.status !== 'cancelled');
         const resCount = tableReservations.length;
         const nextRes = tableReservations[0]; // First upcoming
         
@@ -2667,18 +2814,28 @@ import '../../../styles/coyol-tables.css';
       if (!tableId || !resId) return;
       
       try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?id=eq.${resId}`, {
+        // Use API endpoint for server-side conflict validation
+        const response = await fetch(`/api/coyol-reservations?id=${resId}`, {
           method: 'PATCH',
           headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': 'application/json',
-            'Prefer': 'return=minimal'
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({ table_id: tableId })
         });
         
-        if (!response.ok) throw new Error('Failed to save');
+        const result = await response.json();
+        
+        if (!response.ok) {
+          // Show conflict error
+          if (result.validation_failed) {
+            alert(result.error);
+          } else {
+            alert('Failed to assign table');
+          }
+          selectEl.value = '';
+          return;
+        }
+        
         await loadReservations();
         renderFloor();
       } catch (e) {
@@ -2832,14 +2989,12 @@ import '../../../styles/coyol-tables.css';
       // Show table assignment status
       const tableInfo = document.getElementById('detailTable');
       if (res.tableId) {
-        // Find table name from layout
-        const layouts = getLayout();
-        let tableName = res.tableId;
-        for (const zone of Object.values(layouts)) {
-          const table = zone.find(t => t.id === res.tableId);
-          if (table) { tableName = table.name; break; }
-        }
-        tableInfo.textContent = `Table ${tableName}`;
+        // Use helper function for consistent display
+        const tableDisplay = formatTableDisplay(res.tableId);
+        const tableCount = res.tableId.split(',').length;
+        const displayText = tableCount === 1 ? `Table ${tableDisplay}` : `Tables ${tableDisplay}`;
+        
+        tableInfo.textContent = displayText;
         tableInfo.className = 'table-badge assigned';
         tableInfo.style.display = 'inline-block';
         document.getElementById('detailStatus').textContent = 'assigned';
@@ -3009,14 +3164,10 @@ import '../../../styles/coyol-tables.css';
       const newTableId = document.getElementById('editTable').value || null;
       
       try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?id=eq.${selectedReservationId}`, {
+        // Use API for server-side conflict validation
+        const response = await fetch(`/api/coyol-reservations?id=${selectedReservationId}`, {
           method: 'PATCH',
-          headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': 'application/json',
-            'Prefer': 'return=minimal'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             date: newDate,
             time: newTime,
@@ -3030,7 +3181,15 @@ import '../../../styles/coyol-tables.css';
           })
         });
         
-        if (!response.ok) throw new Error('Failed to update');
+        const result = await response.json();
+        
+        if (!response.ok) {
+          if (result.validation_failed) {
+            alert(result.error);
+            return;
+          }
+          throw new Error('Failed to update');
+        }
         
         // Close edit modal and refresh
         document.getElementById('editResModal')?.classList.remove('open');
@@ -3242,18 +3401,25 @@ import '../../../styles/coyol-tables.css';
       }
       
       try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?id=eq.${assigningReservationId}`, {
+        // Use API endpoint for server-side conflict validation
+        const response = await fetch(`/api/coyol-reservations?id=${assigningReservationId}`, {
           method: 'PATCH',
           headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': 'application/json',
-            'Prefer': 'return=minimal'
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({ table_id: tableId })
         });
         
-        if (!response.ok) throw new Error('Failed to save');
+        const result = await response.json();
+        
+        if (!response.ok) {
+          if (result.validation_failed) {
+            alert(result.error);
+          } else {
+            alert('Failed to assign table');
+          }
+          return;
+        }
         
         // Reset assignment mode
         isAssigningTable = false;
@@ -3440,25 +3606,12 @@ import '../../../styles/coyol-tables.css';
 
     // Populate table dropdown for new reservation modal
     function populateTableDropdown(preselectedTableId = null) {
-      const tableSelect = document.getElementById('newTable');
-      const layouts = getLayout();
-      const allTables = [...(layouts.inside || []), ...(layouts.jardin || []), ...(layouts.terraza || [])];
-      
-      tableSelect.innerHTML = '<option value="">Auto-assign</option>';
-      allTables.forEach(t => {
-        const capacity = t.maxCovers || 4;
-        const opt = document.createElement('option');
-        opt.value = t.id;
-        opt.textContent = `${t.name} (${capacity}p)`;
-        tableSelect.appendChild(opt);
-      });
-      
-      if (preselectedTableId) {
-        tableSelect.value = preselectedTableId;
-      }
+      // Use multi-table dropdown for new reservations
+      const preselected = preselectedTableId ? [preselectedTableId] : [];
+      populateMultiTableDropdown('new', preselected);
     }
 
-    // Multi-table selection for large groups
+    // Multi-table selection for large groups (synced with La Luna)
     let selectedTables = [];
     
     function toggleTableDropdown(prefix) {
@@ -3475,8 +3628,10 @@ import '../../../styles/coyol-tables.css';
         selectedTables = selectedTables.filter(t => t !== tableId);
       }
       
+      // Update hidden input with comma-separated values
       document.getElementById(prefix + 'Table').value = selectedTables.join(',');
       
+      // Update button label
       const label = document.getElementById(prefix + 'TableLabel');
       if (selectedTables.length === 0) {
         label.textContent = 'Select Tables';
@@ -3490,26 +3645,43 @@ import '../../../styles/coyol-tables.css';
     function populateMultiTableDropdown(prefix, preselectedTables = []) {
       const dropdown = document.getElementById(prefix + 'TableDropdown');
       const layouts = getLayout();
-      const allTables = [
-        ...(layouts.inside || []),
-        ...(layouts.terraza || []),
-        ...(layouts.jardin || [])
-      ];
       
-      selectedTables = [...preselectedTables];
+      // Helper to extract numeric part for sorting
+      function getTableNumber(name) {
+        const match = (name || '').match(/\d+/);
+        return match ? parseInt(match[0]) : 999;
+      }
       
-      dropdown.innerHTML = allTables.map(t => {
-        const isSelected = selectedTables.includes(t.id);
-        const cap = t.maxCovers || t.capacity || 4;
-        return `<div class="table-option ${isSelected ? 'selected' : ''}" onclick="this.querySelector('input').click();">
-            <input type="checkbox" ${isSelected ? 'checked' : ''} 
-              onclick="event.stopPropagation();"
-              onchange="updateTableSelection('${prefix}', '${t.id}', '${t.name || t.id}', this); this.parentElement.classList.toggle('selected', this.checked);">
-            <span class="table-name">${t.name || t.id.toUpperCase()}</span>
-            <span class="table-cap">(${cap}p)</span>
-          </div>`;
-      }).join('');
+      // Sort tables within each zone by numeric value
+      function sortTables(tables) {
+        return [...tables].sort((a, b) => getTableNumber(a.name) - getTableNumber(b.name));
+      }
       
+      // Build grouped and sorted HTML
+      const zones = [
+        { name: 'Inside', tables: sortTables(layouts.inside || []) },
+        { name: 'Terraza', tables: sortTables(layouts.terraza || []) },
+        { name: 'Jardin', tables: sortTables(layouts.jardin || []) }
+      ].filter(z => z.tables.length > 0);
+      
+      selectedTables = preselectedTables;
+      
+      dropdown.innerHTML = zones.map(zone => `
+        <div class="table-zone-header">${zone.name}</div>
+        ${zone.tables.map(t => {
+          const isSelected = selectedTables.includes(t.id);
+          const cap = t.maxCovers || t.capacity || 4;
+          return `<div class="table-option ${isSelected ? 'selected' : ''}" onclick="this.querySelector('input').click();">
+              <input type="checkbox" ${isSelected ? 'checked' : ''} 
+                onclick="event.stopPropagation();"
+                onchange="updateTableSelection('${prefix}', '${t.id}', '${t.name || t.id}', this); this.parentElement.classList.toggle('selected', this.checked);">
+              <span class="table-name">${t.name || t.id.toUpperCase()}</span>
+              <span class="table-cap">(${cap}p)</span>
+            </div>`;
+        }).join('')}
+      `).join('');
+      
+      // Update label
       const label = document.getElementById(prefix + 'TableLabel');
       if (selectedTables.length === 0) {
         label.textContent = 'Select Tables';
@@ -3517,6 +3689,7 @@ import '../../../styles/coyol-tables.css';
         label.textContent = selectedTables.length + ' table(s) selected';
       }
       
+      // Update hidden input
       document.getElementById(prefix + 'Table').value = selectedTables.join(',');
     }
     
@@ -3624,7 +3797,8 @@ import '../../../styles/coyol-tables.css';
       };
       
       try {
-        await saveReservation(reservation);
+        const result = await saveReservation(reservation);
+        if (!result) return; // Validation error already shown
         closeWalkinModal();
         await loadReservations();
         renderFloor();
@@ -3687,7 +3861,13 @@ import '../../../styles/coyol-tables.css';
       };
       
       try {
-        await saveReservation(reservation);
+        const result = await saveReservation(reservation);
+        if (!result) {
+          // Validation error already shown
+          isSavingReservation = false;
+          if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Save'; }
+          return;
+        }
         closeModal();
         await loadReservations();
         renderFloor();

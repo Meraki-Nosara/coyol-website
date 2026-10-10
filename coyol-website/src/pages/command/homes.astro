@@ -1,0 +1,605 @@
+---
+import { supabase } from '../../lib/supabase';
+import CommandLayout from '../../layouts/CommandLayout.astro';
+
+// Fetch all house models
+const { data: models } = await supabase
+  .from('house_models')
+  .select('*')
+  .order('interior_sqm');
+---
+
+<CommandLayout title="House Models">
+  <div class="homes-page">
+    <div class="page-header">
+      <h1>House Models</h1>
+      <button class="btn-primary" id="addHomeBtn">+ Add Home</button>
+    </div>
+
+    <div class="homes-grid">
+      {models?.map(model => (
+        <div class="home-card" data-id={model.id}>
+          <div class="home-image">
+            {model.render_url ? (
+              <img src={model.render_url} alt={model.name} />
+            ) : (
+              <div class="no-image">No Image</div>
+            )}
+            {model.is_turnkey && (
+              <span class="turnkey-badge">TURNKEY</span>
+            )}
+          </div>
+          <div class="home-info">
+            <h3>{model.name}</h3>
+            <p class="home-desc">{model.description || 'No description'}</p>
+            <div class="home-specs">
+              <span class="spec">{model.interior_sqm}m² indoor</span>
+              <span class="spec">{model.covered_terrace_sqm}m² covered</span>
+              <span class="spec">{model.pool_sqm}m² pool</span>
+            </div>
+            {model.bedrooms && (
+              <div class="home-beds">
+                <span>{model.bedrooms} BR</span>
+                {model.bathrooms && <span> · {model.bathrooms} BA</span>}
+              </div>
+            )}
+          </div>
+          <div class="home-actions">
+            <label class="turnkey-toggle">
+              <input 
+                type="checkbox" 
+                class="turnkey-checkbox" 
+                data-id={model.id}
+                checked={model.is_turnkey}
+              />
+              <span class="toggle-label">Turnkey</span>
+            </label>
+            <button class="btn-edit" data-id={model.id}>Edit</button>
+            <button class="btn-delete" data-id={model.id}>Delete</button>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div class="modal" id="homeModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modalTitle">Add House Model</h2>
+          <button class="modal-close" id="closeModal">&times;</button>
+        </div>
+        <form id="homeForm">
+          <input type="hidden" id="homeId" />
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" id="homeName" required placeholder="Casa Example" />
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <input type="text" id="homeDesc" placeholder="3BR tropical modern" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Bedrooms</label>
+              <input type="number" id="homeBedrooms" min="1" max="10" />
+            </div>
+            <div class="form-group">
+              <label>Bathrooms</label>
+              <input type="number" id="homeBathrooms" min="1" max="10" step="0.5" />
+            </div>
+          </div>
+
+          <div class="form-section-title">Areas (m²)</div>
+          <div class="form-row four-col">
+            <div class="form-group">
+              <label>Interior</label>
+              <input type="number" id="homeInterior" required min="0" step="0.5" />
+            </div>
+            <div class="form-group">
+              <label>Covered Terrace</label>
+              <input type="number" id="homeCovered" min="0" step="0.5" />
+            </div>
+            <div class="form-group">
+              <label>Open Terrace</label>
+              <input type="number" id="homeOpen" min="0" step="0.5" />
+            </div>
+            <div class="form-group">
+              <label>Pool</label>
+              <input type="number" id="homePool" min="0" step="0.5" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group full">
+              <label>Render URL</label>
+              <input type="url" id="homeRender" placeholder="https://coyolnosara.com/images/homes/..." />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group full">
+              <label>Floorplan URL</label>
+              <input type="url" id="homeFloorplan" placeholder="https://coyolnosara.com/images/homes/.../floorplan.jpg" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label class="checkbox-group">
+              <input type="checkbox" id="homeTurnkey" />
+              <span>Mark as Turnkey (built home — 25% premium)</span>
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
+            <button type="submit" class="btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .homes-page {
+      padding: 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .page-header h1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .btn-primary {
+      background: #3D4F3D;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #2d3d2d;
+    }
+
+    .homes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .home-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .home-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    }
+
+    .home-image {
+      position: relative;
+      height: 180px;
+      background: #f0f0f0;
+    }
+
+    .home-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .no-image {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #999;
+      font-size: 14px;
+    }
+
+    .turnkey-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #3D4F3D;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .home-info {
+      padding: 16px;
+    }
+
+    .home-info h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #1a1a1a;
+    }
+
+    .home-desc {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 12px;
+    }
+
+    .home-specs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .spec {
+      background: #f5f5f5;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #555;
+    }
+
+    .home-beds {
+      font-size: 13px;
+      color: #888;
+    }
+
+    .home-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-top: 1px solid #eee;
+      background: #fafafa;
+    }
+
+    .turnkey-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .turnkey-checkbox {
+      width: 18px;
+      height: 18px;
+      accent-color: #3D4F3D;
+    }
+
+    .toggle-label {
+      font-size: 13px;
+      color: #555;
+    }
+
+    .btn-edit, .btn-delete {
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-edit {
+      background: #e8e8e8;
+      color: #333;
+    }
+
+    .btn-edit:hover {
+      background: #ddd;
+    }
+
+    .btn-delete {
+      background: #fee;
+      color: #c00;
+    }
+
+    .btn-delete:hover {
+      background: #fdd;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .modal-header h2 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #999;
+    }
+
+    #homeForm {
+      padding: 24px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form-row.four-col {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      font-weight: 500;
+      color: #555;
+    }
+
+    .form-group input {
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #3D4F3D;
+    }
+
+    .form-section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 20px 0 12px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .checkbox-group input {
+      width: 18px;
+      height: 18px;
+      accent-color: #3D4F3D;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+      background: #e5e5e5;
+    }
+
+    @media (max-width: 600px) {
+      .form-row, .form-row.four-col {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script>
+    const modal = document.getElementById('homeModal');
+    const form = document.getElementById('homeForm');
+    const modalTitle = document.getElementById('modalTitle');
+    
+    // Open modal for new home
+    document.getElementById('addHomeBtn')?.addEventListener('click', () => {
+      modalTitle.textContent = 'Add House Model';
+      form.reset();
+      document.getElementById('homeId').value = '';
+      modal.classList.add('active');
+    });
+
+    // Close modal
+    document.getElementById('closeModal')?.addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+
+    document.getElementById('cancelBtn')?.addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+
+    // Close on backdrop click
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) modal.classList.remove('active');
+    });
+
+    // Edit buttons
+    document.querySelectorAll('.btn-edit').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.dataset.id;
+        const response = await fetch(`/api/house-models?id=${id}`);
+        const model = await response.json();
+        
+        if (model) {
+          modalTitle.textContent = 'Edit House Model';
+          document.getElementById('homeId').value = model.id;
+          document.getElementById('homeName').value = model.name || '';
+          document.getElementById('homeDesc').value = model.description || '';
+          document.getElementById('homeBedrooms').value = model.bedrooms || '';
+          document.getElementById('homeBathrooms').value = model.bathrooms || '';
+          document.getElementById('homeInterior').value = model.interior_sqm || '';
+          document.getElementById('homeCovered').value = model.covered_terrace_sqm || '';
+          document.getElementById('homeOpen').value = model.open_terrace_sqm || '';
+          document.getElementById('homePool').value = model.pool_sqm || '';
+          document.getElementById('homeRender').value = model.render_url || '';
+          document.getElementById('homeFloorplan').value = model.floorplan_url || '';
+          document.getElementById('homeTurnkey').checked = model.is_turnkey || false;
+          modal.classList.add('active');
+        }
+      });
+    });
+
+    // Delete buttons
+    document.querySelectorAll('.btn-delete').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Delete this house model?')) return;
+        
+        const id = btn.dataset.id;
+        const response = await fetch('/api/house-models', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+        
+        if (response.ok) {
+          location.reload();
+        } else {
+          alert('Failed to delete');
+        }
+      });
+    });
+
+    // Turnkey toggles
+    document.querySelectorAll('.turnkey-checkbox').forEach(checkbox => {
+      checkbox.addEventListener('change', async () => {
+        const id = checkbox.dataset.id;
+        const isTurnkey = checkbox.checked;
+        
+        await fetch('/api/house-models', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, is_turnkey: isTurnkey })
+        });
+        
+        // Update badge
+        const card = checkbox.closest('.home-card');
+        const existingBadge = card.querySelector('.turnkey-badge');
+        if (isTurnkey && !existingBadge) {
+          const badge = document.createElement('span');
+          badge.className = 'turnkey-badge';
+          badge.textContent = 'TURNKEY';
+          card.querySelector('.home-image').appendChild(badge);
+        } else if (!isTurnkey && existingBadge) {
+          existingBadge.remove();
+        }
+      });
+    });
+
+    // Form submit
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const id = document.getElementById('homeId').value;
+      const data = {
+        name: document.getElementById('homeName').value,
+        description: document.getElementById('homeDesc').value || null,
+        bedrooms: parseInt(document.getElementById('homeBedrooms').value) || null,
+        bathrooms: parseFloat(document.getElementById('homeBathrooms').value) || null,
+        interior_sqm: parseFloat(document.getElementById('homeInterior').value) || null,
+        covered_terrace_sqm: parseFloat(document.getElementById('homeCovered').value) || null,
+        open_terrace_sqm: parseFloat(document.getElementById('homeOpen').value) || null,
+        pool_sqm: parseFloat(document.getElementById('homePool').value) || null,
+        render_url: document.getElementById('homeRender').value || null,
+        floorplan_url: document.getElementById('homeFloorplan').value || null,
+        is_turnkey: document.getElementById('homeTurnkey').checked
+      };
+
+      const method = id ? 'PUT' : 'POST';
+      if (id) data.id = id;
+
+      const response = await fetch('/api/house-models', {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        location.reload();
+      } else {
+        alert('Failed to save');
+      }
+    });
+  </script>
+</CommandLayout>

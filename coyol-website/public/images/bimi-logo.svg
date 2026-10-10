@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.2" baseProfile="tiny-ps" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <title>Coyol Group</title>
+  <!-- Background -->
+  <rect width="512" height="512" fill="#1A1F16"/>
+  <!-- Stylized C for Coyol -->
+  <path d="M256 96c-88.4 0-160 71.6-160 160s71.6 160 160 160c44.2 0 84.2-17.9 113.1-46.9l-42.4-42.4c-18.4 18.4-43.8 29.8-70.7 29.8-55.2 0-100-44.8-100-100s44.8-100 100-100c26.9 0 52.3 11.4 70.7 29.8l42.4-42.4C340.2 113.9 300.2 96 256 96z" fill="#C4A67C"/>
+  <!-- Text: COYOL -->
+  <text x="256" y="440" font-family="sans-serif" font-size="48" font-weight="600" fill="#C4A67C" text-anchor="middle" letter-spacing="8">COYOL</text>
+</svg>

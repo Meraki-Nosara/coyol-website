@@ -1,0 +1,104 @@
+{
+  "lastCheck": "2026-09-01",
+  "nextFollowUp": "2026-09-03",
+  "tasks": [
+    {
+      "id": "finca-avilas",
+      "name": "Finca Avilas - Información Posesoria",
+      "assignees": ["Andrea", "Anlly"],
+      "deadline": null,
+      "status": "waiting-for-dates",
+      "subtasks": [
+        {"item": "Comisión INDER", "status": "pending"},
+        {"item": "Oficio a Catastro", "status": "pending"},
+        {"item": "Certificación Estudio de Suelo", "status": "pending"},
+        {"item": "Punto #4 resolución", "status": "pending"},
+        {"item": "Domicilios de colindantes", "status": "pending"}
+      ],
+      "lastContact": "2026-09-01",
+      "notes": "Waiting for meeting date with Andrea"
+    },
+    {
+      "id": "registro-nacional",
+      "name": "Registro Nacional - Modificaciones Mar Azul",
+      "assignees": ["Alessia", "Anlly"],
+      "deadline": null,
+      "status": "waiting-for-dates",
+      "subtasks": [
+        {"item": "Modificaciones lotes 21,32,33,34,35", "status": "pending"},
+        {"item": "Registro servidumbre", "status": "pending"}
+      ],
+      "lastContact": "2026-09-01",
+      "notes": "Approved in 2024 assembly, all institutional approvals done"
+    },
+    {
+      "id": "jcb-license",
+      "name": "Licencia JCB",
+      "assignees": ["Anlly"],
+      "deadline": null,
+      "status": "waiting-for-dates",
+      "subtasks": [
+        {"item": "Confirm expiration date", "status": "pending"},
+        {"item": "Confirm renewal requirements", "status": "pending"},
+        {"item": "Submit renewal", "status": "pending"}
+      ],
+      "lastContact": "2026-09-01",
+      "notes": "Almost lost license before due to poor follow-up"
+    }
+  ],
+  "devWorkflow": [
+    {
+      "person": "Milagro",
+      "email": "design@nosaraconstruction.com",
+      "role": "Arquitecta",
+      "pendingDeliverables": ["Casa Cacao planos/renders", "Casa Luz planos/renders", "Casa Lefki (confirm changes)", "Casa Nest renders"],
+      "lastContact": "2026-09-01",
+      "deadlines": null,
+      "status": "waiting-for-dates"
+    },
+    {
+      "person": "Jorge",
+      "email": "jorge.dfcr@gmail.com",
+      "role": "Ing. Civil",
+      "pendingDeliverables": ["Casa Cacao estructural", "Casa Luz estructural", "Casa Lefki estructural"],
+      "lastContact": "2026-08-31",
+      "deadlines": {"Casa Cacao": "2026-09-06"},
+      "status": "in-progress",
+      "notes": "Working on Cacao, expects to finish this week. Waiting on Milagro for Lefki."
+    },
+    {
+      "person": "Gustavo",
+      "email": "atavoc27@gmail.com", 
+      "role": "Ing. Electromecánico",
+      "pendingDeliverables": ["Casa Cacao electromecánico", "Casa Luz electromecánico", "Casa Lefki electromecánico"],
+      "lastContact": "2026-09-01",
+      "deadlines": null,
+      "status": "waiting-for-dates"
+    }
+  ],
+  "reminders": [
+    {
+      "id": "supabase-pro",
+      "title": "Upgrade Supabase to Pro",
+      "deadline": "2026-10-15",
+      "notes": "Free tier warning received Sep 16. Fair Use Policy kicks in Oct 17. Cost: ~$25/mo",
+      "status": "pending"
+    }
+  ],
+  "adminTasks": [
+    {
+      "person": "Anlly",
+      "email": "info@nosaraconstruction.com",
+      "lastContact": "2026-09-01",
+      "status": "waiting-response",
+      "pendingResponse": true
+    },
+    {
+      "person": "Alessia",
+      "email": "alessia.aguirre@gmail.com",
+      "lastContact": "2026-09-01", 
+      "status": "waiting-response",
+      "pendingResponse": true
+    }
+  ]
+}

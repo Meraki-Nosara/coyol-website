@@ -4,672 +4,1079 @@ import CommandLayout from '../../../layouts/CommandLayout.astro';
 const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
 const SUPABASE_KEY = import.meta.env.SUPABASE_SERVICE_KEY || 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng';
 
-// Fetch qualified leads for targeting
-let leads: any[] = [];
-try {
-  const response = await fetch(`${SUPABASE_URL}/rest/v1/mar_azul_leads?select=id,full_name,email,status,total_budget,purpose&order=created_at.desc`, {
-    headers: {
-      'apikey': SUPABASE_KEY,
-      'Authorization': `Bearer ${SUPABASE_KEY}`,
-    }
-  });
-  if (response.ok) {
-    leads = await response.json();
-  }
-} catch (e) {
-  console.error('Failed to fetch leads:', e);
-}
-
-// Filter leads with email
-const emailableLeads = leads.filter(l => l.email);
-
-// Email templates
-const templates = [
-  { id: 'new-listing', name: 'New Listing Alert', subject: 'New lot available at Mar Azul' },
-  { id: 'tour-invite', name: 'Tour Invitation', subject: 'Schedule your Mar Azul tour' },
-  { id: 'followup', name: 'Follow-up', subject: 'Following up on Mar Azul' },
-  { id: 'price-update', name: 'Price Update', subject: 'Price update for Mar Azul lots' },
-  { id: 'custom', name: 'Custom Email', subject: '' },
-];
+// Fetch campaigns from localStorage (client-side) or create table later
+// For now we'll use localStorage to avoid needing new Supabase tables
 ---
 
 <CommandLayout title="QL Campaigns" active="qualified">
-  <div class="header">
-    <div>
-      <h1>Lead Campaigns</h1>
-      <span class="subtitle">{emailableLeads.length} leads with email addresses</span>
-    </div>
-    <a href="/command/qualified" class="back-link">← Back to Leads</a>
-  </div>
-
-  <div class="tabs">
-    <button class="tab active" data-tab="compose">Compose</button>
-    <button class="tab" data-tab="sent">Sent</button>
-  </div>
-
-  <!-- Compose Tab -->
-  <div id="compose-tab" class="tab-content active">
-    <div class="compose-grid">
-      <!-- Left: Recipients -->
-      <div class="card">
-        <h3>Recipients</h3>
-        <div class="filter-row">
-          <select id="filterStatus">
-            <option value="">All Status</option>
-            <option value="new">New</option>
-            <option value="contacted">Contacted</option>
-            <option value="toured">Toured</option>
-            <option value="negotiating">Negotiating</option>
-          </select>
-          <select id="filterBudget">
-            <option value="">All Budgets</option>
-            <option value="1.5m-2m">$1.5M - $2M</option>
-            <option value="2m+">$2M+</option>
-          </select>
-          <button class="select-all-btn" onclick="selectAllVisible()">Select All</button>
-        </div>
-        
-        <div class="recipients-list" id="recipientsList">
-          {emailableLeads.map((lead) => (
-            <label class="recipient-item" data-status={lead.status || 'new'} data-budget={lead.total_budget || ''}>
-              <input type="checkbox" name="recipients" value={lead.email} data-name={lead.full_name} />
-              <div class="recipient-info">
-                <span class="recipient-name">{lead.full_name}</span>
-                <span class="recipient-email">{lead.email}</span>
-              </div>
-              <span class={`status-dot ${lead.status || 'new'}`}></span>
-            </label>
-          ))}
-        </div>
-        
-        <div class="selected-count">
-          <span id="selectedCount">0</span> selected
-        </div>
+  <div class="page">
+    <header class="page-header">
+      <div>
+        <h1>Lead Campaigns</h1>
+        <span class="subtitle">Create targeted email campaigns for qualified leads</span>
       </div>
+      <div class="header-actions">
+        <a href="/command/qualified" class="back-btn">← Back to Leads</a>
+        <button class="new-btn" onclick="showNewCampaign()">+ New Campaign</button>
+      </div>
+    </header>
 
-      <!-- Right: Email Content -->
-      <div class="card">
-        <h3>Email Content</h3>
-        
+    <!-- Stats Overview -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value" id="totalContacts">-</div>
+        <div class="stat-label">Total Leads</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="totalInCampaigns">-</div>
+        <div class="stat-label">In Campaigns</div>
+      </div>
+      <div class="stat-card sent">
+        <div class="stat-value" id="totalSent">-</div>
+        <div class="stat-label">Emails Sent</div>
+      </div>
+      <div class="stat-card pending">
+        <div class="stat-value" id="totalPending">-</div>
+        <div class="stat-label">In Queue</div>
+      </div>
+    </div>
+
+    <!-- Campaigns List -->
+    <div class="campaigns-grid" id="campaignsGrid">
+      <div class="loading">Loading campaigns...</div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="emptyState" style="display: none;">
+      <div class="empty-icon">📧</div>
+      <h3>No campaigns yet</h3>
+      <p>Create your first campaign to start reaching out to qualified leads</p>
+      <button class="new-btn" onclick="showNewCampaign()">+ Create Campaign</button>
+    </div>
+  </div>
+
+  <!-- New Campaign Modal -->
+  <div class="modal" id="newCampaignModal">
+    <div class="modal-overlay" onclick="closeModal()"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>New Campaign</h2>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body">
         <div class="form-group">
-          <label>Template</label>
-          <select id="templateSelect">
-            {templates.map((t) => (
-              <option value={t.id} data-subject={t.subject}>{t.name}</option>
-            ))}
-          </select>
+          <label>Campaign Name *</label>
+          <input type="text" id="campaignName" placeholder="e.g. Toronto Repeat Visitors" />
         </div>
-
         <div class="form-group">
-          <label>Subject</label>
-          <input type="text" id="emailSubject" placeholder="Email subject..." value="New lot available at Mar Azul" />
+          <label>Subject Line *</label>
+          <input type="text" id="campaignSubject" placeholder="e.g. A Special Opportunity in Nosara" />
         </div>
-
         <div class="form-group">
-          <label>Message</label>
-          <textarea id="emailBody" rows="12" placeholder="Write your message...">Hi {name},
+          <label>Email Template</label>
+          <textarea id="campaignBody" rows="10" placeholder="Hi {name},
 
-I wanted to reach out about an exciting opportunity at Mar Azul.
-
-[Your message here]
-
-Looking forward to connecting!
+I noticed you've visited our restaurants multiple times, and I wanted to personally reach out about an exciting opportunity...
 
 Best,
 Ruth
-Coyol Real Estate</textarea>
-        </div>
+Coyol Real Estate">Hi {name},
 
-        <div class="form-group">
-          <label class="checkbox-label">
-            <input type="checkbox" id="personalize" checked />
-            Personalize with recipient name
-          </label>
-        </div>
+I noticed you've visited our restaurants and wanted to personally reach out about an exciting real estate opportunity in Nosara.
 
-        <div class="send-actions">
-          <button class="preview-btn" onclick="previewEmail()">Preview</button>
-          <button class="send-btn" onclick="sendCampaign()">Send Campaign</button>
-        </div>
-      </div>
-    </div>
-  </div>
+We have some beautiful home sites available that I think would be perfect for you. Would you be interested in learning more?
 
-  <!-- Sent Tab -->
-  <div id="sent-tab" class="tab-content">
-    <div class="card">
-      <div class="empty-state">
-        <p>Campaign history coming soon</p>
-        <span>Sent emails will appear here</span>
-      </div>
-    </div>
-  </div>
+I'd love to schedule a quick call or tour at your convenience.
 
-  <!-- Preview Modal -->
-  <div id="previewModal" class="modal hidden">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Email Preview</h3>
-        <button class="close-modal" onclick="closePreview()">×</button>
-      </div>
-      <div class="modal-body">
-        <div class="preview-field">
-          <span class="label">To:</span>
-          <span id="previewTo">--</span>
+Best regards,
+Ruth
+Coyol Real Estate
++1 (343) 574-7238</textarea>
         </div>
-        <div class="preview-field">
-          <span class="label">Subject:</span>
-          <span id="previewSubject">--</span>
-        </div>
-        <div class="preview-body" id="previewBody"></div>
       </div>
       <div class="modal-footer">
-        <button onclick="closePreview()">Close</button>
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-create" onclick="createCampaign()">Create Campaign</button>
       </div>
     </div>
   </div>
 
-  <script is:inline>
-    // Tab switching
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById(tab.dataset.tab + '-tab').classList.add('active');
+  <!-- Campaign Detail Modal -->
+  <div class="modal" id="campaignDetailModal">
+    <div class="modal-overlay" onclick="closeCampaignDetail()"></div>
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2 id="detailTitle">Campaign</h2>
+        <button class="modal-close" onclick="closeCampaignDetail()">×</button>
+      </div>
+      <div class="modal-body">
+        <!-- Campaign Info -->
+        <div class="campaign-info">
+          <div class="info-row">
+            <span class="label">Subject:</span>
+            <span id="detailSubject">-</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Created:</span>
+            <span id="detailCreated">-</span>
+          </div>
+        </div>
+
+        <!-- Email Preview -->
+        <div class="email-preview">
+          <h4>Email Template</h4>
+          <div id="detailBody" class="preview-body"></div>
+          <button class="btn-edit-template" onclick="editTemplate()">Edit Template</button>
+        </div>
+
+        <!-- Leads in Campaign -->
+        <div class="leads-section">
+          <div class="leads-header">
+            <h4>Leads in Campaign (<span id="leadsCount">0</span>)</h4>
+            <button class="btn-add-leads" onclick="showAddLeads()">+ Add Leads</button>
+          </div>
+          <div class="leads-table-wrap">
+            <table class="leads-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="campaignLeadsBody">
+                <tr><td colspan="4" class="empty">No leads added yet</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeCampaignDetail()">Close</button>
+        <button class="btn-delete" onclick="deleteCampaign()">Delete Campaign</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Leads Modal -->
+  <div class="modal" id="addLeadsModal">
+    <div class="modal-overlay" onclick="closeAddLeads()"></div>
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2>Add Leads to Campaign</h2>
+        <button class="modal-close" onclick="closeAddLeads()">×</button>
+      </div>
+      <div class="modal-body">
+        <!-- Filters -->
+        <div class="filter-bar">
+          <input type="text" id="searchLeads" placeholder="Search by name, email, city..." />
+          <select id="filterSource">
+            <option value="">All Sources</option>
+            <option value="coyol">Coyol</option>
+            <option value="laluna">La Luna</option>
+            <option value="esh">Esh</option>
+          </select>
+          <select id="filterCity">
+            <option value="">All Cities</option>
+          </select>
+        </div>
+
+        <div class="select-actions">
+          <button class="btn-select-all" onclick="selectAllFiltered()">Select All Visible</button>
+          <span class="selected-count"><span id="addSelectedCount">0</span> selected</span>
+        </div>
+
+        <!-- Available Leads -->
+        <div class="available-leads" id="availableLeads">
+          <div class="loading">Loading leads...</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeAddLeads()">Cancel</button>
+        <button class="btn-add" onclick="addSelectedLeads()">Add Selected Leads</button>
+      </div>
+    </div>
+  </div>
+
+</CommandLayout>
+
+<script is:inline>
+  const STORAGE_KEY = 'ql_campaigns';
+  let campaigns = [];
+  let currentCampaignId = null;
+  let allLeads = [];
+
+  // Load campaigns from localStorage
+  function loadCampaigns() {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    campaigns = stored ? JSON.parse(stored) : [];
+    renderCampaigns();
+    updateStats();
+  }
+
+  // Update stats
+  async function updateStats() {
+    // Calculate campaign stats
+    let totalInCampaigns = 0;
+    let totalSent = 0;
+    let totalPending = 0;
+
+    campaigns.forEach(c => {
+      const leads = c.leads || [];
+      totalInCampaigns += leads.length;
+      totalSent += leads.filter(l => l.status === 'sent' || l.status === 'opened' || l.status === 'replied').length;
+      totalPending += leads.filter(l => l.status === 'pending').length;
+    });
+
+    document.getElementById('totalInCampaigns').textContent = totalInCampaigns;
+    document.getElementById('totalSent').textContent = totalSent;
+    document.getElementById('totalPending').textContent = totalPending;
+
+    // Fetch total leads count
+    try {
+      const res = await fetch('https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/crm_guests?select=id&lead_score=gte.40', {
+        headers: {
+          'apikey': 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng',
+          'Authorization': 'Bearer sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng',
+          'Prefer': 'count=exact',
+          'Range': '0-0'
+        }
+      });
+      const count = res.headers.get('content-range')?.split('/')[1] || '0';
+      document.getElementById('totalContacts').textContent = count;
+    } catch (e) {
+      document.getElementById('totalContacts').textContent = '-';
+    }
+  }
+
+  // Save campaigns to localStorage
+  function saveCampaigns() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(campaigns));
+  }
+
+  // Render campaigns grid
+  function renderCampaigns() {
+    const grid = document.getElementById('campaignsGrid');
+    const empty = document.getElementById('emptyState');
+
+    if (campaigns.length === 0) {
+      grid.style.display = 'none';
+      empty.style.display = 'flex';
+      return;
+    }
+
+    grid.style.display = 'grid';
+    empty.style.display = 'none';
+
+    grid.innerHTML = campaigns.map(c => {
+      const total = c.leads?.length || 0;
+      const sent = c.leads?.filter(l => l.status === 'sent').length || 0;
+      const pending = total - sent;
+      
+      return `
+        <div class="campaign-card" onclick="openCampaign('${c.id}')">
+          <div class="campaign-name">${c.name}</div>
+          <div class="campaign-subject">${c.subject}</div>
+          <div class="campaign-stats">
+            <span class="stat"><span class="stat-num">${total}</span> leads</span>
+            <span class="stat sent"><span class="stat-num">${sent}</span> sent</span>
+            <span class="stat pending"><span class="stat-num">${pending}</span> pending</span>
+          </div>
+          <div class="campaign-date">Created ${new Date(c.created).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Show new campaign modal
+  function showNewCampaign() {
+    document.getElementById('campaignName').value = '';
+    document.getElementById('campaignSubject').value = '';
+    document.getElementById('newCampaignModal').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('newCampaignModal').classList.remove('open');
+  }
+
+  // Create campaign
+  function createCampaign() {
+    const name = document.getElementById('campaignName').value.trim();
+    const subject = document.getElementById('campaignSubject').value.trim();
+    const body = document.getElementById('campaignBody').value.trim();
+
+    if (!name || !subject) {
+      alert('Please fill in campaign name and subject');
+      return;
+    }
+
+    const campaign = {
+      id: Date.now().toString(),
+      name,
+      subject,
+      body,
+      leads: [],
+      created: new Date().toISOString()
+    };
+
+    campaigns.unshift(campaign);
+    saveCampaigns();
+    renderCampaigns();
+    closeModal();
+    
+    // Open the new campaign
+    openCampaign(campaign.id);
+  }
+
+  // Open campaign detail
+  function openCampaign(id) {
+    currentCampaignId = id;
+    const campaign = campaigns.find(c => c.id === id);
+    if (!campaign) return;
+
+    document.getElementById('detailTitle').textContent = campaign.name;
+    document.getElementById('detailSubject').textContent = campaign.subject;
+    document.getElementById('detailCreated').textContent = new Date(campaign.created).toLocaleDateString();
+    document.getElementById('detailBody').innerHTML = (campaign.body || '').replace(/\n/g, '<br>');
+    
+    renderCampaignLeads(campaign);
+    document.getElementById('campaignDetailModal').classList.add('open');
+  }
+
+  function closeCampaignDetail() {
+    document.getElementById('campaignDetailModal').classList.remove('open');
+    currentCampaignId = null;
+  }
+
+  // Render leads in campaign
+  function renderCampaignLeads(campaign) {
+    const tbody = document.getElementById('campaignLeadsBody');
+    const leads = campaign.leads || [];
+    
+    document.getElementById('leadsCount').textContent = leads.length;
+
+    if (leads.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" class="empty">No leads added yet. Click "+ Add Leads" to add from your qualified leads or restaurant guests.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = leads.map(lead => `
+      <tr data-email="${lead.email}">
+        <td>${lead.name}</td>
+        <td>${lead.email}</td>
+        <td>
+          <select class="status-select" onchange="updateLeadStatus('${lead.email}', this.value)">
+            <option value="pending" ${lead.status === 'pending' ? 'selected' : ''}>⏳ Pending</option>
+            <option value="sent" ${lead.status === 'sent' ? 'selected' : ''}>✅ Sent</option>
+            <option value="opened" ${lead.status === 'opened' ? 'selected' : ''}>👁️ Opened</option>
+            <option value="replied" ${lead.status === 'replied' ? 'selected' : ''}>💬 Replied</option>
+            <option value="skip" ${lead.status === 'skip' ? 'selected' : ''}>⏭️ Skip</option>
+          </select>
+        </td>
+        <td>
+          <button class="btn-copy" onclick="copyEmail('${lead.email}', '${lead.name}')" title="Copy personalized email">📋 Copy</button>
+          <button class="btn-remove" onclick="removeLead('${lead.email}')" title="Remove from campaign">×</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Update lead status
+  function updateLeadStatus(email, status) {
+    const campaign = campaigns.find(c => c.id === currentCampaignId);
+    if (!campaign) return;
+
+    const lead = campaign.leads.find(l => l.email === email);
+    if (lead) {
+      lead.status = status;
+      saveCampaigns();
+      renderCampaigns();
+    }
+  }
+
+  // Copy personalized email
+  function copyEmail(email, name) {
+    const campaign = campaigns.find(c => c.id === currentCampaignId);
+    if (!campaign) return;
+
+    const firstName = name.split(' ')[0];
+    const body = campaign.body.replace(/{name}/g, firstName);
+    
+    const fullEmail = `To: ${email}\nSubject: ${campaign.subject}\n\n${body}`;
+    
+    navigator.clipboard.writeText(fullEmail).then(() => {
+      alert('Email copied! Paste into your email client.');
+    });
+  }
+
+  // Remove lead from campaign
+  function removeLead(email) {
+    if (!confirm('Remove this lead from the campaign?')) return;
+    
+    const campaign = campaigns.find(c => c.id === currentCampaignId);
+    if (!campaign) return;
+
+    campaign.leads = campaign.leads.filter(l => l.email !== email);
+    saveCampaigns();
+    renderCampaignLeads(campaign);
+    renderCampaigns();
+  }
+
+  // Delete campaign
+  function deleteCampaign() {
+    if (!confirm('Delete this campaign? This cannot be undone.')) return;
+    
+    campaigns = campaigns.filter(c => c.id !== currentCampaignId);
+    saveCampaigns();
+    renderCampaigns();
+    closeCampaignDetail();
+  }
+
+  // Edit template
+  function editTemplate() {
+    const campaign = campaigns.find(c => c.id === currentCampaignId);
+    if (!campaign) return;
+
+    const newBody = prompt('Edit email template:', campaign.body);
+    if (newBody !== null) {
+      campaign.body = newBody;
+      saveCampaigns();
+      document.getElementById('detailBody').innerHTML = newBody.replace(/\n/g, '<br>');
+    }
+  }
+
+  // Add Leads Modal
+  async function showAddLeads() {
+    document.getElementById('addLeadsModal').classList.add('open');
+    await loadAllLeads();
+  }
+
+  function closeAddLeads() {
+    document.getElementById('addLeadsModal').classList.remove('open');
+  }
+
+  // Load leads from both QL and CRM
+  async function loadAllLeads() {
+    const container = document.getElementById('availableLeads');
+    container.innerHTML = '<div class="loading">Loading leads...</div>';
+
+    try {
+      // Fetch QL leads
+      const qlRes = await fetch('https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/mar_azul_leads?select=full_name,email,country&order=created_at.desc', {
+        headers: {
+          'apikey': 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng',
+          'Authorization': 'Bearer sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng'
+        }
+      });
+      const qlLeads = qlRes.ok ? await qlRes.json() : [];
+
+      // Fetch CRM leads (restaurant guests)
+      const crmRes = await fetch('https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1/crm_guests?select=name,email,city,source&lead_score=gte.40&order=lead_score.desc&limit=500', {
+        headers: {
+          'apikey': 'sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng',
+          'Authorization': 'Bearer sb_secret_4gCkzhlfhZzJLynh4NOZDQ_Vm9o4mng'
+        }
+      });
+      const crmLeads = crmRes.ok ? await crmRes.json() : [];
+
+      // Merge and dedupe by email
+      const emailMap = new Map();
+      
+      qlLeads.filter(l => l.email).forEach(l => {
+        emailMap.set(l.email.toLowerCase(), {
+          name: l.full_name,
+          email: l.email,
+          city: l.country || '',
+          source: 'ql'
+        });
+      });
+
+      crmLeads.filter(l => l.email).forEach(l => {
+        if (!emailMap.has(l.email.toLowerCase())) {
+          emailMap.set(l.email.toLowerCase(), {
+            name: l.name,
+            email: l.email,
+            city: l.city || '',
+            source: l.source || 'restaurant'
+          });
+        }
+      });
+
+      allLeads = Array.from(emailMap.values());
+      
+      // Get campaign leads to mark as already added
+      const campaign = campaigns.find(c => c.id === currentCampaignId);
+      const campaignEmails = new Set((campaign?.leads || []).map(l => l.email.toLowerCase()));
+
+      // Populate city filter
+      const cities = [...new Set(allLeads.map(l => l.city).filter(Boolean))].sort();
+      const cityFilter = document.getElementById('filterCity');
+      cityFilter.innerHTML = '<option value="">All Cities</option>' + cities.map(c => `<option value="${c}">${c}</option>`).join('');
+
+      renderAvailableLeads(allLeads, campaignEmails);
+
+    } catch (err) {
+      console.error('Failed to load leads:', err);
+      container.innerHTML = '<div class="error">Failed to load leads</div>';
+    }
+  }
+
+  function renderAvailableLeads(leads, campaignEmails = new Set()) {
+    const container = document.getElementById('availableLeads');
+    
+    if (leads.length === 0) {
+      container.innerHTML = '<div class="empty">No leads found</div>';
+      return;
+    }
+
+    container.innerHTML = leads.map(lead => {
+      const inCampaign = campaignEmails.has(lead.email.toLowerCase());
+      return `
+        <label class="lead-item ${inCampaign ? 'in-campaign' : ''}" 
+               data-name="${lead.name.toLowerCase()}" 
+               data-email="${lead.email.toLowerCase()}" 
+               data-city="${(lead.city || '').toLowerCase()}"
+               data-source="${lead.source || ''}">
+          <input type="checkbox" name="addLead" value="${lead.email}" data-name="${lead.name}" ${inCampaign ? 'disabled' : ''} />
+          <div class="lead-info">
+            <span class="lead-name">${lead.name}</span>
+            <span class="lead-email">${lead.email}</span>
+          </div>
+          <span class="lead-city">${lead.city || ''}</span>
+          <span class="lead-source">${lead.source}</span>
+          ${inCampaign ? '<span class="already-added">Added</span>' : ''}
+        </label>
+      `;
+    }).join('');
+
+    updateAddSelectedCount();
+  }
+
+  // Filter leads
+  document.getElementById('searchLeads')?.addEventListener('input', filterAvailableLeads);
+  document.getElementById('filterSource')?.addEventListener('change', filterAvailableLeads);
+  document.getElementById('filterCity')?.addEventListener('change', filterAvailableLeads);
+
+  function filterAvailableLeads() {
+    const search = document.getElementById('searchLeads').value.toLowerCase();
+    const source = document.getElementById('filterSource').value.toLowerCase();
+    const city = document.getElementById('filterCity').value.toLowerCase();
+
+    document.querySelectorAll('.lead-item').forEach(item => {
+      const matchSearch = !search || 
+        item.dataset.name.includes(search) || 
+        item.dataset.email.includes(search) ||
+        item.dataset.city.includes(search);
+      const matchSource = !source || item.dataset.source === source;
+      const matchCity = !city || item.dataset.city.includes(city);
+
+      item.style.display = (matchSearch && matchSource && matchCity) ? '' : 'none';
+    });
+  }
+
+  function selectAllFiltered() {
+    document.querySelectorAll('.lead-item:not([style*="display: none"]):not(.in-campaign) input').forEach(cb => {
+      cb.checked = true;
+    });
+    updateAddSelectedCount();
+  }
+
+  function updateAddSelectedCount() {
+    const count = document.querySelectorAll('input[name="addLead"]:checked').length;
+    document.getElementById('addSelectedCount').textContent = count;
+  }
+
+  document.addEventListener('change', (e) => {
+    if (e.target.name === 'addLead') {
+      updateAddSelectedCount();
+    }
+  });
+
+  // Add selected leads to campaign
+  function addSelectedLeads() {
+    const selected = Array.from(document.querySelectorAll('input[name="addLead"]:checked'));
+    if (selected.length === 0) {
+      alert('Please select at least one lead');
+      return;
+    }
+
+    const campaign = campaigns.find(c => c.id === currentCampaignId);
+    if (!campaign) return;
+
+    selected.forEach(cb => {
+      campaign.leads.push({
+        email: cb.value,
+        name: cb.dataset.name,
+        status: 'pending',
+        added: new Date().toISOString()
       });
     });
 
-    // Template selection
-    document.getElementById('templateSelect').addEventListener('change', (e) => {
-      const subject = e.target.selectedOptions[0].dataset.subject;
-      if (subject) {
-        document.getElementById('emailSubject').value = subject;
-      }
-    });
-
-    // Recipient filtering
-    const filterStatus = document.getElementById('filterStatus');
-    const filterBudget = document.getElementById('filterBudget');
-
-    function filterRecipients() {
-      const status = filterStatus.value;
-      const budget = filterBudget.value;
-      
-      document.querySelectorAll('.recipient-item').forEach(item => {
-        const itemStatus = item.dataset.status;
-        const itemBudget = item.dataset.budget;
-        
-        const matchStatus = !status || itemStatus === status;
-        const matchBudget = !budget || itemBudget === budget;
-        
-        item.style.display = (matchStatus && matchBudget) ? '' : 'none';
-      });
-    }
-
-    filterStatus.addEventListener('change', filterRecipients);
-    filterBudget.addEventListener('change', filterRecipients);
-
-    // Select all visible
-    function selectAllVisible() {
-      document.querySelectorAll('.recipient-item:not([style*="display: none"]) input').forEach(cb => {
-        cb.checked = true;
-      });
-      updateSelectedCount();
-    }
-
-    // Update selected count
-    function updateSelectedCount() {
-      const count = document.querySelectorAll('input[name="recipients"]:checked').length;
-      document.getElementById('selectedCount').textContent = count;
-    }
-
-    document.querySelectorAll('input[name="recipients"]').forEach(cb => {
-      cb.addEventListener('change', updateSelectedCount);
-    });
-
-    // Preview
-    function previewEmail() {
-      const selected = document.querySelectorAll('input[name="recipients"]:checked');
-      if (selected.length === 0) {
-        alert('Please select at least one recipient');
-        return;
-      }
-      
-      const firstName = selected[0].dataset.name?.split(' ')[0] || 'there';
-      const subject = document.getElementById('emailSubject').value;
-      let body = document.getElementById('emailBody').value;
-      
-      if (document.getElementById('personalize').checked) {
-        body = body.replace('{name}', firstName);
-      }
-      
-      document.getElementById('previewTo').textContent = `${selected.length} recipient(s)`;
-      document.getElementById('previewSubject').textContent = subject;
-      document.getElementById('previewBody').innerHTML = body.replace(/\n/g, '<br>');
-      document.getElementById('previewModal').classList.remove('hidden');
-    }
-
-    function closePreview() {
-      document.getElementById('previewModal').classList.add('hidden');
-    }
-
-    // Send campaign
-    async function sendCampaign() {
-      const selected = Array.from(document.querySelectorAll('input[name="recipients"]:checked'));
-      if (selected.length === 0) {
-        alert('Please select at least one recipient');
-        return;
-      }
-      
-      const subject = document.getElementById('emailSubject').value;
-      const body = document.getElementById('emailBody').value;
-      const personalize = document.getElementById('personalize').checked;
-      
-      if (!subject || !body) {
-        alert('Please fill in subject and message');
-        return;
-      }
-      
-      if (!confirm(`Send email to ${selected.length} recipient(s)?`)) {
-        return;
-      }
-      
-      // For now, just show success - integrate with actual email service
-      alert(`Campaign queued for ${selected.length} recipients!\n\nNote: Email sending integration coming soon.`);
-      
-      // TODO: Integrate with email service (Resend, SendGrid, etc.)
-      // for (const cb of selected) {
-      //   const email = cb.value;
-      //   const name = cb.dataset.name;
-      //   const personalizedBody = personalize ? body.replace('{name}', name.split(' ')[0]) : body;
-      //   await sendEmail({ to: email, subject, body: personalizedBody });
-      // }
-    }
-  </script>
-
-  <style>
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-
-    h1 {
-      font-size: 28px;
-      font-weight: 300;
-      color: #C4A67C;
-      margin: 0;
-    }
-
-    .subtitle {
-      color: #666;
-      font-size: 14px;
-    }
-
-    .back-link {
-      color: #666;
-      text-decoration: none;
-      font-size: 14px;
-    }
-
-    .back-link:hover {
-      color: #C4A67C;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 24px;
-      border-bottom: 1px solid #1a1d17;
-      padding-bottom: 0;
-    }
-
-    .tab {
-      background: none;
-      border: none;
-      color: #666;
-      padding: 12px 20px;
-      font-size: 14px;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-    }
-
-    .tab:hover {
-      color: #fff;
-    }
-
-    .tab.active {
-      color: #C4A67C;
-      border-bottom-color: #C4A67C;
-    }
-
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    .compose-grid {
-      display: grid;
-      grid-template-columns: 350px 1fr;
-      gap: 24px;
-    }
-
-    @media (max-width: 1000px) {
-      .compose-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .card {
-      background: #141714;
-      border: 1px solid #1a1d17;
-      border-radius: 12px;
-      padding: 24px;
-    }
-
-    .card h3 {
-      color: #C4A67C;
-      font-size: 14px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin: 0 0 20px 0;
-    }
-
-    .filter-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-
-    .filter-row select {
-      flex: 1;
-      background: #1a1d17;
-      border: 1px solid #2a2d26;
-      color: #ddd;
-      padding: 8px;
-      border-radius: 6px;
-      font-size: 12px;
-    }
-
-    .select-all-btn {
-      background: #2a2d26;
-      border: none;
-      color: #888;
-      padding: 8px 12px;
-      border-radius: 6px;
-      font-size: 12px;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .select-all-btn:hover {
-      background: #3a3d36;
-      color: #fff;
-    }
-
-    .recipients-list {
-      max-height: 400px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .recipient-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 12px;
-      background: #1a1d17;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-
-    .recipient-item:hover {
-      background: #2a2d26;
-    }
-
-    .recipient-item input {
-      width: 16px;
-      height: 16px;
-      accent-color: #C4A67C;
-    }
-
-    .recipient-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .recipient-name {
-      display: block;
-      color: #fff;
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    .recipient-email {
-      display: block;
-      color: #666;
-      font-size: 11px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-    }
-
-    .status-dot.new { background: #22c55e; }
-    .status-dot.contacted { background: #3b82f6; }
-    .status-dot.toured { background: #8b5cf6; }
-    .status-dot.negotiating { background: #f59e0b; }
-
-    .selected-count {
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid #1a1d17;
-      color: #C4A67C;
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      color: #888;
-      font-size: 12px;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .form-group select,
-    .form-group input[type="text"],
-    .form-group textarea {
-      width: 100%;
-      background: #1a1d17;
-      border: 1px solid #2a2d26;
-      color: #fff;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-family: inherit;
-    }
-
-    .form-group textarea {
-      resize: vertical;
-      line-height: 1.6;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group select:focus {
-      outline: none;
-      border-color: #C4A67C;
-    }
-
-    .checkbox-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      font-size: 13px;
-      color: #888;
-    }
-
-    .checkbox-label input {
-      width: 16px;
-      height: 16px;
-      accent-color: #C4A67C;
-    }
-
-    .send-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .preview-btn {
-      flex: 1;
-      background: #2a2d26;
-      border: none;
-      color: #fff;
-      padding: 14px;
-      border-radius: 8px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    .preview-btn:hover {
-      background: #3a3d36;
-    }
-
-    .send-btn {
-      flex: 2;
-      background: #3D4F3D;
-      border: none;
-      color: #fff;
-      padding: 14px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-    }
-
-    .send-btn:hover {
-      background: #4a5f4a;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 60px;
-      color: #666;
-    }
-
-    .empty-state span {
-      font-size: 13px;
-    }
-
-    /* Modal */
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-
-    .modal.hidden {
-      display: none;
-    }
-
-    .modal-content {
-      background: #141714;
-      border: 1px solid #2a2d26;
-      border-radius: 16px;
-      width: 90%;
-      max-width: 600px;
-      max-height: 80vh;
-      overflow: hidden;
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 24px;
-      border-bottom: 1px solid #1a1d17;
-    }
-
-    .modal-header h3 {
-      color: #C4A67C;
-      font-size: 18px;
-      margin: 0;
-    }
-
-    .close-modal {
-      background: none;
-      border: none;
-      color: #666;
-      font-size: 24px;
-      cursor: pointer;
-    }
-
-    .modal-body {
-      padding: 24px;
-      overflow-y: auto;
-      max-height: 50vh;
-    }
-
-    .preview-field {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 12px;
-      font-size: 14px;
-    }
-
-    .preview-field .label {
-      color: #666;
-      min-width: 60px;
-    }
-
-    .preview-body {
-      background: #1a1d17;
-      padding: 20px;
-      border-radius: 8px;
-      margin-top: 20px;
-      line-height: 1.6;
-      font-size: 14px;
-    }
-
-    .modal-footer {
-      padding: 16px 24px;
-      border-top: 1px solid #1a1d17;
-      text-align: right;
-    }
-
-    .modal-footer button {
-      background: #2a2d26;
-      border: none;
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-  </style>
+    saveCampaigns();
+    renderCampaignLeads(campaign);
+    renderCampaigns();
+    closeAddLeads();
+  }
+
+  // Init
+  loadCampaigns();
+</script>
+
+<style>
+  .page { padding: 32px 40px; }
+  
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+  
+  .page-header h1 {
+    font-size: 28px;
+    color: #C4A67C;
+    margin: 0;
+  }
+  
+  .subtitle { color: #666; font-size: 14px; }
+  
+  .header-actions {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .back-btn {
+    background: transparent;
+    border: 1px solid #333;
+    color: #888;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+  }
+  
+  .back-btn:hover { border-color: #C4A67C; color: #C4A67C; }
+  
+  .new-btn {
+    background: linear-gradient(135deg, #3D4F3D, #4a6040);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  
+  .new-btn:hover { transform: translateY(-1px); }
+
+  /* Stats Row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .stat-card {
+    background: #141814;
+    border: 1px solid #2a2d26;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 32px;
+    font-weight: 600;
+    color: #C4A67C;
+  }
+
+  .stat-card.sent .stat-value { color: #22c55e; }
+  .stat-card.pending .stat-value { color: #f59e0b; }
+
+  .stat-label {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 768px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Campaigns Grid */
+  .campaigns-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .campaign-card {
+    background: #141814;
+    border: 1px solid #2a2d26;
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .campaign-card:hover {
+    border-color: #C4A67C;
+    transform: translateY(-2px);
+  }
+  
+  .campaign-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  
+  .campaign-subject {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 16px;
+  }
+  
+  .campaign-stats {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .stat {
+    font-size: 12px;
+    color: #666;
+  }
+  
+  .stat-num {
+    font-weight: 600;
+    color: #aaa;
+  }
+  
+  .stat.sent .stat-num { color: #22c55e; }
+  .stat.pending .stat-num { color: #f59e0b; }
+  
+  .campaign-date {
+    font-size: 11px;
+    color: #555;
+  }
+
+  /* Empty State */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 40px;
+    text-align: center;
+  }
+  
+  .empty-icon { font-size: 48px; margin-bottom: 16px; }
+  .empty-state h3 { color: #aaa; margin: 0 0 8px; }
+  .empty-state p { color: #666; margin: 0 0 24px; }
+
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modal.open { display: flex; }
+  
+  .modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+  }
+  
+  .modal-content {
+    position: relative;
+    background: #0f1210;
+    border: 1px solid #2a2d26;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  .modal-large { max-width: 800px; }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #1a1d17;
+  }
+  
+  .modal-header h2 { margin: 0; color: #C4A67C; font-size: 20px; }
+  
+  .modal-close {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .modal-body { padding: 20px; }
+  
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 20px;
+    border-top: 1px solid #1a1d17;
+  }
+
+  /* Form */
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 12px; color: #888; margin-bottom: 6px; }
+  
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 12px;
+    background: #1a1d17;
+    border: 1px solid #2a2d26;
+    border-radius: 6px;
+    color: #e8e6e1;
+    font-size: 14px;
+  }
+  
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: #C4A67C;
+  }
+
+  /* Buttons */
+  .btn-cancel {
+    background: transparent;
+    border: 1px solid #333;
+    color: #888;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .btn-create, .btn-add {
+    background: #C4A67C;
+    border: none;
+    color: #0a0c08;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  
+  .btn-delete {
+    background: #7f1d1d;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  /* Campaign Detail */
+  .campaign-info {
+    background: #1a1d17;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .info-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  
+  .info-row:last-child { margin-bottom: 0; }
+  .info-row .label { color: #666; min-width: 80px; }
+  
+  .email-preview { margin-bottom: 24px; }
+  .email-preview h4 { color: #C4A67C; margin: 0 0 12px; font-size: 14px; }
+  
+  .preview-body {
+    background: #1a1d17;
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 12px;
+  }
+  
+  .btn-edit-template {
+    background: transparent;
+    border: 1px solid #333;
+    color: #888;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  /* Leads Section */
+  .leads-section h4 { color: #C4A67C; margin: 0 0 12px; font-size: 14px; }
+  
+  .leads-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  
+  .btn-add-leads {
+    background: #3D4F3D;
+    border: none;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  
+  .leads-table-wrap {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+  .leads-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .leads-table th {
+    text-align: left;
+    padding: 10px;
+    font-size: 11px;
+    color: #666;
+    text-transform: uppercase;
+    border-bottom: 1px solid #1a1d17;
+  }
+  
+  .leads-table td {
+    padding: 10px;
+    font-size: 13px;
+    border-bottom: 1px solid #1a1d17;
+  }
+  
+  .leads-table .empty {
+    text-align: center;
+    color: #555;
+    padding: 24px;
+  }
+  
+  .status-select {
+    background: #1a1d17;
+    border: 1px solid #2a2d26;
+    color: #e8e6e1;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+  
+  .btn-copy, .btn-remove {
+    background: transparent;
+    border: 1px solid #333;
+    color: #888;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    cursor: pointer;
+    margin-right: 6px;
+  }
+  
+  .btn-copy:hover { border-color: #C4A67C; color: #C4A67C; }
+  .btn-remove:hover { border-color: #ef4444; color: #ef4444; }
+
+  /* Add Leads Modal */
+  .filter-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .filter-bar input {
+    flex: 1;
+    padding: 10px 14px;
+    background: #1a1d17;
+    border: 1px solid #2a2d26;
+    border-radius: 6px;
+    color: #e8e6e1;
+    font-size: 13px;
+  }
+  
+  .filter-bar select {
+    padding: 10px 14px;
+    background: #1a1d17;
+    border: 1px solid #2a2d26;
+    border-radius: 6px;
+    color: #e8e6e1;
+    font-size: 13px;
+  }
+  
+  .select-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  
+  .btn-select-all {
+    background: transparent;
+    border: 1px solid #333;
+    color: #888;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  
+  .selected-count { color: #C4A67C; font-size: 13px; }
+  
+  .available-leads {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  
+  .lead-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-bottom: 1px solid #1a1d17;
+    cursor: pointer;
+  }
+  
+  .lead-item:hover { background: #1a1d17; }
+  .lead-item.in-campaign { opacity: 0.5; cursor: not-allowed; }
+  
+  .lead-item input { width: 16px; height: 16px; accent-color: #C4A67C; }
+  
+  .lead-info { flex: 1; }
+  .lead-name { display: block; font-size: 14px; color: #fff; }
+  .lead-email { display: block; font-size: 12px; color: #666; }
+  .lead-city { font-size: 12px; color: #888; min-width: 100px; }
+  .lead-source { font-size: 11px; color: #555; text-transform: uppercase; }
+  .already-added { font-size: 10px; color: #22c55e; }
+
+  .loading, .error { padding: 40px; text-align: center; color: #666; }
+</style>
 </CommandLayout>

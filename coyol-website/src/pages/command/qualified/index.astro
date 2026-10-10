@@ -33,9 +33,59 @@ const statusColors: Record<string, string> = {
 // Purpose labels
 const purposeLabels: Record<string, string> = {
   'primary': 'Primary Home',
+  'primary_home': 'Primary Home',
   'vacation': 'Vacation Home',
+  'vacation_home': 'Vacation Home',
   'investment': 'Investment',
+  'rental_investment': 'Investment',
   'retirement': 'Retirement',
+};
+
+// Budget labels
+const budgetLabels: Record<string, string> = {
+  'under500': 'Under $500K',
+  'under_500k': 'Under $500K',
+  '500-750': '$500K-$750K',
+  '500k_750k': '$500K-$750K',
+  '750-1m': '$750K-$1M',
+  '750k_1m': '$750K-$1M',
+  '1m-1.5m': '$1M-$1.5M',
+  '1m_1.5m': '$1M-$1.5M',
+  '1.5m-2m': '$1.5M-$2M',
+  '1.5m_2m': '$1.5M-$2M',
+  '2m+': '$2M+',
+  'over_2m': '$2M+',
+};
+
+// Timeline labels
+const timelineLabels: Record<string, string> = {
+  'now': 'Ready Now',
+  'asap': 'ASAP (0-3mo)',
+  '3months': 'Within 3mo',
+  'soon': '3-6 months',
+  '6months': 'Within 6mo',
+  'this_year': 'This Year',
+  'nextyear': 'Next Year',
+  'next_year': 'Next Year',
+  'exploring': 'Exploring',
+};
+
+// Payment labels
+const paymentLabels: Record<string, string> = {
+  'cash': 'All Cash',
+  'financing_us': 'US Financing',
+  'financing_cr': 'CR Financing',
+  'mixed': 'Mixed',
+  'undecided': 'Undecided',
+};
+
+// Visited labels
+const visitedLabels: Record<string, string> = {
+  'never': 'Never',
+  'once': 'Once',
+  'few_times': 'Few times',
+  'many_times': 'Many times',
+  'lives_here': 'Lives here',
 };
 ---
 
@@ -47,9 +97,10 @@ const purposeLabels: Record<string, string> = {
     </div>
     <div class="header-actions">
       <input type="text" id="searchInput" placeholder="🔍 Search by name..." class="search-main" autofocus />
-      <a href="/command/qualified/assistant" class="ai-btn">🤖 Ask AI</a>
-      <a href="/command/qualified/map" class="map-btn">🗺️ Lots</a>
-      <a href="/command/qualified/campaigns" class="map-btn">✉️ Campaigns</a>
+      <a href="/command/qualified/assistant" class="nav-btn">Ask AI</a>
+      <a href="/command/lots" class="nav-btn">Lots</a>
+      <a href="/command/qualified/campaigns" class="nav-btn">Campaigns</a>
+      
       <a href="/command/qualified/new" class="new-btn">+ New Lead</a>
     </div>
   </div>
@@ -75,48 +126,84 @@ const purposeLabels: Record<string, string> = {
     </select>
   </div>
 
-  <table class="leads-table" id="leadsTable">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Contact</th>
-        <th>Purpose</th>
-        <th>Budget</th>
-        <th>Timeline</th>
-        <th>Status</th>
-        <th>Created</th>
-      </tr>
-    </thead>
-    <tbody>
-      {leads.map((lead) => (
-        <tr data-status={lead.status || 'new'} data-budget={lead.total_budget || ''}>
-          <td class="col-name">
-            <a href={`/command/qualified/${lead.id}`}>{lead.full_name}</a>
-            {lead.country && <span class="country">{lead.country}</span>}
-          </td>
-          <td class="col-contact">
-            {lead.email && <div class="email">{lead.email}</div>}
-            {lead.phone && <div class="phone">{lead.phone}</div>}
-          </td>
-          <td class="col-purpose">
-            {lead.purpose?.map((p: string) => (
-              <span class="tag">{purposeLabels[p] || p}</span>
-            ))}
-          </td>
-          <td class="col-budget">{lead.total_budget || '—'}</td>
-          <td class="col-timeline">{lead.timeline_to_buy || '—'}</td>
-          <td class="col-status">
+  <div class="leads-grid" id="leadsGrid">
+    {leads.map((lead) => (
+      <div class="lead-card" data-status={lead.status || 'new'} data-budget={lead.total_budget || ''}>
+        <div class="card-header">
+          <div class="name-row">
+            <a href={`/command/qualified/${lead.id}`} class="lead-name">{lead.full_name}</a>
             <span class="status-badge" style={`background: ${statusColors[lead.status] || statusColors.new}`}>
               {lead.status || 'new'}
             </span>
-          </td>
-          <td class="col-date">
-            {new Date(lead.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
+          </div>
+          {lead.country && <span class="country">{lead.country}</span>}
+        </div>
+        
+        <div class="card-body">
+          <div class="contact-row">
+            {lead.email && <span class="email">📧 {lead.email}</span>}
+            {lead.phone && <span class="phone">📞 {lead.phone}</span>}
+          </div>
+          
+          <div class="info-row">
+            <div class="info-item">
+              <span class="label">Budget</span>
+              <span class="value highlight">{budgetLabels[lead.total_budget] || lead.total_budget || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Timeline</span>
+              <span class="value">{timelineLabels[lead.timeline_to_buy] || lead.timeline_to_buy || '—'}</span>
+            </div>
+          </div>
+          
+          {lead.purpose?.length > 0 && (
+            <div class="tags-row">
+              {lead.purpose.map((p: string) => (
+                <span class="tag">{purposeLabels[p] || p}</span>
+              ))}
+            </div>
+          )}
+          
+          {/* Home Preferences Summary */}
+          {(lead.bedrooms || lead.bathrooms || lead.pool) && (
+            <div class="prefs-row">
+              {lead.bedrooms && <span class="pref">🛏️ {lead.bedrooms} bed</span>}
+              {lead.bathrooms && <span class="pref">🚿 {lead.bathrooms} bath</span>}
+              {lead.pool && <span class="pref">🏊 {lead.pool}</span>}
+              {lead.view_priority && <span class="pref">🌅 {lead.view_priority}</span>}
+            </div>
+          )}
+          
+          {/* Payment & Experience */}
+          {(lead.payment_method || lead.visited_nosara) && (
+            <div class="extras-row">
+              {lead.payment_method && <span class="extra">💳 {paymentLabels[lead.payment_method] || lead.payment_method}</span>}
+              {lead.visited_nosara && <span class="extra">✈️ {visitedLabels[lead.visited_nosara] || lead.visited_nosara}</span>}
+            </div>
+          )}
+          
+          {/* Notes preview */}
+          {lead.notes && (
+            <div class="notes-preview">
+              📝 {lead.notes.length > 80 ? lead.notes.substring(0, 80) + '...' : lead.notes}
+            </div>
+          )}
+          
+          {/* Follow-up */}
+          {lead.follow_up_date && (
+            <div class="follow-up">
+              📅 Follow-up: {new Date(lead.follow_up_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+            </div>
+          )}
+        </div>
+        
+        <div class="card-footer">
+          <span class="date">Added {new Date(lead.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+          <a href={`/command/qualified/${lead.id}`} class="view-btn">View →</a>
+        </div>
+      </div>
+    ))}
+  </div>
 
   {leads.length === 0 && (
     <div class="empty-state">
@@ -129,29 +216,30 @@ const purposeLabels: Record<string, string> = {
     const statusFilter = document.getElementById('statusFilter');
     const budgetFilter = document.getElementById('budgetFilter');
     const searchInput = document.getElementById('searchInput');
-    const rows = document.querySelectorAll('#leadsTable tbody tr');
+    const cards = document.querySelectorAll('.lead-card');
 
-    function filterRows() {
+    function filterCards() {
       const status = statusFilter.value.toLowerCase();
       const budget = budgetFilter.value;
       const search = searchInput.value.toLowerCase();
 
-      rows.forEach(row => {
-        const rowStatus = row.dataset.status || '';
-        const rowBudget = row.dataset.budget || '';
-        const name = row.querySelector('.col-name a')?.textContent?.toLowerCase() || '';
+      cards.forEach(card => {
+        const cardStatus = card.dataset.status || '';
+        const cardBudget = card.dataset.budget || '';
+        const name = card.querySelector('.lead-name')?.textContent?.toLowerCase() || '';
+        const email = card.querySelector('.email')?.textContent?.toLowerCase() || '';
 
-        const matchStatus = !status || rowStatus === status;
-        const matchBudget = !budget || rowBudget === budget;
-        const matchSearch = !search || name.includes(search);
+        const matchStatus = !status || cardStatus === status;
+        const matchBudget = !budget || cardBudget === budget;
+        const matchSearch = !search || name.includes(search) || email.includes(search);
 
-        row.style.display = (matchStatus && matchBudget && matchSearch) ? '' : 'none';
+        card.style.display = (matchStatus && matchBudget && matchSearch) ? '' : 'none';
       });
     }
 
-    statusFilter.addEventListener('change', filterRows);
-    budgetFilter.addEventListener('change', filterRows);
-    searchInput.addEventListener('input', filterRows);
+    statusFilter.addEventListener('change', filterCards);
+    budgetFilter.addEventListener('change', filterCards);
+    searchInput.addEventListener('input', filterCards);
   </script>
 
   <style>
@@ -202,34 +290,39 @@ const purposeLabels: Record<string, string> = {
       font-size: 14px;
     }
 
-    .new-btn {
-      background: #3D4F3D;
-      color: white;
+    .nav-btn {
+      background: #1a1f16;
+      color: #C4A67C;
+      border: 1px solid #3D4F3D;
       padding: 10px 20px;
       border-radius: 6px;
       text-decoration: none;
-      font-size: 14px;
-      transition: background 0.2s;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: #3D4F3D;
+      color: #fff;
+    }
+
+    .new-btn {
+      background: linear-gradient(135deg, #3D4F3D, #4a6040);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      border: none;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s;
     }
 
     .new-btn:hover {
-      background: #4a5f4a;
-    }
-    
-    .map-btn {
-      background: #1a1d17;
-      border: 1px solid #2a2d26;
-      color: #C4A67C;
-      padding: 10px 16px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 14px;
-      transition: all 0.2s;
-    }
-    
-    .map-btn:hover {
-      background: #2a2d26;
-      border-color: #C4A67C;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(61, 79, 61, 0.3);
     }
     
     .ai-btn {
@@ -349,6 +442,157 @@ const purposeLabels: Record<string, string> = {
 
     .col-date {
       color: #666;
+    }
+
+    /* Lead Cards Grid */
+    .leads-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    .lead-card {
+      background: #141814;
+      border: 1px solid #2a2d26;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+
+    .lead-card:hover {
+      border-color: #3D4F3D;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .card-header {
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid #1a1d17;
+    }
+
+    .name-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .lead-name {
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .lead-name:hover {
+      color: #C4A67C;
+    }
+
+    .card-body {
+      padding: 12px 16px;
+    }
+
+    .contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 12px;
+      color: #888;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 12px;
+    }
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .info-item .label {
+      font-size: 10px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .info-item .value {
+      font-size: 13px;
+      color: #aaa;
+    }
+
+    .info-item .value.highlight {
+      color: #C4A67C;
+      font-weight: 600;
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .prefs-row,
+    .extras-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: #888;
+    }
+
+    .pref,
+    .extra {
+      background: #1a1d17;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .notes-preview {
+      font-size: 12px;
+      color: #777;
+      font-style: italic;
+      padding: 8px 10px;
+      background: #1a1d17;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .follow-up {
+      font-size: 12px;
+      color: #f59e0b;
+      font-weight: 500;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: #0f1210;
+      border-top: 1px solid #1a1d17;
+    }
+
+    .card-footer .date {
+      font-size: 11px;
+      color: #555;
+    }
+
+    .view-btn {
+      font-size: 12px;
+      color: #C4A67C;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .view-btn:hover {
+      text-decoration: underline;
       font-size: 12px;
     }
 

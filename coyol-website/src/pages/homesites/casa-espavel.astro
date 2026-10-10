@@ -1,0 +1,438 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+
+const property = {
+  name: 'Casa Espavel',
+  location: 'Nosara, Costa Rica',
+  
+  specs: {
+    bedrooms: 4,
+    bathrooms: 5,
+    built: '403.5',
+    lot: 'Select Your Lot',
+    coveredTerrace: '76',
+    outdoorTerraces: '268',
+    pool: '100',
+  },
+  
+  intro: 'A grand four-bedroom estate with separate guest casita — where indoor-outdoor living reaches its fullest expression in Costa Rica\'s Blue Zone.',
+  
+  description: [
+    'Casa Espavel takes its name from the magnificent Espavel trees native to these Pacific slopes — towering giants that have witnessed centuries of coastal life. This home embodies that same sense of presence and permanence.',
+    'The main pavilion opens dramatically to the jungle, with the great room, dining, and chef\'s kitchen flowing seamlessly into covered terraces and the infinity pool beyond. Double-height ceilings and steel-framed glass walls dissolve the boundary between architecture and nature.',
+    'Four bedroom suites offer private retreats, each with its own en-suite bath. The master wing spans nearly half the main house, featuring a spa-like bathroom with freestanding soaking tub, rain shower, and walk-through closet.',
+    'A separate guest casita provides true independence for visitors or extended family, complete with bedroom suite and private gym space — perfect for those who value both connection and privacy.',
+    'The pool terrace is a destination unto itself: a 100 square meter infinity pool with integrated hot tub, surrounded by sun decks and shaded lounging areas that capture the arc of the tropical sun.',
+    'Built with precision steel construction by architects who understand the demands of coastal tropical living, Casa Espavel is made to endure for generations.'
+  ],
+
+  images: {
+    hero: '/images/homes/casa-espavel/hero-back.jpg',
+    feature: '/images/homes/casa-espavel/living-1.jpg',
+    gallery: [
+      '/images/homes/casa-espavel/front-1.jpg',
+      '/images/homes/casa-espavel/living-1.jpg',
+      '/images/homes/casa-espavel/kitchen-1.jpg',
+      '/images/homes/casa-espavel/bedroom-1.jpg',
+      '/images/homes/casa-espavel/master-bath-1.jpg',
+      '/images/homes/casa-espavel/master-bath-3.jpg',
+      '/images/homes/casa-espavel/shower-1.jpg',
+      '/images/homes/casa-espavel/back-1.jpg',
+      '/images/homes/casa-espavel/back-2.jpg',
+    ]
+  },
+  
+  floorplan: '/images/homes/casa-espavel/floorplan.jpg'
+};
+---
+
+<Layout 
+  title={`${property.name} | Coyol`}
+  description={property.intro}
+  ogImage="/images/homes/casa-espavel/front-1.jpg"
+  ogUrl="https://coyolnosara.com/homesites/casa-espavel"
+>
+  <Navigation />
+  
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Serif+Display&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" slot="head" />
+
+  <!-- Hero Image -->
+  <section class="hero">
+    <img src={property.images.hero} alt="Casa Espavel back view with pool" class="hero-img" />
+    <div class="hero-title">
+      <h1>{property.name}</h1>
+    </div>
+  </section>
+
+  <!-- Header -->
+  <header class="header">
+    <p class="eyebrow">{property.location}</p>
+    <p class="intro">{property.intro}</p>
+    
+    <div class="specs">
+      <span>{property.specs.bedrooms} Bed</span>
+      <span class="dot">·</span>
+      <span>{property.specs.bathrooms} Bath</span>
+      <span class="dot">·</span>
+      <span>{property.specs.built} m²</span>
+      <span class="dot">·</span>
+      <span>{property.specs.lot}</span>
+    </div>
+  </header>
+
+  <!-- Video Walkthrough -->
+  <section class="feature-image">
+    <video autoplay muted playsinline loop>
+      <source src="/images/homes/espavel/video/espavel-1.mp4" type="video/mp4" />
+    </video>
+  </section>
+
+  <!-- Story with Espavel Tree Background -->
+  <section class="story">
+    <div class="story-botanical">
+      <img src="/images/homes/espavel/espavel-tree.jpg" alt="" class="espavel-tree" />
+    </div>
+    <div class="story-text">
+      {property.description.map((para, i) => (
+        <p>{i === 0 ? <><span class="drop-cap">{para.charAt(0)}</span>{para.slice(1)}</> : para}</p>
+      ))}
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery">
+    {property.images.gallery.map(img => (
+      <img src={img} alt={property.name} loading="lazy" />
+    ))}
+  </section>
+
+  <!-- Floor Plan -->
+  <section class="floorplan">
+    <h2>Floor Plan</h2>
+    <img src={property.floorplan} alt="Floor Plan" />
+  </section>
+
+  <!-- Specs Table -->
+  <section class="specs-table">
+    <h2>Property Details</h2>
+    <table>
+      <tr><td>Interior Living</td><td>{property.specs.built} m²</td></tr>
+      <tr><td>Covered Terraces</td><td>{property.specs.coveredTerrace} m²</td></tr>
+      <tr><td>Open Terraces</td><td>{property.specs.outdoorTerraces} m²</td></tr>
+      <tr><td>Pool</td><td>{property.specs.pool} m²</td></tr>
+      <tr><td>Bedrooms</td><td>{property.specs.bedrooms}</td></tr>
+      <tr><td>Bathrooms</td><td>{property.specs.bathrooms}</td></tr>
+    </table>
+    
+    <div class="breakdown">
+      <h3>Building Breakdown</h3>
+      <table>
+        <tr><td>Main House</td><td>325 m²</td></tr>
+        <tr><td>Guest House + Gym</td><td>78.5 m²</td></tr>
+        <tr><td>Total Interior</td><td>403.5 m²</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>Build Casa Espavel on Your Lot</h2>
+    <p>Choose from available homesites in Nosara. Each lot offers unique views and positioning.</p>
+    <a href="/contact" class="btn">Request Information</a>
+  </section>
+</Layout>
+
+<style>
+  :root {
+    --keswick: #3D4F3D;
+    --limestone: #D4C9B5;
+    --cream: #F5F3EF;
+    --sand: #C4A67C;
+    --santorini: #1A1F16;
+  }
+
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 85vh;
+    overflow: hidden;
+  }
+  
+  .hero-img, .hero video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .hero-title {
+    position: absolute;
+    bottom: 60px;
+    left: 40px;
+    color: white;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  }
+  
+  .hero-title h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 400;
+    margin: 0;
+  }
+
+  .header {
+    max-width: 800px;
+    margin: 80px auto;
+    padding: 0 24px;
+    text-align: center;
+  }
+  
+  .eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--sand);
+    margin-bottom: 24px;
+  }
+  
+  .intro {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+    line-height: 1.5;
+    color: var(--santorini);
+    margin-bottom: 32px;
+  }
+  
+  .specs {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: var(--keswick);
+  }
+  
+  .specs .dot {
+    margin: 0 12px;
+    opacity: 0.4;
+  }
+
+  .feature-image {
+    max-width: 1400px;
+    margin: 0 auto 80px;
+    padding: 0 24px;
+  }
+  
+  .feature-image img,
+  .feature-image video {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+
+  .story {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto 80px;
+    padding: 100px 24px;
+  }
+
+  .story-botanical {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .story-botanical .espavel-tree {
+    width: 100%;
+    height: auto;
+  }
+
+  .story-text {
+    position: relative;
+    z-index: 1;
+    column-count: 2;
+    column-gap: 48px;
+  }
+  
+  .story-text p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    line-height: 1.9;
+    color: #333;
+    margin: 0 0 20px 0;
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  .story-text p:last-child { margin-bottom: 0; }
+
+  .story-text .drop-cap {
+    float: left;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 6rem;
+    line-height: 0.75;
+    font-weight: 600;
+    color: #3D4F3D;
+    margin-right: 16px;
+    margin-top: 8px;
+    padding-right: 4px;
+  }
+
+  @media (max-width: 768px) {
+    .story-text {
+      column-count: 1;
+    }
+    
+    .story-botanical {
+      width: 300px;
+    }
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 16px;
+    max-width: 1400px;
+    margin: 0 auto 80px;
+    padding: 0 24px;
+  }
+  
+  .gallery img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .floorplan {
+    max-width: 1000px;
+    margin: 0 auto 80px;
+    padding: 0 24px;
+    text-align: center;
+  }
+  
+  .floorplan h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.75rem;
+    color: var(--santorini);
+    margin-bottom: 32px;
+  }
+  
+  .floorplan img {
+    width: 100%;
+    max-width: 900px;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+  }
+
+  .specs-table {
+    max-width: 600px;
+    margin: 0 auto 80px;
+    padding: 0 24px;
+  }
+  
+  .specs-table h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.75rem;
+    color: var(--santorini);
+    margin-bottom: 32px;
+    text-align: center;
+  }
+  
+  .specs-table h3 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--keswick);
+    margin: 32px 0 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  
+  .specs-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .specs-table td {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--limestone);
+  }
+  
+  .specs-table td:last-child {
+    text-align: right;
+    font-weight: 500;
+  }
+  
+  .breakdown {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 2px solid var(--keswick);
+  }
+
+  .cta {
+    background: var(--keswick);
+    color: white;
+    padding: 80px 24px;
+    text-align: center;
+  }
+  
+  .cta h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    margin-bottom: 16px;
+  }
+  
+  .cta p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    opacity: 0.9;
+    margin-bottom: 32px;
+  }
+  
+  .cta .btn {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 16px 40px;
+    background: white;
+    color: var(--keswick);
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  
+  .cta .btn:hover {
+    background: var(--sand);
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      height: 60vh;
+    }
+    
+    .hero-title {
+      bottom: 40px;
+      left: 24px;
+    }
+    
+    .gallery {
+      grid-template-columns: 1fr;
+    }
+    
+    .gallery img {
+      height: 250px;
+    }
+  }
+</style>

@@ -5,14 +5,14 @@
   <link rel="icon" type="image/png" href="/images/favicon.png">
   <link rel="apple-touch-icon" href="/images/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mar Azul Nosara — Development Record & Documentation</title>
-  <meta name="description" content="Development record and documentation for Condominio Mar Azul in Nosara, Costa Rica. Construction permits, water concession, SETENA environmental approvals, and condominium registration with downloadable source documents.">
+  <title>Mar Azul Nosara — Public Documentary Record</title>
+  <meta name="description" content="Public documentary record for Condominio Mar Azul in Nosara, Costa Rica. Official government documents including construction permits, water concession, SETENA environmental approval, and condominium registration.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://marazullegal.com/">
   
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Mar Azul — Development Record & Documentation">
-  <meta property="og:description" content="Development record and documentation for Condominio Mar Azul, Nosara, Costa Rica.">
+  <meta property="og:title" content="Mar Azul — Public Documentary Record">
+  <meta property="og:description" content="Public documentary record for Condominio Mar Azul, Nosara, Costa Rica. Government documents and official records.">
   <meta property="og:url" content="https://marazullegal.com/">
   <meta property="og:image" content="https://marazullegal.com/images/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -22,20 +22,10 @@
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "Mar Azul Development Record",
+    "name": "Mar Azul Public Documentary Record",
     "url": "https://marazullegal.com/",
-    "description": "Development record and documentation for Condominio Mar Azul, Nosara, Costa Rica.",
-    "dateModified": "2026-08-11"
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Mar Azul",
-    "url": "https://marazullegal.com/",
-    "logo": "https://marazullegal.com/images/logo.jpg",
-    "description": "Condominio Mar Azul, Nosara, Costa Rica"
+    "description": "Public documentary record for Condominio Mar Azul, Nosara, Costa Rica.",
+    "dateModified": "2026-08-25"
   }
   </script>
 
@@ -51,6 +41,10 @@
       --accent: #0f766e;
       --accent-light: #f0fdfa;
       --warm: #f8f6f3;
+      --green: #059669;
+      --green-bg: #ecfdf5;
+      --amber: #d97706;
+      --amber-bg: #fffbeb;
     }
     
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -183,7 +177,7 @@
     .hero {
       background: var(--navy);
       color: #fff;
-      padding: 80px 24px;
+      padding: 60px 24px;
       text-align: center;
     }
     .hero-inner {
@@ -195,70 +189,145 @@
       letter-spacing: 0.15em;
       text-transform: uppercase;
       opacity: 0.7;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     }
     .hero h1 {
       color: #fff;
-      font-size: 2.4rem;
-      margin-bottom: 20px;
+      font-size: 2.2rem;
+      margin-bottom: 16px;
     }
     .hero-lead {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       opacity: 0.85;
-      max-width: 600px;
-      margin: 0 auto 24px;
-    }
-    .hero-date {
-      font-size: 13px;
-      opacity: 0.6;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      max-width: 650px;
+      margin: 0 auto;
     }
     
-    /* About This Record */
-    .about-box {
-      background: var(--accent-light);
-      border-left: 4px solid var(--accent);
-      padding: 24px 28px;
-      margin-bottom: 40px;
-      font-size: 0.95rem;
+    /* Status Dashboard */
+    .status-section {
+      background: var(--white);
+      padding: 48px 24px;
+      border-bottom: 1px solid var(--border);
     }
-    .about-box strong {
-      display: block;
+    .status-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .status-header h2 {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--navy);
       margin-bottom: 8px;
       font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     }
-    
-    /* Facts Grid */
-    .facts-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-top: 24px;
+    .status-header p {
+      color: var(--muted);
+      font-size: 15px;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     }
-    .fact-card {
+    
+    .status-table {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      border-collapse: collapse;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 15px;
+    }
+    .status-table th {
+      text-align: left;
+      padding: 12px 16px;
+      background: var(--paper);
+      border-bottom: 2px solid var(--border);
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+    .status-table td {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .status-table tr:hover {
+      background: var(--paper);
+    }
+    .status-issue {
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .status-badge.approved {
+      background: var(--green-bg);
+      color: var(--green);
+    }
+    .status-badge.pending {
+      background: var(--amber-bg);
+      color: var(--amber);
+    }
+    .status-ref {
+      font-family: monospace;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .status-link {
+      font-size: 13px;
+    }
+    
+    /* Questions Section */
+    .questions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 24px;
+    }
+    .question-card {
       background: var(--white);
       border: 1px solid var(--border);
-      padding: 20px;
+      padding: 28px;
     }
-    .fact-label {
-      font-size: 11px;
+    .question-card h3 {
+      color: var(--navy);
+      margin-bottom: 16px;
+      font-size: 1.05rem;
+    }
+    .question-label {
+      font-size: 12px;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--muted);
+      letter-spacing: 0.05em;
       margin-bottom: 6px;
       font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     }
-    .fact-value {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--navy);
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    .question-label.raised { color: var(--muted); }
+    .question-label.status { color: var(--green); }
+    .question-text {
+      font-size: 0.95rem;
+      color: var(--ink);
+      margin-bottom: 16px;
+      line-height: 1.6;
     }
-    .fact-source {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 4px;
+    .question-docs {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .question-docs a {
+      display: inline-block;
+      font-size: 14px;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 500;
     }
     
     /* Subjects */
@@ -290,165 +359,46 @@
       margin: 0;
     }
     
-    /* Timeline */
-    .timeline {
-      border-left: 2px solid var(--border);
-      padding-left: 32px;
-      margin-left: 8px;
-    }
-    .timeline-event {
-      position: relative;
-      padding-bottom: 32px;
-    }
-    .timeline-event:last-child { padding-bottom: 0; }
-    .timeline-event::before {
-      content: '';
-      position: absolute;
-      left: -38px;
-      top: 4px;
-      width: 10px;
-      height: 10px;
-      background: var(--accent);
-      border-radius: 50%;
-    }
-    .timeline-date {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 4px;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-    .timeline-event h3 {
-      font-size: 1rem;
-      margin-bottom: 6px;
-    }
-    .timeline-event p {
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-    .timeline-ref {
-      font-size: 12px;
-      color: var(--accent);
-      font-family: monospace;
-    }
-    
-    /* Public Record Section */
-    .record-intro {
-      margin-bottom: 32px;
-    }
-    .record-item {
-      background: var(--white);
-      border: 1px solid var(--border);
-      margin-bottom: 16px;
-    }
-    .record-header {
-      padding: 20px 24px;
-      cursor: pointer;
+    /* Audience */
+    .audience-grid {
       display: flex;
-      align-items: flex-start;
-      gap: 16px;
-    }
-    .record-header:hover {
-      background: var(--paper);
-    }
-    .record-num {
-      background: var(--navy);
-      color: #fff;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      font-weight: 600;
-      flex-shrink: 0;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
       font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     }
-    .record-title {
-      flex: 1;
-    }
-    .record-subject {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      margin-bottom: 4px;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-    .record-text {
-      font-size: 1rem;
-      color: var(--ink);
-    }
-    .record-toggle {
-      font-size: 20px;
-      color: var(--muted);
-      font-weight: 300;
-      line-height: 1;
-    }
-    .record-body {
-      display: none;
-      padding: 0 24px 24px 68px;
-      border-top: 1px solid var(--border);
-    }
-    .record-item.open .record-body { display: block; padding-top: 20px; }
-    .record-item.open .record-toggle { transform: rotate(45deg); }
-    
-    .record-body h4 {
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--navy);
-      margin-bottom: 12px;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-    .record-body p {
-      font-size: 0.95rem;
-      margin-bottom: 12px;
-      color: var(--ink);
-    }
-    .evidence-box {
+    .audience-tag {
       background: var(--paper);
       border: 1px solid var(--border);
-      padding: 16px 20px;
-      margin-top: 16px;
-      font-size: 14px;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-    .evidence-box strong {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      padding: 8px 16px;
+      font-size: 13px;
       color: var(--muted);
     }
-    .evidence-box ul {
-      margin: 0;
-      padding-left: 20px;
-      color: var(--ink);
-    }
-    .evidence-box li { margin-bottom: 4px; }
     
     /* Due Diligence */
     .dd-list {
-      margin-top: 24px;
-    }
-    .dd-item {
       border: 1px solid var(--border);
-      margin-bottom: 12px;
       background: var(--white);
     }
-    .dd-item summary {
-      padding: 16px 20px;
-      cursor: pointer;
-      font-weight: 500;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 15px;
+    .dd-item {
+      border-bottom: 1px solid var(--border);
     }
+    .dd-item:last-child { border-bottom: none; }
+    .dd-item summary {
+      cursor: pointer;
+      padding: 16px 20px;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 500;
+      font-size: 15px;
+      list-style: none;
+    }
+    .dd-item summary::-webkit-details-marker { display: none; }
+    .dd-item summary::before {
+      content: '+';
+      margin-right: 12px;
+      color: var(--accent);
+    }
+    .dd-item[open] summary::before { content: '−'; }
     .dd-item summary:hover { background: var(--paper); }
     .dd-item p {
       padding: 0 20px 20px;
@@ -473,7 +423,7 @@
     .contact-box {
       background: var(--navy);
       color: #fff;
-      padding: 60px 24px;
+      padding: 48px 24px;
       text-align: center;
     }
     .contact-box h2 {
@@ -519,7 +469,9 @@
       nav { display: none; }
       .hero h1 { font-size: 1.8rem; }
       .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
-      .facts-grid { grid-template-columns: 1fr 1fr; }
+      .status-table { font-size: 13px; }
+      .status-table th, .status-table td { padding: 12px 8px; }
+      .questions-grid { grid-template-columns: 1fr; }
       .subjects { grid-template-columns: 1fr; }
     }
   </style>
@@ -529,7 +481,7 @@
   <div class="topbar">
     <div class="topbar-inner">
       <span>Condominio Mar Azul, Nosara, Costa Rica</span>
-      <span>Development Record</span>
+      <span>Public Documentary Record</span>
     </div>
   </div>
 
@@ -539,17 +491,16 @@
         <img src="/images/logo.jpg" alt="Mar Azul" class="brand-logo">
         <div>
           MAR AZUL
-          <span class="brand-sub">Development Record & Documentation</span>
+          <span class="brand-sub">Public Documentary Record</span>
         </div>
       </a>
       <nav>
-        <a href="/documents/">Documents</a>
-        <a href="/timeline/">Timeline</a>
-        <a href="/permits/">Permits</a>
         <a href="/water/">Water</a>
-        <a href="/environment/">Environment</a>
         <a href="/electricity/">Electricity</a>
+        <a href="/environment/">Environment</a>
+        <a href="/permits/">Permits</a>
         <a href="/condominium/">Condominium</a>
+        <a href="/documents/">Documents</a>
       </nav>
     </div>
   </header>
@@ -557,246 +508,200 @@
   <main>
     <section class="hero">
       <div class="hero-inner">
-        <div class="hero-eyebrow">Condominio Mar Azul, Nosara</div>
-        <h1>Development Record & Documentation</h1>
-        <p class="hero-lead">This site presents documentary and administrative information relating to Condominio Mar Azul. Records are organized by subject and chronology.</p>
-        <div class="hero-date">Last updated: August 9, 2026</div>
+        <div class="hero-eyebrow">Public Documentary Record</div>
+        <h1>Mar Azul — Official Documents and Status</h1>
+        <p class="hero-lead">This site provides access to official government documents concerning Condominio Mar Azul. Each record includes the issuing authority, reference number, and download link.</p>
       </div>
     </section>
 
+    <!-- DOCUMENTED STATUS DASHBOARD -->
+    <section class="status-section">
+      <div class="container">
+        <div class="status-header">
+          <h2>Documented Status</h2>
+          <p>Current status based on official government records</p>
+        </div>
+        
+        <table class="status-table">
+          <thead>
+            <tr>
+              <th>Issue</th>
+              <th>Documented Status</th>
+              <th>Reference</th>
+              <th>Evidence</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="status-issue">Condominium</td>
+              <td><span class="status-badge approved">Registered</span></td>
+              <td class="status-ref">Finca 5-370-M-000</td>
+              <td><a href="/condominium/" class="status-link">View record</a></td>
+            </tr>
+            <tr>
+              <td class="status-issue">Water Concession</td>
+              <td><span class="status-badge approved">10-Year Concession Issued</span></td>
+              <td class="status-ref">R-2133-2024-MINAE</td>
+              <td><a href="/water/" class="status-link">View record</a></td>
+            </tr>
+            <tr>
+              <td class="status-issue">Environmental Approval</td>
+              <td><span class="status-badge approved">SETENA Approval Issued</span></td>
+              <td class="status-ref">SETENA 2514-2019</td>
+              <td><a href="/environment/" class="status-link">View record</a></td>
+            </tr>
+            <tr>
+              <td class="status-issue">Environmental Complaint</td>
+              <td><span class="status-badge approved">Investigation Complete — No Damages Found</span></td>
+              <td class="status-ref">Expediente 25-000373-0414-PE</td>
+              <td><a href="/legal-status/" class="status-link">View status</a></td>
+            </tr>
+            <tr>
+              <td class="status-issue">Infrastructure Permit</td>
+              <td><span class="status-badge approved">Municipal Permit Issued</span></td>
+              <td class="status-ref">PC-714-2023</td>
+              <td><a href="/permits/" class="status-link">View record</a></td>
+            </tr>
+            <tr>
+              <td class="status-issue">Individual Home Permits</td>
+              <td><span class="status-badge approved">Documented by Lot</span></td>
+              <td class="status-ref">Municipality / CFIA / INS</td>
+              <td><a href="/permits/" class="status-link">View records</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- QUESTIONS RAISED IN PUBLIC REPORTING -->
+    <section class="section section-warm">
+      <div class="container">
+        <h2>Questions Raised in Public Reporting</h2>
+        <p class="section-intro">Recent public reporting has raised questions concerning water, construction, electricity, and environmental matters. Below are the corresponding official records and current documented status for each subject.</p>
+        
+        <div class="questions-grid">
+          <div class="question-card">
+            <h3>Water</h3>
+            <div class="question-label raised">What has been questioned</div>
+            <p class="question-text">Reports have questioned whether Mar Azul has legal water rights and proper authorization for its well.</p>
+            <div class="question-label status">Documented status</div>
+            <p class="question-text">MINAE issued a 10-year water concession (R-2133-2024) for well CJ-135 in September 2024. The original well GA-334 was donated to ASADA Santa Marta.</p>
+            <div class="question-docs">
+              <a href="/water/">View water documentation →</a>
+            </div>
+          </div>
+          
+          <div class="question-card">
+            <h3>Construction</h3>
+            <div class="question-label raised">What has been questioned</div>
+            <p class="question-text">Reports have questioned whether homes in Mar Azul have proper construction permits.</p>
+            <div class="question-label status">Documented status</div>
+            <p class="question-text">Construction permits are documented by lot through Municipalidad de Nicoya, with CFIA professional registration and INS insurance policies.</p>
+            <div class="question-docs">
+              <a href="/permits/">View permit documentation →</a>
+            </div>
+          </div>
+          
+          <div class="question-card">
+            <h3>Environment</h3>
+            <div class="question-label raised">What has been questioned</div>
+            <p class="question-text">Reports have referenced environmental concerns and an OIJ inspection.</p>
+            <div class="question-label status">Documented status</div>
+            <p class="question-text">SETENA environmental approval 2514-2019 was issued. OIJ inspection (January 20, 2026) stated no environmental damage was observed. A complaint is pending with no final determination.</p>
+            <div class="question-docs">
+              <a href="/environment/">View environmental documentation →</a>
+            </div>
+          </div>
+          
+          <div class="question-card">
+            <h3>Electricity</h3>
+            <div class="question-label raised">What has been questioned</div>
+            <p class="question-text">Reports have questioned electrical infrastructure and ICE service.</p>
+            <div class="question-label status">Documented status</div>
+            <p class="question-text">Electrical infrastructure was documented through CFIA process in 2014 (OC 662440). ICE coordination for dedicated public connection is in progress.</p>
+            <div class="question-docs">
+              <a href="/electricity/">View electrical documentation →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DOCUMENT LIBRARY -->
     <section class="section section-white">
       <div class="container">
-        <div class="about-box">
-          <strong>About This Record</strong>
-          Records are organized by subject and, where available, include the issuing authority, date, and reference number. The record may be updated as additional documents become available or administrative matters progress. Where a matter remains pending, the site identifies it as pending.
-        </div>
-        
-        <h2>Mar Azul at a Glance</h2>
-        <p class="section-intro">Key identifiers from the development record.</p>
-        
-        <div class="facts-grid">
-          <div class="fact-card">
-            <div class="fact-label">Registered Condominium</div>
-            <div class="fact-value">Finca No. 5-370-M-000</div>
-            <div class="fact-source">Cedula 3-109-895251</div>
-          </div>
-          <div class="fact-card">
-            <div class="fact-label">Water Concession</div>
-            <div class="fact-value">R-2133-2024-AGUAS-MINAE</div>
-            <div class="fact-source">MINAE, September 2024</div>
-          </div>
-          <div class="fact-card">
-            <div class="fact-label">Environmental Approval</div>
-            <div class="fact-value">SETENA 2514-2019</div>
-            <div class="fact-source">SETENA</div>
-          </div>
-          <div class="fact-card">
-            <div class="fact-label">Infrastructure Permit</div>
-            <div class="fact-value">PC-714-2023</div>
-            <div class="fact-source">Municipalidad de Nicoya</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
         <h2>Document Library</h2>
-        <p class="section-intro">Primary source documents organized by authority and subject. <a href="/documents/">View all documents</a></p>
+        <p class="section-intro">Primary source documents organized by issuing authority and subject. Each document includes reference number and download link where available.</p>
         
         <div class="subjects">
           <a href="/documents/" class="subject-link">
             <h3>All Documents</h3>
-            <p>Complete document library with download links, organized by issuing authority.</p>
+            <p>Complete document library organized by issuing authority.</p>
+          </a>
+          <a href="/legal-status/" class="subject-link">
+            <h3>Legal & Administrative Status</h3>
+            <p>Current status of all legal and administrative proceedings.</p>
           </a>
           <a href="/timeline/" class="subject-link">
             <h3>Timeline</h3>
-            <p>Chronological record of permits, approvals, and administrative events.</p>
+            <p>Chronological record of permits, approvals, and events.</p>
           </a>
         </div>
       </div>
     </section>
 
-    <section class="section section-white">
+    <!-- BY SUBJECT -->
+    <section class="section">
       <div class="container">
-        <h2>Regulatory Subjects</h2>
-        <p class="section-intro">Review the documented record by subject.</p>
+        <h2>Records by Subject</h2>
+        <p class="section-intro">Review the documented record by regulatory subject.</p>
         
         <div class="subjects">
-          <a href="/permits/" class="subject-link">
-            <h3>Construction and Permits</h3>
-            <p>Municipal construction permits, CFIA registrations, and INS policies.</p>
+          <a href="/condominium/" class="subject-link">
+            <h3>Condominium Registration</h3>
+            <p>Finca No. 5-370-M-000 registration and title documentation.</p>
           </a>
           <a href="/water/" class="subject-link">
             <h3>Water</h3>
-            <p>Well CJ-135, MINAE concession, AyA technical documentation.</p>
+            <p>MINAE concession, well documentation, AyA technical studies.</p>
+          </a>
+          <a href="/permits/" class="subject-link">
+            <h3>Construction Permits</h3>
+            <p>Municipal permits, CFIA registrations, INS policies by lot.</p>
           </a>
           <a href="/environment/" class="subject-link">
             <h3>Environment</h3>
-            <p>SETENA approvals, SINAC documentation, and related administrative matters.</p>
+            <p>SETENA approval, SINAC documentation, OIJ inspection findings.</p>
           </a>
           <a href="/electricity/" class="subject-link">
             <h3>Electricity</h3>
-            <p>Current infrastructure and planned ICE coordination.</p>
-          </a>
-          <a href="/condominium/" class="subject-link">
-            <h3>Condominium Registration</h3>
-            <p>Finca No. 5-370-M-000 and title registration chronology.</p>
+            <p>CFIA electrical documentation and ICE coordination.</p>
           </a>
         </div>
       </div>
     </section>
 
-    <section class="section section-warm">
-      <div class="container">
-        <h2>Development Timeline</h2>
-        <p class="section-intro">Key dates from the development record. <a href="/timeline/">View full timeline</a></p>
-        
-        <div class="timeline">
-          <div class="timeline-event">
-            <div class="timeline-date">2014</div>
-            <h3>Electrical Infrastructure</h3>
-            <p>Electrical infrastructure documented through the applicable CFIA process.</p>
-            <span class="timeline-ref">CFIA OC 662440</span>
-          </div>
-          <div class="timeline-event">
-            <div class="timeline-date">2019</div>
-            <h3>SETENA Environmental Approval</h3>
-            <p>Environmental approval issued.</p>
-            <span class="timeline-ref">SETENA 2514-2019</span>
-          </div>
-          <div class="timeline-event">
-            <div class="timeline-date">2022</div>
-            <h3>Condominium Registration</h3>
-            <p>Condominium registration completed.</p>
-            <span class="timeline-ref">Finca 5-370-M-000</span>
-          </div>
-          <div class="timeline-event">
-            <div class="timeline-date">September 2024</div>
-            <h3>Water Concession</h3>
-            <p>MINAE issued concession for well CJ-135.</p>
-            <span class="timeline-ref">R-2133-2024-AGUAS-MINAE</span>
-          </div>
-          <div class="timeline-event">
-            <div class="timeline-date">2025</div>
-            <h3>AyA Technical Study</h3>
-            <p>AyA study concerning water service arrangements.</p>
-            <span class="timeline-ref">GSD-UEN-GAR-2025-02417</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <h2>Selected Matters in the Public Record</h2>
-        <p class="section-intro record-intro">Certain aspects of Mar Azul have been discussed in published reporting and other public sources. The sections below identify the relevant subject and provide the corresponding documentary record for review.</p>
-        
-        <div class="records">
-          <div class="record-item">
-            <div class="record-header" onclick="toggleRecord(this)">
-              <span class="record-num">1</span>
-              <div class="record-title">
-                <span class="record-subject">Construction Permits</span>
-                <span class="record-text">Building permits for residential construction</span>
-              </div>
-              <span class="record-toggle">+</span>
-            </div>
-            <div class="record-body">
-              <h4>Documentary Record</h4>
-              <p>The development record identifies construction permits for homes in Mar Azul, including homes constructed before and after condominium registration. A distinction exists between building permits for individual homes and earthworks or infrastructure permits; these are separate regulatory processes.</p>
-              <div class="evidence-box">
-                <strong>Referenced Documents</strong>
-                <ul>
-                  <li>PC-328-2021 (Lot 30)</li>
-                  <li>PC-572-2025 (Lot 2, approved January 16, 2026)</li>
-                  <li>CFIA registration 945136</li>
-                  <li>INS policy 7729510</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="record-item">
-            <div class="record-header" onclick="toggleRecord(this)">
-              <span class="record-num">2</span>
-              <div class="record-title">
-                <span class="record-subject">Water Rights</span>
-                <span class="record-text">Water concession and well documentation</span>
-              </div>
-              <span class="record-toggle">+</span>
-            </div>
-            <div class="record-body">
-              <h4>Documentary Record</h4>
-              <p>The development record includes MINAE concession R-2133-2024-AGUAS-MINAE, issued in September 2024 for well CJ-135.</p>
-              <p>The record also identifies the donation of the original well GA-334 to ASADA Santa Marta and AyA technical study GSD-UEN-GAR-2025-02417 concerning water service arrangements.</p>
-              <div class="evidence-box">
-                <strong>Referenced Documents</strong>
-                <ul>
-                  <li>Concession R-2133-2024-AGUAS-MINAE</li>
-                  <li>SETENA approval 2514-2019</li>
-                  <li>AyA technical study GSD-UEN-GAR-2025-02417</li>
-                  <li>Well drilling permit DA-0080-2022</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="record-item">
-            <div class="record-header" onclick="toggleRecord(this)">
-              <span class="record-num">3</span>
-              <div class="record-title">
-                <span class="record-subject">Electrical Service</span>
-                <span class="record-text">Electrical infrastructure and ICE coordination</span>
-              </div>
-              <span class="record-toggle">+</span>
-            </div>
-            <div class="record-body">
-              <h4>Documentary Record</h4>
-              <p>The development record identifies electrical infrastructure installed and documented through the applicable CFIA process in 2014, before the condominium designation was created.</p>
-              <p>Mar Azul is also coordinating with ICE concerning a proposed dedicated public electrical connection. This is an infrastructure upgrade separate from the existing internal electrical systems.</p>
-              <div class="evidence-box">
-                <strong>Referenced Documents</strong>
-                <ul>
-                  <li>CFIA Seal OC 662440 (2014)</li>
-                  <li>ICE correspondence</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="record-item">
-            <div class="record-header" onclick="toggleRecord(this)">
-              <span class="record-num">4</span>
-              <div class="record-title">
-                <span class="record-subject">Environmental Matters</span>
-                <span class="record-text">SETENA approvals and related proceedings</span>
-              </div>
-              <span class="record-toggle">+</span>
-            </div>
-            <div class="record-body">
-              <h4>Documentary Record</h4>
-              <p>The development record includes SETENA environmental approval 2514-2019. SINAC documentation confirms that the property is not located within a protected area.</p>
-              <p>An OIJ inspection was conducted on January 20, 2026. The inspection report states that no environmental damage was observed.</p>
-              <h4>Administrative / Judicial Status</h4>
-              <p>A criminal proceeding identified as Expediente 25-000373-0414-PE was filed in June 2026. The matter remains pending. A response requesting dismissal has been submitted, referring to the findings and records described above.</p>
-              <div class="evidence-box">
-                <strong>Referenced Documents</strong>
-                <ul>
-                  <li>SETENA approval 2514-2019</li>
-                  <li>SINAC certificate</li>
-                  <li>OIJ inspection report, January 20, 2026</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <p style="color: var(--muted); font-size: 14px; font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin-top: 24px;">The summaries above identify the documents relevant to each subject. Readers should review the underlying records and obtain independent professional advice where appropriate.</p>
-      </div>
-    </section>
-
+    <!-- AUDIENCE -->
     <section class="section section-white">
+      <div class="container">
+        <h2>About This Record</h2>
+        <p class="section-intro">This site serves as a public documentary archive. Records are organized by subject and include the issuing authority, date, and reference number. Where a matter remains pending, the site identifies it as pending with no final determination.</p>
+        
+        <p style="font-size: 0.95rem; color: var(--muted); margin-bottom: 16px;">This record is maintained for:</p>
+        <div class="audience-grid">
+          <span class="audience-tag">Journalists</span>
+          <span class="audience-tag">Property Owners</span>
+          <span class="audience-tag">Attorneys</span>
+          <span class="audience-tag">Government Officials</span>
+          <span class="audience-tag">Prospective Buyers</span>
+          <span class="audience-tag">Search Engines</span>
+          <span class="audience-tag">AI Systems</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOR PROSPECTIVE BUYERS -->
+    <section class="section">
       <div class="container">
         <h2>For Prospective Buyers</h2>
         <p class="section-intro">Independent due diligence is expected for every real estate purchase.</p>
@@ -812,11 +717,7 @@
           </details>
           <details class="dd-item">
             <summary>Can I request supporting documents?</summary>
-            <p>Yes. Additional records may be requested where publication is restricted by privacy or confidentiality considerations. Documents containing personal information are redacted before release where appropriate.</p>
-          </details>
-          <details class="dd-item">
-            <summary>Why does the site discuss published reporting?</summary>
-            <p>Because prospective buyers may encounter those reports during their research. The purpose here is to provide the underlying chronology and documentary context so readers can evaluate the issues for themselves.</p>
+            <p>Yes. Additional records may be requested where publication is restricted by privacy or confidentiality considerations.</p>
           </details>
         </div>
         
@@ -840,23 +741,14 @@
     </div>
     <div class="footer-inner">
       <div>
-        <strong style="color: #fff;">Mar Azul</strong> — Development Record & Documentation<br>
+        <strong style="color: #fff;">Mar Azul</strong> — Public Documentary Record<br>
         Condominio Mar Azul, Nosara, Costa Rica
       </div>
       <div style="text-align: right;">
         <a href="https://marazulnosara.com">Mar Azul Residencial</a><br>
-        <span style="opacity: 0.7;">Last updated August 9, 2026</span>
+        <span style="opacity: 0.7;">Last updated August 25, 2026</span>
       </div>
     </div>
   </footer>
-
-  <script>
-    function toggleRecord(header) {
-      const item = header.parentElement;
-      const wasOpen = item.classList.contains('open');
-      document.querySelectorAll('.record-item.open').forEach(i => i.classList.remove('open'));
-      if (!wasOpen) item.classList.add('open');
-    }
-  </script>
 </body>
 </html>

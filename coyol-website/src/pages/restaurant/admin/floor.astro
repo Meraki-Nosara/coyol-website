@@ -14,6 +14,10 @@ import '../../../styles/coyol-tables.css';
         <div class="header-left">
           <h1>Floor Plan</h1>
           <span class="subtitle" id="tableCount">0 tables</span>
+          <div class="date-picker-wrapper">
+            <input type="date" id="datePicker" class="date-picker" />
+            <span class="res-count" id="resCount">0 reservations</span>
+          </div>
         </div>
         <div class="zone-tabs">
           <button class="zone-tab" data-zone="inside">Inside</button>
@@ -40,7 +44,7 @@ import '../../../styles/coyol-tables.css';
             <div class="palette-item" draggable="true" data-type="round" title="Round (4-top)">
               <div class="palette-preview round"></div>
               <span class="palette-name">Round (4-top)</span>
-              <span class="palette-capacity" data-type="round">2</span>
+              <span class="palette-capacity" data-type="round">4</span>
             </div>
             <div class="palette-item" draggable="true" data-type="round-lg" title="Round Large">
               <div class="palette-preview round-lg"></div>
@@ -81,16 +85,23 @@ import '../../../styles/coyol-tables.css';
             </div>
           </div>
         </div>
-        <div class="tool-section" id="tableDetailsSection" style="display: none;">
-          <span class="tool-label">Selected Table</span>
-          <div class="table-details" id="tableDetails"></div>
         </div>
-      </div>
 
       <!-- Floor Plan -->
       <div class="floor-wrapper">
         <div class="floor-container">
           <div class="floor-grid" id="floorGrid"></div>
+        </div>
+      </div>
+
+      <!-- Selected Table Panel (Floating) -->
+      <div class="table-panel" id="tablePanel" style="display: none;">
+        <div class="panel-header">
+          <h3 id="panelTitle">Editing Selected Table</h3>
+          <button class="panel-close" id="panelClose">&times;</button>
+        </div>
+        <div class="panel-body" id="panelBody">
+          <!-- Dynamic content -->
         </div>
       </div>
 
@@ -208,6 +219,37 @@ import '../../../styles/coyol-tables.css';
     .btn-primary:hover { background: #8B4D33; }
     .btn-secondary { background: var(--cream); color: var(--santorini); border: 1px solid var(--limestone); }
     .btn-secondary:hover { background: var(--parchment); }
+
+    /* Date Picker */
+    .date-picker-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-left: 1.5rem;
+      padding-left: 1.5rem;
+      border-left: 1px solid var(--limestone);
+    }
+    .date-picker {
+      padding: 0.5rem 0.75rem;
+      border: 2px solid var(--limestone);
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-family: 'Inter', sans-serif;
+      background: white;
+      cursor: pointer;
+    }
+    .date-picker:focus {
+      outline: none;
+      border-color: var(--keswick);
+    }
+    .res-count {
+      font-size: 0.8125rem;
+      color: var(--keswick);
+      font-weight: 600;
+      background: rgba(61, 79, 61, 0.1);
+      padding: 0.375rem 0.75rem;
+      border-radius: 12px;
+    }
 
     /* Toolbar */
     .toolbar {
@@ -328,55 +370,437 @@ import '../../../styles/coyol-tables.css';
       background: transparent;
     }
 
-    /* Table Details */
-    .table-details {
+    /* Floating Table Panel */
+    .table-panel {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25), 0 0 0 1px rgba(0,0,0,0.05);
+      z-index: 1000;
+      min-width: 360px;
+      max-width: 420px;
+      animation: panelIn 0.2s ease-out;
+    }
+
+    @keyframes panelIn {
+      from { opacity: 0; transform: translate(-50%, -48%); }
+      to { opacity: 1; transform: translate(-50%, -50%); }
+    }
+
+    .panel-header {
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
+      justify-content: space-between;
       align-items: center;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--limestone);
+      background: var(--keswick);
+      border-radius: 16px 16px 0 0;
     }
 
-    .detail-input {
-      padding: 0.5rem 0.75rem;
-      border: 1px solid var(--limestone);
-      border-radius: 6px;
-      font-size: 0.875rem;
-      background: var(--cream);
-      color: var(--santorini);
-      width: 120px;
+    .panel-header h3 {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: white;
+      margin: 0;
     }
 
-    .detail-input:focus { outline: none; border-color: var(--keswick); }
-
-    .detail-btn {
-      padding: 0.5rem 1rem;
-      border: 1px solid var(--limestone);
-      background: var(--cream);
-      border-radius: 6px;
-      font-size: 0.8125rem;
+    .panel-close {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      color: white;
+      font-size: 1.25rem;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .panel-close:hover { background: rgba(255,255,255,0.3); }
+
+    .panel-body {
+      padding: 1.5rem;
+    }
+
+    .panel-field {
+      margin-bottom: 1.25rem;
+    }
+
+    .panel-field:last-child { margin-bottom: 0; }
+
+    .panel-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--keswick);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .panel-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--limestone);
+      border-radius: 8px;
+      font-size: 1rem;
+      background: var(--cream);
+      color: var(--santorini);
+      transition: border-color 0.2s;
+    }
+
+    .panel-input:focus {
+      outline: none;
+      border-color: var(--keswick);
+    }
+
+    .panel-row {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .panel-row .panel-field { flex: 1; }
+
+    .panel-select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--limestone);
+      border-radius: 8px;
+      font-size: 1rem;
+      background: var(--cream);
+      color: var(--santorini);
+      cursor: pointer;
+    }
+
+    .panel-select:focus {
+      outline: none;
+      border-color: var(--keswick);
+    }
+
+    /* Online Toggle - Premium Style */
+    .online-switch {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 1rem;
+      background: var(--cream);
+      border-radius: 8px;
+      border: 2px solid var(--limestone);
+    }
+
+    .switch-track {
+      position: relative;
+      width: 52px;
+      height: 28px;
+      background: #dc2626;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .switch-track.active {
+      background: #16a34a;
+    }
+
+    .switch-thumb {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+    }
+
+    .switch-track.active .switch-thumb {
+      transform: translateX(24px);
+    }
+
+    .switch-label {
+      font-size: 0.9375rem;
       color: var(--santorini);
     }
 
-    .detail-btn:hover { background: var(--parchment); }
-    .detail-btn.danger { color: var(--terracotta); border-color: var(--terracotta); }
-    .detail-btn.danger:hover { background: #fef2f2; }
+    .switch-status {
+      font-weight: 600;
+      margin-left: auto;
+    }
+
+    .switch-status.online { color: #16a34a; }
+    .switch-status.offline { color: #dc2626; }
+
+    /* New Settings Row UI */
+    .setting-row {
+      display: flex;
+      align-items: center;
+      padding: 0.875rem 0;
+      border-bottom: 1px solid #e5e5e5;
+    }
     
-    .covers-controls {
+    .setting-row:last-of-type {
+      border-bottom: none;
+    }
+    
+    .setting-icon {
+      font-size: 1.25rem;
+      width: 36px;
+      text-align: center;
+    }
+    
+    .setting-label {
+      flex: 1;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--santorini);
+    }
+    
+    .setting-input {
+      width: 100px;
+      padding: 0.5rem 0.75rem;
+      border: 2px solid var(--limestone);
+      border-radius: 8px;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      text-align: center;
+      background: white;
+      color: var(--santorini);
+    }
+    
+    .setting-input:focus {
+      outline: none;
+      border-color: var(--keswick);
+    }
+    
+    /* Stepper Buttons */
+    .stepper {
+      display: flex;
+      align-items: center;
+      background: white;
+      border: 2px solid var(--limestone);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .stepper-btn {
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: var(--cream);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--keswick);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .stepper-btn:hover {
+      background: var(--limestone);
+    }
+    
+    .stepper-btn:active {
+      background: var(--keswick);
+      color: white;
+    }
+    
+    .stepper-value {
+      width: 40px;
+      text-align: center;
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--santorini);
+    }
+    
+    /* Toggle Switch */
+    .toggle-switch {
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      cursor: pointer;
+    }
+    
+    .toggle-track {
+      width: 52px;
+      height: 30px;
+      border-radius: 15px;
+      background: #dc2626;
+      position: relative;
+      transition: background 0.3s ease;
+    }
+    
+    .toggle-switch.on .toggle-track {
+      background: #16a34a;
+    }
+    
+    .toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+    }
+    
+    .toggle-switch.on .toggle-thumb {
+      transform: translateX(22px);
+    }
+    
+    .toggle-text {
+      font-size: 0.875rem;
+      font-weight: 700;
+      min-width: 32px;
+    }
+    
+    .toggle-switch.on .toggle-text {
+      color: #16a34a;
+    }
+    
+    .toggle-switch.off .toggle-text {
+      color: #dc2626;
+    }
+    
+    /* Divider */
+    .setting-divider {
+      height: 1px;
+      background: var(--limestone);
+      margin: 1rem 0;
+    }
+    
+    /* Action Buttons */
+    .action-row {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .action-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.875rem 1rem;
+      border: 2px solid var(--limestone);
+      border-radius: 10px;
+      background: white;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--santorini);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .action-btn:hover {
+      background: var(--cream);
+      border-color: var(--keswick);
+    }
+    
+    .action-btn:active {
+      transform: scale(0.98);
+    }
+    
+    .action-btn .action-icon {
+      font-size: 1.25rem;
+    }
+    
+    .action-btn.rotate {
+      background: var(--cream);
+    }
+    
+    .action-btn.delete {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: #dc2626;
+    }
+    
+    .action-btn.delete:hover {
+      background: #fee2e2;
+      border-color: #dc2626;
+    }
+
+    /* Panel Actions */
+    .panel-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--limestone);
+    }
+
+    .panel-btn {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--limestone);
+      background: var(--cream);
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .panel-btn:hover { background: var(--parchment); }
+
+    .panel-btn.danger {
+      color: #dc2626;
+      border-color: #fecaca;
+      background: #fef2f2;
+    }
+
+    .panel-btn.danger:hover {
+      background: #fee2e2;
+      border-color: #dc2626;
+    }
+
+    .panel-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 999;
+    }
+
+    /* Legacy - keep for compatibility */
+    .online-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .toggle-label {
       font-size: 0.75rem;
       color: var(--keswick);
     }
-    
-    .covers-select {
-      padding: 0.375rem 0.5rem;
+
+    .toggle-btn {
+      padding: 0.375rem 0.75rem;
       border: 1px solid var(--limestone);
       border-radius: 4px;
       font-size: 0.75rem;
-      background: white;
-      min-width: 50px;
+      cursor: pointer;
+      background: #fee2e2;
+      color: #dc2626;
+      transition: all 0.2s;
+    }
+
+    .toggle-btn.active {
+      background: #dcfce7;
+      color: #16a34a;
+      border-color: #86efac;
     }
 
     /* Floor */
@@ -458,6 +882,61 @@ import '../../../styles/coyol-tables.css';
       filter: blur(3px);
     }
     :global(.floor-grid .table.square .table-label) { color: #3d2914; }
+
+    /* === RESERVED TABLE STYLING === */
+    :global(.floor-grid .table.reserved) {
+      background: linear-gradient(145deg, #16a34a 0%, #15803d 50%, #166534 100%) !important;
+      border-color: #14532d !important;
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4), inset 0 2px 4px rgba(255,255,255,0.2) !important;
+    }
+    :global(.floor-grid .table.reserved .table-label) {
+      color: white !important;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+    :global(.floor-grid .table.reserved .table-res-time) {
+      position: absolute;
+      top: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.5rem;
+      color: rgba(255,255,255,0.9);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    :global(.floor-grid .table.reserved .table-res-name) {
+      position: absolute;
+      bottom: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.45rem;
+      color: rgba(255,255,255,0.85);
+      font-weight: 500;
+      white-space: nowrap;
+      max-width: 90%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    :global(.floor-grid .table.reserved .table-res-pax) {
+      position: absolute;
+      top: 50%;
+      right: 3px;
+      transform: translateY(-50%);
+      font-size: 0.5rem;
+      color: rgba(255,255,255,0.9);
+      font-weight: 700;
+    }
+    :global(.floor-grid .table.reserved .table-res-more) {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: #dc2626;
+      color: white;
+      font-size: 0.5rem;
+      font-weight: 700;
+      padding: 1px 4px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
 
     /* === ROUND TABLE (elegant with rim) === */
     :global(.floor-grid .table.round) {
@@ -720,14 +1199,14 @@ import '../../../styles/coyol-tables.css';
 
   <script is:inline>
     const LAYOUT_KEY = 'coyol_floor_layout';
-    const LAYOUT_VERSION = 'v3-eatapp-final';
+    const LAYOUT_VERSION = 'v3.1-fix';
     const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
     
     // Force reset if version mismatch
-    if (localStorage.getItem('laluna_floor_version') !== LAYOUT_VERSION) {
+    if (localStorage.getItem('coyol_floor_version') !== LAYOUT_VERSION) {
       localStorage.removeItem(LAYOUT_KEY);
-      localStorage.setItem('laluna_floor_version', LAYOUT_VERSION);
+      localStorage.setItem('coyol_floor_version', LAYOUT_VERSION);
       console.log('La Luna floor layout reset to:', LAYOUT_VERSION);
     }
     
@@ -735,6 +1214,8 @@ import '../../../styles/coyol-tables.css';
     let selectedTable = null;
     let draggedTable = null;
     let dragOffset = { x: 0, y: 0 };
+    let currentDate = new Date().toISOString().split('T')[0];
+    let reservations = [];
 
     // Coyol Restaurant Default Layouts
     const defaultLayouts = {
@@ -833,6 +1314,30 @@ import '../../../styles/coyol-tables.css';
       }
     }
     
+    // Fetch reservations for current date
+    async function fetchReservations() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?date=eq.${currentDate}&select=id,guest_name,guests,time,table_id,status`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const data = await res.json();
+        reservations = (data || []).filter(r => r.status !== 'cancelled' && r.status !== 'no-show');
+        console.log(`Loaded ${reservations.length} reservations for ${currentDate}`);
+      } catch (e) {
+        console.error('Failed to fetch reservations:', e);
+        reservations = [];
+      }
+    }
+    
+    // Check if a table has a reservation (handles combined tables like "j2,j3")
+    function getTableReservations(tableId) {
+      return reservations.filter(r => {
+        if (!r.table_id) return false;
+        const tables = r.table_id.toLowerCase().split(',').map(t => t.trim());
+        return tables.includes(tableId.toLowerCase());
+      });
+    }
+    
     // Load default layout from Supabase
     async function loadLayoutFromSupabase() {
       try {
@@ -867,8 +1372,12 @@ import '../../../styles/coyol-tables.css';
       grid.innerHTML = '';
 
       tables.forEach(table => {
+        const tableRes = getTableReservations(table.id);
+        const hasReservation = tableRes.length > 0;
+        const nextRes = tableRes[0];
+        
         const el = document.createElement('div');
-        el.className = `table ${table.type}`;
+        el.className = `table ${table.type}${hasReservation ? ' reserved' : ''}`;
         el.dataset.id = table.id;
         el.style.left = table.x + 'px';
         el.style.top = table.y + 'px';
@@ -876,9 +1385,22 @@ import '../../../styles/coyol-tables.css';
           const baseRotation = table.type === 'diamond' ? 45 : 0;
           el.style.transform = `rotate(${baseRotation + table.rotation}deg)`;
         }
-        el.innerHTML = `<span class="table-label">${table.name}</span>`;
+        
+        // Show reservation info on table
+        if (hasReservation) {
+          const timeStr = nextRes.time ? nextRes.time.slice(0,5) : '';
+          el.innerHTML = `
+            <span class="table-label">${table.name}</span>
+            <span class="table-res-time">${timeStr}</span>
+            <span class="table-res-name">${nextRes.guest_name || ''}</span>
+            <span class="table-res-pax">${nextRes.guests}p</span>
+            ${tableRes.length > 1 ? `<span class="table-res-more">+${tableRes.length - 1}</span>` : ''}
+          `;
+        } else {
+          el.innerHTML = `<span class="table-label">${table.name}</span>`;
+        }
 
-        // Click to select
+        // Click to select (mouse)
         el.addEventListener('click', (e) => {
           e.stopPropagation();
           selectTable(table.id);
@@ -895,16 +1417,42 @@ import '../../../styles/coyol-tables.css';
           el.style.cursor = 'grabbing';
         });
         
-        // Drag - touch (iPad)
+        // Touch handling - track if it's a tap or drag
+        let touchStartTime = 0;
+        let touchStartPos = { x: 0, y: 0 };
+        let isTouchDrag = false;
+        
         el.addEventListener('touchstart', (e) => {
-          e.preventDefault();
           const touch = e.touches[0];
+          touchStartTime = Date.now();
+          touchStartPos = { x: touch.clientX, y: touch.clientY };
+          isTouchDrag = false;
           draggedTable = el;
           const rect = el.getBoundingClientRect();
           dragOffset.x = touch.clientX - rect.left;
           dragOffset.y = touch.clientY - rect.top;
           el.style.zIndex = '100';
-        }, { passive: false });
+        }, { passive: true });
+        
+        el.addEventListener('touchmove', (e) => {
+          const touch = e.touches[0];
+          const moveX = Math.abs(touch.clientX - touchStartPos.x);
+          const moveY = Math.abs(touch.clientY - touchStartPos.y);
+          // If moved more than 10px, it's a drag
+          if (moveX > 10 || moveY > 10) {
+            isTouchDrag = true;
+          }
+        }, { passive: true });
+        
+        el.addEventListener('touchend', (e) => {
+          e.preventDefault();
+          const touchDuration = Date.now() - touchStartTime;
+          // If touch was short (<300ms) and didn't move much, it's a tap
+          if (!isTouchDrag && touchDuration < 300) {
+            selectTable(table.id);
+          }
+          // Reset drag state handled by global touchend
+        });
 
         grid.appendChild(el);
       });
@@ -923,32 +1471,91 @@ import '../../../styles/coyol-tables.css';
       const table = layouts[currentZone].find(t => t.id === id);
       if (!table) return;
 
-      document.getElementById('tableDetailsSection').style.display = 'flex';
-      document.getElementById('tableDetails').innerHTML = `
-        <input type="text" class="detail-input" id="tableName" value="${table.name}" placeholder="Name" />
-        <div class="covers-controls">
-          <label>Min:</label>
-          <select id="tableMinCovers" class="covers-select">
-            ${[1,2,3,4,5,6,7,8].map(n => `<option value="${n}" ${table.minCovers === n ? 'selected' : ''}>${n}</option>`).join('')}
-          </select>
-          <label>Max:</label>
-          <select id="tableMaxCovers" class="covers-select">
-            ${[2,3,4,5,6,7,8,10,12,15,20].map(n => `<option value="${n}" ${table.maxCovers === n ? 'selected' : ''}>${n}</option>`).join('')}
-          </select>
+      showTablePanel(table);
+    }
+
+    function showTablePanel(table) {
+      const isOnline = table.onlineAvailable !== false;
+      
+      // Create overlay if not exists
+      let overlay = document.querySelector('.panel-overlay');
+      if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'panel-overlay';
+        overlay.onclick = closeTablePanel;
+        document.body.appendChild(overlay);
+      }
+      overlay.style.display = 'block';
+
+      const panel = document.getElementById('tablePanel');
+      document.getElementById('panelTitle').textContent = table.name || 'Table Settings';
+      
+      // Build panel content with inline styles for reliability
+      const panelBody = document.getElementById('panelBody');
+      const minOptions = [1,2,3,4,5,6,7,8].map(n => 
+        `<option value="${n}" ${(table.minCovers || 2) === n ? 'selected' : ''}>${n}</option>`
+      ).join('');
+      const maxOptions = [2,3,4,5,6,7,8,10,12,15,20].map(n => 
+        `<option value="${n}" ${(table.maxCovers || 4) === n ? 'selected' : ''}>${n}</option>`
+      ).join('');
+      
+      panelBody.innerHTML = `
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 12px; font-weight: 600; color: #3D4F3D; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Table Name</label>
+          <input type="text" id="tableName" value="${table.name}" style="width: 100%; padding: 12px; border: 2px solid #D4C9B5; border-radius: 8px; font-size: 16px; font-weight: 600;" />
         </div>
-        <button class="detail-btn" onclick="rotateSelected(-45)">↺</button>
-        <button class="detail-btn" onclick="rotateSelected(45)">↻</button>
-        <button class="detail-btn danger" onclick="deleteSelected()">Delete</button>
+        
+        <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+          <div style="flex: 1;">
+            <label style="display: block; font-size: 12px; font-weight: 600; color: #3D4F3D; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Min Guests</label>
+            <select id="tableMinCovers" style="width: 100%; padding: 12px; border: 2px solid #D4C9B5; border-radius: 8px; font-size: 16px; font-weight: 600; background: white; cursor: pointer;">
+              ${minOptions}
+            </select>
+          </div>
+          <div style="flex: 1;">
+            <label style="display: block; font-size: 12px; font-weight: 600; color: #3D4F3D; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Max Guests</label>
+            <select id="tableMaxCovers" style="width: 100%; padding: 12px; border: 2px solid #D4C9B5; border-radius: 8px; font-size: 16px; font-weight: 600; background: white; cursor: pointer;">
+              ${maxOptions}
+            </select>
+          </div>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 12px; font-weight: 600; color: #3D4F3D; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Online Booking</label>
+          <div id="onlineToggle" onclick="toggleOnlineAvailable()" ontouchend="toggleOnlineAvailable(); event.preventDefault();" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: ${isOnline ? '#dcfce7' : '#fee2e2'}; border: 2px solid ${isOnline ? '#86efac' : '#fecaca'}; border-radius: 8px; cursor: pointer; transition: all 0.2s; -webkit-tap-highlight-color: transparent;">
+            <div style="position: relative; width: 52px; height: 28px; background: ${isOnline ? '#16a34a' : '#dc2626'}; border-radius: 14px; transition: background 0.3s;">
+              <div style="position: absolute; top: 2px; left: ${isOnline ? '26px' : '2px'}; width: 24px; height: 24px; background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: left 0.3s;"></div>
+            </div>
+            <span style="flex: 1; font-size: 15px; font-weight: 500;">${isOnline ? 'Available for online booking' : 'Not available online'}</span>
+            <span id="toggleStatus" style="font-size: 14px; font-weight: 700; color: ${isOnline ? '#16a34a' : '#dc2626'};">${isOnline ? 'ON' : 'OFF'}</span>
+          </div>
+        </div>
+        
+        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+          <button onclick="rotateSelected(-45)" style="flex: 1; padding: 12px; border: 2px solid #D4C9B5; border-radius: 8px; background: #F5F3EF; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span style="font-size: 18px;">↺</span> Rotate Left
+          </button>
+          <button onclick="rotateSelected(45)" style="flex: 1; padding: 12px; border: 2px solid #D4C9B5; border-radius: 8px; background: #F5F3EF; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span style="font-size: 18px;">↻</span> Rotate Right
+          </button>
+        </div>
+        
+        <button onclick="deleteSelected()" style="width: 100%; padding: 12px; border: 2px solid #fecaca; border-radius: 8px; background: #fef2f2; color: #dc2626; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+          <span style="font-size: 16px;">🗑️</span> Delete Table
+        </button>
       `;
 
+      panel.style.display = 'block';
+
+      // Event listeners
       document.getElementById('tableName').addEventListener('change', (e) => {
         const layouts = getLayout();
         const t = layouts[currentZone].find(t => t.id === selectedTable);
         if (t) {
           t.name = e.target.value;
+          document.getElementById('panelTitle').textContent = e.target.value;
           saveLayout(layouts);
           renderFloor();
-          selectTable(selectedTable);
         }
       });
       
@@ -969,6 +1576,55 @@ import '../../../styles/coyol-tables.css';
           saveLayout(layouts);
         }
       });
+
+      document.getElementById('panelClose').onclick = closeTablePanel;
+    }
+
+    function closeTablePanel() {
+      document.getElementById('tablePanel').style.display = 'none';
+      const overlay = document.querySelector('.panel-overlay');
+      if (overlay) overlay.style.display = 'none';
+      selectedTable = null;
+      document.querySelectorAll('.table.selected').forEach(t => t.classList.remove('selected'));
+    }
+
+    function toggleOnlineAvailable() {
+      if (!selectedTable) return;
+      const layouts = getLayout();
+      const t = layouts[currentZone].find(t => t.id === selectedTable);
+      if (t) {
+        const newValue = t.onlineAvailable === false ? true : false;
+        t.onlineAvailable = newValue;
+        saveLayout(layouts);
+        
+        // Re-render the panel to show updated toggle state
+        showTablePanel(t);
+        renderFloor();
+      }
+    }
+    
+    function adjustMin(delta) {
+      if (!selectedTable) return;
+      const layouts = getLayout();
+      const t = layouts[currentZone].find(t => t.id === selectedTable);
+      if (t) {
+        const newVal = Math.max(1, Math.min(8, (t.minCovers || 2) + delta));
+        t.minCovers = newVal;
+        document.getElementById('minValue').textContent = newVal;
+        saveLayout(layouts);
+      }
+    }
+    
+    function adjustMax(delta) {
+      if (!selectedTable) return;
+      const layouts = getLayout();
+      const t = layouts[currentZone].find(t => t.id === selectedTable);
+      if (t) {
+        const newVal = Math.max(2, Math.min(20, (t.maxCovers || 4) + delta));
+        t.maxCovers = newVal;
+        document.getElementById('maxValue').textContent = newVal;
+        saveLayout(layouts);
+      }
     }
 
     function rotateSelected(deg) {
@@ -979,7 +1635,9 @@ import '../../../styles/coyol-tables.css';
         t.rotation = ((t.rotation || 0) + deg + 360) % 360;
         saveLayout(layouts);
         renderFloor();
-        selectTable(selectedTable);
+        // Re-select to show highlight but don't reopen panel
+        const el = document.querySelector(`[data-id="${selectedTable}"]`);
+        if (el) el.classList.add('selected');
       }
     }
 
@@ -1006,8 +1664,7 @@ import '../../../styles/coyol-tables.css';
       
       layouts[currentZone] = layouts[currentZone].filter(t => t.id !== selectedTable);
       saveLayout(layouts);
-      selectedTable = null;
-      document.getElementById('tableDetailsSection').style.display = 'none';
+      closeTablePanel();
       renderFloor();
       alert('Mesa eliminada / Table deleted');
     }
@@ -1079,11 +1736,13 @@ import '../../../styles/coyol-tables.css';
       draggedTable = null;
     });
 
-    // Deselect on grid click
+    // Deselect on grid click (don't close panel - overlay handles that)
     document.getElementById('floorGrid').addEventListener('click', () => {
-      document.querySelectorAll('.table.selected').forEach(t => t.classList.remove('selected'));
-      selectedTable = null;
-      document.getElementById('tableDetailsSection').style.display = 'none';
+      // Only deselect if panel is not open
+      if (document.getElementById('tablePanel').style.display === 'none') {
+        document.querySelectorAll('.table.selected').forEach(t => t.classList.remove('selected'));
+        selectedTable = null;
+      }
     });
 
     // Zone tabs
@@ -1092,8 +1751,7 @@ import '../../../styles/coyol-tables.css';
         document.querySelectorAll('.zone-tab').forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
         currentZone = tab.dataset.zone;
-        selectedTable = null;
-        document.getElementById('tableDetailsSection').style.display = 'none';
+        closeTablePanel();
         renderFloor();
       });
     });
@@ -1159,16 +1817,59 @@ import '../../../styles/coyol-tables.css';
       }
     });
     
-    // Save as Default - persist to Supabase
+    // Save as Default - persist to Supabase (ADMIN ONLY)
     document.getElementById('saveDefaultBtn').addEventListener('click', async () => {
-      if (!confirm('Save current layout as the new default for all devices?')) return;
+      const adminCode = prompt('Enter admin code to save layout:');
+      if (adminCode !== 'coyol2026') {
+        alert('Invalid admin code. Layout NOT saved.');
+        return;
+      }
+      if (!confirm('Save current layout as the new default for ALL devices? This cannot be undone.')) return;
       await saveLayoutToSupabase();
+      alert('Layout saved to cloud.');
     });
 
     // Expose functions
     window.rotateSelected = rotateSelected;
     window.deleteSelected = deleteSelected;
+    window.toggleOnlineAvailable = toggleOnlineAvailable;
+    window.adjustMin = adjustMin;
+    window.adjustMax = adjustMax;
 
-    renderFloor();
+    // Date picker change handler
+    document.getElementById('datePicker').addEventListener('change', async (e) => {
+      currentDate = e.target.value;
+      await fetchReservations();
+      document.getElementById('resCount').textContent = `${reservations.length} reservations`;
+      renderFloor();
+    });
+
+    // Auto-load from Supabase on page load
+    async function initFloorPlan() {
+      // Set date picker to today
+      document.getElementById('datePicker').value = currentDate;
+      
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.coyol_floor_layout`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const data = await res.json();
+        if (data.length > 0 && data[0].value) {
+          const layouts = JSON.parse(data[0].value);
+          localStorage.setItem(LAYOUT_KEY, JSON.stringify(layouts));
+          console.log('Floor plan loaded from Supabase');
+        }
+      } catch (e) {
+        console.error('Failed to load from Supabase, using localStorage:', e);
+      }
+      
+      // Load reservations for today
+      await fetchReservations();
+      document.getElementById('resCount').textContent = `${reservations.length} reservations`;
+      
+      renderFloor();
+    }
+    
+    initFloorPlan();
   </script>
 </Layout>

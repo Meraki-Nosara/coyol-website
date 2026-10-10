@@ -74,7 +74,7 @@
       <div class="bg-landrover-pangea p-8 lg:p-12">
         <h3 class="font-serif text-2xl text-landrover-santorini mb-8">Send Us a Message</h3>
         
-        <form action="#" method="POST" class="space-y-6">
+        <form id="contact-form" class="space-y-6">
           <div class="grid md:grid-cols-2 gap-6">
             <div>
               <label for="firstName" class="block text-xs font-medium tracking-wider uppercase text-landrover-marine/70 mb-2">First Name</label>
@@ -121,11 +121,59 @@
 
           <button 
             type="submit"
+            id="submit-btn"
             class="w-full bg-landrover-keswick text-white px-8 py-4 text-xs font-medium tracking-[0.2em] uppercase hover:bg-landrover-coniston transition-colors"
           >
             Send Message
           </button>
+          
+          <div id="form-status" class="hidden text-center py-3 rounded"></div>
         </form>
+        
+        <script>
+          document.getElementById('contact-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const form = e.target;
+            const btn = document.getElementById('submit-btn');
+            const status = document.getElementById('form-status');
+            
+            // Get form values
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            
+            // Disable button and show loading
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+            status.className = 'hidden';
+            
+            try {
+              const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ firstName, lastName, email, message })
+              });
+              
+              const data = await res.json();
+              
+              if (res.ok && data.success) {
+                status.textContent = 'Thank you! Your message has been sent. We\'ll be in touch soon.';
+                status.className = 'text-center py-3 rounded bg-green-100 text-green-800';
+                form.reset();
+              } else {
+                throw new Error(data.error || 'Failed to send');
+              }
+            } catch (err) {
+              status.textContent = 'Sorry, there was an error. Please email us directly at info@coyolrealestate.com';
+              status.className = 'text-center py-3 rounded bg-red-100 text-red-800';
+            } finally {
+              btn.disabled = false;
+              btn.textContent = 'Send Message';
+            }
+          });
+        </script>
       </div>
 
     </div>

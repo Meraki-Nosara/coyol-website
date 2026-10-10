@@ -51,6 +51,22 @@ const timelineLabels: Record<string, string> = {
   'nextyear': 'Next Year',
   'exploring': 'Just Exploring',
 };
+
+// Fetch generated offers for this lead
+let generatedOffers: any[] = [];
+try {
+  const offersResponse = await fetch(`${SUPABASE_URL}/rest/v1/generated_offers?lead_id=eq.${id}&order=created_at.desc`, {
+    headers: {
+      'apikey': 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD',
+      'Authorization': `Bearer sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD`,
+    }
+  });
+  if (offersResponse.ok) {
+    generatedOffers = await offersResponse.json();
+  }
+} catch (e) {
+  console.error('Failed to fetch offers:', e);
+}
 ---
 
 <CommandLayout title={lead?.full_name || 'Lead Details'} active="qualified">
@@ -77,6 +93,7 @@ const timelineLabels: Record<string, string> = {
             ))}
           </select>
           <a href={`/command/qualified/new?id=${lead.id}`} class="edit-btn">Edit Lead</a>
+          <button id="deleteBtn" class="delete-btn" data-id={lead.id} data-name={lead.full_name}>Delete</button>
         </div>
       </div>
 
@@ -188,6 +205,70 @@ const timelineLabels: Record<string, string> = {
           </div>
         </div>
 
+        <!-- Follow-up Reminder -->
+        <div class="card follow-up-card">
+          <h3>📅 Follow-up Reminder</h3>
+          <div class="follow-up-form">
+            <div class="form-row">
+              <label>Call/Meeting Date</label>
+              <input type="date" id="followUpDate" value={lead.follow_up_date || ''} />
+            </div>
+            <div class="form-row">
+              <label>Notes</label>
+              <textarea id="followUpNotes" rows="2" placeholder="What to discuss...">{lead.follow_up_notes || ''}</textarea>
+            </div>
+            <button id="saveFollowUp" class="save-btn" data-id={lead.id}>Save Reminder</button>
+          </div>
+          {lead.follow_up_date && (
+            <div class="reminder-badge">
+              ⏰ Reminder set for {new Date(lead.follow_up_date + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+            </div>
+          )}
+        </div>
+
+        <!-- Generated Offers -->
+        <div class="card offers-card">
+          <h3>Generated Offers</h3>
+          <div id="offersList">
+            {generatedOffers.length === 0 ? (
+              <p class="no-offers">No offers generated yet</p>
+            ) : (
+              <div class="offers-table">
+                {generatedOffers.map((offer: any) => (
+                  <div class="offer-row" data-id={offer.id}>
+                    <div class="offer-info">
+                      <div class="offer-model">{offer.model_name}</div>
+                      <div class="offer-details">
+                        Lot {offer.lot_number} — ${offer.total_price?.toLocaleString()}
+                      </div>
+                      <div class="offer-date">
+                        Created: {new Date(offer.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        {offer.sent_at && <span class="sent-date"> · Sent: {new Date(offer.sent_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>}
+                      </div>
+                    </div>
+                    <div class="offer-status">
+                      <span class={`status-badge ${offer.sent_at ? 'sent' : 'draft'}`}>
+                        {offer.sent_at ? 'Sent' : 'Not Sent'}
+                      </span>
+                    </div>
+                    <div class="offer-actions">
+                      <a href={`/proposals/${offer.slug}`} target="_blank" class="btn-small view">View</a>
+                      <button class="btn-small copy" data-url={`https://coyolnosara.com/proposals/${offer.slug}`}>Copy Link</button>
+                      {!offer.sent_at && (
+                        <button class="btn-small mark-sent" data-id={offer.id}>Mark Sent</button>
+                      )}
+                      <button class="btn-small erase" data-id={offer.id}>Erase</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          <div class="add-offer-form">
+            <a href={`/command/offers/new?lead=${lead.id}`} class="generate-offer-btn">Generate Offer</a>
+          </div>
+        </div>
+
         <!-- Notes & Concerns -->
         <div class="card">
           <h3>Notes & Concerns</h3>
@@ -249,6 +330,241 @@ const timelineLabels: Record<string, string> = {
         }
       });
     }
+
+    // Delete button with confirmation
+    const deleteBtn = document.getElementById('deleteBtn');
+    if (deleteBtn) {
+      deleteBtn.addEventListener('click', async () => {
+        const id = deleteBtn.dataset.id;
+        const name = deleteBtn.dataset.name;
+        
+        if (!confirm(`Are you sure you want to delete "${name}"?\n\nThis action cannot be undone.`)) {
+          return;
+        }
+        
+        try {
+          const response = await fetch(`${SUPABASE_URL}/rest/v1/mar_azul_leads?id=eq.${id}`, {
+            method: 'DELETE',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+            },
+          });
+          
+          if (response.ok) {
+            window.location.href = '/command/qualified?deleted=1';
+          } else {
+            alert('Failed to delete lead. Please try again.');
+          }
+        } catch (error) {
+          console.error('Failed to delete:', error);
+          alert('Error deleting lead.');
+        }
+      });
+    }
+
+    // Save Follow-up Reminder
+    const saveFollowUp = document.getElementById('saveFollowUp');
+    if (saveFollowUp) {
+      saveFollowUp.addEventListener('click', async () => {
+        const id = saveFollowUp.dataset.id;
+        const follow_up_date = document.getElementById('followUpDate').value || null;
+        const follow_up_notes = document.getElementById('followUpNotes').value || null;
+        
+        try {
+          const response = await fetch(`${SUPABASE_URL}/rest/v1/mar_azul_leads?id=eq.${id}`, {
+            method: 'PATCH',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ follow_up_date, follow_up_notes, updated_at: new Date().toISOString() }),
+          });
+          
+          if (response.ok) {
+            saveFollowUp.textContent = '✓ Saved!';
+            saveFollowUp.style.background = '#22c55e';
+            setTimeout(() => {
+              saveFollowUp.textContent = 'Save Reminder';
+              saveFollowUp.style.background = '';
+            }, 2000);
+          } else {
+            alert('Failed to save reminder');
+          }
+        } catch (error) {
+          console.error('Failed to save follow-up:', error);
+        }
+      });
+    }
+
+    // Add Offer
+    const addOfferBtn = document.getElementById('addOffer');
+    if (addOfferBtn) {
+      addOfferBtn.addEventListener('click', async () => {
+        const id = addOfferBtn.dataset.id;
+        const date = document.getElementById('offerDate').value;
+        const lot = document.getElementById('offerLot').value;
+        const amount = parseFloat(document.getElementById('offerAmount').value) || 0;
+        const notes = document.getElementById('offerNotes').value;
+        
+        if (!date || !lot || !amount) {
+          alert('Please fill in date, lot, and amount');
+          return;
+        }
+        
+        // Fetch current offers
+        const getRes = await fetch(`${SUPABASE_URL}/rest/v1/mar_azul_leads?id=eq.${id}&select=offers`, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        const data = await getRes.json();
+        const currentOffers = data[0]?.offers || [];
+        
+        // Add new offer
+        currentOffers.push({ date, lot, amount, notes });
+        
+        // Save
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/mar_azul_leads?id=eq.${id}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ offers: currentOffers, updated_at: new Date().toISOString() }),
+        });
+        
+        if (response.ok) {
+          location.reload();
+        } else {
+          alert('Failed to add offer');
+        }
+      });
+    }
+
+    // Delete Offer
+    document.querySelectorAll('.delete-offer-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const index = parseInt(e.target.dataset.index);
+        const id = document.getElementById('addOffer')?.dataset.id;
+        
+        if (!confirm('Delete this offer?')) return;
+        
+        try {
+          const getRes = await fetch(`${SUPABASE_URL}/rest/v1/mar_azul_leads?id=eq.${id}&select=offers`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+          });
+          
+          if (!getRes.ok) {
+            const errText = await getRes.text();
+            console.error('Fetch offers failed:', getRes.status, errText);
+            alert('Failed to fetch offers. Check console for details.');
+            return;
+          }
+          
+          const data = await getRes.json();
+          const offers = data[0]?.offers || [];
+          
+          offers.splice(index, 1);
+          
+          const patchRes = await fetch(`${SUPABASE_URL}/rest/v1/mar_azul_leads?id=eq.${id}`, {
+            method: 'PATCH',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ offers, updated_at: new Date().toISOString() }),
+          });
+          
+          if (!patchRes.ok) {
+            const errText = await patchRes.text();
+            console.error('Delete offer failed:', patchRes.status, errText);
+            alert('Failed to delete offer. Check console for details.');
+            return;
+          }
+          
+          location.reload();
+        } catch (err) {
+          console.error('Delete offer error:', err);
+          alert('Error deleting offer: ' + err.message);
+        }
+      });
+    });
+
+    // Copy link buttons
+    document.querySelectorAll('.btn-small.copy').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const url = btn.dataset.url;
+        await navigator.clipboard.writeText(url);
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy Link';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+
+    // Mark as sent buttons
+    document.querySelectorAll('.btn-small.mark-sent').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const offerId = btn.dataset.id;
+        btn.disabled = true;
+        btn.textContent = 'Updating...';
+
+        try {
+          const res = await fetch('/api/offers/mark-sent', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: offerId })
+          });
+
+          if (res.ok) {
+            location.reload();
+          } else {
+            alert('Error marking as sent');
+            btn.disabled = false;
+            btn.textContent = 'Mark Sent';
+          }
+        } catch (e) {
+          alert('Error: ' + e.message);
+          btn.disabled = false;
+          btn.textContent = 'Mark Sent';
+        }
+      });
+    });
+
+    // Erase offer buttons
+    document.querySelectorAll('.btn-small.erase').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Are you sure you want to erase this offer? This cannot be undone.')) return;
+        
+        const offerId = btn.dataset.id;
+        btn.disabled = true;
+        btn.textContent = 'Erasing...';
+
+        try {
+          const res = await fetch('/api/offers/delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: offerId })
+          });
+
+          if (res.ok) {
+            location.reload();
+          } else {
+            alert('Error erasing offer');
+            btn.disabled = false;
+            btn.textContent = 'Erase';
+          }
+        } catch (e) {
+          alert('Error: ' + e.message);
+          btn.disabled = false;
+          btn.textContent = 'Erase';
+        }
+      });
+    });
   </script>
 
   <style>
@@ -288,6 +604,278 @@ const timelineLabels: Record<string, string> = {
 
     .back-link:hover {
       color: #C4A67C;
+    }
+
+    .delete-btn {
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: background 0.2s;
+    }
+
+    .delete-btn:hover {
+      background: #b91c1c;
+    }
+
+    /* Follow-up & Offers Styles */
+    .follow-up-card, .offers-card {
+      background: linear-gradient(135deg, #1a1f16 0%, #2a3020 100%);
+      border: 1px solid #3D4F3D;
+    }
+
+    .follow-up-form, .add-offer-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .form-row label {
+      font-size: 12px;
+      color: #888;
+      text-transform: uppercase;
+    }
+
+    .form-row input, .form-row textarea {
+      background: #1a1f16;
+      border: 1px solid #3D4F3D;
+      color: #fff;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .form-row input:focus, .form-row textarea:focus {
+      outline: none;
+      border-color: #C4A67C;
+    }
+
+    .save-btn {
+      background: #3D4F3D;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+      align-self: flex-start;
+    }
+
+    .save-btn:hover {
+      background: #4a6040;
+    }
+
+    .generate-offer-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #3D4F3D 0%, #4a6040 100%);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .generate-offer-btn:hover {
+      background: linear-gradient(135deg, #4a6040 0%, #5a7050 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(61, 79, 61, 0.3);
+    }
+
+    .reminder-badge {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: #C4A67C20;
+      border: 1px solid #C4A67C;
+      border-radius: 6px;
+      color: #C4A67C;
+      font-size: 13px;
+    }
+
+    .no-offers {
+      color: #666;
+      font-style: italic;
+    }
+
+    .offers-table {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .offer-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: #1a1f16;
+      border-radius: 6px;
+      border: 1px solid #333;
+    }
+
+    .offer-info {
+      flex: 1;
+    }
+
+    .offer-model {
+      font-weight: 600;
+      color: #C4A67C;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .offer-details {
+      color: #ddd;
+      font-size: 13px;
+    }
+
+    .offer-date {
+      color: #888;
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    .sent-date {
+      color: #7cb87c;
+    }
+
+    .offer-status {
+      min-width: 70px;
+    }
+
+    .status-badge {
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .status-badge.sent {
+      background: #1a3a2a;
+      color: #7cb87c;
+    }
+
+    .status-badge.draft {
+      background: #2a352a;
+      color: #8a9b8a;
+    }
+
+    .offer-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-small {
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+      border: 1px solid #3a453a;
+      background: transparent;
+      color: #aaa;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-small:hover {
+      background: #2a352a;
+    }
+
+    .btn-small.view {
+      background: #3D4F3D;
+      color: white;
+      border-color: #3D4F3D;
+    }
+
+    .btn-small.copy {
+      color: #C4A67C;
+    }
+
+    .btn-small.copy.copied {
+      background: #1a3a2a;
+      color: #7cb87c;
+      border-color: #7cb87c;
+    }
+
+    .btn-small.mark-sent {
+      color: #8a9b8a;
+    }
+
+    .btn-small.erase {
+      color: #A65D3F;
+      border-color: #A65D3F;
+    }
+
+    .btn-small.erase:hover {
+      background: #A65D3F;
+      color: white;
+    }
+
+    .btn-small.mark-sent:hover {
+      border-color: #7cb87c;
+      color: #7cb87c;
+    }
+
+    .delete-offer-btn {
+      background: transparent;
+      border: none;
+      color: #666;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+
+    .delete-offer-btn:hover {
+      color: #dc2626;
+    }
+
+    .add-offer-form h4 {
+      font-size: 13px;
+      color: #888;
+      margin: 0 0 8px 0;
+      text-transform: uppercase;
+    }
+
+    .offer-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 2fr;
+      gap: 8px;
+    }
+
+    .offer-inputs input {
+      background: #1a1f16;
+      border: 1px solid #3D4F3D;
+      color: #fff;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    .offer-inputs input:focus {
+      outline: none;
+      border-color: #C4A67C;
+    }
+
+    @media (max-width: 768px) {
+      .offer-inputs {
+        grid-template-columns: 1fr 1fr;
+      }
     }
 
     h1 {

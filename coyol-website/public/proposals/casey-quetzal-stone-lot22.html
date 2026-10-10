@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Casey — Casa Quetzal Stone at Mar Azul Lot 22</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1a1f16 0%, #2a3020 100%);
+      color: #f5f3ef;
+      min-height: 100vh;
+      padding: 30px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    
+    .container { max-width: 800px; margin: 0 auto; }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(196, 166, 124, 0.3);
+    }
+    
+    .logo-img {
+      width: 100px;
+      height: auto;
+      margin-bottom: 10px;
+      filter: invert(1) brightness(0.85) sepia(0.3) hue-rotate(10deg) saturate(0.8);
+    }
+    
+    .logo {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 32px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      color: #C4A67C;
+      margin-bottom: 5px;
+    }
+    
+    .tagline {
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: #888;
+      text-transform: uppercase;
+    }
+    
+    .hero {
+      margin-bottom: 25px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    }
+    
+    .hero img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    
+    .property-title {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    
+    .property-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 36px;
+      color: #C4A67C;
+      margin-bottom: 5px;
+    }
+    
+    .property-lot {
+      font-size: 14px;
+      color: #999;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    
+    .investment-summary {
+      background: rgba(196, 166, 124, 0.1);
+      border: 1px solid rgba(196, 166, 124, 0.4);
+      border-radius: 12px;
+      padding: 20px 25px;
+      margin-bottom: 25px;
+    }
+    
+    .investment-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #C4A67C;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    .investment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 15px;
+      text-align: center;
+    }
+    
+    .investment-item {
+      padding: 12px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+    }
+    
+    .investment-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      margin-bottom: 5px;
+    }
+    
+    .investment-value {
+      font-size: 22px;
+      font-weight: 300;
+      color: #C4A67C;
+    }
+    
+    .investment-note {
+      font-size: 10px;
+      color: #666;
+      margin-top: 3px;
+    }
+    
+    .floorplan-section { margin-bottom: 25px; }
+    
+    .section-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 20px;
+      color: #C4A67C;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    
+    .floorplan {
+      background: linear-gradient(135deg, #f5f3ef 0%, #e8e2d6 100%);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+      border: 1px solid rgba(196, 166, 124, 0.3);
+      padding: 15px;
+    }
+    
+    .floorplan img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 6px;
+    }
+    
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .spec-item {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+    
+    .spec-value {
+      font-size: 20px;
+      font-weight: 300;
+      color: #C4A67C;
+      margin-bottom: 3px;
+    }
+    
+    .spec-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+    }
+    
+    .breakdown-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    
+    .breakdown-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .breakdown-table td:last-child {
+      text-align: right;
+      color: #C4A67C;
+    }
+    
+    .breakdown-table tr.total td {
+      border-top: 2px solid #C4A67C;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    
+    .upgrade-badge {
+      display: inline-block;
+      background: rgba(196, 166, 124, 0.2);
+      color: #C4A67C;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      margin-left: 8px;
+    }
+    
+    .footer {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      text-align: center;
+    }
+    
+    .contact-prompt {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #f5f3ef;
+      margin-bottom: 10px;
+    }
+    
+    .contact-info { color: #888; font-size: 12px; margin-bottom: 5px; }
+    .contact-email { color: #C4A67C; text-decoration: none; font-size: 14px; }
+    .contact-whatsapp { margin-top: 10px; font-size: 13px; }
+    .contact-whatsapp a { color: #25D366; text-decoration: none; }
+    
+    .disclaimer {
+      margin-top: 20px;
+      font-size: 9px;
+      color: #555;
+      line-height: 1.4;
+    }
+    
+    @media (max-width: 600px) {
+      body { padding: 15px; }
+      .investment-grid { grid-template-columns: 1fr; }
+      .specs-grid { grid-template-columns: repeat(2, 1fr); }
+      .property-name { font-size: 28px; }
+    }
+    
+    @media print {
+      body { background: white; color: #1a1a1a; }
+      .logo, .investment-value, .spec-value, .contact-email, .section-title, .property-name { color: #3D4F3D; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <div class="header">
+      <img src="https://coyolnosara.com/images/logo-black.png" alt="Coyol Group" class="logo-img">
+      <div class="logo">COYOL GROUP</div>
+      <div class="tagline">Nosara, Costa Rica</div>
+    </div>
+    
+    <div class="hero">
+      <img src="https://coyolnosara.com/images/homes/quetzal-stone/hero-lot22.jpg" alt="Casa Quetzal Stone on Lot 22">
+    </div>
+    
+    <div class="property-title">
+      <h1 class="property-name">Casa Quetzal Stone</h1>
+      <p class="property-lot">Lot 22 · Mar Azul · 1,102 m²</p>
+    </div>
+    
+    <div class="investment-summary">
+      <h2 class="investment-title">Your Investment</h2>
+      <div class="investment-grid">
+        <div class="investment-item">
+          <div class="investment-label">Lot 22</div>
+          <div class="investment-value">$375,000</div>
+          <div class="investment-note">1,102 m² · Ready to build</div>
+        </div>
+        <div class="investment-item">
+          <div class="investment-label">Construction</div>
+          <div class="investment-value">$1,187,760</div>
+          <div class="investment-note">Includes stone upgrade</div>
+        </div>
+        <div class="investment-item">
+          <div class="investment-label">Total</div>
+          <div class="investment-value">$1,562,760</div>
+          <div class="investment-note">Turnkey home</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="investment-summary">
+      <h2 class="investment-title">Construction Breakdown</h2>
+      <table class="breakdown-table">
+        <tr><td>Interior Living (165 m² × $3,200)</td><td>$528,000</td></tr>
+        <tr><td>Covered Terrace (42 m² × $1,800)</td><td>$75,600</td></tr>
+        <tr><td>Open Terrace (65.2 m² × $800)</td><td>$52,160</td></tr>
+        <tr><td>Pool (40 m² × $2,250)</td><td>$90,000</td></tr>
+        <tr><td>Design & Engineering</td><td>$100,000</td></tr>
+        <tr><td>Landscaping & Hardscape</td><td>$188,000</td></tr>
+        <tr><td>Appliances Package</td><td>$72,000</td></tr>
+        <tr><td>Stone Exterior Walls <span class="upgrade-badge">Upgrade</span></td><td>$50,000</td></tr>
+        <tr><td>Additional 10 m² (vs. standard Quetzal) <span class="upgrade-badge">Upgrade</span></td><td>$32,000</td></tr>
+        <tr class="total"><td>Total Construction</td><td>$1,187,760</td></tr>
+      </table>
+    </div>
+    
+    <div class="floorplan-section">
+      <h2 class="section-title">Floor Plan</h2>
+      <div class="floorplan">
+        <img src="https://coyolnosara.com/images/homes/quetzal-stone/floorplan-lot22.jpg" alt="Casa Quetzal Stone Floor Plan on Lot 22">
+      </div>
+      <div class="specs-grid">
+        <div class="spec-item">
+          <div class="spec-value">175</div>
+          <div class="spec-label">m² Indoor</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-value">42</div>
+          <div class="spec-label">m² Covered</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-value">65</div>
+          <div class="spec-label">m² Terraces</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-value">40</div>
+          <div class="spec-label">m² Pool</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p class="contact-prompt">Ready to begin?</p>
+      <p class="contact-info">Ruth Tal · Coyol Nosara Real Estate</p>
+      <a href="mailto:info@coyolnosara.com" class="contact-email">info@coyolnosara.com</a>
+      <p class="contact-whatsapp"><a href="https://wa.me/13435747238">WhatsApp: +1 343 574 7238</a></p>
+      
+      <p class="disclaimer">
+        Prepared exclusively for Casey Arrington. Prices valid for 30 days. Construction by Nosara Construction S.A.
+        Timeline estimates based on typical progression. © 2026 Coyol Group.
+      </p>
+    </div>
+    
+  </div>
+</body>
+</html>

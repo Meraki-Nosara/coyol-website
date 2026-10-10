@@ -10,7 +10,9 @@ PDF_FILE="${OUTPUT_DIR}/gaceta-$(date +%Y-%m-%d).pdf"
 TEXT_FILE="${OUTPUT_DIR}/gaceta-$(date +%Y-%m-%d).txt"
 
 # Keywords to search for (case-insensitive)
-KEYWORDS="SFERA|Mar Azul|Maryon Peri|Marion Peri|La Luna Nosara|ZMT Nosara|Zona Marítimo Terrestre Nosara|137600021710|26-000076-1632"
+# Updated 2026-09-02: Added Sfera Global, Nosara Beach Hotel, Coyol Restaurant
+# Note: "Sfera Global" not just "sfera" to avoid false positives (esferas = watch faces)
+KEYWORDS="Sfera Global|sferaglobal|Mar Azul Nosara|Condominio Mar Azul|Maryon Peri|Marion Peri|La Luna Nosara|La Luna Restaurant|Nosara Beach Hotel|Hotel Playas de Nosara|Coyol Restaurant|Coyol Nosara|ZMT Nosara|Zona Marítimo Terrestre Nosara|137600021710|26-000076-1632|Rancho Verde Riabov|David Riabov|Churcher|Nigel Churcher|DESARROLLO RANCHO MAR AZUL|NOSARA CONSTRUCTION"
 
 mkdir -p "$OUTPUT_DIR"
 

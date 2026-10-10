@@ -1,0 +1,817 @@
+---
+// Custom Offer: Espavel Niki for Niki & Zack
+// Two-lot compound (Lots 19 + 36) at Mar Azul
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espavel Niki — A Private Compound at Mar Azul</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1a1f16 0%, #2a3020 100%);
+      color: #f5f3ef;
+      min-height: 100vh;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    
+    .container { max-width: 900px; margin: 0 auto; padding: 40px 30px; }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 25px;
+      border-bottom: 1px solid rgba(196, 166, 124, 0.3);
+    }
+    
+    .logo-img {
+      width: 120px;
+      height: auto;
+      margin-bottom: 12px;
+      filter: invert(1) brightness(0.85) sepia(0.3) hue-rotate(10deg) saturate(0.8);
+    }
+    
+    .logo {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 36px;
+      font-weight: 400;
+      letter-spacing: 5px;
+      color: #C4A67C;
+      margin-bottom: 6px;
+    }
+    
+    .tagline {
+      font-size: 13px;
+      letter-spacing: 4px;
+      color: #888;
+      text-transform: uppercase;
+    }
+    
+    /* Compound Badge */
+    .compound-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #C4A67C 0%, #a08050 100%);
+      color: #1a1f16;
+      padding: 10px 28px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 20px;
+    }
+    
+    /* Hero Section */
+    .hero {
+      margin-bottom: 30px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+      position: relative;
+    }
+    
+    .hero img { width: 100%; height: auto; display: block; }
+    
+    .hero-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      padding: 40px 30px 30px;
+    }
+    
+    .hero-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    
+    .hero-subtitle {
+      font-size: 14px;
+      color: #C4A67C;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    
+    /* Intro Text */
+    .intro {
+      text-align: center;
+      max-width: 750px;
+      margin: 0 auto 40px;
+      padding: 30px;
+      background: rgba(196, 166, 124, 0.08);
+      border: 1px solid rgba(196, 166, 124, 0.2);
+      border-radius: 12px;
+    }
+    
+    .intro p {
+      font-size: 16px;
+      line-height: 1.9;
+      color: #ccc;
+    }
+    
+    .intro strong {
+      color: #C4A67C;
+    }
+    
+    /* Section Titles */
+    .section-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 26px;
+      color: #C4A67C;
+      text-align: center;
+      margin-bottom: 25px;
+      font-weight: 400;
+    }
+    
+    /* Investment Summary */
+    .investment-card {
+      background: rgba(196, 166, 124, 0.1);
+      border: 1px solid rgba(196, 166, 124, 0.4);
+      border-radius: 16px;
+      padding: 35px;
+      margin-bottom: 35px;
+    }
+    
+    .total-price {
+      text-align: center;
+      padding: 30px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+    
+    .total-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #888;
+      margin-bottom: 10px;
+    }
+    
+    .total-value {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 56px;
+      font-weight: 400;
+      color: #C4A67C;
+    }
+    
+    .total-note {
+      font-size: 13px;
+      color: #888;
+      margin-top: 12px;
+    }
+    
+    /* Breakdown Grid */
+    .breakdown-section {
+      margin-top: 30px;
+    }
+    
+    .breakdown-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #888;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .breakdown-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .breakdown-item {
+      padding: 20px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 10px;
+    }
+    
+    .breakdown-item.full-width {
+      grid-column: span 2;
+    }
+    
+    .breakdown-item-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+    
+    .breakdown-item-value {
+      font-size: 28px;
+      font-weight: 300;
+      color: #f5f3ef;
+    }
+    
+    .breakdown-item-note {
+      font-size: 11px;
+      color: #666;
+      margin-top: 5px;
+    }
+    
+    /* Structures Table */
+    .structures-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    
+    .structures-table th {
+      text-align: left;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      padding: 12px 15px;
+      border-bottom: 2px solid rgba(196, 166, 124, 0.4);
+    }
+    
+    .structures-table th:last-child {
+      text-align: right;
+    }
+    
+    .structures-table td {
+      padding: 15px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-size: 14px;
+    }
+    
+    .structures-table td:first-child {
+      color: #f5f3ef;
+      font-weight: 500;
+    }
+    
+    .structures-table td:nth-child(2) {
+      color: #888;
+    }
+    
+    .structures-table td:last-child {
+      text-align: right;
+      color: #C4A67C;
+      font-weight: 500;
+    }
+    
+    .structures-table tr.subtotal td {
+      border-top: 2px solid rgba(196, 166, 124, 0.3);
+      font-weight: 600;
+      color: #f5f3ef;
+    }
+    
+    .structures-table tr.subtotal td:last-child {
+      color: #C4A67C;
+      font-size: 18px;
+    }
+    
+    .structures-table tr.total td {
+      background: rgba(196, 166, 124, 0.15);
+      border-top: 2px solid #C4A67C;
+      font-weight: 600;
+    }
+    
+    .structures-table tr.total td:first-child {
+      border-radius: 0 0 0 8px;
+    }
+    
+    .structures-table tr.total td:last-child {
+      border-radius: 0 0 8px 0;
+      font-size: 22px;
+      color: #C4A67C;
+    }
+    
+    /* Gallery Grid */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 40px;
+    }
+    
+    .gallery img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    }
+    
+    /* Specs Grid */
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 40px;
+    }
+    
+    .spec-item {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 20px 15px;
+      text-align: center;
+    }
+    
+    .spec-value {
+      font-size: 28px;
+      font-weight: 300;
+      color: #C4A67C;
+      margin-bottom: 5px;
+    }
+    
+    .spec-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+    }
+    
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 40px;
+      margin-bottom: 40px;
+    }
+    
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 14px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, #C4A67C, rgba(196, 166, 124, 0.2));
+    }
+    
+    .step {
+      position: relative;
+      margin-bottom: 20px;
+      padding: 20px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+    }
+    
+    .step-number {
+      position: absolute;
+      left: -40px;
+      top: 20px;
+      width: 28px;
+      height: 28px;
+      background: #3D4F3D;
+      border: 2px solid #C4A67C;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: #C4A67C;
+    }
+    
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    
+    .step-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #f5f3ef;
+    }
+    
+    .step-timing {
+      font-size: 10px;
+      color: #C4A67C;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      background: rgba(196, 166, 124, 0.15);
+      padding: 4px 10px;
+      border-radius: 15px;
+    }
+    
+    .step-content {
+      color: #aaa;
+      font-size: 13px;
+    }
+    
+    .step-highlight {
+      display: inline-block;
+      background: rgba(196, 166, 124, 0.2);
+      color: #C4A67C;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    
+    /* Milestones Table */
+    .milestones-table {
+      width: 100%;
+      margin-top: 15px;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    
+    .milestones-table th {
+      text-align: left;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .milestones-table th:last-child { text-align: right; }
+    
+    .milestones-table td {
+      padding: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .milestones-table td:first-child { color: #f5f3ef; }
+    .milestones-table td:nth-child(2) { color: #888; text-align: center; }
+    .milestones-table td:last-child { color: #C4A67C; text-align: right; font-weight: 500; }
+    
+    /* Footer */
+    .footer {
+      margin-top: 50px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      text-align: center;
+    }
+    
+    .contact-prompt {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      color: #f5f3ef;
+      margin-bottom: 15px;
+    }
+    
+    .contact-info {
+      color: #888;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    
+    .contact-email {
+      color: #C4A67C;
+      text-decoration: none;
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+    
+    .contact-whatsapp {
+      margin-top: 12px;
+      font-size: 14px;
+    }
+    
+    .contact-whatsapp a {
+      color: #25D366;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .disclaimer {
+      margin-top: 30px;
+      font-size: 10px;
+      color: #555;
+      line-height: 1.6;
+    }
+    
+    /* Mobile Responsive */
+    @media (max-width: 700px) {
+      .container { padding: 25px 20px; }
+      .hero-title { font-size: 28px; }
+      .total-value { font-size: 40px; }
+      .breakdown-grid { grid-template-columns: 1fr; }
+      .breakdown-item.full-width { grid-column: span 1; }
+      .specs-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery { grid-template-columns: 1fr; }
+      .gallery img { height: 200px; }
+    }
+    
+    @media print {
+      body { background: white; color: #1a1a1a; }
+      .logo, .section-title, .total-value, .spec-value, .step-highlight, .contact-email { color: #3D4F3D; }
+      .hero-title, .step-title, .contact-prompt { color: #1a1a1a; }
+      .step, .spec-item, .breakdown-item { border: 1px solid #ddd; background: #fafafa; }
+      .investment-card { border: 1px solid #C4A67C; background: #fdf9f3; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <!-- Header -->
+    <header class="header">
+      <img src="https://coyolnosara.com/images/logo-black.png" alt="Coyol Group" class="logo-img">
+      <div class="logo">COYOL GROUP</div>
+      <div class="tagline">Nosara, Costa Rica</div>
+      <div class="compound-badge">Two-Lot Private Compound</div>
+    </header>
+    
+    <!-- Hero -->
+    <div class="hero">
+      <img src="/images/homes/espavel-niki/hero-compound.jpg" alt="Espavel Niki Compound">
+      <div class="hero-overlay">
+        <h1 class="hero-title">Espavel Niki</h1>
+        <p class="hero-subtitle">Lots 19 & 36 · Mar Azul</p>
+      </div>
+    </div>
+    
+    <!-- Intro -->
+    <div class="intro">
+      <p>
+        A rare opportunity to create your own <strong>private compound</strong> at Mar Azul — 
+        spanning two adjacent lots with stunning ocean views. Espavel Niki combines a 
+        <strong>440 m² main residence</strong> with dedicated <strong>guest house</strong>, 
+        <strong>gym & spa</strong>, and <strong>garage</strong> — all designed with premium 
+        built-ins, double laundry, and walk-in closets throughout.
+      </p>
+    </div>
+    
+    <!-- Gallery -->
+    <div class="gallery">
+      <img src="/images/homes/espavel-niki/kitchen.jpg" alt="Kitchen">
+      <img src="/images/homes/espavel-niki/living-room.jpg" alt="Living Room">
+      <img src="/images/homes/espavel-niki/courtyard.jpg" alt="Courtyard Entry">
+      <img src="/images/homes/espavel-niki/bathroom.jpg" alt="Bathroom">
+    </div>
+    
+    <!-- Specs -->
+    <h2 class="section-title">Architecture</h2>
+    <div class="specs-grid">
+      <div class="spec-item">
+        <div class="spec-value">607</div>
+        <div class="spec-label">sqm Indoor (AC)</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-value">115</div>
+        <div class="spec-label">sqm Covered</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-value">234</div>
+        <div class="spec-label">sqm Terraces</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-value">84</div>
+        <div class="spec-label">sqm Pool</div>
+      </div>
+    </div>
+    
+    <!-- Investment -->
+    <div class="investment-card">
+      <h2 class="section-title" style="margin-bottom: 20px;">Your Investment</h2>
+      
+      <div class="total-price">
+        <div class="total-label">Total Investment</div>
+        <div class="total-value">$4,273,550</div>
+        <div class="total-note">Two lots + complete turnkey compound</div>
+      </div>
+      
+      <!-- Land -->
+      <div class="breakdown-section">
+        <div class="breakdown-title">Land — Two Adjacent Lots</div>
+        <div class="breakdown-grid">
+          <div class="breakdown-item">
+            <div class="breakdown-item-label">Lot 19</div>
+            <div class="breakdown-item-value">$550,000</div>
+          </div>
+          <div class="breakdown-item">
+            <div class="breakdown-item-label">Lot 36</div>
+            <div class="breakdown-item-value">$550,000</div>
+          </div>
+          <div class="breakdown-item full-width" style="background: rgba(196, 166, 124, 0.15);">
+            <div class="breakdown-item-label">Combined Land</div>
+            <div class="breakdown-item-value" style="color: #C4A67C;">$1,100,000</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Construction Breakdown -->
+      <div class="breakdown-section">
+        <div class="breakdown-title">Construction Breakdown by Structure</div>
+        
+        <table class="structures-table">
+          <thead>
+            <tr>
+              <th>Structure</th>
+              <th>Details</th>
+              <th>Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Main House</td>
+              <td>440 m² interior @ $3,400/m²</td>
+              <td>$1,496,000</td>
+            </tr>
+            <tr>
+              <td>Covered Terraces</td>
+              <td>115 m² @ $1,800/m²</td>
+              <td>$207,000</td>
+            </tr>
+            <tr>
+              <td>Open Decks</td>
+              <td>234.5 m² @ $800/m²</td>
+              <td>$187,600</td>
+            </tr>
+            <tr>
+              <td>Swimming Pool</td>
+              <td>83.8 m² @ $2,250/m²</td>
+              <td>$188,550</td>
+            </tr>
+            <tr>
+              <td>Guest House</td>
+              <td>65 m² interior @ $3,400/m²</td>
+              <td>$221,000</td>
+            </tr>
+            <tr>
+              <td>Gym & Spa</td>
+              <td>60 m² interior @ $3,400/m²</td>
+              <td>$204,000</td>
+            </tr>
+            <tr>
+              <td>Garage</td>
+              <td>42 m² @ $3,200/m²</td>
+              <td>$134,400</td>
+            </tr>
+            <tr class="subtotal">
+              <td colspan="2">Construction Subtotal</td>
+              <td>$2,638,550</td>
+            </tr>
+            <tr>
+              <td>Design & Architecture</td>
+              <td>Main house</td>
+              <td>$100,000</td>
+            </tr>
+            <tr>
+              <td>Guest House — Design/Permits</td>
+              <td></td>
+              <td>$25,000</td>
+            </tr>
+            <tr>
+              <td>Gym/Spa — Design/Permits</td>
+              <td></td>
+              <td>$20,000</td>
+            </tr>
+            <tr>
+              <td>Garage — Design/Permits</td>
+              <td></td>
+              <td>$15,000</td>
+            </tr>
+            <tr>
+              <td>Landscaping</td>
+              <td>Main house grounds</td>
+              <td>$188,000</td>
+            </tr>
+            <tr>
+              <td>Guest House — Landscaping</td>
+              <td></td>
+              <td>$45,000</td>
+            </tr>
+            <tr>
+              <td>Gym/Spa — Landscaping</td>
+              <td></td>
+              <td>$15,000</td>
+            </tr>
+            <tr>
+              <td>Appliances</td>
+              <td>Main house (double laundry, wine fridge)</td>
+              <td>$97,000</td>
+            </tr>
+            <tr>
+              <td>Guest House — Appliances</td>
+              <td>Kitchen & laundry</td>
+              <td>$30,000</td>
+            </tr>
+            <tr class="total">
+              <td colspan="2">Total Construction</td>
+              <td>$3,173,550</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Timeline -->
+    <h2 class="section-title">Your Journey</h2>
+    
+    <div class="timeline">
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-header">
+          <h3 class="step-title">Reserve Both Lots</h3>
+          <span class="step-timing">Day 1</span>
+        </div>
+        <div class="step-content">
+          Secure Lots 19 & 36 with a <span class="step-highlight">$20,000 reservation deposit</span> ($10,000 per lot). Takes both off market immediately.
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-header">
+          <h3 class="step-title">Complete Land Purchase</h3>
+          <span class="step-timing">Within 30 Days</span>
+        </div>
+        <div class="step-content">
+          Pay remaining <span class="step-highlight">$1,080,000</span> to take ownership of both lots. Our legal partner ICS assists with company formation and title transfer.
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-header">
+          <h3 class="step-title">Finalize Design & Contract</h3>
+          <span class="step-timing">Week 2-4</span>
+        </div>
+        <div class="step-content">
+          Work with our architect on final compound layout. Choose finishes for all structures. Sign fixed-price construction contract.
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-header">
+          <h3 class="step-title">Permits</h3>
+          <span class="step-timing">1-3 Months</span>
+        </div>
+        <div class="step-content">
+          We handle the permit process for the entire compound. Once approved, construction begins.
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-header">
+          <h3 class="step-title">Construction</h3>
+          <span class="step-timing">14-20 Months</span>
+        </div>
+        <div class="step-content">
+          <span class="step-highlight">Six milestone payments</span> as your compound takes shape:
+          
+          <table class="milestones-table">
+            <thead>
+              <tr>
+                <th>Milestone</th>
+                <th>%</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Contract Signing</td><td>16.6%</td><td>$526,609</td></tr>
+              <tr><td>Foundation</td><td>16.6%</td><td>$526,609</td></tr>
+              <tr><td>Structure</td><td>16.6%</td><td>$526,609</td></tr>
+              <tr><td>Roof & Enclosure</td><td>16.6%</td><td>$526,609</td></tr>
+              <tr><td>Finishes</td><td>16.6%</td><td>$526,609</td></tr>
+              <tr><td>Handover</td><td>17.0%</td><td>$540,505</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">6</div>
+        <div class="step-header">
+          <h3 class="step-title">Welcome Home</h3>
+          <span class="step-timing">Move-In Day</span>
+        </div>
+        <div class="step-content">
+          Final walkthrough of all structures, keys to your private compound, and welcome to the Mar Azul community.
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+      <p class="contact-prompt">Ready to create your compound?</p>
+      <p class="contact-info">Ruth Tal · Coyol Nosara Real Estate</p>
+      <a href="mailto:info@coyolnosara.com" class="contact-email">info@coyolnosara.com</a>
+      <p class="contact-whatsapp"><a href="https://wa.me/13235747238">WhatsApp: +1 323 574 7238</a></p>
+      
+      <p class="disclaimer">
+        Prepared exclusively for Niki & Zack. Prices valid for 30 days.<br>
+        Construction by Nosara Construction S.A. Timeline estimates based on typical progression.<br>
+        © 2026 Coyol Group
+      </p>
+    </footer>
+    
+  </div>
+</body>
+</html>

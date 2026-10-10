@@ -142,3 +142,6 @@ vite.config.ts.timestamp-*
 *.blend
 coyol-website/source-files/videos/
 .vercel
+*.tar.gz
+backups/
+temp/

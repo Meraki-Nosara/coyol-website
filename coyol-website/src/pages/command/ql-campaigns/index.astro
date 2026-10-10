@@ -1,0 +1,411 @@
+---
+import CommandLayout from '../../../layouts/CommandLayout.astro';
+import { supabase } from '../../../lib/supabase';
+
+// Fetch existing campaigns
+const { data: campaigns } = await supabase
+  .from('ql_campaigns')
+  .select('*')
+  .order('created_at', { ascending: false });
+---
+
+<CommandLayout title="QL Campaigns" active="ql-campaigns">
+  
+  <div class="page">
+    <header class="page-header">
+      <div>
+        <h1>QL Campaigns</h1>
+        <span class="subtitle">Create and manage lead campaigns</span>
+      </div>
+      <button class="btn-primary" id="newCampaignBtn">+ New Campaign</button>
+    </header>
+
+    <!-- New Campaign Modal -->
+    <div class="modal" id="newCampaignModal">
+      <div class="modal-content">
+        <h2>Create New Campaign</h2>
+        <form id="newCampaignForm">
+          <div class="form-group">
+            <label>Campaign Name</label>
+            <input type="text" id="campaignName" placeholder="e.g., Ruth Email Campaign Sep 2026" required />
+          </div>
+          <div class="form-group">
+            <label>Type</label>
+            <select id="campaignType">
+              <option value="email">Email Campaign</option>
+              <option value="ads">Meta Ads Campaign</option>
+              <option value="outreach">Direct Outreach</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Description (optional)</label>
+            <textarea id="campaignDesc" placeholder="Campaign goals and notes..."></textarea>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
+            <button type="submit" class="btn-primary">Create Campaign</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Campaigns List -->
+    <div class="campaigns-grid">
+      {(!campaigns || campaigns.length === 0) ? (
+        <div class="empty-state">
+          <p>No campaigns yet. Create your first campaign to start adding leads.</p>
+        </div>
+      ) : (
+        campaigns.map(campaign => (
+          <div class="campaign-card">
+            <a href={`/command/ql-campaigns/${campaign.id}`} class="campaign-link">
+              <div class="campaign-header">
+                <span class={`campaign-type ${campaign.type}`}>{campaign.type}</span>
+                <span class={`campaign-status ${campaign.status}`}>{campaign.status}</span>
+              </div>
+              <h3>{campaign.name}</h3>
+              <p class="campaign-desc">{campaign.description || 'No description'}</p>
+              <div class="campaign-stats">
+                <div class="stat">
+                  <span class="stat-value">{campaign.lead_count || 0}</span>
+                  <span class="stat-label">Leads</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-value">{campaign.sent_count || 0}</span>
+                  <span class="stat-label">Sent</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-value">{campaign.response_count || 0}</span>
+                  <span class="stat-label">Responses</span>
+                </div>
+              </div>
+              <div class="campaign-date">
+                Created {new Date(campaign.created_at).toLocaleDateString()}
+              </div>
+            </a>
+            <button class="btn-delete" data-id={campaign.id} data-name={campaign.name}>Delete</button>
+          </div>
+        ))
+      )}
+    </div>
+  </div>
+
+</CommandLayout>
+
+<style>
+  .page {
+    padding: 32px 40px;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+
+  .page-header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    color: #8a9b8a;
+    font-size: 14px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #3D4F3D 0%, #4a6040 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(61, 79, 61, 0.3);
+  }
+
+  .btn-secondary {
+    background: #2a352a;
+    color: #e8e6e1;
+    border: 1px solid #3a453a;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal.open {
+    display: flex;
+  }
+
+  .modal-content {
+    background: #111611;
+    border: 1px solid #2a352a;
+    border-radius: 16px;
+    padding: 32px;
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .modal-content h2 {
+    margin-bottom: 24px;
+    font-size: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #8a9b8a;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    background: #1a201a;
+    border: 1px solid #2a352a;
+    border-radius: 8px;
+    color: #e8e6e1;
+    font-size: 15px;
+  }
+
+  .form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 24px;
+  }
+
+  .campaigns-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .campaign-card {
+    background: #111611;
+    border: 1px solid #2a352a;
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .campaign-card:hover {
+    border-color: #3D4F3D;
+  }
+
+  .campaign-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .btn-delete {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: transparent;
+    border: 1px solid #A65D3F;
+    color: #A65D3F;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.2s;
+  }
+
+  .campaign-card:hover .btn-delete {
+    opacity: 1;
+  }
+
+  .btn-delete:hover {
+    background: #A65D3F;
+    color: white;
+  }
+
+  .campaign-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-right: 60px; /* Space for delete button */
+  }
+
+  .campaign-type {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: #2a352a;
+    color: #8a9b8a;
+  }
+
+  .campaign-type.email { background: #1a3a2a; color: #7cb87c; }
+  .campaign-type.ads { background: #3a2a1a; color: #c8a87c; }
+  .campaign-type.outreach { background: #2a2a3a; color: #8a8ac8; }
+
+  .campaign-status {
+    font-size: 11px;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+
+  .campaign-status.active { background: #1a3a2a; color: #7cb87c; }
+  .campaign-status.draft { background: #2a352a; color: #8a9b8a; }
+  .campaign-status.completed { background: #2a2a3a; color: #8a8ac8; }
+
+  .campaign-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #e8e6e1;
+  }
+
+  .campaign-desc {
+    font-size: 14px;
+    color: #6a7b6a;
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+
+  .campaign-stats {
+    display: flex;
+    gap: 24px;
+    padding: 16px 0;
+    border-top: 1px solid #2a352a;
+    border-bottom: 1px solid #2a352a;
+    margin-bottom: 12px;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-value {
+    display: block;
+    font-size: 20px;
+    font-weight: 600;
+    color: #C4A67C;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: #6a7b6a;
+    text-transform: uppercase;
+  }
+
+  .campaign-date {
+    font-size: 12px;
+    color: #6a7b6a;
+  }
+
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: #6a7b6a;
+  }
+</style>
+
+<script>
+  const modal = document.getElementById('newCampaignModal');
+  const newBtn = document.getElementById('newCampaignBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const form = document.getElementById('newCampaignForm');
+
+  newBtn?.addEventListener('click', () => modal.classList.add('open'));
+  cancelBtn?.addEventListener('click', () => modal.classList.remove('open'));
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) modal.classList.remove('open');
+  });
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const name = document.getElementById('campaignName').value;
+    const type = document.getElementById('campaignType').value;
+    const description = document.getElementById('campaignDesc').value;
+
+    try {
+      const res = await fetch('/api/ql-campaigns', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, type, description })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        window.location.href = `/command/ql-campaigns/${data.id}`;
+      } else {
+        alert('Error creating campaign');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error creating campaign');
+    }
+  });
+
+  // Delete campaign buttons
+  document.querySelectorAll('.btn-delete').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const id = btn.dataset.id;
+      const name = btn.dataset.name;
+      
+      if (!confirm(`Are you sure you want to delete "${name}"?\n\nThis cannot be undone.`)) {
+        return;
+      }
+      
+      try {
+        const res = await fetch(`/api/ql-campaigns?id=${id}`, {
+          method: 'DELETE'
+        });
+        
+        if (res.ok) {
+          btn.closest('.campaign-card').remove();
+        } else {
+          alert('Error deleting campaign');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Error deleting campaign');
+      }
+    });
+  });
+</script>

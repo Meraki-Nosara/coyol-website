@@ -1,0 +1,652 @@
+---
+import CommandLayout from '../../layouts/CommandLayout.astro';
+
+// Pricing rates
+const RATES = {
+  interior: 3200,
+  coveredTerrace: 1800,
+  openTerrace: 800,
+  pool: 2250,
+  poolDeck: 650,
+  pergola: 1200,
+  designPermits: 100000,
+  landscaping: 188000,
+  appliances: 72000
+};
+
+// Lot prices loaded dynamically from Supabase
+// Fallback prices in case Supabase is slow
+const LOT_PRICES: Record<number, number> = {};
+---
+
+<CommandLayout title="Price Calculator">
+  <div class="calculator-container">
+    <header class="page-header">
+      <a href="/command/qualified" class="back-link">← Back to Leads</a>
+      <h1>🧮 Price Calculator</h1>
+      <p class="subtitle">Generate construction estimates for Mar Azul homes</p>
+    </header>
+
+    <div class="calculator-grid">
+      <!-- Input Section -->
+      <div class="card input-card">
+        <h3>Property Details</h3>
+        
+        <div class="form-group">
+          <label>Client Name</label>
+          <input type="text" id="clientName" placeholder="e.g. John Smith" />
+        </div>
+
+        <div class="form-group">
+          <label>House Model</label>
+          <input type="text" id="houseModel" placeholder="e.g. Casa Cacao XS" />
+        </div>
+
+        <div class="form-group">
+          <label>Lot Number</label>
+          <select id="lotNumber">
+            <option value="">Loading lots...</option>
+          </select>
+        </div>
+
+        <h4>Areas (m²)</h4>
+        
+        <div class="areas-grid">
+          <div class="form-group">
+            <label>Interior</label>
+            <input type="number" id="interior" value="182" min="0" />
+            <span class="rate">@ $3,200/m²</span>
+          </div>
+
+          <div class="form-group">
+            <label>Covered Terrace</label>
+            <input type="number" id="coveredTerrace" value="41" min="0" />
+            <span class="rate">@ $1,800/m²</span>
+          </div>
+
+          <div class="form-group">
+            <label>Open Terrace</label>
+            <input type="number" id="openTerrace" value="64" min="0" />
+            <span class="rate">@ $800/m²</span>
+          </div>
+
+          <div class="form-group">
+            <label>Pool</label>
+            <input type="number" id="pool" value="42.5" min="0" step="0.5" />
+            <span class="rate">@ $2,250/m²</span>
+          </div>
+
+          <div class="form-group">
+            <label>Pool Deck</label>
+            <input type="number" id="poolDeck" value="0" min="0" />
+            <span class="rate">@ $650/m²</span>
+          </div>
+
+          <div class="form-group">
+            <label>Pergola</label>
+            <input type="number" id="pergola" value="0" min="0" />
+            <span class="rate">@ $1,200/m²</span>
+          </div>
+        </div>
+
+        <h4>Fixed Costs</h4>
+        
+        <div class="fixed-costs">
+          <label class="checkbox-label">
+            <input type="checkbox" id="includeDesign" checked />
+            Design & Permits ($100,000)
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="includeLandscaping" checked />
+            Landscaping & Hardscaping ($188,000)
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="includeAppliances" checked />
+            Appliances ($72,000)
+          </label>
+        </div>
+
+        <button id="calculateBtn" class="calculate-btn">Calculate Total</button>
+      </div>
+
+      <!-- Results Section -->
+      <div class="card results-card">
+        <h3>Estimate Breakdown</h3>
+        
+        <div id="resultsContent" class="results-content">
+          <p class="placeholder">Enter details and click Calculate</p>
+        </div>
+
+        <div id="resultsActions" class="results-actions" style="display: none;">
+          <button id="copyBtn" class="action-btn">📋 Copy to Clipboard</button>
+          <button id="printBtn" class="action-btn">🖨️ Print Estimate</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .calculator-container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      margin-bottom: 30px;
+    }
+
+    .back-link {
+      color: #888;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .back-link:hover {
+      color: #C4A67C;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 10px 0 5px 0;
+      color: #fff;
+    }
+
+    .subtitle {
+      color: #888;
+      margin: 0;
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .calculator-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: #1a1f16;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .card h3 {
+      color: #C4A67C;
+      margin: 0 0 20px 0;
+      font-size: 18px;
+    }
+
+    .card h4 {
+      color: #888;
+      font-size: 13px;
+      text-transform: uppercase;
+      margin: 24px 0 12px 0;
+      padding-top: 16px;
+      border-top: 1px solid #333;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      color: #888;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      background: #0d0f0a;
+      border: 1px solid #3D4F3D;
+      color: #fff;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: #C4A67C;
+    }
+
+    .rate {
+      font-size: 11px;
+      color: #666;
+      margin-top: 4px;
+      display: block;
+    }
+
+    .areas-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .fixed-costs {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ccc;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #C4A67C;
+    }
+
+    .calculate-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #3D4F3D, #4a6040);
+      color: white;
+      border: none;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 24px;
+      transition: all 0.2s;
+    }
+
+    .calculate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(61, 79, 61, 0.4);
+    }
+
+    .results-content {
+      min-height: 300px;
+    }
+
+    .placeholder {
+      color: #666;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .results-table th {
+      text-align: left;
+      color: #888;
+      font-size: 11px;
+      text-transform: uppercase;
+      padding: 8px 0;
+      border-bottom: 1px solid #333;
+    }
+
+    .results-table td {
+      padding: 12px 0;
+      border-bottom: 1px solid #222;
+    }
+
+    .results-table .item-name {
+      color: #fff;
+    }
+
+    .results-table .item-calc {
+      color: #666;
+      font-size: 12px;
+    }
+
+    .results-table .item-total {
+      color: #C4A67C;
+      text-align: right;
+      font-weight: 600;
+    }
+
+    .results-table tr.subtotal td {
+      padding-top: 16px;
+      border-bottom: none;
+    }
+
+    .results-table tr.grand-total td {
+      padding-top: 20px;
+      font-size: 20px;
+      color: #C4A67C;
+      border-top: 2px solid #C4A67C;
+    }
+
+    .results-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #333;
+    }
+
+    .action-btn {
+      flex: 1;
+      background: #2a2f24;
+      color: #fff;
+      border: 1px solid #3D4F3D;
+      padding: 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      background: #3D4F3D;
+    }
+
+    .client-header {
+      background: #0d0f0a;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .client-header h4 {
+      color: #C4A67C;
+      margin: 0 0 4px 0;
+      font-size: 16px;
+      border: none;
+      padding: 0;
+    }
+
+    .client-header p {
+      color: #888;
+      margin: 0;
+      font-size: 13px;
+    }
+  </style>
+
+  <script is:inline>
+    const RATES = {
+      interior: 3200,
+      coveredTerrace: 1800,
+      openTerrace: 800,
+      pool: 2250,
+      poolDeck: 650,
+      pergola: 1200,
+      designPermits: 100000,
+      landscaping: 188000,
+      appliances: 72000
+    };
+
+    const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1';
+    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+
+    // Load lots from Supabase
+    async function loadLots() {
+      const lotSelect = document.getElementById('lotNumber');
+      try {
+        const res = await fetch(`${SUPABASE_URL}/mar_azul_lots?select=lot_number,price&order=lot_number`, {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          }
+        });
+        const lots = await res.json();
+        
+        lotSelect.innerHTML = '<option value="">Select lot...</option>';
+        lots.forEach(lot => {
+          if (lot.price) {
+            const option = document.createElement('option');
+            option.value = lot.lot_number;
+            option.dataset.price = lot.price;
+            option.textContent = `Lot ${lot.lot_number} — $${lot.price.toLocaleString()}`;
+            lotSelect.appendChild(option);
+          }
+        });
+      } catch (err) {
+        console.error('Failed to load lots:', err);
+        lotSelect.innerHTML = '<option value="">Error loading lots</option>';
+      }
+    }
+    loadLots();
+
+    document.getElementById('calculateBtn').addEventListener('click', () => {
+      const clientName = document.getElementById('clientName').value || 'Client';
+      const houseModel = document.getElementById('houseModel').value || 'Custom Home';
+      const lotSelect = document.getElementById('lotNumber');
+      const lotNumber = lotSelect.value;
+      const lotPrice = lotSelect.selectedOptions[0]?.dataset.price || 0;
+
+      const interior = parseFloat(document.getElementById('interior').value) || 0;
+      const coveredTerrace = parseFloat(document.getElementById('coveredTerrace').value) || 0;
+      const openTerrace = parseFloat(document.getElementById('openTerrace').value) || 0;
+      const pool = parseFloat(document.getElementById('pool').value) || 0;
+      const poolDeck = parseFloat(document.getElementById('poolDeck').value) || 0;
+      const pergola = parseFloat(document.getElementById('pergola').value) || 0;
+
+      const includeDesign = document.getElementById('includeDesign').checked;
+      const includeLandscaping = document.getElementById('includeLandscaping').checked;
+      const includeAppliances = document.getElementById('includeAppliances').checked;
+
+      // Calculate
+      const interiorCost = interior * RATES.interior;
+      const coveredCost = coveredTerrace * RATES.coveredTerrace;
+      const openCost = openTerrace * RATES.openTerrace;
+      const poolCost = pool * RATES.pool;
+      const poolDeckCost = poolDeck * RATES.poolDeck;
+      const pergolaCost = pergola * RATES.pergola;
+
+      const buildingSubtotal = interiorCost + coveredCost + openCost + poolCost + poolDeckCost + pergolaCost;
+
+      const designCost = includeDesign ? RATES.designPermits : 0;
+      const landscapingCost = includeLandscaping ? RATES.landscaping : 0;
+      const appliancesCost = includeAppliances ? RATES.appliances : 0;
+
+      const constructionTotal = buildingSubtotal + designCost + landscapingCost + appliancesCost;
+      const grandTotal = constructionTotal + parseInt(lotPrice);
+
+      // Build results HTML
+      let html = `
+        <div class="client-header">
+          <h4>${clientName}</h4>
+          <p>${houseModel}${lotNumber ? ` — Lot ${lotNumber}` : ''}</p>
+        </div>
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th></th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      if (lotNumber) {
+        html += `
+          <tr>
+            <td class="item-name">Lot ${lotNumber}</td>
+            <td class="item-calc"></td>
+            <td class="item-total">$${parseInt(lotPrice).toLocaleString()}</td>
+          </tr>
+        `;
+      }
+
+      if (interior > 0) {
+        html += `
+          <tr>
+            <td class="item-name">Interior</td>
+            <td class="item-calc">${interior} m² × $3,200</td>
+            <td class="item-total">$${interiorCost.toLocaleString()}</td>
+          </tr>
+        `;
+      }
+
+      if (coveredTerrace > 0) {
+        html += `
+          <tr>
+            <td class="item-name">Covered Terrace</td>
+            <td class="item-calc">${coveredTerrace} m² × $1,800</td>
+            <td class="item-total">$${coveredCost.toLocaleString()}</td>
+          </tr>
+        `;
+      }
+
+      if (openTerrace > 0) {
+        html += `
+          <tr>
+            <td class="item-name">Open Terrace</td>
+            <td class="item-calc">${openTerrace} m² × $800</td>
+            <td class="item-total">$${openCost.toLocaleString()}</td>
+          </tr>
+        `;
+      }
+
+      if (pool > 0) {
+        html += `
+          <tr>
+            <td class="item-name">Pool</td>
+            <td class="item-calc">${pool} m² × $2,250</td>
+            <td class="item-total">$${poolCost.toLocaleString()}</td>
+          </tr>
+        `;
+      }
+
+      if (poolDeck > 0) {
+        html += `
+          <tr>
+            <td class="item-name">Pool Deck</td>
+            <td class="item-calc">${poolDeck} m² × $650</td>
+            <td class="item-total">$${poolDeckCost.toLocaleString()}</td>
+          </tr>
+        `;
+      }
+
+      if (pergola > 0) {
+        html += `
+          <tr>
+            <td class="item-name">Pergola</td>
+            <td class="item-calc">${pergola} m² × $1,200</td>
+            <td class="item-total">$${pergolaCost.toLocaleString()}</td>
+          </tr>
+        `;
+      }
+
+      html += `
+        <tr class="subtotal">
+          <td class="item-name">Building Subtotal</td>
+          <td></td>
+          <td class="item-total">$${buildingSubtotal.toLocaleString()}</td>
+        </tr>
+      `;
+
+      if (includeDesign) {
+        html += `
+          <tr>
+            <td class="item-name">Design & Permits</td>
+            <td class="item-calc">Fixed</td>
+            <td class="item-total">$${RATES.designPermits.toLocaleString()}</td>
+          </tr>
+        `;
+      }
+
+      if (includeLandscaping) {
+        html += `
+          <tr>
+            <td class="item-name">Landscaping & Hardscaping</td>
+            <td class="item-calc">Fixed</td>
+            <td class="item-total">$${RATES.landscaping.toLocaleString()}</td>
+          </tr>
+        `;
+      }
+
+      if (includeAppliances) {
+        html += `
+          <tr>
+            <td class="item-name">Appliances</td>
+            <td class="item-calc">Fixed</td>
+            <td class="item-total">$${RATES.appliances.toLocaleString()}</td>
+          </tr>
+        `;
+      }
+
+      html += `
+        <tr class="subtotal">
+          <td class="item-name">Construction Total</td>
+          <td></td>
+          <td class="item-total">$${constructionTotal.toLocaleString()}</td>
+        </tr>
+      `;
+
+      if (lotNumber) {
+        html += `
+          <tr class="grand-total">
+            <td class="item-name">TOTAL INVESTMENT</td>
+            <td></td>
+            <td class="item-total">$${grandTotal.toLocaleString()}</td>
+          </tr>
+        `;
+      }
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+      document.getElementById('resultsContent').innerHTML = html;
+      document.getElementById('resultsActions').style.display = 'flex';
+
+      // Store for copy/print
+      window.estimateData = {
+        clientName,
+        houseModel,
+        lotNumber,
+        lotPrice: parseInt(lotPrice),
+        interior, coveredTerrace, openTerrace, pool, poolDeck, pergola,
+        buildingSubtotal, constructionTotal, grandTotal,
+        includeDesign, includeLandscaping, includeAppliances
+      };
+    });
+
+    // Copy to clipboard
+    document.getElementById('copyBtn').addEventListener('click', () => {
+      const d = window.estimateData;
+      if (!d) return;
+
+      let text = `ESTIMATE: ${d.clientName} — ${d.houseModel}\n`;
+      if (d.lotNumber) text += `Lot ${d.lotNumber}: $${d.lotPrice.toLocaleString()}\n`;
+      text += `\nCONSTRUCTION BREAKDOWN:\n`;
+      if (d.interior > 0) text += `Interior: ${d.interior} m² × $3,200 = $${(d.interior * 3200).toLocaleString()}\n`;
+      if (d.coveredTerrace > 0) text += `Covered Terrace: ${d.coveredTerrace} m² × $1,800 = $${(d.coveredTerrace * 1800).toLocaleString()}\n`;
+      if (d.openTerrace > 0) text += `Open Terrace: ${d.openTerrace} m² × $800 = $${(d.openTerrace * 800).toLocaleString()}\n`;
+      if (d.pool > 0) text += `Pool: ${d.pool} m² × $2,250 = $${(d.pool * 2250).toLocaleString()}\n`;
+      if (d.poolDeck > 0) text += `Pool Deck: ${d.poolDeck} m² × $650 = $${(d.poolDeck * 650).toLocaleString()}\n`;
+      if (d.pergola > 0) text += `Pergola: ${d.pergola} m² × $1,200 = $${(d.pergola * 1200).toLocaleString()}\n`;
+      text += `\nBuilding Subtotal: $${d.buildingSubtotal.toLocaleString()}\n`;
+      if (d.includeDesign) text += `Design & Permits: $100,000\n`;
+      if (d.includeLandscaping) text += `Landscaping: $188,000\n`;
+      if (d.includeAppliances) text += `Appliances: $72,000\n`;
+      text += `\nConstruction Total: $${d.constructionTotal.toLocaleString()}\n`;
+      if (d.lotNumber) text += `\nTOTAL INVESTMENT: $${d.grandTotal.toLocaleString()}\n`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = '✓ Copied!';
+        setTimeout(() => btn.textContent = '📋 Copy to Clipboard', 2000);
+      });
+    });
+
+    // Print
+    document.getElementById('printBtn').addEventListener('click', () => {
+      window.print();
+    });
+  </script>
+</CommandLayout>

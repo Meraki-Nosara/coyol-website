@@ -1,80 +1,52 @@
 ---
 const properties = [
   {
-    name: 'Casa Nest',
-    slug: 'casa-nest',
-    lot: 'Lot 28',
-    development: 'Mar Azul',
-    price: 920000,
-    image: '/images/properties/casa-nest.jpg',
+    name: 'Casa Espavel',
+    slug: 'casa-espavel',
+    lot: 'Select Your Lot',
+    development: '',
+    price: null,
+    image: '/images/homes/casa-espavel/front-1.jpg',
     status: 'Design',
-    tags: ['Cantilevered Design', 'Infinity Pool', 'Ocean Views']
+    tags: ['4 Bed + Guest Casita', '403m² Indoor', '100m² Pool']
   },
   {
-    name: 'Casa Lefki',
-    slug: 'casa-lefki',
-    lot: 'Lot 25',
-    development: 'Mar Azul',
-    price: 2300000,
-    image: '/images/properties/casa-lefki.jpg',
+    name: 'Casa Dafni',
+    slug: 'casa-dafni',
+    lot: 'Lot 27',
+    development: '',
+    price: null,
+    image: '/images/properties/casa-dafni/hero.jpg',
     status: 'Design',
-    tags: ['Modern Glass', 'Guanacaste Trees', 'Pool Terrace']
+    tags: ['Modern Farmhouse', 'Mountain Views', '125m² Indoor']
   },
   {
-    name: 'Casa Perch',
-    slug: 'casa-perch',
-    lot: 'Lot 26',
-    development: 'Mar Azul',
-    price: 960000,
-    image: '/images/properties/casa-perch.jpg',
+    name: 'Casa Quetzal',
+    slug: 'casa-quetzal',
+    lot: 'Lot 22',
+    development: '',
+    price: null,
+    image: '/images/homes/quetzal/hero-card.jpg',
     status: 'Design',
-    tags: ['Compact Living', 'Ocean Views', 'Modern Design']
-  },
-  {
-    name: 'Casa Níspero',
-    slug: 'casa-nispero',
-    lot: 'Lot 2',
-    development: 'Mar Azul',
-    price: 3900000,
-    image: '/images/properties/casa-nispero.jpg',
-    status: 'Under Construction',
-    tags: ['Stone Walls', 'Fire Pit', 'Mountain Views']
-  },
-  {
-    name: 'Casa Umi',
-    slug: 'casa-umi',
-    lot: 'Lot 34',
-    development: 'Mar Azul',
-    price: 5500000,
-    image: '/images/properties/casa-umi.jpg',
-    status: 'Design',
-    tags: ['Black Wood', 'Gabion Walls', 'Forest Setting']
+    tags: ['Cedar & Stone', 'Mountain Views', '120m² Indoor']
   },
   {
     name: 'Casa Cacao',
     slug: 'casa-cacao',
-    lot: 'Lot 18',
-    development: 'Mar Azul',
-    price: 2300000,
-    image: '/images/properties/casa-cacao.jpg',
+    lot: 'Lot 22',
+    development: '',
+    price: null,
+    image: '/images/homes/cacao/hero-card.jpg',
     status: 'Design',
-    tags: ['Stone & Wood', 'Mountain Views', 'Modern Farmhouse']
+    tags: ['Tropical Modern', 'Infinity Pool', '188m² Indoor']
   },
-  {
-    name: 'Casa Luz',
-    slug: 'casa-luz',
-    lot: 'Lot 21',
-    development: 'Mar Azul',
-    price: 2400000,
-    image: '/images/properties/casa-luz.jpg',
-    status: 'Design',
-    tags: ['Pavilion Style', 'Stone Details', 'Jungle Compound']
-  },
+  // HIDDEN - No full content yet (add back when ready)
+  // Casa Nest, Casa Lefki, Casa Perch, Casa Níspero, Casa Umi, Casa Cacao Grande, Casa Luz
   {
     name: 'Casa Elle',
     slug: 'casa-elle',
     lot: 'Lot 14',
-    development: 'Mar Azul',
+    development: '',
     price: 4800000,
     image: '/images/properties/casa-elle.jpg',
     status: 'Completed',
@@ -132,10 +104,13 @@ const properties = [
               </span>
             </div>
             
+            {property.development && (
             <div class="flex items-baseline justify-between">
               <p class="text-landrover-sand/80 text-sm tracking-wide">
                 {property.development}
               </p>
+            </div>
+            )}
               {/* Price hidden for now - data preserved in properties array
               {property.price && (
                 <span class="text-landrover-sand font-medium">
@@ -146,7 +121,6 @@ const properties = [
                 </span>
               )}
               */}
-            </div>
             
             <!-- Tags -->
             <div class="flex flex-wrap gap-2 pt-2">

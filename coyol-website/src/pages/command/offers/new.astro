@@ -1,0 +1,896 @@
+---
+import { supabase } from '../../../lib/supabase';
+
+// Get lead ID from query param
+const leadId = Astro.url.searchParams.get('lead');
+
+// Fetch lead info if provided
+let lead = null;
+if (leadId) {
+  const { data } = await supabase
+    .from('mar_azul_leads')
+    .select('*')
+    .eq('id', leadId)
+    .single();
+  lead = data;
+}
+
+// Fetch available lots (with prices, excluding sold)
+const { data: allLots } = await supabase
+  .from('mar_azul_lots')
+  .select('*')
+  .gt('price', 0)
+  .order('lot_number');
+
+// Filter out sold lots (keep null/available)
+const lots = allLots?.filter(lot => lot.status !== 'sold') || [];
+
+// Fetch house models with complete specs AND renders (ready for offers)
+const { data: models } = await supabase
+  .from('house_models')
+  .select('*')
+  .not('interior_sqm', 'is', null)
+  .not('render_url', 'is', null)
+  .order('name');
+
+// Construction pricing
+const PRICING = {
+  interior: 3200,    // $/m²
+  covered: 1800,     // $/m²
+  open: 800,         // $/m²
+  pool: 2250,        // $/m²
+  design: 100000,
+  landscaping: 188000,
+  appliances: 72000,
+  stoneUpgrade: 50000   // Stone exterior walls upgrade
+};
+
+// Turnkey markup (25% for already-built homes)
+const TURNKEY_MARKUP = 1.25;
+---
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generate Offer | Coyol Command</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav class="topnav">
+    <a href="/command/qualified" class="back-link">← Back to Leads</a>
+    <span class="nav-title">Generate Offer</span>
+  </nav>
+
+  <main class="container">
+    {!lead ? (
+      <div class="error-card">
+        <h2>No Lead Selected</h2>
+        <p>Please select a qualified lead first.</p>
+        <a href="/command/qualified" class="btn">Go to Leads</a>
+      </div>
+    ) : (
+      <div class="offer-builder">
+        <!-- Lead Info Card -->
+        <div class="card lead-card">
+          <h3>Offer For</h3>
+          <div class="lead-info">
+            <span class="lead-name">{lead.full_name}</span>
+            <span class="lead-email">{lead.email}</span>
+            {lead.phone && <span class="lead-phone">{lead.phone}</span>}
+          </div>
+        </div>
+
+        <!-- Lot Selection -->
+        <div class="card">
+          <h3>Select Lot</h3>
+          <select id="lotSelect" class="lot-dropdown">
+            <option value="">Choose a lot...</option>
+            {lots?.map(lot => (
+              <option 
+                value={lot.lot_number}
+                data-price={lot.price}
+                data-area={lot.area}
+              >
+                Lot {lot.lot_number} — ${lot.price?.toLocaleString()} ({lot.area?.toLocaleString()} m²)
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <!-- House Model Selection - Carousel -->
+        <div class="card">
+          <h3>Select House Model</h3>
+          <div class="carousel-container">
+            <button class="carousel-btn prev" id="prevModel">‹</button>
+            <div class="model-carousel" id="modelCarousel">
+              {models?.map((model, i) => (
+                <div 
+                  class={`model-card ${i === 0 ? 'active' : ''}`}
+                  data-model={model.name}
+                  data-interior={model.interior_sqm}
+                  data-covered={model.covered_terrace_sqm}
+                  data-open={model.open_terrace_sqm}
+                  data-pool={model.pool_sqm}
+                >
+                  {model.render_url ? (
+                    <img src={model.render_url} alt={model.name} class="model-image" />
+                  ) : (
+                    <div class="model-placeholder">No Image</div>
+                  )}
+                  <div class="model-info">
+                    <span class="model-name">{model.name}</span>
+                    <span class="model-specs">
+                      {model.interior_sqm}m² indoor · {model.covered_terrace_sqm}m² covered · {model.pool_sqm}m² pool
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button class="carousel-btn next" id="nextModel">›</button>
+          </div>
+          <div class="carousel-dots" id="carouselDots">
+            {models?.map((_, i) => (
+              <span class={`dot ${i === 0 ? 'active' : ''}`} data-index={i}></span>
+            ))}
+          </div>
+          {(!models || models.length === 0) && (
+            <p class="empty-notice">No house models with complete specs yet. Waiting for Milagro's data.</p>
+          )}
+        </div>
+
+        <!-- Turnkey Toggle -->
+        <div class="card turnkey-card">
+          <div class="turnkey-toggle">
+            <label class="toggle-switch">
+              <input type="checkbox" id="turnkeyToggle" />
+              <span class="toggle-slider"></span>
+            </label>
+            <div class="turnkey-label">
+              <span class="turnkey-title">Turnkey Home</span>
+              <span class="turnkey-desc">Already built — 25% premium on construction</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Price Summary -->
+        <div class="card summary-card" id="summaryCard">
+          <h3>Price Summary</h3>
+          <div class="summary-grid">
+            <div class="summary-row">
+              <span class="label">Lot</span>
+              <span class="value" id="summaryLot">Select a lot</span>
+            </div>
+            <div class="summary-row">
+              <span class="label">Lot Price</span>
+              <span class="value" id="summaryLotPrice">—</span>
+            </div>
+            <div class="summary-row">
+              <span class="label">House Model</span>
+              <span class="value" id="summaryModel">Select a model</span>
+            </div>
+            <div class="summary-row">
+              <span class="label">Construction</span>
+              <span class="value" id="summaryConstruction">—</span>
+            </div>
+            <div class="summary-row total">
+              <span class="label">Total Investment</span>
+              <span class="value" id="summaryTotal">—</span>
+            </div>
+          </div>
+          
+          <!-- Template Selection -->
+          <div class="template-selector">
+            <label class="template-label">Choose Template Style</label>
+            <div class="template-options">
+              <label class="template-option">
+                <input type="radio" name="template" value="dark" checked />
+                <div class="template-preview dark-preview">
+                  <div class="preview-bar"></div>
+                  <div class="preview-content"></div>
+                </div>
+                <span class="template-name">Dark Executive</span>
+              </label>
+              <label class="template-option">
+                <input type="radio" name="template" value="light" />
+                <div class="template-preview light-preview">
+                  <div class="preview-bar"></div>
+                  <div class="preview-content"></div>
+                </div>
+                <span class="template-name">Light Editorial</span>
+              </label>
+            </div>
+          </div>
+          
+          <button id="generateBtn" class="generate-btn" disabled>Generate Offer</button>
+        </div>
+      </div>
+    )}
+  </main>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0f0a;
+      color: #e8e6e1;
+      min-height: 100vh;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 16px 24px;
+      background: #111611;
+      border-bottom: 1px solid #2a352a;
+    }
+
+    .back-link {
+      color: #8a9b8a;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .back-link:hover {
+      color: #C4A67C;
+    }
+
+    .nav-title {
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .card {
+      background: #111611;
+      border: 1px solid #2a352a;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #8a9b8a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+
+    .lead-card .lead-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .lead-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: #C4A67C;
+    }
+
+    .lead-email, .lead-phone {
+      font-size: 14px;
+      color: #8a9b8a;
+    }
+
+    /* Lot Dropdown */
+    .lot-dropdown {
+      width: 100%;
+      padding: 14px 16px;
+      background: #1a201a;
+      border: 2px solid #2a352a;
+      border-radius: 10px;
+      color: #e8e6e1;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238a9b8a' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+    }
+
+    .lot-dropdown:hover {
+      border-color: #3D4F3D;
+    }
+
+    .lot-dropdown:focus {
+      outline: none;
+      border-color: #C4A67C;
+    }
+
+    .lot-dropdown option {
+      background: #1a201a;
+      color: #e8e6e1;
+      padding: 10px;
+    }
+
+    /* Carousel */
+    .carousel-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+    }
+
+    .carousel-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #2a352a;
+      border: none;
+      color: #e8e6e1;
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .carousel-btn:hover {
+      background: #3D4F3D;
+    }
+
+    .model-carousel {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .model-card {
+      display: none;
+      background: #1a201a;
+      border: 3px solid #2a352a;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .model-card.active {
+      display: block;
+    }
+
+    .model-card.selected {
+      border-color: #C4A67C;
+    }
+
+    .model-card:hover {
+      border-color: #3D4F3D;
+    }
+
+    .model-image {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+    }
+
+    .model-placeholder {
+      width: 100%;
+      height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #2a352a;
+      color: #6a7b6a;
+    }
+
+    .model-info {
+      padding: 16px;
+      text-align: center;
+    }
+
+    .model-name {
+      font-weight: 600;
+      font-size: 18px;
+      display: block;
+      margin-bottom: 6px;
+      color: #C4A67C;
+    }
+
+    .model-specs {
+      font-size: 13px;
+      color: #8a9b8a;
+    }
+
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #2a352a;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .dot.active {
+      background: #C4A67C;
+    }
+
+    .dot:hover {
+      background: #3D4F3D;
+    }
+
+    .summary-card {
+      background: linear-gradient(135deg, #1a201a 0%, #111611 100%);
+      border-color: #3D4F3D;
+    }
+
+    .summary-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #2a352a;
+    }
+
+    .summary-row.total {
+      border-bottom: none;
+      border-top: 2px solid #3D4F3D;
+      padding-top: 16px;
+      margin-top: 8px;
+    }
+
+    .summary-row .label {
+      color: #8a9b8a;
+    }
+
+    .summary-row .value {
+      font-weight: 600;
+    }
+
+    .summary-row.total .value {
+      font-size: 20px;
+      color: #C4A67C;
+    }
+
+    /* Template Selector */
+    .template-selector {
+      margin: 20px 0;
+      padding-top: 20px;
+      border-top: 1px solid #2a352a;
+    }
+
+    .template-label {
+      display: block;
+      font-size: 14px;
+      color: #8a9b8a;
+      margin-bottom: 12px;
+    }
+
+    .template-options {
+      display: flex;
+      gap: 16px;
+    }
+
+    .template-option {
+      flex: 1;
+      cursor: pointer;
+    }
+
+    .template-option input {
+      display: none;
+    }
+
+    .template-preview {
+      height: 80px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid #2a352a;
+      transition: all 0.2s;
+    }
+
+    .template-option input:checked + .template-preview {
+      border-color: #C4A67C;
+      box-shadow: 0 0 0 2px rgba(196, 166, 124, 0.3);
+    }
+
+    .dark-preview {
+      background: linear-gradient(135deg, #1a1f16 0%, #2a3020 100%);
+    }
+
+    .dark-preview .preview-bar {
+      height: 12px;
+      background: #C4A67C;
+    }
+
+    .dark-preview .preview-content {
+      padding: 8px;
+    }
+
+    .dark-preview .preview-content::before {
+      content: '';
+      display: block;
+      height: 8px;
+      width: 60%;
+      background: #3D4F3D;
+      border-radius: 2px;
+      margin-bottom: 4px;
+    }
+
+    .dark-preview .preview-content::after {
+      content: '';
+      display: block;
+      height: 6px;
+      width: 80%;
+      background: #2a352a;
+      border-radius: 2px;
+    }
+
+    .light-preview {
+      background: #FAFAF8;
+    }
+
+    .light-preview .preview-bar {
+      height: 12px;
+      background: linear-gradient(90deg, #f0ede6 50%, #ddd 50%);
+    }
+
+    .light-preview .preview-content {
+      padding: 8px;
+    }
+
+    .light-preview .preview-content::before {
+      content: '';
+      display: block;
+      height: 8px;
+      width: 60%;
+      background: #1a1a1a;
+      border-radius: 2px;
+      margin-bottom: 4px;
+    }
+
+    .light-preview .preview-content::after {
+      content: '';
+      display: block;
+      height: 6px;
+      width: 80%;
+      background: #e0e0e0;
+      border-radius: 2px;
+    }
+
+    .template-name {
+      display: block;
+      text-align: center;
+      font-size: 12px;
+      color: #8a9b8a;
+      margin-top: 8px;
+    }
+
+    .template-option input:checked ~ .template-name {
+      color: #C4A67C;
+      font-weight: 500;
+    }
+
+    .generate-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #3D4F3D 0%, #4a6040 100%);
+      color: white;
+      border: none;
+      padding: 16px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 16px;
+    }
+
+    .generate-btn:hover:not(:disabled) {
+      background: linear-gradient(135deg, #4a6040 0%, #5a7050 100%);
+      transform: translateY(-1px);
+    }
+
+    .generate-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .empty-notice {
+      color: #6a7b6a;
+      font-style: italic;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .error-card {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .error-card h2 {
+      margin-bottom: 12px;
+    }
+
+    .error-card .btn {
+      display: inline-block;
+      margin-top: 20px;
+      background: #3D4F3D;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+
+    /* Turnkey Toggle */
+    .turnkey-card {
+      background: linear-gradient(135deg, #f8f6f3 0%, #fff 100%);
+      border: 2px solid #e8e4de;
+    }
+
+    .turnkey-toggle {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 56px;
+      height: 30px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.3s;
+      border-radius: 30px;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+
+    .toggle-switch input:checked + .toggle-slider {
+      background-color: #3D4F3D;
+    }
+
+    .toggle-switch input:checked + .toggle-slider:before {
+      transform: translateX(26px);
+    }
+
+    .turnkey-label {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .turnkey-title {
+      font-weight: 600;
+      color: #1a1a1a;
+      font-size: 15px;
+    }
+
+    .turnkey-desc {
+      font-size: 13px;
+      color: #666;
+    }
+
+    .turnkey-card.active {
+      border-color: #3D4F3D;
+      background: linear-gradient(135deg, #f0f4f0 0%, #fff 100%);
+    }
+  </style>
+
+  <script define:vars={{ PRICING, leadId }}>
+    let selectedLot = null;
+    let selectedModel = null;
+    let currentModelIndex = 0;
+    let isTurnkey = false;
+    const TURNKEY_MARKUP = 1.25;
+    const modelCards = document.querySelectorAll('.model-card');
+    const dots = document.querySelectorAll('.dot');
+
+    // Lot dropdown selection
+    const lotSelect = document.getElementById('lotSelect');
+    lotSelect?.addEventListener('change', () => {
+      const option = lotSelect.options[lotSelect.selectedIndex];
+      if (option.value) {
+        selectedLot = {
+          number: option.value,
+          price: parseFloat(option.dataset.price),
+          area: parseFloat(option.dataset.area)
+        };
+      } else {
+        selectedLot = null;
+      }
+      updateSummary();
+    });
+
+    // Turnkey toggle
+    const turnkeyToggle = document.getElementById('turnkeyToggle');
+    const turnkeyCard = document.querySelector('.turnkey-card');
+    turnkeyToggle?.addEventListener('change', () => {
+      isTurnkey = turnkeyToggle.checked;
+      turnkeyCard?.classList.toggle('active', isTurnkey);
+      updateSummary();
+    });
+
+    // Carousel navigation
+    function showModel(index) {
+      if (modelCards.length === 0) return;
+      modelCards.forEach((card, i) => {
+        card.classList.toggle('active', i === index);
+      });
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+      });
+      currentModelIndex = index;
+    }
+
+    document.getElementById('prevModel')?.addEventListener('click', () => {
+      const newIndex = currentModelIndex > 0 ? currentModelIndex - 1 : modelCards.length - 1;
+      showModel(newIndex);
+    });
+
+    document.getElementById('nextModel')?.addEventListener('click', () => {
+      const newIndex = currentModelIndex < modelCards.length - 1 ? currentModelIndex + 1 : 0;
+      showModel(newIndex);
+    });
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => showModel(i));
+    });
+
+    // Model selection (click on card)
+    modelCards.forEach(card => {
+      card.addEventListener('click', () => {
+        modelCards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedModel = {
+          name: card.dataset.model,
+          interior: parseFloat(card.dataset.interior),
+          covered: parseFloat(card.dataset.covered),
+          open: parseFloat(card.dataset.open),
+          pool: parseFloat(card.dataset.pool)
+        };
+        updateSummary();
+      });
+    });
+
+    function calculateConstruction(model) {
+      const interior = model.interior * PRICING.interior;
+      const covered = model.covered * PRICING.covered;
+      const open = model.open * PRICING.open;
+      const pool = model.pool * PRICING.pool;
+      let total = interior + covered + open + pool + PRICING.design + PRICING.landscaping + PRICING.appliances;
+      
+      // Add stone upgrade for Casa Quetzal Stone
+      if (model.name && model.name.toLowerCase().includes('stone')) {
+        total += PRICING.stoneUpgrade;    // +$90k stone bedroom walls
+      }
+      
+      // Apply 25% turnkey markup if selected
+      if (isTurnkey) {
+        total = Math.round(total * TURNKEY_MARKUP);
+      }
+      return total;
+    }
+
+    function updateSummary() {
+      const btn = document.getElementById('generateBtn');
+
+      // Update lot info
+      if (selectedLot) {
+        document.getElementById('summaryLot').textContent = `Lot ${selectedLot.number}`;
+        document.getElementById('summaryLotPrice').textContent = `$${selectedLot.price.toLocaleString()}`;
+      } else {
+        document.getElementById('summaryLot').textContent = 'Select a lot';
+        document.getElementById('summaryLotPrice').textContent = '—';
+      }
+
+      // Update model info
+      if (selectedModel) {
+        const construction = calculateConstruction(selectedModel);
+        document.getElementById('summaryModel').textContent = selectedModel.name;
+        document.getElementById('summaryConstruction').textContent = `$${construction.toLocaleString()}`;
+      } else {
+        document.getElementById('summaryModel').textContent = 'Select a model';
+        document.getElementById('summaryConstruction').textContent = '—';
+      }
+
+      // Update total and button state
+      if (selectedLot && selectedModel) {
+        const construction = calculateConstruction(selectedModel);
+        const total = selectedLot.price + construction;
+        document.getElementById('summaryTotal').textContent = `$${total.toLocaleString()}`;
+        btn.disabled = false;
+      } else {
+        document.getElementById('summaryTotal').textContent = '—';
+        btn.disabled = true;
+      }
+    }
+
+    // Generate offer
+    document.getElementById('generateBtn')?.addEventListener('click', async () => {
+      if (!selectedLot || !selectedModel) return;
+      
+      const btn = document.getElementById('generateBtn');
+      btn.disabled = true;
+      btn.textContent = 'Generating...';
+
+      try {
+        const template = document.querySelector('input[name="template"]:checked')?.value || 'dark';
+        
+        const response = await fetch('/api/generate-offer', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            leadId: leadId,
+            lotNumber: parseInt(selectedLot.number),
+            modelName: selectedModel.name,
+            template: template,
+            isTurnkey: isTurnkey
+          })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+          // Open the generated offer in a new tab
+          const blob = new Blob([data.html], { type: 'text/html' });
+          const url = URL.createObjectURL(blob);
+          window.open(url, '_blank');
+          
+          btn.textContent = 'Offer Generated ✓';
+          setTimeout(() => {
+            btn.textContent = 'Generate Another';
+            btn.disabled = false;
+          }, 2000);
+        } else {
+          alert('Error generating offer: ' + (data.error || 'Unknown error'));
+          btn.textContent = 'Generate Offer';
+          btn.disabled = false;
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to generate offer');
+        btn.textContent = 'Generate Offer';
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

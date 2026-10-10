@@ -76,9 +76,25 @@ function formatArea(area: number) {
 }
 
 function formatPrice(price: number | null | undefined) {
-  if (!price) return 'Contact for pricing';
-  return '₡' + price.toLocaleString('en-US');
+  if (!price) return '-';
+  return '$' + price.toLocaleString('en-US');
 }
+
+// Lot prices (verified Sep 3, 2026)
+const LOT_PRICES: Record<number, number> = {
+  2: 650000,
+  14: 1200000,
+  17: 550000,
+  18: 450000,
+  19: 550000,
+  21: 450000,
+  22: 375000,
+  23: 400000,
+  24: 350000,
+  25: 350000,
+  35: 950000,
+  36: 550000
+};
 ---
 
 <Layout title="Mar Azul — Master Plan" hideFloatingButtons={true}>
@@ -149,7 +165,7 @@ function formatPrice(price: number | null | undefined) {
           <div class="bg-[#D4C9B5] rounded-xl border border-lr-moss/30 overflow-hidden">
             <div class="relative" id="masterplan-container" style="background-color: #D4C9B5;">
               <img 
-                src="/images/mar-azul-masterplan.png" 
+                src="/images/mar-azul-masterplan.jpg" 
                 alt="Mar Azul Master Plan"
                 class="w-full h-auto mix-blend-multiply"
                 id="masterplan-image"
@@ -320,9 +336,11 @@ function formatPrice(price: number | null | undefined) {
                 <th class="px-4 py-3 text-lr-limestone/60 font-medium">#</th>
                 <th class="px-4 py-3 text-lr-limestone/60 font-medium">Name</th>
                 <th class="px-4 py-3 text-lr-limestone/60 font-medium">Area</th>
+                <th class="px-4 py-3 text-lr-limestone/60 font-medium">HOA/mo</th>
                 <th class="px-4 py-3 text-lr-limestone/60 font-medium">Status</th>
                 <th class="px-4 py-3 text-lr-limestone/60 font-medium">Pipeline</th>
                 <th class="px-4 py-3 text-lr-limestone/60 font-medium">Price</th>
+                <th class="px-2 py-3"></th>
               </tr>
             </thead>
             <tbody id="lots-table-body">
@@ -334,8 +352,19 @@ function formatPrice(price: number | null | undefined) {
                     data-lot={lot.number}
                   >
                     <td class="px-4 py-3 font-medium text-lr-alaska">{lot.number}</td>
-                    <td class="px-4 py-3 text-lr-sand">{lot.houseName || '-'}</td>
+                    <td class="px-4 py-3">
+                      <input 
+                        type="text" 
+                        class="house-name-input w-32 bg-transparent border border-transparent hover:border-lr-moss/30 
+                               focus:border-lr-sand focus:bg-lr-moss/10 rounded px-2 py-1 text-lr-sand 
+                               text-sm focus:outline-none transition"
+                        value={lot.houseName || ''}
+                        placeholder="-"
+                        data-lot={lot.number}
+                      />
+                    </td>
                     <td class="px-4 py-3 text-lr-limestone">{formatArea(lot.area)}</td>
+                    <td class="px-4 py-3 text-lr-sand text-sm">${Math.round(lot.area * 0.30).toLocaleString()}</td>
                     <td class="px-4 py-3">
                       <span 
                         class="px-2 py-0.5 rounded text-xs"
@@ -345,7 +374,23 @@ function formatPrice(price: number | null | undefined) {
                       </span>
                     </td>
                     <td class="px-4 py-3 text-lr-limestone/60 text-xs">{lot.pipelineStep || '-'}</td>
-                    <td class="px-4 py-3 text-lr-sand">{formatPrice(lot.purchasePrice)}</td>
+                    <td class="px-4 py-3">
+                      <input 
+                        type="text" 
+                        class="price-input w-24 bg-transparent border border-transparent hover:border-lr-moss/30 
+                               focus:border-lr-sand focus:bg-lr-moss/10 rounded px-2 py-1 text-lr-sand 
+                               text-right text-sm focus:outline-none transition"
+                        value={LOT_PRICES[lot.number] ? '$' + LOT_PRICES[lot.number].toLocaleString() : ''}
+                        placeholder="-"
+                        data-lot={lot.number}
+                      />
+                    </td>
+                    <td class="px-2 py-3">
+                      <button 
+                        class="save-lot-btn text-xs px-2 py-1 bg-lr-moss/20 hover:bg-lr-moss/40 text-lr-sand rounded transition opacity-0"
+                        data-lot={lot.number}
+                      >Save</button>
+                    </td>
                   </tr>
                 );
               })}
@@ -480,6 +525,207 @@ function formatPrice(price: number | null | undefined) {
           showLotDetails(lotNumber);
           scrollToDetails();
         }
+      });
+    });
+
+    // Price editing functionality with Supabase sync
+    const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co/rest/v1';
+    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+
+    // Load prices and house names from Supabase on page load
+    async function loadLotData() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/mar_azul_lots?select=lot_number,price,house_name`, {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          }
+        });
+        const data = await res.json();
+        data.forEach((lot: {lot_number: number, price: number, house_name: string | null}) => {
+          // Update price input
+          const priceInput = document.querySelector(`.price-input[data-lot="${lot.lot_number}"]`) as HTMLInputElement;
+          if (priceInput && lot.price) {
+            priceInput.value = '$' + lot.price.toLocaleString();
+          }
+          // Update house name input
+          const houseInput = document.querySelector(`.house-name-input[data-lot="${lot.lot_number}"]`) as HTMLInputElement;
+          if (houseInput && lot.house_name) {
+            houseInput.value = lot.house_name;
+          }
+          // Update map marker
+          const marker = document.querySelector(`.lot-marker[data-lot="${lot.lot_number}"]`) as HTMLElement;
+          if (marker && lot.house_name) {
+            marker.dataset.house = lot.house_name;
+            marker.title = `Lot ${lot.lot_number} - ${lot.house_name}`;
+          }
+        });
+      } catch (err) {
+        console.error('Failed to load lot data:', err);
+      }
+    }
+    loadLotData();
+
+    const priceInputs = document.querySelectorAll('.price-input');
+    priceInputs.forEach(input => {
+      // Prevent row click when editing price
+      input.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+
+      // Save on blur or Enter
+      input.addEventListener('blur', async (e) => {
+        const target = e.target as HTMLInputElement;
+        const lotNumber = parseInt(target.dataset.lot || '0');
+        const rawValue = target.value.replace(/[^0-9]/g, '');
+        const price = parseInt(rawValue) || 0;
+
+        if (price > 0 && lotNumber > 0) {
+          target.value = '$' + price.toLocaleString();
+          target.style.borderColor = '#f59e0b'; // Yellow while saving
+          
+          try {
+            // Upsert to Supabase
+            const res = await fetch(`${SUPABASE_URL}/mar_azul_lots?lot_number=eq.${lotNumber}`, {
+              method: 'PATCH',
+              headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+              },
+              body: JSON.stringify({ price, updated_at: new Date().toISOString() })
+            });
+            
+            if (res.ok) {
+              target.style.borderColor = '#22c55e'; // Green on success
+            } else {
+              // Try insert if no row exists
+              const insertRes = await fetch(`${SUPABASE_URL}/mar_azul_lots`, {
+                method: 'POST',
+                headers: {
+                  'apikey': SUPABASE_KEY,
+                  'Authorization': `Bearer ${SUPABASE_KEY}`,
+                  'Content-Type': 'application/json',
+                  'Prefer': 'return=minimal'
+                },
+                body: JSON.stringify({ lot_number: lotNumber, price })
+              });
+              target.style.borderColor = insertRes.ok ? '#22c55e' : '#ef4444';
+            }
+          } catch (err) {
+            target.style.borderColor = '#ef4444'; // Red on error
+            console.error('Save failed:', err);
+          }
+          
+          setTimeout(() => target.style.borderColor = '', 2000);
+        } else if (price === 0) {
+          target.value = '';
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if ((e as KeyboardEvent).key === 'Enter') {
+          (e.target as HTMLInputElement).blur();
+        }
+      });
+    });
+
+    // House name editing
+    const houseNameInputs = document.querySelectorAll('.house-name-input');
+    houseNameInputs.forEach(input => {
+      // Prevent row click when editing
+      input.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+
+      // Save on blur or Enter
+      input.addEventListener('blur', async (e) => {
+        const target = e.target as HTMLInputElement;
+        const lotNumber = parseInt(target.dataset.lot || '0');
+        const houseName = target.value.trim();
+
+        if (lotNumber > 0) {
+          target.style.borderColor = '#f59e0b'; // Yellow while saving
+          
+          try {
+            // Update in Supabase
+            const res = await fetch(`${SUPABASE_URL}/mar_azul_lots?lot_number=eq.${lotNumber}`, {
+              method: 'PATCH',
+              headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+              },
+              body: JSON.stringify({ house_name: houseName || null, updated_at: new Date().toISOString() })
+            });
+            
+            if (res.ok) {
+              target.style.borderColor = '#22c55e'; // Green on success
+              // Update the map marker title
+              const marker = document.querySelector(`.lot-marker[data-lot="${lotNumber}"]`) as HTMLElement;
+              if (marker) {
+                marker.dataset.house = houseName;
+                marker.title = `Lot ${lotNumber}${houseName ? ' - ' + houseName : ''}`;
+              }
+            } else {
+              // Try insert if no row exists
+              const insertRes = await fetch(`${SUPABASE_URL}/mar_azul_lots`, {
+                method: 'POST',
+                headers: {
+                  'apikey': SUPABASE_KEY,
+                  'Authorization': `Bearer ${SUPABASE_KEY}`,
+                  'Content-Type': 'application/json',
+                  'Prefer': 'return=minimal'
+                },
+                body: JSON.stringify({ lot_number: lotNumber, house_name: houseName || null })
+              });
+              target.style.borderColor = insertRes.ok ? '#22c55e' : '#ef4444';
+            }
+          } catch (err) {
+            target.style.borderColor = '#ef4444'; // Red on error
+            console.error('Save failed:', err);
+          }
+          
+          setTimeout(() => target.style.borderColor = '', 2000);
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if ((e as KeyboardEvent).key === 'Enter') {
+          (e.target as HTMLInputElement).blur();
+        }
+      });
+    });
+
+    // Show Save button when inputs change
+    document.querySelectorAll('.price-input, .house-name-input').forEach(input => {
+      input.addEventListener('input', (e) => {
+        const lotNumber = (e.target as HTMLInputElement).dataset.lot;
+        const saveBtn = document.querySelector(`.save-lot-btn[data-lot="${lotNumber}"]`) as HTMLElement;
+        if (saveBtn) saveBtn.style.opacity = '1';
+      });
+    });
+
+    // Save button click
+    document.querySelectorAll('.save-lot-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const lotNumber = (btn as HTMLElement).dataset.lot;
+        const priceInput = document.querySelector(`.price-input[data-lot="${lotNumber}"]`) as HTMLInputElement;
+        const houseInput = document.querySelector(`.house-name-input[data-lot="${lotNumber}"]`) as HTMLInputElement;
+        
+        // Trigger blur on both to save
+        if (priceInput) priceInput.blur();
+        if (houseInput) houseInput.blur();
+        
+        (btn as HTMLElement).textContent = 'Saved!';
+        (btn as HTMLElement).style.opacity = '1';
+        setTimeout(() => {
+          (btn as HTMLElement).textContent = 'Save';
+          (btn as HTMLElement).style.opacity = '0';
+        }, 2000);
       });
     });
   </script>

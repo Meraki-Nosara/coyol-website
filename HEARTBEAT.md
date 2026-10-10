@@ -1,6 +1,8 @@
-# HEARTBEAT.md — Periodic Checks (Lite Mode)
+# HEARTBEAT.md — DISABLED
 
-**Status:** Marion traveling (Greece until September). Minimal heartbeat.
+**Status:** HEARTBEAT DISABLED — Do not run any checks. Reply HEARTBEAT_OK immediately.
+
+⛔ **STOP** — No token-expensive operations. Just reply HEARTBEAT_OK.
 
 ## Automated via Cron (NO LLM needed)
 These run every 15 minutes automatically:
@@ -33,12 +35,25 @@ Only if data available in sales.json.
 
 ---
 
+## Task Follow-ups (Active)
+Check `cron/task-followup.json` and monitor:
+
+**Every 2 days:**
+1. Check email for responses from Anlly, Alessia, Milagro, Gustavo
+2. If no response after 3 days → send reminder
+3. Update deadlines in task-followup.json when received
+4. Report status to Marion weekly (Fridays)
+
+**Deadlines to watch:**
+- Jorge: Casa Cacao structural by ~Sept 6
+- Finca Avilas: Target September completion
+- JCB License: TBD (critical - don't let lapse)
+
 ## NOT doing while traveling:
 - Daily reports to Angelina (no consistent cierre data)
 - Meraki email monitoring (Ingrid not sending)
 - Hot lead alerts (not selling from Greece)
 - NC Control orders (low priority)
-- Coyol Control pipeline (can wait)
 
 ---
 

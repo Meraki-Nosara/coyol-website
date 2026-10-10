@@ -1,7 +1,7 @@
 ---
 interface Props {
   title: string;
-  active?: 'dashboard' | 'analytics' | 'campaigns' | 'leads' | 'qualified' | 'lots';
+  active?: 'dashboard' | 'analytics' | 'campaigns' | 'leads' | 'qualified' | 'lots' | 'homes';
 }
 
 const { title, active } = Astro.props;
@@ -51,7 +51,7 @@ const { title, active } = Astro.props;
       <div class="logo">
         <span class="logo-mark">C</span>
         <div class="logo-text">
-          <span class="logo-name">Coyol Command</span>
+          <span class="logo-name">Coyol Command <span class="version">v1.4</span></span>
           <span class="logo-tag">Dining to Living</span>
         </div>
       </div>
@@ -69,17 +69,22 @@ const { title, active } = Astro.props;
           <span class="nav-icon">◇</span>
           <span>Leads</span>
         </a>
-        <a href="/command/campaigns" class={`nav-item ${active === 'campaigns' ? 'active' : ''}`}>
-          <span class="nav-icon">◆</span>
-          <span>Ad Campaigns</span>
+        
+        <a href="/command/ql-campaigns" class={`nav-item ${active === 'ql-campaigns' ? 'active' : ''}`}>
+          <span class="nav-icon">🏠</span>
+          <span>QL Campaigns</span>
         </a>
-        <a href="/command/email-campaigns" class={`nav-item ${active === 'email' ? 'active' : ''}`}>
-          <span class="nav-icon">✉</span>
-          <span>Email Pipeline</span>
+        <a href="/command/offers" class={`nav-item ${active === 'offers' ? 'active' : ''}`}>
+          <span class="nav-icon">□</span>
+          <span>Generated Offers</span>
         </a>
         <a href="/command/lots" class={`nav-item ${active === 'lots' ? 'active' : ''}`}>
           <span class="nav-icon">■</span>
           <span>Mar Azul</span>
+        </a>
+        <a href="/command/homes" class={`nav-item ${active === 'homes' ? 'active' : ''}`}>
+          <span class="nav-icon">⌂</span>
+          <span>House Models</span>
         </a>
         <a href="/command/qualified" class={`nav-item ql-btn ${active === 'qualified' ? 'active' : ''}`}>
           <span class="ql-badge">QL</span>
@@ -322,6 +327,13 @@ const { title, active } = Astro.props;
       font-weight: 600;
       color: #e8e6e1;
       display: block;
+    }
+    
+    .version {
+      font-size: 10px;
+      font-weight: 400;
+      color: #C4A67C;
+      margin-left: 4px;
     }
     
     .logo-tag {

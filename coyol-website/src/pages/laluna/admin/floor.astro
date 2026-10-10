@@ -687,7 +687,7 @@ import '../../../styles/laluna-tables.css';
 
   <script is:inline>
     const LAYOUT_KEY = 'laluna_floor_layout';
-    const LAYOUT_VERSION = 'v3-eatapp-final';
+    const LAYOUT_VERSION = 'v3.0';
     const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
     
@@ -789,41 +789,71 @@ import '../../../styles/laluna-tables.css';
     // Save layout to Supabase as default
     async function saveLayoutToSupabase() {
       const layouts = getLayout();
+      const btn = document.getElementById('saveDefaultBtn');
+      const originalText = btn.textContent;
+      
       try {
+        btn.textContent = 'Saving...';
+        btn.disabled = true;
+        
+        console.log('Saving layout to Supabase...', layouts);
+        
         // Check if record exists
         const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_floor_layout`, {
           headers: { 'apikey': SUPABASE_KEY }
         });
-        const existing = await checkRes.json();
         
+        if (!checkRes.ok) {
+          throw new Error(`Check failed: ${checkRes.status}`);
+        }
+        
+        const existing = await checkRes.json();
+        console.log('Existing record:', existing);
+        
+        let saveRes;
         if (existing.length > 0) {
           // Update existing
-          await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_floor_layout`, {
+          saveRes = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_floor_layout`, {
             method: 'PATCH',
             headers: {
               'apikey': SUPABASE_KEY,
               'Authorization': `Bearer ${SUPABASE_KEY}`,
               'Content-Type': 'application/json',
-              'Prefer': 'return=minimal'
+              'Prefer': 'return=representation'
             },
             body: JSON.stringify({ value: JSON.stringify(layouts), updated_at: new Date().toISOString() })
           });
         } else {
           // Insert new
-          await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings`, {
+          saveRes = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings`, {
             method: 'POST',
             headers: {
               'apikey': SUPABASE_KEY,
               'Authorization': `Bearer ${SUPABASE_KEY}`,
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'Prefer': 'return=representation'
             },
             body: JSON.stringify({ key: 'laluna_floor_layout', value: JSON.stringify(layouts) })
           });
         }
-        alert('Layout saved as default!');
+        
+        if (!saveRes.ok) {
+          const errorText = await saveRes.text();
+          throw new Error(`Save failed: ${saveRes.status} - ${errorText}`);
+        }
+        
+        const result = await saveRes.json();
+        console.log('Save successful:', result);
+        
+        btn.textContent = 'Saved ✓';
+        setTimeout(() => { btn.textContent = originalText; }, 2000);
+        
       } catch (e) {
         console.error('Save to Supabase failed:', e);
-        alert('Failed to save. Check console.');
+        alert('Error al guardar: ' + e.message);
+        btn.textContent = originalText;
+      } finally {
+        btn.disabled = false;
       }
     }
     
@@ -889,15 +919,47 @@ import '../../../styles/laluna-tables.css';
           el.style.cursor = 'grabbing';
         });
         
-        // Drag - touch (iPad)
+        // Touch handling (iPad) - distinguish tap from drag
+        let touchStartTime = 0;
+        let touchStartPos = { x: 0, y: 0 };
+        let touchMoved = false;
+        
         el.addEventListener('touchstart', (e) => {
-          e.preventDefault();
           const touch = e.touches[0];
+          touchStartTime = Date.now();
+          touchStartPos = { x: touch.clientX, y: touch.clientY };
+          touchMoved = false;
+          
+          // Prepare for potential drag
           draggedTable = el;
           const rect = el.getBoundingClientRect();
           dragOffset.x = touch.clientX - rect.left;
           dragOffset.y = touch.clientY - rect.top;
           el.style.zIndex = '100';
+        }, { passive: true });
+        
+        el.addEventListener('touchmove', (e) => {
+          if (!draggedTable) return;
+          const touch = e.touches[0];
+          const dx = Math.abs(touch.clientX - touchStartPos.x);
+          const dy = Math.abs(touch.clientY - touchStartPos.y);
+          // If moved more than 10px, it's a drag
+          if (dx > 10 || dy > 10) {
+            touchMoved = true;
+            e.preventDefault(); // Only prevent default when actually dragging
+          }
+        }, { passive: false });
+        
+        el.addEventListener('touchend', (e) => {
+          const touchDuration = Date.now() - touchStartTime;
+          // Quick tap without movement = select
+          if (touchDuration < 300 && !touchMoved) {
+            e.preventDefault();
+            selectTable(table.id);
+            draggedTable = null;
+            el.style.zIndex = '';
+            return;
+          }
         }, { passive: false });
 
         grid.appendChild(el);
@@ -1037,19 +1099,27 @@ import '../../../styles/laluna-tables.css';
       draggedTable = null;
     });
     
-    // Touch end (iPad)
+    // Touch end (iPad) - save position if actually dragged
     document.addEventListener('touchend', () => {
       if (!draggedTable) return;
+      
+      // Only save position if we actually moved the table
       const id = draggedTable.dataset.id;
       const x = parseInt(draggedTable.style.left);
       const y = parseInt(draggedTable.style.top);
+      
+      // Check if position changed meaningfully
       const layouts = getLayout();
       const t = layouts[currentZone].find(t => t.id === id);
-      if (t) {
-        t.x = x;
-        t.y = y;
-        saveLayout(layouts);
+      if (t && !isNaN(x) && !isNaN(y)) {
+        // Only save if position actually changed
+        if (Math.abs(t.x - x) > 5 || Math.abs(t.y - y) > 5) {
+          t.x = x;
+          t.y = y;
+          saveLayout(layouts);
+        }
       }
+      
       draggedTable.style.zIndex = '';
       draggedTable = null;
     });

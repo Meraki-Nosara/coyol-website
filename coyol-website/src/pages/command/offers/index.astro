@@ -1,0 +1,287 @@
+---
+import CommandLayout from '../../../layouts/CommandLayout.astro';
+import { supabase } from '../../../lib/supabase';
+
+// Fetch generated offers
+const { data: offers } = await supabase
+  .from('generated_offers')
+  .select('*')
+  .order('created_at', { ascending: false });
+---
+
+<CommandLayout title="Generated Offers" active="offers">
+  <div class="page">
+    <header class="page-header">
+      <div>
+        <h1>Generated Offers</h1>
+        <span class="subtitle">{offers?.length || 0} offers created</span>
+      </div>
+      <a href="/command/qualified" class="btn-primary">+ New Offer</a>
+    </header>
+
+    {(!offers || offers.length === 0) ? (
+      <div class="empty-state">
+        <p>No offers generated yet.</p>
+        <p class="empty-hint">Go to Qualified Leads and click "Generate Offer" on a lead.</p>
+      </div>
+    ) : (
+      <div class="offers-grid">
+        {offers.map(offer => (
+          <div class="offer-card" data-id={offer.id}>
+            <div class="offer-header">
+              <span class="offer-model">{offer.model_name}</span>
+              <span class={`offer-status ${offer.sent_at ? 'sent' : 'draft'}`}>
+                {offer.sent_at ? 'Sent' : 'Not Sent'}
+              </span>
+            </div>
+            <h3 class="offer-client">{offer.client_name}</h3>
+            <p class="offer-details">Lot {offer.lot_number} · ${offer.total_price?.toLocaleString()}</p>
+            <div class="offer-dates">
+              <span>Created: {new Date(offer.created_at).toLocaleDateString()}</span>
+              {offer.sent_at && <span>Sent: {new Date(offer.sent_at).toLocaleDateString()}</span>}
+            </div>
+            <div class="offer-actions">
+              <a href={offer.public_url} target="_blank" class="btn-view">View Offer</a>
+              <button class="btn-copy" data-url={offer.public_url}>Copy Link</button>
+              {!offer.sent_at && (
+                <button class="btn-sent" data-id={offer.id}>Mark as Sent</button>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</CommandLayout>
+
+<style>
+  .page {
+    padding: 32px 40px;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+
+  .page-header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    color: #8a9b8a;
+    font-size: 14px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #3D4F3D 0%, #4a6040 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(61, 79, 61, 0.3);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: #6a7b6a;
+  }
+
+  .empty-hint {
+    font-size: 14px;
+    margin-top: 8px;
+    color: #555;
+  }
+
+  .offers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .offer-card {
+    background: #111611;
+    border: 1px solid #2a352a;
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.2s;
+  }
+
+  .offer-card:hover {
+    border-color: #3D4F3D;
+  }
+
+  .offer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .offer-model {
+    font-size: 12px;
+    color: #C4A67C;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .offer-status {
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .offer-status.sent {
+    background: #1a3a2a;
+    color: #7cb87c;
+  }
+
+  .offer-status.draft {
+    background: #2a352a;
+    color: #8a9b8a;
+  }
+
+  .offer-client {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #e8e6e1;
+  }
+
+  .offer-details {
+    color: #8a9b8a;
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .offer-dates {
+    font-size: 12px;
+    color: #6a7b6a;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .offer-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .btn-view, .btn-copy, .btn-sent {
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-view {
+    background: #3D4F3D;
+    color: white;
+    text-decoration: none;
+    border: none;
+  }
+
+  .btn-view:hover {
+    background: #4a6040;
+  }
+
+  .btn-copy {
+    background: transparent;
+    border: 1px solid #3a453a;
+    color: #C4A67C;
+  }
+
+  .btn-copy:hover {
+    background: #1a201a;
+  }
+
+  .btn-sent {
+    background: transparent;
+    border: 1px solid #3a453a;
+    color: #8a9b8a;
+  }
+
+  .btn-sent:hover {
+    border-color: #7cb87c;
+    color: #7cb87c;
+  }
+
+  .btn-copy.copied {
+    background: #1a3a2a;
+    border-color: #7cb87c;
+    color: #7cb87c;
+  }
+</style>
+
+<script>
+  // Copy link buttons
+  document.querySelectorAll('.btn-copy').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const url = btn.dataset.url;
+      await navigator.clipboard.writeText(url);
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy Link';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  });
+
+  // Mark as sent buttons
+  document.querySelectorAll('.btn-sent').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.dataset.id;
+      btn.disabled = true;
+      btn.textContent = 'Updating...';
+
+      try {
+        const res = await fetch('/api/offers/mark-sent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+
+        if (res.ok) {
+          // Update UI
+          const card = btn.closest('.offer-card');
+          const status = card.querySelector('.offer-status');
+          status.textContent = 'Sent';
+          status.className = 'offer-status sent';
+          
+          const dates = card.querySelector('.offer-dates');
+          dates.innerHTML += `<span>Sent: ${new Date().toLocaleDateString()}</span>`;
+          
+          btn.remove();
+        } else {
+          alert('Error marking as sent');
+          btn.disabled = false;
+          btn.textContent = 'Mark as Sent';
+        }
+      } catch (e) {
+        alert('Error: ' + e.message);
+        btn.disabled = false;
+        btn.textContent = 'Mark as Sent';
+      }
+    });
+  });
+</script>
