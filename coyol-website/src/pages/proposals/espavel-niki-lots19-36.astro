@@ -442,6 +442,69 @@
     .milestones-table td:nth-child(2) { color: #888; text-align: center; }
     .milestones-table td:last-child { color: #C4A67C; text-align: right; font-weight: 500; }
     
+    .included-section {
+      margin-top: 40px;
+    }
+    
+    .included-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    
+    @media (max-width: 768px) {
+      .included-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .included-card {
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      padding: 25px;
+    }
+    
+    .included-card.included {
+      border: 1px solid rgba(61, 79, 61, 0.5);
+    }
+    
+    .included-card.not-included {
+      border: 1px solid rgba(166, 93, 63, 0.5);
+    }
+    
+    .included-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .included-card.included .included-title {
+      color: #4A5D4A;
+    }
+    
+    .included-card.not-included .included-title {
+      color: #A65D3F;
+    }
+    
+    .included-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .included-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 14px;
+      color: #aaa;
+    }
+    
+    .included-list li:last-child {
+      border-bottom: none;
+    }
+    
     .footer {
       margin-top: 50px;
       padding-top: 30px;
@@ -735,6 +798,60 @@
         </div>
         <div class="step-content">
           Final walkthrough of all structures, keys to your private compound, and welcome to the Mar Azul community.
+        </div>
+      </div>
+    </div>
+    
+    <h2 class="section-title">What's Included</h2>
+    
+    <div class="included-section">
+      <div class="included-grid">
+        <div class="included-card included">
+          <h3 class="included-title">✓ Included in Your Home</h3>
+          <ul class="included-list">
+            <li>Complete architectural design & engineering</li>
+            <li>All permits and municipal approvals</li>
+            <li>Site preparation and earthwork</li>
+            <li>Foundation and structural system</li>
+            <li>Roof structure and waterproofing</li>
+            <li>All exterior and interior walls</li>
+            <li>Windows and doors (aluminum/glass)</li>
+            <li>Complete electrical system with panels</li>
+            <li>Plumbing and sanitary installations</li>
+            <li>Hot water system</li>
+            <li>Air conditioning (mini-splits throughout)</li>
+            <li>Full kitchen cabinetry and countertops</li>
+            <li>All bathroom fixtures and vanities</li>
+            <li>Interior paint and finishes</li>
+            <li>Flooring throughout (porcelain/tile)</li>
+            <li>Built-in closets and storage</li>
+            <li>Pool with equipment and pump room</li>
+            <li>Covered terraces and open decks</li>
+            <li>Perimeter walls and entry gate</li>
+            <li>Landscaping with irrigation system</li>
+            <li>Driveway and parking areas</li>
+            <li>Exterior lighting</li>
+            <li>Premium appliance package (double laundry + wine fridge)</li>
+            <li>Walk-in closets with built-ins</li>
+            <li>Garage structure</li>
+          </ul>
+        </div>
+        
+        <div class="included-card not-included">
+          <h3 class="included-title">✗ Not Included</h3>
+          <ul class="included-list">
+            <li>Furniture and décor</li>
+            <li>TVs and entertainment systems</li>
+            <li>Window treatments (curtains/blinds)</li>
+            <li>Security system and cameras</li>
+            <li>Internet and cable installation</li>
+            <li>Solar panels or battery backup</li>
+            <li>Outdoor kitchen/BBQ area</li>
+            <li>Hot tub or jacuzzi</li>
+            <li>Additional landscaping beyond scope</li>
+            <li>Guest house (future expansion)</li>
+            <li>Gym/spa building (future expansion)</li>
+          </ul>
         </div>
       </div>
     </div>
