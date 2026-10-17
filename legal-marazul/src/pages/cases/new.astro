@@ -1,0 +1,134 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="New Case">
+  <div class="min-h-screen bg-[#0a0f1a]">
+    <!-- Top Bar -->
+    <header class="bg-[#111827] border-b border-[#374151] px-6 py-4">
+      <div class="flex items-center gap-4">
+        <a href="/dashboard" class="text-[#9ca3af] hover:text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+        </a>
+        <h1 class="text-xl font-bold text-white">Create New Case</h1>
+      </div>
+    </header>
+
+    <main class="max-w-2xl mx-auto p-6">
+      <form id="newCaseForm" class="bg-[#111827] border border-[#374151] rounded-lg p-6 space-y-6">
+        <div>
+          <label class="block text-sm font-medium text-[#9ca3af] mb-2">Número de Caso *</label>
+          <input 
+            type="text" 
+            id="caseNumber"
+            class="w-full bg-[#1f2937] border border-[#374151] rounded-lg px-4 py-3 text-white font-mono focus:outline-none focus:border-[#3b82f6]"
+            placeholder="e.g., MA-2026-001"
+            required
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-[#9ca3af] mb-2">Título del Caso *</label>
+          <input 
+            type="text" 
+            id="caseTítulo"
+            class="w-full bg-[#1f2937] border border-[#374151] rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#3b82f6]"
+            placeholder="Brief description of the case"
+            required
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-[#9ca3af] mb-2">Descripción</label>
+          <textarea 
+            id="caseDescripción"
+            rows="4"
+            class="w-full bg-[#1f2937] border border-[#374151] rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#3b82f6] resize-none"
+            placeholder="Detailed case description..."
+          ></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-[#9ca3af] mb-2">Estado</label>
+            <select 
+              id="caseEstado"
+              class="w-full bg-[#1f2937] border border-[#374151] rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#3b82f6]"
+            >
+              <option value="active">Active</option>
+              <option value="pending">Pending</option>
+              <option value="urgent">Urgent</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-[#9ca3af] mb-2">Prioridad</label>
+            <select 
+              id="casePrioridad"
+              class="w-full bg-[#1f2937] border border-[#374151] rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#3b82f6]"
+            >
+              <option value="low">Baja</option>
+              <option value="medium" selected>Media</option>
+              <option value="high">Alta</option>
+              <option value="critical">Crítica</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex gap-4 pt-4">
+          <button 
+            type="submit"
+            class="flex-1 bg-[#3b82f6] hover:bg-[#2563eb] text-white font-semibold py-3 px-4 rounded-lg transition-colors"
+          >
+            Crear Caso
+          </button>
+          <a 
+            href="/dashboard"
+            class="px-6 py-3 border border-[#374151] text-[#9ca3af] rounded-lg hover:bg-[#1f2937] transition-colors text-center"
+          >
+            Cancelar
+          </a>
+        </div>
+
+        <div id="errorMsg" class="hidden p-3 bg-red-900/30 border border-red-500/50 rounded-lg text-red-400 text-sm"></div>
+      </form>
+    </main>
+  </div>
+
+  <script>
+    const form = document.getElementById('newCaseForm');
+    const errorMsg = document.getElementById('errorMsg');
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const caseNumber = (document.getElementById('caseNumber') as HTMLInputElement).value;
+      const title = (document.getElementById('caseTítulo') as HTMLInputElement).value;
+      const description = (document.getElementById('caseDescripción') as HTMLTextAreaElement).value;
+      const status = (document.getElementById('caseEstado') as HTMLSelectElement).value;
+      const priority = (document.getElementById('casePrioridad') as HTMLSelectElement).value;
+
+      try {
+        const res = await fetch('/api/cases', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ case_number: caseNumber, title, description, status, priority })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          window.location.href = `/cases/${data.case.id}`;
+        } else {
+          errorMsg!.textContent = data.error || 'Failed to create case';
+          errorMsg!.classList.remove('hidden');
+        }
+      } catch (err) {
+        errorMsg!.textContent = 'Server error. Please try again.';
+        errorMsg!.classList.remove('hidden');
+      }
+    });
+  </script>
+</Layout>

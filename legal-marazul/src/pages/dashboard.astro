@@ -1,0 +1,239 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Centro de Comando">
+  <div class="min-h-screen">
+    <!-- Top Bar -->
+    <header class="bg-[#111827] border-b border-[#374151] px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded bg-[#3b82f6] flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path>
+              </svg>
+            </div>
+            <span class="text-lg font-bold text-white tracking-wide">LEGAL MAR AZUL</span>
+          </div>
+          <span class="text-[#6b7280]">|</span>
+          <span class="text-[#9ca3af] text-sm">Centro de Comando</span>
+        </div>
+        
+        <div class="flex items-center gap-4">
+          <span id="userName" class="text-[#9ca3af] text-sm"></span>
+          <button id="logoutBtn" class="text-[#9ca3af] hover:text-white text-sm flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+            </svg>
+            Salir
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="flex">
+      <!-- Sidebar -->
+      <aside class="w-64 bg-[#111827] border-r border-[#374151] min-h-[calc(100vh-73px)] p-4">
+        <nav class="space-y-2">
+          <a href="/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#1f2937] text-white">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+            </svg>
+            Todos los Casos
+          </a>
+          <a href="/cases/new" class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#9ca3af] hover:bg-[#1f2937] hover:text-white transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+            Nuevo Caso
+          </a>
+          <a href="/calendar" class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#9ca3af] hover:bg-[#1f2937] hover:text-white transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            Calendario
+          </a>
+          <a href="/audit-log" class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#9ca3af] hover:bg-[#1f2937] hover:text-white transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            Registro de Auditoría
+          </a>
+        </nav>
+
+        <!-- Estadísticas -->
+        <div class="mt-8 pt-8 border-t border-[#374151]">
+          <h3 class="text-xs font-semibold text-[#6b7280] uppercase tracking-wider mb-4">Estadísticas</h3>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[#9ca3af] text-sm">Casos Activos</span>
+              <span id="activeCases" class="text-white font-mono">--</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[#9ca3af] text-sm">Urgente</span>
+              <span id="urgentCases" class="text-[#ef4444] font-mono">--</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[#9ca3af] text-sm">Próximos Eventos</span>
+              <span id="upcomingEvents" class="text-[#f59e0b] font-mono">--</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="flex-1 p-6">
+        <!-- Action Bar -->
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center gap-4">
+            <h1 class="text-2xl font-bold text-white">Vista de Casos</h1>
+            <div class="flex gap-2 flex-wrap">
+              <button data-filter="all" class="filter-btn px-3 py-1 rounded text-sm bg-[#3b82f6] text-white">All</button>
+              <button data-filter="urgent" class="filter-btn px-3 py-1 rounded text-sm bg-[#1f2937] text-[#9ca3af] hover:bg-[#374151]">Urgente</button>
+              <button data-filter="active" class="filter-btn px-3 py-1 rounded text-sm bg-[#1f2937] text-[#9ca3af] hover:bg-[#374151]">Activo</button>
+              <button data-filter="pending" class="filter-btn px-3 py-1 rounded text-sm bg-[#1f2937] text-[#9ca3af] hover:bg-[#374151]">Pendiente</button>
+              <span class="text-[#374151]">|</span>
+              <button data-category="Civil" class="cat-btn px-3 py-1 rounded text-sm bg-[#1f2937] text-[#9ca3af] hover:bg-[#374151]">Civil</button>
+              <button data-category="Penal" class="cat-btn px-3 py-1 rounded text-sm bg-[#1f2937] text-[#9ca3af] hover:bg-[#374151]">Penal</button>
+              <button data-category="Sala Constitucional" class="cat-btn px-3 py-1 rounded text-sm bg-[#1f2937] text-[#9ca3af] hover:bg-[#374151]">Amparo</button>
+              <button data-category="Familia" class="cat-btn px-3 py-1 rounded text-sm bg-[#1f2937] text-[#9ca3af] hover:bg-[#374151]">Familia</button>
+            </div>
+          </div>
+          <a href="/cases/new" class="bg-[#3b82f6] hover:bg-[#2563eb] text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+            Nuevo Caso
+          </a>
+        </div>
+
+        <!-- Cases Grid -->
+        <div id="casesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Cases will be loaded here -->
+          <div class="col-span-full text-center py-12 text-[#6b7280]">
+            Cargando casos...
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // Check session
+    const session = sessionStorage.getItem('legal_session');
+    if (!session) {
+      window.location.href = '/login';
+    } else {
+      const user = JSON.parse(session);
+      document.getElementById('userName').textContent = user.name;
+    }
+
+    // Salir
+    document.getElementById('logoutBtn')?.addEventListener('click', () => {
+      sessionStorage.removeItem('legal_session');
+      window.location.href = '/login';
+    });
+
+    // Load cases
+    async function loadCases(filter = 'all', category = '') {
+      try {
+        const res = await fetch(`/api/cases?filter=${filter}&category=${encodeURIComponent(category)}`);
+        const data = await res.json();
+        
+        if (data.cases && data.cases.length > 0) {
+          renderCases(data.cases);
+        } else {
+          document.getElementById('casesGrid').innerHTML = `
+            <div class="col-span-full text-center py-12">
+              <div class="text-[#6b7280] mb-4">No se encontraron casos</div>
+              <a href="/cases/new" class="text-[#3b82f6] hover:underline">Crear tu primer caso</a>
+            </div>
+          `;
+        }
+
+        // Update stats
+        document.getElementById('activeCases').textContent = data.stats?.active || '0';
+        document.getElementById('urgentCases').textContent = data.stats?.urgent || '0';
+        document.getElementById('upcomingEvents').textContent = data.stats?.events || '0';
+      } catch (err) {
+        console.error('Failed to load cases:', err);
+      }
+    }
+
+    function renderCases(cases) {
+      const grid = document.getElementById('casesGrid');
+      const statusColors = {
+        urgent: 'border-l-[#ef4444]',
+        active: 'border-l-[#10b981]',
+        pending: 'border-l-[#f59e0b]',
+        closed: 'border-l-[#6b7280]'
+      };
+      const catColors = {
+        'Civil': 'bg-blue-900/30 text-blue-400',
+        'Penal': 'bg-red-900/30 text-red-400',
+        'Sala Constitucional': 'bg-purple-900/30 text-purple-400',
+        'Familia': 'bg-green-900/30 text-green-400'
+      };
+      
+      grid.innerHTML = cases.map(c => `
+        <a href="/cases/${c.id}" class="block bg-[#1f2937] border border-[#374151] border-l-4 ${statusColors[c.status] || 'border-l-[#374151]'} rounded-lg p-4 hover:bg-[#374151] transition-colors">
+          <div class="flex items-start justify-between mb-2">
+            <span class="text-xs font-mono text-[#9ca3af]">${c.case_number}</span>
+            <div class="flex gap-1">
+              <span class="text-xs px-2 py-1 rounded ${catColors[c.category] || 'bg-gray-900/30 text-gray-400'}">${c.category || 'N/A'}</span>
+              <span class="text-xs px-2 py-1 rounded ${c.status === 'urgent' ? 'bg-red-900/30 text-red-400' : c.status === 'active' ? 'bg-green-900/30 text-green-400' : 'bg-yellow-900/30 text-yellow-400'}">${c.status.toUpperCase()}</span>
+            </div>
+          </div>
+          <h3 class="text-white font-semibold mb-2 line-clamp-2">${c.title}</h3>
+          <p class="text-[#9ca3af] text-sm line-clamp-2 mb-3">${c.description || 'No description'}</p>
+          <div class="flex items-center justify-between text-xs text-[#6b7280]">
+            <span>${new Date(c.created_at).toLocaleDateString()}</span>
+            <span>${c.document_count || 0} docs</span>
+          </div>
+        </a>
+      `).join('');
+    }
+
+    // Filter buttons
+    let currentFilter = 'all';
+    let currentCategory = '';
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.filter-btn').forEach(b => {
+          b.classList.remove('bg-[#3b82f6]', 'text-white');
+          b.classList.add('bg-[#1f2937]', 'text-[#9ca3af]');
+        });
+        (e.target ).classList.remove('bg-[#1f2937]', 'text-[#9ca3af]');
+        (e.target ).classList.add('bg-[#3b82f6]', 'text-white');
+        currentFilter = (e.target ).dataset.filter || 'all';
+        loadCases(currentFilter, currentCategory);
+      });
+    });
+
+    document.querySelectorAll('.cat-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const clickedCat = (e.target ).dataset.category || '';
+        if (currentCategory === clickedCat) {
+          // Toggle off
+          currentCategory = '';
+          (e.target ).classList.remove('bg-[#3b82f6]', 'text-white');
+          (e.target ).classList.add('bg-[#1f2937]', 'text-[#9ca3af]');
+        } else {
+          // Select new category
+          document.querySelectorAll('.cat-btn').forEach(b => {
+            b.classList.remove('bg-[#3b82f6]', 'text-white');
+            b.classList.add('bg-[#1f2937]', 'text-[#9ca3af]');
+          });
+          (e.target ).classList.remove('bg-[#1f2937]', 'text-[#9ca3af]');
+          (e.target ).classList.add('bg-[#3b82f6]', 'text-white');
+          currentCategory = clickedCat;
+        }
+        loadCases(currentFilter, currentCategory);
+      });
+    });
+
+    loadCases();
+  </script>
+</Layout>
