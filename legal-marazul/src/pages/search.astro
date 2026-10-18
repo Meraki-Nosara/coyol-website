@@ -1,0 +1,176 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Buscar Documentos">
+  <div class="min-h-screen">
+    <!-- Top Bar -->
+    <header class="bg-[#111827] border-b border-[#374151] px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <img src="/legal-logo.png" alt="Legal Mar Azul" class="h-10" />
+          <span class="text-lg font-bold text-white tracking-wide">LEGAL MAR AZUL</span>
+          <span class="text-[#6b7280]">|</span>
+          <span class="text-[#9ca3af] text-sm">Buscar Documentos</span>
+        </div>
+        <a href="/dashboard" class="text-[#9ca3af] hover:text-white text-sm flex items-center gap-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          Volver
+        </a>
+      </div>
+    </header>
+
+    <div class="max-w-4xl mx-auto p-6">
+      <!-- Search Box -->
+      <div class="bg-[#111827] border border-[#374151] rounded-lg p-6 mb-6">
+        <div class="flex gap-4">
+          <div class="flex-1 relative">
+            <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+            <input 
+              type="text" 
+              id="searchInput"
+              class="w-full bg-[#1f2937] border border-[#374151] rounded-lg pl-12 pr-4 py-3 text-white focus:outline-none focus:border-[#3b82f6]"
+              placeholder="Buscar por caso, expediente, documento o etiqueta..."
+              autofocus
+            />
+          </div>
+          <button id="searchBtn" class="bg-[#3b82f6] hover:bg-[#2563eb] text-white px-6 py-3 rounded-lg font-medium">
+            Buscar
+          </button>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div id="results" class="space-y-4">
+        <p class="text-[#6b7280] text-center py-8">Ingresa un término de búsqueda</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check auth
+    const session = sessionStorage.getItem('legal_session');
+    if (!session) {
+      window.location.href = '/login';
+    }
+
+    const SUPABASE_URL = 'https://axqsjvbqfgpdjyvprnyu.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_sa6N3RuggtywM2RaSanLiw_ADWAGnez';
+
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const results = document.getElementById('results');
+
+    async function search() {
+      const query = searchInput.value.trim().toLowerCase();
+      if (!query) {
+        results.innerHTML = '<p class="text-[#6b7280] text-center py-8">Ingresa un término de búsqueda</p>';
+        return;
+      }
+
+      results.innerHTML = '<p class="text-[#6b7280] text-center py-8">Buscando...</p>';
+
+      try {
+        // Fetch all documents with case info
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/legal_documents?select=*,legal_cases(id,case_number,title)`, {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          }
+        });
+        
+        const docs = await res.json();
+        
+        // Filter by search term
+        const filtered = docs.filter(doc => {
+          const caseNum = (doc.legal_cases?.case_number || '').toLowerCase();
+          const caseTitle = (doc.legal_cases?.title || '').toLowerCase();
+          const filename = (doc.filename || '').toLowerCase();
+          const tags = (doc.tags || []).join(' ').toLowerCase();
+          
+          return caseNum.includes(query) || 
+                 caseTitle.includes(query) || 
+                 filename.includes(query) ||
+                 tags.includes(query);
+        });
+
+        if (filtered.length === 0) {
+          results.innerHTML = '<p class="text-[#6b7280] text-center py-8">No se encontraron documentos</p>';
+          return;
+        }
+
+        // Generate signed URLs and display results
+        results.innerHTML = filtered.map(doc => {
+          const urlParts = doc.file_url.split('/legal-documents/');
+          const filePath = urlParts.length > 1 ? urlParts[1] : '';
+          
+          return `
+            <div class="bg-[#111827] border border-[#374151] rounded-lg p-4 hover:border-[#3b82f6] transition-colors">
+              <div class="flex items-start justify-between">
+                <div class="flex items-start gap-4">
+                  <svg class="w-10 h-10 text-[#6b7280] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                  </svg>
+                  <div>
+                    <p class="text-white font-medium">${doc.filename}</p>
+                    <a href="/cases/${doc.legal_cases?.id}" class="text-[#3b82f6] hover:underline text-sm">
+                      ${doc.legal_cases?.case_number || 'Sin expediente'} — ${doc.legal_cases?.title || 'Sin título'}
+                    </a>
+                    <p class="text-[#6b7280] text-xs mt-1">
+                      ${new Date(doc.created_at).toLocaleDateString()} • ${(doc.file_size / 1024).toFixed(1)} KB
+                      ${doc.tags?.length ? ' • ' + doc.tags.join(', ') : ''}
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-3">
+                  <button onclick="openDoc('${filePath}')" class="text-[#3b82f6] hover:underline text-sm">Abrir</button>
+                  <button onclick="downloadDoc('${filePath}', '${doc.filename}')" class="text-[#6b7280] hover:text-white text-sm">Descargar</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+      } catch (err) {
+        results.innerHTML = '<p class="text-red-400 text-center py-8">Error en la búsqueda</p>';
+      }
+    }
+
+    // Get signed URL and open/download
+    async function getSignedUrl(filePath) {
+      const res = await fetch(`${SUPABASE_URL}/storage/v1/object/sign/legal-documents/${filePath}`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ expiresIn: 3600 })
+      });
+      const data = await res.json();
+      return `${SUPABASE_URL}/storage/v1${data.signedURL}`;
+    }
+
+    window.openDoc = async function(filePath) {
+      const url = await getSignedUrl(filePath);
+      window.open(url, '_blank');
+    };
+
+    window.downloadDoc = async function(filePath, filename) {
+      const url = await getSignedUrl(filePath);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+    };
+
+    searchBtn.addEventListener('click', search);
+    searchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') search();
+    });
+  </script>
+</Layout>

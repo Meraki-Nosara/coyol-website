@@ -5,28 +5,30 @@ import Layout from '../layouts/Layout.astro';
 <Layout title="Centro de Comando">
   <div class="min-h-screen">
     <!-- Top Bar -->
-    <header class="bg-[#111827] border-b border-[#374151] px-6 py-4">
+    <header class="bg-[#111827] border-b border-[#374151] px-4 md:px-6 py-3 md:py-4">
       <div class="flex items-center justify-between">
-        <div class="flex items-center gap-4">
-          <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded bg-[#3b82f6] flex items-center justify-center">
-              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path>
-              </svg>
-            </div>
-            <span class="text-lg font-bold text-white tracking-wide">LEGAL MAR AZUL</span>
+        <div class="flex items-center gap-2 md:gap-4">
+          <!-- Mobile menu button -->
+          <button id="menuToggle" class="md:hidden text-white p-1">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+          <div class="flex items-center gap-2 md:gap-3">
+            <img src="/legal-logo-final.png" alt="Legal Mar Azul" class="h-8 md:h-10" />
+            <span class="text-base md:text-lg font-bold text-white tracking-wide hidden sm:inline">LEGAL MAR AZUL</span>
           </div>
-          <span class="text-[#6b7280]">|</span>
-          <span class="text-[#9ca3af] text-sm">Centro de Comando</span>
+          <span class="text-[#6b7280] hidden md:inline">|</span>
+          <span class="text-[#9ca3af] text-sm hidden md:inline">Centro de Comando</span>
         </div>
         
-        <div class="flex items-center gap-4">
-          <span id="userName" class="text-[#9ca3af] text-sm"></span>
+        <div class="flex items-center gap-2 md:gap-4">
+          <span id="userName" class="text-[#9ca3af] text-xs md:text-sm hidden sm:inline"></span>
           <button id="logoutBtn" class="text-[#9ca3af] hover:text-white text-sm flex items-center gap-1">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
             </svg>
-            Salir
+            <span class="hidden sm:inline">Salir</span>
           </button>
         </div>
       </div>
@@ -34,7 +36,7 @@ import Layout from '../layouts/Layout.astro';
 
     <div class="flex">
       <!-- Sidebar -->
-      <aside class="w-64 bg-[#111827] border-r border-[#374151] min-h-[calc(100vh-73px)] p-4">
+      <aside id="sidebar" class="fixed md:relative inset-y-0 left-0 z-40 w-64 bg-[#111827] border-r border-[#374151] min-h-[calc(100vh-73px)] p-4 transform -translate-x-full md:translate-x-0 transition-transform duration-200">
         <nav class="space-y-2">
           <a href="/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#1f2937] text-white">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -47,6 +49,12 @@ import Layout from '../layouts/Layout.astro';
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
             </svg>
             Nuevo Caso
+          </a>
+          <a href="/search" class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#9ca3af] hover:bg-[#1f2937] hover:text-white transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+            Buscar Documentos
           </a>
           <a href="/calendar" class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#9ca3af] hover:bg-[#1f2937] hover:text-white transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -120,17 +128,83 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <script>
-    // Check session
-    const session = sessionStorage.getItem('legal_session');
-    if (!session) {
-      window.location.href = '/login';
-    } else {
-      const user = JSON.parse(session);
+    // Check session with server validation
+    async function validateSession() {
+      const sessionToken = localStorage.getItem('legal_session_token');
+      const session = sessionStorage.getItem('legal_session');
+      
+      if (!sessionToken || !session) {
+        window.location.href = '/login';
+        return null;
+      }
+
+      try {
+        const res = await fetch('/api/auth/session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionToken })
+        });
+        const data = await res.json();
+        
+        if (!data.valid) {
+          localStorage.removeItem('legal_session_token');
+          sessionStorage.removeItem('legal_session');
+          window.location.href = '/login?expired=1';
+          return null;
+        }
+        
+        return JSON.parse(session);
+      } catch (err) {
+        window.location.href = '/login';
+        return null;
+      }
+    }
+
+    const user = await validateSession();
+    if (user) {
       document.getElementById('userName').textContent = user.name;
     }
 
-    // Salir
-    document.getElementById('logoutBtn')?.addEventListener('click', () => {
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    
+    menuToggle?.addEventListener('click', () => {
+      sidebar?.classList.toggle('-translate-x-full');
+    });
+
+    // Close sidebar when clicking a link (mobile)
+    sidebar?.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 768) {
+          sidebar.classList.add('-translate-x-full');
+        }
+      });
+    });
+
+    // Auto-refresh session every 5 minutes
+    setInterval(async () => {
+      const sessionToken = localStorage.getItem('legal_session_token');
+      if (sessionToken) {
+        await fetch('/api/auth/session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionToken })
+        });
+      }
+    }, 5 * 60 * 1000);
+
+    // Salir with proper logout
+    document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+      const sessionToken = localStorage.getItem('legal_session_token');
+      if (sessionToken) {
+        await fetch('/api/auth/session', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionToken })
+        });
+      }
+      localStorage.removeItem('legal_session_token');
       sessionStorage.removeItem('legal_session');
       window.location.href = '/login';
     });

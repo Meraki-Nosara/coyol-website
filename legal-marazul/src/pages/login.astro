@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+const inviteToken = Astro.url.searchParams.get('invite');
 ---
 
 <Layout title="Access Portal" requireAuth={false}>
@@ -7,76 +8,190 @@ import Layout from '../layouts/Layout.astro';
     <div class="w-full max-w-md">
       <!-- Logo/Header -->
       <div class="text-center mb-8">
-        <img src="/logo.jpg" alt="Legal Mar Azul" class="w-32 h-32 mx-auto rounded-lg mb-4 shadow-lg" />
-        <h1 class="text-2xl font-bold text-white tracking-wide">LEGAL MAR AZUL</h1>
+        <img src="/legal-logo-final.png" alt="Legal Mar Azul" class="w-32 mx-auto mb-4" />
         <p class="text-[#9ca3af] text-sm mt-2">PORTAL DE ACCESO SEGURO</p>
       </div>
 
       <!-- Login Form -->
       <div class="bg-[#111827] border border-[#374151] rounded-lg p-8 shadow-2xl">
-        <form id="loginForm" class="space-y-6">
-          <div>
-            <label class="block text-sm font-medium text-[#9ca3af] mb-2">CÓDIGO DE ACCESO</label>
-            <input 
-              type="password" 
-              id="accessCode"
-              class="w-full bg-[#1f2937] border border-[#374151] rounded-lg px-4 py-3 text-white font-mono text-lg tracking-widest focus:outline-none focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6] placeholder-[#6b7280]"
-              placeholder="••••••••••••"
-              autocomplete="off"
-              required
-            />
+        {inviteToken ? (
+          <div id="inviteLogin">
+            <p class="text-center text-[#9ca3af] mb-4">Enlace de invitación detectado</p>
+            <button 
+              id="useInviteBtn"
+              class="w-full bg-[#3b82f6] hover:bg-[#2563eb] text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200"
+            >
+              Acceder con Invitación
+            </button>
           </div>
-          
-          <button 
-            type="submit"
-            class="w-full bg-[#3b82f6] hover:bg-[#2563eb] text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
-            </svg>
-            AUTENTICAR
-          </button>
+        ) : null}
+
+        <form id="loginForm" class={inviteToken ? 'hidden' : ''}>
+          <div class="space-y-6">
+            <div>
+              <label class="block text-sm font-medium text-[#9ca3af] mb-2">CÓDIGO DE ACCESO</label>
+              <input 
+                type="password" 
+                id="accessCode"
+                class="w-full bg-[#1f2937] border border-[#374151] rounded-lg px-4 py-3 text-white font-mono text-lg tracking-widest focus:outline-none focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6] placeholder-[#6b7280]"
+                placeholder="••••••••••••••••••••••••"
+                autocomplete="off"
+                required
+              />
+            </div>
+
+            <!-- hCaptcha -->
+            <div id="captchaContainer" class="flex justify-center">
+              <div class="h-captcha" data-sitekey="10000000-ffff-ffff-ffff-000000000001" data-theme="dark"></div>
+            </div>
+            
+            <button 
+              type="submit"
+              id="submitBtn"
+              class="w-full bg-[#3b82f6] hover:bg-[#2563eb] text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+              </svg>
+              AUTENTICAR
+            </button>
+          </div>
         </form>
 
         <div id="errorMsg" class="hidden mt-4 p-3 bg-red-900/30 border border-red-500/50 rounded-lg text-red-400 text-sm text-center">
-          Código de acceso inválido. This attempt has been logged.
+        </div>
+
+        <div id="blockedMsg" class="hidden mt-4 p-3 bg-yellow-900/30 border border-yellow-500/50 rounded-lg text-yellow-400 text-sm text-center">
+          ⚠️ Demasiados intentos fallidos. Intenta de nuevo en 1 hora.
         </div>
       </div>
 
       <!-- Security Notice -->
       <p class="text-center text-[#6b7280] text-xs mt-6">
-        🔒 Todos los intentos de acceso son monitoreados and logged
+        🔒 Todos los intentos de acceso son monitoreados y registrados
       </p>
+
+      <!-- Session Timer (shown when logged in) -->
+      <div id="sessionTimer" class="hidden fixed bottom-4 right-4 bg-[#111827] border border-[#374151] rounded-lg px-4 py-2 text-sm text-[#9ca3af]">
+        Sesión expira en: <span id="timerDisplay">30:00</span>
+      </div>
     </div>
   </div>
 
-  <script>
+  <!-- hCaptcha Script -->
+  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+
+  <script define:vars={{ inviteToken }}>
     const form = document.getElementById('loginForm');
     const errorMsg = document.getElementById('errorMsg');
-    const codeInput = document.getElementById('accessCode') as HTMLInputElement;
+    const blockedMsg = document.getElementById('blockedMsg');
+    const codeInput = document.getElementById('accessCode');
+    const submitBtn = document.getElementById('submitBtn');
+    const useInviteBtn = document.getElementById('useInviteBtn');
 
+    // Check for existing valid session
+    async function checkSession() {
+      const sessionToken = localStorage.getItem('legal_session_token');
+      if (sessionToken) {
+        try {
+          const res = await fetch('/api/auth/session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionToken })
+          });
+          const data = await res.json();
+          if (data.valid) {
+            sessionStorage.setItem('legal_session', JSON.stringify(data.user));
+            window.location.href = '/dashboard';
+            return;
+          } else {
+            localStorage.removeItem('legal_session_token');
+          }
+        } catch (err) {
+          localStorage.removeItem('legal_session_token');
+        }
+      }
+    }
+    checkSession();
+
+    // Handle invite link login
+    if (useInviteBtn && inviteToken) {
+      useInviteBtn.addEventListener('click', async () => {
+        useInviteBtn.disabled = true;
+        useInviteBtn.textContent = 'Verificando...';
+
+        try {
+          const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ inviteToken })
+          });
+
+          const data = await res.json();
+
+          if (data.success) {
+            localStorage.setItem('legal_session_token', data.sessionToken);
+            sessionStorage.setItem('legal_session', JSON.stringify(data.user));
+            window.location.href = '/dashboard';
+          } else {
+            errorMsg.textContent = data.error || 'Enlace inválido o expirado';
+            errorMsg.classList.remove('hidden');
+            useInviteBtn.disabled = false;
+            useInviteBtn.textContent = 'Acceder con Invitación';
+          }
+        } catch (err) {
+          errorMsg.textContent = 'Error de conexión';
+          errorMsg.classList.remove('hidden');
+          useInviteBtn.disabled = false;
+          useInviteBtn.textContent = 'Acceder con Invitación';
+        }
+      });
+    }
+
+    // Handle standard login
     form?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const code = codeInput.value.trim();
+      
+      // Get hCaptcha response
+      const captchaResponse = window.hcaptcha?.getResponse() || '';
+      
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Verificando...';
       
       try {
         const res = await fetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ accessCode: code })
+          body: JSON.stringify({ accessCode: code, captcha: captchaResponse })
         });
 
         const data = await res.json();
 
+        if (data.blocked) {
+          blockedMsg.classList.remove('hidden');
+          errorMsg.classList.add('hidden');
+          submitBtn.disabled = true;
+          return;
+        }
+
         if (data.success) {
+          localStorage.setItem('legal_session_token', data.sessionToken);
           sessionStorage.setItem('legal_session', JSON.stringify(data.user));
           window.location.href = '/dashboard';
         } else {
-          errorMsg?.classList.remove('hidden');
+          errorMsg.textContent = data.error || 'Código de acceso inválido';
+          errorMsg.classList.remove('hidden');
           codeInput.value = '';
+          window.hcaptcha?.reset();
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg> AUTENTICAR';
         }
       } catch (err) {
-        errorMsg?.classList.remove('hidden');
+        errorMsg.textContent = 'Error de conexión';
+        errorMsg.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg> AUTENTICAR';
       }
     });
   </script>

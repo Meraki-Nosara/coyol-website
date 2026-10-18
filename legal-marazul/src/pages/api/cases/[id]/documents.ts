@@ -13,7 +13,27 @@ export const GET: APIRoute = async ({ params }) => {
 
     if (error) throw error;
 
-    return new Response(JSON.stringify({ documents }), {
+    // Generate signed URLs for each document (valid for 1 hour)
+    const docsWithSignedUrls = await Promise.all(
+      (documents || []).map(async (doc) => {
+        // Extract file path from stored URL
+        const urlParts = doc.file_url.split('/legal-documents/');
+        if (urlParts.length > 1) {
+          const filePath = urlParts[1];
+          const { data: signedData } = await supabase.storage
+            .from('legal-documents')
+            .createSignedUrl(filePath, 3600); // 1 hour
+          
+          return {
+            ...doc,
+            file_url: signedData?.signedUrl || doc.file_url
+          };
+        }
+        return doc;
+      })
+    );
+
+    return new Response(JSON.stringify({ documents: docsWithSignedUrls }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
