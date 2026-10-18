@@ -103,50 +103,101 @@ const { id } = Astro.params;
         <div id="events-content" class="tab-content hidden">
           <div class="bg-[#111827] border border-[#374151] rounded-lg p-6 mb-6">
             <h3 class="text-lg font-semibold text-white mb-4">Agregar Evento</h3>
-            <form id="eventForm" class="grid grid-cols-2 gap-4">
-              <div class="col-span-2">
-                <input 
-                  type="text" 
-                  id="eventTitle"
-                  class="w-full bg-[#1f2937] border border-[#374151] rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#3b82f6]"
-                  placeholder="Título del evento"
-                  required
-                />
-              </div>
+            <form id="eventForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
+                <label class="block text-xs text-[#9ca3af] mb-1">Tipo de Acto Procesal</label>
                 <select 
                   id="eventType"
                   class="w-full bg-[#1f2937] border border-[#374151] rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#3b82f6]"
+                  required
                 >
-                  <option value="court_date">Fecha de Audiencia</option>
-                  <option value="deadline">Fecha Límite</option>
-                  <option value="meeting">Reunión</option>
-                  <option value="filing">Presentación</option>
-                  <option value="other">Otro</option>
+                  <option value="">Seleccionar tipo...</option>
+                  <optgroup label="Inicio del Proceso">
+                    <option value="interposicion_denuncia">Interposición de Denuncia</option>
+                    <option value="interposicion_demanda">Interposición de Demanda</option>
+                    <option value="interposicion_querella">Interposición de Querella</option>
+                    <option value="admision">Auto de Admisión</option>
+                    <option value="traslado">Traslado de la Demanda</option>
+                  </optgroup>
+                  <optgroup label="Fase de Investigación">
+                    <option value="apertura_investigacion">Apertura de Investigación</option>
+                    <option value="solicitud_pruebas">Solicitud de Pruebas</option>
+                    <option value="peritaje">Peritaje</option>
+                    <option value="inspeccion_judicial">Inspección Judicial</option>
+                    <option value="visita_sitio">Visita en Sitio</option>
+                    <option value="declaracion_testigos">Declaración de Testigos</option>
+                  </optgroup>
+                  <optgroup label="Actuaciones Procesales">
+                    <option value="contestacion">Contestación de la Demanda</option>
+                    <option value="reconvencion">Reconvención</option>
+                    <option value="excepcion">Interposición de Excepciones</option>
+                    <option value="incidente">Incidente</option>
+                    <option value="medida_cautelar">Medida Cautelar</option>
+                    <option value="embargo">Embargo</option>
+                  </optgroup>
+                  <optgroup label="Audiencias">
+                    <option value="audiencia_preliminar">Audiencia Preliminar</option>
+                    <option value="audiencia_conciliacion">Audiencia de Conciliación</option>
+                    <option value="audiencia_oral">Audiencia Oral</option>
+                    <option value="audiencia_juicio">Audiencia de Juicio</option>
+                    <option value="audiencia_sentencia">Lectura de Sentencia</option>
+                  </optgroup>
+                  <optgroup label="Resoluciones">
+                    <option value="resolucion">Resolución</option>
+                    <option value="auto">Auto</option>
+                    <option value="providencia">Providencia</option>
+                    <option value="sentencia_primera">Sentencia de Primera Instancia</option>
+                    <option value="sentencia_segunda">Sentencia de Segunda Instancia</option>
+                    <option value="sentencia_firme">Sentencia Firme</option>
+                  </optgroup>
+                  <optgroup label="Recursos">
+                    <option value="apelacion">Recurso de Apelación</option>
+                    <option value="casacion">Recurso de Casación</option>
+                    <option value="revision">Recurso de Revisión</option>
+                    <option value="amparo">Recurso de Amparo</option>
+                    <option value="habeas_corpus">Hábeas Corpus</option>
+                  </optgroup>
+                  <optgroup label="Notificaciones">
+                    <option value="notificacion_personal">Notificación Personal</option>
+                    <option value="notificacion_edicto">Notificación por Edicto</option>
+                    <option value="citacion">Citación</option>
+                    <option value="emplazamiento">Emplazamiento</option>
+                  </optgroup>
+                  <optgroup label="Conclusión">
+                    <option value="archivo">Archivo del Expediente</option>
+                    <option value="desistimiento">Desistimiento</option>
+                    <option value="sobreseimiento">Sobreseimiento</option>
+                    <option value="ejecucion">Ejecución de Sentencia</option>
+                  </optgroup>
+                  <optgroup label="Otros">
+                    <option value="otro">Otro Acto Procesal</option>
+                  </optgroup>
                 </select>
               </div>
               <div>
+                <label class="block text-xs text-[#9ca3af] mb-1">Fecha</label>
                 <input 
-                  type="datetime-local" 
+                  type="date" 
                   id="eventDate"
                   class="w-full bg-[#1f2937] border border-[#374151] rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#3b82f6]"
                   required
                 />
               </div>
-              <div class="col-span-2">
+              <div class="col-span-1 md:col-span-2">
+                <label class="block text-xs text-[#9ca3af] mb-1">Notas / Observaciones</label>
                 <textarea 
                   id="eventDescription"
-                  rows="2"
+                  rows="3"
                   class="w-full bg-[#1f2937] border border-[#374151] rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#3b82f6] resize-none"
-                  placeholder="Descripción del evento..."
+                  placeholder="Detalles adicionales, número de resolución, juez a cargo, resultado..."
                 ></textarea>
               </div>
-              <div class="col-span-2">
+              <div class="col-span-1 md:col-span-2">
                 <button 
                   type="submit"
-                  class="bg-[#3b82f6] hover:bg-[#2563eb] text-white px-4 py-2 rounded-lg"
+                  class="bg-[#3b82f6] hover:bg-[#2563eb] text-white px-6 py-2 rounded-lg"
                 >
-                  Agregar Evento
+                  Agregar al Expediente
                 </button>
               </div>
             </form>
@@ -351,7 +402,7 @@ const { id } = Astro.params;
               </div>
             </div>
             <div class="flex gap-3">
-              <a href="${d.file_url}" target="_blank" class="text-[#3b82f6] hover:underline text-sm">Abrir</a>
+              <a href="${d.file_url}" target="_blank" rel="noopener noreferrer" class="text-[#3b82f6] hover:underline text-sm">Abrir ↗</a>
               <a href="${d.file_url}" download="${d.filename}" class="text-[#6b7280] hover:text-white text-sm">Descargar</a>
             </div>
           </div>
@@ -359,6 +410,60 @@ const { id } = Astro.params;
       } else {
         list.innerHTML = '<p class="text-[#6b7280]">No hay documentos subidos</p>';
       }
+    }
+
+    // Event type labels in Spanish
+    const eventTypeLabels = {
+      'interposicion_denuncia': 'Interposición de Denuncia',
+      'interposicion_demanda': 'Interposición de Demanda',
+      'interposicion_querella': 'Interposición de Querella',
+      'admision': 'Auto de Admisión',
+      'traslado': 'Traslado de la Demanda',
+      'apertura_investigacion': 'Apertura de Investigación',
+      'solicitud_pruebas': 'Solicitud de Pruebas',
+      'peritaje': 'Peritaje',
+      'inspeccion_judicial': 'Inspección Judicial',
+      'visita_sitio': 'Visita en Sitio',
+      'declaracion_testigos': 'Declaración de Testigos',
+      'contestacion': 'Contestación de la Demanda',
+      'reconvencion': 'Reconvención',
+      'excepcion': 'Interposición de Excepciones',
+      'incidente': 'Incidente',
+      'medida_cautelar': 'Medida Cautelar',
+      'embargo': 'Embargo',
+      'audiencia_preliminar': 'Audiencia Preliminar',
+      'audiencia_conciliacion': 'Audiencia de Conciliación',
+      'audiencia_oral': 'Audiencia Oral',
+      'audiencia_juicio': 'Audiencia de Juicio',
+      'audiencia_sentencia': 'Lectura de Sentencia',
+      'resolucion': 'Resolución',
+      'auto': 'Auto',
+      'providencia': 'Providencia',
+      'sentencia_primera': 'Sentencia de Primera Instancia',
+      'sentencia_segunda': 'Sentencia de Segunda Instancia',
+      'sentencia_firme': 'Sentencia Firme',
+      'apelacion': 'Recurso de Apelación',
+      'casacion': 'Recurso de Casación',
+      'revision': 'Recurso de Revisión',
+      'amparo': 'Recurso de Amparo',
+      'habeas_corpus': 'Hábeas Corpus',
+      'notificacion_personal': 'Notificación Personal',
+      'notificacion_edicto': 'Notificación por Edicto',
+      'citacion': 'Citación',
+      'emplazamiento': 'Emplazamiento',
+      'archivo': 'Archivo del Expediente',
+      'desistimiento': 'Desistimiento',
+      'sobreseimiento': 'Sobreseimiento',
+      'ejecucion': 'Ejecución de Sentencia',
+      'otro': 'Otro Acto Procesal'
+    };
+
+    function getEventColor(type) {
+      if (type.includes('audiencia')) return 'bg-red-900/30 text-red-400';
+      if (type.includes('sentencia')) return 'bg-green-900/30 text-green-400';
+      if (type.includes('recurso') || type.includes('apelacion') || type.includes('casacion') || type.includes('amparo')) return 'bg-yellow-900/30 text-yellow-400';
+      if (type.includes('notificacion') || type.includes('citacion') || type.includes('emplazamiento')) return 'bg-purple-900/30 text-purple-400';
+      return 'bg-blue-900/30 text-blue-400';
     }
 
     // Load events
@@ -370,22 +475,20 @@ const { id } = Astro.params;
       if (data.events?.length) {
         list.innerHTML = data.events.map((e) => `
           <div class="flex items-start gap-4 p-4 bg-[#1f2937] rounded-lg">
-            <div class="w-12 h-12 rounded bg-[#374151] flex items-center justify-center flex-shrink-0">
-              <span class="text-white font-bold">${new Date(e.event_date).getDate()}</span>
+            <div class="w-14 h-14 rounded bg-[#374151] flex flex-col items-center justify-center flex-shrink-0">
+              <span class="text-white font-bold text-lg">${new Date(e.event_date).getDate()}</span>
+              <span class="text-[#9ca3af] text-xs">${new Date(e.event_date).toLocaleDateString('es-CR', {month: 'short'})}</span>
             </div>
-            <div>
-              <p class="text-white font-medium">${e.title}</p>
-              <p class="text-[#9ca3af] text-sm">${new Date(e.event_date).toLocaleString()}</p>
-              <span class="inline-block mt-1 px-2 py-0.5 rounded text-xs ${
-                e.event_type === 'court_date' ? 'bg-red-900/30 text-red-400' :
-                e.event_type === 'deadline' ? 'bg-yellow-900/30 text-yellow-400' :
-                'bg-blue-900/30 text-blue-400'
-              }">${e.event_type.replace('_', ' ')}</span>
+            <div class="flex-1">
+              <span class="inline-block mb-1 px-2 py-0.5 rounded text-xs ${getEventColor(e.event_type)}">
+                ${eventTypeLabels[e.event_type] || e.event_type}
+              </span>
+              <p class="text-[#9ca3af] text-sm">${e.description || ''}</p>
             </div>
           </div>
         `).join('');
       } else {
-        list.innerHTML = '<p class="text-[#6b7280]">No hay eventos próximos</p>';
+        list.innerHTML = '<p class="text-[#6b7280]">No hay actos procesales registrados</p>';
       }
 
       // Also populate timeline
@@ -605,20 +708,31 @@ const { id } = Astro.params;
     // Event form
     document.getElementById('eventForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const title = (document.getElementById('eventTitle') ).value;
       const eventType = (document.getElementById('eventType') ).value;
       const eventDate = (document.getElementById('eventDate') ).value;
       const description = (document.getElementById('eventDescription') ).value;
 
-      await fetch(`/api/cases/${caseId}/events`, {
+      if (!eventType) {
+        alert('Seleccione un tipo de acto procesal');
+        return;
+      }
+
+      // Use the event type label as the title
+      const title = eventTypeLabels[eventType] || eventType;
+
+      const res = await fetch(`/api/cases/${caseId}/events`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, event_type: eventType, event_date: eventDate, description, user_id: user.id })
       });
 
-      (document.getElementById('eventTitle') ).value = '';
-      (document.getElementById('eventDescription') ).value = '';
-      loadEvents();
+      if (res.ok) {
+        (document.getElementById('eventType') ).value = '';
+        (document.getElementById('eventDescription') ).value = '';
+        loadEvents();
+        // Also refresh timeline
+        buildTimeline();
+      }
     });
 
     // Comment form
