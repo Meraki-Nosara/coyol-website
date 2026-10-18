@@ -25,6 +25,35 @@ export const GET: APIRoute = async ({ params }) => {
   }
 };
 
+export const DELETE: APIRoute = async ({ url }) => {
+  try {
+    const eventId = url.searchParams.get('id');
+    if (!eventId) {
+      return new Response(JSON.stringify({ error: 'Event ID required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    const { error } = await supabase
+      .from('legal_events')
+      .delete()
+      .eq('id', eventId);
+
+    if (error) throw error;
+
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch (err: any) {
+    return new Response(JSON.stringify({ error: err.message || 'Failed to delete event' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+};
+
 export const POST: APIRoute = async ({ params, request }) => {
   try {
     const { id } = params;

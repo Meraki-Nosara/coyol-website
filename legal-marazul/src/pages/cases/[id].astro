@@ -219,7 +219,7 @@ const { id } = Astro.params;
                 id="commentContent"
                 rows="3"
                 class="w-full bg-[#1f2937] border border-[#374151] rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#3b82f6] resize-none"
-                placeholder="Agregar un comentario..."
+                placeholder="Agregar una nota..."
                 required
               ></textarea>
               <button 
@@ -232,7 +232,7 @@ const { id } = Astro.params;
           </div>
 
           <div id="commentsList" class="space-y-4">
-            <p class="text-[#6b7280]">Cargando comentarios...</p>
+            <p class="text-[#6b7280]">Cargando notas...</p>
           </div>
         </div>
       </main>
@@ -256,6 +256,10 @@ const { id } = Astro.params;
           <div>
             <label class="text-xs text-[#6b7280]">Categoría</label>
             <p id="caseCategory" class="text-white">--</p>
+          </div>
+          <div>
+            <label class="text-xs text-[#6b7280]">Abogado a Cargo</label>
+            <p id="caseLawyer" class="text-white">--</p>
           </div>
           <div>
             <label class="text-xs text-[#6b7280]">Descripción</label>
@@ -305,11 +309,17 @@ const { id } = Astro.params;
             </select>
           </div>
           <div>
+            <label class="text-xs text-[#6b7280]">Abogado a Cargo</label>
+            <select id="editLawyer" class="w-full bg-[#1f2937] border border-[#374151] rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-[#3b82f6]">
+              <option value="">Sin asignar</option>
+            </select>
+          </div>
+          <div>
             <label class="text-xs text-[#6b7280]">Descripción</label>
             <textarea id="editDescription" rows="3" class="w-full bg-[#1f2937] border border-[#374151] rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-[#3b82f6] resize-none"></textarea>
           </div>
           <div class="flex gap-2">
-            <button type="submit" class="flex-1 bg-[#3b82f6] hover:bg-[#2563eb] text-white px-3 py-2 rounded text-sm">Guardar</button>
+            <button type="submit" id="saveEditBtn" class="flex-1 bg-[#3b82f6] hover:bg-[#2563eb] text-white px-3 py-2 rounded text-sm">Guardar</button>
             <button type="button" id="cancelEdit" class="px-3 py-2 border border-[#374151] text-[#9ca3af] rounded text-sm hover:bg-[#1f2937]">Cancelar</button>
           </div>
         </form>
@@ -342,6 +352,23 @@ const { id } = Astro.params;
       });
     });
 
+    // Load lawyers for dropdown
+    let lawyers = [];
+    async function loadLawyers() {
+      const SUPABASE_URL = 'https://axqsjvbqfgpdjyvprnyu.supabase.co';
+      const SUPABASE_KEY = 'sb_publishable_sa6N3RuggtywM2RaSanLiw_ADWAGnez';
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/legal_users?role=eq.lawyer&select=id,name`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      });
+      lawyers = await res.json();
+      const select = document.getElementById('editLawyer');
+      if (select) {
+        select.innerHTML = '<option value="">Sin asignar</option>' + 
+          lawyers.map(l => `<option value="${l.id}">${l.name}</option>`).join('');
+      }
+    }
+    loadLawyers();
+
     // Load case data
     async function loadCase() {
       try {
@@ -359,6 +386,7 @@ const { id } = Astro.params;
           const caseDateEl = document.getElementById('caseDateDisplay');
           const casePriorityEl = document.getElementById('casePriority');
           const caseCategoryEl = document.getElementById('caseCategory');
+          const caseLawyerEl = document.getElementById('caseLawyer');
           const statusEl = document.getElementById('caseStatus');
           
           if (caseNumberEl) caseNumberEl.textContent = c.case_number;
@@ -368,6 +396,12 @@ const { id } = Astro.params;
           if (caseDateEl) caseDateEl.textContent = c.case_date ? new Date(c.case_date).toLocaleDateString() : 'No establecida';
           if (casePriorityEl) casePriorityEl.textContent = c.priority ? c.priority.toUpperCase() : 'N/A';
           if (caseCategoryEl) caseCategoryEl.textContent = c.category || 'N/A';
+          
+          // Show lawyer name
+          if (caseLawyerEl) {
+            const lawyer = lawyers.find(l => l.id === c.assigned_lawyer);
+            caseLawyerEl.textContent = lawyer ? lawyer.name : 'Sin asignar';
+          }
           
           if (statusEl) {
             statusEl.textContent = c.status ? c.status.toUpperCase() : 'N/A';
@@ -466,6 +500,13 @@ const { id } = Astro.params;
       return 'bg-blue-900/30 text-blue-400';
     }
 
+    // Delete event - make global
+    window.deleteEvent = async function(eventId) {
+      if (!confirm('¿Eliminar este evento?')) return;
+      await fetch(`/api/cases/${caseId}/events?id=${eventId}`, { method: 'DELETE' });
+      loadEvents();
+    };
+
     // Load events
     async function loadEvents() {
       const res = await fetch(`/api/cases/${caseId}/events`);
@@ -474,7 +515,7 @@ const { id } = Astro.params;
       const list = document.getElementById('eventsList');
       if (data.events?.length) {
         list.innerHTML = data.events.map((e) => `
-          <div class="flex items-start gap-4 p-4 bg-[#1f2937] rounded-lg">
+          <div class="flex items-start gap-4 p-4 bg-[#1f2937] rounded-lg group">
             <div class="w-14 h-14 rounded bg-[#374151] flex flex-col items-center justify-center flex-shrink-0">
               <span class="text-white font-bold text-lg">${new Date(e.event_date).getDate()}</span>
               <span class="text-[#9ca3af] text-xs">${new Date(e.event_date).toLocaleDateString('es-CR', {month: 'short'})}</span>
@@ -485,6 +526,7 @@ const { id } = Astro.params;
               </span>
               <p class="text-[#9ca3af] text-sm">${e.description || ''}</p>
             </div>
+            <button onclick="deleteEvent('${e.id}')" class=" text-red-400 hover:text-red-300 text-sm transition-opacity">✕</button>
           </div>
         `).join('');
       } else {
@@ -495,6 +537,13 @@ const { id } = Astro.params;
       buildTimelineía(data.events || []);
     }
 
+    // Delete comment - make global
+    window.deleteComment = async function(commentId) {
+      if (!confirm('¿Eliminar esta nota?')) return;
+      await fetch(`/api/cases/${caseId}/comments?id=${commentId}`, { method: 'DELETE' });
+      loadComments();
+    };
+
     // Load comments
     async function loadComments() {
       const res = await fetch(`/api/cases/${caseId}/comments`);
@@ -503,16 +552,19 @@ const { id } = Astro.params;
       const list = document.getElementById('commentsList');
       if (data.comments?.length) {
         list.innerHTML = data.comments.map((c) => `
-          <div class="bg-[#111827] border border-[#374151] rounded-lg p-4">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="text-white font-medium">${c.legal_users?.name || 'Unknown'}</span>
-              <span class="text-[#6b7280] text-sm">${new Date(c.created_at).toLocaleString()}</span>
+          <div class="bg-[#111827] border border-[#374151] rounded-lg p-4 group">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-2">
+                <span class="text-white font-medium">${c.legal_users?.name || 'Unknown'}</span>
+                <span class="text-[#6b7280] text-sm">${new Date(c.created_at).toLocaleString()}</span>
+              </div>
+              <button onclick="deleteComment('${c.id}')" class=" text-red-400 hover:text-red-300 text-sm transition-opacity">✕</button>
             </div>
             <p class="text-[#9ca3af]">${c.content}</p>
           </div>
         `).join('');
       } else {
-        list.innerHTML = '<p class="text-[#6b7280] text-center py-4">Sin comentarios</p>';
+        list.innerHTML = '<p class="text-[#6b7280] text-center py-4">Sin notas</p>';
       }
     }
 
@@ -762,6 +814,7 @@ const { id } = Astro.params;
       (document.getElementById('editStatus') ).value = currentCase.status;
       (document.getElementById('editPriority') ).value = currentCase.priority;
       (document.getElementById('editCategory') ).value = currentCase.category || 'Civil';
+      (document.getElementById('editLawyer') ).value = currentCase.assigned_lawyer || '';
       (document.getElementById('editDescription') ).value = currentCase.description || '';
       
       // Show form, hide view
@@ -774,9 +827,19 @@ const { id } = Astro.params;
       document.getElementById('caseInfoView')?.classList.remove('hidden');
     });
     
+    // Also add click handler for Guardar button as backup
+    document.getElementById('saveEditBtn')?.addEventListener('click', async (e) => {
+      e.preventDefault();
+      await saveCase();
+    });
+
     document.getElementById('editCaseForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+      await saveCase();
+    });
+
+    async function saveCase() {
+      const lawyerVal = (document.getElementById('editLawyer') ).value;
       const payload = {
         case_number: (document.getElementById('editCaseNumber') ).value,
         title: (document.getElementById('editTitle') ).value,
@@ -784,6 +847,7 @@ const { id } = Astro.params;
         status: (document.getElementById('editStatus') ).value,
         priority: (document.getElementById('editPriority') ).value,
         category: (document.getElementById('editCategory') ).value,
+        assigned_lawyer: lawyerVal || null,
         description: (document.getElementById('editDescription') ).value
       };
       
@@ -797,8 +861,12 @@ const { id } = Astro.params;
         document.getElementById('editCaseForm')?.classList.add('hidden');
         document.getElementById('caseInfoView')?.classList.remove('hidden');
         loadCase(); // Reload case data
+        alert('Caso actualizado correctamente');
+      } else {
+        const errData = await res.json();
+        alert('Error: ' + (errData.error || 'No se pudo actualizar'));
       }
-    });
+    }
 
     // Initial load
     loadCase();

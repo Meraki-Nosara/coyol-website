@@ -39,6 +39,7 @@ export const PATCH: APIRoute = async ({ params, request }) => {
         status: body.status,
         priority: body.priority,
         category: body.category,
+        assigned_lawyer: body.assigned_lawyer,
         description: body.description,
         updated_at: new Date().toISOString()
       })
