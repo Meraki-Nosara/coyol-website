@@ -27,6 +27,12 @@ const { id } = Astro.params;
             </svg>
             <span class="hidden sm:inline">Editar</span>
           </button>
+          <button id="deleteCaseBtn" class="px-2 md:px-3 py-1 rounded text-xs md:text-sm bg-red-900/50 text-red-400 hover:bg-red-900 flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+            </svg>
+            <span class="hidden sm:inline">Eliminar</span>
+          </button>
         </div>
       </div>
     </header>
@@ -66,7 +72,7 @@ const { id } = Astro.params;
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                 </svg>
                 <p class="text-[#9ca3af] mb-2 pointer-events-none">Arrastra archivos aquí o haz clic para seleccionar</p>
-                <p class="text-[#6b7280] text-sm pointer-events-none">PDF, DOC, DOCX, JPG, PNG hasta 50MB</p>
+                <p class="text-[#6b7280] text-sm pointer-events-none">PDF, DOC, DOCX, JPG, PNG hasta 250MB</p>
               </div>
               <input type="file" id="fileInput" class="hidden" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" />
               <div id="fileList" class="space-y-2"></div>
@@ -417,6 +423,13 @@ const { id } = Astro.params;
       }
     }
 
+    // Delete document - make global
+    window.deleteDocument = async function(docId) {
+      if (!confirm('¿Eliminar este documento?')) return;
+      await fetch(`/api/cases/${caseId}/documents?id=${docId}`, { method: 'DELETE' });
+      loadDocuments();
+    };
+
     // Load documents
     async function loadDocuments() {
       const res = await fetch(`/api/cases/${caseId}/documents`);
@@ -438,6 +451,7 @@ const { id } = Astro.params;
             <div class="flex gap-3">
               <a href="${d.file_url}" target="_blank" rel="noopener noreferrer" class="text-[#3b82f6] hover:underline text-sm">Abrir ↗</a>
               <a href="${d.file_url}" download="${d.filename}" class="text-[#6b7280] hover:text-white text-sm">Descargar</a>
+              <button onclick="deleteDocument('${d.id}')" class="text-red-400 hover:text-red-300 text-sm">✕</button>
             </div>
           </div>
         `).join('');
@@ -654,18 +668,43 @@ const { id } = Astro.params;
       renderFileList();
     }
 
+    // Store custom names for files
+    let fileNames = [];
+
     function renderFileList() {
+      // Initialize fileNames array if needed
+      while (fileNames.length < filesToUpload.length) {
+        const file = filesToUpload[fileNames.length];
+        fileNames.push(file.name);
+      }
+      
       fileList.innerHTML = filesToUpload.map((f, i) => `
-        <div class="flex items-center justify-between p-2 bg-[#1f2937] rounded">
-          <span class="text-white text-sm">${f.name}</span>
+        <div class="flex items-center gap-2 p-2 bg-[#1f2937] rounded">
+          <input 
+            type="text" 
+            data-index="${i}" 
+            value="${fileNames[i] || f.name}" 
+            class="file-name-input flex-1 bg-[#374151] border border-[#4b5563] rounded px-2 py-1 text-white text-sm focus:outline-none focus:border-[#3b82f6]"
+            placeholder="Nombre del documento"
+          />
+          <span class="text-[#6b7280] text-xs">${(f.size / 1024).toFixed(0)} KB</span>
           <button type="button" data-index="${i}" class="remove-file text-red-400 hover:text-red-300">✕</button>
         </div>
       `).join('');
+      
+      // Handle name changes
+      document.querySelectorAll('.file-name-input').forEach(input => {
+        input.addEventListener('change', (e) => {
+          const idx = parseInt((e.target).dataset.index || '0');
+          fileNames[idx] = (e.target).value;
+        });
+      });
       
       document.querySelectorAll('.remove-file').forEach(btn => {
         btn.addEventListener('click', (e) => {
           const idx = parseInt((e.target ).dataset.index || '0');
           filesToUpload.splice(idx, 1);
+          fileNames.splice(idx, 1);
           renderFileList();
         });
       });
@@ -689,11 +728,13 @@ const { id } = Astro.params;
       let successCount = 0;
       let errorMsg = '';
       
-      for (const file of filesToUpload) {
+      for (let i = 0; i < filesToUpload.length; i++) {
+        const file = filesToUpload[i];
+        const customName = fileNames[i] || file.name;
         try {
           // Upload directly to Supabase Storage
           const timestamp = Date.now();
-          const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+          const safeName = customName.replace(/[^a-zA-Z0-9.-]/g, '_');
           const filePath = `${caseId}/${timestamp}_${safeName}`;
           
           const uploadRes = await fetch(`${SUPABASE_URL}/storage/v1/object/legal-documents/${filePath}`, {
@@ -725,7 +766,7 @@ const { id } = Astro.params;
             },
             body: JSON.stringify({
               case_id: caseId,
-              filename: file.name,
+              filename: customName,
               file_url: fileUrl,
               file_type: file.type,
               file_size: file.size,
@@ -752,6 +793,7 @@ const { id } = Astro.params;
       }
 
       filesToUpload = [];
+      fileNames = [];
       renderFileList();
       (document.getElementById('docTags') ).value = '';
       loadDocuments();
@@ -867,6 +909,39 @@ const { id } = Astro.params;
         alert('Error: ' + (errData.error || 'No se pudo actualizar'));
       }
     }
+
+    // Delete case - only admin can delete
+    const deleteBtn = document.getElementById('deleteCaseBtn');
+    if (user?.role !== 'admin') {
+      deleteBtn?.remove(); // Hide delete button for non-admins
+    }
+    
+    deleteBtn?.addEventListener('click', async () => {
+      // First confirmation
+      if (!confirm('¿Estás seguro que deseas eliminar este caso?\n\nEsta acción eliminará todos los documentos, eventos y notas asociados.')) {
+        return;
+      }
+      
+      // Second confirmation
+      if (!confirm('¿REALMENTE SEGURO?\n\nEsta acción es IRREVERSIBLE.')) {
+        return;
+      }
+      
+      // Final confirmation - type ELIMINAR
+      const confirmText = prompt('Para confirmar, escribe "ELIMINAR" en mayúsculas:');
+      if (confirmText !== 'ELIMINAR') {
+        alert('Operación cancelada');
+        return;
+      }
+      
+      const res = await fetch(`/api/cases/${caseId}`, { method: 'DELETE' });
+      if (res.ok) {
+        alert('Caso eliminado permanentemente');
+        window.location.href = '/dashboard';
+      } else {
+        alert('Error al eliminar el caso');
+      }
+    });
 
     // Initial load
     loadCase();

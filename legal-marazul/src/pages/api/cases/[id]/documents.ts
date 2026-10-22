@@ -45,6 +45,53 @@ export const GET: APIRoute = async ({ params }) => {
   }
 };
 
+export const DELETE: APIRoute = async ({ url }) => {
+  try {
+    const docId = url.searchParams.get('id');
+    if (!docId) {
+      return new Response(JSON.stringify({ error: 'Document ID required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Get document to find storage path
+    const { data: doc } = await supabase
+      .from('legal_documents')
+      .select('file_url')
+      .eq('id', docId)
+      .single();
+
+    if (doc?.file_url) {
+      // Delete from storage
+      const urlParts = doc.file_url.split('/legal-documents/');
+      if (urlParts.length > 1) {
+        await supabase.storage
+          .from('legal-documents')
+          .remove([urlParts[1]]);
+      }
+    }
+
+    // Delete from database
+    const { error } = await supabase
+      .from('legal_documents')
+      .delete()
+      .eq('id', docId);
+
+    if (error) throw error;
+
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch (err: any) {
+    return new Response(JSON.stringify({ error: err.message || 'Failed to delete document' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+};
+
 export const POST: APIRoute = async ({ params, request }) => {
   try {
     const { id } = params;
