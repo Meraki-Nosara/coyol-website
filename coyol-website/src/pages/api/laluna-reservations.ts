@@ -318,7 +318,7 @@ export const POST: APIRoute = async ({ request }) => {
       // Capacity validation is informational only - trust manual table selection
       const validation = await validateTableAssignment(table_id, guestCount);
       if (!validation.valid) {
-        console.warn(`Table capacity warning (ignoring for manual selection): ${validation.error}`);
+        return new Response(JSON.stringify({ error: validation.error, validation_failed: true }), { status: 400, headers: { 'Content-Type': 'application/json' } });
         // Keep the manually selected table(s) - don't override to null
       }
     }

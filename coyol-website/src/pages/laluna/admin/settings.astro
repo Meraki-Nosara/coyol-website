@@ -64,6 +64,14 @@ import '../../../styles/laluna-tables.css';
         
         <div class="time-slots-container">
           <div class="shift-slots">
+            <h3 style="font-size:13px;color:#A65D3F;margin-bottom:12px;">Breakfast (7:30am - 10:00am)</h3>
+            <div class="slots-grid" id="breakfastSlots"></div>
+          </div>
+          <div class="shift-slots">
+            <h3 style="font-size:13px;color:#A65D3F;margin-bottom:12px;">Lunch (12:00pm - 3:00pm)</h3>
+            <div class="slots-grid" id="lunchSlots"></div>
+          </div>
+          <div class="shift-slots">
             <h3 style="font-size:13px;color:#A65D3F;margin-bottom:12px;">Dinner 1 (First Seating)</h3>
             <div class="slots-grid" id="dinner1Slots"></div>
           </div>
@@ -190,11 +198,13 @@ import '../../../styles/laluna-tables.css';
     const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
     
     // Time Slots Configuration
+    const breakfastTimes = ['07:30', '08:00', '08:30', '09:00', '09:30', '10:00'];
+    const lunchTimes = ['12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00'];
     const dinner1Times = ['17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '19:45'];
     const dinner2Times = ['20:00', '20:30', '21:00', '21:30', '22:00'];
     
     // Default: all enabled
-    let enabledSlots = [...dinner1Times, ...dinner2Times];
+    let enabledSlots = [...breakfastTimes, ...lunchTimes, ...dinner1Times, ...dinner2Times];
     
     function formatTime12(time24) {
       const [h, m] = time24.split(':');
@@ -205,22 +215,22 @@ import '../../../styles/laluna-tables.css';
     }
     
     function renderTimeSlots() {
+      const bfContainer = document.getElementById('breakfastSlots');
+      const lunchContainer = document.getElementById('lunchSlots');
       const d1Container = document.getElementById('dinner1Slots');
       const d2Container = document.getElementById('dinner2Slots');
       
-      d1Container.innerHTML = dinner1Times.map(time => `
+      const renderSlotGroup = (times) => times.map(time => `
         <div class="slot-item ${enabledSlots.includes(time) ? '' : 'disabled'}" onclick="toggleSlot('${time}', this)">
           <input type="checkbox" id="slot-${time}" ${enabledSlots.includes(time) ? 'checked' : ''} onclick="event.stopPropagation(); toggleSlot('${time}', this.parentElement)" />
           <label for="slot-${time}">${formatTime12(time)}</label>
         </div>
       `).join('');
       
-      d2Container.innerHTML = dinner2Times.map(time => `
-        <div class="slot-item ${enabledSlots.includes(time) ? '' : 'disabled'}" onclick="toggleSlot('${time}', this)">
-          <input type="checkbox" id="slot-${time}" ${enabledSlots.includes(time) ? 'checked' : ''} onclick="event.stopPropagation(); toggleSlot('${time}', this.parentElement)" />
-          <label for="slot-${time}">${formatTime12(time)}</label>
-        </div>
-      `).join('');
+      bfContainer.innerHTML = renderSlotGroup(breakfastTimes);
+      lunchContainer.innerHTML = renderSlotGroup(lunchTimes);
+      d1Container.innerHTML = renderSlotGroup(dinner1Times);
+      d2Container.innerHTML = renderSlotGroup(dinner2Times);
     }
     
     function toggleSlot(time, element) {
@@ -275,7 +285,7 @@ import '../../../styles/laluna-tables.css';
         const existing = await checkRes.json();
         
         // Convert array to object format {time: true/false} for consistency with public page
-        const allTimes = [...dinner1Times, ...dinner2Times];
+        const allTimes = [...breakfastTimes, ...lunchTimes, ...dinner1Times, ...dinner2Times];
         const slotsObj = {};
         allTimes.forEach(t => slotsObj[t] = enabledSlots.includes(t));
         const payload = { value: JSON.stringify(slotsObj), updated_at: new Date().toISOString() };
