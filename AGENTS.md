@@ -207,6 +207,24 @@ Think of it like a human reviewing their journal and updating their mental model
 
 The goal: Be helpful without being annoying. Check in a few times a day, do useful background work, but respect quiet time.
 
+## 📁 Project Structure — READ THIS!
+
+The workspace contains **separate git repos** as subdirectories. Don't get confused:
+
+| Directory | Repo | Deploys To |
+|-----------|------|------------|
+| `coyol-website/` | github.com/Meraki-Nosara/coyol-website | DigitalOcean → coyolnosara.com |
+| `meraki-control/` | github.com/Meraki-Nosara/meraki-control | DigitalOcean → meraki.livingnosara.com |
+| `coyol-control/` | (local only) | N/A |
+
+**Key rules:**
+1. **Always `cd` into the project directory** before git operations
+2. The workspace root is NOT a deployable repo — it's just a container
+3. Each project has its own `.git` — commits must happen inside the project folder
+4. When editing files in `coyol-website/`, commit FROM `coyol-website/`
+
+**Don't waste tokens** checking if you're in the right repo. Just `cd` to the project first.
+
 ## Make It Yours
 
 This is a starting point. Add your own conventions, style, and rules as you figure out what works.
