@@ -1,9 +1,11 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
+import AdminAuth from '../../../components/AdminAuth.astro';
 ---
 
 <Layout hideFloatingButtons={true} title="Gift Cards | La Luna Admin" appleTouchIcon="/laluna-apple-touch-icon.png">
+<AdminAuth restaurant="laluna" title="La Luna Gift Cards">
   <div class="admin">
     <LaLunaAdminSidebar active="gifts" />
 
@@ -38,6 +40,7 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
       </div>
     </div>
   </div>
+</AdminAuth>
 </Layout>
 
 <style is:global>

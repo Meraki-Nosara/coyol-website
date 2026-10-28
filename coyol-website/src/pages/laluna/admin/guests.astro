@@ -1,9 +1,11 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
+import AdminAuth from '../../../components/AdminAuth.astro';
 ---
 
 <Layout hideFloatingButtons={true} title="Guests | La Luna Admin" appleTouchIcon="/laluna-apple-touch-icon.png">
+<AdminAuth restaurant="laluna" title="La Luna Guests">
   <div class="admin">
     <LaLunaAdminSidebar active="guests" />
 
@@ -274,4 +276,5 @@ import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
       return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
     }
   </script>
+</AdminAuth>
 </Layout>

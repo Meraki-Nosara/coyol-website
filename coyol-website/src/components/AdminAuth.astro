@@ -1,0 +1,193 @@
+---
+// Admin Authentication Component
+// Wrap admin pages with this to require a code
+
+interface Props {
+  restaurant: 'laluna' | 'coyol';
+  title?: string;
+}
+
+const { restaurant, title = 'Admin' } = Astro.props;
+
+// Admin codes - in production, these should be in environment variables
+const ADMIN_CODES: Record<string, string> = {
+  laluna: 'D5E2CFE3',
+  coyol: '8CC4D97B'
+};
+
+const validCode = ADMIN_CODES[restaurant];
+const colors = restaurant === 'laluna' 
+  ? { primary: '#A65D3F', bg: '#F5F3EF', dark: '#1A1F16' }
+  : { primary: '#3D4F3D', bg: '#1a1a1a', dark: '#1a1a1a' };
+---
+
+<div id="auth-gate" class="auth-container" data-code={validCode} data-restaurant={restaurant}>
+  <div class="auth-box">
+    <img 
+      src={restaurant === 'laluna' ? '/images/laluna-moon-white-real.png' : '/images/coyol-moon-white-real.png'} 
+      alt={restaurant === 'laluna' ? 'La Luna' : 'Coyol'} 
+      class="auth-logo"
+    />
+    <h1>{title}</h1>
+    <p>Enter admin code to continue</p>
+    <input 
+      type="text" 
+      id="auth-code" 
+      placeholder="Enter code" 
+      maxlength="8"
+      autocomplete="off"
+      autofocus
+    />
+    <button id="auth-submit">Access Admin</button>
+    <p id="auth-error" class="error"></p>
+  </div>
+</div>
+
+<div id="admin-content" style="display: none;">
+  <slot />
+</div>
+
+<style define:vars={{ primary: colors.primary, bg: colors.bg, dark: colors.dark }}>
+  .auth-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  
+  .auth-container.hidden {
+    display: none;
+  }
+  
+  .auth-box {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    max-width: 320px;
+    width: 90%;
+  }
+  
+  .auth-logo {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 20px;
+    opacity: 0.9;
+  }
+  
+  .auth-box h1 {
+    color: white;
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  
+  .auth-box p {
+    color: rgba(255,255,255,0.6);
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+  
+  .auth-box input {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 18px;
+    text-align: center;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.05);
+    color: white;
+    margin-bottom: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  
+  .auth-box input:focus {
+    border-color: var(--primary);
+  }
+  
+  .auth-box input::placeholder {
+    letter-spacing: normal;
+    text-transform: none;
+    color: rgba(255,255,255,0.3);
+  }
+  
+  .auth-box button {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  
+  .auth-box button:hover {
+    opacity: 0.9;
+  }
+  
+  .auth-box .error {
+    color: #ff6b6b;
+    font-size: 13px;
+    margin-top: 12px;
+    margin-bottom: 0;
+    min-height: 20px;
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    const gate = document.getElementById('auth-gate');
+    const content = document.getElementById('admin-content');
+    const input = document.getElementById('auth-code');
+    const submit = document.getElementById('auth-submit');
+    const error = document.getElementById('auth-error');
+    
+    const restaurant = gate.dataset.restaurant;
+    const validCode = gate.dataset.code;
+    const storageKey = `admin_auth_${restaurant}`;
+    
+    // Check if already authenticated (session storage - clears on browser close)
+    const savedAuth = sessionStorage.getItem(storageKey);
+    if (savedAuth === validCode) {
+      gate.classList.add('hidden');
+      content.style.display = 'block';
+    }
+    
+    function attemptAuth() {
+      const entered = input.value.trim().toUpperCase();
+      
+      if (entered === validCode) {
+        sessionStorage.setItem(storageKey, validCode);
+        gate.classList.add('hidden');
+        content.style.display = 'block';
+        error.textContent = '';
+      } else {
+        error.textContent = 'Invalid code. Please try again.';
+        input.value = '';
+        input.focus();
+      }
+    }
+    
+    submit.addEventListener('click', attemptAuth);
+    input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') attemptAuth();
+    });
+    
+    // Auto-uppercase as user types
+    input.addEventListener('input', () => {
+      input.value = input.value.toUpperCase();
+    });
+  })();
+</script>

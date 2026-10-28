@@ -1,9 +1,11 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import AdminAuth from '../../../components/AdminAuth.astro';
 import '../../../styles/laluna-tables.css';
 ---
 
 <Layout hideFloatingButtons={true} title="Settings | La Luna Admin" appleTouchIcon="/laluna-apple-touch-icon.png">
+<AdminAuth restaurant="laluna" title="La Luna Settings">
   <div class="admin">
     <!-- Sidebar -->
     <aside class="sidebar">
@@ -706,4 +708,5 @@ import '../../../styles/laluna-tables.css';
     loadBlockedDates();
     loadCapacity();
   </script>
+</AdminAuth>
 </Layout>

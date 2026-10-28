@@ -1,10 +1,12 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import ChatWidget from '../../../components/ChatWidget.astro';
+import AdminAuth from '../../../components/AdminAuth.astro';
 import '../../../styles/laluna-tables.css';
 ---
 
 <Layout hideFloatingButtons={true} title="Dashboard | La Luna Admin" appleTouchIcon="/laluna-apple-touch-icon.png">
+<AdminAuth restaurant="laluna" title="La Luna Admin">
   <!-- Offline Banner -->
   <div class="offline-banner" id="offlineBanner" style="display:none;position:fixed;top:0;left:0;right:0;background:#A65D3F;color:white;padding:8px 16px;text-align:center;z-index:9999;font-size:14px;">
     <span style="display:inline-flex;align-items:center;gap:8px;">
@@ -5299,5 +5301,6 @@ import '../../../styles/laluna-tables.css';
     });
   </script>
 <ChatWidget restaurant="laluna" position="floating" />
+</AdminAuth>
 </Layout>
 // Force rebuild Wed May 27 18:30:47 CST 2026

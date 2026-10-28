@@ -1,10 +1,12 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import LaLunaAdminSidebar from '../../../components/LaLunaAdminSidebar.astro';
+import AdminAuth from '../../../components/AdminAuth.astro';
 import '../../../styles/laluna-tables.css';
 ---
 
 <Layout hideFloatingButtons={true} title="Floor Plan | La Luna Admin" appleTouchIcon="/laluna-apple-touch-icon.png">
+<AdminAuth restaurant="laluna" title="La Luna Floor Plan">
   <div class="admin">
     <LaLunaAdminSidebar active="floor" />
 
@@ -1226,4 +1228,5 @@ import '../../../styles/laluna-tables.css';
 
     renderFloor();
   </script>
+</AdminAuth>
 </Layout>

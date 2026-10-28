@@ -1,9 +1,11 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import CoyolAdminSidebar from '../../../components/CoyolAdminSidebar.astro';
+import AdminAuth from '../../../components/AdminAuth.astro';
 ---
 
 <Layout hideFloatingButtons={true} appleTouchIcon="/coyol-restaurant-icon.png" title="Guest Lookup | Coyol Admin">
+<AdminAuth restaurant="coyol" title="Coyol Guests">
   <div class="admin">
     <CoyolAdminSidebar active="guests" />
 
@@ -273,4 +275,5 @@ import CoyolAdminSidebar from '../../../components/CoyolAdminSidebar.astro';
       return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
     }
   </script>
+</AdminAuth>
 </Layout>

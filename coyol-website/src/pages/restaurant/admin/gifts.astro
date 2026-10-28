@@ -1,8 +1,10 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import AdminAuth from '../../../components/AdminAuth.astro';
 ---
 
 <Layout hideFloatingButtons={true} title="Gift Cards | Coyol Admin" appleTouchIcon="/coyol-restaurant-icon.png">
+<AdminAuth restaurant="coyol" title="Coyol Gift Cards">
   <div class="admin">
     <!-- Sidebar -->
     <aside class="sidebar">
@@ -64,6 +66,7 @@ import Layout from '../../../layouts/Layout.astro';
       </div>
     </div>
   </div>
+</AdminAuth>
 </Layout>
 
 <style is:global>

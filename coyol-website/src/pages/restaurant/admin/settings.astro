@@ -1,9 +1,11 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import AdminAuth from '../../../components/AdminAuth.astro';
 import '../../../styles/coyol-tables.css';
 ---
 
 <Layout hideFloatingButtons={true} title="Settings | Coyol Restaurant Admin" appleTouchIcon="/coyol-apple-touch-icon.png">
+<AdminAuth restaurant="coyol" title="Coyol Settings">
   <div class="admin">
     <!-- Sidebar Icons -->
     <aside class="sidebar">
@@ -564,4 +566,5 @@ import '../../../styles/coyol-tables.css';
     loadTimeSlots();
     loadCapacity();
   </script>
+</AdminAuth>
 </Layout>

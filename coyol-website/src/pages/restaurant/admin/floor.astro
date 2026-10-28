@@ -1,10 +1,12 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import CoyolAdminSidebar from '../../../components/CoyolAdminSidebar.astro';
+import AdminAuth from '../../../components/AdminAuth.astro';
 import '../../../styles/coyol-tables.css';
 ---
 
 <Layout hideFloatingButtons={true} title="Floor Plan | Coyol Admin" appleTouchIcon="/coyol-restaurant-icon.png">
+<AdminAuth restaurant="coyol" title="Coyol Floor Plan">
   <div class="admin">
     <CoyolAdminSidebar active="floor" />
 
@@ -1872,4 +1874,5 @@ import '../../../styles/coyol-tables.css';
     
     initFloorPlan();
   </script>
+</AdminAuth>
 </Layout>
