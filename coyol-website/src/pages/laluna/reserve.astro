@@ -821,10 +821,8 @@ import Layout from '../../layouts/Layout.astro';
         });
         if (res.ok) {
           const data = await res.json();
-          console.log('Time slots raw data:', data);
           if (data.length > 0 && data[0].value) {
             const parsed = JSON.parse(data[0].value);
-            console.log('Time slots parsed:', parsed);
             // Handle both formats: object {time: true/false} or array [time1, time2]
             if (Array.isArray(parsed)) {
               enabledSlots = parsed;
@@ -834,17 +832,11 @@ import Layout from '../../layouts/Layout.astro';
                 .filter(([time, enabled]) => enabled === true)
                 .map(([time]) => time);
             }
-            console.log('Enabled slots after parsing:', enabledSlots);
           }
-        } else {
-          console.error('Failed to fetch time slots:', res.status);
         }
       } catch (e) {
         console.error('Error loading time slots:', e);
       }
-      // Don't re-render - HTML already has the correct buttons
-      // Just hide any buttons that shouldn't be shown based on settings
-      console.log('Final enabledSlots before visibility update:', enabledSlots);
       updateTimeButtonVisibility();
     }
     
