@@ -982,10 +982,12 @@ import Layout from '../../layouts/Layout.astro';
     // Initialize with default selection
     selectedTime = '17:00';
     
-    // Load settings, then attach handlers
-    Promise.all([loadTimeSlots(), loadCapacity()]).then(() => {
+    // Load settings, then attach handlers and check availability
+    Promise.all([loadTimeSlots(), loadCapacity()]).then(async () => {
       attachTimeButtonHandlers();
-      updateSlotAvailability();
+      await checkAvailability();
+      await updateSlotAvailability();
+      updateTimeButtonVisibility(); // Final enforcement
     });
 
     // Get reservations from Supabase
@@ -1068,7 +1070,7 @@ import Layout from '../../layouts/Layout.astro';
     });
 
     // Check availability when date changes
-    dateInput.addEventListener('change', () => {
+    dateInput.addEventListener('change', async () => {
       // Enforce 90-day limit
       const maxDate = new Date();
       maxDate.setDate(maxDate.getDate() + 90);
@@ -1081,8 +1083,9 @@ import Layout from '../../layouts/Layout.astro';
         return;
       }
       
-      checkAvailability();
-      updateSlotAvailability(); // Check which time slots are full
+      await checkAvailability();
+      await updateSlotAvailability();
+      updateTimeButtonVisibility(); // Re-enforce visibility after availability updates
     });
 
     // Track if current date is blocked
@@ -1340,8 +1343,7 @@ import Layout from '../../layouts/Layout.astro';
       window.open(calUrl, '_blank');
     }
 
-    // Initial availability check
-    checkAvailability();
+    // Initial check is now inside Promise.all callback above
   </script>
 </Layout>
 <!-- 1779757269 -->
