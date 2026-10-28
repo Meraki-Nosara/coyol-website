@@ -806,6 +806,35 @@ import Layout from '../../layouts/Layout.astro';
     let enabledSlots = [...defaultBreakfast, ...defaultLunch, ...defaultDinner1, ...defaultDinner2];
     let selectedTime = '18:00';
     
+    // Capacity settings (loaded from Supabase)
+    let shiftCapacity = { breakfast: 40, lunch: 50, dinner1: 50, dinner2: 50 };
+    
+    // Determine which shift a time belongs to
+    function getShiftForTime(time) {
+      const hour = parseInt(time.split(':')[0]);
+      if (hour >= 7 && hour < 11) return 'breakfast';
+      if (hour >= 11 && hour < 17) return 'lunch';
+      if (hour >= 17 && hour < 20) return 'dinner1';
+      return 'dinner2';
+    }
+    
+    // Load capacity settings
+    async function loadCapacity() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.laluna_capacity`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.length > 0 && data[0].value) {
+            shiftCapacity = JSON.parse(data[0].value);
+          }
+        }
+      } catch (e) {
+        console.error('Error loading capacity:', e);
+      }
+    }
+    
     function formatTime12(time24) {
       const [h, m] = time24.split(':');
       const hour = parseInt(h);
@@ -873,32 +902,39 @@ import Layout from '../../layouts/Layout.astro';
       }
     }
     
-    // Total tables at La Luna (approximate - for availability calculation)
-    const TOTAL_TABLES = 14;
-    
-    // Check if a time slot is full based on reservations
+    // Check if a time slot is full based on reservations and capacity
     function isSlotFull(time, reservations) {
       if (!reservations || reservations.length === 0) return false;
       
-      const timeMinutes = parseInt(time.split(':')[0]) * 60 + parseInt(time.split(':')[1]);
+      const shift = getShiftForTime(time);
+      const maxGuests = shiftCapacity[shift] || 50;
       
-      // Count reservations within 2-hour window of this slot
-      const conflicting = reservations.filter(r => {
+      // Count total guests in the same shift (not just same time)
+      const shiftReservations = reservations.filter(r => {
         if (r.status === 'cancelled' || r.status === 'no-show') return false;
-        const rTime = r.time.split(':');
-        const rMinutes = parseInt(rTime[0]) * 60 + parseInt(rTime[1]);
-        return Math.abs(rMinutes - timeMinutes) < 120; // 2-hour window
+        return getShiftForTime(r.time) === shift;
       });
       
-      // Count unique tables booked
-      const bookedTables = new Set();
-      conflicting.forEach(r => {
-        if (r.table_id) {
-          r.table_id.split(',').forEach(t => bookedTables.add(t.trim()));
-        }
+      const totalGuests = shiftReservations.reduce((sum, r) => sum + (r.guests || 2), 0);
+      
+      return totalGuests >= maxGuests;
+    }
+    
+    // Get remaining capacity for a shift
+    function getRemainingCapacity(time, reservations) {
+      const shift = getShiftForTime(time);
+      const maxGuests = shiftCapacity[shift] || 50;
+      
+      if (!reservations || reservations.length === 0) return maxGuests;
+      
+      const shiftReservations = reservations.filter(r => {
+        if (r.status === 'cancelled' || r.status === 'no-show') return false;
+        return getShiftForTime(r.time) === shift;
       });
       
-      return bookedTables.size >= TOTAL_TABLES;
+      const totalGuests = shiftReservations.reduce((sum, r) => sum + (r.guests || 2), 0);
+      
+      return Math.max(0, maxGuests - totalGuests);
     }
     
     // Update slot availability based on selected date
@@ -946,8 +982,8 @@ import Layout from '../../layouts/Layout.astro';
     // Initialize with default selection
     selectedTime = '17:00';
     
-    // Load time slots from settings, then attach handlers
-    loadTimeSlots().then(() => {
+    // Load settings, then attach handlers
+    Promise.all([loadTimeSlots(), loadCapacity()]).then(() => {
       attachTimeButtonHandlers();
       updateSlotAvailability();
     });
@@ -1160,6 +1196,33 @@ import Layout from '../../layouts/Layout.astro';
         }
       } catch (e) {
         console.error('Error checking blocked dates:', e);
+      }
+      
+      // Check capacity before saving
+      const time = document.querySelector('.time-btn.selected')?.dataset.time || '18:30';
+      const guests = parseInt(document.querySelector('.party-btn.selected')?.dataset.guests || '2');
+      const selectedDate = dateInput.value;
+      
+      try {
+        const reservations = await getReservations(selectedDate);
+        const remaining = getRemainingCapacity(time, reservations);
+        
+        if (remaining < guests) {
+          const shift = getShiftForTime(time);
+          const shiftName = shift === 'breakfast' ? 'Breakfast' : shift === 'lunch' ? 'Lunch' : shift === 'dinner1' ? 'First Seating' : 'Second Seating';
+          
+          if (remaining === 0) {
+            alert(`Sorry, ${shiftName} is fully booked for ${selectedDate}. Please select a different time or date.`);
+          } else {
+            alert(`Sorry, only ${remaining} seats remaining for ${shiftName} on ${selectedDate}. Your party of ${guests} cannot be accommodated. Please select a different time or reduce your party size.`);
+          }
+          btn.disabled = false;
+          btn.textContent = 'Confirm Reservation';
+          showStep(1);
+          return;
+        }
+      } catch (e) {
+        console.error('Error checking capacity:', e);
       }
       
       btn.textContent = 'Saving...';

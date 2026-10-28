@@ -761,6 +761,53 @@ import Layout from '../../layouts/Layout.astro';
     // Supabase config
     const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+    
+    // Capacity settings (loaded from Supabase)
+    let shiftCapacity = { dinner1: 50, dinner2: 50 };
+    
+    // Determine which shift a time belongs to (Coyol is dinner only)
+    function getShiftForTime(time) {
+      const hour = parseInt(time.split(':')[0]);
+      if (hour < 20) return 'dinner1';
+      return 'dinner2';
+    }
+    
+    // Load capacity settings
+    async function loadCapacity() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.coyol_capacity`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.length > 0 && data[0].value) {
+            shiftCapacity = JSON.parse(data[0].value);
+          }
+        }
+      } catch (e) {
+        console.error('Error loading capacity:', e);
+      }
+    }
+    
+    // Get remaining capacity for a shift
+    function getRemainingCapacity(time, reservations) {
+      const shift = getShiftForTime(time);
+      const maxGuests = shiftCapacity[shift] || 50;
+      
+      if (!reservations || reservations.length === 0) return maxGuests;
+      
+      const shiftReservations = reservations.filter(r => {
+        if (r.status === 'cancelled' || r.status === 'no-show') return false;
+        return getShiftForTime(r.time) === shift;
+      });
+      
+      const totalGuests = shiftReservations.reduce((sum, r) => sum + (r.guests || 2), 0);
+      
+      return Math.max(0, maxGuests - totalGuests);
+    }
+    
+    // Initialize capacity
+    loadCapacity();
 
     // Get reservations from Supabase
     async function getReservations(date) {
@@ -1052,6 +1099,33 @@ import Layout from '../../layouts/Layout.astro';
         }
       } catch (e) {
         console.error('Error checking blocked dates:', e);
+      }
+      
+      // Check capacity before saving
+      const time = document.querySelector('.time-btn.selected')?.dataset.time || '18:30';
+      const guests = parseInt(document.querySelector('.party-btn.selected')?.dataset.guests || '2');
+      const selectedDate = dateInput.value;
+      
+      try {
+        const reservations = await getReservations(selectedDate);
+        const remaining = getRemainingCapacity(time, reservations);
+        
+        if (remaining < guests) {
+          const shift = getShiftForTime(time);
+          const shiftName = shift === 'dinner1' ? 'First Seating' : 'Second Seating';
+          
+          if (remaining === 0) {
+            alert(`Sorry, ${shiftName} is fully booked for ${selectedDate}. Please select a different time or date.`);
+          } else {
+            alert(`Sorry, only ${remaining} seats remaining for ${shiftName} on ${selectedDate}. Your party of ${guests} cannot be accommodated. Please select a different time or reduce your party size.`);
+          }
+          btn.disabled = false;
+          btn.textContent = 'Confirm Reservation';
+          showStep(1);
+          return;
+        }
+      } catch (e) {
+        console.error('Error checking capacity:', e);
       }
       
       btn.textContent = 'Saving...';
