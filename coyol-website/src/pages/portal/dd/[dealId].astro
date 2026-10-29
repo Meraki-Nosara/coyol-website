@@ -1,0 +1,527 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+
+export function getStaticPaths() {
+  return [
+    { params: { dealId: 'espavel-niki' } },
+  ];
+}
+
+const { dealId } = Astro.params;
+
+const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+
+// Section definitions
+const sections = [
+  { id: '01', name: 'Transaction Overview', icon: '📋', description: 'Property summaries, purchase structure, payment schedules' },
+  { id: '02', name: 'Property Titles', icon: '📜', description: 'Registry certifications, surveys, ownership, encumbrances' },
+  { id: '03', name: 'Condominium Legal', icon: '🏛️', description: 'Registration, bylaws, plans, assembly decisions' },
+  { id: '04', name: 'Water & Electricity', icon: '💧', description: 'Permits, infrastructure, availability, correspondence' },
+  { id: '05', name: 'Construction Rights', icon: '🏗️', description: 'Zoning, setbacks, building restrictions, permits' },
+  { id: '06', name: 'Casa Espavel Construction', icon: '🏠', description: 'Plans, specifications, contract, schedule' },
+  { id: '07', name: 'Financial & HOA', icon: '💰', description: 'Fees, assessments, statements, clearance certificates' },
+  { id: '08', name: 'Legal Disclosures', icon: '⚖️', description: 'Material litigation, restrictions, pending proceedings' },
+  { id: '09', name: 'Legal Q&A', icon: '💬', description: 'Questions, responses, review progress' },
+];
+---
+
+<Layout title="Due Diligence Portal — Coyol Development Group" hideFloatingButtons={true}>
+  <div class="min-h-screen bg-[#0a0a0a] text-white">
+    
+    <!-- Auth Screen -->
+    <div id="authScreen" class="min-h-screen flex items-center justify-center p-6">
+      <div class="max-w-md w-full">
+        <div class="text-center mb-8">
+          <img src="/images/logo.png" alt="Coyol" class="h-16 mx-auto mb-4 invert opacity-80" />
+          <h1 class="text-2xl font-serif text-[#C4A67C] tracking-wide">COYOL DEVELOPMENT GROUP</h1>
+          <p class="text-[#888] text-sm tracking-widest mt-2">DUE DILIGENCE PORTAL</p>
+        </div>
+        
+        <div class="bg-[#151515] border border-[#333] rounded-xl p-8">
+          <label class="block text-[#888] text-sm mb-2">Access Code</label>
+          <input type="text" id="accessCodeInput" 
+            class="w-full bg-[#0a0a0a] border border-[#333] rounded-lg px-4 py-3 text-white text-center text-xl tracking-widest font-mono focus:border-[#C4A67C] focus:outline-none uppercase"
+            placeholder="XXXX0000" autocomplete="off" maxlength="12" />
+          <button id="accessBtn" 
+            class="w-full mt-4 bg-[#C4A67C] hover:bg-[#d4b68c] text-[#0a0a0a] font-medium py-3 rounded-lg transition-colors">
+            Access Portal
+          </button>
+          <p id="authError" class="text-red-400 text-sm text-center mt-3 hidden">Invalid access code</p>
+        </div>
+        
+        <p class="text-center text-[#666] text-xs mt-6">
+          Private data room for authorized parties only
+        </p>
+      </div>
+    </div>
+
+    <!-- Portal Content -->
+    <div id="portalContent" class="hidden">
+      
+      <!-- Header -->
+      <header class="border-b border-[#333] bg-[#0a0a0a]/95 backdrop-blur-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div class="flex items-center gap-4">
+            <img src="/images/logo.png" alt="Coyol" class="h-10 invert opacity-80" />
+            <div>
+              <h1 class="text-lg font-serif text-[#C4A67C]">CASA ESPAVEL</h1>
+              <p class="text-[#888] text-xs">Private Due Diligence Portal</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <span id="userRole" class="text-xs text-[#888] bg-[#1a1a1a] px-3 py-1 rounded-full">Buyer</span>
+            <button id="logoutBtn" class="text-[#888] text-sm hover:text-white">Logout</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="max-w-6xl mx-auto px-6 py-8">
+        
+        <!-- Deal Summary -->
+        <div class="bg-[#151515] border border-[#333] rounded-xl p-6 mb-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div>
+              <p class="text-[#888] text-xs uppercase tracking-wider mb-1">Buyers</p>
+              <p class="text-white font-medium" id="buyerNames">Niki & Zack</p>
+            </div>
+            <div>
+              <p class="text-[#888] text-xs uppercase tracking-wider mb-1">Development</p>
+              <p class="text-white">Mar Azul Condominium, Nosara</p>
+            </div>
+            <div>
+              <p class="text-[#888] text-xs uppercase tracking-wider mb-1">Properties</p>
+              <p class="text-white">Lots 19 & 36 (5,358 m²)</p>
+            </div>
+            <div>
+              <p class="text-[#888] text-xs uppercase tracking-wider mb-1">Total Investment</p>
+              <p class="text-[#C4A67C] text-xl font-medium">$3,829,850</p>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-3 gap-4 mt-6 text-center text-sm">
+            <div class="bg-[#1a1a1a] rounded-lg p-3">
+              <p class="text-[#888]">Land Acquisition</p>
+              <p class="text-white font-medium">$1,000,000</p>
+            </div>
+            <div class="bg-[#1a1a1a] rounded-lg p-3">
+              <p class="text-[#888]">Construction</p>
+              <p class="text-white font-medium">$2,829,850</p>
+            </div>
+            <div class="bg-[#1a1a1a] rounded-lg p-3">
+              <p class="text-[#888]">Completion Target</p>
+              <p class="text-white font-medium">18 months</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="flex flex-wrap gap-3 mb-8">
+          <button class="bg-[#3D4F3D] hover:bg-[#4a5d4a] text-white px-4 py-2 rounded-lg text-sm flex items-center gap-2">
+            📄 View Documents
+          </button>
+          <button onclick="document.getElementById('qaSection').scrollIntoView({behavior:'smooth'})" 
+            class="bg-[#1a1a1a] hover:bg-[#252525] border border-[#333] text-white px-4 py-2 rounded-lg text-sm flex items-center gap-2">
+            ❓ Ask a Question
+          </button>
+          <button id="downloadIndexBtn" 
+            class="bg-[#1a1a1a] hover:bg-[#252525] border border-[#333] text-white px-4 py-2 rounded-lg text-sm flex items-center gap-2">
+            📥 Download DD Index
+          </button>
+        </div>
+
+        <!-- Progress Dashboard -->
+        <div class="bg-[#151515] border border-[#333] rounded-xl p-6 mb-8">
+          <h2 class="text-lg font-serif text-[#C4A67C] mb-4">Verification Status</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="statusGrid">
+            <!-- Loaded dynamically -->
+          </div>
+        </div>
+
+        <!-- Sections -->
+        <div class="space-y-4" id="sectionsContainer">
+          {sections.map((section) => (
+            <div class="section-card bg-[#151515] border border-[#333] rounded-xl overflow-hidden" data-section={section.id}>
+              <button class="section-header w-full px-6 py-4 flex items-center justify-between text-left hover:bg-[#1a1a1a] transition-colors">
+                <div class="flex items-center gap-4">
+                  <span class="text-2xl">{section.icon}</span>
+                  <div>
+                    <h3 class="font-medium text-white">{section.id}. {section.name}</h3>
+                    <p class="text-[#888] text-sm">{section.description}</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="section-status text-xs px-2 py-1 rounded-full bg-[#333] text-[#888]">Loading...</span>
+                  <svg class="section-chevron w-5 h-5 text-[#888] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </button>
+              <div class="section-content hidden border-t border-[#333]">
+                <div class="p-6">
+                  <div class="documents-list space-y-2">
+                    <!-- Documents loaded here -->
+                  </div>
+                  <div class="mt-4 pt-4 border-t border-[#333] flex justify-between items-center">
+                    <button class="upload-btn text-sm text-[#C4A67C] hover:text-[#d4b68c] hidden" data-section={section.id}>
+                      + Upload Document
+                    </button>
+                    <button class="download-section-btn text-sm text-[#888] hover:text-white" data-section={section.id}>
+                      Download Section
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Q&A Section -->
+        <div id="qaSection" class="mt-8 bg-[#151515] border border-[#333] rounded-xl p-6">
+          <h2 class="text-lg font-serif text-[#C4A67C] mb-4">Legal Q&A</h2>
+          
+          <!-- New Question Form -->
+          <div class="bg-[#1a1a1a] rounded-lg p-4 mb-6">
+            <textarea id="newQuestionText" rows="3" 
+              class="w-full bg-[#0a0a0a] border border-[#333] rounded-lg px-4 py-3 text-white text-sm focus:border-[#C4A67C] focus:outline-none resize-none"
+              placeholder="Ask a question about any document or aspect of the transaction..."></textarea>
+            <div class="flex justify-between items-center mt-3">
+              <select id="questionSection" class="bg-[#0a0a0a] border border-[#333] rounded-lg px-3 py-2 text-sm text-white">
+                <option value="">General Question</option>
+                {sections.map((s) => (
+                  <option value={s.id}>{s.id}. {s.name}</option>
+                ))}
+              </select>
+              <button id="submitQuestionBtn" class="bg-[#C4A67C] hover:bg-[#d4b68c] text-[#0a0a0a] px-4 py-2 rounded-lg text-sm font-medium">
+                Submit Question
+              </button>
+            </div>
+          </div>
+          
+          <!-- Questions List -->
+          <div id="questionsList" class="space-y-4">
+            <!-- Questions loaded here -->
+          </div>
+        </div>
+
+      </main>
+
+      <!-- Footer -->
+      <footer class="border-t border-[#333] mt-12 py-8 text-center">
+        <p class="text-[#888] text-sm">© 2026 Coyol Development Group — Private & Confidential</p>
+      </footer>
+      
+    </div>
+
+    <!-- Upload Modal -->
+    <div id="uploadModal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-6">
+      <div class="bg-[#151515] border border-[#333] rounded-xl max-w-md w-full p-6">
+        <h3 class="text-lg font-serif text-[#C4A67C] mb-4">Upload Document</h3>
+        <input type="text" id="uploadTitle" placeholder="Document title" 
+          class="w-full bg-[#0a0a0a] border border-[#333] rounded-lg px-4 py-3 text-white text-sm mb-3 focus:border-[#C4A67C] focus:outline-none" />
+        <select id="uploadLot" class="w-full bg-[#0a0a0a] border border-[#333] rounded-lg px-4 py-3 text-white text-sm mb-3">
+          <option value="">Both Lots / General</option>
+          <option value="19">Lot 19 Only</option>
+          <option value="36">Lot 36 Only</option>
+        </select>
+        <div id="dropZone" class="border-2 border-dashed border-[#333] rounded-lg p-8 text-center cursor-pointer hover:border-[#C4A67C] transition-colors mb-4">
+          <p class="text-[#888]">Drop file here or click to browse</p>
+          <input type="file" id="fileInput" class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png" />
+        </div>
+        <div class="flex gap-3">
+          <button id="cancelUploadBtn" class="flex-1 bg-[#1a1a1a] text-white py-2 rounded-lg">Cancel</button>
+          <button id="confirmUploadBtn" class="flex-1 bg-[#C4A67C] text-[#0a0a0a] py-2 rounded-lg font-medium">Upload</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script define:vars={{ SUPABASE_URL, SUPABASE_KEY, dealId }}>
+    let portalData = null;
+    let documents = [];
+    let questions = [];
+    let userRole = 'buyer';
+
+    // Status categories
+    const statusCategories = [
+      { key: 'property_ownership', label: 'Property Ownership' },
+      { key: 'condo_documentation', label: 'Condominium Documentation' },
+      { key: 'water_electricity', label: 'Water & Electricity' },
+      { key: 'construction_rights', label: 'Construction Rights' },
+      { key: 'financial_obligations', label: 'Financial Obligations' },
+      { key: 'purchase_agreements', label: 'Purchase Agreements' },
+      { key: 'construction_agreement', label: 'Construction Agreement' },
+    ];
+
+    // Load portal data
+    async function loadPortal(accessCode) {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/dd_portals?access_code=eq.${accessCode}&select=*`, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        const data = await res.json();
+        if (!data || data.length === 0) return null;
+        return data[0];
+      } catch (e) {
+        console.error('Failed to load portal:', e);
+        return null;
+      }
+    }
+
+    // Load documents
+    async function loadDocuments(portalId) {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/dd_documents?portal_id=eq.${portalId}&select=*&order=section.asc,created_at.desc`, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        return await res.json() || [];
+      } catch (e) {
+        console.error('Failed to load documents:', e);
+        return [];
+      }
+    }
+
+    // Load questions
+    async function loadQuestions(portalId) {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/dd_questions?portal_id=eq.${portalId}&select=*&order=created_at.desc`, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        return await res.json() || [];
+      } catch (e) {
+        console.error('Failed to load questions:', e);
+        return [];
+      }
+    }
+
+    // Get status badge
+    function getStatusBadge(status) {
+      const colors = {
+        'verified': { bg: '#22c55e22', text: '#22c55e', label: 'Verified' },
+        'pending': { bg: '#f59e0b22', text: '#f59e0b', label: 'Awaiting Verification' },
+        'drafting': { bg: '#60a5fa22', text: '#60a5fa', label: 'Drafting' },
+        'missing': { bg: '#ef444422', text: '#ef4444', label: 'Documents Missing' },
+      };
+      const s = colors[status] || colors.pending;
+      return `<span class="text-xs px-2 py-1 rounded-full" style="background:${s.bg};color:${s.text}">${s.label}</span>`;
+    }
+
+    // Render status grid
+    function renderStatusGrid() {
+      const grid = document.getElementById('statusGrid');
+      const statuses = portalData.verification_status || {};
+      grid.innerHTML = statusCategories.map(cat => `
+        <div class="flex items-center justify-between p-3 bg-[#1a1a1a] rounded-lg">
+          <span class="text-sm text-[#888]">${cat.label}</span>
+          ${getStatusBadge(statuses[cat.key] || 'pending')}
+        </div>
+      `).join('');
+    }
+
+    // Render documents for a section
+    function renderSectionDocuments(sectionId) {
+      const card = document.querySelector(`[data-section="${sectionId}"]`);
+      if (!card) return;
+      
+      const sectionDocs = documents.filter(d => d.section === sectionId);
+      const docsList = card.querySelector('.documents-list');
+      
+      if (sectionDocs.length === 0) {
+        docsList.innerHTML = '<p class="text-[#666] text-sm">No documents uploaded yet</p>';
+      } else {
+        docsList.innerHTML = sectionDocs.map(doc => `
+          <div class="flex items-center justify-between p-3 bg-[#1a1a1a] rounded-lg">
+            <div class="flex items-center gap-3">
+              <span class="text-lg">${doc.file_type === 'pdf' ? '📄' : '📎'}</span>
+              <div>
+                <p class="text-white text-sm font-medium">${doc.title}</p>
+                <p class="text-[#666] text-xs">${doc.lot ? `Lot ${doc.lot}` : 'Both Lots'} • ${new Date(doc.created_at).toLocaleDateString()}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              ${getStatusBadge(doc.verification_status || 'pending')}
+              <a href="${doc.file_url}" target="_blank" class="text-[#C4A67C] hover:text-[#d4b68c] text-sm ml-2">View</a>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Update section status
+      const statusEl = card.querySelector('.section-status');
+      const verified = sectionDocs.filter(d => d.verification_status === 'verified').length;
+      if (sectionDocs.length === 0) {
+        statusEl.textContent = 'Empty';
+        statusEl.className = 'section-status text-xs px-2 py-1 rounded-full bg-[#333] text-[#888]';
+      } else if (verified === sectionDocs.length) {
+        statusEl.textContent = `${verified}/${sectionDocs.length} Verified`;
+        statusEl.className = 'section-status text-xs px-2 py-1 rounded-full bg-[#22c55e22] text-[#22c55e]';
+      } else {
+        statusEl.textContent = `${verified}/${sectionDocs.length} Verified`;
+        statusEl.className = 'section-status text-xs px-2 py-1 rounded-full bg-[#f59e0b22] text-[#f59e0b]';
+      }
+    }
+
+    // Render questions
+    function renderQuestions() {
+      const list = document.getElementById('questionsList');
+      if (questions.length === 0) {
+        list.innerHTML = '<p class="text-[#666] text-sm">No questions yet</p>';
+        return;
+      }
+      
+      list.innerHTML = questions.map(q => `
+        <div class="bg-[#1a1a1a] rounded-lg p-4">
+          <div class="flex items-start justify-between mb-2">
+            <p class="text-white text-sm">${q.question}</p>
+            <span class="text-xs px-2 py-1 rounded-full ${q.status === 'answered' ? 'bg-[#22c55e22] text-[#22c55e]' : 'bg-[#f59e0b22] text-[#f59e0b]'}">
+              ${q.status === 'answered' ? 'Answered' : 'Pending'}
+            </span>
+          </div>
+          <p class="text-[#666] text-xs mb-2">${q.section ? `Section ${q.section}` : 'General'} • Asked ${new Date(q.created_at).toLocaleDateString()}</p>
+          ${q.answer ? `
+            <div class="mt-3 pt-3 border-t border-[#333]">
+              <p class="text-[#888] text-xs mb-1">Response from ${q.answered_by || 'Coyol'}:</p>
+              <p class="text-white text-sm">${q.answer}</p>
+            </div>
+          ` : ''}
+        </div>
+      `).join('');
+    }
+
+    // Render portal
+    async function renderPortal(data) {
+      portalData = data;
+      userRole = data.user_role || 'buyer';
+      
+      document.getElementById('userRole').textContent = userRole.charAt(0).toUpperCase() + userRole.slice(1);
+      document.getElementById('buyerNames').textContent = data.buyer_names || 'Niki & Zack';
+      
+      // Load documents and questions
+      documents = await loadDocuments(data.id);
+      questions = await loadQuestions(data.id);
+      
+      // Render status grid
+      renderStatusGrid();
+      
+      // Render each section
+      ['01','02','03','04','05','06','07','08','09'].forEach(renderSectionDocuments);
+      
+      // Render questions
+      renderQuestions();
+      
+      // Show upload buttons for admin/legal roles
+      if (['admin', 'coyol_legal'].includes(userRole)) {
+        document.querySelectorAll('.upload-btn').forEach(btn => btn.classList.remove('hidden'));
+      }
+      
+      // Show portal
+      document.getElementById('authScreen').classList.add('hidden');
+      document.getElementById('portalContent').classList.remove('hidden');
+      
+      sessionStorage.setItem('ddPortalAccess', data.access_code);
+    }
+
+    // Section toggle
+    document.querySelectorAll('.section-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const card = header.closest('.section-card');
+        const content = card.querySelector('.section-content');
+        const chevron = card.querySelector('.section-chevron');
+        content.classList.toggle('hidden');
+        chevron.style.transform = content.classList.contains('hidden') ? '' : 'rotate(180deg)';
+      });
+    });
+
+    // Auth
+    document.getElementById('accessBtn').addEventListener('click', async () => {
+      const code = document.getElementById('accessCodeInput').value.trim().toUpperCase();
+      if (!code) return;
+      
+      const data = await loadPortal(code);
+      if (data) {
+        renderPortal(data);
+      } else {
+        document.getElementById('authError').classList.remove('hidden');
+      }
+    });
+
+    document.getElementById('accessCodeInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') document.getElementById('accessBtn').click();
+    });
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      sessionStorage.removeItem('ddPortalAccess');
+      document.getElementById('portalContent').classList.add('hidden');
+      document.getElementById('authScreen').classList.remove('hidden');
+      document.getElementById('accessCodeInput').value = '';
+    });
+
+    // Submit question
+    document.getElementById('submitQuestionBtn').addEventListener('click', async () => {
+      const text = document.getElementById('newQuestionText').value.trim();
+      const section = document.getElementById('questionSection').value;
+      if (!text || !portalData) return;
+      
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/dd_questions`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=representation'
+          },
+          body: JSON.stringify({
+            portal_id: portalData.id,
+            question: text,
+            section: section || null,
+            asked_by: portalData.buyer_names || 'Buyer',
+            status: 'pending'
+          })
+        });
+        
+        if (res.ok) {
+          const newQ = await res.json();
+          questions.unshift(newQ[0]);
+          renderQuestions();
+          document.getElementById('newQuestionText').value = '';
+          document.getElementById('questionSection').value = '';
+        }
+      } catch (e) {
+        console.error('Failed to submit question:', e);
+      }
+    });
+
+    // Upload modal
+    let currentUploadSection = null;
+    
+    document.querySelectorAll('.upload-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentUploadSection = btn.dataset.section;
+        document.getElementById('uploadModal').classList.remove('hidden');
+        document.getElementById('uploadModal').classList.add('flex');
+      });
+    });
+
+    document.getElementById('cancelUploadBtn').addEventListener('click', () => {
+      document.getElementById('uploadModal').classList.add('hidden');
+      document.getElementById('uploadModal').classList.remove('flex');
+    });
+
+    document.getElementById('dropZone').addEventListener('click', () => {
+      document.getElementById('fileInput').click();
+    });
+
+    // Check session on load
+    window.addEventListener('DOMContentLoaded', async () => {
+      const savedCode = sessionStorage.getItem('ddPortalAccess');
+      if (savedCode) {
+        const data = await loadPortal(savedCode);
+        if (data) renderPortal(data);
+      }
+    });
+  </script>
+</Layout>

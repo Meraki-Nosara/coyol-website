@@ -1052,7 +1052,7 @@ import Layout from '../../layouts/Layout.astro';
       });
     }
 
-    function showStep(step) {
+    window.showStep = function(step) {
       document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
       document.getElementById('step-' + step).classList.add('active');
       
@@ -1077,7 +1077,7 @@ import Layout from '../../layouts/Layout.astro';
       }
     }
 
-    async function submitReservation() {
+    window.submitReservation = async function() {
       // Prevent double submission - disable immediately
       const btn = document.getElementById('confirmBtn');
       if (btn.disabled) return;
@@ -1161,11 +1161,11 @@ import Layout from '../../layouts/Layout.astro';
       }
       
       // Check date is within 90 days
-      const selectedDate = new Date(window.selectedDate + 'T12:00:00');
+      const selectedDateObj = new Date(selectedDate + 'T12:00:00');
       const maxAllowedDate = new Date();
       maxAllowedDate.setDate(maxAllowedDate.getDate() + 90);
       
-      if (selectedDate > maxAllowedDate) {
+      if (selectedDateObj > maxAllowedDate) {
         alert('Reservations can only be made up to 90 days in advance. Please select an earlier date.');
         btn.disabled = false;
         btn.textContent = 'Confirm Reservation';
@@ -1178,9 +1178,7 @@ import Layout from '../../layouts/Layout.astro';
         return;
       }
 
-      const date = dateInput.value;
-      const time = selectedTime || document.querySelector('.time-btn.selected')?.dataset.time || '18:30';
-      const guests = document.querySelector('.party-btn.selected')?.dataset.guests || '2';
+      const date = selectedDate;
       const zone = document.querySelector('.seating-btn.selected')?.dataset.zone || 'any';
 
       const reservation = {
@@ -1228,7 +1226,7 @@ import Layout from '../../layouts/Layout.astro';
       }
     }
 
-    function addToCalendar() {
+    window.addToCalendar = function() {
       const date = dateInput.value;
       const time = document.querySelector('.time-btn.selected')?.dataset.time || '18:30';
       const [hours, minutes] = time.split(':');
