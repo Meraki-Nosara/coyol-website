@@ -96,11 +96,29 @@ const { id } = Astro.params;
             </form>
           </div>
 
-          <!-- Document List -->
+          <!-- Folders & Documents -->
           <div class="bg-[#111827] border border-[#374151] rounded-lg p-6">
-            <h3 class="text-lg font-semibold text-white mb-4">Case Documentos</h3>
-            <div id="documentList" class="space-y-3">
-              <p class="text-[#6b7280]">Cargando documentos...</p>
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-semibold text-white">Carpetas y Documentos</h3>
+              <button id="newFolderBtn" class="text-sm text-[#3b82f6] hover:text-[#60a5fa] flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+                </svg>
+                Nueva Carpeta
+              </button>
+            </div>
+            
+            <!-- Folder selector for uploads -->
+            <div class="mb-4 p-3 bg-[#1f2937] rounded-lg">
+              <label class="block text-xs text-[#9ca3af] mb-2">Subir a carpeta:</label>
+              <select id="uploadFolderSelect" class="w-full bg-[#0a0f1a] border border-[#374151] rounded px-3 py-2 text-white text-sm">
+                <option value="">📁 Raíz (sin carpeta)</option>
+              </select>
+            </div>
+            
+            <!-- Folders and documents list -->
+            <div id="foldersDocumentsList" class="space-y-3">
+              <p class="text-[#6b7280]">Cargando...</p>
             </div>
           </div>
         </div>
@@ -423,41 +441,151 @@ const { id } = Astro.params;
       }
     }
 
+    // Folders state
+    let folders = [];
+    let selectedUploadFolder = '';
+    
     // Delete document - make global
     window.deleteDocument = async function(docId) {
       if (!confirm('¿Eliminar este documento?')) return;
       await fetch(`/api/cases/${caseId}/documents?id=${docId}`, { method: 'DELETE' });
       loadDocuments();
     };
+    
+    // Delete folder - make global
+    window.deleteFolder = async function(folderId) {
+      if (!confirm('¿Eliminar esta carpeta? Los documentos se moverán a la raíz.')) return;
+      await fetch(`/api/cases/${caseId}/folders?id=${folderId}`, { method: 'DELETE' });
+      loadDocuments();
+    };
+    
+    // Move document to folder - make global
+    window.moveDocToFolder = async function(docId, folderId) {
+      await fetch(`/api/cases/${caseId}/documents`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: docId, folder_id: folderId || null })
+      });
+      loadDocuments();
+    };
+    
+    // Toggle folder open/close
+    window.toggleFolder = function(folderId) {
+      const content = document.getElementById(`folder-content-${folderId}`);
+      const icon = document.getElementById(`folder-icon-${folderId}`);
+      if (content) {
+        content.classList.toggle('hidden');
+        if (icon) icon.textContent = content.classList.contains('hidden') ? '📁' : '📂';
+      }
+    };
 
-    // Load documents
+    // Load folders and documents
     async function loadDocuments() {
+      // Load folders
+      const foldersRes = await fetch(`/api/cases/${caseId}/folders`);
+      const foldersData = await foldersRes.json();
+      folders = foldersData.folders || [];
+      
+      // Load documents
       const res = await fetch(`/api/cases/${caseId}/documents`);
       const data = await res.json();
+      const documents = data.documents || [];
       
-      const list = document.getElementById('documentList');
-      if (data.documents?.length) {
-        list.innerHTML = data.documents.map((d) => `
-          <div class="flex items-center justify-between p-3 bg-[#1f2937] rounded-lg">
-            <div class="flex items-center gap-3">
-              <svg class="w-8 h-8 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-              </svg>
-              <div>
-                <p class="text-white text-sm">${d.filename}</p>
-                <p class="text-[#6b7280] text-xs">${new Date(d.created_at).toLocaleDateString()} • ${(d.file_size / 1024).toFixed(1)} KB</p>
+      // Update folder select dropdown
+      const folderSelect = document.getElementById('uploadFolderSelect');
+      if (folderSelect) {
+        folderSelect.innerHTML = `<option value="">📁 Raíz (sin carpeta)</option>` +
+          folders.map(f => `<option value="${f.id}">📁 ${f.name}</option>`).join('');
+        folderSelect.value = selectedUploadFolder;
+      }
+      
+      // Group documents by folder
+      const rootDocs = documents.filter(d => !d.folder_id);
+      const folderDocs = {};
+      folders.forEach(f => folderDocs[f.id] = []);
+      documents.forEach(d => {
+        if (d.folder_id && folderDocs[d.folder_id]) {
+          folderDocs[d.folder_id].push(d);
+        }
+      });
+      
+      const list = document.getElementById('foldersDocumentsList');
+      let html = '';
+      
+      // Render folders
+      folders.forEach(folder => {
+        const docs = folderDocs[folder.id] || [];
+        html += `
+          <div class="border border-[#374151] rounded-lg overflow-hidden">
+            <div class="flex items-center justify-between p-3 bg-[#1f2937] cursor-pointer hover:bg-[#374151]" onclick="toggleFolder('${folder.id}')">
+              <div class="flex items-center gap-2">
+                <span id="folder-icon-${folder.id}" class="text-lg">📁</span>
+                <span class="text-white font-medium">${folder.name}</span>
+                <span class="text-[#6b7280] text-xs">(${docs.length} docs)</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <button onclick="event.stopPropagation(); deleteFolder('${folder.id}')" class="text-red-400 hover:text-red-300 text-xs">Eliminar</button>
               </div>
             </div>
-            <div class="flex gap-3">
-              <a href="${d.file_url}" target="_blank" rel="noopener noreferrer" class="text-[#3b82f6] hover:underline text-sm">Abrir ↗</a>
-              <a href="${d.file_url}" download="${d.filename}" class="text-[#6b7280] hover:text-white text-sm">Descargar</a>
-              <button onclick="deleteDocument('${d.id}')" class="text-red-400 hover:text-red-300 text-sm">✕</button>
+            <div id="folder-content-${folder.id}" class="hidden border-t border-[#374151] bg-[#0a0f1a] p-2 space-y-2">
+              ${docs.length ? docs.map(d => renderDocument(d)).join('') : '<p class="text-[#6b7280] text-sm p-2">Carpeta vacía</p>'}
             </div>
           </div>
-        `).join('');
-      } else {
-        list.innerHTML = '<p class="text-[#6b7280]">No hay documentos subidos</p>';
+        `;
+      });
+      
+      // Render root documents
+      if (rootDocs.length || folders.length === 0) {
+        html += `
+          <div class="mt-4">
+            <p class="text-[#6b7280] text-xs mb-2 uppercase tracking-wider">Documentos sin carpeta</p>
+            <div class="space-y-2">
+              ${rootDocs.length ? rootDocs.map(d => renderDocument(d)).join('') : '<p class="text-[#6b7280] text-sm">No hay documentos</p>'}
+            </div>
+          </div>
+        `;
       }
+      
+      list.innerHTML = html || '<p class="text-[#6b7280]">No hay carpetas ni documentos</p>';
+    }
+    
+    function renderDocument(d) {
+      const folderOptions = folders.map(f => 
+        `<option value="${f.id}" ${d.folder_id === f.id ? 'selected' : ''}>${f.name}</option>`
+      ).join('');
+      
+      // Truncate long filenames
+      const displayName = d.filename.length > 45 ? d.filename.substring(0, 42) + '...' : d.filename;
+      const fileSize = d.file_size > 1024 * 1024 
+        ? (d.file_size / (1024 * 1024)).toFixed(1) + ' MB'
+        : (d.file_size / 1024).toFixed(1) + ' KB';
+      
+      return `
+        <div class="flex items-center p-3 bg-[#1f2937] rounded-lg gap-3">
+          <!-- Icon -->
+          <svg class="w-5 h-5 text-[#6b7280] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+          </svg>
+          
+          <!-- File info -->
+          <div class="flex-1 min-w-0">
+            <p class="text-white text-sm truncate" title="${d.filename}">${displayName}</p>
+            <p class="text-[#6b7280] text-xs">${new Date(d.created_at).toLocaleDateString()} • ${fileSize}</p>
+          </div>
+          
+          <!-- Actions - fixed width -->
+          <div class="flex items-center gap-3 flex-shrink-0">
+            <select onchange="moveDocToFolder('${d.id}', this.value)" class="bg-[#0a0f1a] border border-[#374151] rounded px-2 py-1 text-xs text-[#9ca3af] w-24">
+              <option value="">Mover a...</option>
+              <option value="">Raíz</option>
+              ${folderOptions}
+            </select>
+            <a href="${d.file_url}" target="_blank" rel="noopener noreferrer" class="text-[#3b82f6] hover:underline text-sm whitespace-nowrap">Abrir ↗</a>
+            <a href="${d.file_url}" download="${d.filename}" class="text-[#6b7280] hover:text-white text-sm whitespace-nowrap">Descargar</a>
+            <button onclick="deleteDocument('${d.id}')" class="text-red-400 hover:text-red-300 text-sm">✕</button>
+          </div>
+        </div>
+      `;
     }
 
     // Event type labels in Spanish
@@ -771,7 +899,8 @@ const { id } = Astro.params;
               file_type: file.type,
               file_size: file.size,
               uploaded_by: user.id,
-              tags: tags
+              tags: tags,
+              folder_id: selectedUploadFolder || null
             })
           });
           
@@ -797,6 +926,34 @@ const { id } = Astro.params;
       renderFileList();
       (document.getElementById('docTags') ).value = '';
       loadDocuments();
+    });
+    
+    // Folder select change handler
+    document.getElementById('uploadFolderSelect')?.addEventListener('change', (e) => {
+      selectedUploadFolder = e.target.value;
+    });
+    
+    // New folder button
+    document.getElementById('newFolderBtn')?.addEventListener('click', async () => {
+      const name = prompt('Nombre de la nueva carpeta:');
+      if (!name || !name.trim()) return;
+      
+      try {
+        const res = await fetch(`/api/cases/${caseId}/folders`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: name.trim(), created_by: user.id })
+        });
+        
+        if (res.ok) {
+          loadDocuments();
+        } else {
+          const err = await res.json();
+          alert('Error creando carpeta: ' + (err.error || 'Unknown'));
+        }
+      } catch (err) {
+        alert('Error de conexión');
+      }
     });
 
     // Event form

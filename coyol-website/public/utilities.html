@@ -1019,6 +1019,7 @@
       <div class="settings-section">
         <div class="settings-header">
           <span>Historial de Reportes Mensuales</span>
+          <span id="reportLoadStatus" style="font-size:12px;color:var(--coniston);"></span>
         </div>
         <div class="settings-body" id="reportsList" style="padding: 0;"></div>
       </div>
@@ -1118,7 +1119,8 @@
           }));
         }
         
-        const dbInvoices = await supabaseFetch('utility_invoices', { query: '?order=created_at.desc' });
+        const dbInvoices = await supabaseFetch('utility_invoices', { query: '?order=created_at.desc&limit=1000' });
+        console.log('Loaded', dbInvoices.length, 'invoices from Supabase');
         invoices = dbInvoices.map(i => ({
           id: i.id,
           meterId: i.meter_id,
@@ -2017,6 +2019,10 @@
     
     function renderReportsTab() {
       const monthsWithData = [...new Set(invoices.map(i => i.month))].sort().reverse();
+      
+      // Show load status
+      const statusEl = document.getElementById('reportLoadStatus');
+      if (statusEl) statusEl.textContent = `(${invoices.length} facturas, ${monthsWithData.length} meses)`;
       
       const totalMonths = monthsWithData.length;
       const totalInvoices = invoices.length;

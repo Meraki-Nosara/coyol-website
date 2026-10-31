@@ -92,6 +92,37 @@ export const DELETE: APIRoute = async ({ url }) => {
   }
 };
 
+export const PATCH: APIRoute = async ({ request }) => {
+  try {
+    const body = await request.json();
+    const { id, folder_id } = body;
+
+    if (!id) {
+      return new Response(JSON.stringify({ error: 'Document ID required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    const { error } = await supabase
+      .from('legal_documents')
+      .update({ folder_id: folder_id || null })
+      .eq('id', id);
+
+    if (error) throw error;
+
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch (err: any) {
+    return new Response(JSON.stringify({ error: err.message || 'Failed to update document' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+};
+
 export const POST: APIRoute = async ({ params, request }) => {
   try {
     const { id } = params;
