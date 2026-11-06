@@ -892,10 +892,26 @@ import Layout from '../../layouts/Layout.astro';
     let selectedTime = null;
     let enabledTimeSlots = {};
     
-    // DISABLED - using static HTML buttons instead
+    // Load enabled time slots from database and hide disabled ones
     async function loadTimeSlots() {
-      // Do nothing - static buttons are already in HTML
-      return;
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.coyol_time_slots`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const data = await res.json();
+        if (data.length > 0 && data[0].value) {
+          enabledTimeSlots = JSON.parse(data[0].value);
+          // Hide disabled time slots from the static HTML
+          document.querySelectorAll('.time-btn').forEach(btn => {
+            const time = btn.dataset.time;
+            if (enabledTimeSlots[time] === false) {
+              btn.style.display = 'none';
+            }
+          });
+        }
+      } catch (e) {
+        console.error('Error loading time slots:', e);
+      }
     }
     
     function renderTimeGrid() {
@@ -961,8 +977,8 @@ import Layout from '../../layouts/Layout.astro';
     }
     initTimeButtons();
     
-    // Skip dynamic loading - use static buttons
-    // loadTimeSlots();
+    // Load time slots from database
+    loadTimeSlots();
 
     // Seating selection
     document.querySelectorAll('.seating-btn').forEach(btn => {
@@ -1247,3 +1263,4 @@ import Layout from '../../layouts/Layout.astro';
   </script>
 </Layout>
 <!-- force 1780007219 -->
+<!-- cache-bust 1793970155 -->

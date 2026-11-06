@@ -77,6 +77,10 @@ import '../../../styles/coyol-tables.css';
         
         <div class="capacity-grid">
           <div class="capacity-item">
+            <span>Lunch</span>
+            <input type="number" id="capacity-lunch" value="50" min="1" max="200" /> guests
+          </div>
+          <div class="capacity-item">
             <span>Dinner 1 (First Seating)</span>
             <input type="number" id="capacity-dinner1" value="50" min="1" max="200" /> guests
           </div>
@@ -210,44 +214,66 @@ import '../../../styles/coyol-tables.css';
     }
     
     .blocked-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
     }
     
     .blocked-item {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 16px;
-      background: #1a1a1a;
-      border-radius: 8px;
-      border-left: 3px solid #3D4F3D;
+      flex-direction: column;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #2a2a2a 0%, #222222 100%);
+      border-radius: 12px;
+      border: 1px solid #3a3a3a;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .blocked-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      border-color: #3D4F3D;
+    }
+    
+    .blocked-item .event-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
     }
     
     .blocked-item .date {
-      color: #ffffff !important;
-      font-weight: 600;
+      color: #C4A67C !important;
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 4px;
     }
     
     .blocked-item .reason {
-      color: #cccccc !important;
-      font-size: 13px;
+      color: #ffffff !important;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 12px;
+      line-height: 1.4;
     }
     
     .blocked-item .btn-unblock {
-      padding: 6px 12px;
+      align-self: flex-start;
+      padding: 8px 16px;
       background: transparent;
-      border: 1px solid #666;
-      color: #999;
+      border: 1px solid #555;
+      color: #888;
       border-radius: 6px;
       cursor: pointer;
       font-size: 12px;
+      font-weight: 500;
+      transition: all 0.2s;
     }
     
     .blocked-item .btn-unblock:hover {
       border-color: #ff6b6b;
       color: #ff6b6b;
+      background: rgba(255,107,107,0.1);
     }
     
     .empty-state {
@@ -324,15 +350,23 @@ import '../../../styles/coyol-tables.css';
           return;
         }
         
-        list.innerHTML = dates.map(d => `
-          <div class="blocked-item">
-            <div>
+        list.innerHTML = dates.map(d => {
+          const reason = (d.reason || '').toLowerCase();
+          let icon = '📅';
+          if (reason.includes('wedding')) icon = '💒';
+          else if (reason.includes('party') || reason.includes('event')) icon = '🎉';
+          else if (reason.includes('closed') || reason.includes('cerrado')) icon = '🚫';
+          else if (reason.includes('vacation') || reason.includes('holiday')) icon = '🏖️';
+          
+          return `
+            <div class="blocked-item">
+              <div class="event-icon">${icon}</div>
               <div class="date">${formatDate(d.date)}</div>
-              <div class="reason">${d.reason || 'No reason specified'}</div>
+              <div class="reason">${d.reason || 'Private Event'}</div>
+              <button class="btn-unblock" onclick="unblockDate('${d.id}')">Unblock</button>
             </div>
-            <button class="btn-unblock" onclick="unblockDate('${d.id}')">Unblock</button>
-          </div>
-        `).join('');
+          `;
+        }).join('');
       } catch (e) {
         console.error('Error loading blocked dates:', e);
       }
@@ -502,9 +536,6 @@ import '../../../styles/coyol-tables.css';
     window.saveTimeSlots = saveTimeSlots;
     
     // Capacity
-    const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
-    
     async function loadCapacity() {
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/restaurant_settings?key=eq.coyol_capacity`, {
@@ -513,6 +544,7 @@ import '../../../styles/coyol-tables.css';
         const data = await res.json();
         if (data.length > 0 && data[0].value) {
           const cap = JSON.parse(data[0].value);
+          document.getElementById('capacity-lunch').value = cap.lunch || 50;
           document.getElementById('capacity-dinner1').value = cap.dinner1 || 50;
           document.getElementById('capacity-dinner2').value = cap.dinner2 || 50;
         }
@@ -529,6 +561,7 @@ import '../../../styles/coyol-tables.css';
       
       try {
         const cap = {
+          lunch: parseInt(document.getElementById('capacity-lunch').value) || 50,
           dinner1: parseInt(document.getElementById('capacity-dinner1').value) || 50,
           dinner2: parseInt(document.getElementById('capacity-dinner2').value) || 50
         };
