@@ -1616,8 +1616,10 @@ export const prerender = false;
     
     // Add relationship
     async function addRelationship() {
+      console.log('addRelationship called');
       const fromId = document.getElementById('relFrom').value;
       const toId = document.getElementById('relTo').value;
+      console.log('From:', fromId, 'To:', toId);
       
       if (fromId === toId) return alert('Cannot create relationship to same company');
       
