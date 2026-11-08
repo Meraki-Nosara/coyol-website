@@ -918,7 +918,7 @@ export const prerender = false;
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeModal('addRelationshipModal')">Cancel</button>
-        <button class="btn btn-primary" onclick="addRelationship()">Create Relationship</button>
+        <button class="btn btn-primary" id="btnCreateRelationship">Create Relationship</button>
       </div>
     </div>
   </div>
@@ -1453,12 +1453,12 @@ export const prerender = false;
     }
     
     function getCompanyRelationships(companyId) {
-      const rels = relationships.filter(r => r.from === companyId || r.to === companyId);
+      const rels = relationships.filter(r => r.from_company === companyId || r.to_company === companyId);
       if (rels.length === 0) return '<div style="color: var(--text-muted); font-size: 13px;">No relationships</div>';
       
       return rels.map(r => {
-        const other = r.from === companyId ? companies.find(c => c.id === r.to) : companies.find(c => c.id === r.from);
-        const direction = r.from === companyId ? '→' : '←';
+        const other = r.from_company === companyId ? companies.find(c => c.id === r.to_company) : companies.find(c => c.id === r.from_company);
+        const direction = r.from_company === companyId ? '→' : '←';
         return `
           <div class="doc-item" onclick="selectRelationship(relationships.find(rel => rel.id === '${r.id}'))">
             <div class="doc-icon">${direction}</div>
@@ -1621,12 +1621,16 @@ export const prerender = false;
       const toId = document.getElementById('relTo').value;
       console.log('From:', fromId, 'To:', toId);
       
+      if (!fromId || !toId) {
+        alert('Please select both companies');
+        return;
+      }
       if (fromId === toId) return alert('Cannot create relationship to same company');
       
       const newRel = {
         id: 'r_' + Date.now(),
-        from: fromId,
-        to: toId,
+        from_company: fromId,
+        to_company: toId,
         type: document.getElementById('relType').value,
         description: document.getElementById('relDescription').value.trim() || null,
         amount: document.getElementById('relAmount').value.trim() || null,
@@ -1637,19 +1641,18 @@ export const prerender = false;
       
       // Save to Supabase
       try {
-        await fetch(`${SUPABASE_URL}/rest/v1/corp_relationships`, {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/corp_relationships`, {
           method: 'POST',
           headers: {
             'apikey': SUPABASE_KEY,
             'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Prefer': 'return=representation'
           },
-          body: JSON.stringify({
-            ...newRel,
-            from_company: fromId,
-            to_company: toId
-          })
+          body: JSON.stringify(newRel)
         });
+        const data = await res.json();
+        console.log('Saved:', data);
       } catch (e) {
         console.log('Save pending:', e);
       }
@@ -2046,6 +2049,13 @@ export const prerender = false;
     // Add close button listener directly
     document.querySelector('.panel-close')?.addEventListener('click', closePanel);
     document.querySelector('#rightPanel .panel-close')?.addEventListener('click', closePanel);
+    
+    // Add Create Relationship button listener
+    document.getElementById('btnCreateRelationship')?.addEventListener('click', function(e) {
+      e.preventDefault();
+      console.log('Create button clicked');
+      addRelationship();
+    });
   </script>
 </body>
 </html>
