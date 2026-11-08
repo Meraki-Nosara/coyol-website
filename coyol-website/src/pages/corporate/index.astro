@@ -786,6 +786,11 @@ export const prerender = false;
             <button data-mode="planned">Planned</button>
             <button data-mode="history">History</button>
           </div>
+          <div class="toolbar-separator"></div>
+          <div class="view-toggle" id="langToggle">
+            <button class="active" data-lang="en">EN</button>
+            <button data-lang="es">ES</button>
+          </div>
         </div>
       </div>
 
@@ -922,6 +927,198 @@ export const prerender = false;
     const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
     // Access codes validated against corp_access_codes table
+    
+    // Language
+    let currentLang = localStorage.getItem('corp_lang') || 'en';
+    
+    const translations = {
+      en: {
+        // Auth
+        title: 'Corporate Structure',
+        enterCode: 'Enter access code to continue',
+        accessPlatform: 'Access Platform',
+        invalidCode: 'Invalid access code',
+        verifying: 'Verifying...',
+        connectionError: 'Connection error',
+        // Sidebar
+        corporateMap: 'Corporate Map',
+        companies: 'Companies',
+        relationships: 'Relationships',
+        documents: 'Documents',
+        properties: 'Properties',
+        // Toolbar
+        addCompany: 'Add Company',
+        connect: 'Connect',
+        autoLayout: 'Auto Layout',
+        current: 'Current',
+        planned: 'Planned',
+        history: 'History',
+        // Company types
+        holding: 'Holding',
+        operating: 'Operating',
+        realestate: 'Real Estate',
+        plannedType: 'Planned',
+        // Status
+        active: 'Active',
+        inactive: 'Inactive',
+        // Panel
+        companyInfo: 'Company Information',
+        cedula: 'Cédula',
+        type: 'Type',
+        activity: 'Activity',
+        status: 'Status',
+        editCompany: '✏️ Edit Company',
+        addRelationship: '+ Add Relationship',
+        docs: 'docs',
+        noDocs: 'No documents uploaded yet',
+        clickUpload: 'Click to upload',
+        orDragDrop: 'or drag and drop',
+        // Modals
+        companyName: 'Company Name',
+        cedulaJuridica: 'Cédula Jurídica',
+        companyType: 'Company Type',
+        businessActivity: 'Business Activity',
+        notes: 'Notes',
+        cancel: 'Cancel',
+        saveChanges: 'Save Changes',
+        createRelationship: 'Create Relationship',
+        fromCompany: 'From Company',
+        toCompany: 'To Company',
+        relationshipType: 'Relationship Type',
+        description: 'Description',
+        amount: 'Amount (if applicable)',
+        // Relationship types
+        ownership: 'Ownership / Shareholding',
+        financing: 'Intercompany Loan / Financing',
+        services: 'Services Agreement',
+        property: 'Property Transaction',
+        other: 'Other Contractual',
+        // Relationship status
+        verified: 'Verified / Documented',
+        pending: 'Pending Verification',
+        // Actions
+        delete: 'Delete',
+        deleteConfirm: 'Delete this relationship?'
+      },
+      es: {
+        // Auth
+        title: 'Estructura Corporativa',
+        enterCode: 'Ingrese código de acceso',
+        accessPlatform: 'Acceder',
+        invalidCode: 'Código inválido',
+        verifying: 'Verificando...',
+        connectionError: 'Error de conexión',
+        // Sidebar
+        corporateMap: 'Mapa Corporativo',
+        companies: 'Empresas',
+        relationships: 'Relaciones',
+        documents: 'Documentos',
+        properties: 'Propiedades',
+        // Toolbar
+        addCompany: 'Agregar Empresa',
+        connect: 'Conectar',
+        autoLayout: 'Organizar',
+        current: 'Actual',
+        planned: 'Planeado',
+        history: 'Historial',
+        // Company types
+        holding: 'Holding',
+        operating: 'Operativa',
+        realestate: 'Inmobiliaria',
+        plannedType: 'Planeada',
+        // Status
+        active: 'Activa',
+        inactive: 'Inactiva',
+        // Panel
+        companyInfo: 'Información de la Empresa',
+        cedula: 'Cédula',
+        type: 'Tipo',
+        activity: 'Actividad',
+        status: 'Estado',
+        editCompany: '✏️ Editar Empresa',
+        addRelationship: '+ Agregar Relación',
+        docs: 'docs',
+        noDocs: 'Sin documentos',
+        clickUpload: 'Clic para subir',
+        orDragDrop: 'o arrastrar',
+        // Modals
+        companyName: 'Nombre de Empresa',
+        cedulaJuridica: 'Cédula Jurídica',
+        companyType: 'Tipo de Empresa',
+        businessActivity: 'Actividad Comercial',
+        notes: 'Notas',
+        cancel: 'Cancelar',
+        saveChanges: 'Guardar',
+        createRelationship: 'Crear Relación',
+        fromCompany: 'Empresa Origen',
+        toCompany: 'Empresa Destino',
+        relationshipType: 'Tipo de Relación',
+        description: 'Descripción',
+        amount: 'Monto (si aplica)',
+        // Relationship types
+        ownership: 'Propiedad / Participación',
+        financing: 'Préstamo Intercompañía',
+        services: 'Contrato de Servicios',
+        property: 'Transacción Inmobiliaria',
+        other: 'Otro Contractual',
+        // Relationship status
+        verified: 'Verificado / Documentado',
+        pending: 'Pendiente de Verificación',
+        // Actions
+        delete: 'Eliminar',
+        deleteConfirm: '¿Eliminar esta relación?'
+      }
+    };
+    
+    function t(key) {
+      return translations[currentLang][key] || translations['en'][key] || key;
+    }
+    
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('corp_lang', lang);
+      updateUILanguage();
+    }
+    
+    function updateUILanguage() {
+      // Update static elements
+      document.querySelector('.auth-box h1').textContent = t('title');
+      document.querySelector('.auth-box p').textContent = t('enterCode');
+      document.querySelector('.auth-box button').textContent = t('accessPlatform');
+      document.getElementById('authError').textContent = t('invalidCode');
+      
+      // Sidebar
+      const navItems = document.querySelectorAll('.nav-item span:last-child');
+      const navKeys = ['corporateMap', 'companies', 'relationships', 'documents', 'properties'];
+      navItems.forEach((item, i) => {
+        if (navKeys[i]) item.textContent = t(navKeys[i]);
+      });
+      
+      // Toolbar buttons
+      document.querySelector('.toolbar-btn.primary').innerHTML = `<span>+</span> ${t('addCompany')}`;
+      document.querySelectorAll('.toolbar-btn')[1].innerHTML = `<span>🔗</span> ${t('connect')}`;
+      document.querySelectorAll('.toolbar-btn')[2].innerHTML = `<span>📐</span> ${t('autoLayout')}`;
+      
+      // View toggle
+      const viewBtns = document.querySelectorAll('.view-toggle:first-child button');
+      if (viewBtns.length >= 3) {
+        viewBtns[0].textContent = t('current');
+        viewBtns[1].textContent = t('planned');
+        viewBtns[2].textContent = t('history');
+      }
+      
+      // Update lang toggle active state
+      document.querySelectorAll('#langToggle button').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === currentLang);
+      });
+      
+      // Re-render if data loaded
+      if (companies.length > 0) {
+        renderCompanies();
+        renderConnections();
+        if (selectedCompany) selectCompany(selectedCompany);
+      }
+    }
     
     // State
     let companies = [];
@@ -1788,15 +1985,28 @@ export const prerender = false;
     }
     
     // View mode toggle
-    document.querySelectorAll('.view-toggle button').forEach(btn => {
+    document.querySelectorAll('.view-toggle:not(#langToggle) button').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+        const parent = btn.closest('.view-toggle');
+        parent.querySelectorAll('button').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         
         const mode = btn.dataset.mode;
         // TODO: Filter view based on mode
         console.log('View mode:', mode);
       });
+    });
+    
+    // Language toggle
+    document.querySelectorAll('#langToggle button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        setLanguage(btn.dataset.lang);
+      });
+    });
+    
+    // Initialize language on load
+    document.addEventListener('DOMContentLoaded', () => {
+      updateUILanguage();
     });
     
     // Nav items
