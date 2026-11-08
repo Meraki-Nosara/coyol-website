@@ -1,0 +1,1839 @@
+---
+// Corporate Structure Platform - Main Map View
+// Password protected - Marion only initially
+export const prerender = false;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corporate Structure | Coyol Group</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0f1419;
+      --bg-card: #1a1f26;
+      --bg-panel: #232a33;
+      --border: #2d3640;
+      --text: #e7e9ea;
+      --text-muted: #8b98a5;
+      --accent: #C4A67C;
+      --accent-hover: #d4b88c;
+      --holding: #3D4F3D;
+      --operating: #4A90A4;
+      --realestate: #A65D3F;
+      --planned: #6B7280;
+      --success: #22c55e;
+      --warning: #f59e0b;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      overflow: hidden;
+      height: 100vh;
+    }
+    
+    /* Auth Screen */
+    #authScreen {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    
+    .auth-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 48px;
+      text-align: center;
+      max-width: 400px;
+    }
+    
+    .auth-box h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+    
+    .auth-box p {
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+    
+    .auth-box input {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 16px;
+      text-align: center;
+      letter-spacing: 4px;
+      margin-bottom: 16px;
+    }
+    
+    .auth-box input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    
+    .auth-box button {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: var(--bg-dark);
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .auth-box button:hover {
+      background: var(--accent-hover);
+    }
+    
+    .auth-error {
+      color: #ef4444;
+      font-size: 14px;
+      margin-top: 12px;
+      display: none;
+    }
+    
+    /* Main Layout */
+    #app {
+      display: none;
+      height: 100vh;
+    }
+    
+    #app.active {
+      display: flex;
+    }
+    
+    /* Sidebar */
+    #sidebar {
+      width: 260px;
+      background: var(--bg-card);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .sidebar-header h1 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+    
+    .sidebar-header span {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    
+    .sidebar-nav {
+      padding: 16px 12px;
+      flex: 1;
+    }
+    
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 4px;
+    }
+    
+    .nav-item:hover, .nav-item.active {
+      background: var(--bg-panel);
+      color: var(--text);
+    }
+    
+    .nav-item.active {
+      border-left: 3px solid var(--accent);
+    }
+    
+    .nav-icon {
+      font-size: 18px;
+    }
+    
+    /* Toolbar */
+    #toolbar {
+      height: 56px;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 12px;
+    }
+    
+    .toolbar-btn {
+      padding: 8px 16px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    
+    .toolbar-btn:hover {
+      background: var(--border);
+    }
+    
+    .toolbar-btn.primary {
+      background: var(--accent);
+      color: var(--bg-dark);
+      border-color: var(--accent);
+    }
+    
+    .toolbar-btn.primary:hover {
+      background: var(--accent-hover);
+    }
+    
+    .toolbar-separator {
+      width: 1px;
+      height: 24px;
+      background: var(--border);
+      margin: 0 8px;
+    }
+    
+    .toolbar-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .view-toggle {
+      display: flex;
+      background: var(--bg-panel);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    
+    .view-toggle button {
+      padding: 8px 16px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      cursor: pointer;
+    }
+    
+    .view-toggle button.active {
+      background: var(--accent);
+      color: var(--bg-dark);
+    }
+    
+    /* Canvas Area */
+    #canvasContainer {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+    
+    #canvas {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      background: 
+        radial-gradient(circle at center, var(--bg-panel) 1px, transparent 1px);
+      background-size: 30px 30px;
+      cursor: grab;
+    }
+    
+    #canvas:active {
+      cursor: grabbing;
+    }
+    
+    #canvasContent {
+      position: absolute;
+      transform-origin: 0 0;
+      width: 4000px;
+      height: 3000px;
+    }
+    
+    /* Company Cards - use :global for dynamically created elements */
+    :global(.company-card) {
+      position: absolute;
+      width: 220px;
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      cursor: move;
+      user-select: none;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    
+    :global(.company-card):hover {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    
+    :global(.company-card.selected) {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(196, 166, 124, 0.2);
+    }
+    
+    :global(.company-card.holding) { border-top: 4px solid var(--holding); }
+    :global(.company-card.operating) { border-top: 4px solid var(--operating); }
+    :global(.company-card.realestate) { border-top: 4px solid var(--realestate); }
+    :global(.company-card.planned) { border-top: 4px solid var(--planned); border-style: dashed; }
+    
+    :global(.card-header) {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    :global(.card-type) {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    
+    :global(.card-name) {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    
+    :global(.card-body) {
+      padding: 12px 16px;
+    }
+    
+    :global(.card-cedula) {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+    
+    :global(.card-status) {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      margin-top: 8px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: var(--bg-panel);
+    }
+    
+    :global(.status-dot) {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    
+    :global(.status-dot.active) { background: var(--success); }
+    :global(.status-dot.planned) { background: var(--warning); }
+    
+    :global(.card-footer) {
+      padding: 8px 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    :global(.card-docs) {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    
+    :global(.card-connector) {
+      width: 12px;
+      height: 12px;
+      background: var(--accent);
+      border-radius: 50%;
+      cursor: crosshair;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    
+    :global(.company-card):hover :global(.card-connector) {
+      opacity: 1;
+    }
+    
+    /* Connection Lines */
+    #svgLayer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4000px;
+      height: 3000px;
+      pointer-events: none;
+      overflow: visible;
+    }
+    
+    :global(.connection) {
+      stroke: var(--accent);
+      stroke-width: 2;
+      fill: none;
+      pointer-events: stroke;
+      cursor: pointer;
+    }
+    
+    :global(.connection):hover {
+      stroke-width: 4;
+    }
+    
+    :global(.connection.ownership) { stroke: var(--holding); }
+    :global(.connection.financing) { stroke: var(--operating); }
+    :global(.connection.property) { stroke: var(--realestate); }
+    :global(.connection.planned) { stroke-dasharray: 8 4; stroke: var(--planned); }
+    
+    :global(.connection-label) {
+      font-size: 11px;
+      fill: var(--text-muted);
+      pointer-events: none;
+    }
+    
+    /* Right Panel */
+    #rightPanel {
+      width: 380px;
+      background: var(--bg-card);
+      border-left: 1px solid var(--border);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    #rightPanel.open {
+      display: flex;
+    }
+    
+    .panel-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .panel-header h2 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .panel-close, :global(.panel-close) {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-panel);
+      border: none;
+      border-radius: 6px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 18px;
+    }
+    
+    .panel-close:hover {
+      color: var(--text);
+    }
+    
+    .panel-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    
+    .panel-section {
+      margin-bottom: 24px;
+    }
+    
+    .panel-section h3 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    
+    .info-label {
+      color: var(--text-muted);
+    }
+    
+    .info-value {
+      color: var(--text);
+      font-weight: 500;
+    }
+    
+    /* Documents List */
+    .doc-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .doc-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: var(--bg-panel);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .doc-item:hover {
+      background: var(--border);
+    }
+    
+    .doc-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--bg-dark);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    
+    .doc-info {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .doc-name {
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .doc-date {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    
+    /* Upload Zone */
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .upload-zone:hover {
+      border-color: var(--accent);
+      background: rgba(196, 166, 124, 0.05);
+    }
+    
+    .upload-zone p {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    
+    .upload-zone span {
+      color: var(--accent);
+      font-weight: 500;
+    }
+    
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 500;
+    }
+    
+    .modal-overlay.open {
+      display: flex;
+    }
+    
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    .modal-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .modal-header h2 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    
+    .modal-body {
+      padding: 20px;
+      overflow-y: auto;
+      flex: 1;
+      max-height: calc(85vh - 140px);
+    }
+    
+    .form-group {
+      margin-bottom: 16px;
+    }
+    
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 14px;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    
+    .modal-footer, :global(.modal-footer) {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+    
+    .btn, :global(.btn) {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    
+    .btn-secondary, :global(.btn-secondary) {
+      background: var(--bg-panel);
+      color: var(--text);
+    }
+    
+    .btn-primary, :global(.btn-primary) {
+      background: var(--accent);
+      color: var(--bg-dark);
+    }
+    
+    .btn:hover, :global(.btn):hover {
+      opacity: 0.9;
+    }
+    
+    /* Zoom Controls */
+    .zoom-controls {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      z-index: 100;
+    }
+    
+    .zoom-btn {
+      width: 40px;
+      height: 40px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .zoom-btn:hover {
+      background: var(--bg-panel);
+    }
+    
+    .zoom-level {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 4px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Auth Screen -->
+  <div id="authScreen">
+    <div class="auth-box">
+      <h1>Corporate Structure</h1>
+      <p>Enter access code to continue</p>
+      <input type="password" id="accessCode" placeholder="••••••••" maxlength="20" autofocus>
+      <button onclick="authenticate()">Access Platform</button>
+      <p class="auth-error" id="authError">Invalid access code</p>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app">
+    <!-- Sidebar -->
+    <div id="sidebar">
+      <div class="sidebar-header">
+        <h1>Coyol Group</h1>
+        <span>Corporate Structure</span>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-item active" data-view="map">
+          <span class="nav-icon">🗺️</span>
+          <span>Corporate Map</span>
+        </div>
+        <div class="nav-item" data-view="companies">
+          <span class="nav-icon">🏢</span>
+          <span>Companies</span>
+        </div>
+        <div class="nav-item" data-view="relationships">
+          <span class="nav-icon">🔗</span>
+          <span>Relationships</span>
+        </div>
+        <div class="nav-item" data-view="documents">
+          <span class="nav-icon">📄</span>
+          <span>Documents</span>
+        </div>
+        <div class="nav-item" data-view="properties">
+          <span class="nav-icon">🏠</span>
+          <span>Properties</span>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+      <!-- Toolbar -->
+      <div id="toolbar">
+        <button class="toolbar-btn primary" onclick="openAddCompanyModal()">
+          <span>+</span> Add Company
+        </button>
+        <button class="toolbar-btn" onclick="toggleConnectionMode()">
+          <span>🔗</span> Connect
+        </button>
+        <div class="toolbar-separator"></div>
+        <button class="toolbar-btn" onclick="autoLayout()">
+          <span>📐</span> Auto Layout
+        </button>
+        
+        <div class="toolbar-right">
+          <div class="view-toggle">
+            <button class="active" data-mode="current">Current</button>
+            <button data-mode="planned">Planned</button>
+            <button data-mode="history">History</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Canvas Container -->
+      <div id="canvasContainer">
+        <div id="canvas">
+          <div id="canvasContent">
+            <svg id="svgLayer"></svg>
+          </div>
+          
+          <!-- Zoom Controls -->
+          <div class="zoom-controls">
+            <button class="zoom-btn" onclick="zoomIn()">+</button>
+            <div class="zoom-level" id="zoomLevel">100%</div>
+            <button class="zoom-btn" onclick="zoomOut()">−</button>
+            <button class="zoom-btn" onclick="resetView()" style="margin-top: 8px; font-size: 14px;">⌂</button>
+          </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div id="rightPanel">
+          <div class="panel-header">
+            <h2 id="panelTitle">Company Details</h2>
+            <button class="panel-close" onclick="closePanel()">×</button>
+          </div>
+          <div class="panel-content" id="panelContent">
+            <!-- Dynamic content -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Company Modal -->
+  <div class="modal-overlay" id="addCompanyModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Add Company</h2>
+        <button class="panel-close" onclick="closeModal('addCompanyModal')">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Company Name *</label>
+          <input type="text" id="companyName" placeholder="e.g., Desarrollo Rancho Mar Azul S.A.">
+        </div>
+        <div class="form-group">
+          <label>Cédula Jurídica</label>
+          <input type="text" id="companyCedula" placeholder="e.g., 3-102-861529">
+        </div>
+        <div class="form-group">
+          <label>Company Type *</label>
+          <select id="companyType">
+            <option value="holding">Holding Company</option>
+            <option value="operating">Operating Company</option>
+            <option value="realestate">Real Estate / Development</option>
+            <option value="planned">Planned (Not Yet Incorporated)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Business Activity</label>
+          <input type="text" id="companyActivity" placeholder="e.g., Restaurant Operations">
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="companyStatus">
+            <option value="active">Active</option>
+            <option value="planned">Planned</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <textarea id="companyNotes" rows="3" placeholder="Additional information..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('addCompanyModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="addCompany()">Add Company</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Relationship Modal -->
+  <div class="modal-overlay" id="addRelationshipModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Create Relationship</h2>
+        <button class="panel-close" onclick="closeModal('addRelationshipModal')">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>From Company</label>
+          <select id="relFrom"></select>
+        </div>
+        <div class="form-group">
+          <label>To Company</label>
+          <select id="relTo"></select>
+        </div>
+        <div class="form-group">
+          <label>Relationship Type *</label>
+          <select id="relType">
+            <option value="ownership">Ownership / Shareholding</option>
+            <option value="financing">Intercompany Loan / Financing</option>
+            <option value="services">Services Agreement</option>
+            <option value="property">Property Transaction</option>
+            <option value="other">Other Contractual</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" id="relDescription" placeholder="e.g., 100% ownership">
+        </div>
+        <div class="form-group">
+          <label>Amount (if applicable)</label>
+          <input type="text" id="relAmount" placeholder="e.g., ₡100,000,000">
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="relStatus">
+            <option value="verified">Verified / Documented</option>
+            <option value="planned">Planned / Proposed</option>
+            <option value="pending">Pending Verification</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('addRelationshipModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="addRelationship()">Create Relationship</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://mnxjzvqgrrodalcmtntf.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_gO-cG9R8SahPuHyZRaeA_w_ajibiSiD';
+    // Access codes validated against corp_access_codes table
+    
+    // State
+    let companies = [];
+    let relationships = [];
+    let selectedCompany = null;
+    let selectedRelationship = null;
+    let connectionMode = false;
+    let connectionStart = null;
+    
+    // Canvas state
+    let scale = 1;
+    let panX = 0;
+    let panY = 0;
+    let isPanning = false;
+    let startPanX, startPanY;
+    
+    // Auth - validate against database
+    async function authenticate() {
+      const code = document.getElementById('accessCode').value.trim().toUpperCase();
+      const btn = document.querySelector('.auth-box button');
+      btn.textContent = 'Verifying...';
+      btn.disabled = true;
+      
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/corp_access_codes?code=eq.${code}&active=eq.true&select=name,role`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const data = await res.json();
+        
+        if (data.length > 0) {
+          document.getElementById('authScreen').style.display = 'none';
+          document.getElementById('app').classList.add('active');
+          localStorage.setItem('corp_auth', code);
+          localStorage.setItem('corp_user', data[0].name);
+          localStorage.setItem('corp_role', data[0].role);
+          loadData();
+        } else {
+          document.getElementById('authError').style.display = 'block';
+          btn.textContent = 'Access Platform';
+          btn.disabled = false;
+        }
+      } catch (e) {
+        console.error('Auth error:', e);
+        document.getElementById('authError').textContent = 'Connection error';
+        document.getElementById('authError').style.display = 'block';
+        btn.textContent = 'Access Platform';
+        btn.disabled = false;
+      }
+    }
+    
+    // Check existing auth
+    async function checkExistingAuth() {
+      const storedCode = localStorage.getItem('corp_auth');
+      if (storedCode) {
+        try {
+          const res = await fetch(`${SUPABASE_URL}/rest/v1/corp_access_codes?code=eq.${storedCode}&active=eq.true&select=name,role`, {
+            headers: { 'apikey': SUPABASE_KEY }
+          });
+          const data = await res.json();
+          if (data.length > 0) {
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('app').classList.add('active');
+            loadData();
+            return;
+          }
+        } catch (e) {
+          console.error('Auth check error:', e);
+        }
+        localStorage.removeItem('corp_auth');
+      }
+    }
+    checkExistingAuth();
+    
+    document.getElementById('accessCode').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') authenticate();
+    });
+    
+    // Data loading
+    async function loadData() {
+      try {
+        // Load companies
+        const compRes = await fetch(`${SUPABASE_URL}/rest/v1/corp_companies?select=*&order=created_at.asc`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        if (compRes.ok) {
+          companies = await compRes.json();
+        }
+        
+        // Load relationships
+        const relRes = await fetch(`${SUPABASE_URL}/rest/v1/corp_relationships?select=*`, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        if (relRes.ok) {
+          relationships = await relRes.json();
+        }
+      } catch (e) {
+        console.log('Loading with defaults:', e);
+      }
+      
+      // Default companies if empty
+      if (companies.length === 0) {
+        companies = [
+          { id: 'holding', name: 'Sociedad 3-102-861529', cedula: '3-102-861529', type: 'holding', activity: 'Holding Company', status: 'active', x: 400, y: 100, docs: 0 },
+          { id: 'meraki', name: 'Meraki Family Ltda.', cedula: '3-102-XXXXXX', type: 'operating', activity: 'Restaurant Operations', status: 'active', x: 200, y: 300, docs: 0 },
+          { id: 'drma', name: 'Desarrollo Rancho Mar Azul S.A.', cedula: '3-101-XXXXXX', type: 'realestate', activity: 'Real Estate Development', status: 'active', x: 600, y: 300, docs: 0 },
+          { id: 'coyolgroup', name: 'Coyol Group', cedula: 'Pending', type: 'planned', activity: 'Development Company', status: 'planned', x: 600, y: 500, docs: 0 }
+        ];
+        
+        relationships = [
+          { id: 'r1', from: 'holding', to: 'meraki', type: 'ownership', description: 'Acquisition of 100% of Meraki', amount: '₡100M', status: 'verified' },
+          { id: 'r2', from: 'holding', to: 'drma', type: 'financing', description: 'Intercompany financing up to ₡500M', amount: '₡500M authorized', status: 'verified' },
+          { id: 'r3', from: 'drma', to: 'coyolgroup', type: 'property', description: 'Planned sale of development lots', amount: 'TBD', status: 'planned' }
+        ];
+      }
+      
+      renderCompanies();
+      renderConnections();
+    }
+    
+    // Render companies on canvas
+    function renderCompanies() {
+      const container = document.getElementById('canvasContent');
+      container.innerHTML = '';
+      
+      companies.forEach(company => {
+        const card = document.createElement('div');
+        card.className = `company-card ${company.type}`;
+        card.id = `company-${company.id}`;
+        card.style.left = `${company.x || 100}px`;
+        card.style.top = `${company.y || 100}px`;
+        
+        const statusClass = company.status === 'active' ? 'active' : 'planned';
+        const typeLabel = {
+          'holding': 'Holding',
+          'operating': 'Operating',
+          'realestate': 'Real Estate',
+          'planned': 'Planned'
+        }[company.type] || company.type;
+        
+        card.innerHTML = `
+          <div class="card-header">
+            <div class="card-type">${typeLabel}</div>
+            <div class="card-name">${company.name}</div>
+          </div>
+          <div class="card-body">
+            <div class="card-cedula">${company.cedula || 'No cédula'}</div>
+            <div class="card-status">
+              <span class="status-dot ${statusClass}"></span>
+              ${company.status === 'active' ? 'Active' : 'Planned'}
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="card-docs">📄 ${company.docs || 0} docs</span>
+            <div class="card-connector" data-company="${company.id}" title="Drag to connect"></div>
+          </div>
+        `;
+        
+        // Drag functionality
+        let isDragging = false;
+        let startX, startY, origX, origY;
+        
+        card.addEventListener('mousedown', (e) => {
+          if (e.target.classList.contains('card-connector')) {
+            // Start connection
+            if (connectionMode) {
+              connectionStart = company.id;
+              card.classList.add('selected');
+            }
+            return;
+          }
+          
+          isDragging = true;
+          startX = e.clientX;
+          startY = e.clientY;
+          origX = company.x || 100;
+          origY = company.y || 100;
+          card.style.zIndex = 100;
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+          if (!isDragging) return;
+          const dx = (e.clientX - startX) / scale;
+          const dy = (e.clientY - startY) / scale;
+          company.x = Math.max(0, origX + dx);
+          company.y = Math.max(0, origY + dy);
+          card.style.left = `${company.x}px`;
+          card.style.top = `${company.y}px`;
+          renderConnections();
+        });
+        
+        document.addEventListener('mouseup', () => {
+          if (isDragging) {
+            isDragging = false;
+            card.style.zIndex = '';
+            savePositions();
+          }
+        });
+        
+        // Click to select or connect
+        card.addEventListener('click', (e) => {
+          if (isDragging) return;
+          
+          // Connection mode
+          if (connectionMode) {
+            if (!connectionStart) {
+              // First click - start connection
+              connectionStart = company.id;
+              card.classList.add('selected');
+              console.log('Connection started from:', company.name);
+            } else if (connectionStart !== company.id) {
+              // Second click - complete connection
+              console.log('Connection to:', company.name);
+              openAddRelationshipModal(connectionStart, company.id);
+              connectionStart = null;
+              document.querySelectorAll('.company-card').forEach(c => c.classList.remove('selected'));
+            }
+            return;
+          }
+          
+          // Normal mode - select company
+          selectCompany(company);
+        });
+        
+        container.appendChild(card);
+      });
+    }
+    
+    // Render connections (SVG lines)
+    function renderConnections() {
+      const svg = document.getElementById('svgLayer');
+      svg.innerHTML = '';
+      
+      relationships.forEach(rel => {
+        const fromCard = document.getElementById(`company-${rel.from}`);
+        const toCard = document.getElementById(`company-${rel.to}`);
+        
+        if (!fromCard || !toCard) return;
+        
+        const fromRect = fromCard.getBoundingClientRect();
+        const toRect = toCard.getBoundingClientRect();
+        const canvasRect = document.getElementById('canvas').getBoundingClientRect();
+        
+        // Get positions relative to canvas
+        const fromCompany = companies.find(c => c.id === rel.from);
+        const toCompany = companies.find(c => c.id === rel.to);
+        
+        if (!fromCompany || !toCompany) return;
+        
+        const x1 = (fromCompany.x || 100) + 110; // Center of card
+        const y1 = (fromCompany.y || 100) + 80;  // Bottom of card
+        const x2 = (toCompany.x || 100) + 110;
+        const y2 = (toCompany.y || 100);
+        
+        // Create path
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const midY = (y1 + y2) / 2;
+        const d = `M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`;
+        
+        path.setAttribute('d', d);
+        path.setAttribute('class', `connection ${rel.type} ${rel.status === 'planned' ? 'planned' : ''}`);
+        path.setAttribute('data-rel-id', rel.id);
+        path.style.pointerEvents = 'stroke';
+        
+        path.addEventListener('click', () => selectRelationship(rel));
+        
+        svg.appendChild(path);
+        
+        // Add label
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', (x1 + x2) / 2);
+        text.setAttribute('y', midY - 10);
+        text.setAttribute('class', 'connection-label');
+        text.setAttribute('text-anchor', 'middle');
+        text.textContent = rel.description?.substring(0, 30) || rel.type;
+        svg.appendChild(text);
+      });
+    }
+    
+    // Select company - show panel
+    function selectCompany(company) {
+      selectedCompany = company;
+      selectedRelationship = null;
+      
+      document.querySelectorAll('.company-card').forEach(c => c.classList.remove('selected'));
+      document.getElementById(`company-${company.id}`)?.classList.add('selected');
+      
+      document.getElementById('panelTitle').textContent = company.name;
+      document.getElementById('panelContent').innerHTML = `
+        <div class="panel-section">
+          <h3>Company Information</h3>
+          <div class="info-row">
+            <span class="info-label">Cédula</span>
+            <span class="info-value">${company.cedula || 'Pending'}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Type</span>
+            <span class="info-value">${company.type}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Activity</span>
+            <span class="info-value">${company.activity || '-'}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Status</span>
+            <span class="info-value">${company.status}</span>
+          </div>
+          <button class="btn btn-secondary" style="width: 100%; margin-top: 16px;" onclick="editCompany('${company.id}')">✏️ Edit Company</button>
+        </div>
+        
+        <div class="panel-section">
+          <h3>Relationships</h3>
+          ${getCompanyRelationships(company.id)}
+          <button class="btn btn-secondary" style="width: 100%; margin-top: 12px;" onclick="createRelationshipFrom('${company.id}')">+ Add Relationship</button>
+        </div>
+        
+        <div class="panel-section">
+          <h3>Documents</h3>
+          <div class="doc-list" id="companyDocs">
+            <div style="color: var(--text-muted); font-size: 13px; padding: 12px;">
+              No documents uploaded yet
+            </div>
+          </div>
+          <div class="upload-zone" style="margin-top: 12px;" onclick="uploadDocument('${company.id}')">
+            <p><span>Click to upload</span> or drag and drop</p>
+            <p style="font-size: 11px; margin-top: 4px;">PDF, Word, Excel, Images</p>
+          </div>
+        </div>
+      `;
+      
+      document.getElementById('rightPanel').classList.add('open');
+      loadCompanyDocuments(company.id);
+    }
+    
+    function getCompanyRelationships(companyId) {
+      const rels = relationships.filter(r => r.from === companyId || r.to === companyId);
+      if (rels.length === 0) return '<div style="color: var(--text-muted); font-size: 13px;">No relationships</div>';
+      
+      return rels.map(r => {
+        const other = r.from === companyId ? companies.find(c => c.id === r.to) : companies.find(c => c.id === r.from);
+        const direction = r.from === companyId ? '→' : '←';
+        return `
+          <div class="doc-item" onclick="selectRelationship(relationships.find(rel => rel.id === '${r.id}'))">
+            <div class="doc-icon">${direction}</div>
+            <div class="doc-info">
+              <div class="doc-name">${other?.name || 'Unknown'}</div>
+              <div class="doc-date">${r.description || r.type}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    // Select relationship - show panel
+    function selectRelationship(rel) {
+      selectedRelationship = rel;
+      selectedCompany = null;
+      
+      document.querySelectorAll('.company-card').forEach(c => c.classList.remove('selected'));
+      
+      const fromCompany = companies.find(c => c.id === rel.from);
+      const toCompany = companies.find(c => c.id === rel.to);
+      
+      document.getElementById('panelTitle').textContent = 'Relationship';
+      document.getElementById('panelContent').innerHTML = `
+        <div class="panel-section">
+          <h3>Connection</h3>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 16px; background: var(--bg-panel); border-radius: 8px; margin-bottom: 16px;">
+            <div style="flex: 1; text-align: center;">
+              <div style="font-weight: 600;">${fromCompany?.name || 'Unknown'}</div>
+              <div style="font-size: 11px; color: var(--text-muted);">${fromCompany?.cedula || ''}</div>
+            </div>
+            <div style="font-size: 24px; color: var(--accent);">→</div>
+            <div style="flex: 1; text-align: center;">
+              <div style="font-weight: 600;">${toCompany?.name || 'Unknown'}</div>
+              <div style="font-size: 11px; color: var(--text-muted);">${toCompany?.cedula || ''}</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="panel-section">
+          <h3>Details</h3>
+          <div class="info-row">
+            <span class="info-label">Type</span>
+            <span class="info-value">${rel.type}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Description</span>
+            <span class="info-value">${rel.description || '-'}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Amount</span>
+            <span class="info-value">${rel.amount || '-'}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Status</span>
+            <span class="info-value">${rel.status}</span>
+          </div>
+        </div>
+        
+        <div class="panel-section">
+          <h3>Supporting Documents</h3>
+          <div class="doc-list" id="relDocs">
+            <div style="color: var(--text-muted); font-size: 13px; padding: 12px;">
+              No documents attached
+            </div>
+          </div>
+          <div class="upload-zone" style="margin-top: 12px;" onclick="uploadRelDocument('${rel.id}')">
+            <p><span>Click to upload</span> evidence</p>
+            <p style="font-size: 11px; margin-top: 4px;">Contracts, Actas, Bank statements</p>
+          </div>
+        </div>
+      `;
+      
+      document.getElementById('rightPanel').classList.add('open');
+    }
+    
+    // Close panel
+    function closePanel() {
+      document.getElementById('rightPanel').classList.remove('open');
+      document.querySelectorAll('.company-card').forEach(c => c.classList.remove('selected'));
+      selectedCompany = null;
+      selectedRelationship = null;
+    }
+    
+    // Modal functions
+    function openAddCompanyModal() {
+      document.getElementById('addCompanyModal').classList.add('open');
+    }
+    
+    function openAddRelationshipModal(fromId, toId) {
+      // Populate dropdowns
+      const fromSelect = document.getElementById('relFrom');
+      const toSelect = document.getElementById('relTo');
+      
+      fromSelect.innerHTML = companies.map(c => 
+        `<option value="${c.id}" ${c.id === fromId ? 'selected' : ''}>${c.name}</option>`
+      ).join('');
+      
+      toSelect.innerHTML = companies.map(c => 
+        `<option value="${c.id}" ${c.id === toId ? 'selected' : ''}>${c.name}</option>`
+      ).join('');
+      
+      document.getElementById('addRelationshipModal').classList.add('open');
+    }
+    
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+    
+    // Add company
+    async function addCompany() {
+      const name = document.getElementById('companyName').value.trim();
+      if (!name) return alert('Company name is required');
+      
+      const newCompany = {
+        id: 'c_' + Date.now(),
+        name,
+        cedula: document.getElementById('companyCedula').value.trim() || null,
+        type: document.getElementById('companyType').value,
+        activity: document.getElementById('companyActivity').value.trim() || null,
+        status: document.getElementById('companyStatus').value,
+        notes: document.getElementById('companyNotes').value.trim() || null,
+        x: 300 + Math.random() * 200,
+        y: 200 + Math.random() * 200,
+        docs: 0
+      };
+      
+      companies.push(newCompany);
+      
+      // Save to Supabase
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/corp_companies`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(newCompany)
+        });
+      } catch (e) {
+        console.log('Save pending:', e);
+      }
+      
+      renderCompanies();
+      renderConnections();
+      closeModal('addCompanyModal');
+      
+      // Reset form
+      document.getElementById('companyName').value = '';
+      document.getElementById('companyCedula').value = '';
+      document.getElementById('companyActivity').value = '';
+      document.getElementById('companyNotes').value = '';
+    }
+    
+    // Add relationship
+    async function addRelationship() {
+      const fromId = document.getElementById('relFrom').value;
+      const toId = document.getElementById('relTo').value;
+      
+      if (fromId === toId) return alert('Cannot create relationship to same company');
+      
+      const newRel = {
+        id: 'r_' + Date.now(),
+        from: fromId,
+        to: toId,
+        type: document.getElementById('relType').value,
+        description: document.getElementById('relDescription').value.trim() || null,
+        amount: document.getElementById('relAmount').value.trim() || null,
+        status: document.getElementById('relStatus').value
+      };
+      
+      relationships.push(newRel);
+      
+      // Save to Supabase
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/corp_relationships`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            ...newRel,
+            from_company: fromId,
+            to_company: toId
+          })
+        });
+      } catch (e) {
+        console.log('Save pending:', e);
+      }
+      
+      renderConnections();
+      closeModal('addRelationshipModal');
+      
+      // Reset form
+      document.getElementById('relDescription').value = '';
+      document.getElementById('relAmount').value = '';
+    }
+    
+    // Connection mode toggle
+    function toggleConnectionMode() {
+      connectionMode = !connectionMode;
+      const btn = document.querySelector('.toolbar-btn:nth-child(2)');
+      if (connectionMode) {
+        btn.classList.add('primary');
+        document.getElementById('canvas').style.cursor = 'crosshair';
+      } else {
+        btn.classList.remove('primary');
+        document.getElementById('canvas').style.cursor = 'grab';
+        connectionStart = null;
+        document.querySelectorAll('.company-card').forEach(c => c.classList.remove('selected'));
+      }
+    }
+    
+    // Auto layout
+    function autoLayout() {
+      const centerX = 400;
+      const startY = 100;
+      const levelGap = 200;
+      const cardGap = 250;
+      
+      // Simple hierarchical layout
+      // Level 0: Holding
+      // Level 1: Direct subsidiaries
+      // Level 2: Sub-subsidiaries / planned
+      
+      const holding = companies.find(c => c.type === 'holding');
+      if (holding) {
+        holding.x = centerX;
+        holding.y = startY;
+      }
+      
+      const level1 = companies.filter(c => c.type !== 'holding' && c.type !== 'planned');
+      level1.forEach((c, i) => {
+        c.x = centerX - ((level1.length - 1) * cardGap / 2) + i * cardGap;
+        c.y = startY + levelGap;
+      });
+      
+      const level2 = companies.filter(c => c.type === 'planned');
+      level2.forEach((c, i) => {
+        c.x = centerX - ((level2.length - 1) * cardGap / 2) + i * cardGap;
+        c.y = startY + levelGap * 2;
+      });
+      
+      renderCompanies();
+      renderConnections();
+      savePositions();
+    }
+    
+    // Save positions
+    async function savePositions() {
+      // Save to Supabase (batch update)
+      for (const company of companies) {
+        try {
+          await fetch(`${SUPABASE_URL}/rest/v1/corp_companies?id=eq.${company.id}`, {
+            method: 'PATCH',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ x: company.x, y: company.y })
+          });
+        } catch (e) {
+          // Silent fail
+        }
+      }
+    }
+    
+    // Zoom functions
+    function zoomIn() {
+      scale = Math.min(2, scale + 0.1);
+      applyTransform();
+    }
+    
+    function zoomOut() {
+      scale = Math.max(0.3, scale - 0.1);
+      applyTransform();
+    }
+    
+    function resetView() {
+      scale = 1;
+      panX = 0;
+      panY = 0;
+      applyTransform();
+    }
+    
+    function applyTransform() {
+      const content = document.getElementById('canvasContent');
+      content.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+      document.getElementById('zoomLevel').textContent = `${Math.round(scale * 100)}%`;
+    }
+    
+    // Pan functionality
+    const canvas = document.getElementById('canvas');
+    canvas.addEventListener('mousedown', (e) => {
+      if (e.target === canvas || e.target.id === 'canvasContent') {
+        isPanning = true;
+        startPanX = e.clientX - panX;
+        startPanY = e.clientY - panY;
+      }
+    });
+    
+    canvas.addEventListener('mousemove', (e) => {
+      if (isPanning) {
+        panX = e.clientX - startPanX;
+        panY = e.clientY - startPanY;
+        applyTransform();
+      }
+    });
+    
+    canvas.addEventListener('mouseup', () => {
+      isPanning = false;
+    });
+    
+    canvas.addEventListener('mouseleave', () => {
+      isPanning = false;
+    });
+    
+    // Wheel zoom
+    canvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      if (e.deltaY < 0) {
+        scale = Math.min(2, scale + 0.05);
+      } else {
+        scale = Math.max(0.3, scale - 0.05);
+      }
+      applyTransform();
+    });
+    
+    // Document upload (placeholder)
+    function uploadDocument(companyId) {
+      alert('Document upload coming soon!\n\nThis will allow you to attach corporate documents (actas, contracts, etc.) to ' + companies.find(c => c.id === companyId)?.name);
+    }
+    
+    function uploadRelDocument(relId) {
+      alert('Document upload coming soon!\n\nThis will allow you to attach evidence to this relationship.');
+    }
+    
+    async function loadCompanyDocuments(companyId) {
+      // TODO: Load from corp_documents
+    }
+    
+    // Edit company
+    function editCompany(companyId) {
+      const company = companies.find(c => c.id === companyId);
+      if (!company) return;
+      
+      document.getElementById('companyName').value = company.name || '';
+      document.getElementById('companyCedula').value = company.cedula || '';
+      document.getElementById('companyType').value = company.type || 'operating';
+      document.getElementById('companyActivity').value = company.activity || '';
+      document.getElementById('companyStatus').value = company.status || 'active';
+      document.getElementById('companyNotes').value = company.notes || '';
+      
+      // Change modal to edit mode
+      const modal = document.getElementById('addCompanyModal');
+      modal.querySelector('h2').textContent = 'Edit Company';
+      modal.querySelector('.btn-primary').textContent = 'Save Changes';
+      modal.querySelector('.btn-primary').onclick = () => saveCompanyEdit(companyId);
+      
+      modal.classList.add('open');
+    }
+    
+    async function saveCompanyEdit(companyId) {
+      const company = companies.find(c => c.id === companyId);
+      if (!company) return;
+      
+      company.name = document.getElementById('companyName').value.trim();
+      company.cedula = document.getElementById('companyCedula').value.trim() || null;
+      company.type = document.getElementById('companyType').value;
+      company.activity = document.getElementById('companyActivity').value.trim() || null;
+      company.status = document.getElementById('companyStatus').value;
+      company.notes = document.getElementById('companyNotes').value.trim() || null;
+      
+      // Save to database
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/corp_companies?id=eq.${companyId}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: company.name,
+            cedula: company.cedula,
+            type: company.type,
+            activity: company.activity,
+            status: company.status,
+            notes: company.notes
+          })
+        });
+      } catch (e) {
+        console.error('Save error:', e);
+      }
+      
+      renderCompanies();
+      renderConnections();
+      closeModal('addCompanyModal');
+      selectCompany(company);
+      
+      // Reset modal for adding
+      resetAddCompanyModal();
+    }
+    
+    function resetAddCompanyModal() {
+      const modal = document.getElementById('addCompanyModal');
+      modal.querySelector('h2').textContent = 'Add Company';
+      modal.querySelector('.btn-primary').textContent = 'Add Company';
+      modal.querySelector('.btn-primary').onclick = addCompany;
+      document.getElementById('companyName').value = '';
+      document.getElementById('companyCedula').value = '';
+      document.getElementById('companyActivity').value = '';
+      document.getElementById('companyNotes').value = '';
+    }
+    
+    // Create relationship from a specific company
+    function createRelationshipFrom(companyId) {
+      openAddRelationshipModal(companyId, null);
+    }
+    
+    // Edit relationship
+    function editRelationship(relId) {
+      const rel = relationships.find(r => r.id === relId);
+      if (!rel) return;
+      
+      document.getElementById('relFrom').innerHTML = companies.map(c => 
+        `<option value="${c.id}" ${c.id === rel.from ? 'selected' : ''}>${c.name}</option>`
+      ).join('');
+      document.getElementById('relTo').innerHTML = companies.map(c => 
+        `<option value="${c.id}" ${c.id === rel.to ? 'selected' : ''}>${c.name}</option>`
+      ).join('');
+      document.getElementById('relType').value = rel.type || 'other';
+      document.getElementById('relDescription').value = rel.description || '';
+      document.getElementById('relAmount').value = rel.amount || '';
+      document.getElementById('relStatus').value = rel.status || 'pending';
+      
+      const modal = document.getElementById('addRelationshipModal');
+      modal.querySelector('h2').textContent = 'Edit Relationship';
+      
+      // Replace footer with edit buttons
+      const footer = modal.querySelector('.modal-footer');
+      footer.innerHTML = `
+        <button class="btn" style="background: #ef4444; color: white; margin-right: auto;" onclick="deleteRelationship('${relId}')">Delete</button>
+        <button class="btn btn-secondary" onclick="closeModal('addRelationshipModal'); resetRelationshipModal();">Cancel</button>
+        <button class="btn btn-primary" onclick="saveRelationshipEdit('${relId}')">Save Changes</button>
+      `;
+      
+      modal.classList.add('open');
+    }
+    
+    async function saveRelationshipEdit(relId) {
+      const rel = relationships.find(r => r.id === relId);
+      if (!rel) return;
+      
+      rel.from = document.getElementById('relFrom').value;
+      rel.to = document.getElementById('relTo').value;
+      rel.type = document.getElementById('relType').value;
+      rel.description = document.getElementById('relDescription').value.trim() || null;
+      rel.amount = document.getElementById('relAmount').value.trim() || null;
+      rel.status = document.getElementById('relStatus').value;
+      
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/corp_relationships?id=eq.${relId}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            from_company: rel.from,
+            to_company: rel.to,
+            type: rel.type,
+            description: rel.description,
+            amount: rel.amount,
+            status: rel.status
+          })
+        });
+      } catch (e) {
+        console.error('Save error:', e);
+      }
+      
+      renderConnections();
+      closeModal('addRelationshipModal');
+      resetRelationshipModal();
+      selectRelationship(rel);
+    }
+    
+    async function deleteRelationship(relId) {
+      if (!confirm('Delete this relationship?')) return;
+      
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/corp_relationships?id=eq.${relId}`, {
+          method: 'DELETE',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          }
+        });
+      } catch (e) {
+        console.error('Delete error:', e);
+      }
+      
+      relationships = relationships.filter(r => r.id !== relId);
+      renderConnections();
+      closeModal('addRelationshipModal');
+      resetRelationshipModal();
+      closePanel();
+    }
+    
+    function resetRelationshipModal() {
+      const modal = document.getElementById('addRelationshipModal');
+      modal.querySelector('h2').textContent = 'Create Relationship';
+      modal.querySelector('.modal-footer').innerHTML = `
+        <button class="btn btn-secondary" onclick="closeModal('addRelationshipModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="addRelationship()">Create Relationship</button>
+      `;
+      document.getElementById('relDescription').value = '';
+      document.getElementById('relAmount').value = '';
+    }
+    
+    // View mode toggle
+    document.querySelectorAll('.view-toggle button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        const mode = btn.dataset.mode;
+        // TODO: Filter view based on mode
+        console.log('View mode:', mode);
+      });
+    });
+    
+    // Nav items
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        // TODO: Switch views
+      });
+    });
+    
+    // Make functions globally available (for onclick handlers)
+    window.authenticate = authenticate;
+    window.closePanel = closePanel;
+    window.closeModal = closeModal;
+    window.openAddCompanyModal = openAddCompanyModal;
+    window.toggleConnectionMode = toggleConnectionMode;
+    window.autoLayout = autoLayout;
+    window.addCompany = addCompany;
+    window.addRelationship = addRelationship;
+    window.zoomIn = zoomIn;
+    window.zoomOut = zoomOut;
+    window.resetView = resetView;
+    window.uploadDocument = uploadDocument;
+    window.uploadRelDocument = uploadRelDocument;
+    window.selectRelationship = selectRelationship;
+    window.editCompany = editCompany;
+    window.saveCompanyEdit = saveCompanyEdit;
+    window.createRelationshipFrom = createRelationshipFrom;
+    window.editRelationship = editRelationship;
+    window.saveRelationshipEdit = saveRelationshipEdit;
+    window.deleteRelationship = deleteRelationship;
+    window.resetRelationshipModal = resetRelationshipModal;
+    
+    // Add close button listener directly
+    document.querySelector('.panel-close')?.addEventListener('click', closePanel);
+    document.querySelector('#rightPanel .panel-close')?.addEventListener('click', closePanel);
+  </script>
+</body>
+</html>
