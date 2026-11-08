@@ -394,6 +394,7 @@ export const prerender = false;
       height: 3000px;
       pointer-events: none;
       overflow: visible;
+      z-index: 5;
     }
     
     :global(.connection) {
@@ -797,9 +798,8 @@ export const prerender = false;
       <!-- Canvas Container -->
       <div id="canvasContainer">
         <div id="canvas">
-          <div id="canvasContent">
-            <svg id="svgLayer"></svg>
-          </div>
+          <svg id="svgLayer"></svg>
+          <div id="canvasContent"></div>
           
           <!-- Zoom Controls -->
           <div class="zoom-controls">
@@ -918,7 +918,7 @@ export const prerender = false;
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeModal('addRelationshipModal')">Cancel</button>
-        <button class="btn btn-primary" id="btnCreateRelationship">Create Relationship</button>
+        <button class="btn btn-primary" id="btnCreateRelationship" onclick="window.addRelationship()">Create Relationship</button>
       </div>
     </div>
   </div>
@@ -1218,21 +1218,9 @@ export const prerender = false;
         console.log('Loading with defaults:', e);
       }
       
-      // Default companies if empty
-      if (companies.length === 0) {
-        companies = [
-          { id: 'holding', name: 'Sociedad 3-102-861529', cedula: '3-102-861529', type: 'holding', activity: 'Holding Company', status: 'active', x: 400, y: 100, docs: 0 },
-          { id: 'meraki', name: 'Meraki Family Ltda.', cedula: '3-102-XXXXXX', type: 'operating', activity: 'Restaurant Operations', status: 'active', x: 200, y: 300, docs: 0 },
-          { id: 'drma', name: 'Desarrollo Rancho Mar Azul S.A.', cedula: '3-101-XXXXXX', type: 'realestate', activity: 'Real Estate Development', status: 'active', x: 600, y: 300, docs: 0 },
-          { id: 'coyolgroup', name: 'Coyol Group', cedula: 'Pending', type: 'planned', activity: 'Development Company', status: 'planned', x: 600, y: 500, docs: 0 }
-        ];
-        
-        relationships = [
-          { id: 'r1', from: 'holding', to: 'meraki', type: 'ownership', description: 'Acquisition of 100% of Meraki', amount: '₡100M', status: 'verified' },
-          { id: 'r2', from: 'holding', to: 'drma', type: 'financing', description: 'Intercompany financing up to ₡500M', amount: '₡500M authorized', status: 'verified' },
-          { id: 'r3', from: 'drma', to: 'coyolgroup', type: 'property', description: 'Planned sale of development lots', amount: 'TBD', status: 'planned' }
-        ];
-      }
+      // Log what we loaded
+      console.log('Loaded companies:', companies.length);
+      console.log('Loaded relationships:', relationships.length, relationships);
       
       renderCompanies();
       renderConnections();
@@ -1349,50 +1337,92 @@ export const prerender = false;
     // Render connections (SVG lines)
     function renderConnections() {
       const svg = document.getElementById('svgLayer');
+      if (!svg) { console.error('SVG not found!'); return; }
       svg.innerHTML = '';
       
+
+      
+      console.log('renderConnections called, relationships:', relationships.length);
+      
       relationships.forEach(rel => {
-        const fromCard = document.getElementById(`company-${rel.from}`);
-        const toCard = document.getElementById(`company-${rel.to}`);
+        const fromCompany = companies.find(c => c.id === rel.from_company);
+        const toCompany = companies.find(c => c.id === rel.to_company);
         
-        if (!fromCard || !toCard) return;
+        if (!fromCompany || !toCompany) {
+          console.log('Company not found for rel:', rel.id);
+          return;
+        }
         
-        const fromRect = fromCard.getBoundingClientRect();
-        const toRect = toCard.getBoundingClientRect();
-        const canvasRect = document.getElementById('canvas').getBoundingClientRect();
-        
-        // Get positions relative to canvas
-        const fromCompany = companies.find(c => c.id === rel.from);
-        const toCompany = companies.find(c => c.id === rel.to);
-        
-        if (!fromCompany || !toCompany) return;
-        
-        const x1 = (fromCompany.x || 100) + 110; // Center of card
-        const y1 = (fromCompany.y || 100) + 80;  // Bottom of card
+        // Calculate line positions
+        const x1 = (fromCompany.x || 100) + 110;
+        const y1 = (fromCompany.y || 100) + 120; // bottom of card
         const x2 = (toCompany.x || 100) + 110;
-        const y2 = (toCompany.y || 100);
+        const y2 = (toCompany.y || 100); // top of target card
         
-        // Create path
-        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        console.log(`Line ${rel.id}: (${x1},${y1}) -> (${x2},${y2})`);
+        
+        // Curved path for smoother lines
+        const midX = (x1 + x2) / 2;
         const midY = (y1 + y2) / 2;
-        const d = `M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`;
+        const ctrlY1 = y1 + 40;
+        const ctrlY2 = y2 - 40;
         
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const d = `M ${x1} ${y1} C ${x1} ${ctrlY1}, ${x2} ${ctrlY2}, ${x2} ${y2}`;
         path.setAttribute('d', d);
-        path.setAttribute('class', `connection ${rel.type} ${rel.status === 'planned' ? 'planned' : ''}`);
-        path.setAttribute('data-rel-id', rel.id);
-        path.style.pointerEvents = 'stroke';
+        path.setAttribute('stroke', rel.status === 'planned' ? '#6B7280' : '#C4A67C');
+        path.setAttribute('stroke-width', '2');
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke-dasharray', rel.status === 'planned' ? '6,4' : 'none');
+        path.style.cursor = 'pointer';
+        path.style.filter = 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))';
         
         path.addEventListener('click', () => selectRelationship(rel));
-        
         svg.appendChild(path);
         
-        // Add label
+        // Arrow head at end
+        const arrowSize = 8;
+        const angle = Math.atan2(y2 - ctrlY2, x2 - x2) || -Math.PI/2;
+        const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        const ax = x2 - arrowSize * Math.cos(angle - Math.PI/6);
+        const ay = y2 - arrowSize * Math.sin(angle - Math.PI/6);
+        const bx = x2 - arrowSize * Math.cos(angle + Math.PI/6);
+        const by = y2 - arrowSize * Math.sin(angle + Math.PI/6);
+        arrow.setAttribute('points', `${x2},${y2} ${ax},${ay} ${bx},${by}`);
+        arrow.setAttribute('fill', rel.status === 'planned' ? '#6B7280' : '#C4A67C');
+        svg.appendChild(arrow);
+        
+        // Label card at midpoint
+        const labelX = midX;
+        const labelY = midY;
+        const labelText = rel.description?.substring(0, 25) || rel.type;
+        const labelWidth = Math.max(80, labelText.length * 7 + 16);
+        const labelHeight = 24;
+        
+        // Background rectangle for label
+        const labelBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        labelBg.setAttribute('x', labelX - labelWidth/2);
+        labelBg.setAttribute('y', labelY - labelHeight/2);
+        labelBg.setAttribute('width', labelWidth);
+        labelBg.setAttribute('height', labelHeight);
+        labelBg.setAttribute('rx', '4');
+        labelBg.setAttribute('fill', '#1a1f26');
+        labelBg.setAttribute('stroke', rel.status === 'planned' ? '#6B7280' : '#C4A67C');
+        labelBg.setAttribute('stroke-width', '1');
+        labelBg.style.cursor = 'pointer';
+        labelBg.addEventListener('click', () => selectRelationship(rel));
+        svg.appendChild(labelBg);
+        
+        // Label text
         const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        text.setAttribute('x', (x1 + x2) / 2);
-        text.setAttribute('y', midY - 10);
-        text.setAttribute('class', 'connection-label');
+        text.setAttribute('x', labelX);
+        text.setAttribute('y', labelY + 4);
         text.setAttribute('text-anchor', 'middle');
-        text.textContent = rel.description?.substring(0, 30) || rel.type;
+        text.setAttribute('fill', '#e7e9ea');
+        text.setAttribute('font-size', '11');
+        text.setAttribute('font-family', 'Inter, sans-serif');
+        text.style.pointerEvents = 'none';
+        text.textContent = labelText;
         svg.appendChild(text);
       });
     }
@@ -1478,8 +1508,8 @@ export const prerender = false;
       
       document.querySelectorAll('.company-card').forEach(c => c.classList.remove('selected'));
       
-      const fromCompany = companies.find(c => c.id === rel.from);
-      const toCompany = companies.find(c => c.id === rel.to);
+      const fromCompany = companies.find(c => c.id === rel.from_company);
+      const toCompany = companies.find(c => c.id === rel.to_company);
       
       document.getElementById('panelTitle').textContent = 'Relationship';
       document.getElementById('panelContent').innerHTML = `
@@ -1755,7 +1785,10 @@ export const prerender = false;
     
     function applyTransform() {
       const content = document.getElementById('canvasContent');
-      content.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+      const svg = document.getElementById('svgLayer');
+      const transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+      content.style.transform = transform;
+      svg.style.transform = transform;
       document.getElementById('zoomLevel').textContent = `${Math.round(scale * 100)}%`;
     }
     
@@ -1894,10 +1927,10 @@ export const prerender = false;
       if (!rel) return;
       
       document.getElementById('relFrom').innerHTML = companies.map(c => 
-        `<option value="${c.id}" ${c.id === rel.from ? 'selected' : ''}>${c.name}</option>`
+        `<option value="${c.id}" ${c.id === rel.from_company ? 'selected' : ''}>${c.name}</option>`
       ).join('');
       document.getElementById('relTo').innerHTML = companies.map(c => 
-        `<option value="${c.id}" ${c.id === rel.to ? 'selected' : ''}>${c.name}</option>`
+        `<option value="${c.id}" ${c.id === rel.to_company ? 'selected' : ''}>${c.name}</option>`
       ).join('');
       document.getElementById('relType').value = rel.type || 'other';
       document.getElementById('relDescription').value = rel.description || '';
@@ -1922,8 +1955,8 @@ export const prerender = false;
       const rel = relationships.find(r => r.id === relId);
       if (!rel) return;
       
-      rel.from = document.getElementById('relFrom').value;
-      rel.to = document.getElementById('relTo').value;
+      rel.from_company = document.getElementById('relFrom').value;
+      rel.to_company = document.getElementById('relTo').value;
       rel.type = document.getElementById('relType').value;
       rel.description = document.getElementById('relDescription').value.trim() || null;
       rel.amount = document.getElementById('relAmount').value.trim() || null;
@@ -1938,8 +1971,8 @@ export const prerender = false;
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            from_company: rel.from,
-            to_company: rel.to,
+            from_company: rel.from_company,
+            to_company: rel.to_company,
             type: rel.type,
             description: rel.description,
             amount: rel.amount,
