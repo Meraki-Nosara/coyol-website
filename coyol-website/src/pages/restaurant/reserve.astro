@@ -74,12 +74,13 @@ import Layout from '../../layouts/Layout.astro';
             </div>
           </div>
 
-          <button type="button" class="continue-btn" onclick="showStep(2)">Continue</button>
+          <button type="button" class="continue-btn" id="checkAvailBtn" onclick="checkAndContinue()">Check Availability</button>
+          <div id="availabilityMessage" class="availability-message" style="display: none;"></div>
         </div>
 
         <!-- Step 2: Details -->
         <div class="step" id="step-2">
-          <button type="button" class="back-step" onclick="showStep(1)">← Change time</button>
+          <button type="button" class="back-step" onclick="showStep(1)">← Change date/time</button>
           
           <div class="selected-summary">
             <span class="summary-item" id="summary-date">Tonight</span>
@@ -407,9 +408,34 @@ import Layout from '../../layouts/Layout.astro';
       background: #4A5D4A;
     }
 
-    .confirm-btn:disabled {
+    .confirm-btn:disabled, .continue-btn:disabled {
       background: #a8a29e;
       cursor: not-allowed;
+    }
+
+    .availability-message {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .availability-message.success {
+      background: rgba(74, 93, 74, 0.15);
+      border: 1px solid #4A5D4A;
+      color: #3D4F3D;
+    }
+
+    .availability-message.error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid #ef4444;
+      color: #dc2626;
+    }
+
+    .availability-message.error a {
+      color: #dc2626;
+      text-decoration: underline;
     }
 
     .back-step {
@@ -810,6 +836,79 @@ import Layout from '../../layouts/Layout.astro';
     // Initialize capacity
     loadCapacity();
 
+    // Table definitions by section (priority: terrace > indoor > bar)
+    const COYOL_TABLES = {
+      terrace: [
+        { id: 'terrace-1', name: 'Terrace 1', minCovers: 2, maxCovers: 4 },
+        { id: 'terrace-2', name: 'Terrace 2', minCovers: 2, maxCovers: 4 },
+        { id: 'terrace-3', name: 'Terrace 3', minCovers: 2, maxCovers: 4 },
+        { id: 'terrace-4', name: 'Terrace 4', minCovers: 2, maxCovers: 6 },
+        { id: 'terrace-5', name: 'Terrace 5', minCovers: 2, maxCovers: 4 },
+        { id: 'terrace-6', name: 'Terrace 6', minCovers: 2, maxCovers: 4 },
+        { id: 'terrace-7', name: 'Terrace 7', minCovers: 4, maxCovers: 8 },
+        { id: 'terrace-8', name: 'Terrace 8', minCovers: 2, maxCovers: 4 },
+      ],
+      indoor: [
+        { id: 'indoor-1', name: 'Indoor 1', minCovers: 2, maxCovers: 4 },
+        { id: 'indoor-2', name: 'Indoor 2', minCovers: 2, maxCovers: 4 },
+        { id: 'indoor-3', name: 'Indoor 3', minCovers: 2, maxCovers: 6 },
+        { id: 'indoor-4', name: 'Indoor 4', minCovers: 2, maxCovers: 4 },
+        { id: 'indoor-5', name: 'Indoor 5', minCovers: 4, maxCovers: 8 },
+        { id: 'indoor-6', name: 'Indoor 6', minCovers: 2, maxCovers: 4 },
+      ],
+      bar: [
+        { id: 'bar-1', name: 'Bar 1', minCovers: 1, maxCovers: 2 },
+        { id: 'bar-2', name: 'Bar 2', minCovers: 1, maxCovers: 2 },
+        { id: 'bar-3', name: 'Bar 3', minCovers: 1, maxCovers: 2 },
+        { id: 'bar-4', name: 'Bar 4', minCovers: 1, maxCovers: 2 },
+        { id: 'bar-5', name: 'Bar 5', minCovers: 1, maxCovers: 4 },
+      ]
+    };
+
+    // Auto-assign table based on party size and availability
+    function autoAssignTable(partySize, existingReservations, time) {
+      const shift = getShiftForTime(time);
+      const shiftReservations = existingReservations.filter(r => {
+        const rShift = getShiftForTime(r.time);
+        return rShift === shift && r.status !== 'cancelled' && r.status !== 'no-show';
+      });
+      
+      // Handle comma-separated table IDs (for multi-table reservations)
+      const assignedTableIds = shiftReservations
+        .filter(r => r.table_id)
+        .flatMap(r => r.table_id.split(',').map(id => id.trim()));
+      
+      const sections = ['terrace', 'indoor', 'bar'];
+      
+      for (const section of sections) {
+        const tables = COYOL_TABLES[section];
+        
+        const availableTables = tables.filter(t => 
+          t.maxCovers >= partySize && 
+          t.minCovers <= partySize &&
+          !assignedTableIds.includes(t.id)
+        );
+        
+        if (availableTables.length > 0) {
+          availableTables.sort((a, b) => a.maxCovers - b.maxCovers);
+          const table = availableTables[0];
+          return { id: table.id, name: table.name, section };
+        }
+        
+        const largerTables = tables.filter(t => 
+          t.maxCovers >= partySize &&
+          !assignedTableIds.includes(t.id)
+        );
+        
+        if (largerTables.length > 0) {
+          largerTables.sort((a, b) => a.maxCovers - b.maxCovers);
+          return { id: largerTables[0].id, name: largerTables[0].name, section };
+        }
+      }
+      
+      return null;
+    }
+
     // Get reservations from Supabase
     async function getReservations(date) {
       try {
@@ -1069,6 +1168,101 @@ import Layout from '../../layouts/Layout.astro';
       });
     }
 
+    // Check availability before proceeding to personal info
+    window.checkAndContinue = async function() {
+      const btn = document.getElementById('checkAvailBtn');
+      const msgDiv = document.getElementById('availabilityMessage');
+      
+      const date = dateInput.value;
+      const time = document.querySelector('.time-btn.selected')?.dataset.time;
+      const guests = parseInt(document.querySelector('.party-btn.selected')?.dataset.guests || '2');
+      
+      if (!date) {
+        msgDiv.className = 'availability-message error';
+        msgDiv.innerHTML = 'Please select a date';
+        msgDiv.style.display = 'block';
+        return;
+      }
+      
+      if (!time) {
+        msgDiv.className = 'availability-message error';
+        msgDiv.innerHTML = 'Please select a time';
+        msgDiv.style.display = 'block';
+        return;
+      }
+      
+      btn.disabled = true;
+      btn.textContent = 'Checking...';
+      msgDiv.style.display = 'none';
+      
+      try {
+        const blockRes = await fetch(`/api/blocked-dates?restaurant=coyol`);
+        const blockedDates = await blockRes.json();
+        const blocked = blockedDates.find(b => b.date === date);
+        
+        if (blocked) {
+          msgDiv.className = 'availability-message error';
+          msgDiv.innerHTML = `Sorry, Coyol is closed on this date${blocked.reason ? ' for ' + blocked.reason : ''}. <a href="#" onclick="document.getElementById('date').focus(); return false;">Select another date</a>`;
+          msgDiv.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Check Availability';
+          return;
+        }
+        
+        const reservations = await getReservations(date);
+        const remaining = getRemainingCapacity(time, reservations);
+        
+        if (remaining < guests) {
+          const shift = getShiftForTime(time);
+          const shiftNames = { lunch: 'Lunch', dinner: 'Dinner' };
+          const shiftName = shiftNames[shift] || 'this time slot';
+          
+          if (remaining === 0) {
+            msgDiv.className = 'availability-message error';
+            msgDiv.innerHTML = `Sorry, ${shiftName} is fully booked on this date. <a href="#" onclick="document.getElementById('date').focus(); return false;">Try another date</a> or select a different time.`;
+          } else {
+            msgDiv.className = 'availability-message error';
+            msgDiv.innerHTML = `Sorry, only ${remaining} seats available for ${shiftName}. Your party of ${guests} cannot be accommodated. <a href="#" onclick="document.getElementById('date').focus(); return false;">Try another date</a> or reduce your party size.`;
+          }
+          msgDiv.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Check Availability';
+          return;
+        }
+        
+        const assignedTable = autoAssignTable(guests, reservations, time);
+        if (!assignedTable) {
+          msgDiv.className = 'availability-message error';
+          msgDiv.innerHTML = `Sorry, no suitable tables available for a party of ${guests} at this time. <a href="#" onclick="document.getElementById('date').focus(); return false;">Try another date</a> or different time.`;
+          msgDiv.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Check Availability';
+          return;
+        }
+        
+        const sectionNames = { terrace: 'Terrace', indoor: 'Indoor', bar: 'Bar' };
+        msgDiv.className = 'availability-message success';
+        msgDiv.innerHTML = `✓ Table available in the ${sectionNames[assignedTable.section] || assignedTable.section} area`;
+        msgDiv.style.display = 'block';
+        
+        window.preAssignedTable = assignedTable;
+        
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.textContent = 'Check Availability';
+          showStep(2);
+        }, 800);
+        
+      } catch (e) {
+        console.error('Availability check error:', e);
+        msgDiv.className = 'availability-message error';
+        msgDiv.innerHTML = 'Unable to check availability. Please try again.';
+        msgDiv.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Check Availability';
+      }
+    }
+
     window.showStep = function(step) {
       document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
       document.getElementById('step-' + step).classList.add('active');
@@ -1197,6 +1391,14 @@ import Layout from '../../layouts/Layout.astro';
 
       const date = selectedDate;
       const zone = document.querySelector('.seating-btn.selected')?.dataset.zone || 'any';
+      
+      // Use pre-assigned table from availability check
+      let assignedTable = window.preAssignedTable;
+      if (!assignedTable) {
+        btn.textContent = 'Finding best table...';
+        const existingReservations = await getReservations(date);
+        assignedTable = autoAssignTable(guests, existingReservations, time);
+      }
 
       const reservation = {
         date: date,
@@ -1207,7 +1409,10 @@ import Layout from '../../layouts/Layout.astro';
         guest_email: email,
         zone_preference: zone,
         special_requests: notes,
-        status: 'confirmed'
+        status: 'confirmed',
+        table_id: assignedTable?.id || null,
+        table_name: assignedTable?.name || null,
+        section: assignedTable?.section || null
       };
 
       // Button already disabled at function start

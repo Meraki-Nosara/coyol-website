@@ -96,12 +96,13 @@ import Layout from '../../layouts/Layout.astro';
             </div>
           </div>
 
-          <button type="button" class="continue-btn" onclick="showStep(2)">Continue</button>
+          <button type="button" class="continue-btn" id="checkAvailBtn" onclick="checkAndContinue()">Check Availability</button>
+          <div id="availabilityMessage" class="availability-message" style="display: none;"></div>
         </div>
 
         <!-- Step 2: Details -->
         <div class="step" id="step-2">
-          <button type="button" class="back-step" onclick="showStep(1)">← Change time</button>
+          <button type="button" class="back-step" onclick="showStep(1)">← Change date/time</button>
           
           <div class="selected-summary">
             <span class="summary-item" id="summary-date">Tonight</span>
@@ -414,9 +415,34 @@ import Layout from '../../layouts/Layout.astro';
       background: #B86B4A;
     }
 
-    .confirm-btn:disabled {
+    .confirm-btn:disabled, .continue-btn:disabled {
       background: #a8a29e;
       cursor: not-allowed;
+    }
+
+    .availability-message {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .availability-message.success {
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid #22c55e;
+      color: #16a34a;
+    }
+
+    .availability-message.error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid #ef4444;
+      color: #dc2626;
+    }
+
+    .availability-message.error a {
+      color: #dc2626;
+      text-decoration: underline;
     }
 
     .back-step {
@@ -991,6 +1017,118 @@ import Layout from '../../layouts/Layout.astro';
       updateTimeButtonVisibility(); // Final enforcement
     });
 
+    // Table definitions by section (priority: jardin > terraza > inside)
+    const LALUNA_TABLES = {
+      jardin: [
+        { id: 't17', name: '17', minCovers: 2, maxCovers: 4 },
+        { id: 't18-1', name: '18-1', minCovers: 2, maxCovers: 4 },
+        { id: 't18-2', name: '18-2', minCovers: 2, maxCovers: 4 },
+        { id: 't18-3', name: '18-3', minCovers: 2, maxCovers: 4 },
+        { id: 't18-4', name: '18-4', minCovers: 2, maxCovers: 4 },
+        { id: 't20', name: '20', minCovers: 2, maxCovers: 4 },
+        { id: 'f6', name: 'F6', minCovers: 2, maxCovers: 4 },
+        { id: 'sofa-16', name: 'Sofa 16', minCovers: 2, maxCovers: 4 },
+        { id: 'fant-2-izq', name: 'FANT 2 Izq', minCovers: 2, maxCovers: 4 },
+        { id: 'fan-2', name: 'FAN 2', minCovers: 2, maxCovers: 4 },
+        { id: 't19', name: '19', minCovers: 2, maxCovers: 4 },
+        { id: 'fan-19', name: 'FAN 19', minCovers: 2, maxCovers: 4 },
+        { id: 't24', name: '24', minCovers: 4, maxCovers: 6 },
+        { id: 'f5', name: 'F5', minCovers: 2, maxCovers: 4 },
+        { id: 'sofa-21', name: 'Sofa 21', minCovers: 2, maxCovers: 4 },
+        { id: 'sofa-15', name: 'Sofa 15', minCovers: 2, maxCovers: 4 },
+        { id: 't26', name: '26', minCovers: 6, maxCovers: 10 },
+        { id: 't25', name: '25', minCovers: 4, maxCovers: 8 },
+        { id: 'fan-25', name: 'Fan 25', minCovers: 2, maxCovers: 4 },
+        { id: 'fant-4', name: 'Fant 4', minCovers: 2, maxCovers: 4 },
+        { id: 't22', name: '22', minCovers: 2, maxCovers: 4 },
+        { id: 'sofa-14', name: 'Sofa 14', minCovers: 2, maxCovers: 4 },
+        { id: 'fant-1', name: 'FANTASMA 1', minCovers: 2, maxCovers: 4 },
+        { id: 'sofa-13', name: 'Sofa 13', minCovers: 2, maxCovers: 4 },
+        { id: 'fant-3', name: 'FANTASMA 3', minCovers: 2, maxCovers: 4 },
+        { id: 'sofa-23', name: 'Sofa 23', minCovers: 2, maxCovers: 4 },
+        { id: 'f3p', name: 'F3P', minCovers: 2, maxCovers: 4 },
+      ],
+      terraza: [
+        { id: 't7', name: '7', minCovers: 2, maxCovers: 4 },
+        { id: 't8', name: '8', minCovers: 2, maxCovers: 4 },
+        { id: 't9', name: '9', minCovers: 2, maxCovers: 4 },
+        { id: 't10', name: '10', minCovers: 2, maxCovers: 4 },
+        { id: 't11', name: '11', minCovers: 2, maxCovers: 4 },
+        { id: 't12', name: '12', minCovers: 2, maxCovers: 4 },
+        { id: 't1', name: '1', minCovers: 4, maxCovers: 6 },
+        { id: 't2', name: '2', minCovers: 4, maxCovers: 6 },
+        { id: 't3', name: '3', minCovers: 4, maxCovers: 6 },
+        { id: 't4', name: '4', minCovers: 2, maxCovers: 4 },
+        { id: 't5', name: '5', minCovers: 2, maxCovers: 4 },
+        { id: 't6', name: '6', minCovers: 2, maxCovers: 4 },
+      ],
+      inside: [
+        { id: 'high-1', name: '2 High', minCovers: 2, maxCovers: 4 },
+        { id: 'high-2', name: '2 High', minCovers: 2, maxCovers: 4 },
+        { id: 'indoor-sofa-1', name: 'Indoor Sofa 1', minCovers: 2, maxCovers: 4 },
+        { id: 'bar', name: 'Bar', minCovers: 1, maxCovers: 8 },
+        { id: 'indoor-sofa-2', name: 'Indoor Sofa 2', minCovers: 4, maxCovers: 6 },
+        { id: 'indoor-sofa-3', name: 'Indoor Sofa 3', minCovers: 4, maxCovers: 6 },
+        { id: 'indoor-sof', name: 'Indoor Sof', minCovers: 2, maxCovers: 4 },
+        { id: 'indoor-sofa-4', name: 'Indoor Sofa 4', minCovers: 2, maxCovers: 4 },
+        { id: 'indoor-sofa-5', name: 'Indoor Sofa 5', minCovers: 2, maxCovers: 4 },
+        { id: 'indoor-sofa-6', name: 'Indoor Sofa 6', minCovers: 2, maxCovers: 4 },
+      ]
+    };
+
+    // Auto-assign table based on party size and availability
+    // Priority: jardin > terraza > inside
+    function autoAssignTable(partySize, existingReservations, time) {
+      // Get shift to filter reservations for same time slot
+      const shift = getShiftForTime(time);
+      const shiftReservations = existingReservations.filter(r => {
+        const rShift = getShiftForTime(r.time);
+        return rShift === shift && r.status !== 'cancelled' && r.status !== 'no-show';
+      });
+      
+      // Get list of already-assigned tables for this shift
+      // Handle comma-separated table IDs (for multi-table reservations)
+      const assignedTableIds = shiftReservations
+        .filter(r => r.table_id)
+        .flatMap(r => r.table_id.split(',').map(id => id.trim()));
+      
+      // Try sections in priority order
+      const sections = ['jardin', 'terraza', 'inside'];
+      
+      for (const section of sections) {
+        const tables = LALUNA_TABLES[section];
+        
+        // Find best fit: table that fits the party with minimal waste
+        // First, filter tables that can fit the party and aren't assigned
+        const availableTables = tables.filter(t => 
+          t.maxCovers >= partySize && 
+          t.minCovers <= partySize &&
+          !assignedTableIds.includes(t.id)
+        );
+        
+        if (availableTables.length > 0) {
+          // Sort by best fit (smallest maxCovers that fits)
+          availableTables.sort((a, b) => a.maxCovers - b.maxCovers);
+          const table = availableTables[0];
+          return { id: table.id, name: table.name, section };
+        }
+        
+        // If no exact fit, try tables that can accommodate (maxCovers >= partySize)
+        const largerTables = tables.filter(t => 
+          t.maxCovers >= partySize &&
+          !assignedTableIds.includes(t.id)
+        );
+        
+        if (largerTables.length > 0) {
+          largerTables.sort((a, b) => a.maxCovers - b.maxCovers);
+          return { id: largerTables[0].id, name: largerTables[0].name, section };
+        }
+      }
+      
+      // No table available
+      return null;
+    }
+
     // Get reservations from Supabase
     async function getReservations(date) {
       try {
@@ -1153,6 +1291,109 @@ import Layout from '../../layouts/Layout.astro';
       });
     }
 
+    // Check availability before proceeding to personal info
+    window.checkAndContinue = async function() {
+      const btn = document.getElementById('checkAvailBtn');
+      const msgDiv = document.getElementById('availabilityMessage');
+      
+      // Get selected values
+      const date = dateInput.value;
+      const time = document.querySelector('.time-btn.selected')?.dataset.time;
+      const guests = parseInt(document.querySelector('.party-btn.selected')?.dataset.guests || '2');
+      
+      // Validate selections
+      if (!date) {
+        msgDiv.className = 'availability-message error';
+        msgDiv.innerHTML = 'Please select a date';
+        msgDiv.style.display = 'block';
+        return;
+      }
+      
+      if (!time) {
+        msgDiv.className = 'availability-message error';
+        msgDiv.innerHTML = 'Please select a time';
+        msgDiv.style.display = 'block';
+        return;
+      }
+      
+      // Show checking state
+      btn.disabled = true;
+      btn.textContent = 'Checking...';
+      msgDiv.style.display = 'none';
+      
+      try {
+        // Check blocked dates
+        const blockRes = await fetch(`/api/blocked-dates?restaurant=laluna`);
+        const blockedDates = await blockRes.json();
+        const blocked = blockedDates.find(b => b.date === date);
+        
+        if (blocked) {
+          msgDiv.className = 'availability-message error';
+          msgDiv.innerHTML = `Sorry, La Luna is closed on this date${blocked.reason ? ' for ' + blocked.reason : ''}. <a href="#" onclick="document.getElementById('date').focus(); return false;">Select another date</a>`;
+          msgDiv.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Check Availability';
+          return;
+        }
+        
+        // Check capacity
+        const reservations = await getReservations(date);
+        const remaining = getRemainingCapacity(time, reservations);
+        
+        if (remaining < guests) {
+          const shift = getShiftForTime(time);
+          const shiftNames = { breakfast: 'Breakfast', lunch: 'Lunch', dinner1: 'First Seating', dinner2: 'Second Seating' };
+          const shiftName = shiftNames[shift] || 'this time slot';
+          
+          if (remaining === 0) {
+            msgDiv.className = 'availability-message error';
+            msgDiv.innerHTML = `Sorry, ${shiftName} is fully booked on this date. <a href="#" onclick="document.getElementById('date').focus(); return false;">Try another date</a> or select a different time.`;
+          } else {
+            msgDiv.className = 'availability-message error';
+            msgDiv.innerHTML = `Sorry, only ${remaining} seats available for ${shiftName}. Your party of ${guests} cannot be accommodated. <a href="#" onclick="document.getElementById('date').focus(); return false;">Try another date</a> or reduce your party size.`;
+          }
+          msgDiv.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Check Availability';
+          return;
+        }
+        
+        // Check if a table can be assigned
+        const assignedTable = autoAssignTable(guests, reservations, time);
+        if (!assignedTable) {
+          msgDiv.className = 'availability-message error';
+          msgDiv.innerHTML = `Sorry, no suitable tables available for a party of ${guests} at this time. <a href="#" onclick="document.getElementById('date').focus(); return false;">Try another date</a> or different time.`;
+          msgDiv.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Check Availability';
+          return;
+        }
+        
+        // Success! Show brief confirmation and proceed
+        msgDiv.className = 'availability-message success';
+        msgDiv.innerHTML = `✓ Table available in the ${assignedTable.section === 'jardin' ? 'Garden' : assignedTable.section === 'terraza' ? 'Terrace' : 'Indoor'} area`;
+        msgDiv.style.display = 'block';
+        
+        // Store the pre-assigned table for later
+        window.preAssignedTable = assignedTable;
+        
+        // Proceed to step 2 after brief delay
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.textContent = 'Check Availability';
+          showStep(2);
+        }, 800);
+        
+      } catch (e) {
+        console.error('Availability check error:', e);
+        msgDiv.className = 'availability-message error';
+        msgDiv.innerHTML = 'Unable to check availability. Please try again.';
+        msgDiv.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Check Availability';
+      }
+    }
+
     window.showStep = function(step) {
       document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
       document.getElementById('step-' + step).classList.add('active');
@@ -1281,6 +1522,16 @@ import Layout from '../../layouts/Layout.astro';
 
       const date = selectedDate;
       const zone = document.querySelector('.seating-btn.selected')?.dataset.zone || 'any';
+      
+      // Use pre-assigned table from availability check, or re-check if needed
+      let assignedTable = window.preAssignedTable;
+      if (!assignedTable) {
+        btn.textContent = 'Finding best table...';
+        const existingReservations = await getReservations(date);
+        assignedTable = autoAssignTable(guests, existingReservations, time);
+      }
+      
+      console.log('Assigned table:', assignedTable);
 
       const reservation = {
         date: date,
@@ -1291,7 +1542,10 @@ import Layout from '../../layouts/Layout.astro';
         guest_email: email,
         zone_preference: zone,
         special_requests: notes,
-        status: 'confirmed'
+        status: 'confirmed',
+        table_id: assignedTable?.id || null,
+        table_name: assignedTable?.name || null,
+        section: assignedTable?.section || null
       };
 
       // Button already disabled at function start
