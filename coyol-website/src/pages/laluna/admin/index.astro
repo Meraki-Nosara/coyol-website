@@ -4260,8 +4260,8 @@ import '../../../styles/laluna-tables.css';
           return !conflict;
         });
         
-        // Build options: TBA first, then all available tables
-        select.innerHTML = '<option value="">TBA</option>';
+        // Build options: available tables only (no TBA)
+        select.innerHTML = '<option value="" disabled selected>-- Seleccionar mesa --</option>';
         availableTables.forEach(t => {
           const opt = document.createElement('option');
           opt.value = t.id;
@@ -4900,7 +4900,7 @@ import '../../../styles/laluna-tables.css';
       document.getElementById('walkinGiftMatch').style.display = 'none';
       // Populate tables from current zone layout
       const tableSelect = document.getElementById('walkinTable');
-      tableSelect.innerHTML = '<option value="">Auto-assign</option>';
+      tableSelect.innerHTML = '<option value="">Auto-assign</option>'; // Walk-in can still auto-assign
       const layouts = getLayout();
       const allTables = [...(layouts.terraza || []), ...(layouts.lounge || []), ...(layouts.jardin || [])];
       allTables.forEach(t => {

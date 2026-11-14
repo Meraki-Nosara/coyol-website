@@ -330,8 +330,16 @@ export const POST: APIRoute = async ({ request }) => {
     if (!assignedTable && !skipValidation) {
       assignedTable = await findBestTable(guestCount, date, time, existingReservations, zone_preference);
       
+      // BLOCK if no table available - TBA not allowed
       if (!assignedTable) {
-        console.log(`No suitable table for ${guestCount} guests on ${date} at ${time} - leaving as TBA`);
+        return new Response(JSON.stringify({
+          error: `No hay mesas disponibles para ${guestCount} personas a las ${time}. Por favor intente otro horario.`,
+          error_en: `No tables available for ${guestCount} guests at ${time}. Please try a different time.`,
+          no_table_available: true
+        }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        });
       }
     }
     
