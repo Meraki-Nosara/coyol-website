@@ -326,8 +326,8 @@ export const POST: APIRoute = async ({ request }) => {
       }
     }
     
-    // Auto-assign table if not provided or validation failed
-    if (!assignedTable) {
+    // Auto-assign table if not provided (unless skip_validation - admin will assign manually)
+    if (!assignedTable && !skipValidation) {
       assignedTable = await findBestTable(guestCount, date, time, existingReservations, zone_preference);
       
       if (!assignedTable) {

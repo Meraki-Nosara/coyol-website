@@ -382,21 +382,24 @@ export const POST: APIRoute = async ({ request }) => {
           headers: { 'Content-Type': 'application/json' }
         });
       }
-    } else if (!assignedTable && !skipValidation) {
-      // Auto-assign table if not provided (skip if manual override)
-      assignedTable = await findBestTable(guestCount, date, time, existingReservations, zone_preference);
-      
-      // BLOCK if no table available (prevents overbooking) - unless manual
-      if (!assignedTable) {
-        return new Response(JSON.stringify({
-          error: `Lo sentimos, no hay mesas disponibles para ${guestCount} personas a las ${time}. Por favor intente otro horario o llame para lista de espera.`,
-          error_en: `Sorry, no tables available for ${guestCount} guests at ${time}. Please try a different time or call for waitlist.`,
-          no_table_available: true
-        }), {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' }
-        });
+    } else if (!assignedTable) {
+      if (!skipValidation) {
+        // Auto-assign table if not provided (skip if manual override)
+        assignedTable = await findBestTable(guestCount, date, time, existingReservations, zone_preference);
+        
+        // BLOCK if no table available (prevents overbooking) - unless manual override
+        if (!assignedTable) {
+          return new Response(JSON.stringify({
+            error: `Lo sentimos, no hay mesas disponibles para ${guestCount} personas a las ${time}. Por favor intente otro horario o llame para lista de espera.`,
+            error_en: `Sorry, no tables available for ${guestCount} guests at ${time}. Please try a different time or call for waitlist.`,
+            no_table_available: true
+          }), {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
       }
+      // If skip_validation is true and no table selected, leave as null (TBA)
     }
     
     const reservation = {
