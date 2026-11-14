@@ -402,6 +402,11 @@ import '../../../styles/laluna-tables.css';
               <span class="detail-label">Notes</span>
               <span class="detail-value" id="detailNotes">None</span>
             </div>
+            <div class="detail-item full-width no-show-warning" id="noShowWarning" style="display:none;">
+              <span class="detail-value" style="background:#fef2f2;color:#991b1b;padding:8px 12px;border-radius:6px;font-weight:600;">
+                ⚠️ <span id="noShowCount">0</span> no-show(s) anteriores
+              </span>
+            </div>
           </div>
           
           <!-- 3-Step Reservation Timeline -->
@@ -3682,6 +3687,9 @@ import '../../../styles/laluna-tables.css';
       document.getElementById('detailStatus').textContent = res.status;
       document.getElementById('detailStatus').className = 'status-badge ' + res.status;
       
+      // Check for previous no-shows
+      checkNoShowHistory(res);
+      
       // Update 3-step timeline
       updateReservationTimeline(res);
       
@@ -3977,6 +3985,37 @@ import '../../../styles/laluna-tables.css';
       renderFloor();
     }
     
+    async function checkNoShowHistory(res) {
+      const warningEl = document.getElementById('noShowWarning');
+      const countEl = document.getElementById('noShowCount');
+      
+      if (!res.guestPhone) {
+        warningEl.style.display = 'none';
+        return;
+      }
+      
+      try {
+        const phoneClean = res.guestPhone.replace(/[^0-9]/g, '');
+        const query = `${SUPABASE_URL}/rest/v1/laluna_reservations?status=eq.no-show&id=neq.${res.id}&guest_phone=ilike.*${phoneClean.slice(-8)}*&select=id`;
+        
+        const countRes = await fetch(query, {
+          headers: { 'apikey': SUPABASE_KEY }
+        });
+        const prevNoShows = await countRes.json();
+        const count = prevNoShows?.length || 0;
+        
+        if (count > 0) {
+          countEl.textContent = count;
+          warningEl.style.display = 'block';
+        } else {
+          warningEl.style.display = 'none';
+        }
+      } catch (err) {
+        console.error('Failed to check no-show history:', err);
+        warningEl.style.display = 'none';
+      }
+    }
+    
     async function markNoShow() {
       if (!selectedReservationId) return;
       
@@ -3997,11 +4036,38 @@ import '../../../styles/laluna-tables.css';
           body: JSON.stringify({ status: 'no-show', table_id: null })
         });
         
+        // Count previous no-shows for this guest (by phone or email)
+        let noShowCount = 1; // This one counts
+        if (res.guestPhone || res.guestEmail) {
+          const phoneClean = res.guestPhone ? res.guestPhone.replace(/[^0-9]/g, '') : '';
+          let query = `${SUPABASE_URL}/rest/v1/laluna_reservations?status=eq.no-show&id=neq.${selectedReservationId}&select=id`;
+          if (phoneClean) query += `&guest_phone=ilike.*${phoneClean.slice(-8)}*`; // Match last 8 digits
+          
+          const countRes = await fetch(query, {
+            headers: { 'apikey': SUPABASE_KEY }
+          });
+          const prevNoShows = await countRes.json();
+          noShowCount += (prevNoShows?.length || 0);
+        }
+        
         // Send notification if they have a phone
         if (res.guestPhone) {
           const phoneClean = res.guestPhone.replace(/[^0-9]/g, '');
-          const message = `Hola ${res.guestName.split(' ')[0]}, notamos que no pudiste llegar a tu reservación en La Luna hoy. Esperamos verte pronto. Si deseas reprogramar, escríbenos aquí.`;
+          let message;
+          
+          if (noShowCount >= 2) {
+            // Repeat offender - ask them to call directly
+            message = `Hola ${res.guestName.split(' ')[0]}, notamos que no pudiste llegar a tu reservación en La Luna. Esta es la ${noShowCount == 2 ? 'segunda' : noShowCount + 'a'} vez que esto ocurre. Para futuras reservaciones, por favor llámanos directamente al +506 2682-1122. Gracias por tu comprensión.`;
+          } else {
+            // First time - friendly message
+            message = `Hola ${res.guestName.split(' ')[0]}, notamos que no pudiste llegar a tu reservación en La Luna hoy. Esperamos verte pronto. Si deseas reprogramar, escríbenos aquí.`;
+          }
           window.open(`https://wa.me/${phoneClean}?text=${encodeURIComponent(message)}`, '_blank');
+          
+          // Alert staff if repeat offender
+          if (noShowCount >= 2) {
+            alert(`⚠️ ${res.guestName} tiene ${noShowCount} no-shows. Se le pidió que llame directamente para futuras reservaciones.`);
+          }
         }
       } catch (err) {
         console.error('Failed to mark no-show:', err);
