@@ -384,9 +384,11 @@ import '../../../styles/coyol-tables.css';
         <div class="modal-footer detail-actions" id="modalActions">
           <!-- Active reservation buttons -->
           <div id="activeActions">
-            <button class="btn-edit" onclick="openEditModal()">✏️ Edit</button>
+            <button class="btn-edit" onclick="openEditModal()">Edit</button>
             <button class="btn-assign" id="assignBtn" onclick="startTableAssignment()">Change Table</button>
             <button class="btn-seat" id="seatBtn" onclick="toggleSeatStatus()">Seat</button>
+            <button class="btn-finish" id="finishBtn" onclick="finishReservation()" style="display:none;">Finish</button>
+            <button class="btn-noshow" onclick="markNoShow()">No Show</button>
             <button class="btn-cancel" onclick="cancelReservation()">Cancel</button>
           </div>
           <!-- Cancelled reservation buttons -->
@@ -1845,6 +1847,10 @@ import '../../../styles/coyol-tables.css';
     .btn-seat.active { background: #0066cc; }
     .btn-cancel { background: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 0.75rem 0.5rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.8125rem; }
     .btn-cancel:hover { background: #dc3545; color: white; }
+    .btn-noshow { background: #6b7280; color: white; border: none; padding: 0.75rem 0.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; font-size: 0.8125rem; }
+    .btn-noshow:hover { background: #4b5563; }
+    .btn-finish { background: #10b981; color: white; border: none; padding: 0.75rem 0.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; font-size: 0.8125rem; }
+    .btn-finish:hover { background: #059669; }
     .btn-reactivate { background: #10b981; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
     .btn-reactivate:hover { background: #059669; }
     
@@ -3035,12 +3041,16 @@ import '../../../styles/coyol-tables.css';
         const seatBtn = document.getElementById('seatBtn');
         const assignBtn = document.getElementById('assignBtn');
         
+        // Show/hide Finish button (only when seated)
+        const finishBtn = document.getElementById('finishBtn');
         if (res.status === 'seated') {
           seatBtn.textContent = 'Unseat';
           seatBtn.classList.add('active');
+          finishBtn.style.display = 'inline-block';
         } else {
           seatBtn.textContent = 'Seat';
           seatBtn.classList.remove('active');
+          finishBtn.style.display = 'none';
         }
         
         // Update assign button based on table assignment
@@ -3273,6 +3283,65 @@ import '../../../styles/coyol-tables.css';
         });
       } catch (err) {
         console.error('Failed to reactivate:', err);
+      }
+      closeDetailModal();
+      await loadReservations();
+      renderFloor();
+    }
+    
+    async function markNoShow() {
+      if (!selectedReservationId) return;
+      
+      const res = cachedReservations.find(r => r.id === selectedReservationId);
+      if (!res) return;
+      
+      if (!confirm(`Mark ${res.guestName} as No Show?`)) return;
+      
+      try {
+        // Update status to no-show and clear table
+        await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?id=eq.${selectedReservationId}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ status: 'no-show', table_id: null })
+        });
+        
+        // Send notification if they have a phone
+        if (res.guestPhone) {
+          const phoneClean = res.guestPhone.replace(/[^0-9]/g, '');
+          const message = `Hola ${res.guestName.split(' ')[0]}, notamos que no pudiste llegar a tu reservación en Coyol hoy. Esperamos verte pronto. Si deseas reprogramar, escríbenos aquí.`;
+          window.open(`https://wa.me/${phoneClean}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+      } catch (err) {
+        console.error('Failed to mark no-show:', err);
+      }
+      closeDetailModal();
+      await loadReservations();
+      renderFloor();
+    }
+    
+    async function finishReservation() {
+      if (!selectedReservationId) return;
+      
+      const res = cachedReservations.find(r => r.id === selectedReservationId);
+      if (!res) return;
+      
+      try {
+        // Mark as completed and free the table
+        await fetch(`${SUPABASE_URL}/rest/v1/coyol_reservations?id=eq.${selectedReservationId}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ status: 'completed', table_id: null })
+        });
+      } catch (err) {
+        console.error('Failed to finish:', err);
       }
       closeDetailModal();
       await loadReservations();
