@@ -1,0 +1,600 @@
+---
+// Custom Offer: Casa Quetzal 24 for Amanda Fields
+// Lot 24 at Mar Azul - Modified Quetzal design
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Casa Quetzal 24 — A Private Residence at Mar Azul</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1a1f16 0%, #2a3020 100%);
+      color: #f5f3ef;
+      min-height: 100vh;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    
+    .container { max-width: 900px; margin: 0 auto; padding: 40px 30px; }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 25px;
+      border-bottom: 1px solid rgba(196, 166, 124, 0.3);
+    }
+    
+    .logo-img {
+      width: 120px;
+      height: auto;
+      margin-bottom: 12px;
+      filter: invert(1) brightness(0.85) sepia(0.3) hue-rotate(10deg) saturate(0.8);
+    }
+    
+    .logo {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 36px;
+      font-weight: 400;
+      letter-spacing: 5px;
+      color: #C4A67C;
+      margin-bottom: 6px;
+    }
+    
+    .tagline {
+      font-size: 13px;
+      letter-spacing: 4px;
+      color: #888;
+      text-transform: uppercase;
+    }
+    
+    .exclusive-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #C4A67C 0%, #a08050 100%);
+      color: #1a1f16;
+      padding: 10px 28px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 20px;
+    }
+    
+    .hero {
+      margin-bottom: 30px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+      position: relative;
+    }
+    
+    .hero img { width: 100%; height: auto; display: block; }
+    
+    .hero-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      padding: 40px 30px 30px;
+    }
+    
+    .hero-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    
+    .hero-subtitle {
+      font-size: 14px;
+      color: #C4A67C;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    
+    .intro {
+      text-align: center;
+      max-width: 750px;
+      margin: 0 auto 40px;
+      padding: 30px;
+      background: rgba(196, 166, 124, 0.08);
+      border: 1px solid rgba(196, 166, 124, 0.2);
+      border-radius: 12px;
+    }
+    
+    .intro p {
+      font-size: 16px;
+      line-height: 1.9;
+      color: #ccc;
+    }
+    
+    .intro strong { color: #C4A67C; }
+    
+    .section-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 26px;
+      color: #C4A67C;
+      text-align: center;
+      margin-bottom: 25px;
+      font-weight: 400;
+    }
+    
+    .floorplan {
+      margin-bottom: 40px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    }
+    
+    .floorplan img { width: 100%; height: auto; display: block; }
+    
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 40px;
+    }
+    
+    .spec-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(196, 166, 124, 0.2);
+      border-radius: 10px;
+      padding: 20px 15px;
+      text-align: center;
+    }
+    
+    .spec-value {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 28px;
+      color: #C4A67C;
+      margin-bottom: 5px;
+    }
+    
+    .spec-label {
+      font-size: 11px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .breakdown {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(196, 166, 124, 0.15);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 40px;
+    }
+    
+    .breakdown-section {
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(196, 166, 124, 0.1);
+    }
+    
+    .breakdown-section:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    
+    .breakdown-title {
+      font-size: 13px;
+      color: #C4A67C;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 15px;
+    }
+    
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 14px;
+    }
+    
+    .breakdown-row.subtotal {
+      border-top: 1px solid rgba(196, 166, 124, 0.2);
+      margin-top: 10px;
+      padding-top: 15px;
+      font-weight: 500;
+    }
+    
+    .breakdown-item { color: #aaa; }
+    .breakdown-detail { color: #666; font-size: 12px; }
+    .breakdown-value { color: #f5f3ef; }
+    
+    .total-section {
+      background: linear-gradient(135deg, rgba(196, 166, 124, 0.15) 0%, rgba(196, 166, 124, 0.05) 100%);
+      border: 1px solid rgba(196, 166, 124, 0.3);
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .total-label {
+      font-size: 13px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+    
+    .total-value {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 48px;
+      color: #C4A67C;
+      font-weight: 400;
+    }
+    
+    .total-note {
+      font-size: 12px;
+      color: #666;
+      margin-top: 10px;
+    }
+    
+    .timeline {
+      margin-bottom: 40px;
+    }
+    
+    .timeline-item {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .timeline-marker {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #C4A67C 0%, #a08050 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1a1f16;
+      font-weight: 600;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    
+    .timeline-content {
+      flex: 1;
+      padding-top: 8px;
+    }
+    
+    .timeline-title {
+      font-weight: 500;
+      color: #f5f3ef;
+      margin-bottom: 5px;
+    }
+    
+    .timeline-desc {
+      font-size: 13px;
+      color: #888;
+    }
+    
+    .features {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 40px;
+    }
+    
+    .feature {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(196, 166, 124, 0.15);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    
+    .feature-title {
+      color: #C4A67C;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    
+    .feature-desc {
+      font-size: 13px;
+      color: #888;
+    }
+    
+    .cta {
+      text-align: center;
+      padding: 40px;
+      background: rgba(196, 166, 124, 0.08);
+      border: 1px solid rgba(196, 166, 124, 0.2);
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+    
+    .cta-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      color: #f5f3ef;
+      margin-bottom: 15px;
+    }
+    
+    .cta-text {
+      color: #888;
+      margin-bottom: 20px;
+    }
+    
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #C4A67C 0%, #a08050 100%);
+      color: #1a1f16;
+      padding: 15px 40px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    
+    .footer {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(196, 166, 124, 0.2);
+      color: #666;
+      font-size: 12px;
+    }
+    
+    .footer a { color: #C4A67C; text-decoration: none; }
+    
+    .valid-until {
+      background: rgba(196, 166, 124, 0.1);
+      border-radius: 20px;
+      padding: 8px 20px;
+      display: inline-block;
+      margin-top: 15px;
+      font-size: 11px;
+      color: #C4A67C;
+    }
+    
+    @media (max-width: 768px) {
+      .specs-grid { grid-template-columns: repeat(2, 1fr); }
+      .features { grid-template-columns: 1fr; }
+      .hero-title { font-size: 32px; }
+      .total-value { font-size: 36px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <img src="/images/coyol-logo.png" alt="Coyol" class="logo-img">
+      <div class="tagline">Private Residences at Mar Azul</div>
+      <div class="exclusive-badge">Exclusive Offer for Amanda</div>
+    </header>
+    
+    <div class="hero">
+      <img src="/images/offers/amanda-quetzal24/hero.jpg" alt="Casa Quetzal 24">
+      <div class="hero-overlay">
+        <h1 class="hero-title">Casa Quetzal 24</h1>
+        <div class="hero-subtitle">Lot 24 · Mar Azul · Nosara</div>
+      </div>
+    </div>
+    
+    <div class="intro">
+      <p>
+        <strong>Amanda</strong>, we're pleased to present <strong>Casa Quetzal 24</strong> — 
+        a modified version of our signature Quetzal design, thoughtfully adapted to embrace 
+        the unique characteristics of Lot 24. This refined residence offers <strong>199 m²</strong> 
+        of interior living space, a separate guest house, and a stunning infinity pool 
+        overlooking Mar Azul's protected gardens.
+      </p>
+    </div>
+    
+    <h2 class="section-title">Site Plan</h2>
+    <div class="floorplan">
+      <img src="/images/offers/amanda-quetzal24/floorplan.jpg" alt="Casa Quetzal 24 Site Plan">
+    </div>
+    
+    <h2 class="section-title">At a Glance</h2>
+    <div class="specs-grid">
+      <div class="spec-card">
+        <div class="spec-value">199</div>
+        <div class="spec-label">Interior m²</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-value">54</div>
+        <div class="spec-label">Covered m²</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-value">113</div>
+        <div class="spec-label">Open Deck m²</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-value">42</div>
+        <div class="spec-label">Pool m²</div>
+      </div>
+    </div>
+    
+    <h2 class="section-title">Investment Breakdown</h2>
+    <div class="breakdown">
+      <div class="breakdown-section">
+        <div class="breakdown-title">Land</div>
+        <div class="breakdown-row">
+          <span class="breakdown-item">Lot 24 at Mar Azul</span>
+          <span class="breakdown-value">$350,000</span>
+        </div>
+      </div>
+      
+      <div class="breakdown-section">
+        <div class="breakdown-title">Main House</div>
+        <div class="breakdown-row">
+          <span class="breakdown-item">AC Interior <span class="breakdown-detail">(159 m² × $3,200)</span></span>
+          <span class="breakdown-value">$508,800</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-item">Covered Terraces <span class="breakdown-detail">(38 m² × $1,800)</span></span>
+          <span class="breakdown-value">$68,400</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-item">Open Decks <span class="breakdown-detail">(110 m² × $800)</span></span>
+          <span class="breakdown-value">$88,000</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-item">Infinity Pool <span class="breakdown-detail">(42 m² × $2,250)</span></span>
+          <span class="breakdown-value">$94,500</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-item">Infinity Edge <span class="breakdown-detail">(9 m × $1,000)</span></span>
+          <span class="breakdown-value">$9,000</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-item">Stone Walls <span class="breakdown-detail">(40m @$650 + 10m @$200)</span></span>
+          <span class="breakdown-value">$28,000</span>
+        </div>
+        <div class="breakdown-row subtotal">
+          <span class="breakdown-item">Main House Subtotal</span>
+          <span class="breakdown-value">$796,700</span>
+        </div>
+      </div>
+      
+      <div class="breakdown-section">
+        <div class="breakdown-title">Guest House</div>
+        <div class="breakdown-row">
+          <span class="breakdown-item">AC Interior <span class="breakdown-detail">(40 m² × $3,200)</span></span>
+          <span class="breakdown-value">$128,000</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-item">Covered Terraces <span class="breakdown-detail">(16 m² × $1,800)</span></span>
+          <span class="breakdown-value">$28,800</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-item">Open Deck <span class="breakdown-detail">(3 m² × $800)</span></span>
+          <span class="breakdown-value">$2,400</span>
+        </div>
+        <div class="breakdown-row subtotal">
+          <span class="breakdown-item">Guest House Subtotal</span>
+          <span class="breakdown-value">$159,200</span>
+        </div>
+      </div>
+      
+      <div class="breakdown-section">
+        <div class="breakdown-title">Fixed Costs</div>
+        <div class="breakdown-row">
+          <span class="breakdown-item">Architectural Design</span>
+          <span class="breakdown-value">$100,000</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-item">Landscaping</span>
+          <span class="breakdown-value">$188,000</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-item">Appliances & Fixtures</span>
+          <span class="breakdown-value">$72,000</span>
+        </div>
+        <div class="breakdown-row subtotal">
+          <span class="breakdown-item">Fixed Costs Subtotal</span>
+          <span class="breakdown-value">$360,000</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="total-section">
+      <div class="total-label">Total Investment</div>
+      <div class="total-value">$1,665,900</div>
+      <div class="total-note">Land + Construction + Design + Landscaping + Appliances</div>
+    </div>
+    
+    <h2 class="section-title">What's Included</h2>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-title">Main Residence</div>
+        <div class="feature-desc">159 m² of climate-controlled living space with premium finishes, open-concept design, and panoramic views.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-title">Guest House</div>
+        <div class="feature-desc">Independent 40 m² guest suite with private terrace — perfect for visitors or rental income.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-title">Infinity Pool</div>
+        <div class="feature-desc">42 m² pool with 9-meter infinity edge overlooking the gardens and jungle canopy.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-title">Outdoor Living</div>
+        <div class="feature-desc">Over 160 m² of terraces and decks, including covered dining areas and sun lounging spaces.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-title">Premium Finishes</div>
+        <div class="feature-desc">Natural stone walls, hardwood accents, designer fixtures, and full appliance package.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-title">Professional Landscaping</div>
+        <div class="feature-desc">Complete tropical landscaping designed to complement Mar Azul's natural environment.</div>
+      </div>
+    </div>
+    
+    <h2 class="section-title">Your Journey</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-marker">1</div>
+        <div class="timeline-content">
+          <div class="timeline-title">Reserve Your Lot</div>
+          <div class="timeline-desc">Secure Lot 24 with a $25,000 refundable deposit. Lock in current pricing while we finalize your design.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-marker">2</div>
+        <div class="timeline-content">
+          <div class="timeline-title">Design Refinement</div>
+          <div class="timeline-desc">Work with our architects to customize finishes, adjust layouts, and make Casa Quetzal 24 uniquely yours.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-marker">3</div>
+        <div class="timeline-content">
+          <div class="timeline-title">Land Closing</div>
+          <div class="timeline-desc">Complete lot purchase with our legal partner ICS. Form Costa Rican company if needed.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-marker">4</div>
+        <div class="timeline-content">
+          <div class="timeline-title">Construction</div>
+          <div class="timeline-desc">12-14 month build with regular progress updates. Visit anytime during construction.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-marker">5</div>
+        <div class="timeline-content">
+          <div class="timeline-title">Welcome Home</div>
+          <div class="timeline-desc">Keys in hand. Move in or begin generating rental income in Costa Rica's most sought-after beach community.</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="cta">
+      <h3 class="cta-title">Ready to Make It Yours?</h3>
+      <p class="cta-text">This custom design is exclusively prepared for you. Let's discuss the next steps.</p>
+      <a href="mailto:info@coyolrealestate.com?subject=Casa%20Quetzal%2024%20-%20Amanda%20Fields" class="cta-button">Schedule a Call</a>
+      <div class="valid-until">Offer valid through December 31, 2026</div>
+    </div>
+    
+    <footer class="footer">
+      <p>Prepared exclusively for Amanda Fields · November 2026</p>
+      <p style="margin-top: 10px;">
+        <a href="https://coyolrealestate.com">coyolrealestate.com</a> · 
+        <a href="mailto:info@coyolrealestate.com">info@coyolrealestate.com</a>
+      </p>
+      <p style="margin-top: 15px; font-size: 11px; color: #555;">
+        Pricing estimates based on current rates. Final costs subject to design development and scope confirmation.
+        Not a binding contract or contractor quotation.
+      </p>
+    </footer>
+  </div>
+</body>
+</html>
