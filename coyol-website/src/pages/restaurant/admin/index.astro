@@ -251,6 +251,12 @@ import '../../../styles/coyol-tables.css';
             <label>Notes</label>
             <textarea id="newNotes" class="form-input" rows="2" placeholder="Birthday, anniversary, allergies..."></textarea>
           </div>
+          <div class="form-group" style="margin-top: 10px;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; color: #C4A67C;">
+              <input type="checkbox" id="newSkipValidation" style="width: 18px; height: 18px;" />
+              <span>⚠️ Manual Override (skip conflict checks - phone reservations)</span>
+            </label>
+          </div>
         </div>
         <div class="modal-footer">
           <button class="btn-secondary" onclick="closeModal()">Cancel</button>
@@ -2353,7 +2359,7 @@ import '../../../styles/coyol-tables.css';
     }
 
     // Save new reservation to Supabase
-    async function saveReservation(reservation) {
+    async function saveReservation(reservation, skipValidation = false) {
       const payload = {
         date: reservation.date,
         time: reservation.time,
@@ -2364,7 +2370,8 @@ import '../../../styles/coyol-tables.css';
         table_id: reservation.tableId,
         zone_preference: reservation.zonePreference,
         special_requests: reservation.specialRequests,
-        status: reservation.status || 'confirmed'
+        status: reservation.status || 'confirmed',
+        skip_validation: skipValidation  // Admin manual override - skip conflict checks
       };
       
       try {
@@ -3830,8 +3837,11 @@ import '../../../styles/coyol-tables.css';
       const time = document.getElementById('newTime').value;
       let tableId = document.getElementById('newTable').value || null;
       
-      // Check for table conflicts if manually selected
-      if (tableId) {
+      // Check if manual override is enabled
+      const skipValidation = document.getElementById('newSkipValidation')?.checked || false;
+      
+      // Check for table conflicts if manually selected (unless override)
+      if (tableId && !skipValidation) {
         const shift = getShiftForTime(time);
         const conflicts = getReservations().filter(r => 
           r.tableId === tableId && 
@@ -3863,7 +3873,7 @@ import '../../../styles/coyol-tables.css';
       };
       
       try {
-        const result = await saveReservation(reservation);
+        const result = await saveReservation(reservation, skipValidation);
         if (!result) {
           // Validation error already shown
           isSavingReservation = false;

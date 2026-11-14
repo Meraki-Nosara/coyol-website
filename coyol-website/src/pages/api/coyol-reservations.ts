@@ -365,9 +365,12 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
     
-    // If table provided, check for conflicts FIRST
+    // Skip validation if admin manual entry (skip_validation flag)
+    const skipValidation = body.skip_validation === true || body.skip_validation === 'true';
+    
+    // If table provided, check for conflicts (unless skip_validation is set)
     let assignedTable = body.table_id;
-    if (assignedTable) {
+    if (assignedTable && !skipValidation) {
       const conflict = checkTableTimeConflict(assignedTable, date, time, existingReservations);
       if (conflict.hasConflict) {
         return new Response(JSON.stringify({
@@ -379,11 +382,11 @@ export const POST: APIRoute = async ({ request }) => {
           headers: { 'Content-Type': 'application/json' }
         });
       }
-    } else {
-      // Auto-assign table if not provided
+    } else if (!assignedTable && !skipValidation) {
+      // Auto-assign table if not provided (skip if manual override)
       assignedTable = await findBestTable(guestCount, date, time, existingReservations, zone_preference);
       
-      // BLOCK if no table available (prevents overbooking)
+      // BLOCK if no table available (prevents overbooking) - unless manual
       if (!assignedTable) {
         return new Response(JSON.stringify({
           error: `Lo sentimos, no hay mesas disponibles para ${guestCount} personas a las ${time}. Por favor intente otro horario o llame para lista de espera.`,

@@ -300,9 +300,12 @@ export const POST: APIRoute = async ({ request }) => {
     // Get existing reservations for conflict checking
     const existingReservations = await getExistingReservations(date);
     
-    // If table provided, check for conflicts FIRST (always reject conflicts)
-    if (table_id) {
-      // Check for time conflicts - this is a hard stop
+    // Skip validation if admin manual entry (skip_validation flag)
+    const skipValidation = body.skip_validation === true || body.skip_validation === 'true';
+    
+    // If table provided, check for conflicts (unless skip_validation is set)
+    if (table_id && !skipValidation) {
+      // Check for time conflicts - this is a hard stop for public bookings
       const conflict = checkTableTimeConflict(table_id, date, time, existingReservations);
       if (conflict.hasConflict) {
         return new Response(JSON.stringify({
@@ -317,7 +320,7 @@ export const POST: APIRoute = async ({ request }) => {
       
       // Capacity validation is informational only - trust manual table selection
       const validation = await validateTableAssignment(table_id, guestCount);
-      if (!validation.valid) {
+      if (!validation.valid && !skipValidation) {
         return new Response(JSON.stringify({ error: validation.error, validation_failed: true }), { status: 400, headers: { 'Content-Type': 'application/json' } });
         // Keep the manually selected table(s) - don't override to null
       }

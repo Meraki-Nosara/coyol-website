@@ -302,6 +302,12 @@ import '../../../styles/laluna-tables.css';
             <label>Notes</label>
             <textarea id="newNotes" class="form-input" rows="2" placeholder="Birthday, anniversary, allergies..."></textarea>
           </div>
+          <div class="form-group" style="margin-top: 10px;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; color: #C4A67C;">
+              <input type="checkbox" id="newSkipValidation" style="width: 18px; height: 18px;" />
+              <span>⚠️ Manual Override (skip conflict checks - phone reservations)</span>
+            </label>
+          </div>
         </div>
         <div class="modal-footer">
           <button class="btn-secondary" onclick="closeModal()">Cancel</button>
@@ -2862,7 +2868,7 @@ import '../../../styles/laluna-tables.css';
     }
 
     // Save new reservation to Supabase
-    async function saveReservation(reservation) {
+    async function saveReservation(reservation, skipValidation = false) {
       const payload = {
         date: reservation.date,
         time: reservation.time,
@@ -2873,7 +2879,8 @@ import '../../../styles/laluna-tables.css';
         table_id: reservation.tableId || null,
         zone_preference: reservation.zonePreference || null,
         special_requests: reservation.specialRequests || '',
-        status: reservation.status || 'confirmed'
+        status: reservation.status || 'confirmed',
+        skip_validation: skipValidation  // Admin manual override - skip conflict checks
       };
       
       // If online, save via API for validation
@@ -4996,11 +5003,14 @@ import '../../../styles/laluna-tables.css';
         if (!proceed) return;
       }
       
-      // Auto-assign best available table if none selected
-      if (!tableId) {
+      // Check if manual override is enabled
+      const skipValidation = document.getElementById('newSkipValidation')?.checked || false;
+      
+      // Auto-assign best available table if none selected (unless override)
+      if (!tableId && !skipValidation) {
         tableId = findBestAvailableTable(date, time, guests, null);
-      } else {
-        // Manual table selected - check for conflicts
+      } else if (tableId && !skipValidation) {
+        // Manual table selected - check for conflicts (unless override)
         const shift = getShiftForTime(time);
         const conflicts = getReservations().filter(r => 
           r.tableId === tableId && 
@@ -5032,8 +5042,8 @@ import '../../../styles/laluna-tables.css';
       };
       
       try {
-        console.log('Saving reservation:', reservation);
-        const result = await saveReservation(reservation);
+        console.log('Saving reservation:', reservation, 'skipValidation:', skipValidation);
+        const result = await saveReservation(reservation, skipValidation);
         console.log('Save result:', result);
         if (!result) {
           // Validation error already shown by saveReservation
