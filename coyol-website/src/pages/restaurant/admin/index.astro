@@ -286,9 +286,13 @@ import '../../../styles/coyol-tables.css';
               <button class="guest-btn" data-guests="3">3</button>
               <button class="guest-btn active" data-guests="4">4</button>
               <button class="guest-btn" data-guests="5">5</button>
-              <button class="guest-btn" data-guests="6">6+</button>
+              <button class="guest-btn" data-guests="6">6</button>
+              <button class="guest-btn" data-guests="8">8</button>
+              <button class="guest-btn" data-guests="10">10</button>
+              <button class="guest-btn" data-guests="12">12</button>
+              <button class="guest-btn" data-guests="custom">+</button>
             </div>
-            <input type="number" id="walkinGuestCount" value="4" min="1" max="50" class="form-input" style="display:none;" />
+            <input type="number" id="walkinGuestCount" value="4" min="1" max="99" class="form-input" placeholder="Enter exact number" style="display:none;margin-top:8px;" />
           </div>
           <div class="walkin-table">
             <label>Table (optional)</label>
@@ -3775,17 +3779,29 @@ import '../../../styles/coyol-tables.css';
     // Guest button clicks
     document.querySelectorAll('.guest-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.guest-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
         const g = btn.dataset.guests;
-        if (g === '6+') {
-          const custom = prompt('How many guests?', '6');
-          walkinGuests = parseInt(custom) || 6;
+        const guestInput = document.getElementById('walkinGuestCount');
+        
+        if (g === 'custom') {
+          // Show number input for custom amount
+          guestInput.style.display = 'block';
+          guestInput.focus();
+          guestInput.select();
         } else {
+          // Hide custom input, use button value
+          guestInput.style.display = 'none';
+          document.querySelectorAll('.guest-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
           walkinGuests = parseInt(g);
+          guestInput.value = walkinGuests;
         }
-        document.getElementById('walkinGuestCount').value = walkinGuests;
       });
+    });
+    
+    // Custom guest count input
+    document.getElementById('walkinGuestCount').addEventListener('change', (e) => {
+      walkinGuests = parseInt(e.target.value) || 4;
+      document.querySelectorAll('.guest-btn').forEach(b => b.classList.remove('active'));
     });
 
     async function seatWalkin() {
@@ -3793,11 +3809,15 @@ import '../../../styles/coyol-tables.css';
       const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
       const walkinNameValue = document.getElementById('walkinName').value.trim();
       
+      // Get guest count from input (in case custom was used)
+      const guestInput = document.getElementById('walkinGuestCount');
+      const finalGuestCount = parseInt(guestInput.value) || walkinGuests || 4;
+      
       const reservation = {
         date: getDateString(currentDate),
         time: timeStr,
-        guests: walkinGuests,
-        guestName: walkinNameValue || `Walk-in (${walkinGuests})`,
+        guests: finalGuestCount,
+        guestName: walkinNameValue || `Walk-in (${finalGuestCount})`,
         guestPhone: '',
         guestEmail: '',
         tableId: document.getElementById('walkinTable').value || null,
@@ -3806,7 +3826,8 @@ import '../../../styles/coyol-tables.css';
       };
       
       try {
-        const result = await saveReservation(reservation);
+        // Walk-ins always skip validation (already seated, staff decision)
+        const result = await saveReservation(reservation, true);
         if (!result) return; // Validation error already shown
         closeWalkinModal();
         await loadReservations();
