@@ -493,7 +493,7 @@ export const PATCH: APIRoute = async ({ request, url }) => {
         
         if (conflict.hasConflict) {
           return new Response(JSON.stringify({ 
-            error: `Table ${table_id} already has a reservation at ${conflict.conflictWith.time} (${conflict.conflictWith.name})`,
+            error: `Table ${table_id} already has a reservation at ${conflict.conflictWith.time} (${conflict.conflictWith.guest_name})`,
             validation_failed: true,
             conflict: conflict.conflictWith
           }), {
