@@ -222,6 +222,23 @@ function generateLightTemplate(data: any): string {
       <div class="timeline-item">
         <div class="timeline-number">06</div>
         <div class="timeline-content">
+          <h3>Track Your Progress</h3>
+          <span class="timeline-timing">Ongoing</span>
+          <p>Stay connected throughout construction:</p>
+          <div style="background: #f8f6f0; border: 1px solid #e8e4dc; border-radius: 8px; padding: 20px; margin-top: 15px;">
+            <div style="font-weight: 500; margin-bottom: 12px;">Coyol Control — Your Client Portal</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; color: #666;">
+              <div>✓ Construction photos</div>
+              <div>✓ Milestone tracking</div>
+              <div>✓ Documents & contracts</div>
+              <div>✓ Direct messaging</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-number">07</div>
+        <div class="timeline-content">
           <h3>Welcome Home</h3>
           <span class="timeline-timing">Move-in day</span>
           <p>Final walkthrough, keys, and welcome to the Mar Azul community.</p>
