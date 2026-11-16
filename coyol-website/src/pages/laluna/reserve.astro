@@ -1532,6 +1532,15 @@ import Layout from '../../layouts/Layout.astro';
       }
       
       console.log('Assigned table:', assignedTable);
+      
+      // Block reservation if no table available (Julia's request - no TBA for public bookings)
+      if (!assignedTable) {
+        const shift = time < '15:00' ? 'Lunch' : 'Dinner';
+        alert(`Sorry, ${shift} is fully booked for ${guests} guests on this date. Please try a different time or date, or call us directly at +506 2682-1122.`);
+        btn.disabled = false;
+        btn.textContent = 'Confirm Reservation';
+        return;
+      }
 
       const reservation = {
         date: date,
