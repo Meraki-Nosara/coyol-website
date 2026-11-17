@@ -1400,7 +1400,7 @@ import Layout from '../../layouts/Layout.astro';
         assignedTable = autoAssignTable(guests, existingReservations, time);
       }
       
-      // Block reservation if no table available (no TBA for public bookings)
+      // Block reservation if no table available - v2 202611170850 (no TBA for public bookings)
       if (!assignedTable) {
         const shift = time < '15:00' ? 'Lunch' : 'Dinner';
         alert(`Sorry, ${shift} is fully booked for ${guests} guests on this date. Please try a different time or date, or call us directly at +506 2682-0379.`);
